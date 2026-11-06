@@ -1,0 +1,161 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/theme.json",
+  "version": 3,
+  "settings": {
+    "appearanceTools": true,
+    "layout": {
+      "contentSize": "1200px",
+      "wideSize": "1440px"
+    },
+    "color": {
+      "palette": [
+        {
+          "slug": "primary",
+          "color": "#059669",
+          "name": "Primary Emerald"
+        },
+        {
+          "slug": "primary-hover",
+          "color": "#047857",
+          "name": "Primary Dark"
+        },
+        {
+          "slug": "secondary",
+          "color": "#10b981",
+          "name": "Secondary Teal"
+        },
+        {
+          "slug": "accent",
+          "color": "#ea580c",
+          "name": "Accent Orange (CTA)"
+        },
+        {
+          "slug": "accent-hover",
+          "color": "#c2410c",
+          "name": "Accent Dark"
+        },
+        {
+          "slug": "background",
+          "color": "#f8fafc",
+          "name": "Background Light"
+        },
+        {
+          "slug": "foreground",
+          "color": "#0f172a",
+          "name": "Foreground Dark"
+        },
+        {
+          "slug": "card",
+          "color": "#ffffff",
+          "name": "Card White"
+        },
+        {
+          "slug": "card-foreground",
+          "color": "#0f172a",
+          "name": "Card Text"
+        },
+        {
+          "slug": "muted",
+          "color": "#f1f5f9",
+          "name": "Muted Gray"
+        },
+        {
+          "slug": "muted-foreground",
+          "color": "#64748b",
+          "name": "Muted Text"
+        },
+        {
+          "slug": "border",
+          "color": "#e2e8f0",
+          "name": "Border Gray"
+        },
+        {
+          "slug": "destructive",
+          "color": "#dc2626",
+          "name": "Destructive Red"
+        },
+        {
+          "slug": "success",
+          "color": "#16a34a",
+          "name": "Success Green"
+        },
+        {
+          "slug": "warning",
+          "color": "#f59e0b",
+          "name": "Warning Yellow"
+        }
+      ]
+    },
+    "typography": {
+      "fontFamilies": [
+        {
+          "fontFamily": "'Vazirmatn', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
+          "slug": "primary",
+          "name": "Vazirmatn (Default)"
+        },
+        {
+          "fontFamily": "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
+          "slug": "system",
+          "name": "System UI"
+        }
+      ],
+      "fontSizes": [
+        {
+          "name": "Extra Small",
+          "slug": "xs",
+          "size": "12px"
+        },
+        {
+          "name": "Small",
+          "slug": "sm",
+          "size": "13px"
+        },
+        {
+          "name": "Normal",
+          "slug": "base",
+          "size": "15px"
+        },
+        {
+          "name": "Medium",
+          "slug": "md",
+          "size": "16px"
+        },
+        {
+          "name": "Large",
+          "slug": "lg",
+          "size": "18px"
+        },
+        {
+          "name": "Extra Large",
+          "slug": "xl",
+          "size": "20px"
+        },
+        {
+          "name": "2X Large",
+          "slug": "2xl",
+          "size": "24px"
+        },
+        {
+          "name": "3X Large",
+          "slug": "3xl",
+          "size": "30px"
+        },
+        {
+          "name": "4X Large",
+          "slug": "4xl",
+          "size": "36px"
+        }
+      ]
+    },
+    "spacing": {
+      "spacingScale": {
+        "steps": 8
+      },
+      "units": [
+        "px",
+        "rem",
+        "%"
+      ]
+    }
+  }
+}
