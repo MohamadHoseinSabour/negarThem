@@ -1,0 +1,1932 @@
+# Copyright (C) 2026 Antigravity & User Team
+# This file is distributed under the GNU General Public License v2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Negar Shop 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/theme/negarThem\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-11-06T11:40:00+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: negar-shop\n"
+
+#. Theme Name of the theme
+#: style.css
+msgid "Negar Shop"
+msgstr "Negar Shop"
+
+#. Theme URI of the theme
+#: style.css
+msgid "https://example.com/negar-shop"
+msgstr "https://example.com/negar-shop"
+
+#. Description of the theme
+#: style.css
+msgid "قالب وردپرس فروشگاهی مدرن، پیشرفته و هیبرید، کاملاً بهینه‌شده برای ووکامرس، زبان فارسی و ساختار راست‌چین (RTL)"
+msgstr "قالب وردپرس فروشگاهی مدرن، پیشرفته و هیبرید، کاملاً بهینه‌شده برای ووکامرس، زبان فارسی و ساختار راست‌چین (RTL)"
+
+#. Author of the theme
+#: style.css
+msgid "Antigravity & User Team"
+msgstr "Antigravity & User Team"
+
+#. Author URI of the theme
+#: style.css
+msgid "https://example.com"
+msgstr "https://example.com"
+
+#: 404.php:35
+msgid "متأسفانه صفحه مورد نظر یافت نشد!"
+msgstr "متأسفانه صفحه مورد نظر یافت نشد!"
+
+#: 404.php:39
+msgid "صفحه‌ای که به دنبال آن بودید ممکن است حذف شده باشد، نام آن تغییر یافته باشد یا موقتاً در دسترس نباشد."
+msgstr "صفحه‌ای که به دنبال آن بودید ممکن است حذف شده باشد، نام آن تغییر یافته باشد یا موقتاً در دسترس نباشد."
+
+#: 404.php:45
+msgid "جستجوی محصول یا مقاله مورد نظر..."
+msgstr "جستجوی محصول یا مقاله مورد نظر..."
+
+#: 404.php:46
+#: search.php:59
+#: template-parts/blog/sidebar.php:34
+#: template-parts/header/main-header.php:79
+#: template-parts/header/mobile-header.php:67
+msgid "جستجو"
+msgstr "جستجو"
+
+#: 404.php:56
+#: archive.php:58
+#: index.php:65
+msgid "بازگشت به صفحه اصلی"
+msgstr "بازگشت به صفحه اصلی"
+
+#: 404.php:60
+msgid "مشاهده محصولات فروشگاه"
+msgstr "مشاهده محصولات فروشگاه"
+
+#: 404.php:68
+msgid "یا از دسته‌بندی‌های پرطرفدار زیر دیدن فرمایید:"
+msgstr "یا از دسته‌بندی‌های پرطرفدار زیر دیدن فرمایید:"
+
+#: archive.php:57
+msgid "هیچ مقاله‌ای در این بخش یافت نشد."
+msgstr "هیچ مقاله‌ای در این بخش یافت نشد."
+
+#: header.php:26
+msgid "پرش به محتوای اصلی"
+msgstr "پرش به محتوای اصلی"
+
+#: inc/ajax-search.php:24
+msgid "حداقل ۲ کاراکتر وارد کنید."
+msgstr "حداقل ۲ کاراکتر وارد کنید."
+
+#: inc/customizer.php:26
+msgid "تنظیمات قالب نگار شاپ"
+msgstr "تنظیمات قالب نگار شاپ"
+
+#: inc/customizer.php:27
+msgid "مدیریت و سفارشی‌سازی رنگ‌بندی، هدر، شبکه‌های اجتماعی و فوتر فروشگاه"
+msgstr "مدیریت و سفارشی‌سازی رنگ‌بندی، هدر، شبکه‌های اجتماعی و فوتر فروشگاه"
+
+#: inc/customizer.php:38
+msgid "رنگ‌بندی فروشگاه"
+msgstr "رنگ‌بندی فروشگاه"
+
+#: inc/customizer.php:58
+msgid "رنگ اصلی سازمانی (Primary)"
+msgstr "رنگ اصلی سازمانی (Primary)"
+
+#: inc/customizer.php:59
+msgid "رنگ پیش‌فرض دکمه‌ها، لینک‌ها و اِلمان‌های کلیدی"
+msgstr "رنگ پیش‌فرض دکمه‌ها، لینک‌ها و اِلمان‌های کلیدی"
+
+#: inc/customizer.php:80
+msgid "رنگ تخفیف و پیشنهاد ویژه (Accent / Sale)"
+msgstr "رنگ تخفیف و پیشنهاد ویژه (Accent / Sale)"
+
+#: inc/customizer.php:81
+msgid "رنگ بج‌های تخفیف و باکس شگفت‌انگیزها"
+msgstr "رنگ بج‌های تخفیف و باکس شگفت‌انگیزها"
+
+#: inc/customizer.php:94
+msgid "تنظیمات هدر و نوار بالا"
+msgstr "تنظیمات هدر و نوار بالا"
+
+#: inc/customizer.php:104
+#: template-parts/header/top-bar.php:13
+msgid "ارسال رایگان برای سفارش‌های بالای ۱,۰۰۰,۰۰۰ تومان در سراسر کشور"
+msgstr "ارسال رایگان برای سفارش‌های بالای ۱,۰۰۰,۰۰۰ تومان در سراسر کشور"
+
+#: inc/customizer.php:112
+msgid "متن اعلان نوار بالا (Announcement)"
+msgstr "متن اعلان نوار بالا (Announcement)"
+
+#: inc/customizer.php:113
+msgid "پیام اطلاع‌رسانی بالای هدر در تمامی صفحات"
+msgstr "پیام اطلاع‌رسانی بالای هدر در تمامی صفحات"
+
+#: inc/customizer.php:131
+msgid "شماره تلفن پشتیبانی هدر"
+msgstr "شماره تلفن پشتیبانی هدر"
+
+#: inc/customizer.php:132
+msgid "شماره تماس جهت نمایش در نوار بالای هدر"
+msgstr "شماره تماس جهت نمایش در نوار بالای هدر"
+
+#: inc/customizer.php:150
+msgid "فعال‌سازی هدر چسبان (Sticky Header)"
+msgstr "فعال‌سازی هدر چسبان (Sticky Header)"
+
+#: inc/customizer.php:151
+msgid "هدر هنگام اسکرول به سمت پایین ثابت باقی می‌ماند"
+msgstr "هدر هنگام اسکرول به سمت پایین ثابت باقی می‌ماند"
+
+#: inc/customizer.php:163
+msgid "شبکه‌های اجتماعی"
+msgstr "شبکه‌های اجتماعی"
+
+#: inc/customizer.php:181
+msgid "لینک اینستاگرام (Instagram)"
+msgstr "لینک اینستاگرام (Instagram)"
+
+#: inc/customizer.php:199
+msgid "لینک تلگرام (Telegram)"
+msgstr "لینک تلگرام (Telegram)"
+
+#: inc/customizer.php:217
+msgid "لینک واتس‌اپ (WhatsApp)"
+msgstr "لینک واتس‌اپ (WhatsApp)"
+
+#: inc/customizer.php:235
+msgid "لینک لینکدین (LinkedIn)"
+msgstr "لینک لینکدین (LinkedIn)"
+
+#: inc/customizer.php:247
+msgid "تنظیمات فوتر و کپی‌رایت"
+msgstr "تنظیمات فوتر و کپی‌رایت"
+
+#: inc/customizer.php:257
+#: template-parts/footer/columns.php:15
+msgid "فروشگاه اینترنتی نگار شاپ، مرجع تخصصی خرید آنلاین با تضمین اصالت، بهترین قیمت و ارسال اکسپرس به تمام نقاط کشور."
+msgstr "فروشگاه اینترنتی نگار شاپ، مرجع تخصصی خرید آنلاین با تضمین اصالت، بهترین قیمت و ارسال اکسپرس به تمام نقاط کشور."
+
+#: inc/customizer.php:265
+msgid "متن معرفی کوتاه فروشگاه در فوتر"
+msgstr "متن معرفی کوتاه فروشگاه در فوتر"
+
+#: inc/customizer.php:266
+msgid "توضیحات ستون اول فوتر زیر نام فروشگاه"
+msgstr "توضیحات ستون اول فوتر زیر نام فروشگاه"
+
+#: inc/customizer.php:276
+msgid "تمامی حقوق مادی و معنوی این وب‌سایت محفوظ می‌باشد."
+msgstr "تمامی حقوق مادی و معنوی این وب‌سایت محفوظ می‌باشد."
+
+#: inc/customizer.php:284
+msgid "متن کپی‌رایت پایین فوتر"
+msgstr "متن کپی‌رایت پایین فوتر"
+
+#: inc/elementor/class-elementor-init.php:52
+msgid "المان‌های نگار شاپ (Negar Shop)"
+msgstr "المان‌های نگار شاپ (Negar Shop)"
+
+#: inc/enqueue.php:157
+msgid "کالا با موفقیت به سبد خرید افزوده شد."
+msgstr "کالا با موفقیت به سبد خرید افزوده شد."
+
+#: inc/enqueue.php:158
+msgid "به لیست علاقه‌مندی‌ها اضافه شد."
+msgstr "به لیست علاقه‌مندی‌ها اضافه شد."
+
+#: inc/enqueue.php:159
+msgid "از لیست علاقه‌مندی‌ها حذف شد."
+msgstr "از لیست علاقه‌مندی‌ها حذف شد."
+
+#: inc/enqueue.php:160
+msgid "در حال بارگذاری..."
+msgstr "در حال بارگذاری..."
+
+#: inc/enqueue.php:161
+msgid "خطایی رخ داد. لطفاً مجدداً تلاش کنید."
+msgstr "خطایی رخ داد. لطفاً مجدداً تلاش کنید."
+
+#: inc/enqueue.php:162
+#: template-parts/header/main-header.php:68
+msgid "جستجوی نام کالا، برند یا دسته‌بندی..."
+msgstr "جستجوی نام کالا، برند یا دسته‌بندی..."
+
+#: inc/mega-menu.php:90
+msgid "حراج"
+msgstr "حراج"
+
+#: inc/mega-menu.php:93
+msgid "جدید"
+msgstr "جدید"
+
+#: inc/mega-menu.php:96
+msgid "ویژه"
+msgstr "ویژه"
+
+#: inc/modals-ajax.php:21
+msgid "شناسه محصول نامعتبر است."
+msgstr "شناسه محصول نامعتبر است."
+
+#: inc/modals-ajax.php:26
+msgid "محصول یافت نشد."
+msgstr "محصول یافت نشد."
+
+#: inc/modals-ajax.php:79
+msgid "مشاهده صفحه کامل و مشخصات فنی کالا"
+msgstr "مشاهده صفحه کامل و مشخصات فنی کالا"
+
+#: inc/modals-ajax.php:111
+msgid "لیست علاقه‌مندی‌های شما خالی است!"
+msgstr "لیست علاقه‌مندی‌های شما خالی است!"
+
+#: inc/modals-ajax.php:112
+msgid "کالاهای مورد علاقه خود را با زدن علامت قلب به این لیست اضافه کنید."
+msgstr "کالاهای مورد علاقه خود را با زدن علامت قلب به این لیست اضافه کنید."
+
+#: inc/modals-ajax.php:137
+msgid "خرید"
+msgstr "خرید"
+
+#: inc/modals-ajax.php:140
+#: inc/modals-ajax.php:189
+#: woocommerce/cart/cart.php:39
+msgid "حذف"
+msgstr "حذف"
+
+#: inc/modals-ajax.php:168
+msgid "هیچ کالایی برای مقایسه انتخاب نشده است!"
+msgstr "هیچ کالایی برای مقایسه انتخاب نشده است!"
+
+#: inc/modals-ajax.php:169
+msgid "برای مقایسه، دکمه مقایسه را روی حداقل ۲ کالا بزنید."
+msgstr "برای مقایسه، دکمه مقایسه را روی حداقل ۲ کالا بزنید."
+
+#: inc/modals-ajax.php:184
+msgid "تصویر محصول"
+msgstr "تصویر محصول"
+
+#: inc/modals-ajax.php:200
+msgid "قیمت"
+msgstr "قیمت"
+
+#: inc/modals-ajax.php:210
+msgid "وضعیت انبار"
+msgstr "وضعیت انبار"
+
+#: inc/modals-ajax.php:213
+msgid "موجود"
+msgstr "موجود"
+
+#: inc/modals-ajax.php:213
+#: template-parts/product/card.php:36
+#: woocommerce/single-product/product-gallery.php:45
+msgid "ناموجود"
+msgstr "ناموجود"
+
+#: inc/modals-ajax.php:220
+msgid "کد کالا (SKU)"
+msgstr "کد کالا (SKU)"
+
+#: inc/modals-ajax.php:230
+msgid "عملیات"
+msgstr "عملیات"
+
+#: inc/modals-ajax.php:234
+msgid "افزودن به سبد"
+msgstr "افزودن به سبد"
+
+#: inc/setup.php:49
+msgid "منوی ناوبری اصلی"
+msgstr "منوی ناوبری اصلی"
+
+#: inc/setup.php:50
+msgid "منوی دسته‌بندی‌ها (مگامنو)"
+msgstr "منوی دسته‌بندی‌ها (مگامنو)"
+
+#: inc/setup.php:51
+msgid "منوی موبایل"
+msgstr "منوی موبایل"
+
+#: inc/setup.php:52
+msgid "لینک‌های دسترسی سریع فوتر"
+msgstr "لینک‌های دسترسی سریع فوتر"
+
+#: inc/setup.php:53
+msgid "لینک‌های خدمات و پشتیبانی فوتر"
+msgstr "لینک‌های خدمات و پشتیبانی فوتر"
+
+#: inc/setup.php:124
+msgid "سایدبار فروشگاه و محصولات"
+msgstr "سایدبار فروشگاه و محصولات"
+
+#: inc/setup.php:126
+msgid "ابزارک‌های این بخش در سایدبار فروشگاه و دسته‌بندی محصولات نمایش داده می‌شوند."
+msgstr "ابزارک‌های این بخش در سایدبار فروشگاه و دسته‌بندی محصولات نمایش داده می‌شوند."
+
+#: inc/setup.php:137
+msgid "سایدبار وبلاگ و مقالات"
+msgstr "سایدبار وبلاگ و مقالات"
+
+#: inc/setup.php:139
+msgid "ابزارک‌های این بخش در سایدبار وبلاگ و صفحات داخلی مقالات نمایش داده می‌شوند."
+msgstr "ابزارک‌های این بخش در سایدبار وبلاگ و صفحات داخلی مقالات نمایش داده می‌شوند."
+
+#. translators: %d: Column index
+#: inc/setup.php:152
+#, php-format
+msgid "ستون فوتر %d"
+msgstr "ستون فوتر %d"
+
+#. translators: %d: Column index
+#: inc/setup.php:155
+#, php-format
+msgid "ابزارک‌های ستون %d فوتر وب‌سایت."
+msgstr "ابزارک‌های ستون %d فوتر وب‌سایت."
+
+#: inc/shop-ajax.php:138
+#: template-parts/shop/loop.php:42
+msgid "هیچ کالایی با این مشخصات یافت نشد"
+msgstr "هیچ کالایی با این مشخصات یافت نشد"
+
+#: inc/shop-ajax.php:139
+#: template-parts/shop/loop.php:43
+msgid "لطفاً فیلترهای انتخابی را تغییر داده یا بازنشانی کنید."
+msgstr "لطفاً فیلترهای انتخابی را تغییر داده یا بازنشانی کنید."
+
+#: inc/shop-ajax.php:141
+#: template-parts/shop/loop.php:45
+#: template-parts/shop/sidebar-filters.php:116
+msgid "حذف همه فیلترها"
+msgstr "حذف همه فیلترها"
+
+#: inc/shop-ajax.php:161
+#: template-parts/home/flash-deals.php:128
+#: template-parts/shop/loop.php:65
+#: woocommerce/myaccount/orders.php:108
+msgid "قبلی"
+msgstr "قبلی"
+
+#: inc/shop-ajax.php:162
+#: template-parts/home/flash-deals.php:125
+#: template-parts/shop/loop.php:66
+#: woocommerce/myaccount/orders.php:112
+msgid "بعدی"
+msgstr "بعدی"
+
+#: inc/shop-ajax.php:192
+#: template-parts/shop/toolbar.php:106
+msgid "فیلترهای فعال:"
+msgstr "فیلترهای فعال:"
+
+#: inc/shop-ajax.php:196
+#: template-parts/shop/toolbar.php:110
+msgid "حذف فیلتر"
+msgstr "حذف فیلتر"
+
+#: inc/shop-ajax.php:202
+#: template-parts/shop/toolbar.php:116
+msgid "حذف همه"
+msgstr "حذف همه"
+
+#. translators: %s: number of products
+#: inc/shop-ajax.php:214
+#: template-parts/shop/toolbar.php:45
+#, php-format
+msgid "نمایش %s کالا"
+msgstr "نمایش %s کالا"
+
+#: inc/shop-ajax.php:218
+#: template-parts/shop/toolbar.php:49
+msgid "۰ کالا یافت شد"
+msgstr "۰ کالا یافت شد"
+
+#: inc/shop.php:22
+#: template-parts/footer/columns.php:80
+#: template-parts/header/mobile-drawer.php:62
+#: template-parts/header/navigation.php:94
+msgid "صفحه اصلی"
+msgstr "صفحه اصلی"
+
+#: inc/shop.php:23
+#: template-parts/header/mobile-drawer.php:64
+#: template-parts/header/navigation.php:100
+msgid "فروشگاه"
+msgstr "فروشگاه"
+
+#: inc/shop.php:26
+msgid "مسیر دسترسی"
+msgstr "مسیر دسترسی"
+
+#: inc/shop.php:84
+#, php-format
+msgid "برچسب: %s"
+msgstr "برچسب: %s"
+
+#: inc/shop.php:133
+#, php-format
+msgid "دسته: %s"
+msgstr "دسته: %s"
+
+#: inc/shop.php:145
+#, php-format
+msgid "قیمت: از %s تا %s"
+msgstr "قیمت: از %s تا %s"
+
+#: inc/shop.php:147
+#, php-format
+msgid "قیمت: بیش از %s"
+msgstr "قیمت: بیش از %s"
+
+#: inc/shop.php:149
+#, php-format
+msgid "قیمت: تا %s"
+msgstr "قیمت: تا %s"
+
+#: inc/shop.php:163
+#: template-parts/shop/sidebar-filters.php:68
+msgid "فقط کالاهای موجود"
+msgstr "فقط کالاهای موجود"
+
+#: inc/shop.php:172
+msgid "فقط کالاهای حراجی"
+msgstr "فقط کالاهای حراجی"
+
+#: inc/single-product.php:29
+msgid "شناسه کالا (SKU)"
+msgstr "شناسه کالا (SKU)"
+
+#: inc/single-product.php:37
+msgid "وزن"
+msgstr "وزن"
+
+#: inc/single-product.php:45
+msgid "ابعاد (طول × عرض × ارتفاع)"
+msgstr "ابعاد (طول × عرض × ارتفاع)"
+
+#: inc/single-product.php:85
+msgid "ضمانت اصالت کالا"
+msgstr "ضمانت اصالت کالا"
+
+#: inc/single-product.php:86
+msgid "۱۰۰٪ تضمین کالای اصل و اورجینال"
+msgstr "۱۰۰٪ تضمین کالای اصل و اورجینال"
+
+#: inc/single-product.php:90
+#: template-parts/footer/features.php:56
+msgid "۷ روز ضمانت بازگشت"
+msgstr "۷ روز ضمانت بازگشت"
+
+#: inc/single-product.php:91
+msgid "امکان تعویض یا عودت کالا بدون قید و شرط"
+msgstr "امکان تعویض یا عودت کالا بدون قید و شرط"
+
+#: inc/single-product.php:95
+msgid "تحویل اکسپرس و سریع"
+msgstr "تحویل اکسپرس و سریع"
+
+#: inc/single-product.php:96
+msgid "ارسال امن با بسته‌بندی ویژه و بیمه مرسوله"
+msgstr "ارسال امن با بسته‌بندی ویژه و بیمه مرسوله"
+
+#: inc/single-product.php:100
+msgid "گارانتی معتبر شرکتی"
+msgstr "گارانتی معتبر شرکتی"
+
+#: inc/single-product.php:101
+msgid "دارای ۱۸ تا ۲۴ ماه خدمات پس از فروش رسمی"
+msgstr "دارای ۱۸ تا ۲۴ ماه خدمات پس از فروش رسمی"
+
+#: inc/template-tags.php:40
+msgid "توسط"
+msgstr "توسط"
+
+#: index.php:43
+msgid "ادامه مطلب ←"
+msgstr "ادامه مطلب ←"
+
+#: index.php:54
+msgid "← قبلی"
+msgstr "← قبلی"
+
+#: index.php:55
+msgid "بعدی →"
+msgstr "بعدی →"
+
+#: index.php:62
+msgid "مطلبی یافت نشد!"
+msgstr "مطلبی یافت نشد!"
+
+#: index.php:63
+msgid "به نظر می‌رسد هیچ محتوایی در این بخش وجود ندارد. لطفاً جستجو کنید یا به صفحه اصلی بازگردید."
+msgstr "به نظر می‌رسد هیچ محتوایی در این بخش وجود ندارد. لطفاً جستجو کنید یا به صفحه اصلی بازگردید."
+
+#. Template Name of the theme
+msgid "About Us / درباره ما"
+msgstr "About Us / درباره ما"
+
+#: page-templates/page-about.php:22
+msgid "داستان نگار شاپ"
+msgstr "داستان نگار شاپ"
+
+#: page-templates/page-about.php:25
+msgid "تعهد ما: تجربه خریدی بی‌دغدغه و مطمئن برای خانه شما"
+msgstr "تعهد ما: تجربه خریدی بی‌دغدغه و مطمئن برای خانه شما"
+
+#: page-templates/page-about.php:28
+msgid "نگار شاپ با بیش از یک دهه تجربه در حوزه واردات و توزیع جدیدترین لوازم خانگی هوشمند، همواره کوشیده است تا کالای اصل را با بهترین قیمت و ضمانت‌های معتبر به دست مصرف‌کننده ایرانی برساند."
+msgstr "نگار شاپ با بیش از یک دهه تجربه در حوزه واردات و توزیع جدیدترین لوازم خانگی هوشمند، همواره کوشیده است تا کالای اصل را با بهترین قیمت و ضمانت‌های معتبر به دست مصرف‌کننده ایرانی برساند."
+
+#: page-templates/page-about.php:36
+msgid "سال سابقه تخصصی"
+msgstr "سال سابقه تخصصی"
+
+#: page-templates/page-about.php:40
+msgid "سفارش موفق در کشور"
+msgstr "سفارش موفق در کشور"
+
+#: page-templates/page-about.php:44
+msgid "ضمانت اصالت و سلامت"
+msgstr "ضمانت اصالت و سلامت"
+
+#: page-templates/page-about.php:48
+msgid "پشتیبانی و مشاوره"
+msgstr "پشتیبانی و مشاوره"
+
+#: page-templates/page-about.php:55
+msgid "ارزش‌های کلیدی نگار شاپ"
+msgstr "ارزش‌های کلیدی نگار شاپ"
+
+#: page-templates/page-about.php:56
+msgid "چرا هزاران خانواده ایرانی نگار شاپ را برای تجهیز خانه انتخاب کرده‌اند؟"
+msgstr "چرا هزاران خانواده ایرانی نگار شاپ را برای تجهیز خانه انتخاب کرده‌اند؟"
+
+#: page-templates/page-about.php:66
+msgid "تضمین صددرصدی اصالت کالا"
+msgstr "تضمین صددرصدی اصالت کالا"
+
+#: page-templates/page-about.php:67
+msgid "کلیه کالاهای موجود در فروشگاه به صورت مستقیم و با برگه‌های معتبر بازرگانی و گارانتی شرکتی عرضه می‌شوند."
+msgstr "کلیه کالاهای موجود در فروشگاه به صورت مستقیم و با برگه‌های معتبر بازرگانی و گارانتی شرکتی عرضه می‌شوند."
+
+#: page-templates/page-about.php:76
+msgid "شفافیت و بهترین قیمت بازار"
+msgstr "شفافیت و بهترین قیمت بازار"
+
+#: page-templates/page-about.php:77
+msgid "حذف واسطه‌های غیرضروری به ما این امکان را می‌دهد تا مناسب‌ترین قیمت‌ها را به خریداران عزیز ارائه دهیم."
+msgstr "حذف واسطه‌های غیرضروری به ما این امکان را می‌دهد تا مناسب‌ترین قیمت‌ها را به خریداران عزیز ارائه دهیم."
+
+#: page-templates/page-about.php:86
+msgid "ارسال سریع با بسته‌بندی ویژه"
+msgstr "ارسال سریع با بسته‌بندی ویژه"
+
+#: page-templates/page-about.php:87
+msgid "لوازم خانگی حساس با ایمن‌ترین ناوگان پستی و بسته‌بندی مقاوم ضدضربه ارسال می‌شوند."
+msgstr "لوازم خانگی حساس با ایمن‌ترین ناوگان پستی و بسته‌بندی مقاوم ضدضربه ارسال می‌شوند."
+
+#: page-templates/page-about.php:96
+msgid "همراهی و مشاوره رایگان"
+msgstr "همراهی و مشاوره رایگان"
+
+#: page-templates/page-about.php:97
+msgid "کارشناسان فروش ما قبل از خرید آماده پاسخگویی و راهنمایی شما برای انتخاب بهترین کالا هستند."
+msgstr "کارشناسان فروش ما قبل از خرید آماده پاسخگویی و راهنمایی شما برای انتخاب بهترین کالا هستند."
+
+#: page-templates/page-about.php:106
+msgid "همین حالا خرید از نگار شاپ را تجربه کنید"
+msgstr "همین حالا خرید از نگار شاپ را تجربه کنید"
+
+#: page-templates/page-about.php:107
+msgid "تنوع بی‌نظیری از برندهای مطرح جهانی شامل بوش، سامسونگ، ال‌جی، فیلیپس و اسنوا با ارسال رایگان در انتظار شماست."
+msgstr "تنوع بی‌نظیری از برندهای مطرح جهانی شامل بوش، سامسونگ، ال‌جی، فیلیپس و اسنوا با ارسال رایگان در انتظار شماست."
+
+#: page-templates/page-about.php:109
+msgid "مشاهده کاتالوگ فروشگاه"
+msgstr "مشاهده کاتالوگ فروشگاه"
+
+#. Template Name of the theme
+msgid "Contact Us / تماس با ما"
+msgstr "Contact Us / تماس با ما"
+
+#: page-templates/page-contact.php:22
+msgid "مرکز ارتباط با مشتریان"
+msgstr "مرکز ارتباط با مشتریان"
+
+#: page-templates/page-contact.php:25
+msgid "همیشه آماده پاسخگویی به شما هستیم"
+msgstr "همیشه آماده پاسخگویی به شما هستیم"
+
+#: page-templates/page-contact.php:28
+msgid "سوالی دارید یا به مشاوره خرید نیاز دارید؟ از طریق راه‌های ارتباطی زیر یا فرم پیام با ما در تماس باشید."
+msgstr "سوالی دارید یا به مشاوره خرید نیاز دارید؟ از طریق راه‌های ارتباطی زیر یا فرم پیام با ما در تماس باشید."
+
+#: page-templates/page-contact.php:40
+msgid "تماس مستقیم تلفنی"
+msgstr "تماس مستقیم تلفنی"
+
+#: page-templates/page-contact.php:50
+msgid "پشتیبانی ایمیلی"
+msgstr "پشتیبانی ایمیلی"
+
+#: page-templates/page-contact.php:60
+msgid "ساعات پاسخگویی"
+msgstr "ساعات پاسخگویی"
+
+#: page-templates/page-contact.php:61
+msgid "شنبه تا پنجشنبه ۹ الی ۲۱"
+msgstr "شنبه تا پنجشنبه ۹ الی ۲۱"
+
+#: page-templates/page-contact.php:70
+msgid "دفتر مرکزی"
+msgstr "دفتر مرکزی"
+
+#: page-templates/page-contact.php:71
+msgid "تهران، ولیعصر، برج نگار"
+msgstr "تهران، ولیعصر، برج نگار"
+
+#: page-templates/page-contact.php:84
+msgid "ارسال پیام مستقیم برای مدیریت و پشتیبانی"
+msgstr "ارسال پیام مستقیم برای مدیریت و پشتیبانی"
+
+#: page-templates/page-contact.php:90
+msgid "نام و نام خانوادگی"
+msgstr "نام و نام خانوادگی"
+
+#: page-templates/page-contact.php:91
+msgid "مثال: علی محمدی"
+msgstr "مثال: علی محمدی"
+
+#: page-templates/page-contact.php:94
+msgid "شماره موبایل"
+msgstr "شماره موبایل"
+
+#: page-templates/page-contact.php:100
+msgid "موضوع پیام"
+msgstr "موضوع پیام"
+
+#: page-templates/page-contact.php:101
+msgid "مثال: پیگیری سفارش یا مشاوره خرید کالا"
+msgstr "مثال: پیگیری سفارش یا مشاوره خرید کالا"
+
+#: page-templates/page-contact.php:105
+msgid "متن پیام شما"
+msgstr "متن پیام شما"
+
+#: page-templates/page-contact.php:106
+msgid "توضیحات خود را اینجا بنویسید..."
+msgstr "توضیحات خود را اینجا بنویسید..."
+
+#: page-templates/page-contact.php:110
+msgid "ارسال پیام"
+msgstr "ارسال پیام"
+
+#: page-templates/page-contact.php:119
+msgid "پرسش‌های متداول خریداران"
+msgstr "پرسش‌های متداول خریداران"
+
+#: page-templates/page-contact.php:126
+msgid "چگونه سفارش خود را پیگیری کنم؟"
+msgstr "چگونه سفارش خود را پیگیری کنم؟"
+
+#: page-templates/page-contact.php:130
+msgid "از طریق بخش «سفارش‌های من» در حساب کاربری یا صفحه «پیگیری سفارش» با وارد کردن کد پیگیری می‌توانید وضعیت ارسال را به صورت لحظه‌ای مشاهده کنید."
+msgstr "از طریق بخش «سفارش‌های من» در حساب کاربری یا صفحه «پیگیری سفارش» با وارد کردن کد پیگیری می‌توانید وضعیت ارسال را به صورت لحظه‌ای مشاهده کنید."
+
+#: page-templates/page-contact.php:136
+msgid "هزینه ارسال چقدر است؟"
+msgstr "هزینه ارسال چقدر است؟"
+
+#: page-templates/page-contact.php:140
+msgid "ارسال کلیه خریدهای بالای ۱ میلیون تومان به سراسر کشور کاملاً رایگان است. برای مبالغ کمتر بر اساس تعرفه مصوب پست محاسبه می‌شود."
+msgstr "ارسال کلیه خریدهای بالای ۱ میلیون تومان به سراسر کشور کاملاً رایگان است. برای مبالغ کمتر بر اساس تعرفه مصوب پست محاسبه می‌شود."
+
+#: page-templates/page-contact.php:146
+msgid "شرایط گارانتی و مرجوعی چیست؟"
+msgstr "شرایط گارانتی و مرجوعی چیست؟"
+
+#: page-templates/page-contact.php:150
+msgid "تمامی کالاها تا ۷ روز پس از تحویل در صورت مغایرت یا نقص فنی بدون کسر هزینه تعویض یا مرجوع می‌شوند."
+msgstr "تمامی کالاها تا ۷ روز پس از تحویل در صورت مغایرت یا نقص فنی بدون کسر هزینه تعویض یا مرجوع می‌شوند."
+
+#. translators: %s: search query
+#: search.php:39
+#, php-format
+msgid "نتایج جستجو برای: «%s»"
+msgstr "نتایج جستجو برای: «%s»"
+
+#. translators: %s: total results count
+#: search.php:48
+#, php-format
+msgid "تعداد %s مورد یافت شد."
+msgstr "تعداد %s مورد یافت شد."
+
+#: search.php:58
+msgid "جستجوی مجدد..."
+msgstr "جستجوی مجدد..."
+
+#: search.php:109
+msgid "هیچ موردی منطبق با جستجوی شما یافت نشد!"
+msgstr "هیچ موردی منطبق با جستجوی شما یافت نشد!"
+
+#: search.php:113
+msgid "لطفاً املای کلمات را بررسی کنید، از عبارات عمومی‌تر استفاده کنید یا از دسته‌بندی‌های زیر دیدن فرمایید."
+msgstr "لطفاً املای کلمات را بررسی کنید، از عبارات عمومی‌تر استفاده کنید یا از دسته‌بندی‌های زیر دیدن فرمایید."
+
+#: search.php:118
+msgid "دسته‌بندی‌های پیشنهادی برای شما:"
+msgstr "دسته‌بندی‌های پیشنهادی برای شما:"
+
+#: single.php:58
+msgid "بدون دیدگاه"
+msgstr "بدون دیدگاه"
+
+#: single.php:58
+msgid "۱ دیدگاه"
+msgstr "۱ دیدگاه"
+
+#: single.php:58
+msgid "% دیدگاه"
+msgstr "% دیدگاه"
+
+#: single.php:78
+msgid "صفحات:"
+msgstr "صفحات:"
+
+#: single.php:91
+msgid "برچسب‌ها:"
+msgstr "برچسب‌ها:"
+
+#: single.php:107
+msgid "نویسنده و کارشناس تخصصی تولید محتوا در نگار شاپ."
+msgstr "نویسنده و کارشناس تخصصی تولید محتوا در نگار شاپ."
+
+#: single.php:119
+msgid "← مقاله قبلی"
+msgstr "← مقاله قبلی"
+
+#: single.php:128
+msgid "مقاله بعدی →"
+msgstr "مقاله بعدی →"
+
+#: template-parts/blog/article-card.php:58
+msgid "ادامه مطلب"
+msgstr "ادامه مطلب"
+
+#: template-parts/blog/article-card.php:61
+msgid "زمان مطالعه: ۵ دقیقه"
+msgstr "زمان مطالعه: ۵ دقیقه"
+
+#: template-parts/blog/sidebar.php:24
+msgid "سایدبار وبلاگ"
+msgstr "سایدبار وبلاگ"
+
+#: template-parts/blog/sidebar.php:29
+msgid "جستجو در مقالات"
+msgstr "جستجو در مقالات"
+
+#: template-parts/blog/sidebar.php:33
+msgid "جستجوی مقاله..."
+msgstr "جستجوی مقاله..."
+
+#: template-parts/blog/sidebar.php:44
+msgid "دسته‌بندی‌های وبلاگ"
+msgstr "دسته‌بندی‌های وبلاگ"
+
+#: template-parts/blog/sidebar.php:64
+msgid "آخرین مقالات"
+msgstr "آخرین مقالات"
+
+#: template-parts/footer/columns.php:41
+msgid "تهران، خیابان آزادی، برج نوآوری، طبقه ۴"
+msgstr "تهران، خیابان آزادی، برج نوآوری، طبقه ۴"
+
+#: template-parts/footer/columns.php:66
+msgid "دسترسی سریع"
+msgstr "دسترسی سریع"
+
+#: template-parts/footer/columns.php:82
+msgid "فروشگاه و محصولات"
+msgstr "فروشگاه و محصولات"
+
+#: template-parts/footer/columns.php:83
+#: template-parts/header/main-header.php:161
+#: template-parts/header/mobile-bottom-bar.php:48
+#: template-parts/header/mobile-header.php:41
+msgid "سبد خرید"
+msgstr "سبد خرید"
+
+#: template-parts/footer/columns.php:84
+#: template-parts/header/main-header.php:97
+#: woocommerce/checkout/thankyou.php:31
+msgid "حساب کاربری من"
+msgstr "حساب کاربری من"
+
+#: template-parts/footer/columns.php:86
+msgid "مجله اینترنتی و وبلاگ"
+msgstr "مجله اینترنتی و وبلاگ"
+
+#: template-parts/footer/columns.php:100
+msgid "خدمات مشتریان"
+msgstr "خدمات مشتریان"
+
+#: template-parts/footer/columns.php:114
+msgid "پرسش‌های متداول (FAQ)"
+msgstr "پرسش‌های متداول (FAQ)"
+
+#: template-parts/footer/columns.php:115
+msgid "رویه ارسال سفارش‌ها"
+msgstr "رویه ارسال سفارش‌ها"
+
+#: template-parts/footer/columns.php:116
+msgid "شرایط بازگشت کالا"
+msgstr "شرایط بازگشت کالا"
+
+#: template-parts/footer/columns.php:117
+msgid "حریم خصوصی کاربران"
+msgstr "حریم خصوصی کاربران"
+
+#: template-parts/footer/columns.php:118
+msgid "قوانین و مقررات خرید"
+msgstr "قوانین و مقررات خرید"
+
+#: template-parts/footer/columns.php:132
+msgid "نمادهای اعتماد الکترونیکی"
+msgstr "نمادهای اعتماد الکترونیکی"
+
+#: template-parts/footer/copyright.php:17
+#, php-format
+msgid "تمامی حقوق مادی و معنوی این وب‌سایت متعلق به %2$s می‌باشد. © %1$s"
+msgstr "تمامی حقوق مادی و معنوی این وب‌سایت متعلق به %2$s می‌باشد. © %1$s"
+
+#: template-parts/footer/copyright.php:85
+msgid "بازگشت به بالای صفحه"
+msgstr "بازگشت به بالای صفحه"
+
+#: template-parts/footer/copyright.php:86
+msgid "بازگشت به بالا"
+msgstr "بازگشت به بالا"
+
+#: template-parts/footer/features.php:13
+msgid "مزایای خرید از فروشگاه"
+msgstr "مزایای خرید از فروشگاه"
+
+#: template-parts/footer/features.php:28
+msgid "تحویل اکسپرس"
+msgstr "تحویل اکسپرس"
+
+#: template-parts/footer/features.php:29
+msgid "ارسال سریع به سراسر کشور"
+msgstr "ارسال سریع به سراسر کشور"
+
+#: template-parts/footer/features.php:42
+msgid "ضمانت اصالت"
+msgstr "ضمانت اصالت"
+
+#: template-parts/footer/features.php:43
+msgid "۱۰۰٪ تضمین اصل بودن کالا"
+msgstr "۱۰۰٪ تضمین اصل بودن کالا"
+
+#: template-parts/footer/features.php:57
+msgid "امکان عودت بی‌قید و شرط"
+msgstr "امکان عودت بی‌قید و شرط"
+
+#: template-parts/footer/features.php:69
+msgid "پشتیبانی ۲۴ ساعته"
+msgstr "پشتیبانی ۲۴ ساعته"
+
+#: template-parts/footer/features.php:70
+msgid "۷ روز هفته پاسخگوی شما"
+msgstr "۷ روز هفته پاسخگوی شما"
+
+#: template-parts/footer/features.php:83
+msgid "پرداخت امن آنلاین"
+msgstr "پرداخت امن آنلاین"
+
+#: template-parts/footer/features.php:84
+msgid "با کلیه کارت‌های عضو شتاب"
+msgstr "با کلیه کارت‌های عضو شتاب"
+
+#: template-parts/footer/newsletter.php:13
+msgid "عضویت در خبرنامه تخفیف‌ها"
+msgstr "عضویت در خبرنامه تخفیف‌ها"
+
+#: template-parts/footer/newsletter.php:23
+msgid "از جدیدترین تخفیف‌ها و حراجی‌ها باخبر شوید!"
+msgstr "از جدیدترین تخفیف‌ها و حراجی‌ها باخبر شوید!"
+
+#: template-parts/footer/newsletter.php:26
+msgid "با ثبت ایمیل یا شماره همراه خود، کدهای تخفیف اختصاصی را زودتر از دیگران دریافت کنید."
+msgstr "با ثبت ایمیل یا شماره همراه خود، کدهای تخفیف اختصاصی را زودتر از دیگران دریافت کنید."
+
+#: template-parts/footer/newsletter.php:37
+msgid "ایمیل یا شماره همراه خود را وارد کنید..."
+msgstr "ایمیل یا شماره همراه خود را وارد کنید..."
+
+#: template-parts/footer/newsletter.php:41
+msgid "عضویت"
+msgstr "عضویت"
+
+#: template-parts/footer/trust-badges.php:15
+msgid "دارای کلیه مجوزهای رسمی و گواهینامه‌های پرداخت امن بانکی"
+msgstr "دارای کلیه مجوزهای رسمی و گواهینامه‌های پرداخت امن بانکی"
+
+#: template-parts/footer/trust-badges.php:23
+msgid "ای‌نماد ۵ ستاره"
+msgstr "ای‌نماد ۵ ستاره"
+
+#: template-parts/footer/trust-badges.php:32
+msgid "نشان ملی ثبت"
+msgstr "نشان ملی ثبت"
+
+#: template-parts/footer/trust-badges.php:41
+msgid "درگاه شاپرک"
+msgstr "درگاه شاپرک"
+
+#: template-parts/header/main-header.php:52
+#: template-parts/home/category-bubbles.php:39
+#: template-parts/shop/sidebar-filters.php:42
+msgid "همه دسته‌ها"
+msgstr "همه دسته‌ها"
+
+#: template-parts/header/main-header.php:105
+msgid "خوش آمدید"
+msgstr "خوش آمدید"
+
+#: template-parts/header/main-header.php:119
+#: woocommerce/myaccount/form-login.php:64
+#: woocommerce/myaccount/form-login.php:65
+msgid "ورود به حساب"
+msgstr "ورود به حساب"
+
+#: template-parts/header/main-header.php:120
+msgid "ثبت‌نام کاربر"
+msgstr "ثبت‌نام کاربر"
+
+#: template-parts/header/main-header.php:128
+msgid "مقایسه کالاها"
+msgstr "مقایسه کالاها"
+
+#: template-parts/header/main-header.php:138
+msgid "علاقه‌مندی‌ها"
+msgstr "علاقه‌مندی‌ها"
+
+#: template-parts/header/main-header.php:149
+msgid "مشاهده سبد خرید"
+msgstr "مشاهده سبد خرید"
+
+#: template-parts/header/mini-cart-drawer.php:23
+#: woocommerce/cart/cart.php:19
+msgid "سبد خرید شما"
+msgstr "سبد خرید شما"
+
+#: template-parts/header/mini-cart-drawer.php:29
+msgid "بستن سبد خرید"
+msgstr "بستن سبد خرید"
+
+#: template-parts/header/mini-cart-drawer.php:45
+msgid "ووکامرس فعال نیست."
+msgstr "ووکامرس فعال نیست."
+
+#: template-parts/header/mobile-bottom-bar.php:13
+msgid "ناوبری سریع موبایل"
+msgstr "ناوبری سریع موبایل"
+
+#: template-parts/header/mobile-bottom-bar.php:22
+msgid "خانه"
+msgstr "خانه"
+
+#: template-parts/header/mobile-bottom-bar.php:33
+msgid "دسته‌ها"
+msgstr "دسته‌ها"
+
+#: template-parts/header/mobile-bottom-bar.php:56
+msgid "علاقه‌مندی"
+msgstr "علاقه‌مندی"
+
+#: template-parts/header/mobile-bottom-bar.php:65
+msgid "حساب من"
+msgstr "حساب من"
+
+#: template-parts/header/mobile-drawer.php:20
+msgid "بستن منو"
+msgstr "بستن منو"
+
+#: template-parts/header/mobile-drawer.php:31
+msgid "منوی سایت"
+msgstr "منوی سایت"
+
+#: template-parts/header/mobile-drawer.php:34
+msgid "دسته‌بندی‌ها"
+msgstr "دسته‌بندی‌ها"
+
+#: template-parts/header/mobile-drawer.php:66
+msgid "وبلاگ"
+msgstr "وبلاگ"
+
+#: template-parts/header/mobile-drawer.php:67
+#: template-parts/header/navigation.php:111
+#: template-parts/header/top-bar.php:47
+msgid "درباره ما"
+msgstr "درباره ما"
+
+#: template-parts/header/mobile-drawer.php:68
+#: template-parts/header/navigation.php:116
+#: template-parts/header/top-bar.php:42
+msgid "تماس با ما"
+msgstr "تماس با ما"
+
+#: template-parts/header/mobile-header.php:17
+msgid "منوی ناوبری موبایل"
+msgstr "منوی ناوبری موبایل"
+
+#: template-parts/header/mobile-header.php:60
+msgid "جستجوی نام کالا یا برند..."
+msgstr "جستجوی نام کالا یا برند..."
+
+#: template-parts/header/navigation.php:25
+msgid "دسته‌بندی کالاها"
+msgstr "دسته‌بندی کالاها"
+
+#: template-parts/header/navigation.php:64
+msgid "دسته‌ای تعریف نشده است"
+msgstr "دسته‌ای تعریف نشده است"
+
+#: template-parts/header/navigation.php:74
+msgid "ناوبری اصلی فروشگاه"
+msgstr "ناوبری اصلی فروشگاه"
+
+#: template-parts/header/navigation.php:106
+msgid "وبلاگ و مقالات"
+msgstr "وبلاگ و مقالات"
+
+#: template-parts/header/navigation.php:132
+#: template-parts/home/flash-deals.php:33
+msgid "پیشنهادات شگفت‌انگیز"
+msgstr "پیشنهادات شگفت‌انگیز"
+
+#: template-parts/header/top-bar.php:25
+msgid "پیشنهاد ویژه"
+msgstr "پیشنهاد ویژه"
+
+#: template-parts/header/top-bar.php:37
+msgid "پیگیری سفارش"
+msgstr "پیگیری سفارش"
+
+#: template-parts/home/banners-grid.php:14
+msgid "بنرهای تبلیغاتی منتخب"
+msgstr "بنرهای تبلیغاتی منتخب"
+
+#: template-parts/home/banners-grid.php:22
+msgid "تجهیزات گیمینگ"
+msgstr "تجهیزات گیمینگ"
+
+#: template-parts/home/banners-grid.php:25
+msgid "مانیتور و کنسول بازی"
+msgstr "مانیتور و کنسول بازی"
+
+#: template-parts/home/banners-grid.php:27
+msgid "تخفیف ویژه تا ۳۰٪"
+msgstr "تخفیف ویژه تا ۳۰٪"
+
+#: template-parts/home/banners-grid.php:30
+msgid "خرید کالاها"
+msgstr "خرید کالاها"
+
+#: template-parts/home/banners-grid.php:39
+msgid "لوازم دیجیتال"
+msgstr "لوازم دیجیتال"
+
+#: template-parts/home/banners-grid.php:42
+msgid "لپ‌تاپ‌های مهندسی و اداری"
+msgstr "لپ‌تاپ‌های مهندسی و اداری"
+
+#: template-parts/home/banners-grid.php:44
+msgid "با گارانتی معتبر شرکتی"
+msgstr "با گارانتی معتبر شرکتی"
+
+#: template-parts/home/banners-grid.php:47
+msgid "مشاهده مدل‌ها"
+msgstr "مشاهده مدل‌ها"
+
+#: template-parts/home/banners-grid.php:56
+msgid "صدا و موسیقی"
+msgstr "صدا و موسیقی"
+
+#: template-parts/home/banners-grid.php:59
+msgid "اسپیکر و ساندبار خانگی"
+msgstr "اسپیکر و ساندبار خانگی"
+
+#: template-parts/home/banners-grid.php:61
+msgid "صدای شفاف و باکیفیت"
+msgstr "صدای شفاف و باکیفیت"
+
+#: template-parts/home/banners-grid.php:64
+msgid "انتخاب اسپیکر"
+msgstr "انتخاب اسپیکر"
+
+#: template-parts/home/banners-grid.php:73
+msgid "لوازم جانبی"
+msgstr "لوازم جانبی"
+
+#: template-parts/home/banners-grid.php:76
+msgid "پاوربانک و شارژر سریع"
+msgstr "پاوربانک و شارژر سریع"
+
+#: template-parts/home/banners-grid.php:78
+msgid "تضمین اصالت و سلامت باتری"
+msgstr "تضمین اصالت و سلامت باتری"
+
+#: template-parts/home/banners-grid.php:81
+msgid "خرید شارژر"
+msgstr "خرید شارژر"
+
+#: template-parts/home/blog-posts.php:23
+msgid "آخرین مقالات و آموزش‌ها"
+msgstr "آخرین مقالات و آموزش‌ها"
+
+#: template-parts/home/blog-posts.php:31
+msgid "آخرین مقالات و راهنماهای خرید"
+msgstr "آخرین مقالات و راهنماهای خرید"
+
+#: template-parts/home/blog-posts.php:35
+msgid "مشاهده همه مقالات"
+msgstr "مشاهده همه مقالات"
+
+#: template-parts/home/blog-posts.php:83
+msgid "مطالعه مقاله"
+msgstr "مطالعه مقاله"
+
+#: template-parts/home/brands-slider.php:25
+msgid "برندهای برتر"
+msgstr "برندهای برتر"
+
+#: template-parts/home/brands-slider.php:32
+msgid "محبوب‌ترین برندهای بازار"
+msgstr "محبوب‌ترین برندهای بازار"
+
+#: template-parts/home/category-bubbles.php:26
+msgid "دسته‌بندی‌های برتر"
+msgstr "دسته‌بندی‌های برتر"
+
+#: template-parts/home/category-bubbles.php:34
+msgid "دسته‌بندی‌های محبوب فروشگاه"
+msgstr "دسته‌بندی‌های محبوب فروشگاه"
+
+#: template-parts/home/category-bubbles.php:71
+#, php-format
+msgid "%s کالا"
+msgid_plural "%s کالا"
+msgstr[0] ""
+msgstr[1] ""
+
+#: template-parts/home/category-showcase.php:26
+msgid "ویترین دسته‌بندی منتخب"
+msgstr "ویترین دسته‌بندی منتخب"
+
+#: template-parts/home/category-showcase.php:36
+msgid "دسته برگزیده ماه"
+msgstr "دسته برگزیده ماه"
+
+#: template-parts/home/category-showcase.php:39
+msgid "دنیای صوت و هدفون‌های پیشرفته"
+msgstr "دنیای صوت و هدفون‌های پیشرفته"
+
+#: template-parts/home/category-showcase.php:42
+msgid "بهترین برندهای روز دنیا با گارانتی تعویض و ضمانت بهترین کیفیت پخش صدا."
+msgstr "بهترین برندهای روز دنیا با گارانتی تعویض و ضمانت بهترین کیفیت پخش صدا."
+
+#: template-parts/home/category-showcase.php:48
+msgid "مشاهده همه کالاها"
+msgstr "مشاهده همه کالاها"
+
+#: template-parts/home/flash-deals.php:45
+msgid "فرصت محدود"
+msgstr "فرصت محدود"
+
+#: template-parts/home/flash-deals.php:49
+msgid "پیشنهاد شگفت‌انگیز"
+msgstr "پیشنهاد شگفت‌انگیز"
+
+#: template-parts/home/flash-deals.php:53
+msgid "تخفیف‌های استثنایی و لحظه‌ای روی برترین کالاهای دیجیتال و لوازم خانگی."
+msgstr "تخفیف‌های استثنایی و لحظه‌ای روی برترین کالاهای دیجیتال و لوازم خانگی."
+
+#: template-parts/home/flash-deals.php:60
+msgid "ساعت"
+msgstr "ساعت"
+
+#: template-parts/home/flash-deals.php:65
+msgid "دقیقه"
+msgstr "دقیقه"
+
+#: template-parts/home/flash-deals.php:70
+msgid "ثانیه"
+msgstr "ثانیه"
+
+#: template-parts/home/flash-deals.php:76
+msgid "مشاهده همه تخفیف‌ها"
+msgstr "مشاهده همه تخفیف‌ها"
+
+#: template-parts/home/hero-slider.php:14
+msgid "اسلایدر اصلی و بنرهای ویژه"
+msgstr "اسلایدر اصلی و بنرهای ویژه"
+
+#: template-parts/home/hero-slider.php:29
+msgid "جشنواره تخفیف‌های پاییزی"
+msgstr "جشنواره تخفیف‌های پاییزی"
+
+#: template-parts/home/hero-slider.php:32
+msgid "جدیدترین گجت‌های هوشمند با ۴۰٪ تخفیف"
+msgstr "جدیدترین گجت‌های هوشمند با ۴۰٪ تخفیف"
+
+#: template-parts/home/hero-slider.php:35
+msgid "بهترین انتخاب برای دوستداران تکنولوژی، ساعت‌های هوشمند، هندزفری‌های بی‌سیم با گارانتی اصالت کالا."
+msgstr "بهترین انتخاب برای دوستداران تکنولوژی، ساعت‌های هوشمند، هندزفری‌های بی‌سیم با گارانتی اصالت کالا."
+
+#: template-parts/home/hero-slider.php:38
+msgid "خرید و مشاهده محصولات"
+msgstr "خرید و مشاهده محصولات"
+
+#: template-parts/home/hero-slider.php:50
+msgid "محصولات پرفروش سال"
+msgstr "محصولات پرفروش سال"
+
+#: template-parts/home/hero-slider.php:53
+msgid "لوازم خانگی و آشپزخانه مدرن"
+msgstr "لوازم خانگی و آشپزخانه مدرن"
+
+#: template-parts/home/hero-slider.php:56
+msgid "ارسال رایگان برای خریدهای اول با کد تخفیف اختصاصی NEGAR-FIRST."
+msgstr "ارسال رایگان برای خریدهای اول با کد تخفیف اختصاصی NEGAR-FIRST."
+
+#: template-parts/home/hero-slider.php:59
+msgid "مشاهده حراجی‌ها"
+msgstr "مشاهده حراجی‌ها"
+
+#: template-parts/home/hero-slider.php:71
+msgid "اسلاید قبلی"
+msgstr "اسلاید قبلی"
+
+#: template-parts/home/hero-slider.php:80
+msgid "اسلاید بعدی"
+msgstr "اسلاید بعدی"
+
+#: template-parts/home/hero-slider.php:97
+msgid "تخفیف شگفت‌انگیز"
+msgstr "تخفیف شگفت‌انگیز"
+
+#: template-parts/home/hero-slider.php:100
+msgid "ساعت هوشمند و دستبند ورزشی"
+msgstr "ساعت هوشمند و دستبند ورزشی"
+
+#: template-parts/home/hero-slider.php:102
+msgid "تا ۵۰٪ تخفیف طلایی"
+msgstr "تا ۵۰٪ تخفیف طلایی"
+
+#: template-parts/home/hero-slider.php:105
+msgid "مشاهده کالاهای تخفیفی"
+msgstr "مشاهده کالاهای تخفیفی"
+
+#: template-parts/home/hero-slider.php:116
+msgid "پیشنهاد اختصاصی"
+msgstr "پیشنهاد اختصاصی"
+
+#: template-parts/home/hero-slider.php:119
+msgid "انواع هندزفری و هدست بی‌سیم"
+msgstr "انواع هندزفری و هدست بی‌سیم"
+
+#: template-parts/home/hero-slider.php:121
+msgid "تضمین بهترین قیمت بازار"
+msgstr "تضمین بهترین قیمت بازار"
+
+#: template-parts/home/hero-slider.php:124
+msgid "همین حالا خرید کنید"
+msgstr "همین حالا خرید کنید"
+
+#: template-parts/home/product-tabs.php:54
+msgid "محصولات منتخب فروشگاه"
+msgstr "محصولات منتخب فروشگاه"
+
+#: template-parts/home/product-tabs.php:62
+msgid "منتخب محصولات نگار شاپ"
+msgstr "منتخب محصولات نگار شاپ"
+
+#: template-parts/home/product-tabs.php:69
+#: template-parts/shop/toolbar.php:22
+msgid "جدیدترین‌ها"
+msgstr "جدیدترین‌ها"
+
+#: template-parts/home/product-tabs.php:72
+msgid "پرفروش‌ترین‌ها"
+msgstr "پرفروش‌ترین‌ها"
+
+#: template-parts/home/product-tabs.php:75
+msgid "تخفیف‌دارها"
+msgstr "تخفیف‌دارها"
+
+#: template-parts/modals/compare-modal.php:23
+msgid "مقایسه محصولات منتخب"
+msgstr "مقایسه محصولات منتخب"
+
+#: template-parts/modals/compare-modal.php:25
+#: template-parts/modals/quickview.php:20
+#: template-parts/modals/wishlist-drawer.php:26
+#: woocommerce/single-product/product-gallery.php:95
+msgid "بستن"
+msgstr "بستن"
+
+#: template-parts/modals/compare-modal.php:33
+msgid "در حال بارگذاری جدول مقایسه..."
+msgstr "در حال بارگذاری جدول مقایسه..."
+
+#: template-parts/modals/quickview.php:24
+msgid "نمایش سریع کالا"
+msgstr "نمایش سریع کالا"
+
+#: template-parts/modals/quickview.php:33
+msgid "در حال دریافت اطلاعات کالا..."
+msgstr "در حال دریافت اطلاعات کالا..."
+
+#: template-parts/modals/wishlist-drawer.php:16
+#: template-parts/modals/wishlist-drawer.php:24
+msgid "لیست علاقه‌مندی‌ها"
+msgstr "لیست علاقه‌مندی‌ها"
+
+#: template-parts/modals/wishlist-drawer.php:34
+msgid "در حال بارگذاری لیست علاقه‌مندی‌ها..."
+msgstr "در حال بارگذاری لیست علاقه‌مندی‌ها..."
+
+#: template-parts/modals/wishlist-drawer.php:41
+msgid "حذف همه موارد از علاقه‌مندی"
+msgstr "حذف همه موارد از علاقه‌مندی"
+
+#: template-parts/product/card.php:47
+msgid "افزودن به مقایسه"
+msgstr "افزودن به مقایسه"
+
+#: template-parts/product/card.php:54
+msgid "افزودن به علاقه‌مندی‌ها"
+msgstr "افزودن به علاقه‌مندی‌ها"
+
+#: template-parts/product/card.php:85
+msgid "مشاهده سریع"
+msgstr "مشاهده سریع"
+
+#: template-parts/shop/loop.php:24
+msgid "در حال بارگذاری کالاها..."
+msgstr "در حال بارگذاری کالاها..."
+
+#: template-parts/shop/sidebar-filters.php:34
+msgid "دسته‌بندی محصولات"
+msgstr "دسته‌بندی محصولات"
+
+#: template-parts/shop/sidebar-filters.php:79
+msgid "فقط کالاهای تخفیف‌دار"
+msgstr "فقط کالاهای تخفیف‌دار"
+
+#: template-parts/shop/sidebar-filters.php:90
+msgid "محدوده قیمت (تومان)"
+msgstr "محدوده قیمت (تومان)"
+
+#: template-parts/shop/sidebar-filters.php:96
+msgid "از"
+msgstr "از"
+
+#: template-parts/shop/sidebar-filters.php:101
+msgid "تا"
+msgstr "تا"
+
+#: template-parts/shop/sidebar-filters.php:107
+msgid "اعمال فیلتر قیمت"
+msgstr "اعمال فیلتر قیمت"
+
+#: template-parts/shop/toolbar.php:19
+msgid "مرتب‌سازی پیش‌فرض"
+msgstr "مرتب‌سازی پیش‌فرض"
+
+#: template-parts/shop/toolbar.php:20
+msgid "محبوب‌ترین‌ها"
+msgstr "محبوب‌ترین‌ها"
+
+#: template-parts/shop/toolbar.php:21
+msgid "بالاترین امتیاز"
+msgstr "بالاترین امتیاز"
+
+#: template-parts/shop/toolbar.php:23
+msgid "ارزان‌ترین"
+msgstr "ارزان‌ترین"
+
+#: template-parts/shop/toolbar.php:24
+msgid "گران‌ترین"
+msgstr "گران‌ترین"
+
+#: template-parts/shop/toolbar.php:37
+msgid "فیلترها"
+msgstr "فیلترها"
+
+#: template-parts/shop/toolbar.php:59
+msgid "مرتب‌سازی"
+msgstr "مرتب‌سازی"
+
+#: template-parts/shop/toolbar.php:75
+msgid "حالت نمایش محصولات"
+msgstr "حالت نمایش محصولات"
+
+#: template-parts/shop/toolbar.php:76
+msgid "نمایش شبکه‌ای"
+msgstr "نمایش شبکه‌ای"
+
+#: template-parts/shop/toolbar.php:84
+msgid "نمایش ردیفی (لیست)"
+msgstr "نمایش ردیفی (لیست)"
+
+#: woocommerce/archive-product.php:40
+msgid "فیلترهای فروشگاه"
+msgstr "فیلترهای فروشگاه"
+
+#: woocommerce/archive-product.php:46
+#: woocommerce/archive-product.php:53
+msgid "فیلتر محصولات"
+msgstr "فیلتر محصولات"
+
+#: woocommerce/archive-product.php:55
+msgid "بستن منوی فیلترها"
+msgstr "بستن منوی فیلترها"
+
+#: woocommerce/cart/cart-empty.php:24
+msgid "سبد خرید شما در حال حاضر خالی است!"
+msgstr "سبد خرید شما در حال حاضر خالی است!"
+
+#: woocommerce/cart/cart-empty.php:28
+msgid "می‌توانید برای مشاهده محصولات جدید، دسته‌بندی‌ها و تخفیف‌های شگفت‌انگیز به صفحه فروشگاه سر بزنید."
+msgstr "می‌توانید برای مشاهده محصولات جدید، دسته‌بندی‌ها و تخفیف‌های شگفت‌انگیز به صفحه فروشگاه سر بزنید."
+
+#: woocommerce/cart/cart-empty.php:34
+msgid "شروع خرید از فروشگاه"
+msgstr "شروع خرید از فروشگاه"
+
+#: woocommerce/cart/cart-totals.php:17
+msgid "خلاصه فاکتور سفارش"
+msgstr "خلاصه فاکتور سفارش"
+
+#: woocommerce/cart/cart-totals.php:25
+#: woocommerce/cart/cart-totals.php:26
+#: woocommerce/checkout/review-order.php:48
+msgid "قیمت کل کالاها"
+msgstr "قیمت کل کالاها"
+
+#: woocommerce/cart/cart-totals.php:50
+#: woocommerce/cart/cart-totals.php:51
+msgid "هزینه ارسال"
+msgstr "هزینه ارسال"
+
+#. translators: %s location.
+#: woocommerce/cart/cart-totals.php:75
+#, php-format
+msgid "(تخمینی برای %s)"
+msgstr "(تخمینی برای %s)"
+
+#: woocommerce/cart/cart-totals.php:102
+#: woocommerce/checkout/review-order.php:91
+msgid "مبلغ قابل پرداخت:"
+msgstr "مبلغ قابل پرداخت:"
+
+#: woocommerce/cart/cart-totals.php:103
+msgid "مبلغ قابل پرداخت"
+msgstr "مبلغ قابل پرداخت"
+
+#: woocommerce/cart/cart.php:35
+#: woocommerce/checkout/review-order.php:15
+msgid "محصول"
+msgstr "محصول"
+
+#: woocommerce/cart/cart.php:36
+#: woocommerce/cart/cart.php:93
+msgid "قیمت واحد"
+msgstr "قیمت واحد"
+
+#: woocommerce/cart/cart.php:37
+#: woocommerce/cart/cart.php:98
+msgid "تعداد"
+msgstr "تعداد"
+
+#: woocommerce/cart/cart.php:38
+#: woocommerce/cart/cart.php:127
+msgid "قیمت کل"
+msgstr "قیمت کل"
+
+#: woocommerce/cart/cart.php:86
+msgid "موجود در پیش‌خرید"
+msgstr "موجود در پیش‌خرید"
+
+#. translators: %s is the product name
+#: woocommerce/cart/cart.php:140
+#, php-format
+msgid "حذف %s از سبد خرید"
+msgstr "حذف %s از سبد خرید"
+
+#: woocommerce/cart/cart.php:166
+msgid "کد تخفیف:"
+msgstr "کد تخفیف:"
+
+#: woocommerce/cart/cart.php:167
+msgid "کد تخفیف دارید؟"
+msgstr "کد تخفیف دارید؟"
+
+#: woocommerce/cart/cart.php:168
+msgid "اعمال کد"
+msgstr "اعمال کد"
+
+#: woocommerce/cart/cart.php:173
+msgid "به‌روزرسانی سبد خرید"
+msgstr "به‌روزرسانی سبد خرید"
+
+#: woocommerce/cart/cart.php:173
+msgid "به‌روزرسانی سبد"
+msgstr "به‌روزرسانی سبد"
+
+#: woocommerce/checkout/form-checkout.php:17
+msgid "برای تسویه‌حساب باید وارد حساب کاربری خود شوید."
+msgstr "برای تسویه‌حساب باید وارد حساب کاربری خود شوید."
+
+#: woocommerce/checkout/form-checkout.php:28
+msgid "تسویه‌حساب و ثبت نهایی سفارش"
+msgstr "تسویه‌حساب و ثبت نهایی سفارش"
+
+#: woocommerce/checkout/form-checkout.php:47
+msgid "اطلاعات گیرنده و نشانی تحویل"
+msgstr "اطلاعات گیرنده و نشانی تحویل"
+
+#: woocommerce/checkout/form-checkout.php:74
+msgid "خلاصه سفارش و انتخاب درگاه"
+msgstr "خلاصه سفارش و انتخاب درگاه"
+
+#: woocommerce/checkout/review-order.php:16
+msgid "قیمت جزء"
+msgstr "قیمت جزء"
+
+#: woocommerce/checkout/thankyou.php:26
+msgid "متأسفانه پرداخت سفارش انجام نشد."
+msgstr "متأسفانه پرداخت سفارش انجام نشد."
+
+#: woocommerce/checkout/thankyou.php:27
+msgid "تراکنش ناموفق بود یا توسط بانک لغو شد. می‌توانید مجدداً اقدام به پرداخت نمایید."
+msgstr "تراکنش ناموفق بود یا توسط بانک لغو شد. می‌توانید مجدداً اقدام به پرداخت نمایید."
+
+#: woocommerce/checkout/thankyou.php:29
+msgid "تلاش مجدد برای پرداخت"
+msgstr "تلاش مجدد برای پرداخت"
+
+#: woocommerce/checkout/thankyou.php:43
+msgid "از خرید شما سپاسگزاریم!"
+msgstr "از خرید شما سپاسگزاریم!"
+
+#: woocommerce/checkout/thankyou.php:44
+msgid "سفارش شما با موفقیت ثبت شد و هم‌اکنون در مرحله پردازش قرار دارد."
+msgstr "سفارش شما با موفقیت ثبت شد و هم‌اکنون در مرحله پردازش قرار دارد."
+
+#: woocommerce/checkout/thankyou.php:49
+msgid "شماره سفارش:"
+msgstr "شماره سفارش:"
+
+#: woocommerce/checkout/thankyou.php:53
+msgid "تاریخ ثبت:"
+msgstr "تاریخ ثبت:"
+
+#: woocommerce/checkout/thankyou.php:57
+msgid "مبلغ پرداختی:"
+msgstr "مبلغ پرداختی:"
+
+#: woocommerce/checkout/thankyou.php:61
+msgid "روش پرداخت:"
+msgstr "روش پرداخت:"
+
+#: woocommerce/checkout/thankyou.php:79
+msgid "از سفارش شما سپاسگزاریم. سفارش شما با موفقیت دریافت شد."
+msgstr "از سفارش شما سپاسگزاریم. سفارش شما با موفقیت دریافت شد."
+
+#: woocommerce/checkout/thankyou.php:80
+msgid "بازگشت به فروشگاه"
+msgstr "بازگشت به فروشگاه"
+
+#: woocommerce/content-single-product.php:52
+msgid "کد کالا:"
+msgstr "کد کالا:"
+
+#. translators: %s: review count
+#: woocommerce/content-single-product.php:76
+#, php-format
+msgid "%s دیدگاه خریداران"
+msgstr "%s دیدگاه خریداران"
+
+#: woocommerce/content-single-product.php:95
+msgid "قیمت محصول:"
+msgstr "قیمت محصول:"
+
+#: woocommerce/content-single-product.php:112
+msgid "موجود در انبار - آماده ارسال فوری"
+msgstr "موجود در انبار - آماده ارسال فوری"
+
+#: woocommerce/content-single-product.php:115
+msgid "ناموجود در انبار"
+msgstr "ناموجود در انبار"
+
+#. translators: 1: user display name
+#: woocommerce/myaccount/dashboard.php:24
+#, php-format
+msgid "سلام %s عزیز، به حساب کاربری خود خوش آمدید! 👋"
+msgstr "سلام %s عزیز، به حساب کاربری خود خوش آمدید! 👋"
+
+#. translators: 1: orders URL 2: addresses URL 3: account details URL
+#: woocommerce/myaccount/dashboard.php:33
+#, php-format
+msgid "از طریق پیشخوان کاربری خود می‌توانید <a href=\"%1$s\" class=\"text-primary font-bold hover:underline\">آخرین سفارش‌ها</a> را مشاهده کنید، <a href=\"%2$s\" class=\"text-primary font-bold hover:underline\">نشانی‌های ارسال و صورت‌حساب</a> را مدیریت نمایید و <a href=\"%3$s\" class=\"text-primary font-bold hover:underline\">مشخصات و رمز عبور</a> خود را ویرایش کنید."
+msgstr "از طریق پیشخوان کاربری خود می‌توانید <a href=\"%1$s\" class=\"text-primary font-bold hover:underline\">آخرین سفارش‌ها</a> را مشاهده کنید، <a href=\"%2$s\" class=\"text-primary font-bold hover:underline\">نشانی‌های ارسال و صورت‌حساب</a> را مدیریت نمایید و <a href=\"%3$s\" class=\"text-primary font-bold hover:underline\">مشخصات و رمز عبور</a> خود را ویرایش کنید."
+
+#: woocommerce/myaccount/dashboard.php:51
+msgid "سفارش‌های من"
+msgstr "سفارش‌های من"
+
+#: woocommerce/myaccount/dashboard.php:52
+msgid "پیگیری وضعیت مرسوله"
+msgstr "پیگیری وضعیت مرسوله"
+
+#: woocommerce/myaccount/dashboard.php:62
+msgid "نشانی‌های تحویل"
+msgstr "نشانی‌های تحویل"
+
+#: woocommerce/myaccount/dashboard.php:63
+msgid "مدیریت آدرس‌های ثبت‌شده"
+msgstr "مدیریت آدرس‌های ثبت‌شده"
+
+#: woocommerce/myaccount/dashboard.php:73
+msgid "جزئیات حساب کاربری"
+msgstr "جزئیات حساب کاربری"
+
+#: woocommerce/myaccount/dashboard.php:74
+msgid "تغییر کلمه عبور و نام"
+msgstr "تغییر کلمه عبور و نام"
+
+#: woocommerce/myaccount/form-login.php:29
+msgid "ورود به حساب کاربری"
+msgstr "ورود به حساب کاربری"
+
+#: woocommerce/myaccount/form-login.php:31
+msgid "اگر قبلاً در سایت عضو شده‌اید، وارد شوید."
+msgstr "اگر قبلاً در سایت عضو شده‌اید، وارد شوید."
+
+#: woocommerce/myaccount/form-login.php:39
+msgid "نام کاربری یا ایمیل"
+msgstr "نام کاربری یا ایمیل"
+
+#: woocommerce/myaccount/form-login.php:45
+#: woocommerce/myaccount/form-login.php:105
+msgid "کلمه عبور"
+msgstr "کلمه عبور"
+
+#: woocommerce/myaccount/form-login.php:46
+msgid "فراموشی رمز؟"
+msgstr "فراموشی رمز؟"
+
+#: woocommerce/myaccount/form-login.php:58
+msgid "مرا به خاطر بسپار"
+msgstr "مرا به خاطر بسپار"
+
+#: woocommerce/myaccount/form-login.php:82
+msgid "عضویت جدید در فروشگاه"
+msgstr "عضویت جدید در فروشگاه"
+
+#: woocommerce/myaccount/form-login.php:84
+msgid "اگر کاربر جدید هستید، ثبت‌نام کنید."
+msgstr "اگر کاربر جدید هستید، ثبت‌نام کنید."
+
+#: woocommerce/myaccount/form-login.php:93
+msgid "نام کاربری"
+msgstr "نام کاربری"
+
+#: woocommerce/myaccount/form-login.php:99
+msgid "آدرس ایمیل"
+msgstr "آدرس ایمیل"
+
+#: woocommerce/myaccount/form-login.php:109
+msgid "لینک تعیین کلمه عبور به ایمیل شما ارسال خواهد شد."
+msgstr "لینک تعیین کلمه عبور به ایمیل شما ارسال خواهد شد."
+
+#: woocommerce/myaccount/form-login.php:116
+msgid "ثبت‌نام در سایت"
+msgstr "ثبت‌نام در سایت"
+
+#: woocommerce/myaccount/form-login.php:117
+msgid "عضویت در سایت"
+msgstr "عضویت در سایت"
+
+#: woocommerce/myaccount/navigation.php:25
+msgid "ناوبری حساب کاربری"
+msgstr "ناوبری حساب کاربری"
+
+#: woocommerce/myaccount/orders.php:18
+msgid "تاریخچه سفارش‌های من"
+msgstr "تاریخچه سفارش‌های من"
+
+#: woocommerce/myaccount/orders.php:50
+msgctxt "hash before order number"
+msgid "#"
+msgstr "#"
+
+#. translators: 1: formatted order total 2: total order items
+#: woocommerce/myaccount/orders.php:79
+#, php-format
+msgid "%1$s برای %2$s قلم"
+msgid_plural "%1$s برای %2$s قلم کالا"
+msgstr[0] ""
+msgstr[1] ""
+
+#: woocommerce/myaccount/orders.php:123
+msgid "شما تاکنون هیچ سفارشی در فروشگاه ثبت نکرده‌اید."
+msgstr "شما تاکنون هیچ سفارشی در فروشگاه ثبت نکرده‌اید."
+
+#: woocommerce/myaccount/orders.php:125
+msgid "مشاهده کالاهای فروشگاه"
+msgstr "مشاهده کالاهای فروشگاه"
+
+#: woocommerce/single-product/product-gallery.php:51
+msgid "بزرگ‌نمایی تصویر"
+msgstr "بزرگ‌نمایی تصویر"
+
+#: woocommerce/single-product/product-gallery.php:85
+#, php-format
+msgid "تصویر %d"
+msgstr "تصویر %d"
+
+#: woocommerce/single-product/product-gallery.php:94
+msgid "نمایش بزرگ تصویر"
+msgstr "نمایش بزرگ تصویر"
+
+#: woocommerce/single-product/product-tabs.php:32
+msgid "نقد و بررسی تخصصی"
+msgstr "نقد و بررسی تخصصی"
+
+#: woocommerce/single-product/product-tabs.php:37
+msgid "مشخصات فنی"
+msgstr "مشخصات فنی"
+
+#: woocommerce/single-product/product-tabs.php:41
+msgid "دیدگاه‌های خریداران"
+msgstr "دیدگاه‌های خریداران"
+
+#: woocommerce/single-product/product-tabs.php:61
+msgid "مشخصات فنی و ویژگی‌های محصول"
+msgstr "مشخصات فنی و ویژگی‌های محصول"
+
+#: woocommerce/single-product/product-tabs.php:81
+msgid "مشخصات فنی تکمیلی برای این کالا ثبت نشده است."
+msgstr "مشخصات فنی تکمیلی برای این کالا ثبت نشده است."
+
+#. translators: %s: review count
+#: woocommerce/single-product/product-tabs.php:108
+#, php-format
+msgid "بر اساس %s دیدگاه ثبت‌شده"
+msgstr "بر اساس %s دیدگاه ثبت‌شده"
+
+#: woocommerce/single-product/related.php:45
+msgid "کالاهای مشابه و پیشنهادی"
+msgstr "کالاهای مشابه و پیشنهادی"
+
+#: theme.json
+msgctxt "Color name"
+msgid "Primary Emerald"
+msgstr "Primary Emerald"
+
+#: theme.json
+msgctxt "Color name"
+msgid "Primary Dark"
+msgstr "Primary Dark"
+
+#: theme.json
+msgctxt "Color name"
+msgid "Secondary Teal"
+msgstr "Secondary Teal"
+
+#: theme.json
+msgctxt "Color name"
+msgid "Accent Orange (CTA)"
+msgstr "Accent Orange (CTA)"
+
+#: theme.json
+msgctxt "Color name"
+msgid "Accent Dark"
+msgstr "Accent Dark"
+
+#: theme.json
+msgctxt "Color name"
+msgid "Background Light"
+msgstr "Background Light"
+
+#: theme.json
+msgctxt "Color name"
+msgid "Foreground Dark"
+msgstr "Foreground Dark"
+
+#: theme.json
+msgctxt "Color name"
+msgid "Card White"
+msgstr "Card White"
+
+#: theme.json
+msgctxt "Color name"
+msgid "Card Text"
+msgstr "Card Text"
+
+#: theme.json
+msgctxt "Color name"
+msgid "Muted Gray"
+msgstr "Muted Gray"
+
+#: theme.json
+msgctxt "Color name"
+msgid "Muted Text"
+msgstr "Muted Text"
+
+#: theme.json
+msgctxt "Color name"
+msgid "Border Gray"
+msgstr "Border Gray"
+
+#: theme.json
+msgctxt "Color name"
+msgid "Destructive Red"
+msgstr "Destructive Red"
+
+#: theme.json
+msgctxt "Color name"
+msgid "Success Green"
+msgstr "Success Green"
+
+#: theme.json
+msgctxt "Color name"
+msgid "Warning Yellow"
+msgstr "Warning Yellow"
+
+#: theme.json
+msgctxt "Font family name"
+msgid "Vazirmatn (Default)"
+msgstr "Vazirmatn (Default)"
+
+#: theme.json
+msgctxt "Font family name"
+msgid "System UI"
+msgstr "System UI"
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Extra Small"
+msgstr "Extra Small"
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Small"
+msgstr "Small"
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Normal"
+msgstr "Normal"
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Medium"
+msgstr "Medium"
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Large"
+msgstr "Large"
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Extra Large"
+msgstr "Extra Large"
+
+#: theme.json
+msgctxt "Font size name"
+msgid "2X Large"
+msgstr "2X Large"
+
+#: theme.json
+msgctxt "Font size name"
+msgid "3X Large"
+msgstr "3X Large"
+
+#: theme.json
+msgctxt "Font size name"
+msgid "4X Large"
+msgstr "4X Large"

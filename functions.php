@@ -53,6 +53,11 @@ require_once NEGAR_SHOP_DIR . '/inc/elementor/class-elementor-init.php';
 require_once NEGAR_SHOP_DIR . '/inc/customizer.php';
 
 /**
+ * SEO, OpenGraph and JSON-LD Structured Data (HRD-02)
+ */
+require_once NEGAR_SHOP_DIR . '/inc/seo-schema.php';
+
+/**
  * WooCommerce Integration & Hooks
  */
 if ( class_exists( 'WooCommerce' ) || file_exists( WP_PLUGIN_DIR . '/woocommerce/woocommerce.php' ) ) {

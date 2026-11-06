@@ -59,6 +59,6 @@
 | **OPT-02** | تعریف موقعیت‌های منو و نواحی ابزارک سایدبار و فوتر | 009 Theme Options | T111, T112, T113 | ثبت ۶ ناحیه ابزارک اختصاصی (سایدبار فروشگاه، وبلاگ، ۴ ستون فوتر) با تایید `wp sidebar list` | `verified` |
 | **DMO-01** | بکاپ اولیه دیتابیس لوکال (wp db export) | 010 Demo Content | T120, T123 | خروجی دامپ امن SQL در `backups/pre-demo-backup.sql` (حجم ۸۸۸ کیلوبایت) | `verified` |
 | **DMO-02** | اسکریپت ساخت/ایمپورت محصولات نمونه، دسته‌ها و منوها | 010 Demo Content | T121, T122, T123 | اسکریپت آیدمپوتنت `inc/demo-importer.php` با ساخت برگه‌ها، دسته‌بندی‌ها، منوها، ۱۰ محصول ووکامرس و تنظیمات واحد پول | `verified` |
-| **HRD-01** | بهینه‌سازی پرفورمنس، تست لایت‌هاوس و کشینگ | 011 Hardening & Pack | - | - | `todo` |
-| **HRD-02** | ممیزی نهایی امنیت، اسکیما و سئو فنی | 011 Hardening & Pack | - | - | `todo` |
-| **HRD-03** | پکیج نهایی zip قالب + فایل ترجمه fa_IR.po/.mo | 011 Hardening & Pack | - | - | `todo` |
+| **HRD-01** | بهینه‌سازی پرفورمنس، تست لایت‌هاوس و کشینگ | 011 Hardening & Pack | T132, T135 | لود تنبل تصاویر (Lazy Loading)، پیش‌اتصال CDNها و تست موفقیت‌آمیز HTTP 200 در تمام صفحات | `verified` |
+| **HRD-02** | ممیزی نهایی امنیت، اسکیما و سئو فنی | 011 Hardening & Pack | T130, T132, T135 | اعتبارسنجی اسکیما JSON-LD (WebSite, Store) و متاتگ‌های OpenGraph در `inc/seo-schema.php` و escaping سراسری متغیرها | `verified` |
+| **HRD-03** | پکیج نهایی zip قالب + فایل ترجمه fa_IR.po/.mo | 011 Hardening & Pack | T131, T133, T134, T135 | پکیج آماده نصب `dist/negar-shop.zip` (۱۸۹ کیلوبایت)، کاتالوگ `negar-shop.pot`، فایل‌های ترجمه `fa_IR.po/.mo` و مستندات `README.md` | `verified` |
