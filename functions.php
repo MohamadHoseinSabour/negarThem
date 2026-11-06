@@ -52,4 +52,6 @@ require_once NEGAR_SHOP_DIR . '/inc/elementor/class-elementor-init.php';
  */
 if ( class_exists( 'WooCommerce' ) || file_exists( WP_PLUGIN_DIR . '/woocommerce/woocommerce.php' ) ) {
 	require_once NEGAR_SHOP_DIR . '/inc/woocommerce.php';
+	require_once NEGAR_SHOP_DIR . '/inc/shop.php';
+	require_once NEGAR_SHOP_DIR . '/inc/shop-ajax.php';
 }

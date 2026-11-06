@@ -1,0 +1,189 @@
+/**
+ * Shop & Archive Stylesheet
+ *
+ * @package Negar_Shop
+ * @version 1.0.0
+ */
+
+/* ==========================================================================
+   1. Shop Layout & Sidebar
+   ========================================================================== */
+.negar-shop-page {
+	background-color: var(--negar-bg, #f8fafc);
+	min-height: 80vh;
+}
+
+.negar-breadcrumbs {
+	padding: 0.5rem 0;
+}
+
+.negar-breadcrumbs .breadcrumb-separator {
+	color: var(--negar-text-muted, #94a3b8);
+	display: inline-flex;
+	align-items: center;
+}
+
+.negar-shop-sidebar .negar-filter-widget {
+	transition: box-shadow 0.2s ease;
+}
+
+.negar-shop-sidebar .negar-filter-widget:hover {
+	box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.negar-filter-categories::-webkit-scrollbar {
+	width: 4px;
+}
+
+.negar-filter-categories::-webkit-scrollbar-track {
+	background: #f1f5f9;
+	border-radius: 4px;
+}
+
+.negar-filter-categories::-webkit-scrollbar-thumb {
+	background: #cbd5e1;
+	border-radius: 4px;
+}
+
+/* ==========================================================================
+   2. Toolbar & View Switcher
+   ========================================================================== */
+.negar-view-btn {
+	border: none;
+	background: transparent;
+	cursor: pointer;
+	transition: all 0.15s ease;
+}
+
+.negar-view-btn.is-active {
+	background-color: var(--negar-surface, #ffffff);
+	color: var(--negar-primary, #2563eb);
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.negar-active-filter-chips .negar-filter-chip {
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+/* ==========================================================================
+   3. Product Grid & List View
+   ========================================================================== */
+.negar-products-grid {
+	transition: opacity 0.2s ease;
+}
+
+/* List View Layout Overrides */
+.negar-products-grid.is-list {
+	display: flex !important;
+	flex-direction: column !important;
+	gap: 1rem !important;
+}
+
+.negar-products-grid.is-list .product-card {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+}
+
+@media (min-width: 640px) {
+	.negar-products-grid.is-list .product-card {
+		flex-direction: row;
+		align-items: stretch;
+	}
+
+	.negar-products-grid.is-list .product-card-thumb {
+		width: 240px;
+		min-width: 240px;
+		border-bottom: none;
+		border-left: 1px solid var(--negar-border, #e2e8f0);
+	}
+
+	.negar-products-grid.is-list .product-card-body {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		padding: 1.25rem 1.5rem;
+	}
+
+	.negar-products-grid.is-list .product-card-title {
+		font-size: 1rem;
+		margin-bottom: 0.5rem;
+	}
+
+	.negar-products-grid.is-list .product-card-footer {
+		margin-top: 1rem;
+		padding-top: 1rem;
+		border-top: 1px dashed var(--negar-border, #e2e8f0);
+	}
+}
+
+/* ==========================================================================
+   4. Mobile Filters Off-Canvas Drawer
+   ========================================================================== */
+.negar-filters-drawer {
+	transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+	will-change: transform;
+}
+
+.negar-filters-drawer.is-open {
+	transform: translateX(0) !important;
+}
+
+.negar-filters-backdrop {
+	transition: opacity 0.3s ease;
+	backdrop-filter: blur(2px);
+}
+
+.negar-filters-backdrop.is-open {
+	opacity: 1 !important;
+	pointer-events: auto !important;
+}
+
+/* ==========================================================================
+   5. Loading Overlay & Pagination
+   ========================================================================== */
+.negar-products-loop-wrapper.is-loading .negar-loop-loader {
+	opacity: 1;
+	pointer-events: auto;
+}
+
+.negar-pagination ul.page-numbers {
+	display: flex;
+	gap: 0.5rem;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	align-items: center;
+	flex-wrap: wrap;
+}
+
+.negar-pagination .page-numbers a,
+.negar-pagination .page-numbers span {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 2.5rem;
+	height: 2.5rem;
+	padding: 0 0.75rem;
+	border-radius: var(--negar-radius-md, 0.5rem);
+	border: 1px solid var(--negar-border, #e2e8f0);
+	background-color: var(--negar-surface, #ffffff);
+	color: var(--negar-text-dark, #0f172a);
+	font-size: 0.875rem;
+	font-weight: 500;
+	text-decoration: none;
+	transition: all 0.2s ease;
+}
+
+.negar-pagination .page-numbers span.current {
+	background-color: var(--negar-primary, #2563eb);
+	color: #ffffff;
+	border-color: var(--negar-primary, #2563eb);
+	box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
+}
+
+.negar-pagination .page-numbers a:hover {
+	border-color: var(--negar-primary, #2563eb);
+	color: var(--negar-primary, #2563eb);
+}

@@ -77,6 +77,16 @@ function negar_shop_scripts() {
 		);
 	}
 
+	// Shop & Archive Dedicated CSS
+	if ( function_exists( 'is_woocommerce' ) && ( is_shop() || is_product_taxonomy() ) ) {
+		wp_enqueue_style(
+			'negar-shop-shop',
+			NEGAR_SHOP_URI . '/assets/css/shop.css',
+			array( 'negar-shop-header-footer' ),
+			NEGAR_SHOP_VERSION
+		);
+	}
+
 	// RTL Stylesheet
 	if ( is_rtl() ) {
 		wp_enqueue_style(
@@ -133,6 +143,26 @@ function negar_shop_scripts() {
 			array( 'negar-shop-header-footer' ),
 			NEGAR_SHOP_VERSION,
 			true
+		);
+	}
+
+	// Shop & Archive Interactive Script
+	if ( function_exists( 'is_woocommerce' ) && ( is_shop() || is_product_taxonomy() ) ) {
+		wp_enqueue_script(
+			'negar-shop-shop',
+			NEGAR_SHOP_URI . '/assets/js/shop.js',
+			array( 'negar-shop-header-footer' ),
+			NEGAR_SHOP_VERSION,
+			true
+		);
+
+		wp_localize_script(
+			'negar-shop-shop',
+			'negarShopVars',
+			array(
+				'ajax_url' => admin_url( 'admin-ajax.php' ),
+				'nonce'    => wp_create_nonce( 'negar_shop_nonce' ),
+			)
 		);
 	}
 

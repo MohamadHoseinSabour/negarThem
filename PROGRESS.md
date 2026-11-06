@@ -46,15 +46,34 @@
   - [x] T052: راه‌انداز ویجت‌های المنتور (`inc/elementor/class-elementor-init.php`)
   - [x] T053: ثبت اسکرین‌شات‌ها در ۴ عرض و به‌روزرسانی ماتریس پوشش (وضعیت `verified`)
 
+### فیچر 004: Shop & Archive
+- **وضعیت:** `CONVERGED / VERIFIED`
+  - [x] T060: توابع کمکی فروشگاه، بریدکرامب معنایی با schema.org و استخراج محدوده قیمت و چیپ‌ها (`inc/shop.php`)
+  - [x] T061: اندپوینت ایجکس فیلتر محصولات با اعتبارسنجی نانس، کوئری‌های تاکسونومی، متادیتا و متدهای مرتب‌سازی (`inc/shop-ajax.php`)
+  - [x] T062: نوار ابزار فروشگاه (`SHOP-02`) شامل دکمه فیلتر موبایل، شمارنده محصولات، سلکتور مرتب‌سازی، سوییچر گرید/لیست و چیپ‌های فعال
+  - [x] T063: سایدبار فیلترها (`SHOP-03`) با لیست درختی دسته‌ها و شمارنده، کلیدهای مدرن سوئیچی موجودی و حراجی، فیلد قیمت و دکمه حذف فیلترها
+  - [x] T064: لوپ محصولات (`SHOP-04`, `SHOP-05`) با پشتیبانی از گرید و لیست، لودر چرخشی ترنزیشن، وضعیت خالی و صفحه‌بندی عددی
+  - [x] T065: قالب یکپارچه `woocommerce/archive-product.php` (`SHOP-01`) با سایدبار دسکتاپ و دراور کشویی ریسپانسیو موبایل
+  - [x] T066: استایل‌های اختصاصی `assets/css/shop.css` شامل چیدمان سایدبار، دراور متحرک موبایل، حالت نمایش افقی لیست و استایل صفحه‌بندی
+  - [x] T067: اسکریپت کلاینت `assets/js/shop.js` با پشتیبانی از فیلتر زنده ایجکس، ذخیره سلیقه نمایش در LocalStorage، مدیریت تاریخچه مرورگر با PushState و کنترل دراور موبایل
+  - [x] T068: انکیو و لود هوشمند اسکریپت‌ها و استایل‌ها در آرشیوهای فروشگاه با پارامترهای بومی‌سازی‌شده
+  - [x] T069: ثبت ۶ اسکرین‌شات در ویوپورت‌های مختلف و به‌روزرسانی ردیف‌های `SHOP-01` تا `SHOP-05` به `verified`
+
 ---
 
 ## ۲. اسکرین‌شات‌های ثبت‌شده
-- [home-mobile-375.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/home-mobile-375.png) (موبایل ۳۷۵ پیکسل)
-- [home-tablet-768.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/home-tablet-768.png) (تبلت ۷۶۸ پیکسل)
-- [home-desktop-1024.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/home-desktop-1024.png) (دسکتاپ ۱۰۲۴ پیکسل)
-- [home-wide-1440.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/home-wide-1440.png) (دسکتاپ عریض ۱۴۴۰ پیکسل)
+- [home-mobile-375.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/home-mobile-375.png) (صفحه اصلی موبایل ۳۷۵px)
+- [home-tablet-768.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/home-tablet-768.png) (صفحه اصلی تبلت ۷۶۸px)
+- [home-desktop-1024.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/home-desktop-1024.png) (صفحه اصلی دسکتاپ ۱۰۲۴px)
+- [home-wide-1440.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/home-wide-1440.png) (صفحه اصلی دسکتاپ عریض ۱۴۴۰px)
+- [shop-mobile-375.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/shop-mobile-375.png) (فروشگاه موبایل با نوار ابزار و گرید ۲ ستونه)
+- [shop-mobile-drawer-open-375.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/shop-mobile-drawer-open-375.png) (فروشگاه موبایل با دراور کشویی فیلترها بازشده)
+- [shop-tablet-768.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/shop-tablet-768.png) (فروشگاه تبلت ۳ ستونه)
+- [shop-desktop-1024.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/shop-desktop-1024.png) (فروشگاه دسکتاپ با سایدبار راست)
+- [shop-wide-1440.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/shop-wide-1440.png) (فروشگاه عریض با سایدبار و گرید ۴ ستونه)
+- [shop-wide-list-view-1440.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/shop-wide-list-view-1440.png) (حالت نمایش ردیفی کالاها در دسکتاپ عریض)
 
 ---
 
 ## ۳. فیچر بعدی
-- **Feature 004: Shop & Archive (`SHOP-01` تا `SHOP-05`)**: آرشیو فروشگاه، سایدبار فیلترها (دسکتاپ و دراور موبایل)، نوار ابزار سورت/گرید، فیلترهای ایجکس و صفحه‌بندی عددی / لود مور.
+- **Feature 005: Single Product (`PROD-01` تا `PROD-05`)**: گالری محصول (لایت‌باکس/زوم/تامبنیل)، باکس خرید و انتخاب وریشین‌ها، ویژگی‌ها و مزایای تحویل، تب‌های اطلاعات/مشخصات/دیدگاه‌ها، و کاروسل کالاهای مرتبط.
