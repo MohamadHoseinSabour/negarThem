@@ -482,8 +482,8 @@
   direction: ltr;
   filter: drop-shadow(0 4px 14px color-mix(in srgb, var(--kaveh-primary-color, #e90544) 25%, transparent));
   padding: 10px 29px 11px 21px;
-  top: -26px;
-  left: -34px;
+  top: -13px;
+  left: -17px;
   z-index: 2;
 }
 .landing-nk__products__box .offer::before, .landing-nk__products__box .offer::after {

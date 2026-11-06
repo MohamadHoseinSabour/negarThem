@@ -45,8 +45,8 @@
     top: 16px;
     left: 50%;
     transform: translateX(-50%);
-    width: calc(100% - 64px) !important;
-    max-width: 1260px !important;
+    width: calc(100% - 32px) !important;
+    max-width: 1440px !important;
     min-height: 82px !important;
     z-index: 1000;
     
