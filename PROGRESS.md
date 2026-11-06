@@ -96,6 +96,18 @@
   - [x] T097: انکیو و لود هوشمند استایل‌ها روی صفحات محتوایی
   - [x] T098: ثبت ۱۰ اسکرین‌شات از صفحات وبلاگ، تک‌پست، درباره ما، تماس با ما، ۴۰۴ و سرچ خالی، و به‌روزرسانی ردیف‌های `CNT-01` تا `CNT-06` به `verified`
 
+### فیچر 008: Extras & Modals
+- **وضعیت:** `CONVERGED / VERIFIED`
+  - [x] T100: ثبت اندپوینت‌های ایجکس `inc/modals-ajax.php` برای دریافت مارک‌آپ پیش‌نمایش سریع کالا، لیست علاقه‌مندی‌ها و جدول ماتریس مقایسه کالاها
+  - [x] T101: کامپوننت پاپ‌آپ نمایش سریع کالا (`MODAL-01` / `template-parts/modals/quickview.php`) با ساختار دیالوگ مدال و کانتینر بارگذاری پویای اطلاعات
+  - [x] T102: دراور کشویی لیست علاقه‌مندی‌ها (`MODAL-02` / `template-parts/modals/wishlist-drawer.php`) با هدر، لیست اقلام ایجکس و وضعیت خالی شکیل
+  - [x] T103: پنجره مودال مقایسه محصولات کنار هم (`MODAL-03` / `template-parts/modals/compare-modal.php`) با جدول ویژگی‌ها، قیمت، وضعیت انبار و کد کالا
+  - [x] T104: کامپوننت اعلان‌های گرافیکی شناور (`MODAL-04` / `template-parts/modals/toast.php`)
+  - [x] T105: استایل‌های اختصاصی `assets/css/modals.css` برای انیمیشن‌های باز شدن، ترنزیشن‌های بلور و بک‌دراپ
+  - [x] T106: اسکریپت تعاملی `assets/js/modals.js` با پیاده‌سازی همگام‌سازی لوکال‌استوریج، شمارنده‌های هدر، لودر ایجکس کالاها و سیستم Toast API
+  - [x] T107: اتصال کامل در `footer.php`، لود در `functions.php`، انکیو سراسری در `inc/enqueue.php` و افزودن دکمه‌های مقایسه و علاقه‌مندی در کارت کالا و هدر
+  - [x] T108: ثبت ۴ اسکرین‌شات تعاملی از پیش‌نمایش سریع، لیست علاقه‌مندی، توست الرت و جدول مقایسه، و به‌روزرسانی ردیف‌های `MODAL-01` تا `MODAL-04` به `verified`
+
 ---
 
 ## ۲. اسکرین‌شات‌های ثبت‌شده
@@ -110,8 +122,12 @@
 - [post-1440.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/post-1440.png) (صفحه تک‌پست با تایپوگرافی و جعبه نویسنده)
 - [404-1440.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/404-1440.png) (صفحه خطای ۴۰۴ گرافیکی با جستجو)
 - [search-empty-1440.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/search-empty-1440.png) (وضعیت خالی جستجو با پیشنهادات دسته‌ها)
+- [008-modal-quickview-desktop.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/008-modal-quickview-desktop.png) (پاپ‌آپ نمایش سریع کالا با تصویر، قیمت و دکمه خرید)
+- [008-modal-wishlist-drawer.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/008-modal-wishlist-drawer.png) (دراور کشویی علاقه‌مندی‌ها با کارت‌های محصولات ذخیره شده)
+- [008-modal-compare-table.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/008-modal-compare-table.png) (جدول مقایسه ویژگی‌های محصولات منتخب)
+- [008-modal-toast-alert.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/008-modal-toast-alert.png) (اعلان گرافیکی موفقیت شناور در گوشه صفحه)
 
 ---
 
 ## ۳. فیچر بعدی
-- **Feature 008: Extras & Modals (`MODAL-01` تا `MODAL-04`)**: پاپ‌آپ نمایش سریع کالا (Quick View)، دراور/مودال لیست علاقه‌مندی‌ها (Wishlist)، پنجره مقایسه کالاها (Compare)، و توست نوتیفیکیشن گرافیکی افزودن به سبد.
+- **Feature 009: Theme Options (`OPT-01`, `OPT-02`)**: پنل سفارشی‌سازی وردپرس (Theme Customizer) جهت تنظیم رنگ‌های اصلی سازمانی، متن‌های هدر/فوتر، تلفن پشتیبانی، آیکون‌های شبکه‌های اجتماعی، و تعریف رسمی سایدبارها و نواحی ابزارک‌های فوتر.

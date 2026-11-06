@@ -1,0 +1,105 @@
+/**
+ * Modals, Drawers & Toast Notifications Stylesheet
+ *
+ * @package Negar_Shop
+ * @version 1.0.0
+ */
+
+/* ==========================================================================
+   1. Backdrops & Dialog Open States
+   ========================================================================== */
+.negar-modal-backdrop.is-open,
+.negar-compare-backdrop.is-open,
+.negar-wishlist-backdrop.is-open {
+	opacity: 1 !important;
+	pointer-events: auto !important;
+}
+
+.negar-quickview-modal.is-open,
+.negar-compare-modal.is-open {
+	opacity: 1 !important;
+	pointer-events: auto !important;
+	transform: scale(1) !important;
+}
+
+.negar-wishlist-drawer {
+	transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+	will-change: transform;
+}
+
+.negar-wishlist-drawer.is-open {
+	transform: translateX(0) !important;
+}
+
+/* ==========================================================================
+   2. Quick View Styling
+   ========================================================================== */
+.negar-quickview-cart form.cart {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+}
+
+.negar-quickview-cart .quantity input.qty {
+	width: 3rem;
+	height: 2.5rem;
+	text-align: center;
+	border: 1px solid var(--negar-border, #e2e8f0);
+	border-radius: var(--negar-radius-md, 0.5rem);
+	font-weight: 700;
+}
+
+.negar-quickview-cart button.single_add_to_cart_button {
+	background-color: var(--negar-primary, #2563eb);
+	color: #ffffff;
+	padding: 0.625rem 1.5rem;
+	border-radius: var(--negar-radius-md, 0.5rem);
+	font-weight: 700;
+	font-size: 0.875rem;
+	border: none;
+	cursor: pointer;
+	transition: all 0.2s ease;
+}
+
+.negar-quickview-cart button.single_add_to_cart_button:hover {
+	background-color: var(--negar-primary-dark, #1d4ed8);
+}
+
+/* ==========================================================================
+   3. Toast Notification Alerts
+   ========================================================================== */
+.negar-toast {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	padding: 0.875rem 1.25rem;
+	border-radius: var(--negar-radius-lg, 1rem);
+	background-color: #ffffff;
+	border: 1px solid var(--negar-border, #e2e8f0);
+	box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+	pointer-events: auto;
+	transform: translateY(20px);
+	opacity: 0;
+	transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+	max-width: 380px;
+}
+
+.negar-toast.is-show {
+	transform: translateY(0);
+	opacity: 1;
+}
+
+.negar-toast.toast-success .toast-icon {
+	color: #10b981;
+	background-color: rgba(16, 185, 129, 0.1);
+}
+
+.negar-toast.toast-error .toast-icon {
+	color: #ef4444;
+	background-color: rgba(239, 68, 68, 0.1);
+}
+
+.negar-toast.toast-info .toast-icon {
+	color: #2563eb;
+	background-color: rgba(37, 99, 235, 0.1);
+}

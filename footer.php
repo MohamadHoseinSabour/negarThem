@@ -47,6 +47,18 @@ get_template_part( 'template-parts/header/mobile-drawer' );
 
 // Mobile Bottom Sticky App Bar (HDR-05)
 get_template_part( 'template-parts/header/mobile-bottom-bar' );
+
+// Quick View Modal (MODAL-01)
+get_template_part( 'template-parts/modals/quickview' );
+
+// Wishlist Off-Canvas Drawer (MODAL-02)
+get_template_part( 'template-parts/modals/wishlist-drawer' );
+
+// Product Compare Modal (MODAL-03)
+get_template_part( 'template-parts/modals/compare-modal' );
+
+// Toast Notification Alerts Container (MODAL-04)
+get_template_part( 'template-parts/modals/toast' );
 ?>
 
 <?php wp_footer(); ?>

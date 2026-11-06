@@ -123,6 +123,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<?php endif; ?>
 			</div>
 
+			<!-- Compare Button -->
+			<div class="header-action-item">
+				<button type="button" class="btn-icon relative negar-compare-trigger" aria-label="<?php esc_attr_e( 'مقایسه کالاها', 'negar-shop' ); ?>" title="<?php esc_attr_e( 'مقایسه کالاها', 'negar-shop' ); ?>">
+					<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+						<path d="m16 3 4 4-4 4"/><path d="M20 7H4"/><path d="m8 21-4-4 4-4"/><path d="M4 17h16"/>
+					</svg>
+					<span class="negar-compare-count badge badge-info absolute -top-1.5 -right-1.5 text-2xs px-1.5 py-0.5">0</span>
+				</button>
+			</div>
+
 			<!-- Wishlist Button -->
 			<div class="header-action-item">
 				<a href="<?php echo esc_url( home_url( '/wishlist' ) ); ?>" class="btn-icon relative" aria-label="<?php esc_attr_e( 'علاقه‌مندی‌ها', 'negar-shop' ); ?>">

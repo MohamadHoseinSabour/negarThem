@@ -127,6 +127,14 @@ function negar_shop_scripts() {
 		);
 	}
 
+	// Modals, QuickView, Drawers & Toast CSS (MODAL-01 to MODAL-04)
+	wp_enqueue_style(
+		'negar-shop-modals',
+		NEGAR_SHOP_URI . '/assets/css/modals.css',
+		array( 'negar-shop-header-footer' ),
+		NEGAR_SHOP_VERSION
+	);
+
 	// Main Vanilla JS Framework
 	wp_enqueue_script(
 		'negar-shop-main',
@@ -222,5 +230,14 @@ function negar_shop_scripts() {
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 		wp_enqueue_script( 'comment-reply' );
 	}
+
+	// Modals, QuickView, Wishlist, Compare & Toast Script (MODAL-01 to MODAL-04)
+	wp_enqueue_script(
+		'negar-shop-modals',
+		NEGAR_SHOP_URI . '/assets/js/modals.js',
+		array( 'negar-shop-main', 'negar-shop-header-footer' ),
+		NEGAR_SHOP_VERSION,
+		true
+	);
 }
 add_action( 'wp_enqueue_scripts', 'negar_shop_scripts' );

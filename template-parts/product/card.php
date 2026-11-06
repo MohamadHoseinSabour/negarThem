@@ -42,12 +42,21 @@ $discount_pct = function_exists( 'negar_shop_product_discount_percentage' ) ? ne
 			<?php endif; ?>
 		</div>
 
-		<!-- Wishlist Button -->
-		<button type="button" class="btn-wishlist-toggle w-7 h-7 rounded-full bg-slate-50 hover:bg-rose-50 text-slate-400 hover:text-rose-500 flex items-center justify-center transition border border-slate-100" data-id="<?php echo esc_attr( $product_id ); ?>" aria-label="<?php esc_attr_e( 'افزودن به علاقه‌مندی‌ها', 'negar-shop' ); ?>">
-			<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-				<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-			</svg>
-		</button>
+		<div class="flex items-center gap-1">
+			<!-- Compare Button -->
+			<button type="button" class="btn-compare-toggle w-7 h-7 rounded-full bg-slate-50 hover:bg-sky-50 text-slate-400 hover:text-sky-500 flex items-center justify-center transition border border-slate-100" data-id="<?php echo esc_attr( $product_id ); ?>" aria-label="<?php esc_attr_e( 'افزودن به مقایسه', 'negar-shop' ); ?>" title="<?php esc_attr_e( 'افزودن به مقایسه', 'negar-shop' ); ?>">
+				<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+					<path d="m16 3 4 4-4 4"/><path d="M20 7H4"/><path d="m8 21-4-4 4-4"/><path d="M4 17h16"/>
+				</svg>
+			</button>
+
+			<!-- Wishlist Button -->
+			<button type="button" class="btn-wishlist-toggle w-7 h-7 rounded-full bg-slate-50 hover:bg-rose-50 text-slate-400 hover:text-rose-500 flex items-center justify-center transition border border-slate-100" data-id="<?php echo esc_attr( $product_id ); ?>" aria-label="<?php esc_attr_e( 'افزودن به علاقه‌مندی‌ها', 'negar-shop' ); ?>">
+				<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+					<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+				</svg>
+			</button>
+		</div>
 	</div>
 
 	<!-- Product Image & Quick Action Overlay -->

@@ -51,10 +51,10 @@
 | **CNT-04** | صفحه تماس با ما، اطلاعات و فرم ارتباطی | 007 Content Pages | T093, T096 | کارت‌های ۴گانه ارتباطی، فرم مستقیم و آکاردئون FAQ | `verified` |
 | **CNT-05** | صفحه خطای اختصاصی ۴۰۴ | 007 Content Pages | T094, T096 | تست ۴۰۴ با تایپوگرافی، سرچ ریکاوری و تایید HTTP 404 | `verified` |
 | **CNT-06** | حالت‌های خالی (Empty States): سبد، سرچ، علاقه‌مندی | 007 Content Pages | T095, T080 | باکس اختصاصی وضعیت خالی با پیشنهادات دسته‌بندی | `verified` |
-| **MODAL-01** | پاپ‌آپ نمایش سریع کالا (Quick View) | 008 Extras & Features | - | - | `todo` |
-| **MODAL-02** | دراور / مودال لیست علاقه‌مندی‌ها (Wishlist) | 008 Extras & Features | - | - | `todo` |
-| **MODAL-03** | پنجره مقایسه محصولات کنار هم (Compare) | 008 Extras & Features | - | - | `todo` |
-| **MODAL-04** | اعلان گرافیکی افزودن موفق به سبد (Toast Alert) | 008 Extras & Features | - | - | `todo` |
+| **MODAL-01** | پاپ‌آپ نمایش سریع کالا (Quick View) | 008 Extras & Features | T101, T106, T108 | باز شدن پاپ‌آپ سریع کالا با ایجکس و نمایش قیمت و دکمه خرید (`008-modal-quickview-desktop.png`) | `verified` |
+| **MODAL-02** | دراور / مودال لیست علاقه‌مندی‌ها (Wishlist) | 008 Extras & Features | T102, T106, T108 | دراور کشویی علاقه‌مندی با همگام‌سازی لوکال‌استوریج و ایجکس (`008-modal-wishlist-drawer.png`) | `verified` |
+| **MODAL-03** | پنجره مقایسه محصولات کنار هم (Compare) | 008 Extras & Features | T103, T106, T108 | پنجره مقایسه ویژگی‌های محصولات کنار هم با ایجکس (`008-modal-compare-table.png`) | `verified` |
+| **MODAL-04** | اعلان گرافیکی افزودن موفق به سبد (Toast Alert) | 008 Extras & Features | T104, T106, T108 | نوتیفیکیشن‌های شناور موفقیت/خطا/اطلاع‌رسانی گوشه صفحه (`008-modal-toast-alert.png`) | `verified` |
 | **OPT-01** | پنل سفارشی‌سازی وردپرس / تنظیمات قالب (Theme Customizer) | 009 Theme Options | - | - | `todo` |
 | **OPT-02** | تعریف موقعیت‌های منو و نواحی ابزارک سایدبار و فوتر | 009 Theme Options | - | - | `todo` |
 | **DMO-01** | بکاپ اولیه دیتابیس لوکال (wp db export) | 010 Demo Content | - | - | `todo` |
