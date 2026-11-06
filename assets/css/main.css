@@ -1441,12 +1441,6 @@ body.kaveh-full-product-titles .product h2, body.kaveh-full-product-titles .prod
 
 .popular-products-nk .product-one-nk .price-rate .line { height: 1px; background-color: rgba(0, 0, 0, 0.06); min-width: 8px; flex-grow: 1; }
 
-.popular-products-nk .d-none { display: none !important; }
-
-.popular-products-nk .d-block { display: block !important; }
-
-.popular-products-nk .d-flex { display: flex !important; }
-
 .top-view-products-nk .section-heading-one-nk { margin-bottom: 48px; }
 
 .top-view-products-nk .section-heading-one-nk .title { font-size: 20px; line-height: 32px; font-weight: 500; color: rgb(4, 4, 4); }
