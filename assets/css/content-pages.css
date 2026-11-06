@@ -1,0 +1,103 @@
+/**
+ * Content Pages Stylesheet (Blog, Single Post, About, Contact, 404, Search)
+ *
+ * @package Negar_Shop
+ * @version 1.0.0
+ */
+
+/* ==========================================================================
+   1. Typography & Prose Styling for Single Articles
+   ========================================================================== */
+.negar-single-post .entry-content p {
+	margin-bottom: 1.5rem;
+	line-height: 2;
+}
+
+.negar-single-post .entry-content h2 {
+	font-size: 1.5rem;
+	font-weight: 800;
+	color: var(--negar-text-dark, #0f172a);
+	margin-top: 2rem;
+	margin-bottom: 1rem;
+	padding-bottom: 0.5rem;
+	border-bottom: 1px solid var(--negar-border, #e2e8f0);
+}
+
+.negar-single-post .entry-content h3 {
+	font-size: 1.25rem;
+	font-weight: 700;
+	color: var(--negar-text-dark, #0f172a);
+	margin-top: 1.5rem;
+	margin-bottom: 0.75rem;
+}
+
+.negar-single-post .entry-content blockquote {
+	border-right: 4px solid var(--negar-primary, #2563eb);
+	padding: 1rem 1.5rem;
+	margin: 1.5rem 0;
+	background-color: #f8fafc;
+	border-radius: 0 0.75rem 0.75rem 0;
+	font-style: italic;
+	color: var(--negar-text-muted, #475569);
+}
+
+.negar-single-post .entry-content img {
+	border-radius: var(--negar-radius-lg, 1rem);
+	margin: 1.5rem auto;
+}
+
+/* ==========================================================================
+   2. About Us Cards & Metrics
+   ========================================================================== */
+.about-metrics .metric-card {
+	transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.about-metrics .metric-card:hover {
+	transform: translateY(-3px);
+	box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+}
+
+.about-values .value-card {
+	transition: all 0.2s ease;
+}
+
+.about-values .value-card:hover {
+	border-color: var(--negar-primary, #2563eb);
+	transform: translateY(-2px);
+}
+
+/* ==========================================================================
+   3. Contact Form & FAQ
+   ========================================================================== */
+.contact-card {
+	transition: all 0.2s ease;
+}
+
+.contact-card:hover {
+	border-color: var(--negar-primary, #2563eb);
+	transform: translateY(-2px);
+}
+
+.negar-contact-page details summary::-webkit-details-marker {
+	display: none;
+}
+
+/* ==========================================================================
+   4. 404 & Empty State Transitions
+   ========================================================================== */
+.negar-404-page,
+.negar-search-empty {
+	animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: translateY(10px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}

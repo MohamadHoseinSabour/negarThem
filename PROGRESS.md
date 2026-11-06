@@ -84,23 +84,34 @@
   - [x] T087: انکیو استایل‌ها و اسکریپت‌ها در برگه‌های فرآیند خرید
   - [x] T088: ثبت ۱۲ اسکرین‌شات از سبد، تسویه و حساب کاربری در ۴ ویوپورت و ارتقای وضعیت ردیف‌های `FLOW-02` تا `FLOW-06` به `verified`
 
+### فیچر 007: Content Pages
+- **وضعیت:** `CONVERGED / VERIFIED`
+  - [x] T090: کارت مقاله استاندارد ۱۶:۹ با برچسب دسته، زمان مطالعه و متادیتا (`template-parts/blog/article-card.php`)، سایدبار ویجت‌های وبلاگ (`template-parts/blog/sidebar.php`) و قالب آرشیو ۲ ستونه (`archive.php`)
+  - [x] T091: قالب تک‌پست وبلاگ (`single.php`) با تایپوگرافی خوانا، تصویر شاخص عریض، جعبه بیوگرافی نویسنده، برچسب‌ها، هدایت به مقالات قبلی/بعدی و فرم ارسال دیدگاه
+  - [x] T092: برگه اختصاصی درباره ما (`page-templates/page-about.php`) با هیرو داستان برند، ۴ شمارنده آماری برجسته، کارت‌های ارزش‌های محوری و بنر فراخوان خرید
+  - [x] T093: برگه تماس با ما (`page-templates/page-contact.php`) با ۴ کارت راه‌های ارتباطی، فرم مستقیم ارسال پیام، و آکاردئون پرسش‌های متداول خریداران
+  - [x] T094: صفحه خطای ۴۰۴ اختصاصی (`404.php`) با تایپوگرافی بزرگ، فرم جستجوی ریکاوری، دکمه‌های هدایت و میانبرهای دسته‌بندی پرطرفدار
+  - [x] T095: قالب نتایج جستجو و وضعیت خالی (`search.php`) با راهنمای جستجو و پیشنهادات دسته‌بندی
+  - [x] T096: استایل‌های اختصاصی `assets/css/content-pages.css`
+  - [x] T097: انکیو و لود هوشمند استایل‌ها روی صفحات محتوایی
+  - [x] T098: ثبت ۱۰ اسکرین‌شات از صفحات وبلاگ، تک‌پست، درباره ما، تماس با ما، ۴۰۴ و سرچ خالی، و به‌روزرسانی ردیف‌های `CNT-01` تا `CNT-06` به `verified`
+
 ---
 
 ## ۲. اسکرین‌شات‌های ثبت‌شده
-- [home-mobile-375.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/home-mobile-375.png) (صفحه اصلی موبایل ۳۷۵px)
-- [home-tablet-768.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/home-tablet-768.png) (صفحه اصلی تبلت ۷۶۸px)
-- [home-desktop-1024.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/home-desktop-1024.png) (صفحه اصلی دسکتاپ ۱۰۲۴px)
 - [home-wide-1440.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/home-wide-1440.png) (صفحه اصلی دسکتاپ عریض ۱۴۴۰px)
 - [shop-wide-1440.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/shop-wide-1440.png) (فروشگاه عریض با سایدبار و گرید ۴ ستونه)
 - [product-wide-1440.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/product-wide-1440.png) (صفحه محصول با گالری و باکس خرید)
-- [cart-1440.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/cart-1440.png) (سبد خرید دسکتاپ با جدول کالاها و خلاصه فاکتور چسبان)
-- [cart-375.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/cart-375.png) (سبد خرید موبایل)
-- [checkout-1440.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/checkout-1440.png) (تسویه‌حساب ۲ ستونه دسکتاپ با فیلدهای تحویل و درگاه)
-- [checkout-375.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/checkout-375.png) (تسویه‌حساب موبایل)
-- [account-1440.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/account-1440.png) (برگه احراز هویت و ورود/ثبت‌نام دسکتاپ)
-- [account-375.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/account-375.png) (برگه ورود/ثبت‌نام موبایل)
+- [cart-1440.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/cart-1440.png) (سبد خرید با جدول کالاها و خلاصه فاکتور چسبان)
+- [checkout-1440.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/checkout-1440.png) (تسویه‌حساب ۲ ستونه با فیلدهای تحویل و درگاه)
+- [account-1440.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/account-1440.png) (احراز هویت و ورود/ثبت‌نام)
+- [about-1440.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/about-1440.png) (صفحه درباره ما با آمار و ارزش‌ها)
+- [contact-1440.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/contact-1440.png) (صفحه تماس با ما، فرم و FAQ)
+- [post-1440.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/post-1440.png) (صفحه تک‌پست با تایپوگرافی و جعبه نویسنده)
+- [404-1440.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/404-1440.png) (صفحه خطای ۴۰۴ گرافیکی با جستجو)
+- [search-empty-1440.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/search-empty-1440.png) (وضعیت خالی جستجو با پیشنهادات دسته‌ها)
 
 ---
 
 ## ۳. فیچر بعدی
-- **Feature 007: Content Pages (`CNT-01` تا `CNT-06`)**: آرشیو وبلاگ، صفحه تک‌پست، درباره ما، تماس با ما، خطای ۴۰۴ و حالت‌های خالی.
+- **Feature 008: Extras & Modals (`MODAL-01` تا `MODAL-04`)**: پاپ‌آپ نمایش سریع کالا (Quick View)، دراور/مودال لیست علاقه‌مندی‌ها (Wishlist)، پنجره مقایسه کالاها (Compare)، و توست نوتیفیکیشن گرافیکی افزودن به سبد.
