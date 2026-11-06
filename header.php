@@ -26,45 +26,26 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php esc_html_e( 'پرش به محتوای اصلی', 'negar-shop' ); ?>
 	</a>
 
-	<header id="masthead" class="site-header border-b border-slate-200 bg-white">
-		<div class="container py-4 flex items-center justify-between">
-			<div class="site-branding">
-				<?php
-				if ( has_custom_logo() ) :
-					the_custom_logo();
-				else :
-					?>
-					<h1 class="site-title text-xl font-bold m-0">
-						<a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home" class="text-slate-900">
-							<?php bloginfo( 'name' ); ?>
-						</a>
-					</h1>
-					<?php
-					$negar_description = get_bloginfo( 'description', 'display' );
-					if ( $negar_description || is_customize_preview() ) :
-						?>
-						<p class="site-description text-xs text-slate-500 m-0">
-							<?php echo esc_html( $negar_description ); ?>
-						</p>
-						<?php
-					endif;
-				endif;
-				?>
-			</div>
+	<header id="masthead" class="site-header">
+		<?php
+		/**
+		 * 1. Top Bar (HDR-01)
+		 */
+		get_template_part( 'template-parts/header/top-bar' );
 
-			<nav id="site-navigation" class="main-navigation" aria-label="<?php esc_attr_e( 'منوی اصلی', 'negar-shop' ); ?>">
-				<?php
-				if ( has_nav_menu( 'primary' ) ) :
-					wp_nav_menu(
-						array(
-							'theme_location' => 'primary',
-							'menu_id'        => 'primary-menu',
-							'container'      => false,
-							'menu_class'     => 'nav-menu flex items-center gap-6 list-none m-0 p-0',
-						)
-					);
-				endif;
-				?>
-			</nav>
-		</div>
+		/**
+		 * 2. Main Header with Logo, Ajax Search & Cart (HDR-02)
+		 */
+		get_template_part( 'template-parts/header/main-header' );
+
+		/**
+		 * 3. Primary Navigation & Mega Menu (HDR-03)
+		 */
+		get_template_part( 'template-parts/header/navigation' );
+
+		/**
+		 * 4. Mobile Header (HDR-05)
+		 */
+		get_template_part( 'template-parts/header/mobile-header' );
+		?>
 	</header>

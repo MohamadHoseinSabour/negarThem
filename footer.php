@@ -10,23 +10,44 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 ?>
-	<footer id="colophon" class="site-footer bg-slate-900 text-slate-300 py-8 mt-auto">
-		<div class="container text-center">
-			<div class="site-info text-sm">
-				<p class="m-0">
-					<?php
-					/* translators: 1: Current Year, 2: Site Title */
-					printf(
-						esc_html__( 'تمامی حقوق برای %1$s محفوظ است. © %2$s', 'negar-shop' ),
-						esc_html( get_bloginfo( 'name' ) ),
-						esc_html( date_i18n( 'Y' ) )
-					);
-					?>
-				</p>
-			</div>
-		</div>
+	<footer id="colophon" class="site-footer">
+		<?php
+		/**
+		 * 1. Value Guarantee Badges (FTR-01)
+		 */
+		get_template_part( 'template-parts/footer/features' );
+
+		/**
+		 * 2. Newsletter Signup Section (FTR-02)
+		 */
+		get_template_part( 'template-parts/footer/newsletter' );
+
+		/**
+		 * 3. 4-Column Footer Links & Info (FTR-03 & FTR-04)
+		 */
+		get_template_part( 'template-parts/footer/columns' );
+
+		/**
+		 * 4. Copyright, Socials & Back to Top (FTR-05)
+		 */
+		get_template_part( 'template-parts/footer/copyright' );
+		?>
 	</footer>
 </div><!-- #page -->
+
+<?php
+/**
+ * Global Modals and Drawers
+ */
+// Slide-out Mini Cart Drawer (FLOW-01)
+get_template_part( 'template-parts/header/mini-cart-drawer' );
+
+// Mobile Navigation Drawer (HDR-05)
+get_template_part( 'template-parts/header/mobile-drawer' );
+
+// Mobile Bottom Sticky App Bar (HDR-05)
+get_template_part( 'template-parts/header/mobile-bottom-bar' );
+?>
 
 <?php wp_footer(); ?>
 

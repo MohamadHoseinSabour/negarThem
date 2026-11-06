@@ -59,12 +59,20 @@ function negar_shop_scripts() {
 		NEGAR_SHOP_VERSION
 	);
 
+	// Header and Footer Dedicated CSS
+	wp_enqueue_style(
+		'negar-shop-header-footer',
+		NEGAR_SHOP_URI . '/assets/css/header-footer.css',
+		array( 'negar-shop-main' ),
+		NEGAR_SHOP_VERSION
+	);
+
 	// RTL Stylesheet
 	if ( is_rtl() ) {
 		wp_enqueue_style(
 			'negar-shop-rtl',
 			NEGAR_SHOP_URI . '/rtl.css',
-			array( 'negar-shop-main' ),
+			array( 'negar-shop-header-footer' ),
 			NEGAR_SHOP_VERSION
 		);
 	}
@@ -88,14 +96,23 @@ function negar_shop_scripts() {
 			'isRtl'      => is_rtl(),
 			'themeUri'   => NEGAR_SHOP_URI,
 			'i18n'       => array(
-				'addedToCart'      => esc_html__( 'کالا با موفقیت به سبد خرید افزوده شد.', 'negar-shop' ),
-				'addedToWishlist'  => esc_html__( 'به لیست علاقه‌مندی‌ها اضافه شد.', 'negar-shop' ),
-				'removedWishlist'  => esc_html__( 'از لیست علاقه‌مندی‌ها حذف شد.', 'negar-shop' ),
-				'loading'          => esc_html__( 'در حال بارگذاری...', 'negar-shop' ),
-				'error'            => esc_html__( 'خطایی رخ داد. لطفاً مجدداً تلاش کنید.', 'negar-shop' ),
-				'searchPlaceholder'=> esc_html__( 'جستجوی نام کالا، برند یا دسته‌بندی...', 'negar-shop' ),
+				'addedToCart'       => esc_html__( 'کالا با موفقیت به سبد خرید افزوده شد.', 'negar-shop' ),
+				'addedToWishlist'   => esc_html__( 'به لیست علاقه‌مندی‌ها اضافه شد.', 'negar-shop' ),
+				'removedWishlist'   => esc_html__( 'از لیست علاقه‌مندی‌ها حذف شد.', 'negar-shop' ),
+				'loading'           => esc_html__( 'در حال بارگذاری...', 'negar-shop' ),
+				'error'             => esc_html__( 'خطایی رخ داد. لطفاً مجدداً تلاش کنید.', 'negar-shop' ),
+				'searchPlaceholder' => esc_html__( 'جستجوی نام کالا، برند یا دسته‌بندی...', 'negar-shop' ),
 			),
 		)
+	);
+
+	// Header & Footer Interactive Script
+	wp_enqueue_script(
+		'negar-shop-header-footer',
+		NEGAR_SHOP_URI . '/assets/js/header-footer.js',
+		array( 'negar-shop-main' ),
+		NEGAR_SHOP_VERSION,
+		true
 	);
 
 	// Threaded Comments

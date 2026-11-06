@@ -33,6 +33,16 @@ require_once NEGAR_SHOP_DIR . '/inc/enqueue.php';
 require_once NEGAR_SHOP_DIR . '/inc/template-tags.php';
 
 /**
+ * Mega Menu Nav Walker
+ */
+require_once NEGAR_SHOP_DIR . '/inc/mega-menu.php';
+
+/**
+ * Live Ajax Search Backend
+ */
+require_once NEGAR_SHOP_DIR . '/inc/ajax-search.php';
+
+/**
  * WooCommerce Integration & Hooks
  */
 if ( class_exists( 'WooCommerce' ) || file_exists( WP_PLUGIN_DIR . '/woocommerce/woocommerce.php' ) ) {
