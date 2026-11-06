@@ -6,20 +6,21 @@
  */
 
 /* ==========================================================================
-   Header & Topbar Expanded Width
+   Header & Topbar Container Width Matching Main Content (1320px)
    ========================================================================== */
 .site-header .container,
 .negar-topbar .container,
 .negar-main-header .container,
 .negar-navigation-bar .container {
-  max-width: 1920px !important;
-  width: calc(100% - 32px) !important;
-  padding-left: 1.5rem !important;
-  padding-right: 1.5rem !important;
+  max-width: 1320px !important;
+  width: 100% !important;
+  margin-inline: auto !important;
+  padding-left: 15px !important;
+  padding-right: 15px !important;
 }
 
 .site-header .header-search {
-  max-width: 920px;
+  max-width: 680px;
 }
 
 /* ==========================================================================
@@ -46,7 +47,7 @@
     left: 50%;
     transform: translateX(-50%);
     width: calc(100% - 32px) !important;
-    max-width: 1440px !important;
+    max-width: 1320px !important;
     min-height: 82px !important;
     z-index: 1000;
     
