@@ -18,19 +18,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 		get_template_part( 'template-parts/footer/features' );
 
 		/**
-		 * 2. Newsletter Signup Section (FTR-02)
-		 */
-		get_template_part( 'template-parts/footer/newsletter' );
-
-		/**
-		 * 3. 4-Column Footer Links & Info (FTR-03 & FTR-04)
+		 * 2. Full Multi-Layer Light Footer matching Kaveh Demo 43 (FTR-03, FTR-04, FTR-05)
 		 */
 		get_template_part( 'template-parts/footer/columns' );
-
-		/**
-		 * 4. Copyright, Socials & Back to Top (FTR-05)
-		 */
-		get_template_part( 'template-parts/footer/copyright' );
 		?>
 	</footer>
 </div><!-- #page -->

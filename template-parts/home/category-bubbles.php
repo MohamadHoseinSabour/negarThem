@@ -1,9 +1,11 @@
 <?php
 /**
- * Quick Category Bubbles Component (HOME-02) - Styled matching Kaveh Demo 43
+ * Category Bubbles Component (HOME-03) - Exact Match to Kaveh Demo 43
+ * Reference: Demo 43 Section 2 (Top: 1014px, Height: 360px)
+ * Heading: "پرفروش ترین دسته بندی - ضمانت قیمت و کیفیت"
  *
  * @package Negar_Shop
- * @version 1.0.0
+ * @version 2.1.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -11,48 +13,75 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 $upload_dir = wp_upload_dir();
-$cat_base   = $upload_dir['baseurl'] . '/kaveh-demo/categories';
+$demo_base  = $upload_dir['baseurl'] . '/kaveh-demo';
 
-$demo_cats = array(
-	array( 'name' => 'گوشی موبایل', 'img' => $cat_base . '/cat-mobile.png' ),
-	array( 'name' => 'کنسول بازی', 'img' => $cat_base . '/cat-console.png' ),
-	array( 'name' => 'ساعت هوشمند', 'img' => $cat_base . '/cat-watch.png' ),
-	array( 'name' => 'لوازم جانبی', 'img' => $cat_base . '/cat-accessories.png' ),
-	array( 'name' => 'ساعت و مچ‌بند', 'img' => $cat_base . '/cat-icon-watch.png' ),
-	array( 'name' => 'لپ‌تاپ و تبلت', 'img' => $cat_base . '/cat-mobile.png' ),
-	array( 'name' => 'هدفون و اسپیکر', 'img' => $cat_base . '/cat-accessories.png' ),
-	array( 'name' => 'لوازم خانگی', 'img' => $cat_base . '/cat-console.png' ),
+$kaveh_categories = array(
+	array(
+		'name' => 'ساعت هوشمند',
+		'img'  => $demo_base . '/category-01.png',
+		'link' => wc_get_page_permalink( 'shop' ),
+	),
+	array(
+		'name' => 'کنسول بازی',
+		'img'  => $demo_base . '/category-02.png',
+		'link' => wc_get_page_permalink( 'shop' ),
+	),
+	array(
+		'name' => 'گوشی موبایل',
+		'img'  => $demo_base . '/category-03.png',
+		'link' => wc_get_page_permalink( 'shop' ),
+	),
+	array(
+		'name' => 'ساعت هوشمند',
+		'img'  => $demo_base . '/category-01.png',
+		'link' => wc_get_page_permalink( 'shop' ),
+	),
+	array(
+		'name' => 'لوازم جانبی موبایل',
+		'img'  => $demo_base . '/category-02.png',
+		'link' => wc_get_page_permalink( 'shop' ),
+	),
 );
 ?>
 
-<section class="negar-category-bubbles-section py-8 bg-white border-b border-slate-100" aria-label="<?php esc_attr_e( 'دسته‌بندی‌های برتر', 'negar-shop' ); ?>">
-	<div class="container">
+<section class="negar-categories-nk-section py-8" aria-label="<?php esc_attr_e( 'پرفروش‌ترین دسته‌بندی‌ها', 'negar-shop' ); ?>">
+	<div class="container max-w-[1320px] mx-auto px-3">
 		
-		<!-- Section Header -->
-		<div class="section-heading flex items-center justify-between mb-6">
-			<div class="flex items-center gap-2">
-				<span class="w-2.5 h-6 rounded-full bg-rose-600 inline-block"></span>
-				<h2 class="text-base md:text-lg font-black text-slate-800 m-0">
-					<?php esc_html_e( 'دسته‌بندی‌های محبوب فروشگاه', 'negar-shop' ); ?>
-				</h2>
+		<!-- Signature Section Header & Divider -->
+		<div class="section-heading-one-nk">
+			<div class="title">
+				<span class="highlight">پرفروش</span> ترین دسته بندی
 			</div>
-			<a href="<?php echo esc_url( wc_get_page_permalink( 'shop' ) ); ?>" class="text-xs font-bold text-rose-600 hover:text-rose-700 flex items-center gap-1">
-				<span><?php esc_html_e( 'مشاهده همه', 'negar-shop' ); ?></span>
+			<div class="sub-title hidden sm:inline-block">
+				<?php esc_html_e( 'ضمانت قیمت و کیفیت', 'negar-shop' ); ?>
+			</div>
+			<div class="line">
+				<span></span>
+				<span></span>
+			</div>
+			<a href="<?php echo esc_url( wc_get_page_permalink( 'shop' ) ); ?>" class="btn-nk-danger">
+				<span><?php esc_html_e( 'مشاهده بیشتر', 'negar-shop' ); ?></span>
 				<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
 			</a>
 		</div>
 
-		<!-- Bubbles Grid -->
-		<div class="category-bubbles-grid grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-4">
-			<?php foreach ( $demo_cats as $dcat ) : ?>
-				<a href="<?php echo esc_url( wc_get_page_permalink( 'shop' ) ); ?>" class="category-bubble-card group flex flex-col items-center text-center p-3 rounded-2xl bg-slate-50/60 hover:bg-white border border-slate-100 hover:border-rose-200 hover:shadow-lg transition duration-300">
-					<div class="bubble-icon-wrap w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-white border border-slate-200/60 flex items-center justify-center p-2 mb-2 group-hover:scale-105 group-hover:border-rose-400 transition duration-300 overflow-hidden shadow-xs">
-						<img src="<?php echo esc_url( $dcat['img'] ); ?>" alt="<?php echo esc_attr( $dcat['name'] ); ?>" class="w-full h-full object-contain">
-					</div>
-					<span class="text-xs font-bold text-slate-700 group-hover:text-rose-600 transition-colors line-clamp-1">
-						<?php echo esc_html( $dcat['name'] ); ?>
-					</span>
-				</a>
+		<!-- Category Cards Grid (Exact Demo 43 Layout & Style) -->
+		<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 lg:gap-5 pb-4">
+			<?php foreach ( $kaveh_categories as $cat ) : ?>
+				<div class="categories-nk__item group">
+					<a href="<?php echo esc_url( $cat['link'] ); ?>" class="image">
+						<img src="<?php echo esc_url( $cat['img'] ); ?>" alt="<?php echo esc_attr( $cat['name'] ); ?>" class="transition-transform duration-300">
+					</a>
+					<h3 class="title">
+						<a href="<?php echo esc_url( $cat['link'] ); ?>" class="text-[#212341] hover:text-rose-600 transition-colors">
+							<?php echo esc_html( $cat['name'] ); ?>
+						</a>
+					</h3>
+					<!-- Circular Red Arrow Button inside the Notch -->
+					<a href="<?php echo esc_url( $cat['link'] ); ?>" class="btn-nk-danger-2" aria-label="<?php echo esc_attr( $cat['name'] ); ?>">
+						<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+					</a>
+				</div>
 			<?php endforeach; ?>
 		</div>
 

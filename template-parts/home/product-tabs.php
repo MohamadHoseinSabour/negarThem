@@ -85,37 +85,40 @@ if ( ! $watches_query->have_posts() ) {
 <section class="negar-product-tabs-section py-6" aria-label="<?php esc_attr_e( 'پربازدید ترین محصولات بر اساس مخاطبان', 'negar-shop' ); ?>">
 	<div class="container max-w-[1320px] mx-auto px-3">
 		
-		<!-- Section Header with Title, Tabs, and View All Link -->
-		<div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 mb-4 border-b border-slate-100">
+		<!-- Signature Section Header with Title, Tabs, and View All Link -->
+		<div class="section-heading-one-nk">
 			
 			<!-- Right: Title & Subtitle -->
-			<div class="flex items-baseline gap-3">
-				<h2 class="text-xl md:text-2xl font-black text-[#212341]">
-					<?php esc_html_e( 'پربازدید ترین محصولات', 'negar-shop' ); ?>
-				</h2>
-				<span class="text-xs text-slate-400 font-medium hidden sm:inline">
-					<?php esc_html_e( 'بر اساس مخاطبان', 'negar-shop' ); ?>
-				</span>
+			<div class="title">
+				<span class="highlight">پربازدید</span> ترین محصولات
+			</div>
+			<div class="sub-title hidden sm:inline-block">
+				<?php esc_html_e( 'بر اساس مخاطبان', 'negar-shop' ); ?>
 			</div>
 
 			<!-- Center: Tabs Navigation Pills (Matching Demo) -->
-			<div class="product-tab-buttons flex items-center gap-1.5 bg-slate-100/80 p-1 rounded-2xl overflow-x-auto no-scrollbar">
-				<button type="button" class="tab-trigger active text-xs font-bold px-4 py-1.5 rounded-xl transition-all duration-200 bg-white text-rose-600 shadow-xs" data-target="#tab-panel-laptops">
+			<div class="product-tab-buttons flex items-center gap-1 bg-slate-100 p-1 rounded-2xl mx-1 sm:mx-3">
+				<button type="button" class="tab-trigger active text-xs font-bold px-3.5 py-1.5 rounded-xl transition-all duration-200 bg-white text-rose-600 shadow-xs" data-target="#tab-panel-laptops">
 					<?php esc_html_e( 'لپتاپ ها', 'negar-shop' ); ?>
 				</button>
-				<button type="button" class="tab-trigger text-xs font-bold px-4 py-1.5 rounded-xl transition-all duration-200 text-slate-600 hover:text-slate-900" data-target="#tab-panel-consoles">
+				<button type="button" class="tab-trigger text-xs font-bold px-3.5 py-1.5 rounded-xl transition-all duration-200 text-slate-600 hover:text-slate-900" data-target="#tab-panel-consoles">
 					<?php esc_html_e( 'کنسول ها', 'negar-shop' ); ?>
 				</button>
-				<button type="button" class="tab-trigger text-xs font-bold px-4 py-1.5 rounded-xl transition-all duration-200 text-slate-600 hover:text-slate-900" data-target="#tab-panel-mobile">
+				<button type="button" class="tab-trigger text-xs font-bold px-3.5 py-1.5 rounded-xl transition-all duration-200 text-slate-600 hover:text-slate-900" data-target="#tab-panel-mobile">
 					<?php esc_html_e( 'موبایل', 'negar-shop' ); ?>
 				</button>
-				<button type="button" class="tab-trigger text-xs font-bold px-4 py-1.5 rounded-xl transition-all duration-200 text-slate-600 hover:text-slate-900" data-target="#tab-panel-watches">
+				<button type="button" class="tab-trigger text-xs font-bold px-3.5 py-1.5 rounded-xl transition-all duration-200 text-slate-600 hover:text-slate-900" data-target="#tab-panel-watches">
 					<?php esc_html_e( 'ساعت هوشمند', 'negar-shop' ); ?>
 				</button>
 			</div>
 
-			<!-- Left: View All Link -->
-			<a href="<?php echo esc_url( wc_get_page_permalink( 'shop' ) ); ?>" class="text-xs font-bold text-rose-600 hover:text-rose-700 flex items-center gap-1 transition-colors shrink-0">
+			<div class="line">
+				<span></span>
+				<span></span>
+			</div>
+
+			<!-- Left: View All Button -->
+			<a href="<?php echo esc_url( wc_get_page_permalink( 'shop' ) ); ?>" class="btn-nk-danger">
 				<span><?php esc_html_e( 'مشاهده همه', 'negar-shop' ); ?></span>
 				<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
 			</a>

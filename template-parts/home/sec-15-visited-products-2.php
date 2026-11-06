@@ -29,17 +29,20 @@ if ( ! $visited_products->have_posts() ) {
 <section class="negar-sec-15-visited py-6" aria-label="<?php esc_attr_e( 'پربازدیدترین محصولات مخاطبان', 'negar-shop' ); ?>">
 	<div class="container max-w-[1320px] mx-auto px-3">
 		
-		<div class="flex items-center justify-between pb-4 mb-4 border-b border-slate-100">
-			<div class="flex items-baseline gap-3">
-				<h2 class="text-xl md:text-2xl font-black text-[#212341]">
-					<?php esc_html_e( 'پربازدید ترین محصولات بر اساس مخاطبان', 'negar-shop' ); ?>
-				</h2>
-				<span class="text-xs text-slate-400 font-medium hidden sm:inline">
-					<?php esc_html_e( 'محبوب‌ترین انتخاب‌های خریداران در ماه جاری', 'negar-shop' ); ?>
-				</span>
+		<!-- Signature Section Header & Divider -->
+		<div class="section-heading-one-nk">
+			<div class="title">
+				<span class="highlight">پربازدید</span> ترین محصولات
 			</div>
-			<a href="<?php echo esc_url( wc_get_page_permalink( 'shop' ) ); ?>" class="text-xs font-bold text-rose-600 hover:text-rose-700 flex items-center gap-1 transition-colors">
-				<span><?php esc_html_e( 'مشاهده همه', 'negar-shop' ); ?></span>
+			<div class="sub-title hidden sm:inline-block">
+				<?php esc_html_e( 'بر اساس مخاطبان', 'negar-shop' ); ?>
+			</div>
+			<div class="line">
+				<span></span>
+				<span></span>
+			</div>
+			<a href="<?php echo esc_url( wc_get_page_permalink( 'shop' ) ); ?>" class="btn-nk-danger">
+				<span><?php esc_html_e( 'مشاهده بیشتر', 'negar-shop' ); ?></span>
 				<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
 			</a>
 		</div>
