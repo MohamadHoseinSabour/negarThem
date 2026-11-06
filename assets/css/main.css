@@ -882,7 +882,7 @@ select:focus {
 
 .landing-nk__products__box .shape-b { width: 106px; height: 29px; mask: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDYiIGhlaWdodD0iMjkiIGZpbGw9Im5vbmUiPjxwYXRoIGZpbGw9IiNEOUQ5RDkiIGQ9Ik0zMS4xNSAxMC4yOWEzMCAzMCAwIDAgMSA0NC4zMyAwbDcuNjggOC40MmEzMCAzMCAwIDAgMCAyMi4xNiA5Ljc4aC42OFYyOUgwdi0uNTFoMS4zMWEzMCAzMCAwIDAgMCAyMi4xNi05Ljc4eiIgc3R5bGU9ImZpbGw6I2Q5ZDlkOTtmaWxsOmNvbG9yKGRpc3BsYXktcDMgLjg1MSAuODUxIC44NTEpO2ZpbGwtb3BhY2l0eToxIi8+PC9zdmc+") 0px 0px / 100% 100% no-repeat; background-color: var(--bg-body); transform: translate(-50%, 17px); }
 
-.landing-nk__products__box .offer { --bg: var(--kaveh-primary-color, #e90544); direction: ltr; filter: drop-shadow(0 4px 14px color-mix(in srgb, var(--kaveh-primary-color, #e90544) 25%, transparent)); padding: 10px 29px 11px 21px; top: -26px; left: -34px; z-index: 2; }
+.landing-nk__products__box .offer { --bg: var(--kaveh-primary-color, #e90544); direction: ltr; filter: drop-shadow(0 4px 14px color-mix(in srgb, var(--kaveh-primary-color, #e90544) 25%, transparent)); padding: 10px 29px 11px 21px; top: -13px; left: -17px; z-index: 2; }
 
 .landing-nk__products__box .offer::before, .landing-nk__products__box .offer::after { content: ""; position: absolute; top: 0px; background-color: var(--bg); height: 100%; z-index: -1; }
 
