@@ -92,7 +92,7 @@ $stories = array(
 	<div class="container max-w-[1320px] mx-auto px-3">
 		
 		<!-- Swiper Container with left/right fade markers matching Demo 43 -->
-		<div class="position-relative">
+		<div class="position-relative overflow-hidden w-full">
 			<div class="story-shop__r d-none d-sm-block"></div>
 			<div class="story-shop__l d-none d-sm-block"></div>
 

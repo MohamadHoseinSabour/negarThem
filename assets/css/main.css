@@ -58,6 +58,11 @@
 }
 
 /* Base Body & Layout */
+html {
+  overflow-x: hidden !important;
+  max-width: 100vw;
+}
+
 body {
   font-family: var(--font-primary);
   font-size: 15px;
@@ -71,6 +76,9 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow-x: hidden !important;
+  max-width: 100vw;
+  position: relative;
 }
 
 #page {

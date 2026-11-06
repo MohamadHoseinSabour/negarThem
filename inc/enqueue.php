@@ -94,6 +94,12 @@ function negar_shop_scripts() {
 		array( 'bootstrap-rtl' ),
 		NEGAR_SHOP_VERSION
 	);
+	wp_enqueue_style(
+		'kaveh-banners',
+		NEGAR_SHOP_URI . '/assets/css/vendor/bannernkkaveh.css',
+		array( 'bootstrap-rtl' ),
+		NEGAR_SHOP_VERSION
+	);
 
 	// Tailwind Engine Compiled Utility CSS
 	wp_enqueue_style(

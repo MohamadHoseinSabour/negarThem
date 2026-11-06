@@ -1,0 +1,224 @@
+/**
+ * Kaveh Demo 43 - Banners NK Widget CSS (Exact 1:1 Match)
+ * Source: kaveh.moeinwp.com/43/
+ */
+
+.banners-nk [class^="icon-"],
+.banners-nk [class*=" icon-"] {
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  font-family: icomoon !important;
+}
+
+.banners-nk .icon-chevron-left-2::before {
+  content: "\ea3b";
+}
+
+.banners-nk {
+  margin: 0;
+  width: 100%;
+  direction: inherit;
+  unicode-bidi: isolate;
+}
+
+.banners-nk__item {
+  background-color: #e6ecf3;
+  border-radius: 30px;
+  padding-block: 50px 47px;
+  padding-inline: 61px 310px;
+  overflow: hidden;
+  min-height: 180px;
+  position: relative;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.banners-nk__item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+}
+
+.banners-nk__item .detail {
+  position: relative;
+  z-index: 2;
+}
+
+.banners-nk__item .detail .more {
+  width: 54px;
+  height: 44px;
+  background-color: var(--kaveh-primary-color, #e90544);
+  color: #ffffff;
+  box-shadow: 0px 14px 35px color-mix(in srgb, var(--kaveh-primary-color, #e90544) 25%, transparent);
+  font-size: 14px;
+  margin-bottom: 44px;
+  text-decoration: none;
+  transition: background-color 0.25s, color 0.25s, box-shadow 0.25s, transform 0.25s;
+  border-radius: 800px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.banners-nk__item .detail .more:hover {
+  background-color: var(--kaveh-primary-hover, var(--kaveh-primary-color, #d0043d));
+  color: #ffffff;
+  transform: scale(1.05);
+}
+
+.banners-nk__item .detail .more i,
+.banners-nk__item .detail .more svg {
+  display: block;
+  line-height: 1;
+}
+
+.banners-nk__item .detail .more svg {
+  width: 1em;
+  height: 1em;
+  fill: currentColor;
+}
+
+html[dir="ltr"] .banners-nk__item .detail .more i,
+html[dir="ltr"] .banners-nk__item .detail .more svg,
+body.ltr .banners-nk__item .detail .more i,
+body.ltr .banners-nk__item .detail .more svg,
+[dir="ltr"] .banners-nk__item .detail .more i,
+[dir="ltr"] .banners-nk__item .detail .more svg {
+  transform: scaleX(-1);
+}
+
+.banners-nk__item .detail .title {
+  font-size: 25px;
+  line-height: 38px;
+  color: rgb(19, 39, 95);
+  margin: 0 0 8px;
+  font-weight: 700;
+}
+
+.banners-nk__item .detail .sub-title {
+  font-size: 15px;
+  line-height: 23px;
+  color: rgb(164, 168, 186);
+  margin: 0;
+  font-weight: 400;
+}
+
+.banners-nk__item .banner-image {
+  --banner-img-offset: 90px;
+  left: auto;
+  right: auto;
+  inset-inline-end: var(--banner-img-offset);
+  inset-inline-start: auto;
+  bottom: 0;
+  width: 218px;
+  height: auto;
+  max-height: 100%;
+  object-fit: contain;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* RTL explicit positioning for cross-browser reliability */
+[dir="rtl"] .banners-nk__item,
+body.rtl .banners-nk__item,
+html[dir="rtl"] .banners-nk__item {
+  padding-left: 310px;
+  padding-right: 61px;
+}
+
+[dir="rtl"] .banners-nk__item .banner-image,
+body.rtl .banners-nk__item .banner-image,
+html[dir="rtl"] .banners-nk__item .banner-image {
+  left: 90px;
+  right: auto;
+}
+
+/* Responsive Breakpoints from Demo 43 */
+@media only screen and (max-width: 1399px) {
+  .banners-nk__item {
+    padding-inline: 32px 310px;
+  }
+  [dir="rtl"] .banners-nk__item,
+  body.rtl .banners-nk__item {
+    padding-left: 310px;
+    padding-right: 32px;
+  }
+  .banners-nk__item .banner-image {
+    --banner-img-offset: 64px;
+  }
+  [dir="rtl"] .banners-nk__item .banner-image,
+  body.rtl .banners-nk__item .banner-image {
+    left: 64px;
+  }
+}
+
+@media only screen and (max-width: 1199px) {
+  .banners-nk__item {
+    padding-inline: 24px 220px;
+  }
+  [dir="rtl"] .banners-nk__item,
+  body.rtl .banners-nk__item {
+    padding-left: 220px;
+    padding-right: 24px;
+  }
+  .banners-nk__item .detail .title {
+    font-size: 20px;
+    line-height: 32px;
+  }
+  .banners-nk__item .detail .sub-title {
+    font-size: 12px;
+    line-height: 18px;
+  }
+  .banners-nk__item .banner-image {
+    --banner-img-offset: 32px;
+    width: 180px;
+  }
+  [dir="rtl"] .banners-nk__item .banner-image,
+  body.rtl .banners-nk__item .banner-image {
+    left: 32px;
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .banners-nk__item {
+    padding-block: 32px;
+    padding-inline: 20px 190px;
+  }
+  [dir="rtl"] .banners-nk__item,
+  body.rtl .banners-nk__item {
+    padding-left: 190px;
+    padding-right: 20px;
+  }
+}
+
+@media only screen and (max-width: 575px) {
+  .banners-nk__item {
+    padding-block: 24px;
+    padding-inline: 16px 140px;
+  }
+  [dir="rtl"] .banners-nk__item,
+  body.rtl .banners-nk__item {
+    padding-left: 140px;
+    padding-right: 16px;
+  }
+  .banners-nk__item .detail .more {
+    width: 36px;
+    height: 32px;
+    font-size: 12px;
+    margin-bottom: 24px;
+  }
+  .banners-nk__item .detail .title {
+    font-size: 16px;
+    line-height: 24px;
+  }
+  .banners-nk__item .detail .sub-title {
+    font-size: 11px;
+    line-height: 16px;
+  }
+  .banners-nk__item .banner-image {
+    width: 130px;
+    left: 16px;
+  }
+}
