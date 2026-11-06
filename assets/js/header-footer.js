@@ -139,29 +139,40 @@
   }
 
   /**
-   * 2. Sticky Header Controller
+   * 2. Sticky Floating Island Header Controller
    */
   function initStickyHeader() {
     const header = document.querySelector('.site-header');
     if (!header) return;
 
-    let lastScrollY = window.scrollY;
+    let headerHeight = header.offsetHeight;
 
-    window.addEventListener(
-      'scroll',
-      function () {
-        const currentScrollY = window.scrollY;
+    function updateHeight() {
+      if (!header.classList.contains('is-sticky')) {
+        headerHeight = header.offsetHeight;
+      }
+    }
+    window.addEventListener('resize', updateHeight);
 
-        if (currentScrollY > 250) {
-          header.classList.add('is-sticky');
-        } else if (currentScrollY <= 150) {
-          header.classList.remove('is-sticky');
-        }
+    let isSticky = false;
 
-        lastScrollY = currentScrollY;
-      },
-      { passive: true }
-    );
+    function handleScroll() {
+      const currentScrollY = window.scrollY;
+
+      if (currentScrollY > 160 && !isSticky) {
+        updateHeight();
+        header.style.minHeight = headerHeight + 'px';
+        header.classList.add('is-sticky');
+        isSticky = true;
+      } else if (currentScrollY <= 60 && isSticky) {
+        header.classList.remove('is-sticky');
+        header.style.minHeight = '';
+        isSticky = false;
+      }
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
   }
 
   /**
