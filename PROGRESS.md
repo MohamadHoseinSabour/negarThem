@@ -59,6 +59,19 @@
   - [x] T068: انکیو و لود هوشمند اسکریپت‌ها و استایل‌ها در آرشیوهای فروشگاه با پارامترهای بومی‌سازی‌شده
   - [x] T069: ثبت ۶ اسکرین‌شات در ویوپورت‌های مختلف و به‌روزرسانی ردیف‌های `SHOP-01` تا `SHOP-05` به `verified`
 
+### فیچر 005: Single Product
+- **وضعیت:** `CONVERGED / VERIFIED`
+  - [x] T070: توابع کمکی تک‌محصول، استخراج جدول مشخصات فنی و داده‌های ۴ مزیت خرید (`inc/single-product.php`)
+  - [x] T071: گالری محصول (`PROD-01`) با تصویر شاخص، بج تخفیف، دکمه زوم و نوار افقی بندانگشتی‌ها
+  - [x] T072: جعبه مزایای خرید و اطمینان تحویل (`PROD-03`) شامل اصالت کالا، بازگشت ۷ روزه، ارسال اکسپرس و گارانتی
+  - [x] T073: تب‌های توضیحات تکمیلی (`PROD-04`) شامل نقد و بررسی، جدول مشخصات فنی دورنگ و دیدگاه‌های خریداران با امتیاز ستاره‌ای
+  - [x] T074: کاروسل محصولات مشابه و مکمل (`PROD-05`) با بهره‌گیری از کارت استاندارد محصول
+  - [x] T075: مونتاژ قالب کامل ۲ ستونه `woocommerce/single-product.php` و `woocommerce/content-single-product.php`
+  - [x] T076: استایل‌های اختصاصی `assets/css/single-product.css` برای گالری، استپرهای تعداد، دکمه خرید، سواچ‌ها و جدول مشخصات
+  - [x] T077: اسکریپت تعاملی `assets/js/single-product.js` جهت سوئیچ تصویر با کلیک تامبنیل، بازشدن لایت‌باکس، دکمه‌های مثبت/منفی تعداد و تب‌ها
+  - [x] T078: انکیو استایل‌ها و اسکریپت‌های اختصاصی فقط در صفحات تکی محصول
+  - [x] T079: ثبت ۵ اسکرین‌شات در ۴ عرض، تایید رفتار استپر تعداد و سوییچ تب مشخصات، و به‌روزرسانی ردیف‌های `PROD-01` تا `PROD-05` به `verified`
+
 ---
 
 ## ۲. اسکرین‌شات‌های ثبت‌شده
@@ -72,8 +85,13 @@
 - [shop-desktop-1024.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/shop-desktop-1024.png) (فروشگاه دسکتاپ با سایدبار راست)
 - [shop-wide-1440.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/shop-wide-1440.png) (فروشگاه عریض با سایدبار و گرید ۴ ستونه)
 - [shop-wide-list-view-1440.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/shop-wide-list-view-1440.png) (حالت نمایش ردیفی کالاها در دسکتاپ عریض)
+- [product-mobile-375.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/product-mobile-375.png) (صفحه محصول موبایل ۳۷۵px)
+- [product-tablet-768.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/product-tablet-768.png) (صفحه محصول تبلت ۷۶۸px)
+- [product-desktop-1024.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/product-desktop-1024.png) (صفحه محصول دسکتاپ ۱۰۲۴px)
+- [product-wide-1440.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/product-wide-1440.png) (صفحه محصول عریض با گالری و باکس خرید)
+- [product-wide-specs-tab-1440.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/product-wide-specs-tab-1440.png) (تب مشخصات فنی راه‌راه در دسکتاپ)
 
 ---
 
 ## ۳. فیچر بعدی
-- **Feature 005: Single Product (`PROD-01` تا `PROD-05`)**: گالری محصول (لایت‌باکس/زوم/تامبنیل)، باکس خرید و انتخاب وریشین‌ها، ویژگی‌ها و مزایای تحویل، تب‌های اطلاعات/مشخصات/دیدگاه‌ها، و کاروسل کالاهای مرتبط.
+- **Feature 006: Cart / Checkout / My Account (`FLOW-02` تا `FLOW-06`)**: صفحه سبد خرید مدرن با تنظیم ایجکس تعداد، فیلد کوپن، صفحه تسویه حساب بهینه‌شده، صفحه سپاس سفارش، و داشبورد حساب کاربری با فرم ورود/ثبت‌نام تمیز.

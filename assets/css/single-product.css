@@ -1,0 +1,218 @@
+/**
+ * Single Product Dedicated Stylesheet
+ *
+ * @package Negar_Shop
+ * @version 1.0.0
+ */
+
+/* ==========================================================================
+   1. Single Product Page Structure
+   ========================================================================== */
+.negar-single-product-page {
+	background-color: var(--negar-bg, #f8fafc);
+	min-height: 80vh;
+}
+
+/* ==========================================================================
+   2. Gallery & Lightbox
+   ========================================================================== */
+.negar-gallery-main {
+	transition: border-color 0.2s ease;
+}
+
+.negar-gallery-thumbs .negar-thumb-btn {
+	cursor: pointer;
+}
+
+.negar-gallery-lightbox.is-open {
+	opacity: 1 !important;
+	pointer-events: auto !important;
+}
+
+/* ==========================================================================
+   3. Buy Box & Quantity Controls
+   ========================================================================== */
+.negar-buy-box {
+	box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+}
+
+/* Quantity Custom Stepper */
+.negar-add-to-cart-wrapper form.cart {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 1rem;
+}
+
+.negar-add-to-cart-wrapper .quantity {
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+	border: 1px solid var(--negar-border, #e2e8f0);
+	border-radius: var(--negar-radius-md, 0.5rem);
+	background-color: #ffffff;
+	overflow: hidden;
+}
+
+.negar-add-to-cart-wrapper .quantity input.qty {
+	width: 3.5rem;
+	height: 2.75rem;
+	text-align: center;
+	border: none;
+	font-weight: 700;
+	color: var(--negar-text-dark, #0f172a);
+	background: transparent;
+	padding: 0;
+	-moz-appearance: textfield;
+}
+
+.negar-add-to-cart-wrapper .quantity input.qty::-webkit-outer-spin-button,
+.negar-add-to-cart-wrapper .quantity input.qty::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+.negar-qty-btn {
+	width: 2.25rem;
+	height: 2.75rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: #f8fafc;
+	border: none;
+	cursor: pointer;
+	color: var(--negar-text-muted, #64748b);
+	font-size: 1.125rem;
+	font-weight: 700;
+	transition: all 0.15s ease;
+}
+
+.negar-qty-btn:hover {
+	background-color: #f1f5f9;
+	color: var(--negar-primary, #2563eb);
+}
+
+.negar-add-to-cart-wrapper button.single_add_to_cart_button {
+	background-color: var(--negar-primary, #2563eb) !important;
+	color: #ffffff !important;
+	padding: 0.75rem 2rem !important;
+	border-radius: var(--negar-radius-md, 0.5rem) !important;
+	font-weight: 700 !important;
+	font-size: 0.9375rem !important;
+	border: none !important;
+	cursor: pointer !important;
+	transition: all 0.2s ease !important;
+	display: inline-flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+	min-height: 2.75rem !important;
+	box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2) !important;
+}
+
+.negar-add-to-cart-wrapper button.single_add_to_cart_button:hover {
+	background-color: var(--negar-primary-dark, #1d4ed8) !important;
+	transform: translateY(-1px) !important;
+	box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3) !important;
+}
+
+/* Variable Products Swatches & Table */
+.negar-add-to-cart-wrapper table.variations {
+	width: 100%;
+	margin-bottom: 1rem;
+	border-collapse: separate;
+	border-spacing: 0 0.75rem;
+}
+
+.negar-add-to-cart-wrapper table.variations th.label {
+	width: 25%;
+	text-align: right;
+	font-size: 0.8125rem;
+	font-weight: 600;
+	color: var(--negar-text-dark, #0f172a);
+}
+
+.negar-add-to-cart-wrapper table.variations td.value select {
+	width: 100%;
+	padding: 0.5rem 0.75rem;
+	border-radius: var(--negar-radius-md, 0.5rem);
+	border: 1px solid var(--negar-border, #e2e8f0);
+	background-color: #ffffff;
+	font-size: 0.875rem;
+}
+
+/* ==========================================================================
+   4. Delivery & Trust Perks
+   ========================================================================== */
+.negar-delivery-perks .negar-perk-item {
+	transition: transform 0.2s ease;
+}
+
+.negar-delivery-perks .negar-perk-item:hover {
+	transform: translateY(-2px);
+}
+
+/* ==========================================================================
+   5. Product Tabs & Specifications Table
+   ========================================================================== */
+.negar-tab-btn.is-active {
+	color: var(--negar-primary, #2563eb) !important;
+	border-bottom-color: var(--negar-primary, #2563eb) !important;
+}
+
+.negar-specs-table th {
+	background-color: #f8fafc;
+	color: var(--negar-text-muted, #64748b);
+}
+
+.negar-specs-table tr:hover {
+	background-color: #f1f5f9;
+}
+
+/* Reviews List & Comment Form */
+#comments ol.commentlist {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 1.25rem;
+}
+
+#comments .comment {
+	padding: 1.25rem;
+	border-radius: var(--negar-radius-md, 0.5rem);
+	background-color: #ffffff;
+	border: 1px solid var(--negar-border, #e2e8f0);
+}
+
+#comments .star-rating {
+	display: inline-block;
+	color: #f59e0b;
+	font-size: 0.875rem;
+}
+
+#respond input[type="text"],
+#respond input[type="email"],
+#respond textarea {
+	width: 100%;
+	padding: 0.625rem 0.875rem;
+	border-radius: var(--negar-radius-md, 0.5rem);
+	border: 1px solid var(--negar-border, #e2e8f0);
+	margin-bottom: 1rem;
+	font-size: 0.875rem;
+}
+
+#respond input[type="submit"] {
+	background-color: var(--negar-primary, #2563eb);
+	color: #ffffff;
+	padding: 0.625rem 1.75rem;
+	border-radius: var(--negar-radius-md, 0.5rem);
+	border: none;
+	cursor: pointer;
+	font-weight: 600;
+	transition: background-color 0.2s ease;
+}
+
+#respond input[type="submit"]:hover {
+	background-color: var(--negar-primary-dark, #1d4ed8);
+}

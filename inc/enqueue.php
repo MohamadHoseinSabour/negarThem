@@ -87,6 +87,16 @@ function negar_shop_scripts() {
 		);
 	}
 
+	// Single Product Dedicated CSS
+	if ( function_exists( 'is_product' ) && is_product() ) {
+		wp_enqueue_style(
+			'negar-shop-single-product',
+			NEGAR_SHOP_URI . '/assets/css/single-product.css',
+			array( 'negar-shop-header-footer' ),
+			NEGAR_SHOP_VERSION
+		);
+	}
+
 	// RTL Stylesheet
 	if ( is_rtl() ) {
 		wp_enqueue_style(
@@ -163,6 +173,17 @@ function negar_shop_scripts() {
 				'ajax_url' => admin_url( 'admin-ajax.php' ),
 				'nonce'    => wp_create_nonce( 'negar_shop_nonce' ),
 			)
+		);
+	}
+
+	// Single Product Interactive Script
+	if ( function_exists( 'is_product' ) && is_product() ) {
+		wp_enqueue_script(
+			'negar-shop-single-product',
+			NEGAR_SHOP_URI . '/assets/js/single-product.js',
+			array( 'negar-shop-header-footer' ),
+			NEGAR_SHOP_VERSION,
+			true
 		);
 	}
 
