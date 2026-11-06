@@ -46,6 +46,9 @@
 /* Section */
 .your-taste-box-nk {
   --bg-body: #fff;
+  --kaveh-primary-color: #e11242;
+  --kaveh-primary-hover: #be123c;
+  margin: 45px 0 50px;
 }
 
 .your-taste-box-nk__heading {
