@@ -67,6 +67,16 @@ function negar_shop_scripts() {
 		NEGAR_SHOP_VERSION
 	);
 
+	// Homepage Dedicated CSS
+	if ( is_front_page() || is_home() ) {
+		wp_enqueue_style(
+			'negar-shop-home',
+			NEGAR_SHOP_URI . '/assets/css/home.css',
+			array( 'negar-shop-header-footer' ),
+			NEGAR_SHOP_VERSION
+		);
+	}
+
 	// RTL Stylesheet
 	if ( is_rtl() ) {
 		wp_enqueue_style(
@@ -114,6 +124,17 @@ function negar_shop_scripts() {
 		NEGAR_SHOP_VERSION,
 		true
 	);
+
+	// Homepage Interactivity Script
+	if ( is_front_page() || is_home() ) {
+		wp_enqueue_script(
+			'negar-shop-home',
+			NEGAR_SHOP_URI . '/assets/js/home.js',
+			array( 'negar-shop-header-footer' ),
+			NEGAR_SHOP_VERSION,
+			true
+		);
+	}
 
 	// Threaded Comments
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
