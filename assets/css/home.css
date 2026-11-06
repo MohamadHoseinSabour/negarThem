@@ -159,3 +159,11 @@
 .blog-card:hover {
   transform: translateY(-4px);
 }
+
+/* 9. Hero Flash Deal Badge Positioning (Exact Demo 43 Match) */
+@media (min-width: 992px) {
+  .landing-nk__products__box .offer {
+    top: -26px !important;
+    left: -34px !important;
+  }
+}
