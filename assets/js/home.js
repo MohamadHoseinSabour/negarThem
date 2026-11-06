@@ -198,6 +198,78 @@
   }
 
   /**
+   * 5. Kaveh Demo 43 Swiper Carousels Initializer
+   */
+  function initKavehSwipers() {
+    if (typeof Swiper === 'undefined') return;
+
+    // 1. Landing Hero Carousel
+    const landingEl = document.querySelector('.swiper-landing-nk');
+    if (landingEl) {
+      new Swiper(landingEl, {
+        loop: true,
+        effect: 'fade',
+        fadeEffect: { crossFade: true },
+        navigation: {
+          prevEl: '.swiper-button-prev',
+          nextEl: '.swiper-button-next',
+        },
+        autoplay: {
+          delay: 5000,
+          disableOnInteraction: false,
+        },
+      });
+    }
+
+    // 2. Landing Flash Product (Left box in Hero)
+    const landingProdEl = document.querySelector('.swiper-landing-product-nk');
+    if (landingProdEl) {
+      new Swiper(landingProdEl, {
+        effect: 'fade',
+        fadeEffect: { crossFade: true },
+        pagination: {
+          el: '.landing-nk__products .swiper-pagination',
+          clickable: true,
+        },
+      });
+    }
+
+    // 3. Category Bubbles Slider
+    const catEl = document.querySelector('.swiper-categories-nk');
+    if (catEl) {
+      new Swiper(catEl, {
+        watchSlidesProgress: true,
+        watchOverflow: true,
+        slidesPerView: 2.1,
+        spaceBetween: 12,
+        breakpoints: {
+          320: { slidesPerView: 2.1, spaceBetween: 12 },
+          576: { slidesPerView: 3, spaceBetween: 12 },
+          768: { slidesPerView: 3, spaceBetween: 12 },
+          992: { slidesPerView: 5, spaceBetween: 12 },
+          1200: { slidesPerView: 5, spaceBetween: 12 },
+        },
+      });
+    }
+
+    // 4. Popular Deals Slider
+    const popularEl = document.querySelector('.swiper-products-popular');
+    if (popularEl) {
+      new Swiper(popularEl, {
+        watchSlidesProgress: true,
+        slidesPerView: 1.5,
+        spaceBetween: 8,
+        breakpoints: {
+          320: { slidesPerView: 1.5, spaceBetween: 8 },
+          768: { slidesPerView: 2.2, spaceBetween: 10 },
+          992: { slidesPerView: 3.2, spaceBetween: 10 },
+          1200: { slidesPerView: 3.2, spaceBetween: 10 },
+        },
+      });
+    }
+  }
+
+  /**
    * DOM Ready Initializer
    */
   function init() {
@@ -205,6 +277,7 @@
     initCountdownTimer();
     initDealsCarousel();
     initProductTabs();
+    initKavehSwipers();
   }
 
   if (document.readyState === 'loading') {

@@ -51,19 +51,63 @@ function negar_shop_scripts() {
 		NEGAR_SHOP_VERSION
 	);
 
+	// Bootstrap 5 RTL Framework Utilities
+	wp_enqueue_style(
+		'bootstrap-rtl',
+		NEGAR_SHOP_URI . '/assets/css/vendor/bootstrap.rtl.min.css',
+		array(),
+		'5.3.0'
+	);
+
+	// Kaveh Product Cards Official CSS
+	wp_enqueue_style(
+		'kaveh-product-carts',
+		NEGAR_SHOP_URI . '/assets/css/vendor/product-carts.min.css',
+		array( 'bootstrap-rtl' ),
+		NEGAR_SHOP_VERSION
+	);
+
+	// Kaveh Elementor Widgets Official CSS (Landing, Categories, Deals)
+	wp_enqueue_style(
+		'kaveh-landing',
+		NEGAR_SHOP_URI . '/assets/css/vendor/landingnkkaveh.css',
+		array( 'bootstrap-rtl' ),
+		NEGAR_SHOP_VERSION
+	);
+	wp_enqueue_style(
+		'kaveh-categories',
+		NEGAR_SHOP_URI . '/assets/css/vendor/categoriesnkkaveh.css',
+		array( 'bootstrap-rtl' ),
+		NEGAR_SHOP_VERSION
+	);
+	wp_enqueue_style(
+		'kaveh-popular',
+		NEGAR_SHOP_URI . '/assets/css/vendor/popularproductsnkkaveh.css',
+		array( 'bootstrap-rtl' ),
+		NEGAR_SHOP_VERSION
+	);
+
 	// Tailwind Engine Compiled Utility CSS
 	wp_enqueue_style(
 		'negar-shop-tailwind',
 		NEGAR_SHOP_URI . '/assets/css/tailwind.css',
-		array( 'negar-shop-style' ),
+		array( 'negar-shop-style', 'bootstrap-rtl' ),
 		NEGAR_SHOP_VERSION
+	);
+
+	// Swiper Slider CSS
+	wp_enqueue_style(
+		'swiper-bundle',
+		NEGAR_SHOP_URI . '/assets/vendor/swiper/swiper-bundle.min.css',
+		array(),
+		'11.0.0'
 	);
 
 	// Design System Tokens & Base Component CSS
 	wp_enqueue_style(
 		'negar-shop-main',
 		NEGAR_SHOP_URI . '/assets/css/main.css',
-		array( 'negar-shop-tailwind' ),
+		array( 'negar-shop-tailwind', 'swiper-bundle' ),
 		NEGAR_SHOP_VERSION
 	);
 
@@ -143,11 +187,20 @@ function negar_shop_scripts() {
 		NEGAR_SHOP_VERSION
 	);
 
+	// Swiper Slider JS
+	wp_enqueue_script(
+		'swiper-bundle',
+		NEGAR_SHOP_URI . '/assets/vendor/swiper/swiper-bundle.min.js',
+		array(),
+		'11.0.0',
+		true
+	);
+
 	// Main Vanilla JS Framework
 	wp_enqueue_script(
 		'negar-shop-main',
 		NEGAR_SHOP_URI . '/assets/js/main.js',
-		array(),
+		array( 'swiper-bundle' ),
 		NEGAR_SHOP_VERSION,
 		true
 	);
