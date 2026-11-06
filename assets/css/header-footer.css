@@ -12,14 +12,14 @@
 .negar-topbar .container,
 .negar-main-header .container,
 .negar-navigation-bar .container {
-  max-width: 1600px !important;
-  width: 95% !important;
+  max-width: 1920px !important;
+  width: calc(100% - 32px) !important;
   padding-left: 1.5rem !important;
   padding-right: 1.5rem !important;
 }
 
 .site-header .header-search {
-  max-width: 760px;
+  max-width: 920px;
 }
 
 /* ==========================================================================
@@ -45,8 +45,8 @@
     top: 14px;
     left: 50%;
     transform: translateX(-50%);
-    width: calc(100% - 32px);
-    max-width: 1600px;
+    width: calc(100% - 32px) !important;
+    max-width: 1920px !important;
     z-index: 1000;
     
     /* Frosted glassmorphism */
@@ -71,7 +71,9 @@
   }
 
   .site-header.is-sticky .negar-main-header .container {
-    padding-inline: 1.25rem !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    padding-inline: 1.5rem !important;
   }
 
   /* Translucent search bar inside glassmorphism island */
