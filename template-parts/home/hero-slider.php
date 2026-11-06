@@ -182,9 +182,9 @@ if ( $fc_prod ) {
 								<span class="offer__icon flex-shrink-0" aria-hidden="true"></span>
 							</div>
 
-							<div class="swiper swiper-landing-product-nk swiper-landing-product-nk-6b94d804 swiper-fade swiper-initialized swiper-horizontal swiper-pointer-events swiper-rtl swiper-watch-progress swiper-backface-hidden">
+							<div class="swiper swiper-landing-product-nk swiper-landing-product-nk-6b94d804 swiper-fade">
 								<div class="swiper-wrapper" id="swiper-wrapper-a79e94571c898698" aria-live="polite">
-																			<div class="swiper-slide swiper-slide-visible swiper-slide-active" data-product-url="<?php echo esc_url( $fc26_link ); ?>" role="group" aria-label="1 / 1" style="width: 292px; opacity: 1; transform: translate3d(0px, 0px, 0px);">
+																			<div class="swiper-slide" data-product-url="<?php echo esc_url( $fc26_link ); ?>" role="group" aria-label="1 / 1">
 											<div class="landing-nk__products__item position-relative d-flex align-items-center align-items-start flex-row flex-lg-column">
 																									<div class="discount position-absolute f-iran-yekan d-flex align-items-center justify-content-center">
 														35														<i class="icon-discount-4"></i>

@@ -1105,6 +1105,19 @@
   color: #fff !important;
 }
 
+@media only screen and (max-width: 575px) {
+  .top-selling-products-two-nk__discount__item .price {
+    flex-wrap: wrap !important;
+    gap: 4px !important;
+  }
+  .top-selling-products-two-nk__discount__item .price del {
+    font-size: 12px !important;
+  }
+  .top-selling-products-two-nk__discount__item .price .price {
+    font-size: 14px !important;
+  }
+}
+
 .top-selling-products-two-nk__discount__item .price .toman-symbol svg {
   fill: #fff !important;
 }

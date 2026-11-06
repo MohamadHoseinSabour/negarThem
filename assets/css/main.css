@@ -857,7 +857,13 @@ select:focus {
 
 .landing-nk__carousel .swiper-button-next { left: 21px; }
 
-.landing-nk__products { max-width: 292px; flex-shrink: 0; overflow: visible; }
+.landing-nk__products { flex-shrink: 0; overflow: visible; }
+@media only screen and (min-width: 992px) {
+  .landing-nk__products { max-width: 292px; }
+}
+@media only screen and (max-width: 991.98px) {
+  .landing-nk__products { max-width: 100%; width: 100%; }
+}
 
 .landing-nk__products::before { content: ""; position: absolute; inset: -9px -3px -16px 146px; background-color: var(--bg-back); z-index: -1; }
 
@@ -901,7 +907,15 @@ select:focus {
 
 .landing-nk__products__box .offer .title { display: block; font-size: 14px; line-height: 19px; color: rgb(255, 255, 255); white-space: nowrap; margin-bottom: 0px; }
 
-.landing-nk__products__item { padding: 89px 32px 18px; width: 100%; min-width: 0px; }
+.landing-nk__products__item { width: 100%; min-width: 0px; }
+@media only screen and (min-width: 992px) {
+  .landing-nk__products__item { padding: 89px 32px 18px; }
+}
+@media only screen and (max-width: 991.98px) {
+  .landing-nk__products__item { padding: 56px 42px 36px 24px; gap: 46px; }
+  .landing-nk__products__item .image { margin-bottom: 0; flex: 0 0 auto; }
+  .landing-nk__products__item .detail { width: 100%; flex: 1 1 auto; min-width: 0; }
+}
 
 .landing-nk__products__item .detail { width: 100%; max-width: 100%; min-width: 0px; }
 
@@ -909,7 +923,26 @@ select:focus {
 
 .landing-nk__products__item .discount i { font-size: 8px; }
 
-.landing-nk__products__item .image { max-width: fit-content; margin-bottom: 38px; z-index: 2; }
+.landing-nk__products__item .image { z-index: 2; }
+
+@media only screen and (min-width: 992px) {
+  .landing-nk__products__item .image { max-width: fit-content; margin-bottom: 38px; }
+  .landing-nk__products__item .image img { height: 124px; }
+}
+
+@media only screen and (max-width: 991.98px) {
+  .landing-nk__products__item .image { margin-bottom: 0; flex: 0 0 auto; }
+}
+
+@media only screen and (max-width: 575px) {
+  .landing-nk__products__item { gap: 35px !important; }
+  .landing-nk__products__item .image { max-width: 70px !important; }
+  .landing-nk__products__item .image img { height: 76px !important; }
+  .landing-nk__products__item .detail { max-width: calc(100% - 105px) !important; }
+  .landing-nk__products__item .title { font-size: 14px; line-height: 20px; margin-bottom: 16px; }
+  .landing-nk__products__item .price del,
+  .landing-nk__products__item .price .price { font-size: 14px; line-height: 20px; }
+}
 
 .landing-nk__products__item .image .bg { width: 160.66%; height: 146.27%; background-color: rgb(255, 255, 255); filter: blur(24px); z-index: -2; }
 
@@ -923,7 +956,7 @@ select:focus {
 
 .landing-nk__products__item .image svg { transform: translate(30px, -8px); }
 
-.landing-nk__products__item .image img { height: 124px; transform: rotate(11.39deg); }
+.landing-nk__products__item .image img { transform: rotate(11.39deg); }
 
 .landing-nk__products__item .title { font-size: 16px; line-height: 24px; color: rgb(57, 68, 84); margin-bottom: 19px; width: 100%; max-width: 100%; min-width: 0px; }
 
@@ -941,7 +974,17 @@ select:focus {
 
 .landing-nk__products__item .comments-rate .rate svg { color: rgb(255, 199, 0); }
 
-.landing-nk__products__item .detail > .price, .landing-nk__products__box .landing-nk__products__price { width: 100%; max-width: 100%; min-width: 0px; flex-wrap: nowrap; align-items: center; justify-content: space-between; gap: 8px; box-sizing: border-box; }
+.landing-nk__products__item .detail > .price { width: 100%; max-width: 100%; min-width: 0px; flex-wrap: nowrap; align-items: center; justify-content: space-between; gap: 8px; box-sizing: border-box; }
+
+.landing-nk__products__box .landing-nk__products__price { max-width: 100%; min-width: 0px; flex-wrap: nowrap; align-items: center; justify-content: space-between; gap: 8px; box-sizing: border-box; }
+@media only screen and (min-width: 992px) {
+  .landing-nk__products__box .landing-nk__products__price {
+    width: auto !important;
+    left: 32px !important;
+    right: 32px !important;
+    bottom: 10px !important;
+  }
+}
 
 .landing-nk__products__item .detail > .price del, .landing-nk__products__box .landing-nk__products__price del { font-size: 16px; line-height: 24px; color: rgb(164, 168, 186); white-space: nowrap; flex-shrink: 0; }
 
