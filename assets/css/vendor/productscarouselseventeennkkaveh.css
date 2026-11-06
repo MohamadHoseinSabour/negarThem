@@ -865,4 +865,87 @@
   }
 }
 
+/* ========================================================
+   Fidelity & Layout Enhancements for Negar Shop
+   - Prevent Button Clipping across Top Selling & Accessories
+   - Larger Red Highlight Discount Card in Top Selling Layout
+   ======================================================== */
+
+/* 1. Prevent Button Clipping in Accessories Carousel */
+.buy-accessories-nk {
+  overflow: visible !important;
+  padding-bottom: 55px !important;
+}
+.buy-accessories-nk > .container {
+  overflow: visible !important;
+}
+.buy-accessories-nk__right,
+.buy-accessories-nk__right__box {
+  overflow: visible !important;
+}
+.buy-accessories-nk__right__box__more-wrap {
+  z-index: 10 !important;
+}
+.buy-accessories-nk__right__box .more {
+  position: relative;
+  z-index: 11 !important;
+}
+
+/* 2. Prevent Button Clipping in Top Selling Layout */
+.top-selling-products-two-nk {
+  overflow: visible !important;
+  padding-bottom: 50px !important;
+}
+.top-selling-products-two-nk .container,
+.top-selling-products-two-nk .row {
+  overflow: visible !important;
+}
+.top-selling-products-two-nk .row {
+  margin-bottom: 25px !important;
+}
+.top-selling-products-two-nk__discount,
+.top-selling-products-two-nk__discount .swiper,
+.top-selling-products-two-nk__discount .swiper-wrapper,
+.top-selling-products-two-nk__discount .swiper-slide {
+  overflow: visible !important;
+}
+.top-selling-products-two-nk__discount__item .btn-more {
+  z-index: 10 !important;
+}
+
+/* 3. Larger Red Product Card (User Request: "کارت محصولی که قرمزه باید بزرگ تر از بقیه باشه") */
+@media (min-width: 992px) {
+  .top-selling-products-two-nk__discount {
+    border-radius: 36px;
+  }
+  .top-selling-products-two-nk__discount__item {
+    padding: 85px 28px 75px;
+  }
+  .top-selling-products-two-nk__discount__item .image {
+    width: 175px;
+    height: 175px;
+  }
+  .top-selling-products-two-nk__discount__item .image img {
+    width: 175px !important;
+    height: 175px !important;
+    object-fit: contain;
+  }
+  .top-selling-products-two-nk__discount__item .title {
+    font-size: 15px;
+    line-height: 26px;
+    margin-bottom: 12px;
+  }
+  .top-selling-products-two-nk__discount__item .price .price span {
+    font-size: 18px;
+    line-height: 34px;
+  }
+  .top-selling-products-two-nk__discount__item .btn-more {
+    width: 80px;
+    height: 64px;
+    font-size: 16px;
+    transform: translate(-50%, 46px);
+  }
+}
+
+
 

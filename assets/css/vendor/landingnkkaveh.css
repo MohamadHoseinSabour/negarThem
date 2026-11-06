@@ -36,7 +36,8 @@
 
 .landing-nk {
   --bg-body: #fff;
-  overflow: hidden;
+  overflow: visible;
+  padding-top: 15px;
 }
 .landing-nk .bg-border {
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
