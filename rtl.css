@@ -1,0 +1,26 @@
+/*
+Theme Name: Negar Shop
+Description: RTL stylesheet for Persian and right-to-left language layouts
+*/
+
+body {
+  direction: rtl;
+  unicode-bidi: embed;
+}
+
+/* Float & Margin Inversions */
+.float-left {
+  float: right !important;
+}
+
+.float-right {
+  float: left !important;
+}
+
+.text-left {
+  text-align: right !important;
+}
+
+.text-right {
+  text-align: left !important;
+}
