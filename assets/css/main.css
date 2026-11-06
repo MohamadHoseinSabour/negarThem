@@ -1838,12 +1838,12 @@ body.kaveh-full-product-titles .product h2, body.kaveh-full-product-titles .prod
 @media (min-width: 992px) {
   .landing-nk__carousel .swiper-button-prev,
   .landing-nk__carousel > .swiper-button-prev {
-    right: -10px !important;
+    right: 48px !important;
     left: auto !important;
   }
   .landing-nk__carousel .swiper-button-next,
   .landing-nk__carousel > .swiper-button-next {
-    left: -17px !important;
+    left: 21px !important;
     right: auto !important;
   }
 }
