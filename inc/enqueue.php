@@ -112,6 +112,12 @@ function negar_shop_scripts() {
 		array( 'bootstrap-rtl', 'kaveh-product-carts' ),
 		NEGAR_SHOP_VERSION
 	);
+	wp_enqueue_style(
+		'kaveh-buy-top-product',
+		NEGAR_SHOP_URI . '/assets/css/vendor/buytopproductnkkaveh.css',
+		array( 'bootstrap-rtl', 'kaveh-product-carts' ),
+		NEGAR_SHOP_VERSION
+	);
 
 	// Tailwind Engine Compiled Utility CSS
 	wp_enqueue_style(
