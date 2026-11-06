@@ -1,0 +1,161 @@
+/**
+ * Negar Shop - Homepage Dedicated Stylesheet
+ * 
+ * @package Negar_Shop
+ * @version 1.0.0
+ */
+
+/* Hide Scrollbars while keeping scroll functionality */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* 1. Hero Slider */
+.hero-slider-container {
+  background-size: cover;
+  background-position: center;
+}
+
+.hero-slide {
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hero-slide.active {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  transform: scale(1);
+}
+
+.hero-slide:not(.active) {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transform: scale(0.98);
+}
+
+.hero-dots .hero-dot.active {
+  width: 24px;
+  background-color: var(--color-primary);
+}
+
+/* 2. Promo Banners */
+.promo-banner-card {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.promo-banner-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* 3. Category Bubbles */
+.category-bubble-card {
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.category-bubble-card:hover {
+  transform: translateY(-4px);
+}
+
+/* 4. Flash Deals */
+.flash-deals-wrapper {
+  position: relative;
+  overflow: hidden;
+}
+
+.timer-box {
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.flash-deal-item .negar-product-card {
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+
+/* 5. Product Tabs Trigger */
+.product-tab-buttons .tab-trigger.active {
+  background-color: var(--color-primary);
+  color: #ffffff;
+  box-shadow: 0 2px 6px rgba(5, 150, 105, 0.25);
+}
+
+.product-tab-buttons .tab-trigger:not(.active) {
+  color: var(--color-foreground);
+}
+
+.product-tab-buttons .tab-trigger:not(.active):hover {
+  color: var(--color-primary);
+  background-color: rgba(255, 255, 255, 0.6);
+}
+
+/* 6. Product Card Component Details */
+.negar-product-card {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.negar-product-card:hover {
+  transform: translateY(-4px);
+  border-color: #cbd5e1;
+}
+
+.quick-view-overlay {
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  transform: translateY(6px);
+}
+
+.negar-product-card:hover .quick-view-overlay {
+  transform: translateY(0);
+}
+
+/* WooCommerce Loop Add-to-Cart Button inside Card */
+.add-to-cart-wrap .button {
+  padding: 0.375rem 0.75rem !important;
+  font-size: 0.75rem !important;
+  font-weight: 700 !important;
+  border-radius: var(--radius-sm) !important;
+  background-color: var(--color-muted) !important;
+  color: var(--color-foreground) !important;
+  border: 1px solid var(--color-border) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: all 0.2s ease !important;
+  text-decoration: none !important;
+  margin: 0 !important;
+}
+
+.add-to-cart-wrap .button:hover {
+  background-color: var(--color-primary) !important;
+  color: #ffffff !important;
+  border-color: var(--color-primary) !important;
+}
+
+.add-to-cart-wrap .added_to_cart {
+  display: block;
+  font-size: 0.6875rem;
+  color: var(--color-primary);
+  margin-top: 2px;
+  text-decoration: underline;
+}
+
+/* 7. Brands Grid */
+.brand-item-card {
+  transition: all 0.25s ease;
+}
+
+.brand-item-card:hover {
+  transform: translateY(-3px);
+}
+
+/* 8. Blog Cards */
+.blog-card {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.blog-card:hover {
+  transform: translateY(-4px);
+}
