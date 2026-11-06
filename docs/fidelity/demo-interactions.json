@@ -1,0 +1,61 @@
+[
+  {
+    "element": "Header / Navigation Bar",
+    "trigger": "Scroll window down > 300px",
+    "state": "sticky",
+    "observedResult": {
+      "position": "static",
+      "top": "auto",
+      "classList": [
+        "ag-theme-builder-header"
+      ]
+    },
+    "notes": "Header sticky behavior during scroll"
+  },
+  {
+    "element": "Search Input",
+    "trigger": "Focus & Type keyword \"گوشی\"",
+    "state": "typing / open dropdown",
+    "observedResult": {
+      "hasLiveDropdown": false
+    },
+    "notes": "Live search autocomplete behavior"
+  },
+  {
+    "element": "Cart Icon in Header",
+    "trigger": "Hover",
+    "state": "dropdown preview",
+    "observedResult": {
+      "hasHoverDropdown": false
+    },
+    "notes": "Mini-cart dropdown on hover"
+  },
+  {
+    "element": "Carousel Arrows (Next/Prev)",
+    "trigger": "Slide navigation",
+    "state": "rendered",
+    "observedResult": {
+      "arrowCount": 10
+    },
+    "notes": "Horizontal product carousels navigation arrows"
+  },
+  {
+    "element": "Back to Top Button",
+    "trigger": "Scroll window down > 1000px",
+    "state": "visible",
+    "observedResult": {
+      "exists": false
+    },
+    "notes": "Back to top floating action button"
+  },
+  {
+    "element": "Mobile Navigation Menu & Bottom Bar",
+    "trigger": "Mobile Viewport (375px)",
+    "state": "responsive",
+    "observedResult": {
+      "hasHamburger": false,
+      "hasBottomBar": false
+    },
+    "notes": "Mobile offcanvas drawer and sticky bottom navigation"
+  }
+]

@@ -1,0 +1,64 @@
+[
+  {
+    "index": 0,
+    "tagName": "DIV",
+    "id": "",
+    "className": "elementor elementor-1419",
+    "rect": {
+      "top": 256.59375,
+      "left": 0,
+      "width": 1440,
+      "height": 16990.15625
+    },
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "bgImage": "none",
+    "padding": "0px 0px 0px 0px",
+    "margin": "0px 0px 0px 0px",
+    "headings": [
+      "پیشنهاد داغ",
+      "شروعی متفاوت",
+      "ویژه تو",
+      "شانس با توست",
+      "تخفیف رویایی"
+    ],
+    "productCount": 0,
+    "productsSample": [],
+    "imageCount": 324,
+    "imagesSample": [
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/10/11c84a6efb8352f41b63a80222c4e5e9d923c2b5_1739995946-150x150-1.jpg",
+        "alt": "پیشنهاد داغ",
+        "width": 150,
+        "height": 150
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/10/4-3-150x150-1.jpg",
+        "alt": "شروعی متفاوت",
+        "width": 150,
+        "height": 150
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/10/0ca0161bda0b47d19aa49cb9225c0f73b37e72ef_1738957158-150x150-1.jpg",
+        "alt": "ویژه تو",
+        "width": 150,
+        "height": 150
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/10/fcf5df508d005982feac77ce3c7feaff599f092b_1738870860-150x150-1.jpg",
+        "alt": "شانس با توست",
+        "width": 150,
+        "height": 150
+      }
+    ],
+    "linkCount": 273,
+    "buttons": [
+      "مشاهده بیشتر",
+      "مشاهده بیشتر",
+      "مشاهده بیشتر",
+      "مشاهده بیشتر",
+      "مشاهده بیشتر"
+    ],
+    "timers": [],
+    "rawTextSnippet": "پیشنهاد داغ ویژه ما شروعی متفاوت ویژه تو محصول ویژه شانس با توست تخفیف رویایی تکرار نمیشه باورنکردنی انتخاب خاص ویژه یک خرید خاص تخفیف ويژه برای تو خر"
+  }
+]

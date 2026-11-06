@@ -1,0 +1,187 @@
+{
+  "body": {
+    "fontFamily": "iransansxv",
+    "fontSize": "14px",
+    "color": "rgb(33, 35, 65)",
+    "bgColor": "rgb(255, 255, 255)",
+    "direction": "rtl"
+  },
+  "headingSamples": [
+    {
+      "tag": "H6",
+      "fontFamily": "iransansxv",
+      "fontSize": "16px",
+      "fontWeight": "500",
+      "color": "rgb(33, 35, 65)",
+      "lineHeight": "19.2px"
+    },
+    {
+      "tag": "H2",
+      "fontFamily": "iransansxv",
+      "fontSize": "11px",
+      "fontWeight": "700",
+      "color": "rgb(255, 255, 255)",
+      "lineHeight": "19px"
+    },
+    {
+      "tag": "H2",
+      "fontFamily": "iransansxv",
+      "fontSize": "11px",
+      "fontWeight": "700",
+      "color": "rgb(255, 255, 255)",
+      "lineHeight": "19px"
+    },
+    {
+      "tag": "H2",
+      "fontFamily": "iransansxv",
+      "fontSize": "11px",
+      "fontWeight": "700",
+      "color": "rgb(255, 255, 255)",
+      "lineHeight": "19px"
+    },
+    {
+      "tag": "H2",
+      "fontFamily": "iransansxv",
+      "fontSize": "11px",
+      "fontWeight": "700",
+      "color": "rgb(255, 255, 255)",
+      "lineHeight": "19px"
+    },
+    {
+      "tag": "H2",
+      "fontFamily": "iransansxv",
+      "fontSize": "11px",
+      "fontWeight": "700",
+      "color": "rgb(255, 255, 255)",
+      "lineHeight": "19px"
+    },
+    {
+      "tag": "H2",
+      "fontFamily": "iransansxv",
+      "fontSize": "11px",
+      "fontWeight": "700",
+      "color": "rgb(255, 255, 255)",
+      "lineHeight": "19px"
+    },
+    {
+      "tag": "H2",
+      "fontFamily": "iransansxv",
+      "fontSize": "11px",
+      "fontWeight": "700",
+      "color": "rgb(255, 255, 255)",
+      "lineHeight": "19px"
+    },
+    {
+      "tag": "H2",
+      "fontFamily": "iransansxv",
+      "fontSize": "11px",
+      "fontWeight": "700",
+      "color": "rgb(255, 255, 255)",
+      "lineHeight": "19px"
+    },
+    {
+      "tag": "H2",
+      "fontFamily": "iransansxv",
+      "fontSize": "11px",
+      "fontWeight": "700",
+      "color": "rgb(255, 255, 255)",
+      "lineHeight": "19px"
+    }
+  ],
+  "containers": [
+    {
+      "maxWidth": "100%",
+      "width": "1440px",
+      "padding": "0px 10px 0px 10px"
+    },
+    {
+      "maxWidth": "1320px",
+      "width": "1320px",
+      "padding": "0px 12px 0px 12px"
+    },
+    {
+      "maxWidth": "100%",
+      "width": "100%",
+      "padding": "0px 10px 0px 10px"
+    },
+    {
+      "maxWidth": "100%",
+      "width": "1440px",
+      "padding": "0px 10px 0px 10px"
+    },
+    {
+      "maxWidth": "100%",
+      "width": "1440px",
+      "padding": "10px 10px 10px 10px"
+    }
+  ],
+  "cardSamples": [
+    {
+      "borderRadius": "0px",
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "border": "0px none rgb(33, 35, 65)",
+      "boxShadow": "none"
+    },
+    {
+      "borderRadius": "0px",
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "border": "0px none rgb(33, 35, 65)",
+      "boxShadow": "none"
+    },
+    {
+      "borderRadius": "0px",
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "border": "0px none rgb(33, 35, 65)",
+      "boxShadow": "none"
+    },
+    {
+      "borderRadius": "0px",
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "border": "0px none rgb(33, 35, 65)",
+      "boxShadow": "none"
+    },
+    {
+      "borderRadius": "0px",
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "border": "0px none rgb(33, 35, 65)",
+      "boxShadow": "none"
+    }
+  ],
+  "buttonStyles": [
+    {
+      "bg": "rgb(233, 5, 68)",
+      "color": "rgb(255, 255, 255)",
+      "borderRadius": "15px",
+      "padding": "15px 20px 15px 20px",
+      "fontSize": "16px"
+    },
+    {
+      "bg": "rgba(0, 0, 0, 0)",
+      "color": "rgb(33, 35, 65)",
+      "borderRadius": "0px",
+      "padding": "0px 0px 0px 0px",
+      "fontSize": "14px"
+    },
+    {
+      "bg": "rgb(255, 255, 255)",
+      "color": "rgb(212, 36, 46)",
+      "borderRadius": "6px",
+      "padding": "9px 9px 9px 9px",
+      "fontSize": "11px"
+    },
+    {
+      "bg": "rgb(255, 255, 255)",
+      "color": "rgb(212, 36, 46)",
+      "borderRadius": "6px",
+      "padding": "9px 9px 9px 9px",
+      "fontSize": "11px"
+    },
+    {
+      "bg": "rgb(255, 255, 255)",
+      "color": "rgb(212, 36, 46)",
+      "borderRadius": "6px",
+      "padding": "9px 9px 9px 9px",
+      "fontSize": "11px"
+    }
+  ]
+}

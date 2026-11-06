@@ -1,0 +1,5169 @@
+[
+  {
+    "index": 0,
+    "className": "elementor-element elementor-element-a8261cb e-flex e-con-boxed e-con e-parent e-lazyloaded",
+    "id": "",
+    "rect": {
+      "top": 256.59375,
+      "left": 0,
+      "width": 1440,
+      "height": 187
+    },
+    "styles": {
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "backgroundImage": "none",
+      "padding": "0px 10px 0px 10px",
+      "margin": "-25px 0px 0px 0px",
+      "borderRadius": "0px",
+      "boxShadow": "none"
+    },
+    "headings": [
+      {
+        "tag": "DIV",
+        "text": "پیشنهاد داغ",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "color": "rgb(33, 35, 65)"
+      },
+      {
+        "tag": "DIV",
+        "text": "شروعی متفاوت",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "color": "rgb(33, 35, 65)"
+      },
+      {
+        "tag": "DIV",
+        "text": "ویژه تو",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "color": "rgb(33, 35, 65)"
+      },
+      {
+        "tag": "DIV",
+        "text": "شانس با توست",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "color": "rgb(33, 35, 65)"
+      },
+      {
+        "tag": "DIV",
+        "text": "تخفیف رویایی",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "color": "rgb(33, 35, 65)"
+      },
+      {
+        "tag": "DIV",
+        "text": "تکرار نمیشه",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "color": "rgb(33, 35, 65)"
+      },
+      {
+        "tag": "DIV",
+        "text": "باورنکردنی",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "color": "rgb(33, 35, 65)"
+      },
+      {
+        "tag": "DIV",
+        "text": "انتخاب خاص",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "color": "rgb(33, 35, 65)"
+      },
+      {
+        "tag": "DIV",
+        "text": "یک خرید خاص",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "color": "rgb(33, 35, 65)"
+      },
+      {
+        "tag": "DIV",
+        "text": "برای تو",
+        "fontSize": "12px",
+        "fontWeight": "400",
+        "color": "rgb(33, 35, 65)"
+      }
+    ],
+    "imageCount": 11,
+    "imagesSample": [
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/10/11c84a6efb8352f41b63a80222c4e5e9d923c2b5_1739995946-150x150-1.jpg",
+        "alt": "پیشنهاد داغ",
+        "width": 150,
+        "height": 150
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/10/4-3-150x150-1.jpg",
+        "alt": "شروعی متفاوت",
+        "width": 150,
+        "height": 150
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/10/0ca0161bda0b47d19aa49cb9225c0f73b37e72ef_1738957158-150x150-1.jpg",
+        "alt": "ویژه تو",
+        "width": 150,
+        "height": 150
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/10/fcf5df508d005982feac77ce3c7feaff599f092b_1738870860-150x150-1.jpg",
+        "alt": "شانس با توست",
+        "width": 150,
+        "height": 150
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/10/12-150x150-1.jpg",
+        "alt": "تخفیف رویایی",
+        "width": 150,
+        "height": 150
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/10/22-150x150-1.jpg",
+        "alt": "تکرار نمیشه",
+        "width": 150,
+        "height": 150
+      }
+    ],
+    "linkCount": 0,
+    "linksSample": [],
+    "isSlider": true,
+    "hasTimer": false,
+    "productCount": 0,
+    "productTitlesSample": [],
+    "subContainerCount": 1,
+    "subContainers": [
+      {
+        "className": "e-con-inner",
+        "width": 1320,
+        "height": 187
+      }
+    ],
+    "rawText": "پیشنهاد داغ ویژه ما شروعی متفاوت ویژه تو محصول ویژه شانس با توست تخفیف رویایی تکرار نمیشه باورنکردنی انتخاب خاص ویژه یک خرید خاص تخفیف ويژه برای تو"
+  },
+  {
+    "index": 1,
+    "className": "elementor-element elementor-element-229ccc7d e-con-full e-flex e-con e-parent e-lazyloaded",
+    "id": "",
+    "rect": {
+      "top": 463.59375,
+      "left": 0,
+      "width": 1440,
+      "height": 475
+    },
+    "styles": {
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "backgroundImage": "none",
+      "padding": "10px 10px 10px 10px",
+      "margin": "20px 0px 0px 0px",
+      "borderRadius": "0px",
+      "boxShadow": "none"
+    },
+    "headings": [
+      {
+        "tag": "DIV",
+        "text": "خرید برترین محصولاتــــــــ",
+        "fontSize": "14px",
+        "fontWeight": "400",
+        "color": "rgb(33, 35, 65)"
+      },
+      {
+        "tag": "H2",
+        "text": "خرید برترین محصولاتــــــــ",
+        "fontSize": "28px",
+        "fontWeight": "900",
+        "color": "rgb(255, 255, 255)"
+      },
+      {
+        "tag": "DIV",
+        "text": "خرید برترین محصولاتــــــــ",
+        "fontSize": "14px",
+        "fontWeight": "400",
+        "color": "rgb(33, 35, 65)"
+      },
+      {
+        "tag": "H2",
+        "text": "خرید برترین محصولاتــــــــ",
+        "fontSize": "28px",
+        "fontWeight": "900",
+        "color": "rgb(255, 255, 255)"
+      },
+      {
+        "tag": "DIV",
+        "text": "خرید برترین محصولاتــــــــ",
+        "fontSize": "14px",
+        "fontWeight": "400",
+        "color": "rgb(33, 35, 65)"
+      },
+      {
+        "tag": "H2",
+        "text": "خرید برترین محصولاتــــــــ",
+        "fontSize": "28px",
+        "fontWeight": "900",
+        "color": "rgb(255, 255, 255)"
+      },
+      {
+        "tag": "DIV",
+        "text": "خرید برترین محصولاتــــــــ",
+        "fontSize": "14px",
+        "fontWeight": "400",
+        "color": "rgb(33, 35, 65)"
+      },
+      {
+        "tag": "H2",
+        "text": "خرید برترین محصولاتــــــــ",
+        "fontSize": "28px",
+        "fontWeight": "900",
+        "color": "rgb(255, 255, 255)"
+      },
+      {
+        "tag": "DIV",
+        "text": "لـــحظه ایــ",
+        "fontSize": "14px",
+        "fontWeight": "600",
+        "color": "rgb(255, 255, 255)"
+      },
+      {
+        "tag": "H2",
+        "text": "بازی EA Sports FC 26 نسخه استاندارد مخصوص PS5",
+        "fontSize": "16px",
+        "fontWeight": "600",
+        "color": "rgb(57, 68, 84)"
+      }
+    ],
+    "imageCount": 5,
+    "imagesSample": [
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/landing-01-300x261-1.png",
+        "alt": "خرید برترین محصولاتــــــــ",
+        "width": 300,
+        "height": 261
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/landing-01-300x261-1.png",
+        "alt": "خرید برترین محصولاتــــــــ",
+        "width": 300,
+        "height": 261
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/landing-01-300x261-1.png",
+        "alt": "خرید برترین محصولاتــــــــ",
+        "width": 300,
+        "height": 261
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/landing-01-300x261-1.png",
+        "alt": "خرید برترین محصولاتــــــــ",
+        "width": 300,
+        "height": 261
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/5a11a470554a92905e74facee6978604b2f3fd09_1754815528-300x300-removebg-preview-1.png",
+        "alt": "بازی EA Sports FC 26 نسخه استاندارد مخصوص PS5",
+        "width": 300,
+        "height": 300
+      }
+    ],
+    "linkCount": 5,
+    "linksSample": [
+      {
+        "href": "https://kaveh.moeinwp.com/43/#",
+        "text": "مشاهده بیشتر"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/#",
+        "text": "مشاهده بیشتر"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/#",
+        "text": "مشاهده بیشتر"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/#",
+        "text": "مشاهده بیشتر"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d8%a8%d8%a7%d8%b2%db%8c-ea-sports-fc-26-%d9%86%d8%b3%d8%ae%d9%87-%d8%a7%d8%b3%d8%aa%d8%a7%d9%86%d8%af%d8%a7%d8%b1%d8%af-%d9%85%d8%ae%d8%b5%d9%88%d8%b5-ps5/",
+        "text": "بازی EA Sports FC 26 نسخه استاندارد مخصوص PS5"
+      }
+    ],
+    "isSlider": true,
+    "hasTimer": false,
+    "productCount": 0,
+    "productTitlesSample": [],
+    "subContainerCount": 1,
+    "subContainers": [
+      {
+        "className": "elementor-element elementor-element-6b94d804 elementor-widget elementor-widget-landingnkkaveh",
+        "width": 1420,
+        "height": 455
+      }
+    ],
+    "rawText": "خرید دسته های ایکس باکس خرید برترین محصولاتــــــــ مشاهده بیشتر خرید دسته های ایکس باکس خرید برترین محصولاتــــــــ مشاهده بیشتر خرید دسته های ایکس باکس خرید برترین محصولاتــــــــ مشاهده بیشتر خرید "
+  },
+  {
+    "index": 2,
+    "className": "elementor-element elementor-element-619bae2e e-con-full e-flex e-con e-parent e-lazyloaded",
+    "id": "",
+    "rect": {
+      "top": 1013.59375,
+      "left": 0,
+      "width": 1440,
+      "height": 360
+    },
+    "styles": {
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "backgroundImage": "none",
+      "padding": "10px 10px 10px 10px",
+      "margin": "75px 0px 0px 0px",
+      "borderRadius": "0px",
+      "boxShadow": "none"
+    },
+    "headings": [
+      {
+        "tag": "DIV",
+        "text": "پرفروش ترین دسته بندی",
+        "fontSize": "20px",
+        "fontWeight": "500",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "ساعت هوشمند",
+        "fontSize": "17px",
+        "fontWeight": "700",
+        "color": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "tag": "H2",
+        "text": "کنسول بازی",
+        "fontSize": "17px",
+        "fontWeight": "700",
+        "color": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "tag": "H2",
+        "text": "گوشی موبایل",
+        "fontSize": "17px",
+        "fontWeight": "700",
+        "color": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "tag": "H2",
+        "text": "ساعت هوشمند",
+        "fontSize": "17px",
+        "fontWeight": "700",
+        "color": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "tag": "H2",
+        "text": "لوازم جانبی موبایل",
+        "fontSize": "17px",
+        "fontWeight": "700",
+        "color": "rgba(0, 0, 0, 0)"
+      }
+    ],
+    "imageCount": 5,
+    "imagesSample": [
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/themes/kavehTheme/inc/elements/categoriesnkkaveh/images/category-01.png",
+        "alt": "ساعت هوشمند",
+        "width": 111,
+        "height": 111
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/09/ChatGPT-Image-Sep-7-2026-08_26_32-PM-1-e1788800283621-1-266x300.png",
+        "alt": "کنسول بازی",
+        "width": 266,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/09/ChatGPT-Image-Sep-7-2026-08_34_23-PM-1-e1788800698777-1-295x300.png",
+        "alt": "گوشی موبایل",
+        "width": 295,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/09/l7j5y-removebg-preview-e1788804006204-1-281x300.png",
+        "alt": "ساعت هوشمند",
+        "width": 281,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/09/9c9ei-removebg-preview-e1788804190536-1.png",
+        "alt": "لوازم جانبی موبایل",
+        "width": 242,
+        "height": 253
+      }
+    ],
+    "linkCount": 1,
+    "linksSample": [
+      {
+        "href": "https://kaveh.moeinwp.com/43/#",
+        "text": "مشاهده بیشتر"
+      }
+    ],
+    "isSlider": true,
+    "hasTimer": false,
+    "productCount": 0,
+    "productTitlesSample": [],
+    "subContainerCount": 1,
+    "subContainers": [
+      {
+        "className": "elementor-element elementor-element-57191199 elementor-widget elementor-widget-categoriesnkkaveh",
+        "width": 1420,
+        "height": 340
+      }
+    ],
+    "rawText": "پرفروش ترین دسته بندی زمانت قیمت و کیفیت مشاهده بیشتر ساعت هوشمند کنسول بازی گوشی موبایل ساعت هوشمند لوازم جانبی موبایل"
+  },
+  {
+    "index": 3,
+    "className": "elementor-element elementor-element-2ab93256 e-con-full e-flex e-con e-parent e-lazyloaded",
+    "id": "",
+    "rect": {
+      "top": 1448.59375,
+      "left": 0,
+      "width": 1440,
+      "height": 568
+    },
+    "styles": {
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "backgroundImage": "none",
+      "padding": "10px 10px 10px 10px",
+      "margin": "75px 0px 0px 0px",
+      "borderRadius": "0px",
+      "boxShadow": "none"
+    },
+    "headings": [
+      {
+        "tag": "DIV",
+        "text": "پیشنهاد",
+        "fontSize": "44px",
+        "fontWeight": "400",
+        "color": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "tag": "DIV",
+        "text": "پیشنهاد",
+        "fontSize": "44px",
+        "fontWeight": "400",
+        "color": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "tag": "H2",
+        "text": "گوشی موبایل سامسونگ مدل Galaxy S25 FE دو...",
+        "fontSize": "16px",
+        "fontWeight": "600",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "گوشی موبایل اپل مدل iPhone 17 Pro Max...",
+        "fontSize": "16px",
+        "fontWeight": "600",
+        "color": "rgb(4, 4, 4)"
+      }
+    ],
+    "imageCount": 4,
+    "imagesSample": [
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/themes/kavehTheme/inc/elements/popularproductsnkkaveh/images/popular-products.png",
+        "alt": "پیشنهاد",
+        "width": 294,
+        "height": 265
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/themes/kavehTheme/inc/elements/popularproductsnkkaveh/images/popular-products.png",
+        "alt": "پیشنهاد",
+        "width": 294,
+        "height": 265
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/89c0e7b3f400348a3add26684b7ece5084e4361f_1777115891-300x300-removebg-preview-1.png",
+        "alt": "گوشی موبایل سامسونگ مدل Galaxy S25 FE دو سیم کارت",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/ec57ce03f2a92834058f502174b1a2aeffc9a580_1759666637-300x300-removebg-preview-1.png",
+        "alt": "گوشی موبایل اپل مدل iPhone 17 Pro Max ZAA",
+        "width": 300,
+        "height": 300
+      }
+    ],
+    "linkCount": 4,
+    "linksSample": [
+      {
+        "href": "https://kaveh.moeinwp.com/43/#",
+        "text": "مشاهده بیشتر"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/#",
+        "text": "مشاهده بیشتر"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%da%af%d9%88%d8%b4%db%8c-%d9%85%d9%88%d8%a8%d8%a7%db%8c%d9%84-%d8%b3%d8%a7%d9%85%d8%b3%d9%88%d9%86%da%af-%d9%85%d8%af%d9%84-galaxy-s25-fe-%d8%af%d9%88-%d8%b3%db%8c%d9%85-%da%a9%d8%a7%d8%b1%d8%aa/",
+        "text": "گوشی موبایل سامسونگ مدل Galaxy S25 FE دو..."
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%da%af%d9%88%d8%b4%db%8c-%d9%85%d9%88%d8%a8%d8%a7%db%8c%d9%84-%d8%a7%d9%be%d9%84-%d9%85%d8%af%d9%84-iphone-17-pro-max-zaa/",
+        "text": "گوشی موبایل اپل مدل iPhone 17 Pro Max..."
+      }
+    ],
+    "isSlider": true,
+    "hasTimer": false,
+    "productCount": 0,
+    "productTitlesSample": [],
+    "subContainerCount": 1,
+    "subContainers": [
+      {
+        "className": "elementor-element elementor-element-6ef6dd31 elementor-widget elementor-widget-popularproductsnkkaveh",
+        "width": 1420,
+        "height": 548
+      }
+    ],
+    "rawText": "پیشنهاد تخفیفات روز مشاهده بیشتر 256 گیگابایت گوشی موبایل سامسونگ مدل Galaxy S25 FE دو... 175,000,000 7 162,999,000 5/4.0 256 گیگابایت گوشی موبایل اپل مدل iPhone 17 Pro Max... 419,999,000 2 409,999,00"
+  },
+  {
+    "index": 4,
+    "className": "elementor-element elementor-element-1e985f93 e-con-full e-flex e-con e-parent e-lazyloaded",
+    "id": "",
+    "rect": {
+      "top": 2066.59375,
+      "left": 0,
+      "width": 1440,
+      "height": 486
+    },
+    "styles": {
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "backgroundImage": "none",
+      "padding": "10px 10px 10px 10px",
+      "margin": "50px 0px 0px 0px",
+      "borderRadius": "0px",
+      "boxShadow": "none"
+    },
+    "headings": [
+      {
+        "tag": "DIV",
+        "text": "پربازدید ترین محصولات",
+        "fontSize": "20px",
+        "fontWeight": "500",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "لپ تاپ 16.2 اینچی اپل مدل MacBook Pro...",
+        "fontSize": "15px",
+        "fontWeight": "500",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "لپ تاپ 16 اینچی لنوو مدل Legion Pro...",
+        "fontSize": "15px",
+        "fontWeight": "500",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "لپ تاپ 16 اینچی ایسوس مدل ROG Strix...",
+        "fontSize": "15px",
+        "fontWeight": "500",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "لپ‌تاپ 17 اینچی ام اس آی مدل Vector...",
+        "fontSize": "15px",
+        "fontWeight": "500",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "لپ تاپ 16 اینچی ایسوس مدل WQXGA 240Hz",
+        "fontSize": "15px",
+        "fontWeight": "500",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "بازی Gran Turismo 7 مخصوص PS5",
+        "fontSize": "15px",
+        "fontWeight": "500",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "بازی Horizon Forbidden West نسخه کامل مخصوص PS5",
+        "fontSize": "15px",
+        "fontWeight": "500",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "بازی Ghostrunner 2 مخصوص PS5",
+        "fontSize": "15px",
+        "fontWeight": "500",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "بازی مدل بازی Mortal Kombat 1 مخصوص PS5",
+        "fontSize": "15px",
+        "fontWeight": "500",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "بازی Ghost of Yotei مخصوص PS5",
+        "fontSize": "15px",
+        "fontWeight": "500",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "کنسول بازی سونی مدل PlayStation 5 Slim ظرفیت...",
+        "fontSize": "15px",
+        "fontWeight": "500",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "بازی Marvels Spider-Man 2 مخصوص PS5",
+        "fontSize": "15px",
+        "fontWeight": "500",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "بازی Assassin’s Creed Shadows مخصوص PS5",
+        "fontSize": "15px",
+        "fontWeight": "500",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "گوشی موبایل اپل مدل iPhone 17 Pro Max...",
+        "fontSize": "15px",
+        "fontWeight": "500",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "گوشی موبایل اپل مدل iPhone 15 Ch",
+        "fontSize": "15px",
+        "fontWeight": "500",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "گوشی موبایل اپل مدل iPhone 16 CH دو...",
+        "fontSize": "15px",
+        "fontWeight": "500",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "گوشی موبایل سامسونگ مدل Galaxy S25 FE دو...",
+        "fontSize": "15px",
+        "fontWeight": "500",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "گوشی موبایل اپل مدل iPhone 17 CH دو...",
+        "fontSize": "15px",
+        "fontWeight": "500",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "گوشی موبایل اپل مدل iPhone 16 Pro Max...",
+        "fontSize": "15px",
+        "fontWeight": "500",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "گوشی موبایل سامسونگ مدل Galaxy S25 Ultra دو...",
+        "fontSize": "15px",
+        "fontWeight": "500",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "ساعت هوشمند اپل مدل SE Aluminum Case 44mm",
+        "fontSize": "15px",
+        "fontWeight": "500",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "ساعت هوشمند 49 میلی متری اپل مدل Ultra...",
+        "fontSize": "15px",
+        "fontWeight": "500",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "ساعت هوشمند 46 میلی متری اپل مدل Series...",
+        "fontSize": "15px",
+        "fontWeight": "500",
+        "color": "rgb(57, 68, 84)"
+      }
+    ],
+    "imageCount": 25,
+    "imagesSample": [
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/0ca4d5b25eba55f934a668f923d996a8ef5862fd_1786538643-removebg-preview-300x300.png",
+        "alt": "لپ تاپ 16.2 اینچی اپل مدل MacBook Pro MGE94 2026 LLA-M5",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/6c703cf0a62ada38bc1069e041c36bff551606b1_1780745743-300x300-removebg-preview-1.png",
+        "alt": "لپ تاپ 16 اینچی لنوو مدل Legion Pro 7 16IAX10H-Core",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/3c0f8ff8a12c67f061136e8fafd65eb6f6c56d2e_1787055103-300x300-removebg-preview-1.png",
+        "alt": "لپ تاپ 16 اینچی ایسوس مدل ROG Strix G16 G615LW-Core",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/04124d815f3ee9d9adb91f219ad4b45d298b8408_1779002328-300x300-removebg-preview-1.png",
+        "alt": "لپ‌تاپ 17 اینچی ام اس آی مدل Vector 17 HX AI A2XWJG-Core",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/3c0f8ff8a12c67f061136e8fafd65eb6f6c56d2e_1786985097-300x300-removebg-preview-1.png",
+        "alt": "لپ تاپ 16 اینچی ایسوس مدل WQXGA 240Hz",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/203a083f03f1506a710c1e6a88c71e1919e20a76_1786268142-300x300-removebg-preview-1-1.png",
+        "alt": "لپ تاپ 15.3 اینچی لنوو مدل Legion 5 15IRX10-i7",
+        "width": 300,
+        "height": 300
+      }
+    ],
+    "linkCount": 23,
+    "linksSample": [
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d9%84%d9%be-%d8%aa%d8%a7%d9%be-16-2-%d8%a7%db%8c%d9%86%da%86%db%8c-%d8%a7%d9%be%d9%84-%d9%85%d8%af%d9%84-macbook-pro-mge94-2026-lla-m5-max-48gb-ram-2tb-ssd-retina-120hz/",
+        "text": "لپ تاپ 16.2 اینچی اپل مدل MacBook Pro..."
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d9%84%d9%be-%d8%aa%d8%a7%d9%be-16-%d8%a7%db%8c%d9%86%da%86%db%8c-%d9%84%d9%86%d9%88%d9%88-%d9%85%d8%af%d9%84-legion-pro-7-16iax10h-core-ultra-9-275hx-rtx5090-24gb-32gb-ddr5-1tb-ssd-wqxga-oled-24/",
+        "text": "لپ تاپ 16 اینچی لنوو مدل Legion Pro..."
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d9%84%d9%be-%d8%aa%d8%a7%d9%be-16-%d8%a7%db%8c%d9%86%da%86%db%8c-%d8%a7%db%8c%d8%b3%d9%88%d8%b3-%d9%85%d8%af%d9%84-rog-strix-g16-g615lw-core-ultra-9-275hx-rtx5080-16gb-48gb-ddr5-5600mhz-4tb-ssd-wqxga/",
+        "text": "لپ تاپ 16 اینچی ایسوس مدل ROG Strix..."
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d9%84%d9%be%d8%aa%d8%a7%d9%be-17-%d8%a7%db%8c%d9%86%da%86%db%8c-%d8%a7%d9%85-%d8%a7%d8%b3-%d8%a2%db%8c-%d9%85%d8%af%d9%84-vector-17-hx-ai-a2xwjg-core-ultra-9-275hx-rtx5090-24gb-32gb-ddr5-560/",
+        "text": "لپ‌تاپ 17 اینچی ام اس آی مدل Vector..."
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d9%84%d9%be-%d8%aa%d8%a7%d9%be-16-%d8%a7%db%8c%d9%86%da%86%db%8c-%d8%a7%db%8c%d8%b3%d9%88%d8%b3-%d9%85%d8%af%d9%84-rog-strix-g16-g615lw-core-ultra-9-275hx-rtx5080-16gb-64gb-ddr5-5600mhz-512gb-ssd-wqx/",
+        "text": "لپ تاپ 16 اینچی ایسوس مدل WQXGA 240Hz"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d8%a8%d8%a7%d8%b2%db%8c-gran-turismo-7-%d9%85%d8%ae%d8%b5%d9%88%d8%b5-ps5/",
+        "text": "بازی Gran Turismo 7 مخصوص PS5"
+      }
+    ],
+    "isSlider": true,
+    "hasTimer": false,
+    "productCount": 0,
+    "productTitlesSample": [],
+    "subContainerCount": 1,
+    "subContainers": [
+      {
+        "className": "elementor-element elementor-element-12faf2dd elementor-widget elementor-widget-productstabthirdnkkaveh",
+        "width": 1420,
+        "height": 466
+      }
+    ],
+    "rawText": "پربازدید ترین محصولات بر اساس مخاطبان لپتاپ ها کنسول ها موبایل ساعت هوشمند محـصــــولات مشاهده همه لپ تاپ 16.2 اینچی اپل مدل MacBook Pro... 100,000,000 99,250,000 لپ تاپ 16 اینچی لنوو مدل Legion Pro.."
+  },
+  {
+    "index": 5,
+    "className": "elementor-element elementor-element-4e969361 e-flex e-con-boxed e-con e-parent e-lazyloaded",
+    "id": "",
+    "rect": {
+      "top": 2602.59375,
+      "left": 0,
+      "width": 1440,
+      "height": 274
+    },
+    "styles": {
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "backgroundImage": "none",
+      "padding": "0px 10px 0px 10px",
+      "margin": "50px 0px 0px 0px",
+      "borderRadius": "0px",
+      "boxShadow": "none"
+    },
+    "headings": [
+      {
+        "tag": "DIV",
+        "text": "محل قرار گیری بنر",
+        "fontSize": "25px",
+        "fontWeight": "700",
+        "color": "rgb(19, 39, 95)"
+      },
+      {
+        "tag": "DIV",
+        "text": "محل قرار گیری بنر",
+        "fontSize": "25px",
+        "fontWeight": "700",
+        "color": "rgb(19, 39, 95)"
+      }
+    ],
+    "imageCount": 2,
+    "imagesSample": [
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/themes/kavehTheme/assets/images/new-demo/banner-01.png",
+        "alt": "محل قرار گیری بنر",
+        "width": 218,
+        "height": 245
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/banner-02-1.png",
+        "alt": "محل قرار گیری بنر",
+        "width": 218,
+        "height": 243
+      }
+    ],
+    "linkCount": 0,
+    "linksSample": [],
+    "isSlider": false,
+    "hasTimer": false,
+    "productCount": 0,
+    "productTitlesSample": [],
+    "subContainerCount": 1,
+    "subContainers": [
+      {
+        "className": "e-con-inner",
+        "width": 1320,
+        "height": 274
+      }
+    ],
+    "rawText": "محل قرار گیری بنر همین الان با تخفیف خرید کنید محل قرار گیری بنر همین الان با تخفیف خرید کنید"
+  },
+  {
+    "index": 6,
+    "className": "elementor-element elementor-element-28173fec e-con-full e-flex e-con e-parent e-lazyloaded",
+    "id": "",
+    "rect": {
+      "top": 2951.59375,
+      "left": 0,
+      "width": 1440,
+      "height": 531
+    },
+    "styles": {
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "backgroundImage": "none",
+      "padding": "10px 10px 10px 10px",
+      "margin": "75px 0px 0px 0px",
+      "borderRadius": "0px",
+      "boxShadow": "none"
+    },
+    "headings": [
+      {
+        "tag": "DIV",
+        "text": "پرفروش ترین ساعت هوشمند",
+        "fontSize": "20px",
+        "fontWeight": "500",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "گوشی موبایل اپل مدل iPhone 17 Pro Max...",
+        "fontSize": "16px",
+        "fontWeight": "600",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "گوشی موبایل اپل مدل iPhone 15 Ch",
+        "fontSize": "16px",
+        "fontWeight": "600",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "گوشی موبایل اپل مدل iPhone 16 CH دو...",
+        "fontSize": "16px",
+        "fontWeight": "600",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "گوشی موبایل سامسونگ مدل Galaxy S25 FE دو...",
+        "fontSize": "16px",
+        "fontWeight": "600",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "گوشی موبایل اپل مدل iPhone 17 CH دو...",
+        "fontSize": "16px",
+        "fontWeight": "600",
+        "color": "rgb(4, 4, 4)"
+      }
+    ],
+    "imageCount": 7,
+    "imagesSample": [
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/ec57ce03f2a92834058f502174b1a2aeffc9a580_1759666637-300x300-removebg-preview-1.png",
+        "alt": "گوشی موبایل اپل مدل iPhone 17 Pro Max ZAA",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/f4c0e5f4199abda603494b54e0655cbd0447405f_1765624240-300x300-removebg-preview-1.png",
+        "alt": "گوشی موبایل اپل مدل iPhone 15 Ch",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/5af568b4909435c6a215ad5e728e902db234b673_1736597759-300x300-removebg-preview-1.png",
+        "alt": "گوشی موبایل اپل مدل iPhone 16 CH دو سیم کارت ظرفیت 128 گیگابایت",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/89c0e7b3f400348a3add26684b7ece5084e4361f_1777115891-300x300-removebg-preview-1.png",
+        "alt": "گوشی موبایل سامسونگ مدل Galaxy S25 FE دو سیم کارت",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/0a8fff942ea8ee0359edadad85daae399b0e357c_1763462145-300x300-removebg-preview-1.png",
+        "alt": "گوشی موبایل اپل مدل iPhone 17 CH دو سیم کارت",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/48daaebd4cb7706cce21ce8b5e485d6fdafa6bd1_1736598863-300x300-removebg-preview-1.png",
+        "alt": "گوشی موبایل اپل مدل iPhone 16 Pro Max ZAA دو سیم کارت",
+        "width": 300,
+        "height": 300
+      }
+    ],
+    "linkCount": 6,
+    "linksSample": [
+      {
+        "href": "https://kaveh.moeinwp.com/43/#",
+        "text": "مشاهده بیشتر"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%da%af%d9%88%d8%b4%db%8c-%d9%85%d9%88%d8%a8%d8%a7%db%8c%d9%84-%d8%a7%d9%be%d9%84-%d9%85%d8%af%d9%84-iphone-17-pro-max-zaa/",
+        "text": "گوشی موبایل اپل مدل iPhone 17 Pro Max..."
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%da%af%d9%88%d8%b4%db%8c-%d9%85%d9%88%d8%a8%d8%a7%db%8c%d9%84-%d8%a7%d9%be%d9%84-%d9%85%d8%af%d9%84-iphone-15-ch-%d8%af%d9%88-%d8%b3%db%8c%d9%85-%da%a9%d8%a7%d8%b1%d8%aa-%d8%b8%d8%b1%d9%81/",
+        "text": "گوشی موبایل اپل مدل iPhone 15 Ch"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%da%af%d9%88%d8%b4%db%8c-%d9%85%d9%88%d8%a8%d8%a7%db%8c%d9%84-%d8%a7%d9%be%d9%84-%d9%85%d8%af%d9%84-iphone-16-ch-%d8%af%d9%88-%d8%b3%db%8c%d9%85-%da%a9%d8%a7%d8%b1%d8%aa-%d8%b8%d8%b1%d9%81%db%8c%d8%aa/",
+        "text": "گوشی موبایل اپل مدل iPhone 16 CH دو..."
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%da%af%d9%88%d8%b4%db%8c-%d9%85%d9%88%d8%a8%d8%a7%db%8c%d9%84-%d8%b3%d8%a7%d9%85%d8%b3%d9%88%d9%86%da%af-%d9%85%d8%af%d9%84-galaxy-s25-fe-%d8%af%d9%88-%d8%b3%db%8c%d9%85-%da%a9%d8%a7%d8%b1%d8%aa/",
+        "text": "گوشی موبایل سامسونگ مدل Galaxy S25 FE دو..."
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%da%af%d9%88%d8%b4%db%8c-%d9%85%d9%88%d8%a8%d8%a7%db%8c%d9%84-%d8%a7%d9%be%d9%84-%d9%85%d8%af%d9%84-iphone-17-ch-%d8%af%d9%88-%d8%b3%db%8c%d9%85-%da%a9%d8%a7%d8%b1%d8%aa-%d8%b8%d8%b1%d9%81%db%8c%d8%aa/",
+        "text": "گوشی موبایل اپل مدل iPhone 17 CH دو..."
+      }
+    ],
+    "isSlider": true,
+    "hasTimer": false,
+    "productCount": 0,
+    "productTitlesSample": [],
+    "subContainerCount": 1,
+    "subContainers": [
+      {
+        "className": "elementor-element elementor-element-ee3dc51 elementor-widget elementor-widget-productscarouselsixteennkkaveh",
+        "width": 1420,
+        "height": 511
+      }
+    ],
+    "rawText": "پرفروش ترین ساعت هوشمند زمانت قیمت و کیفیت مشاهده بیشتر 256 گیگابایت گوشی موبایل اپل مدل iPhone 17 Pro Max... 419,999,000 2 409,999,000 5/4.0 128 گیگابایت گوشی موبایل اپل مدل iPhone 15 Ch 214,999,000 "
+  },
+  {
+    "index": 7,
+    "className": "elementor-element elementor-element-572953ca e-flex e-con-boxed e-con e-parent e-lazyloaded",
+    "id": "",
+    "rect": {
+      "top": 3532.59375,
+      "left": 0,
+      "width": 1440,
+      "height": 268
+    },
+    "styles": {
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "backgroundImage": "none",
+      "padding": "0px 10px 0px 10px",
+      "margin": "50px 0px 0px 0px",
+      "borderRadius": "0px",
+      "boxShadow": "none"
+    },
+    "headings": [],
+    "imageCount": 1,
+    "imagesSample": [
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/banner-03.png",
+        "alt": "",
+        "width": 1319,
+        "height": 248
+      }
+    ],
+    "linkCount": 0,
+    "linksSample": [],
+    "isSlider": false,
+    "hasTimer": false,
+    "productCount": 0,
+    "productTitlesSample": [],
+    "subContainerCount": 1,
+    "subContainers": [
+      {
+        "className": "e-con-inner",
+        "width": 1320,
+        "height": 268
+      }
+    ],
+    "rawText": ""
+  },
+  {
+    "index": 8,
+    "className": "elementor-element elementor-element-39e1b751 e-con-full e-flex e-con e-parent e-lazyloaded",
+    "id": "",
+    "rect": {
+      "top": 3850.59375,
+      "left": 0,
+      "width": 1440,
+      "height": 460
+    },
+    "styles": {
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "backgroundImage": "none",
+      "padding": "0px 0px 0px 0px",
+      "margin": "50px 0px 0px 0px",
+      "borderRadius": "0px",
+      "boxShadow": "none"
+    },
+    "headings": [
+      {
+        "tag": "DIV",
+        "text": "خرید لوازم جانبی",
+        "fontSize": "23px",
+        "fontWeight": "700",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "DIV",
+        "text": "خرید لوازم جانبی",
+        "fontSize": "23px",
+        "fontWeight": "700",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "بازی Gran Turismo 7 مخصوص PS5",
+        "fontSize": "16px",
+        "fontWeight": "500",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "بازی Horizon Forbidden West نسخه کامل مخصوص PS5",
+        "fontSize": "16px",
+        "fontWeight": "500",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "بازی Ghostrunner 2 مخصوص PS5",
+        "fontSize": "16px",
+        "fontWeight": "500",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "بازی مدل بازی Mortal Kombat 1 مخصوص PS5",
+        "fontSize": "16px",
+        "fontWeight": "500",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "بازی Ghost of Yotei مخصوص PS5",
+        "fontSize": "16px",
+        "fontWeight": "500",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "بازی Marvels Spider-Man 2 مخصوص PS5",
+        "fontSize": "16px",
+        "fontWeight": "500",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "بازی Assassin’s Creed Shadows مخصوص PS5",
+        "fontSize": "16px",
+        "fontWeight": "500",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "بازی EA Sports FC 26 نسخه استاندارد مخصوص PS5",
+        "fontSize": "16px",
+        "fontWeight": "500",
+        "color": "rgb(4, 4, 4)"
+      }
+    ],
+    "imageCount": 10,
+    "imagesSample": [
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/themes/kavehTheme/assets/images/new-demo/image-01.png",
+        "alt": "خرید لوازم جانبی",
+        "width": 273,
+        "height": 264
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/themes/kavehTheme/assets/images/new-demo/image-01.png",
+        "alt": "خرید لوازم جانبی",
+        "width": 273,
+        "height": 264
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/e2a1ec7e564e1d9555bdf7a48e62cc138ff24cd0_1786388718-removebg-preview-300x300-1.png",
+        "alt": "بازی Gran Turismo 7 مخصوص PS5",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/86f41915edf5a7e926e2ae0bbd19a2d0ba9c5d06_1786388241-300x300-removebg-preview-1.png",
+        "alt": "بازی Horizon Forbidden West نسخه کامل مخصوص PS5",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/3eef521897412a152c5b42551b623c91c41d90c0_1786388224-300x300-removebg-preview-1.png",
+        "alt": "بازی Ghostrunner 2 مخصوص PS5",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/92d9b95b55d4cf336cee4cf408c8908caf74c7af_1786388232-300x300-removebg-preview-1.png",
+        "alt": "بازی مدل  بازی Mortal Kombat 1 مخصوص PS5",
+        "width": 300,
+        "height": 300
+      }
+    ],
+    "linkCount": 8,
+    "linksSample": [
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d8%a8%d8%a7%d8%b2%db%8c-gran-turismo-7-%d9%85%d8%ae%d8%b5%d9%88%d8%b5-ps5/",
+        "text": "بازی Gran Turismo 7 مخصوص PS5"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d8%a8%d8%a7%d8%b2%db%8c-horizon-forbidden-west-%d9%86%d8%b3%d8%ae%d9%87-%da%a9%d8%a7%d9%85%d9%84-%d9%85%d8%ae%d8%b5%d9%88%d8%b5-ps5/",
+        "text": "بازی Horizon Forbidden West نسخه کامل مخصوص PS5"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d8%a8%d8%a7%d8%b2%db%8c-ghostrunner-2-%d9%85%d8%ae%d8%b5%d9%88%d8%b5-ps5/",
+        "text": "بازی Ghostrunner 2 مخصوص PS5"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d8%a8%d8%a7%d8%b2%db%8c-%d9%85%d8%af%d9%84-%d8%a8%d8%a7%d8%b2%db%8c-mortal-kombat-1-%d9%85%d8%ae%d8%b5%d9%88%d8%b5-ps5/",
+        "text": "بازی مدل بازی Mortal Kombat 1 مخصوص PS5"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d8%a8%d8%a7%d8%b2%db%8c-ghost-of-yotei-%d9%85%d8%ae%d8%b5%d9%88%d8%b5-ps5/",
+        "text": "بازی Ghost of Yotei مخصوص PS5"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d8%a8%d8%a7%d8%b2%db%8c-marvels-spider-man-2-%d9%85%d8%ae%d8%b5%d9%88%d8%b5-ps5/",
+        "text": "بازی Marvels Spider-Man 2 مخصوص PS5"
+      }
+    ],
+    "isSlider": true,
+    "hasTimer": false,
+    "productCount": 0,
+    "productTitlesSample": [],
+    "subContainerCount": 1,
+    "subContainers": [
+      {
+        "className": "elementor-element elementor-element-48ed06a elementor-widget elementor-widget-productscarouselseventeennkkaveh",
+        "width": 1440,
+        "height": 460
+      }
+    ],
+    "rawText": "خرید لوازم جانبی انواع لوازم جانبیــــــــــــ ایفون 5/4.3 بازی Gran Turismo 7 مخصوص PS5 7,389,700 6,374,200 5/4.0 بازی Horizon Forbidden West نسخه کامل مخصوص PS5 7,700,000 5/2.0 بازی Ghostrunner 2 مخ"
+  },
+  {
+    "index": 9,
+    "className": "elementor-element elementor-element-708142b8 e-flex e-con-boxed e-con e-parent e-lazyloaded",
+    "id": "",
+    "rect": {
+      "top": 4360.59375,
+      "left": 0,
+      "width": 1440,
+      "height": 274
+    },
+    "styles": {
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "backgroundImage": "none",
+      "padding": "0px 10px 0px 10px",
+      "margin": "50px 0px 0px 0px",
+      "borderRadius": "0px",
+      "boxShadow": "none"
+    },
+    "headings": [
+      {
+        "tag": "DIV",
+        "text": "محل قرار گیری بنر",
+        "fontSize": "25px",
+        "fontWeight": "700",
+        "color": "rgb(19, 39, 95)"
+      },
+      {
+        "tag": "DIV",
+        "text": "محل قرار گیری بنر",
+        "fontSize": "25px",
+        "fontWeight": "700",
+        "color": "rgb(19, 39, 95)"
+      }
+    ],
+    "imageCount": 2,
+    "imagesSample": [
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/themes/kavehTheme/assets/images/new-demo/banner-01.png",
+        "alt": "محل قرار گیری بنر",
+        "width": 218,
+        "height": 245
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/banner-02-1.png",
+        "alt": "محل قرار گیری بنر",
+        "width": 218,
+        "height": 243
+      }
+    ],
+    "linkCount": 0,
+    "linksSample": [],
+    "isSlider": false,
+    "hasTimer": false,
+    "productCount": 0,
+    "productTitlesSample": [],
+    "subContainerCount": 1,
+    "subContainers": [
+      {
+        "className": "e-con-inner",
+        "width": 1320,
+        "height": 274
+      }
+    ],
+    "rawText": "محل قرار گیری بنر همین الان با تخفیف خرید کنید محل قرار گیری بنر همین الان با تخفیف خرید کنید"
+  },
+  {
+    "index": 10,
+    "className": "elementor-element elementor-element-145e3133 e-con-full e-flex e-con e-parent e-lazyloaded",
+    "id": "",
+    "rect": {
+      "top": 4684.59375,
+      "left": 0,
+      "width": 1440,
+      "height": 598
+    },
+    "styles": {
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "backgroundImage": "none",
+      "padding": "10px 10px 10px 10px",
+      "margin": "50px 0px 0px 0px",
+      "borderRadius": "0px",
+      "boxShadow": "none"
+    },
+    "headings": [
+      {
+        "tag": "DIV",
+        "text": "پرفروش ترین ساعت هوشمند",
+        "fontSize": "20px",
+        "fontWeight": "500",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "گوشی موبایل اپل مدل iPhone 17 Pro Max...",
+        "fontSize": "16px",
+        "fontWeight": "500",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "گوشی موبایل اپل مدل iPhone 15 Ch",
+        "fontSize": "16px",
+        "fontWeight": "500",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "گوشی موبایل اپل مدل iPhone 16 CH دو...",
+        "fontSize": "16px",
+        "fontWeight": "500",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "گوشی موبایل سامسونگ مدل Galaxy S25 FE دو...",
+        "fontSize": "16px",
+        "fontWeight": "500",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "گوشی موبایل اپل مدل iPhone 17 CH دو...",
+        "fontSize": "16px",
+        "fontWeight": "500",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "گوشی موبایل اپل مدل iPhone 16 Pro Max...",
+        "fontSize": "16px",
+        "fontWeight": "500",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "گوشی موبایل سامسونگ مدل Galaxy S25 Ultra دو...",
+        "fontSize": "16px",
+        "fontWeight": "500",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "گوشی موبایل اپل مدل iPhone 17...",
+        "fontSize": "16px",
+        "fontWeight": "600",
+        "color": "rgb(255, 255, 255)"
+      },
+      {
+        "tag": "H2",
+        "text": "گوشی موبایل سامسونگ مدل Galaxy S25...",
+        "fontSize": "16px",
+        "fontWeight": "600",
+        "color": "rgb(255, 255, 255)"
+      }
+    ],
+    "imageCount": 9,
+    "imagesSample": [
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/ec57ce03f2a92834058f502174b1a2aeffc9a580_1759666637-300x300-removebg-preview-1.png",
+        "alt": "گوشی موبایل اپل مدل iPhone 17 Pro Max ZAA",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/f4c0e5f4199abda603494b54e0655cbd0447405f_1765624240-300x300-removebg-preview-1.png",
+        "alt": "گوشی موبایل اپل مدل iPhone 15 Ch",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/5af568b4909435c6a215ad5e728e902db234b673_1736597759-300x300-removebg-preview-1.png",
+        "alt": "گوشی موبایل اپل مدل iPhone 16 CH دو سیم کارت ظرفیت 128 گیگابایت",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/89c0e7b3f400348a3add26684b7ece5084e4361f_1777115891-300x300-removebg-preview-1.png",
+        "alt": "گوشی موبایل سامسونگ مدل Galaxy S25 FE دو سیم کارت",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/0a8fff942ea8ee0359edadad85daae399b0e357c_1763462145-300x300-removebg-preview-1.png",
+        "alt": "گوشی موبایل اپل مدل iPhone 17 CH دو سیم کارت",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/48daaebd4cb7706cce21ce8b5e485d6fdafa6bd1_1736598863-300x300-removebg-preview-1.png",
+        "alt": "گوشی موبایل اپل مدل iPhone 16 Pro Max ZAA دو سیم کارت",
+        "width": 300,
+        "height": 300
+      }
+    ],
+    "linkCount": 10,
+    "linksSample": [
+      {
+        "href": "https://kaveh.moeinwp.com/43/#",
+        "text": "مشاهده بیشتر"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%da%af%d9%88%d8%b4%db%8c-%d9%85%d9%88%d8%a8%d8%a7%db%8c%d9%84-%d8%a7%d9%be%d9%84-%d9%85%d8%af%d9%84-iphone-17-pro-max-zaa/",
+        "text": "گوشی موبایل اپل مدل iPhone 17 Pro Max..."
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%da%af%d9%88%d8%b4%db%8c-%d9%85%d9%88%d8%a8%d8%a7%db%8c%d9%84-%d8%a7%d9%be%d9%84-%d9%85%d8%af%d9%84-iphone-15-ch-%d8%af%d9%88-%d8%b3%db%8c%d9%85-%da%a9%d8%a7%d8%b1%d8%aa-%d8%b8%d8%b1%d9%81/",
+        "text": "گوشی موبایل اپل مدل iPhone 15 Ch"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%da%af%d9%88%d8%b4%db%8c-%d9%85%d9%88%d8%a8%d8%a7%db%8c%d9%84-%d8%a7%d9%be%d9%84-%d9%85%d8%af%d9%84-iphone-16-ch-%d8%af%d9%88-%d8%b3%db%8c%d9%85-%da%a9%d8%a7%d8%b1%d8%aa-%d8%b8%d8%b1%d9%81%db%8c%d8%aa/",
+        "text": "گوشی موبایل اپل مدل iPhone 16 CH دو..."
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%da%af%d9%88%d8%b4%db%8c-%d9%85%d9%88%d8%a8%d8%a7%db%8c%d9%84-%d8%b3%d8%a7%d9%85%d8%b3%d9%88%d9%86%da%af-%d9%85%d8%af%d9%84-galaxy-s25-fe-%d8%af%d9%88-%d8%b3%db%8c%d9%85-%da%a9%d8%a7%d8%b1%d8%aa/",
+        "text": "گوشی موبایل سامسونگ مدل Galaxy S25 FE دو..."
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%da%af%d9%88%d8%b4%db%8c-%d9%85%d9%88%d8%a8%d8%a7%db%8c%d9%84-%d8%a7%d9%be%d9%84-%d9%85%d8%af%d9%84-iphone-17-ch-%d8%af%d9%88-%d8%b3%db%8c%d9%85-%da%a9%d8%a7%d8%b1%d8%aa-%d8%b8%d8%b1%d9%81%db%8c%d8%aa/",
+        "text": "گوشی موبایل اپل مدل iPhone 17 CH دو..."
+      }
+    ],
+    "isSlider": true,
+    "hasTimer": false,
+    "productCount": 0,
+    "productTitlesSample": [],
+    "subContainerCount": 1,
+    "subContainers": [
+      {
+        "className": "elementor-element elementor-element-6b1a7cb3 elementor-widget elementor-widget-productscarouselsixteennkkaveh",
+        "width": 1420,
+        "height": 578
+      }
+    ],
+    "rawText": "پرفروش ترین ساعت هوشمند زمانت قیمت و کیفیت مشاهده بیشتر 2 5/4.0 گوشی موبایل اپل مدل iPhone 17 Pro Max... 419,999,000 409,999,000 5/3.5 گوشی موبایل اپل مدل iPhone 15 Ch 214,999,000 5/4.5 گوشی موبایل اپ"
+  },
+  {
+    "index": 11,
+    "className": "elementor-element elementor-element-26635d31 e-flex e-con-boxed e-con e-parent e-lazyloaded",
+    "id": "",
+    "rect": {
+      "top": 5357.59375,
+      "left": 0,
+      "width": 1440,
+      "height": 246.078125
+    },
+    "styles": {
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "backgroundImage": "none",
+      "padding": "0px 10px 0px 10px",
+      "margin": "75px 0px 0px 0px",
+      "borderRadius": "0px",
+      "boxShadow": "none"
+    },
+    "headings": [],
+    "imageCount": 2,
+    "imagesSample": [
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/banner-04.png",
+        "alt": "",
+        "width": 767,
+        "height": 226
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/banner-05.png",
+        "alt": "",
+        "width": 533,
+        "height": 224
+      }
+    ],
+    "linkCount": 0,
+    "linksSample": [],
+    "isSlider": false,
+    "hasTimer": false,
+    "productCount": 0,
+    "productTitlesSample": [],
+    "subContainerCount": 1,
+    "subContainers": [
+      {
+        "className": "e-con-inner",
+        "width": 1320,
+        "height": 246.078125
+      }
+    ],
+    "rawText": ""
+  },
+  {
+    "index": 12,
+    "className": "elementor-element elementor-element-7980ffc8 e-con-full e-flex e-con e-parent e-lazyloaded",
+    "id": "",
+    "rect": {
+      "top": 5678.671875,
+      "left": 0,
+      "width": 1440,
+      "height": 930
+    },
+    "styles": {
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "backgroundImage": "none",
+      "padding": "10px 10px 10px 10px",
+      "margin": "75px 0px 0px 0px",
+      "borderRadius": "0px",
+      "boxShadow": "none"
+    },
+    "headings": [
+      {
+        "tag": "DIV",
+        "text": "باکس سلیقه شما",
+        "fontSize": "28px",
+        "fontWeight": "700",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "DIV",
+        "text": "کالای دیجیتال",
+        "fontSize": "18px",
+        "fontWeight": "700",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "لپ تاپ 16 اینچی ایسوس مدل TUF Gaming A16 FA608PP-Ryzen",
+        "fontSize": "15px",
+        "fontWeight": "400",
+        "color": "rgb(28, 28, 37)"
+      },
+      {
+        "tag": "H2",
+        "text": "لپ تاپ 15.3 اینچی لنوو مدل Legion 5 15IRX10-i7",
+        "fontSize": "15px",
+        "fontWeight": "400",
+        "color": "rgb(28, 28, 37)"
+      },
+      {
+        "tag": "H2",
+        "text": "لپ تاپ 16 اینچی ایسوس مدل WQXGA 240Hz",
+        "fontSize": "15px",
+        "fontWeight": "400",
+        "color": "rgb(28, 28, 37)"
+      },
+      {
+        "tag": "H2",
+        "text": "لپ‌تاپ 17 اینچی ام اس آی مدل Vector 17 HX AI A2XWJG-Core",
+        "fontSize": "15px",
+        "fontWeight": "400",
+        "color": "rgb(28, 28, 37)"
+      },
+      {
+        "tag": "DIV",
+        "text": "موبایل",
+        "fontSize": "18px",
+        "fontWeight": "700",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "گوشی موبایل اپل مدل iPhone 17 Pro Max ZAA",
+        "fontSize": "15px",
+        "fontWeight": "400",
+        "color": "rgb(28, 28, 37)"
+      },
+      {
+        "tag": "H2",
+        "text": "گوشی موبایل اپل مدل iPhone 15 Ch",
+        "fontSize": "15px",
+        "fontWeight": "400",
+        "color": "rgb(28, 28, 37)"
+      },
+      {
+        "tag": "H2",
+        "text": "گوشی موبایل اپل مدل iPhone 16 CH دو سیم کارت ظرفیت 128 گیگابایت",
+        "fontSize": "15px",
+        "fontWeight": "400",
+        "color": "rgb(28, 28, 37)"
+      },
+      {
+        "tag": "H2",
+        "text": "گوشی موبایل سامسونگ مدل Galaxy S25 FE دو سیم کارت",
+        "fontSize": "15px",
+        "fontWeight": "400",
+        "color": "rgb(28, 28, 37)"
+      },
+      {
+        "tag": "DIV",
+        "text": "بازی های کنسول خانگی",
+        "fontSize": "18px",
+        "fontWeight": "700",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "بازی Gran Turismo 7 مخصوص PS5",
+        "fontSize": "15px",
+        "fontWeight": "400",
+        "color": "rgb(28, 28, 37)"
+      },
+      {
+        "tag": "H2",
+        "text": "بازی Horizon Forbidden West نسخه کامل مخصوص PS5",
+        "fontSize": "15px",
+        "fontWeight": "400",
+        "color": "rgb(28, 28, 37)"
+      },
+      {
+        "tag": "H2",
+        "text": "بازی Ghostrunner 2 مخصوص PS5",
+        "fontSize": "15px",
+        "fontWeight": "400",
+        "color": "rgb(28, 28, 37)"
+      },
+      {
+        "tag": "H2",
+        "text": "بازی مدل بازی Mortal Kombat 1 مخصوص PS5",
+        "fontSize": "15px",
+        "fontWeight": "400",
+        "color": "rgb(28, 28, 37)"
+      },
+      {
+        "tag": "DIV",
+        "text": "گوشی موبایل",
+        "fontSize": "18px",
+        "fontWeight": "700",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "گوشی موبایل اپل مدل iPhone 17 Pro Max ZAA",
+        "fontSize": "15px",
+        "fontWeight": "400",
+        "color": "rgb(28, 28, 37)"
+      },
+      {
+        "tag": "H2",
+        "text": "گوشی موبایل اپل مدل iPhone 15 Ch",
+        "fontSize": "15px",
+        "fontWeight": "400",
+        "color": "rgb(28, 28, 37)"
+      },
+      {
+        "tag": "H2",
+        "text": "گوشی موبایل اپل مدل iPhone 16 CH دو سیم کارت ظرفیت 128 گیگابایت",
+        "fontSize": "15px",
+        "fontWeight": "400",
+        "color": "rgb(28, 28, 37)"
+      },
+      {
+        "tag": "H2",
+        "text": "گوشی موبایل سامسونگ مدل Galaxy S25 FE دو سیم کارت",
+        "fontSize": "15px",
+        "fontWeight": "400",
+        "color": "rgb(28, 28, 37)"
+      }
+    ],
+    "imageCount": 16,
+    "imagesSample": [
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/230ce545eaa1028a10622044bde2cbfdf2969235_1785675702-removebg-preview-300x300.png",
+        "alt": "لپ تاپ 16 اینچی ایسوس مدل TUF Gaming A16 FA608PP-Ryzen",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/203a083f03f1506a710c1e6a88c71e1919e20a76_1786268142-300x300-removebg-preview-1-1.png",
+        "alt": "لپ تاپ 15.3 اینچی لنوو مدل Legion 5 15IRX10-i7",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/3c0f8ff8a12c67f061136e8fafd65eb6f6c56d2e_1786985097-300x300-removebg-preview-1.png",
+        "alt": "لپ تاپ 16 اینچی ایسوس مدل WQXGA 240Hz",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/04124d815f3ee9d9adb91f219ad4b45d298b8408_1779002328-300x300-removebg-preview-1.png",
+        "alt": "لپ‌تاپ 17 اینچی ام اس آی مدل Vector 17 HX AI A2XWJG-Core",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/ec57ce03f2a92834058f502174b1a2aeffc9a580_1759666637-300x300-removebg-preview-1.png",
+        "alt": "گوشی موبایل اپل مدل iPhone 17 Pro Max ZAA",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/f4c0e5f4199abda603494b54e0655cbd0447405f_1765624240-300x300-removebg-preview-1.png",
+        "alt": "گوشی موبایل اپل مدل iPhone 15 Ch",
+        "width": 300,
+        "height": 300
+      }
+    ],
+    "linkCount": 0,
+    "linksSample": [],
+    "isSlider": true,
+    "hasTimer": false,
+    "productCount": 0,
+    "productTitlesSample": [],
+    "subContainerCount": 1,
+    "subContainers": [
+      {
+        "className": "elementor-element elementor-element-29ed9a57 elementor-widget elementor-widget-productboxnkkaveh",
+        "width": 1420,
+        "height": 910
+      }
+    ],
+    "rawText": "با محصولات ما بروز باشید باکس سلیقه شما کالای دیجیتال محصولات پیشنهادی از دسته لپ تاپ 16 اینچی ایسوس مدل TUF Gaming A16 FA608PP-Ryzen 4.0 580,000,000 4.0 لپ تاپ 15.3 اینچی لنوو مدل Legion 5 15IRX10-i7"
+  },
+  {
+    "index": 13,
+    "className": "elementor-element elementor-element-7ef157bd e-flex e-con-boxed e-con e-parent e-lazyloaded",
+    "id": "",
+    "rect": {
+      "top": 6658.671875,
+      "left": 0,
+      "width": 1440,
+      "height": 323
+    },
+    "styles": {
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "backgroundImage": "none",
+      "padding": "0px 10px 0px 10px",
+      "margin": "50px 0px 0px 0px",
+      "borderRadius": "0px",
+      "boxShadow": "none"
+    },
+    "headings": [
+      {
+        "tag": "DIV",
+        "text": "خرید برترین ساعتــــ",
+        "fontSize": "44px",
+        "fontWeight": "800",
+        "color": "rgb(19, 39, 95)"
+      },
+      {
+        "tag": "H2",
+        "text": "بازی Ghostrunner 2 مخصوص PS5",
+        "fontSize": "13px",
+        "fontWeight": "500",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "کنسول بازی سونی مدل PlayStation 5 Slim ظرفیت 1 ترابایت",
+        "fontSize": "13px",
+        "fontWeight": "500",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "بازی Ghost of Yotei مخصوص PS5",
+        "fontSize": "13px",
+        "fontWeight": "500",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "بازی مدل بازی Mortal Kombat 1 مخصوص PS5",
+        "fontSize": "13px",
+        "fontWeight": "500",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "بازی Ghostrunner 2 مخصوص PS5",
+        "fontSize": "13px",
+        "fontWeight": "500",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "کنسول بازی سونی مدل PlayStation 5 Slim ظرفیت 1 ترابایت",
+        "fontSize": "13px",
+        "fontWeight": "500",
+        "color": "rgb(57, 68, 84)"
+      }
+    ],
+    "imageCount": 7,
+    "imagesSample": [
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/themes/kavehTheme/assets/images/new-demo/image-02.png",
+        "alt": "خرید برترین ساعتــــ",
+        "width": 291,
+        "height": 290
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/3eef521897412a152c5b42551b623c91c41d90c0_1786388224-300x300-removebg-preview-1.png",
+        "alt": "بازی Ghostrunner 2 مخصوص PS5",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/1149308650aa177c213e4175a23076419198dabf_1786296597-300x300-removebg-preview-1.png",
+        "alt": "کنسول بازی سونی مدل PlayStation 5 Slim ظرفیت 1 ترابایت",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/26eb5a74fbf76467080d4a69a6a0dd6f9c5f1008_1786454574-300x300-removebg-preview-1.png",
+        "alt": "بازی Ghost of Yotei مخصوص PS5",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/92d9b95b55d4cf336cee4cf408c8908caf74c7af_1786388232-300x300-removebg-preview-1.png",
+        "alt": "بازی مدل  بازی Mortal Kombat 1 مخصوص PS5",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/3eef521897412a152c5b42551b623c91c41d90c0_1786388224-300x300-removebg-preview-1.png",
+        "alt": "بازی Ghostrunner 2 مخصوص PS5",
+        "width": 300,
+        "height": 300
+      }
+    ],
+    "linkCount": 4,
+    "linksSample": [
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d8%a8%d8%a7%d8%b2%db%8c-ghostrunner-2-%d9%85%d8%ae%d8%b5%d9%88%d8%b5-ps5/",
+        "text": "بازی Ghostrunner 2 مخصوص PS5"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d8%a8%d8%a7%d8%b2%db%8c-ghost-of-yotei-%d9%85%d8%ae%d8%b5%d9%88%d8%b5-ps5/",
+        "text": "بازی Ghost of Yotei مخصوص PS5"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d8%a8%d8%a7%d8%b2%db%8c-%d9%85%d8%af%d9%84-%d8%a8%d8%a7%d8%b2%db%8c-mortal-kombat-1-%d9%85%d8%ae%d8%b5%d9%88%d8%b5-ps5/",
+        "text": "بازی مدل بازی Mortal Kombat 1 مخصوص PS5"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d8%a8%d8%a7%d8%b2%db%8c-ghostrunner-2-%d9%85%d8%ae%d8%b5%d9%88%d8%b5-ps5/",
+        "text": "بازی Ghostrunner 2 مخصوص PS5"
+      }
+    ],
+    "isSlider": true,
+    "hasTimer": false,
+    "productCount": 0,
+    "productTitlesSample": [],
+    "subContainerCount": 1,
+    "subContainers": [
+      {
+        "className": "e-con-inner",
+        "width": 1320,
+        "height": 323
+      }
+    ],
+    "rawText": "خرید برترین ساعتــــ INCIDIDUNT UT LABORE ET DOLORE MAGNA ALIQUA ۴ بازی Ghostrunner 2 مخصوص PS5 3.990.000 5/2.0 ۱ کنسول بازی سونی مدل PlayStation 5 Slim ظرفیت 1 ترابایت 169.300.000 5/4.5 ۲ بازی Ghost "
+  },
+  {
+    "index": 14,
+    "className": "elementor-element elementor-element-23dbfc74 e-con-full e-flex e-con e-parent e-lazyloaded",
+    "id": "",
+    "rect": {
+      "top": 7056.671875,
+      "left": 0,
+      "width": 1440,
+      "height": 542
+    },
+    "styles": {
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "backgroundImage": "none",
+      "padding": "10px 10px 10px 10px",
+      "margin": "75px 0px 0px 0px",
+      "borderRadius": "0px",
+      "boxShadow": "none"
+    },
+    "headings": [
+      {
+        "tag": "DIV",
+        "text": "پربازدید ترین محصولات",
+        "fontSize": "20px",
+        "fontWeight": "500",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "گوشی موبایل اپل مدل iPhone 17 Pro Max...",
+        "fontSize": "16px",
+        "fontWeight": "500",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "گوشی موبایل اپل مدل iPhone 15 Ch",
+        "fontSize": "16px",
+        "fontWeight": "500",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "گوشی موبایل اپل مدل iPhone 16 CH دو...",
+        "fontSize": "16px",
+        "fontWeight": "500",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "گوشی موبایل سامسونگ مدل Galaxy S25 FE دو...",
+        "fontSize": "16px",
+        "fontWeight": "500",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "لپ تاپ 16 اینچی ایسوس مدل TUF Gaming...",
+        "fontSize": "16px",
+        "fontWeight": "500",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "لپ تاپ 15.3 اینچی لنوو مدل Legion 5...",
+        "fontSize": "16px",
+        "fontWeight": "500",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "لپ تاپ 16 اینچی ایسوس مدل WQXGA 240Hz",
+        "fontSize": "16px",
+        "fontWeight": "500",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "لپ‌تاپ 17 اینچی ام اس آی مدل Vector...",
+        "fontSize": "16px",
+        "fontWeight": "500",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "لپ تاپ 16 اینچی ایسوس مدل ROG Strix...",
+        "fontSize": "16px",
+        "fontWeight": "500",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "لپ تاپ 16 اینچی لنوو مدل Legion Pro...",
+        "fontSize": "16px",
+        "fontWeight": "500",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "بازی Gran Turismo 7 مخصوص PS5",
+        "fontSize": "16px",
+        "fontWeight": "500",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "بازی Horizon Forbidden West نسخه کامل مخصوص PS5",
+        "fontSize": "16px",
+        "fontWeight": "500",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "لپ تاپ 16 اینچی ایسوس مدل TUF Gaming...",
+        "fontSize": "16px",
+        "fontWeight": "500",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "لپ تاپ 15.3 اینچی لنوو مدل Legion 5...",
+        "fontSize": "16px",
+        "fontWeight": "500",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "لپ تاپ 16 اینچی ایسوس مدل WQXGA 240Hz",
+        "fontSize": "16px",
+        "fontWeight": "500",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "لپ‌تاپ 17 اینچی ام اس آی مدل Vector...",
+        "fontSize": "16px",
+        "fontWeight": "500",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "لپ تاپ 16 اینچی ایسوس مدل ROG Strix...",
+        "fontSize": "16px",
+        "fontWeight": "500",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "لپ تاپ 16 اینچی لنوو مدل Legion Pro...",
+        "fontSize": "16px",
+        "fontWeight": "500",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "بازی Gran Turismo 7 مخصوص PS5",
+        "fontSize": "16px",
+        "fontWeight": "500",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "بازی Horizon Forbidden West نسخه کامل مخصوص PS5",
+        "fontSize": "16px",
+        "fontWeight": "500",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "لپ تاپ 16 اینچی ایسوس مدل TUF Gaming...",
+        "fontSize": "16px",
+        "fontWeight": "500",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "لپ تاپ 15.3 اینچی لنوو مدل Legion 5...",
+        "fontSize": "16px",
+        "fontWeight": "500",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "لپ تاپ 16 اینچی ایسوس مدل WQXGA 240Hz",
+        "fontSize": "16px",
+        "fontWeight": "500",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "لپ‌تاپ 17 اینچی ام اس آی مدل Vector...",
+        "fontSize": "16px",
+        "fontWeight": "500",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "لپ تاپ 16 اینچی ایسوس مدل ROG Strix...",
+        "fontSize": "16px",
+        "fontWeight": "500",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "لپ تاپ 16 اینچی لنوو مدل Legion Pro...",
+        "fontSize": "16px",
+        "fontWeight": "500",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "بازی Gran Turismo 7 مخصوص PS5",
+        "fontSize": "16px",
+        "fontWeight": "500",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "بازی Horizon Forbidden West نسخه کامل مخصوص PS5",
+        "fontSize": "16px",
+        "fontWeight": "500",
+        "color": "rgb(4, 4, 4)"
+      }
+    ],
+    "imageCount": 31,
+    "imagesSample": [
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/ec57ce03f2a92834058f502174b1a2aeffc9a580_1759666637-300x300-removebg-preview-1.png",
+        "alt": "گوشی موبایل اپل مدل iPhone 17 Pro Max ZAA",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/f4c0e5f4199abda603494b54e0655cbd0447405f_1765624240-300x300-removebg-preview-1.png",
+        "alt": "گوشی موبایل اپل مدل iPhone 15 Ch",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/5af568b4909435c6a215ad5e728e902db234b673_1736597759-300x300-removebg-preview-1.png",
+        "alt": "گوشی موبایل اپل مدل iPhone 16 CH دو سیم کارت ظرفیت 128 گیگابایت",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/89c0e7b3f400348a3add26684b7ece5084e4361f_1777115891-300x300-removebg-preview-1.png",
+        "alt": "گوشی موبایل سامسونگ مدل Galaxy S25 FE دو سیم کارت",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/0a8fff942ea8ee0359edadad85daae399b0e357c_1763462145-300x300-removebg-preview-1.png",
+        "alt": "گوشی موبایل اپل مدل iPhone 17 CH دو سیم کارت",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/48daaebd4cb7706cce21ce8b5e485d6fdafa6bd1_1736598863-300x300-removebg-preview-1.png",
+        "alt": "گوشی موبایل اپل مدل iPhone 16 Pro Max ZAA دو سیم کارت",
+        "width": 300,
+        "height": 300
+      }
+    ],
+    "linkCount": 28,
+    "linksSample": [
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%da%af%d9%88%d8%b4%db%8c-%d9%85%d9%88%d8%a8%d8%a7%db%8c%d9%84-%d8%a7%d9%be%d9%84-%d9%85%d8%af%d9%84-iphone-17-pro-max-zaa/",
+        "text": "گوشی موبایل اپل مدل iPhone 17 Pro Max..."
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%da%af%d9%88%d8%b4%db%8c-%d9%85%d9%88%d8%a8%d8%a7%db%8c%d9%84-%d8%a7%d9%be%d9%84-%d9%85%d8%af%d9%84-iphone-15-ch-%d8%af%d9%88-%d8%b3%db%8c%d9%85-%da%a9%d8%a7%d8%b1%d8%aa-%d8%b8%d8%b1%d9%81/",
+        "text": "گوشی موبایل اپل مدل iPhone 15 Ch"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%da%af%d9%88%d8%b4%db%8c-%d9%85%d9%88%d8%a8%d8%a7%db%8c%d9%84-%d8%a7%d9%be%d9%84-%d9%85%d8%af%d9%84-iphone-16-ch-%d8%af%d9%88-%d8%b3%db%8c%d9%85-%da%a9%d8%a7%d8%b1%d8%aa-%d8%b8%d8%b1%d9%81%db%8c%d8%aa/",
+        "text": "گوشی موبایل اپل مدل iPhone 16 CH دو..."
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%da%af%d9%88%d8%b4%db%8c-%d9%85%d9%88%d8%a8%d8%a7%db%8c%d9%84-%d8%b3%d8%a7%d9%85%d8%b3%d9%88%d9%86%da%af-%d9%85%d8%af%d9%84-galaxy-s25-fe-%d8%af%d9%88-%d8%b3%db%8c%d9%85-%da%a9%d8%a7%d8%b1%d8%aa/",
+        "text": "گوشی موبایل سامسونگ مدل Galaxy S25 FE دو..."
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d9%84%d9%be-%d8%aa%d8%a7%d9%be-16-%d8%a7%db%8c%d9%86%da%86%db%8c-%d8%a7%db%8c%d8%b3%d9%88%d8%b3-%d9%85%d8%af%d9%84-tuf-gaming-a16-fa608pp-ryzen-9-8940hx-rtx5070-8gb-64gb-ddr5-5600mhz-4tb-ssd-2-5k-165/",
+        "text": "لپ تاپ 16 اینچی ایسوس مدل TUF Gaming..."
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d9%84%d9%be-%d8%aa%d8%a7%d9%be-15-3-%d8%a7%db%8c%d9%86%da%86%db%8c-%d9%84%d9%86%d9%88%d9%88-%d9%85%d8%af%d9%84-legion-5-15irx10-i7-13650hx-rtx5070-8gb-64gb-ddr5-4800mhz-4tb-ssd-wuxga-165hz-%da%a9/",
+        "text": "لپ تاپ 15.3 اینچی لنوو مدل Legion 5..."
+      }
+    ],
+    "isSlider": true,
+    "hasTimer": false,
+    "productCount": 0,
+    "productTitlesSample": [],
+    "subContainerCount": 1,
+    "subContainers": [
+      {
+        "className": "elementor-element elementor-element-3894059a elementor-widget elementor-widget-productstabthirdnkkaveh",
+        "width": 1420,
+        "height": 522
+      }
+    ],
+    "rawText": "پربازدید ترین محصولات بر اساس مخاطبان لپتاپ ها کنسول ها لوازم جانبی موبایل محـصــــولات مشاهده همه 5/4.0 گوشی موبایل اپل مدل iPhone 17 Pro Max... 419,999,000 2 409,999,000 5/3.5 گوشی موبایل اپل مدل iP"
+  },
+  {
+    "index": 15,
+    "className": "elementor-element elementor-element-1fecc616 e-flex e-con-boxed e-con e-parent e-lazyloaded",
+    "id": "",
+    "rect": {
+      "top": 7648.671875,
+      "left": 0,
+      "width": 1440,
+      "height": 193
+    },
+    "styles": {
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "backgroundImage": "none",
+      "padding": "0px 10px 0px 10px",
+      "margin": "50px 0px 0px 0px",
+      "borderRadius": "0px",
+      "boxShadow": "none"
+    },
+    "headings": [
+      {
+        "tag": "H2",
+        "text": "ساعت هوشمند اپل مدل SE Aluminum Case 44mm",
+        "fontSize": "14px",
+        "fontWeight": "600",
+        "color": "rgb(35, 35, 35)"
+      },
+      {
+        "tag": "H2",
+        "text": "ساعت هوشمند 49 میلی متری اپل مدل Ultra...",
+        "fontSize": "14px",
+        "fontWeight": "600",
+        "color": "rgb(35, 35, 35)"
+      },
+      {
+        "tag": "H2",
+        "text": "ساعت هوشمند 46 میلی متری اپل مدل Series...",
+        "fontSize": "14px",
+        "fontWeight": "600",
+        "color": "rgb(35, 35, 35)"
+      },
+      {
+        "tag": "H2",
+        "text": "ساعت هوشمند 46 میلی متری اپل مدل Series...",
+        "fontSize": "15px",
+        "fontWeight": "700",
+        "color": "rgb(255, 255, 255)"
+      },
+      {
+        "tag": "H2",
+        "text": "هدفون بلوتوثی انکر مدل Liberty 4 Pro",
+        "fontSize": "15px",
+        "fontWeight": "700",
+        "color": "rgb(255, 255, 255)"
+      },
+      {
+        "tag": "H2",
+        "text": "گوشی موبایل اپل مدل iPhone 17 Pro Max...",
+        "fontSize": "15px",
+        "fontWeight": "700",
+        "color": "rgb(255, 255, 255)"
+      },
+      {
+        "tag": "H2",
+        "text": "گوشی موبایل سامسونگ مدل Galaxy S25 FE دو...",
+        "fontSize": "15px",
+        "fontWeight": "700",
+        "color": "rgb(255, 255, 255)"
+      },
+      {
+        "tag": "H2",
+        "text": "ساعت هوشمند اپل مدل SE Aluminum Case 44mm",
+        "fontSize": "15px",
+        "fontWeight": "700",
+        "color": "rgb(255, 255, 255)"
+      },
+      {
+        "tag": "H2",
+        "text": "ساعت هوشمند 46 میلی متری اپل مدل Series...",
+        "fontSize": "15px",
+        "fontWeight": "700",
+        "color": "rgb(255, 255, 255)"
+      },
+      {
+        "tag": "H2",
+        "text": "هدفون بلوتوثی انکر مدل Liberty 4 Pro",
+        "fontSize": "15px",
+        "fontWeight": "700",
+        "color": "rgb(255, 255, 255)"
+      }
+    ],
+    "imageCount": 10,
+    "imagesSample": [
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/15bbdc3cfde33fc112622d14bd61152cd86e9287_1738409004-300x300-removebg-preview-1.png",
+        "alt": "ساعت هوشمند اپل مدل SE Aluminum Case 44mm",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/128bfd71ad4017050659832b191c846cd050c5c1_1763052371-300x300-removebg-preview-1.png",
+        "alt": "ساعت هوشمند 49 میلی متری اپل مدل Ultra 3 Natural Titanium Case",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/1cb72b186a7f24502e1bd066af4e2382a8caf099_1764429370-300x300-removebg-preview-1.png",
+        "alt": "ساعت هوشمند 46 میلی متری اپل مدل Series 11 Aluminum Case",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/1cb72b186a7f24502e1bd066af4e2382a8caf099_1764429370-300x300-removebg-preview-1.png",
+        "alt": "ساعت هوشمند 46 میلی متری اپل مدل Series 11 Aluminum Case",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/7fc114c1a3c12afc0db1a26f1117e81c5a76a1c6_1786571883-removebg-preview-300x300.png",
+        "alt": "هدفون بلوتوثی انکر مدل Liberty 4 Pro",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/ec57ce03f2a92834058f502174b1a2aeffc9a580_1759666637-300x300-removebg-preview-1.png",
+        "alt": "گوشی موبایل اپل مدل iPhone 17 Pro Max ZAA",
+        "width": 300,
+        "height": 300
+      }
+    ],
+    "linkCount": 10,
+    "linksSample": [
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d8%b3%d8%a7%d8%b9%d8%aa-%d9%87%d9%88%d8%b4%d9%85%d9%86%d8%af-%d8%a7%d9%be%d9%84-%d9%85%d8%af%d9%84-se-aluminum-case-44mm/",
+        "text": "ساعت هوشمند اپل مدل SE Aluminum Case 44mm"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d8%b3%d8%a7%d8%b9%d8%aa-%d9%87%d9%88%d8%b4%d9%85%d9%86%d8%af-49-%d9%85%db%8c%d9%84%db%8c-%d9%85%d8%aa%d8%b1%db%8c-%d8%a7%d9%be%d9%84-%d9%85%d8%af%d9%84-ultra-3-natural-titanium-case-%d8%a8%d8%a7/",
+        "text": "ساعت هوشمند 49 میلی متری اپل مدل Ultra..."
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d8%b3%d8%a7%d8%b9%d8%aa-%d9%87%d9%88%d8%b4%d9%85%d9%86%d8%af-46-%d9%85%db%8c%d9%84%db%8c-%d9%85%d8%aa%d8%b1%db%8c-%d8%a7%d9%be%d9%84-%d9%85%d8%af%d9%84-series-11-aluminum-case-%d8%a8%d8%a7-%d8%a8/",
+        "text": "ساعت هوشمند 46 میلی متری اپل مدل Series..."
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d8%b3%d8%a7%d8%b9%d8%aa-%d9%87%d9%88%d8%b4%d9%85%d9%86%d8%af-46-%d9%85%db%8c%d9%84%db%8c-%d9%85%d8%aa%d8%b1%db%8c-%d8%a7%d9%be%d9%84-%d9%85%d8%af%d9%84-series-11-aluminum-case-%d8%a8%d8%a7-%d8%a8/",
+        "text": "ساعت هوشمند 46 میلی متری اپل مدل Series..."
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d9%87%d8%af%d9%81%d9%88%d9%86-%d8%a8%d9%84%d9%88%d8%aa%d9%88%d8%ab%db%8c-%d8%a7%d9%86%da%a9%d8%b1-%d9%85%d8%af%d9%84-liberty-4-pro-%d8%af%d8%a7%d8%b1%d8%a7%db%8c-%d9%86%d9%88%db%8c%d8%b2-%da%a9%d9%86/",
+        "text": "هدفون بلوتوثی انکر مدل Liberty 4 Pro"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%da%af%d9%88%d8%b4%db%8c-%d9%85%d9%88%d8%a8%d8%a7%db%8c%d9%84-%d8%a7%d9%be%d9%84-%d9%85%d8%af%d9%84-iphone-17-pro-max-zaa/",
+        "text": "گوشی موبایل اپل مدل iPhone 17 Pro Max..."
+      }
+    ],
+    "isSlider": true,
+    "hasTimer": false,
+    "productCount": 0,
+    "productTitlesSample": [],
+    "subContainerCount": 1,
+    "subContainers": [
+      {
+        "className": "e-con-inner",
+        "width": 1320,
+        "height": 193
+      }
+    ],
+    "rawText": "4 ساعت هوشمند اپل مدل SE Aluminum Case 44mm 44,490,000 4 ساعت هوشمند 49 میلی متری اپل مدل Ultra... 175,990,000 4.5 ساعت هوشمند 46 میلی متری اپل مدل Series... 68,800,000 ساعت هوشمند 46 میلی متری اپل مد"
+  },
+  {
+    "index": 16,
+    "className": "elementor-element elementor-element-7ffd12cf e-con-full e-flex e-con e-parent e-lazyloaded",
+    "id": "",
+    "rect": {
+      "top": 7891.671875,
+      "left": 0,
+      "width": 1440,
+      "height": 568
+    },
+    "styles": {
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "backgroundImage": "none",
+      "padding": "10px 10px 10px 10px",
+      "margin": "50px 0px 0px 0px",
+      "borderRadius": "0px",
+      "boxShadow": "none"
+    },
+    "headings": [
+      {
+        "tag": "DIV",
+        "text": "پیشنهاد",
+        "fontSize": "44px",
+        "fontWeight": "400",
+        "color": "rgb(0, 0, 0)"
+      },
+      {
+        "tag": "DIV",
+        "text": "پیشنهاد",
+        "fontSize": "44px",
+        "fontWeight": "400",
+        "color": "rgb(0, 0, 0)"
+      },
+      {
+        "tag": "H2",
+        "text": "ساعت هوشمند 46 میلی متری اپل مدل Series...",
+        "fontSize": "16px",
+        "fontWeight": "600",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "ساعت هوشمند اپل مدل SE Aluminum Case 44mm",
+        "fontSize": "16px",
+        "fontWeight": "600",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "گوشی موبایل سامسونگ مدل Galaxy S25 FE دو...",
+        "fontSize": "16px",
+        "fontWeight": "600",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "گوشی موبایل اپل مدل iPhone 17 Pro Max...",
+        "fontSize": "16px",
+        "fontWeight": "600",
+        "color": "rgb(4, 4, 4)"
+      }
+    ],
+    "imageCount": 7,
+    "imagesSample": [
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/09/box-02-1.png",
+        "alt": "پیشنهاد",
+        "width": 199,
+        "height": 155
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/09/box-02-1.png",
+        "alt": "پیشنهاد",
+        "width": 199,
+        "height": 155
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/1cb72b186a7f24502e1bd066af4e2382a8caf099_1764429370-300x300-removebg-preview-1.png",
+        "alt": "ساعت هوشمند 46 میلی متری اپل مدل Series 11 Aluminum Case",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/15bbdc3cfde33fc112622d14bd61152cd86e9287_1738409004-300x300-removebg-preview-1.png",
+        "alt": "ساعت هوشمند اپل مدل SE Aluminum Case 44mm",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/89c0e7b3f400348a3add26684b7ece5084e4361f_1777115891-300x300-removebg-preview-1.png",
+        "alt": "گوشی موبایل سامسونگ مدل Galaxy S25 FE دو سیم کارت",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/ec57ce03f2a92834058f502174b1a2aeffc9a580_1759666637-300x300-removebg-preview-1.png",
+        "alt": "گوشی موبایل اپل مدل iPhone 17 Pro Max ZAA",
+        "width": 300,
+        "height": 300
+      }
+    ],
+    "linkCount": 6,
+    "linksSample": [
+      {
+        "href": "https://kaveh.moeinwp.com/43/#",
+        "text": "مشاهده بیشتر"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/#",
+        "text": "مشاهده بیشتر"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d8%b3%d8%a7%d8%b9%d8%aa-%d9%87%d9%88%d8%b4%d9%85%d9%86%d8%af-46-%d9%85%db%8c%d9%84%db%8c-%d9%85%d8%aa%d8%b1%db%8c-%d8%a7%d9%be%d9%84-%d9%85%d8%af%d9%84-series-11-aluminum-case-%d8%a8%d8%a7-%d8%a8/",
+        "text": "ساعت هوشمند 46 میلی متری اپل مدل Series..."
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d8%b3%d8%a7%d8%b9%d8%aa-%d9%87%d9%88%d8%b4%d9%85%d9%86%d8%af-%d8%a7%d9%be%d9%84-%d9%85%d8%af%d9%84-se-aluminum-case-44mm/",
+        "text": "ساعت هوشمند اپل مدل SE Aluminum Case 44mm"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%da%af%d9%88%d8%b4%db%8c-%d9%85%d9%88%d8%a8%d8%a7%db%8c%d9%84-%d8%b3%d8%a7%d9%85%d8%b3%d9%88%d9%86%da%af-%d9%85%d8%af%d9%84-galaxy-s25-fe-%d8%af%d9%88-%d8%b3%db%8c%d9%85-%da%a9%d8%a7%d8%b1%d8%aa/",
+        "text": "گوشی موبایل سامسونگ مدل Galaxy S25 FE دو..."
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%da%af%d9%88%d8%b4%db%8c-%d9%85%d9%88%d8%a8%d8%a7%db%8c%d9%84-%d8%a7%d9%be%d9%84-%d9%85%d8%af%d9%84-iphone-17-pro-max-zaa/",
+        "text": "گوشی موبایل اپل مدل iPhone 17 Pro Max..."
+      }
+    ],
+    "isSlider": true,
+    "hasTimer": false,
+    "productCount": 0,
+    "productTitlesSample": [],
+    "subContainerCount": 1,
+    "subContainers": [
+      {
+        "className": "elementor-element elementor-element-375f8bd8 elementor-widget elementor-widget-popularproductsnkkaveh",
+        "width": 1420,
+        "height": 548
+      }
+    ],
+    "rawText": "پیشنهاد تخفیفات روز مشاهده بیشتر 46 میلی‌متر ساعت هوشمند 46 میلی متری اپل مدل Series... 68,800,000 5/4.5 32 گیگابایت ساعت هوشمند اپل مدل SE Aluminum Case 44mm 44,490,000 5/4.0 256 گیگابایت گوشی موبایل"
+  },
+  {
+    "index": 17,
+    "className": "elementor-element elementor-element-57872b0b e-flex e-con-boxed e-con e-parent e-lazyloaded",
+    "id": "",
+    "rect": {
+      "top": 8509.671875,
+      "left": 0,
+      "width": 1440,
+      "height": 274
+    },
+    "styles": {
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "backgroundImage": "none",
+      "padding": "0px 10px 0px 10px",
+      "margin": "50px 0px 0px 0px",
+      "borderRadius": "0px",
+      "boxShadow": "none"
+    },
+    "headings": [
+      {
+        "tag": "DIV",
+        "text": "محل قرار گیری بنر",
+        "fontSize": "25px",
+        "fontWeight": "700",
+        "color": "rgb(19, 39, 95)"
+      },
+      {
+        "tag": "DIV",
+        "text": "محل قرار گیری بنر",
+        "fontSize": "25px",
+        "fontWeight": "700",
+        "color": "rgb(19, 39, 95)"
+      }
+    ],
+    "imageCount": 2,
+    "imagesSample": [
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/themes/kavehTheme/assets/images/new-demo/banner-01.png",
+        "alt": "محل قرار گیری بنر",
+        "width": 218,
+        "height": 245
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/banner-02-1.png",
+        "alt": "محل قرار گیری بنر",
+        "width": 218,
+        "height": 243
+      }
+    ],
+    "linkCount": 0,
+    "linksSample": [],
+    "isSlider": false,
+    "hasTimer": false,
+    "productCount": 0,
+    "productTitlesSample": [],
+    "subContainerCount": 1,
+    "subContainers": [
+      {
+        "className": "e-con-inner",
+        "width": 1320,
+        "height": 274
+      }
+    ],
+    "rawText": "محل قرار گیری بنر همین الان با تخفیف خرید کنید محل قرار گیری بنر همین الان با تخفیف خرید کنید"
+  },
+  {
+    "index": 18,
+    "className": "elementor-element elementor-element-4e67599c e-flex e-con-boxed e-con e-parent e-lazyloaded",
+    "id": "",
+    "rect": {
+      "top": 8858.671875,
+      "left": 0,
+      "width": 1440,
+      "height": 379
+    },
+    "styles": {
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "backgroundImage": "none",
+      "padding": "0px 10px 0px 10px",
+      "margin": "75px 0px 0px 0px",
+      "borderRadius": "0px",
+      "boxShadow": "none"
+    },
+    "headings": [
+      {
+        "tag": "DIV",
+        "text": "پوربازدید ترین محصولات",
+        "fontSize": "20px",
+        "fontWeight": "500",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "لپ تاپ 16 اینچی لنوو مدل Legion Pro...",
+        "fontSize": "15px",
+        "fontWeight": "500",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "گوشی موبایل اپل مدل iPhone 16 Pro Max...",
+        "fontSize": "15px",
+        "fontWeight": "500",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "لپ تاپ 16 اینچی ایسوس مدل WQXGA 240Hz",
+        "fontSize": "15px",
+        "fontWeight": "500",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "گوشی موبایل سامسونگ مدل Galaxy S25 FE دو...",
+        "fontSize": "15px",
+        "fontWeight": "500",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "لپ تاپ 16 اینچی ایسوس مدل ROG Strix...",
+        "fontSize": "15px",
+        "fontWeight": "500",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "هدفون بلوتوثی انکر مدل Liberty 4 Pro",
+        "fontSize": "15px",
+        "fontWeight": "500",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "لپ تاپ 13.6 اینچی اپل مدل MacBook Air...",
+        "fontSize": "15px",
+        "fontWeight": "500",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "بازی Gran Turismo 7 مخصوص PS5",
+        "fontSize": "15px",
+        "fontWeight": "500",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "لپ تاپ 16 اینچی لنوو مدل Legion Pro...",
+        "fontSize": "15px",
+        "fontWeight": "500",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "گوشی موبایل اپل مدل iPhone 16 Pro Max...",
+        "fontSize": "15px",
+        "fontWeight": "500",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "لپ تاپ 16 اینچی ایسوس مدل WQXGA 240Hz",
+        "fontSize": "15px",
+        "fontWeight": "500",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "گوشی موبایل سامسونگ مدل Galaxy S25 FE دو...",
+        "fontSize": "15px",
+        "fontWeight": "500",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "گوشی موبایل اپل مدل iPhone 16 Pro Max...",
+        "fontSize": "15px",
+        "fontWeight": "700",
+        "color": "rgb(255, 255, 255)"
+      },
+      {
+        "tag": "H2",
+        "text": "لپ تاپ 16 اینچی ایسوس مدل WQXGA 240Hz",
+        "fontSize": "15px",
+        "fontWeight": "700",
+        "color": "rgb(255, 255, 255)"
+      },
+      {
+        "tag": "H2",
+        "text": "گوشی موبایل سامسونگ مدل Galaxy S25 FE دو...",
+        "fontSize": "15px",
+        "fontWeight": "700",
+        "color": "rgb(255, 255, 255)"
+      },
+      {
+        "tag": "H2",
+        "text": "لپ تاپ 16 اینچی ایسوس مدل ROG Strix...",
+        "fontSize": "15px",
+        "fontWeight": "700",
+        "color": "rgb(255, 255, 255)"
+      },
+      {
+        "tag": "H2",
+        "text": "هدفون بلوتوثی انکر مدل Liberty 4 Pro",
+        "fontSize": "15px",
+        "fontWeight": "700",
+        "color": "rgb(255, 255, 255)"
+      },
+      {
+        "tag": "H2",
+        "text": "لپ تاپ 13.6 اینچی اپل مدل MacBook Air...",
+        "fontSize": "15px",
+        "fontWeight": "700",
+        "color": "rgb(255, 255, 255)"
+      },
+      {
+        "tag": "H2",
+        "text": "بازی Gran Turismo 7 مخصوص PS5",
+        "fontSize": "15px",
+        "fontWeight": "700",
+        "color": "rgb(255, 255, 255)"
+      },
+      {
+        "tag": "H2",
+        "text": "لپ تاپ 16 اینچی لنوو مدل Legion Pro...",
+        "fontSize": "15px",
+        "fontWeight": "700",
+        "color": "rgb(255, 255, 255)"
+      },
+      {
+        "tag": "H2",
+        "text": "گوشی موبایل اپل مدل iPhone 16 Pro Max...",
+        "fontSize": "15px",
+        "fontWeight": "700",
+        "color": "rgb(255, 255, 255)"
+      },
+      {
+        "tag": "H2",
+        "text": "لپ تاپ 16 اینچی ایسوس مدل WQXGA 240Hz",
+        "fontSize": "15px",
+        "fontWeight": "700",
+        "color": "rgb(255, 255, 255)"
+      }
+    ],
+    "imageCount": 24,
+    "imagesSample": [
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/box-03.png",
+        "alt": "باکس",
+        "width": 68,
+        "height": 54
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/box-03.png",
+        "alt": "",
+        "width": 68,
+        "height": 54
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/6c703cf0a62ada38bc1069e041c36bff551606b1_1780745743-300x300-removebg-preview-1.png",
+        "alt": "لپ تاپ 16 اینچی لنوو مدل Legion Pro 7 16IAX10H-Core",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/48daaebd4cb7706cce21ce8b5e485d6fdafa6bd1_1736598863-300x300-removebg-preview-1.png",
+        "alt": "گوشی موبایل اپل مدل iPhone 16 Pro Max ZAA دو سیم کارت",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/3c0f8ff8a12c67f061136e8fafd65eb6f6c56d2e_1786985097-300x300-removebg-preview-1.png",
+        "alt": "لپ تاپ 16 اینچی ایسوس مدل WQXGA 240Hz",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/89c0e7b3f400348a3add26684b7ece5084e4361f_1777115891-300x300-removebg-preview-1.png",
+        "alt": "گوشی موبایل سامسونگ مدل Galaxy S25 FE دو سیم کارت",
+        "width": 300,
+        "height": 300
+      }
+    ],
+    "linkCount": 22,
+    "linksSample": [
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d9%84%d9%be-%d8%aa%d8%a7%d9%be-16-%d8%a7%db%8c%d9%86%da%86%db%8c-%d9%84%d9%86%d9%88%d9%88-%d9%85%d8%af%d9%84-legion-pro-7-16iax10h-core-ultra-9-275hx-rtx5090-24gb-32gb-ddr5-1tb-ssd-wqxga-oled-24/",
+        "text": "لپ تاپ 16 اینچی لنوو مدل Legion Pro..."
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%da%af%d9%88%d8%b4%db%8c-%d9%85%d9%88%d8%a8%d8%a7%db%8c%d9%84-%d8%a7%d9%be%d9%84-%d9%85%d8%af%d9%84-iphone-16-pro-max-zaa-%d8%af%d9%88-%d8%b3%db%8c%d9%85-%da%a9%d8%a7%d8%b1%d8%aa-%d8%b8%d8%b1%d9%81/",
+        "text": "گوشی موبایل اپل مدل iPhone 16 Pro Max..."
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d9%84%d9%be-%d8%aa%d8%a7%d9%be-16-%d8%a7%db%8c%d9%86%da%86%db%8c-%d8%a7%db%8c%d8%b3%d9%88%d8%b3-%d9%85%d8%af%d9%84-rog-strix-g16-g615lw-core-ultra-9-275hx-rtx5080-16gb-64gb-ddr5-5600mhz-512gb-ssd-wqx/",
+        "text": "لپ تاپ 16 اینچی ایسوس مدل WQXGA 240Hz"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%da%af%d9%88%d8%b4%db%8c-%d9%85%d9%88%d8%a8%d8%a7%db%8c%d9%84-%d8%b3%d8%a7%d9%85%d8%b3%d9%88%d9%86%da%af-%d9%85%d8%af%d9%84-galaxy-s25-fe-%d8%af%d9%88-%d8%b3%db%8c%d9%85-%da%a9%d8%a7%d8%b1%d8%aa/",
+        "text": "گوشی موبایل سامسونگ مدل Galaxy S25 FE دو..."
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d9%84%d9%be-%d8%aa%d8%a7%d9%be-16-%d8%a7%db%8c%d9%86%da%86%db%8c-%d8%a7%db%8c%d8%b3%d9%88%d8%b3-%d9%85%d8%af%d9%84-rog-strix-g16-g615lw-core-ultra-9-275hx-rtx5080-16gb-48gb-ddr5-5600mhz-4tb-ssd-wqxga/",
+        "text": "لپ تاپ 16 اینچی ایسوس مدل ROG Strix..."
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d9%87%d8%af%d9%81%d9%88%d9%86-%d8%a8%d9%84%d9%88%d8%aa%d9%88%d8%ab%db%8c-%d8%a7%d9%86%da%a9%d8%b1-%d9%85%d8%af%d9%84-liberty-4-pro-%d8%af%d8%a7%d8%b1%d8%a7%db%8c-%d9%86%d9%88%db%8c%d8%b2-%da%a9%d9%86/",
+        "text": "هدفون بلوتوثی انکر مدل Liberty 4 Pro"
+      }
+    ],
+    "isSlider": true,
+    "hasTimer": false,
+    "productCount": 0,
+    "productTitlesSample": [],
+    "subContainerCount": 1,
+    "subContainers": [
+      {
+        "className": "e-con-inner",
+        "width": 1320,
+        "height": 379
+      }
+    ],
+    "rawText": "پوربازدید ترین محصولات بر اساس مخاطبان محـصــــولات مشاهده همه لپ تاپ 16 اینچی لنوو مدل Legion Pro... گوشی موبایل اپل مدل iPhone 16 Pro Max... لپ تاپ 16 اینچی ایسوس مدل WQXGA 240Hz گوشی موبایل سامسونگ"
+  },
+  {
+    "index": 19,
+    "className": "elementor-element elementor-element-7a921bf6 e-con-full e-flex e-con e-parent e-lazyloaded",
+    "id": "",
+    "rect": {
+      "top": 9287.671875,
+      "left": 0,
+      "width": 1440,
+      "height": 340
+    },
+    "styles": {
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "backgroundImage": "none",
+      "padding": "10px 10px 10px 10px",
+      "margin": "50px 0px 0px 0px",
+      "borderRadius": "0px",
+      "boxShadow": "none"
+    },
+    "headings": [
+      {
+        "tag": "DIV",
+        "text": "پرفروش ترین برندها",
+        "fontSize": "20px",
+        "fontWeight": "500",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "DIV",
+        "text": "گرادور",
+        "fontSize": "15px",
+        "fontWeight": "800",
+        "color": "rgb(35, 38, 27)"
+      },
+      {
+        "tag": "DIV",
+        "text": "گرادور",
+        "fontSize": "15px",
+        "fontWeight": "800",
+        "color": "rgb(35, 38, 27)"
+      },
+      {
+        "tag": "DIV",
+        "text": "گرادور",
+        "fontSize": "15px",
+        "fontWeight": "800",
+        "color": "rgb(35, 38, 27)"
+      },
+      {
+        "tag": "DIV",
+        "text": "گرادور",
+        "fontSize": "15px",
+        "fontWeight": "800",
+        "color": "rgb(35, 38, 27)"
+      }
+    ],
+    "imageCount": 6,
+    "imagesSample": [
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/09/brand-01-1.png",
+        "alt": "گرادور",
+        "width": 84,
+        "height": 33
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/09/brand-01-1.png",
+        "alt": "گرادور",
+        "width": 84,
+        "height": 33
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/09/brand-01-1.png",
+        "alt": "گرادور",
+        "width": 84,
+        "height": 33
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/09/brand-01-1.png",
+        "alt": "گرادور",
+        "width": 84,
+        "height": 33
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/09/brand-01-1.png",
+        "alt": "گرادور",
+        "width": 84,
+        "height": 33
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/09/brand-01-1.png",
+        "alt": "گرادور",
+        "width": 84,
+        "height": 33
+      }
+    ],
+    "linkCount": 1,
+    "linksSample": [
+      {
+        "href": "https://kaveh.moeinwp.com/43/#",
+        "text": "مشاهده بیشتر"
+      }
+    ],
+    "isSlider": true,
+    "hasTimer": false,
+    "productCount": 0,
+    "productTitlesSample": [],
+    "subContainerCount": 1,
+    "subContainers": [
+      {
+        "className": "elementor-element elementor-element-3f9b050c elementor-widget elementor-widget-brandscarouselsecondnkkaveh",
+        "width": 1420,
+        "height": 320
+      }
+    ],
+    "rawText": "پرفروش ترین برندها زمانت قیمت و کیفیت مشاهده بیشتر ۳/۳ گرادور برند ۴۴ محصول ۴/۵ گرادور برند ۳۰ محصول ۱/۷ گرادور برند ۵۴ محصول ۳/۶ گرادور برند ۴۰ محصول"
+  },
+  {
+    "index": 20,
+    "className": "elementor-element elementor-element-4d80c783 e-con-full e-flex e-con e-parent e-lazyloaded",
+    "id": "",
+    "rect": {
+      "top": 9677.671875,
+      "left": 0,
+      "width": 1440,
+      "height": 482
+    },
+    "styles": {
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "backgroundImage": "none",
+      "padding": "10px 10px 10px 10px",
+      "margin": "50px 0px 0px 0px",
+      "borderRadius": "0px",
+      "boxShadow": "none"
+    },
+    "headings": [
+      {
+        "tag": "SPAN",
+        "text": "بازی Assassin’s Creed Shadows مخصوص PS5",
+        "fontSize": "12px",
+        "fontWeight": "500",
+        "color": "rgb(95, 112, 134)"
+      },
+      {
+        "tag": "SPAN",
+        "text": "بازی Assassins Creed Mirage مخصوص PS5",
+        "fontSize": "12px",
+        "fontWeight": "500",
+        "color": "rgb(95, 112, 134)"
+      },
+      {
+        "tag": "SPAN",
+        "text": "بازی EA Sports FC 26 نسخه استاندارد مخصوص PS5",
+        "fontSize": "12px",
+        "fontWeight": "500",
+        "color": "rgb(95, 112, 134)"
+      },
+      {
+        "tag": "SPAN",
+        "text": "بازی Ghost of Yotei مخصوص PS5",
+        "fontSize": "12px",
+        "fontWeight": "500",
+        "color": "rgb(95, 112, 134)"
+      },
+      {
+        "tag": "SPAN",
+        "text": "بازی Assassin’s Creed Shadows مخصوص PS5",
+        "fontSize": "12px",
+        "fontWeight": "500",
+        "color": "rgb(95, 112, 134)"
+      },
+      {
+        "tag": "SPAN",
+        "text": "بازی Assassins Creed Mirage مخصوص PS5",
+        "fontSize": "12px",
+        "fontWeight": "500",
+        "color": "rgb(95, 112, 134)"
+      },
+      {
+        "tag": "SPAN",
+        "text": "بازی EA Sports FC 26 نسخه استاندارد مخصوص PS5",
+        "fontSize": "12px",
+        "fontWeight": "500",
+        "color": "rgb(95, 112, 134)"
+      },
+      {
+        "tag": "SPAN",
+        "text": "بازی Ghost of Yotei مخصوص PS5",
+        "fontSize": "12px",
+        "fontWeight": "500",
+        "color": "rgb(95, 112, 134)"
+      },
+      {
+        "tag": "SPAN",
+        "text": "بازی Assassin’s Creed Shadows مخصوص PS5",
+        "fontSize": "12px",
+        "fontWeight": "500",
+        "color": "rgb(95, 112, 134)"
+      },
+      {
+        "tag": "SPAN",
+        "text": "بازی Assassins Creed Mirage مخصوص PS5",
+        "fontSize": "12px",
+        "fontWeight": "500",
+        "color": "rgb(95, 112, 134)"
+      },
+      {
+        "tag": "SPAN",
+        "text": "بازی EA Sports FC 26 نسخه استاندارد مخصوص PS5",
+        "fontSize": "12px",
+        "fontWeight": "500",
+        "color": "rgb(95, 112, 134)"
+      },
+      {
+        "tag": "SPAN",
+        "text": "بازی Ghost of Yotei مخصوص PS5",
+        "fontSize": "12px",
+        "fontWeight": "500",
+        "color": "rgb(95, 112, 134)"
+      },
+      {
+        "tag": "SPAN",
+        "text": "بازی Assassin’s Creed Shadows مخصوص PS5",
+        "fontSize": "12px",
+        "fontWeight": "500",
+        "color": "rgb(95, 112, 134)"
+      },
+      {
+        "tag": "SPAN",
+        "text": "بازی Assassins Creed Mirage مخصوص PS5",
+        "fontSize": "12px",
+        "fontWeight": "500",
+        "color": "rgb(95, 112, 134)"
+      },
+      {
+        "tag": "SPAN",
+        "text": "بازی EA Sports FC 26 نسخه استاندارد مخصوص PS5",
+        "fontSize": "12px",
+        "fontWeight": "500",
+        "color": "rgb(95, 112, 134)"
+      },
+      {
+        "tag": "SPAN",
+        "text": "بازی Ghost of Yotei مخصوص PS5",
+        "fontSize": "12px",
+        "fontWeight": "500",
+        "color": "rgb(95, 112, 134)"
+      },
+      {
+        "tag": "SPAN",
+        "text": "بازی Assassin’s Creed Shadows مخصوص PS5",
+        "fontSize": "12px",
+        "fontWeight": "500",
+        "color": "rgb(95, 112, 134)"
+      },
+      {
+        "tag": "SPAN",
+        "text": "بازی Assassins Creed Mirage مخصوص PS5",
+        "fontSize": "12px",
+        "fontWeight": "500",
+        "color": "rgb(95, 112, 134)"
+      },
+      {
+        "tag": "SPAN",
+        "text": "بازی EA Sports FC 26 نسخه استاندارد مخصوص PS5",
+        "fontSize": "12px",
+        "fontWeight": "500",
+        "color": "rgb(95, 112, 134)"
+      },
+      {
+        "tag": "SPAN",
+        "text": "بازی Ghost of Yotei مخصوص PS5",
+        "fontSize": "12px",
+        "fontWeight": "500",
+        "color": "rgb(95, 112, 134)"
+      },
+      {
+        "tag": "SPAN",
+        "text": "بازی Assassin’s Creed Shadows مخصوص PS5",
+        "fontSize": "12px",
+        "fontWeight": "500",
+        "color": "rgb(95, 112, 134)"
+      },
+      {
+        "tag": "SPAN",
+        "text": "بازی Assassins Creed Mirage مخصوص PS5",
+        "fontSize": "12px",
+        "fontWeight": "500",
+        "color": "rgb(95, 112, 134)"
+      },
+      {
+        "tag": "SPAN",
+        "text": "بازی EA Sports FC 26 نسخه استاندارد مخصوص PS5",
+        "fontSize": "12px",
+        "fontWeight": "500",
+        "color": "rgb(95, 112, 134)"
+      },
+      {
+        "tag": "SPAN",
+        "text": "بازی Ghost of Yotei مخصوص PS5",
+        "fontSize": "12px",
+        "fontWeight": "500",
+        "color": "rgb(95, 112, 134)"
+      }
+    ],
+    "imageCount": 30,
+    "imagesSample": [
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/09/avatar-comments-nk-150x150.png",
+        "alt": "امیررضا",
+        "width": 150,
+        "height": 150
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/f2fa44a96ae03ef062fe6a69ff6d1cbf2029eb79_1786388228-300x300-removebg-preview-1.png",
+        "alt": "بازی Assassin’s Creed Shadows مخصوص PS5",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/6276e4189055b9e96d2779c652b748384f11a3a2_1786388736-300x300-removebg-preview-1.png",
+        "alt": "بازی Assassins Creed Mirage مخصوص PS5",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/5a11a470554a92905e74facee6978604b2f3fd09_1754815528-300x300-removebg-preview-1.png",
+        "alt": "بازی EA Sports FC 26 نسخه استاندارد مخصوص PS5",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/26eb5a74fbf76467080d4a69a6a0dd6f9c5f1008_1786454574-300x300-removebg-preview-1.png",
+        "alt": "بازی Ghost of Yotei مخصوص PS5",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/09/avatar-comments-nk-150x150.png",
+        "alt": "محمد حسین",
+        "width": 150,
+        "height": 150
+      }
+    ],
+    "linkCount": 30,
+    "linksSample": [
+      {
+        "href": "https://kaveh.moeinwp.com/43/#",
+        "text": "مشاهده تمام خرید ها"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d8%a8%d8%a7%d8%b2%db%8c-assassins-creed-shadows-%d9%85%d8%ae%d8%b5%d9%88%d8%b5-ps5/",
+        "text": "بازی Assassin’s Creed Shadows مخصوص PS5"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d8%a8%d8%a7%d8%b2%db%8c-assassins-creed-mirage-%d9%85%d8%ae%d8%b5%d9%88%d8%b5-ps5/",
+        "text": "بازی Assassins Creed Mirage مخصوص PS5"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d8%a8%d8%a7%d8%b2%db%8c-ea-sports-fc-26-%d9%86%d8%b3%d8%ae%d9%87-%d8%a7%d8%b3%d8%aa%d8%a7%d9%86%d8%af%d8%a7%d8%b1%d8%af-%d9%85%d8%ae%d8%b5%d9%88%d8%b5-ps5/",
+        "text": "بازی EA Sports FC 26 نسخه استاندارد مخصوص PS5"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d8%a8%d8%a7%d8%b2%db%8c-ghost-of-yotei-%d9%85%d8%ae%d8%b5%d9%88%d8%b5-ps5/",
+        "text": "بازی Ghost of Yotei مخصوص PS5"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/#",
+        "text": "مشاهده تمام خرید ها"
+      }
+    ],
+    "isSlider": true,
+    "hasTimer": false,
+    "productCount": 0,
+    "productTitlesSample": [],
+    "subContainerCount": 1,
+    "subContainers": [
+      {
+        "className": "elementor-element elementor-element-76dc0a33 elementor-widget elementor-widget-testimonialswithproductsnkkaveh",
+        "width": 1420,
+        "height": 462
+      }
+    ],
+    "rawText": "نقد و بررسی‌ها کاربران درباره ما با ما بهترین مبایل هارا بخرید محصولات خریداری شده امیررضا نوازنده گیتار ۵ / ۴.۱ مشاهده تمام خرید ها لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استف"
+  },
+  {
+    "index": 21,
+    "className": "elementor-element elementor-element-6255df64 e-con-full e-flex e-con e-parent e-lazyloaded",
+    "id": "",
+    "rect": {
+      "top": 10209.671875,
+      "left": 0,
+      "width": 1440,
+      "height": 568
+    },
+    "styles": {
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "backgroundImage": "none",
+      "padding": "10px 10px 10px 10px",
+      "margin": "50px 0px 0px 0px",
+      "borderRadius": "0px",
+      "boxShadow": "none"
+    },
+    "headings": [
+      {
+        "tag": "DIV",
+        "text": "پیشنهاد",
+        "fontSize": "44px",
+        "fontWeight": "400",
+        "color": "rgb(0, 0, 0)"
+      },
+      {
+        "tag": "DIV",
+        "text": "پیشنهاد",
+        "fontSize": "44px",
+        "fontWeight": "400",
+        "color": "rgb(0, 0, 0)"
+      },
+      {
+        "tag": "H2",
+        "text": "هدفون بلوتوثی انکر مدل Liberty 4 Pro",
+        "fontSize": "16px",
+        "fontWeight": "600",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "گوشی موبایل اپل مدل iPhone 17 Pro Max...",
+        "fontSize": "16px",
+        "fontWeight": "600",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "گوشی موبایل سامسونگ مدل Galaxy S25 FE دو...",
+        "fontSize": "16px",
+        "fontWeight": "600",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "ساعت هوشمند اپل مدل SE Aluminum Case 44mm",
+        "fontSize": "16px",
+        "fontWeight": "600",
+        "color": "rgb(4, 4, 4)"
+      }
+    ],
+    "imageCount": 7,
+    "imagesSample": [
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/themes/kavehTheme/inc/elements/popularproductsnkkaveh/images/popular-products.png",
+        "alt": "پیشنهاد",
+        "width": 294,
+        "height": 265
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/themes/kavehTheme/inc/elements/popularproductsnkkaveh/images/popular-products.png",
+        "alt": "پیشنهاد",
+        "width": 294,
+        "height": 265
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/7fc114c1a3c12afc0db1a26f1117e81c5a76a1c6_1786571883-removebg-preview-300x300.png",
+        "alt": "هدفون بلوتوثی انکر مدل Liberty 4 Pro",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/ec57ce03f2a92834058f502174b1a2aeffc9a580_1759666637-300x300-removebg-preview-1.png",
+        "alt": "گوشی موبایل اپل مدل iPhone 17 Pro Max ZAA",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/89c0e7b3f400348a3add26684b7ece5084e4361f_1777115891-300x300-removebg-preview-1.png",
+        "alt": "گوشی موبایل سامسونگ مدل Galaxy S25 FE دو سیم کارت",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/15bbdc3cfde33fc112622d14bd61152cd86e9287_1738409004-300x300-removebg-preview-1.png",
+        "alt": "ساعت هوشمند اپل مدل SE Aluminum Case 44mm",
+        "width": 300,
+        "height": 300
+      }
+    ],
+    "linkCount": 6,
+    "linksSample": [
+      {
+        "href": "https://kaveh.moeinwp.com/43/#",
+        "text": "مشاهده بیشتر"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/#",
+        "text": "مشاهده بیشتر"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d9%87%d8%af%d9%81%d9%88%d9%86-%d8%a8%d9%84%d9%88%d8%aa%d9%88%d8%ab%db%8c-%d8%a7%d9%86%da%a9%d8%b1-%d9%85%d8%af%d9%84-liberty-4-pro-%d8%af%d8%a7%d8%b1%d8%a7%db%8c-%d9%86%d9%88%db%8c%d8%b2-%da%a9%d9%86/",
+        "text": "هدفون بلوتوثی انکر مدل Liberty 4 Pro"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%da%af%d9%88%d8%b4%db%8c-%d9%85%d9%88%d8%a8%d8%a7%db%8c%d9%84-%d8%a7%d9%be%d9%84-%d9%85%d8%af%d9%84-iphone-17-pro-max-zaa/",
+        "text": "گوشی موبایل اپل مدل iPhone 17 Pro Max..."
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%da%af%d9%88%d8%b4%db%8c-%d9%85%d9%88%d8%a8%d8%a7%db%8c%d9%84-%d8%b3%d8%a7%d9%85%d8%b3%d9%88%d9%86%da%af-%d9%85%d8%af%d9%84-galaxy-s25-fe-%d8%af%d9%88-%d8%b3%db%8c%d9%85-%da%a9%d8%a7%d8%b1%d8%aa/",
+        "text": "گوشی موبایل سامسونگ مدل Galaxy S25 FE دو..."
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d8%b3%d8%a7%d8%b9%d8%aa-%d9%87%d9%88%d8%b4%d9%85%d9%86%d8%af-%d8%a7%d9%be%d9%84-%d9%85%d8%af%d9%84-se-aluminum-case-44mm/",
+        "text": "ساعت هوشمند اپل مدل SE Aluminum Case 44mm"
+      }
+    ],
+    "isSlider": true,
+    "hasTimer": false,
+    "productCount": 0,
+    "productTitlesSample": [],
+    "subContainerCount": 1,
+    "subContainers": [
+      {
+        "className": "elementor-element elementor-element-5e78b899 elementor-widget elementor-widget-popularproductsnkkaveh",
+        "width": 1420,
+        "height": 548
+      }
+    ],
+    "rawText": "پیشنهاد تخفیفات روز مشاهده بیشتر 580 میلی‌آمپر‌ساعت هدفون بلوتوثی انکر مدل Liberty 4 Pro 13,980,000 5/4.0 256 گیگابایت گوشی موبایل اپل مدل iPhone 17 Pro Max... 419,999,000 2 409,999,000 5/4.0 256 گیگا"
+  },
+  {
+    "index": 22,
+    "className": "elementor-element elementor-element-6c35997f e-flex e-con-boxed e-con e-parent e-lazyloaded",
+    "id": "",
+    "rect": {
+      "top": 10827.671875,
+      "left": 0,
+      "width": 1440,
+      "height": 323
+    },
+    "styles": {
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "backgroundImage": "none",
+      "padding": "0px 10px 0px 10px",
+      "margin": "50px 0px 0px 0px",
+      "borderRadius": "0px",
+      "boxShadow": "none"
+    },
+    "headings": [
+      {
+        "tag": "DIV",
+        "text": "خرید برترین ساعتــــ",
+        "fontSize": "44px",
+        "fontWeight": "800",
+        "color": "rgb(19, 39, 95)"
+      },
+      {
+        "tag": "H2",
+        "text": "بازی Ghost of Yotei مخصوص PS5",
+        "fontSize": "13px",
+        "fontWeight": "500",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "بازی Gran Turismo 7 مخصوص PS5",
+        "fontSize": "13px",
+        "fontWeight": "500",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "بازی Horizon Forbidden West نسخه کامل مخصوص PS5",
+        "fontSize": "13px",
+        "fontWeight": "500",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "بازی Ghostrunner 2 مخصوص PS5",
+        "fontSize": "13px",
+        "fontWeight": "500",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "بازی مدل بازی Mortal Kombat 1 مخصوص PS5",
+        "fontSize": "13px",
+        "fontWeight": "500",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "بازی Ghost of Yotei مخصوص PS5",
+        "fontSize": "13px",
+        "fontWeight": "500",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "بازی Gran Turismo 7 مخصوص PS5",
+        "fontSize": "13px",
+        "fontWeight": "500",
+        "color": "rgb(57, 68, 84)"
+      }
+    ],
+    "imageCount": 8,
+    "imagesSample": [
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/themes/kavehTheme/assets/images/new-demo/image-02.png",
+        "alt": "خرید برترین ساعتــــ",
+        "width": 291,
+        "height": 290
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/26eb5a74fbf76467080d4a69a6a0dd6f9c5f1008_1786454574-300x300-removebg-preview-1.png",
+        "alt": "بازی Ghost of Yotei مخصوص PS5",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/e2a1ec7e564e1d9555bdf7a48e62cc138ff24cd0_1786388718-removebg-preview-300x300-1.png",
+        "alt": "بازی Gran Turismo 7 مخصوص PS5",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/86f41915edf5a7e926e2ae0bbd19a2d0ba9c5d06_1786388241-300x300-removebg-preview-1.png",
+        "alt": "بازی Horizon Forbidden West نسخه کامل مخصوص PS5",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/3eef521897412a152c5b42551b623c91c41d90c0_1786388224-300x300-removebg-preview-1.png",
+        "alt": "بازی Ghostrunner 2 مخصوص PS5",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/92d9b95b55d4cf336cee4cf408c8908caf74c7af_1786388232-300x300-removebg-preview-1.png",
+        "alt": "بازی مدل  بازی Mortal Kombat 1 مخصوص PS5",
+        "width": 300,
+        "height": 300
+      }
+    ],
+    "linkCount": 7,
+    "linksSample": [
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d8%a8%d8%a7%d8%b2%db%8c-ghost-of-yotei-%d9%85%d8%ae%d8%b5%d9%88%d8%b5-ps5/",
+        "text": "بازی Ghost of Yotei مخصوص PS5"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d8%a8%d8%a7%d8%b2%db%8c-gran-turismo-7-%d9%85%d8%ae%d8%b5%d9%88%d8%b5-ps5/",
+        "text": "بازی Gran Turismo 7 مخصوص PS5"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d8%a8%d8%a7%d8%b2%db%8c-horizon-forbidden-west-%d9%86%d8%b3%d8%ae%d9%87-%da%a9%d8%a7%d9%85%d9%84-%d9%85%d8%ae%d8%b5%d9%88%d8%b5-ps5/",
+        "text": "بازی Horizon Forbidden West نسخه کامل مخصوص PS5"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d8%a8%d8%a7%d8%b2%db%8c-ghostrunner-2-%d9%85%d8%ae%d8%b5%d9%88%d8%b5-ps5/",
+        "text": "بازی Ghostrunner 2 مخصوص PS5"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d8%a8%d8%a7%d8%b2%db%8c-%d9%85%d8%af%d9%84-%d8%a8%d8%a7%d8%b2%db%8c-mortal-kombat-1-%d9%85%d8%ae%d8%b5%d9%88%d8%b5-ps5/",
+        "text": "بازی مدل بازی Mortal Kombat 1 مخصوص PS5"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d8%a8%d8%a7%d8%b2%db%8c-ghost-of-yotei-%d9%85%d8%ae%d8%b5%d9%88%d8%b5-ps5/",
+        "text": "بازی Ghost of Yotei مخصوص PS5"
+      }
+    ],
+    "isSlider": true,
+    "hasTimer": false,
+    "productCount": 0,
+    "productTitlesSample": [],
+    "subContainerCount": 1,
+    "subContainers": [
+      {
+        "className": "e-con-inner",
+        "width": 1320,
+        "height": 323
+      }
+    ],
+    "rawText": "خرید برترین ساعتــــ INCIDIDUNT UT LABORE ET DOLORE MAGNA ALIQUA ۵ بازی Ghost of Yotei مخصوص PS5 9.290.000 5/3.5 ۱ بازی Gran Turismo 7 مخصوص PS5 7.389.700 6.374.200 5/4.3 ۲ بازی Horizon Forbidden West"
+  },
+  {
+    "index": 23,
+    "className": "elementor-element elementor-element-34b4c219 e-con-full e-flex e-con e-parent e-lazyloaded",
+    "id": "",
+    "rect": {
+      "top": 11225.671875,
+      "left": 0,
+      "width": 1440,
+      "height": 531
+    },
+    "styles": {
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "backgroundImage": "none",
+      "padding": "10px 10px 10px 10px",
+      "margin": "75px 0px 0px 0px",
+      "borderRadius": "0px",
+      "boxShadow": "none"
+    },
+    "headings": [
+      {
+        "tag": "DIV",
+        "text": "پرفروش ترین ساعت هوشمند",
+        "fontSize": "20px",
+        "fontWeight": "500",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "گوشی موبایل اپل مدل iPhone 17 Pro Max...",
+        "fontSize": "16px",
+        "fontWeight": "600",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "گوشی موبایل اپل مدل iPhone 15 Ch",
+        "fontSize": "16px",
+        "fontWeight": "600",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "گوشی موبایل اپل مدل iPhone 16 CH دو...",
+        "fontSize": "16px",
+        "fontWeight": "600",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "گوشی موبایل سامسونگ مدل Galaxy S25 FE دو...",
+        "fontSize": "16px",
+        "fontWeight": "600",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "گوشی موبایل اپل مدل iPhone 17 CH دو...",
+        "fontSize": "16px",
+        "fontWeight": "600",
+        "color": "rgb(4, 4, 4)"
+      }
+    ],
+    "imageCount": 7,
+    "imagesSample": [
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/ec57ce03f2a92834058f502174b1a2aeffc9a580_1759666637-300x300-removebg-preview-1.png",
+        "alt": "گوشی موبایل اپل مدل iPhone 17 Pro Max ZAA",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/f4c0e5f4199abda603494b54e0655cbd0447405f_1765624240-300x300-removebg-preview-1.png",
+        "alt": "گوشی موبایل اپل مدل iPhone 15 Ch",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/5af568b4909435c6a215ad5e728e902db234b673_1736597759-300x300-removebg-preview-1.png",
+        "alt": "گوشی موبایل اپل مدل iPhone 16 CH دو سیم کارت ظرفیت 128 گیگابایت",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/89c0e7b3f400348a3add26684b7ece5084e4361f_1777115891-300x300-removebg-preview-1.png",
+        "alt": "گوشی موبایل سامسونگ مدل Galaxy S25 FE دو سیم کارت",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/0a8fff942ea8ee0359edadad85daae399b0e357c_1763462145-300x300-removebg-preview-1.png",
+        "alt": "گوشی موبایل اپل مدل iPhone 17 CH دو سیم کارت",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/48daaebd4cb7706cce21ce8b5e485d6fdafa6bd1_1736598863-300x300-removebg-preview-1.png",
+        "alt": "گوشی موبایل اپل مدل iPhone 16 Pro Max ZAA دو سیم کارت",
+        "width": 300,
+        "height": 300
+      }
+    ],
+    "linkCount": 6,
+    "linksSample": [
+      {
+        "href": "https://kaveh.moeinwp.com/43/#",
+        "text": "مشاهده بیشتر"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%da%af%d9%88%d8%b4%db%8c-%d9%85%d9%88%d8%a8%d8%a7%db%8c%d9%84-%d8%a7%d9%be%d9%84-%d9%85%d8%af%d9%84-iphone-17-pro-max-zaa/",
+        "text": "گوشی موبایل اپل مدل iPhone 17 Pro Max..."
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%da%af%d9%88%d8%b4%db%8c-%d9%85%d9%88%d8%a8%d8%a7%db%8c%d9%84-%d8%a7%d9%be%d9%84-%d9%85%d8%af%d9%84-iphone-15-ch-%d8%af%d9%88-%d8%b3%db%8c%d9%85-%da%a9%d8%a7%d8%b1%d8%aa-%d8%b8%d8%b1%d9%81/",
+        "text": "گوشی موبایل اپل مدل iPhone 15 Ch"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%da%af%d9%88%d8%b4%db%8c-%d9%85%d9%88%d8%a8%d8%a7%db%8c%d9%84-%d8%a7%d9%be%d9%84-%d9%85%d8%af%d9%84-iphone-16-ch-%d8%af%d9%88-%d8%b3%db%8c%d9%85-%da%a9%d8%a7%d8%b1%d8%aa-%d8%b8%d8%b1%d9%81%db%8c%d8%aa/",
+        "text": "گوشی موبایل اپل مدل iPhone 16 CH دو..."
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%da%af%d9%88%d8%b4%db%8c-%d9%85%d9%88%d8%a8%d8%a7%db%8c%d9%84-%d8%b3%d8%a7%d9%85%d8%b3%d9%88%d9%86%da%af-%d9%85%d8%af%d9%84-galaxy-s25-fe-%d8%af%d9%88-%d8%b3%db%8c%d9%85-%da%a9%d8%a7%d8%b1%d8%aa/",
+        "text": "گوشی موبایل سامسونگ مدل Galaxy S25 FE دو..."
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%da%af%d9%88%d8%b4%db%8c-%d9%85%d9%88%d8%a8%d8%a7%db%8c%d9%84-%d8%a7%d9%be%d9%84-%d9%85%d8%af%d9%84-iphone-17-ch-%d8%af%d9%88-%d8%b3%db%8c%d9%85-%da%a9%d8%a7%d8%b1%d8%aa-%d8%b8%d8%b1%d9%81%db%8c%d8%aa/",
+        "text": "گوشی موبایل اپل مدل iPhone 17 CH دو..."
+      }
+    ],
+    "isSlider": true,
+    "hasTimer": false,
+    "productCount": 0,
+    "productTitlesSample": [],
+    "subContainerCount": 1,
+    "subContainers": [
+      {
+        "className": "elementor-element elementor-element-17ea5448 elementor-widget elementor-widget-productscarouselsixteennkkaveh",
+        "width": 1420,
+        "height": 511
+      }
+    ],
+    "rawText": "پرفروش ترین ساعت هوشمند زمانت قیمت و کیفیت مشاهده بیشتر 256 گیگابایت گوشی موبایل اپل مدل iPhone 17 Pro Max... 419,999,000 2 409,999,000 5/4.0 128 گیگابایت گوشی موبایل اپل مدل iPhone 15 Ch 214,999,000 "
+  },
+  {
+    "index": 24,
+    "className": "elementor-element elementor-element-384c8dd7 e-con-full e-flex e-con e-parent e-lazyloaded",
+    "id": "",
+    "rect": {
+      "top": 11831.671875,
+      "left": 0,
+      "width": 1440,
+      "height": 640
+    },
+    "styles": {
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "backgroundImage": "none",
+      "padding": "10px 10px 10px 10px",
+      "margin": "75px 0px 0px 0px",
+      "borderRadius": "0px",
+      "boxShadow": "none"
+    },
+    "headings": [
+      {
+        "tag": "H2",
+        "text": "بازی Assassin’s Creed Shadows مخصوص PS5",
+        "fontSize": "15px",
+        "fontWeight": "600",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "بازی Assassins Creed Mirage مخصوص PS5",
+        "fontSize": "15px",
+        "fontWeight": "600",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "بازی EA Sports FC 26 نسخه استاندارد مخصوص PS5",
+        "fontSize": "15px",
+        "fontWeight": "600",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "بازی Ghost of Yotei مخصوص PS5",
+        "fontSize": "15px",
+        "fontWeight": "600",
+        "color": "rgb(57, 68, 84)"
+      }
+    ],
+    "imageCount": 9,
+    "imagesSample": [
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/themes/kavehTheme/assets/images/new-demo/product-pack.png",
+        "alt": "",
+        "width": 881,
+        "height": 586
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/f2fa44a96ae03ef062fe6a69ff6d1cbf2029eb79_1786388228-300x300-removebg-preview-1.png",
+        "alt": "بازی Assassin’s Creed Shadows مخصوص PS5",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/6276e4189055b9e96d2779c652b748384f11a3a2_1786388736-300x300-removebg-preview-1.png",
+        "alt": "بازی Assassins Creed Mirage مخصوص PS5",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/5a11a470554a92905e74facee6978604b2f3fd09_1754815528-300x300-removebg-preview-1.png",
+        "alt": "بازی EA Sports FC 26 نسخه استاندارد مخصوص PS5",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/themes/kavehTheme/assets/images/new-demo/kala-pack.png",
+        "alt": "محصول گیم",
+        "width": 86,
+        "height": 38
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/f2fa44a96ae03ef062fe6a69ff6d1cbf2029eb79_1786388228-300x300-removebg-preview-1.png",
+        "alt": "بازی Assassin’s Creed Shadows مخصوص PS5",
+        "width": 300,
+        "height": 300
+      }
+    ],
+    "linkCount": 4,
+    "linksSample": [
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d8%a8%d8%a7%d8%b2%db%8c-assassins-creed-shadows-%d9%85%d8%ae%d8%b5%d9%88%d8%b5-ps5/",
+        "text": "بازی Assassin’s Creed Shadows مخصوص PS5"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d8%a8%d8%a7%d8%b2%db%8c-assassins-creed-mirage-%d9%85%d8%ae%d8%b5%d9%88%d8%b5-ps5/",
+        "text": "بازی Assassins Creed Mirage مخصوص PS5"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d8%a8%d8%a7%d8%b2%db%8c-ea-sports-fc-26-%d9%86%d8%b3%d8%ae%d9%87-%d8%a7%d8%b3%d8%aa%d8%a7%d9%86%d8%af%d8%a7%d8%b1%d8%af-%d9%85%d8%ae%d8%b5%d9%88%d8%b5-ps5/",
+        "text": "بازی EA Sports FC 26 نسخه استاندارد مخصوص PS5"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d8%a8%d8%a7%d8%b2%db%8c-ghost-of-yotei-%d9%85%d8%ae%d8%b5%d9%88%d8%b5-ps5/",
+        "text": "بازی Ghost of Yotei مخصوص PS5"
+      }
+    ],
+    "isSlider": false,
+    "hasTimer": false,
+    "productCount": 0,
+    "productTitlesSample": [],
+    "subContainerCount": 1,
+    "subContainers": [
+      {
+        "className": "elementor-element elementor-element-61f16945 elementor-widget elementor-widget-productspacknkkaveh",
+        "width": 1420,
+        "height": 620
+      }
+    ],
+    "rawText": "محصول گیم بازی Assassin’s Creed Shadows مخصوص PS5 ۵ / ۳ بازی Assassins Creed Mirage مخصوص PS5 ۵ / ۴ بازی EA Sports FC 26 نسخه استاندارد مخصوص PS5 ۵ / ۴.۵ بازی Ghost of Yotei مخصوص PS5 ۵ / ۳.۵ ۴ کالا ۲"
+  },
+  {
+    "index": 25,
+    "className": "elementor-element elementor-element-34ff495d e-con-full e-flex e-con e-parent e-lazyloaded",
+    "id": "",
+    "rect": {
+      "top": 12546.671875,
+      "left": 0,
+      "width": 1440,
+      "height": 554
+    },
+    "styles": {
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "backgroundImage": "none",
+      "padding": "10px 10px 10px 10px",
+      "margin": "75px 0px 0px 0px",
+      "borderRadius": "0px",
+      "boxShadow": "none"
+    },
+    "headings": [
+      {
+        "tag": "DIV",
+        "text": "پربازدید محصولات",
+        "fontSize": "20px",
+        "fontWeight": "500",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "بازی Gran Turismo 7 مخصوص PS5",
+        "fontSize": "15px",
+        "fontWeight": "600",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "بازی Horizon Forbidden West نسخه کامل مخصوص PS5",
+        "fontSize": "15px",
+        "fontWeight": "600",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "بازی Ghostrunner 2 مخصوص PS5",
+        "fontSize": "15px",
+        "fontWeight": "600",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "بازی مدل بازی Mortal Kombat 1 مخصوص PS5",
+        "fontSize": "15px",
+        "fontWeight": "600",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "بازی Ghost of Yotei مخصوص PS5",
+        "fontSize": "15px",
+        "fontWeight": "600",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "کنسول بازی سونی مدل PlayStation 5 Slim ظرفیت 1 ترابایت",
+        "fontSize": "15px",
+        "fontWeight": "600",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "بازی Marvels Spider-Man 2 مخصوص PS5",
+        "fontSize": "15px",
+        "fontWeight": "600",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "بازی Assassin’s Creed Shadows مخصوص PS5",
+        "fontSize": "15px",
+        "fontWeight": "600",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "بازی EA Sports FC 26 نسخه استاندارد مخصوص PS5",
+        "fontSize": "15px",
+        "fontWeight": "600",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "لپ تاپ 16 اینچی ایسوس مدل TUF Gaming A16 FA608PP-Ryzen",
+        "fontSize": "15px",
+        "fontWeight": "600",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "لپ تاپ 15.3 اینچی لنوو مدل Legion 5 15IRX10-i7",
+        "fontSize": "15px",
+        "fontWeight": "600",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "لپ تاپ 16 اینچی ایسوس مدل WQXGA 240Hz",
+        "fontSize": "15px",
+        "fontWeight": "600",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "لپ‌تاپ 17 اینچی ام اس آی مدل Vector 17 HX AI A2XWJG-Core",
+        "fontSize": "15px",
+        "fontWeight": "600",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "لپ تاپ 16 اینچی ایسوس مدل ROG Strix G16 G615LW-Core",
+        "fontSize": "15px",
+        "fontWeight": "600",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "لپ تاپ 16 اینچی لنوو مدل Legion Pro 7 16IAX10H-Core",
+        "fontSize": "15px",
+        "fontWeight": "600",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "لپ تاپ 16.2 اینچی اپل مدل MacBook Pro MGE94 2026 LLA-M5",
+        "fontSize": "15px",
+        "fontWeight": "600",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "گوشی موبایل اپل مدل iPhone 17 Pro Max ZAA",
+        "fontSize": "15px",
+        "fontWeight": "600",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "گوشی موبایل اپل مدل iPhone 15 Ch",
+        "fontSize": "15px",
+        "fontWeight": "600",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "گوشی موبایل اپل مدل iPhone 16 CH دو سیم کارت ظرفیت 128 گیگابایت",
+        "fontSize": "15px",
+        "fontWeight": "600",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "گوشی موبایل سامسونگ مدل Galaxy S25 FE دو سیم کارت",
+        "fontSize": "15px",
+        "fontWeight": "600",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "گوشی موبایل اپل مدل iPhone 17 CH دو سیم کارت",
+        "fontSize": "15px",
+        "fontWeight": "600",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "گوشی موبایل اپل مدل iPhone 16 Pro Max ZAA دو سیم کارت",
+        "fontSize": "15px",
+        "fontWeight": "600",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "گوشی موبایل سامسونگ مدل Galaxy S25 Ultra دو سیم کارت",
+        "fontSize": "15px",
+        "fontWeight": "600",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "لپ تاپ 16 اینچی ایسوس مدل TUF Gaming A16 FA608PP-Ryzen",
+        "fontSize": "15px",
+        "fontWeight": "600",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "لپ تاپ 15.3 اینچی لنوو مدل Legion 5 15IRX10-i7",
+        "fontSize": "15px",
+        "fontWeight": "600",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "لپ تاپ 16 اینچی ایسوس مدل WQXGA 240Hz",
+        "fontSize": "15px",
+        "fontWeight": "600",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "لپ‌تاپ 17 اینچی ام اس آی مدل Vector 17 HX AI A2XWJG-Core",
+        "fontSize": "15px",
+        "fontWeight": "600",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "لپ تاپ 16 اینچی ایسوس مدل ROG Strix G16 G615LW-Core",
+        "fontSize": "15px",
+        "fontWeight": "600",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "لپ تاپ 16 اینچی لنوو مدل Legion Pro 7 16IAX10H-Core",
+        "fontSize": "15px",
+        "fontWeight": "600",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "بازی Gran Turismo 7 مخصوص PS5",
+        "fontSize": "15px",
+        "fontWeight": "600",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "بازی Horizon Forbidden West نسخه کامل مخصوص PS5",
+        "fontSize": "15px",
+        "fontWeight": "600",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "بازی Ghostrunner 2 مخصوص PS5",
+        "fontSize": "15px",
+        "fontWeight": "600",
+        "color": "rgb(57, 68, 84)"
+      }
+    ],
+    "imageCount": 32,
+    "imagesSample": [
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/e2a1ec7e564e1d9555bdf7a48e62cc138ff24cd0_1786388718-removebg-preview-300x300-1.png",
+        "alt": "بازی Gran Turismo 7 مخصوص PS5",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/86f41915edf5a7e926e2ae0bbd19a2d0ba9c5d06_1786388241-300x300-removebg-preview-1.png",
+        "alt": "بازی Horizon Forbidden West نسخه کامل مخصوص PS5",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/3eef521897412a152c5b42551b623c91c41d90c0_1786388224-300x300-removebg-preview-1.png",
+        "alt": "بازی Ghostrunner 2 مخصوص PS5",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/92d9b95b55d4cf336cee4cf408c8908caf74c7af_1786388232-300x300-removebg-preview-1.png",
+        "alt": "بازی مدل  بازی Mortal Kombat 1 مخصوص PS5",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/26eb5a74fbf76467080d4a69a6a0dd6f9c5f1008_1786454574-300x300-removebg-preview-1.png",
+        "alt": "بازی Ghost of Yotei مخصوص PS5",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/1149308650aa177c213e4175a23076419198dabf_1786296597-300x300-removebg-preview-1.png",
+        "alt": "کنسول بازی سونی مدل PlayStation 5 Slim ظرفیت 1 ترابایت",
+        "width": 300,
+        "height": 300
+      }
+    ],
+    "linkCount": 20,
+    "linksSample": [
+      {
+        "href": "https://kaveh.moeinwp.com/43/#",
+        "text": "مشاهده بیشتر"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d8%a8%d8%a7%d8%b2%db%8c-gran-turismo-7-%d9%85%d8%ae%d8%b5%d9%88%d8%b5-ps5/",
+        "text": "بازی Gran Turismo 7 مخصوص PS5"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d8%a8%d8%a7%d8%b2%db%8c-horizon-forbidden-west-%d9%86%d8%b3%d8%ae%d9%87-%da%a9%d8%a7%d9%85%d9%84-%d9%85%d8%ae%d8%b5%d9%88%d8%b5-ps5/",
+        "text": "بازی Horizon Forbidden West نسخه کامل مخصوص PS5"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d8%a8%d8%a7%d8%b2%db%8c-ghostrunner-2-%d9%85%d8%ae%d8%b5%d9%88%d8%b5-ps5/",
+        "text": "بازی Ghostrunner 2 مخصوص PS5"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d8%a8%d8%a7%d8%b2%db%8c-%d9%85%d8%af%d9%84-%d8%a8%d8%a7%d8%b2%db%8c-mortal-kombat-1-%d9%85%d8%ae%d8%b5%d9%88%d8%b5-ps5/",
+        "text": "بازی مدل بازی Mortal Kombat 1 مخصوص PS5"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d8%a8%d8%a7%d8%b2%db%8c-ghost-of-yotei-%d9%85%d8%ae%d8%b5%d9%88%d8%b5-ps5/",
+        "text": "بازی Ghost of Yotei مخصوص PS5"
+      }
+    ],
+    "isSlider": true,
+    "hasTimer": false,
+    "productCount": 0,
+    "productTitlesSample": [],
+    "subContainerCount": 1,
+    "subContainers": [
+      {
+        "className": "elementor-element elementor-element-29a61ad0 elementor-widget elementor-widget-topviewproductsfournkkaveh",
+        "width": 1420,
+        "height": 534
+      }
+    ],
+    "rawText": "بر اساس مخاطبان پربازدید محصولات کنسول ها لپتاپ ها موبایل لوازم جانبی مشاهده بیشتر ۱ بازی Gran Turismo 7 مخصوص PS5 ۲ بازی Horizon Forbidden West نسخه کامل مخصوص PS5 ۳ بازی Ghostrunner 2 مخصوص PS5 ۴ با"
+  },
+  {
+    "index": 26,
+    "className": "elementor-element elementor-element-3c70d07e e-flex e-con-boxed e-con e-parent e-lazyloaded",
+    "id": "",
+    "rect": {
+      "top": 13175.671875,
+      "left": 0,
+      "width": 1440,
+      "height": 246.078125
+    },
+    "styles": {
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "backgroundImage": "none",
+      "padding": "0px 10px 0px 10px",
+      "margin": "75px 0px 0px 0px",
+      "borderRadius": "0px",
+      "boxShadow": "none"
+    },
+    "headings": [],
+    "imageCount": 2,
+    "imagesSample": [
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/banner-04.png",
+        "alt": "",
+        "width": 767,
+        "height": 226
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/banner-05.png",
+        "alt": "",
+        "width": 533,
+        "height": 224
+      }
+    ],
+    "linkCount": 0,
+    "linksSample": [],
+    "isSlider": false,
+    "hasTimer": false,
+    "productCount": 0,
+    "productTitlesSample": [],
+    "subContainerCount": 1,
+    "subContainers": [
+      {
+        "className": "e-con-inner",
+        "width": 1320,
+        "height": 246.078125
+      }
+    ],
+    "rawText": ""
+  },
+  {
+    "index": 27,
+    "className": "elementor-element elementor-element-2ab1a19d e-con-full e-flex e-con e-parent e-lazyloaded",
+    "id": "",
+    "rect": {
+      "top": 13496.75,
+      "left": 0,
+      "width": 1440,
+      "height": 696
+    },
+    "styles": {
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "backgroundImage": "none",
+      "padding": "10px 10px 10px 10px",
+      "margin": "75px 0px 0px 0px",
+      "borderRadius": "0px",
+      "boxShadow": "none"
+    },
+    "headings": [
+      {
+        "tag": "DIV",
+        "text": "پربازدید ترین محصولات",
+        "fontSize": "20px",
+        "fontWeight": "500",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "گوشی موبایل سامسونگ مدل Galaxy S25 FE دو...",
+        "fontSize": "16px",
+        "fontWeight": "600",
+        "color": "rgb(33, 35, 65)"
+      },
+      {
+        "tag": "H2",
+        "text": "لپ تاپ 16 اینچی ایسوس مدل WQXGA 240Hz",
+        "fontSize": "16px",
+        "fontWeight": "600",
+        "color": "rgb(33, 35, 65)"
+      },
+      {
+        "tag": "H2",
+        "text": "بازی Gran Turismo 7 مخصوص PS5",
+        "fontSize": "16px",
+        "fontWeight": "600",
+        "color": "rgb(33, 35, 65)"
+      },
+      {
+        "tag": "H2",
+        "text": "لپ تاپ 16 اینچی لنوو مدل Legion Pro...",
+        "fontSize": "16px",
+        "fontWeight": "600",
+        "color": "rgb(33, 35, 65)"
+      },
+      {
+        "tag": "H2",
+        "text": "لپ تاپ 16 اینچی ایسوس مدل ROG Strix...",
+        "fontSize": "16px",
+        "fontWeight": "600",
+        "color": "rgb(33, 35, 65)"
+      },
+      {
+        "tag": "H2",
+        "text": "هدفون بلوتوثی انکر مدل Liberty 4 Pro",
+        "fontSize": "16px",
+        "fontWeight": "600",
+        "color": "rgb(33, 35, 65)"
+      },
+      {
+        "tag": "H2",
+        "text": "بازی Gran Turismo 7 مخصوص PS5",
+        "fontSize": "16px",
+        "fontWeight": "600",
+        "color": "rgb(255, 255, 255)"
+      }
+    ],
+    "imageCount": 9,
+    "imagesSample": [
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/themes/kavehTheme/assets/images/new-demo/box-03.png",
+        "alt": "باکس",
+        "width": 68,
+        "height": 54
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/themes/kavehTheme/assets/images/new-demo/box-03.png",
+        "alt": "",
+        "width": 68,
+        "height": 54
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/89c0e7b3f400348a3add26684b7ece5084e4361f_1777115891-300x300-removebg-preview-1.png",
+        "alt": "گوشی موبایل سامسونگ مدل Galaxy S25 FE دو سیم کارت",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/3c0f8ff8a12c67f061136e8fafd65eb6f6c56d2e_1786985097-300x300-removebg-preview-1.png",
+        "alt": "لپ تاپ 16 اینچی ایسوس مدل WQXGA 240Hz",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/e2a1ec7e564e1d9555bdf7a48e62cc138ff24cd0_1786388718-removebg-preview-300x300-1.png",
+        "alt": "بازی Gran Turismo 7 مخصوص PS5",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/6c703cf0a62ada38bc1069e041c36bff551606b1_1780745743-300x300-removebg-preview-1.png",
+        "alt": "لپ تاپ 16 اینچی لنوو مدل Legion Pro 7 16IAX10H-Core",
+        "width": 300,
+        "height": 300
+      }
+    ],
+    "linkCount": 7,
+    "linksSample": [
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%da%af%d9%88%d8%b4%db%8c-%d9%85%d9%88%d8%a8%d8%a7%db%8c%d9%84-%d8%b3%d8%a7%d9%85%d8%b3%d9%88%d9%86%da%af-%d9%85%d8%af%d9%84-galaxy-s25-fe-%d8%af%d9%88-%d8%b3%db%8c%d9%85-%da%a9%d8%a7%d8%b1%d8%aa/",
+        "text": "گوشی موبایل سامسونگ مدل Galaxy S25 FE دو..."
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d9%84%d9%be-%d8%aa%d8%a7%d9%be-16-%d8%a7%db%8c%d9%86%da%86%db%8c-%d8%a7%db%8c%d8%b3%d9%88%d8%b3-%d9%85%d8%af%d9%84-rog-strix-g16-g615lw-core-ultra-9-275hx-rtx5080-16gb-64gb-ddr5-5600mhz-512gb-ssd-wqx/",
+        "text": "لپ تاپ 16 اینچی ایسوس مدل WQXGA 240Hz"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d8%a8%d8%a7%d8%b2%db%8c-gran-turismo-7-%d9%85%d8%ae%d8%b5%d9%88%d8%b5-ps5/",
+        "text": "بازی Gran Turismo 7 مخصوص PS5"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d9%84%d9%be-%d8%aa%d8%a7%d9%be-16-%d8%a7%db%8c%d9%86%da%86%db%8c-%d9%84%d9%86%d9%88%d9%88-%d9%85%d8%af%d9%84-legion-pro-7-16iax10h-core-ultra-9-275hx-rtx5090-24gb-32gb-ddr5-1tb-ssd-wqxga-oled-24/",
+        "text": "لپ تاپ 16 اینچی لنوو مدل Legion Pro..."
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d9%84%d9%be-%d8%aa%d8%a7%d9%be-16-%d8%a7%db%8c%d9%86%da%86%db%8c-%d8%a7%db%8c%d8%b3%d9%88%d8%b3-%d9%85%d8%af%d9%84-rog-strix-g16-g615lw-core-ultra-9-275hx-rtx5080-16gb-48gb-ddr5-5600mhz-4tb-ssd-wqxga/",
+        "text": "لپ تاپ 16 اینچی ایسوس مدل ROG Strix..."
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d9%87%d8%af%d9%81%d9%88%d9%86-%d8%a8%d9%84%d9%88%d8%aa%d9%88%d8%ab%db%8c-%d8%a7%d9%86%da%a9%d8%b1-%d9%85%d8%af%d9%84-liberty-4-pro-%d8%af%d8%a7%d8%b1%d8%a7%db%8c-%d9%86%d9%88%db%8c%d8%b2-%da%a9%d9%86/",
+        "text": "هدفون بلوتوثی انکر مدل Liberty 4 Pro"
+      }
+    ],
+    "isSlider": true,
+    "hasTimer": false,
+    "productCount": 0,
+    "productTitlesSample": [],
+    "subContainerCount": 1,
+    "subContainers": [
+      {
+        "className": "elementor-element elementor-element-79951c87 elementor-widget elementor-widget-topproductsnkkaveh",
+        "width": 1420,
+        "height": 676
+      }
+    ],
+    "rawText": "پربازدید ترین محصولات بر اساس مخاطبان محـصــــولات مشاهده همه گوشی موبایل سامسونگ مدل Galaxy S25 FE دو... 175,000,000 ۷ 162,999,000 5/4.0 لپ تاپ 16 اینچی ایسوس مدل WQXGA 240Hz 839,000,000 5/5.0 بازی G"
+  },
+  {
+    "index": 28,
+    "className": "elementor-element elementor-element-3dc1de63 e-flex e-con-boxed e-con e-parent e-lazyloaded",
+    "id": "",
+    "rect": {
+      "top": 14242.75,
+      "left": 0,
+      "width": 1440,
+      "height": 274
+    },
+    "styles": {
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "backgroundImage": "none",
+      "padding": "0px 10px 0px 10px",
+      "margin": "50px 0px 0px 0px",
+      "borderRadius": "0px",
+      "boxShadow": "none"
+    },
+    "headings": [
+      {
+        "tag": "DIV",
+        "text": "محل قرار گیری بنر",
+        "fontSize": "25px",
+        "fontWeight": "700",
+        "color": "rgb(19, 39, 95)"
+      },
+      {
+        "tag": "DIV",
+        "text": "محل قرار گیری بنر",
+        "fontSize": "25px",
+        "fontWeight": "700",
+        "color": "rgb(19, 39, 95)"
+      }
+    ],
+    "imageCount": 2,
+    "imagesSample": [
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/themes/kavehTheme/assets/images/new-demo/banner-01.png",
+        "alt": "محل قرار گیری بنر",
+        "width": 218,
+        "height": 245
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/banner-02-1.png",
+        "alt": "محل قرار گیری بنر",
+        "width": 218,
+        "height": 243
+      }
+    ],
+    "linkCount": 0,
+    "linksSample": [],
+    "isSlider": false,
+    "hasTimer": false,
+    "productCount": 0,
+    "productTitlesSample": [],
+    "subContainerCount": 1,
+    "subContainers": [
+      {
+        "className": "e-con-inner",
+        "width": 1320,
+        "height": 274
+      }
+    ],
+    "rawText": "محل قرار گیری بنر همین الان با تخفیف خرید کنید محل قرار گیری بنر همین الان با تخفیف خرید کنید"
+  },
+  {
+    "index": 29,
+    "className": "elementor-element elementor-element-37338312 e-flex e-con-boxed e-con e-parent e-lazyloaded",
+    "id": "",
+    "rect": {
+      "top": 14566.75,
+      "left": 0,
+      "width": 1440,
+      "height": 309
+    },
+    "styles": {
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "backgroundImage": "none",
+      "padding": "0px 10px 0px 10px",
+      "margin": "50px 0px 0px 0px",
+      "borderRadius": "0px",
+      "boxShadow": "none"
+    },
+    "headings": [
+      {
+        "tag": "DIV",
+        "text": "اخرین محصولات مشاهده شده",
+        "fontSize": "20px",
+        "fontWeight": "700",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "هدفون بلوتوثی ناتینگ مدل CMF Buds 2",
+        "fontSize": "15px",
+        "fontWeight": "500",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "هدست گیمینگ تسکو مدل GH 5141 Zonyx RGB",
+        "fontSize": "15px",
+        "fontWeight": "500",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "هدفون بلوتوثی انکر مدل Liberty 4 Pro",
+        "fontSize": "15px",
+        "fontWeight": "500",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "ساعت هوشمند اپل مدل SE Aluminum Case 44mm",
+        "fontSize": "15px",
+        "fontWeight": "500",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "ساعت هوشمند 49 میلی متری اپل مدل Ultra...",
+        "fontSize": "15px",
+        "fontWeight": "500",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "ساعت هوشمند 46 میلی متری اپل مدل Series...",
+        "fontSize": "15px",
+        "fontWeight": "500",
+        "color": "rgb(57, 68, 84)"
+      }
+    ],
+    "imageCount": 8,
+    "imagesSample": [
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/themes/kavehTheme/assets/images/new-demo/box-03.png",
+        "alt": "باکس",
+        "width": 68,
+        "height": 54
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/themes/kavehTheme/assets/images/new-demo/box-03.png",
+        "alt": "",
+        "width": 68,
+        "height": 54
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/df649b7ee4285eb418555b08014ca497ff26b0be_1749393757-300x300-removebg-preview-1.png",
+        "alt": "هدفون بلوتوثی ناتینگ مدل CMF Buds 2",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/b12a165a30530e6743afc50a9a1980ec699494e6_1771680081-300x300-removebg-preview-1.png",
+        "alt": "هدست گیمینگ تسکو مدل GH 5141 Zonyx RGB",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/7fc114c1a3c12afc0db1a26f1117e81c5a76a1c6_1786571883-removebg-preview-300x300.png",
+        "alt": "هدفون بلوتوثی انکر مدل Liberty 4 Pro",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/15bbdc3cfde33fc112622d14bd61152cd86e9287_1738409004-300x300-removebg-preview-1.png",
+        "alt": "ساعت هوشمند اپل مدل SE Aluminum Case 44mm",
+        "width": 300,
+        "height": 300
+      }
+    ],
+    "linkCount": 6,
+    "linksSample": [
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d9%87%d8%af%d9%81%d9%88%d9%86-%d8%a8%d9%84%d9%88%d8%aa%d9%88%d8%ab%db%8c-%d9%86%d8%a7%d8%aa%db%8c%d9%86%da%af-%d9%85%d8%af%d9%84-cmf-buds-2/",
+        "text": "هدفون بلوتوثی ناتینگ مدل CMF Buds 2"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d9%87%d8%af%d8%b3%d8%aa-%da%af%db%8c%d9%85%db%8c%d9%86%da%af-%d8%aa%d8%b3%da%a9%d9%88-%d9%85%d8%af%d9%84-gh-5141-zonyx-rgb/",
+        "text": "هدست گیمینگ تسکو مدل GH 5141 Zonyx RGB"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d9%87%d8%af%d9%81%d9%88%d9%86-%d8%a8%d9%84%d9%88%d8%aa%d9%88%d8%ab%db%8c-%d8%a7%d9%86%da%a9%d8%b1-%d9%85%d8%af%d9%84-liberty-4-pro-%d8%af%d8%a7%d8%b1%d8%a7%db%8c-%d9%86%d9%88%db%8c%d8%b2-%da%a9%d9%86/",
+        "text": "هدفون بلوتوثی انکر مدل Liberty 4 Pro"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d8%b3%d8%a7%d8%b9%d8%aa-%d9%87%d9%88%d8%b4%d9%85%d9%86%d8%af-%d8%a7%d9%be%d9%84-%d9%85%d8%af%d9%84-se-aluminum-case-44mm/",
+        "text": "ساعت هوشمند اپل مدل SE Aluminum Case 44mm"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d8%b3%d8%a7%d8%b9%d8%aa-%d9%87%d9%88%d8%b4%d9%85%d9%86%d8%af-49-%d9%85%db%8c%d9%84%db%8c-%d9%85%d8%aa%d8%b1%db%8c-%d8%a7%d9%be%d9%84-%d9%85%d8%af%d9%84-ultra-3-natural-titanium-case-%d8%a8%d8%a7/",
+        "text": "ساعت هوشمند 49 میلی متری اپل مدل Ultra..."
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d8%b3%d8%a7%d8%b9%d8%aa-%d9%87%d9%88%d8%b4%d9%85%d9%86%d8%af-46-%d9%85%db%8c%d9%84%db%8c-%d9%85%d8%aa%d8%b1%db%8c-%d8%a7%d9%be%d9%84-%d9%85%d8%af%d9%84-series-11-aluminum-case-%d8%a8%d8%a7-%d8%a8/",
+        "text": "ساعت هوشمند 46 میلی متری اپل مدل Series..."
+      }
+    ],
+    "isSlider": true,
+    "hasTimer": false,
+    "productCount": 0,
+    "productTitlesSample": [],
+    "subContainerCount": 1,
+    "subContainers": [
+      {
+        "className": "e-con-inner",
+        "width": 1320,
+        "height": 309
+      }
+    ],
+    "rawText": "اخرین محصولات مشاهده شده محـصــــولات مشاهده همه هدفون بلوتوثی ناتینگ مدل CMF Buds 2 هدست گیمینگ تسکو مدل GH 5141 Zonyx RGB هدفون بلوتوثی انکر مدل Liberty 4 Pro ساعت هوشمند اپل مدل SE Aluminum Case 44"
+  },
+  {
+    "index": 30,
+    "className": "elementor-element elementor-element-1a06770f e-con-full e-flex e-con e-parent e-lazyloaded",
+    "id": "",
+    "rect": {
+      "top": 14925.75,
+      "left": 0,
+      "width": 1440,
+      "height": 737
+    },
+    "styles": {
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "backgroundImage": "none",
+      "padding": "10px 10px 10px 10px",
+      "margin": "50px 0px 0px 0px",
+      "borderRadius": "0px",
+      "boxShadow": "none"
+    },
+    "headings": [
+      {
+        "tag": "DIV",
+        "text": "ویدیو های برسی محصول",
+        "fontSize": "20px",
+        "fontWeight": "500",
+        "color": "rgb(255, 255, 255)"
+      },
+      {
+        "tag": "SPAN",
+        "text": "محـصــــولات",
+        "fontSize": "15px",
+        "fontWeight": "700",
+        "color": "rgb(233, 5, 68)"
+      },
+      {
+        "tag": "SPAN",
+        "text": "محـصــــولات",
+        "fontSize": "15px",
+        "fontWeight": "700",
+        "color": "rgb(233, 5, 68)"
+      },
+      {
+        "tag": "SPAN",
+        "text": "محـصــــولات",
+        "fontSize": "15px",
+        "fontWeight": "700",
+        "color": "rgb(233, 5, 68)"
+      },
+      {
+        "tag": "SPAN",
+        "text": "محـصــــولات",
+        "fontSize": "15px",
+        "fontWeight": "700",
+        "color": "rgb(233, 5, 68)"
+      },
+      {
+        "tag": "SPAN",
+        "text": "محـصــــولات",
+        "fontSize": "15px",
+        "fontWeight": "700",
+        "color": "rgb(233, 5, 68)"
+      },
+      {
+        "tag": "SPAN",
+        "text": "محـصــــولات",
+        "fontSize": "15px",
+        "fontWeight": "700",
+        "color": "rgb(233, 5, 68)"
+      }
+    ],
+    "imageCount": 12,
+    "imagesSample": [
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/themes/kavehTheme/assets/images/new-demo/video-01.png",
+        "alt": "امیرحسین شبانی",
+        "width": 295,
+        "height": 353
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/themes/kavehTheme/assets/images/new-demo/avatar-03.png",
+        "alt": "امیرحسین شبانی",
+        "width": 49,
+        "height": 49
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/themes/kavehTheme/assets/images/new-demo/video-01.png",
+        "alt": "امیرحسین شبانی",
+        "width": 295,
+        "height": 353
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/themes/kavehTheme/assets/images/new-demo/avatar-03.png",
+        "alt": "امیرحسین شبانی",
+        "width": 49,
+        "height": 49
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/themes/kavehTheme/assets/images/new-demo/video-01.png",
+        "alt": "امیرحسین شبانی",
+        "width": 295,
+        "height": 353
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/themes/kavehTheme/assets/images/new-demo/avatar-03.png",
+        "alt": "امیرحسین شبانی",
+        "width": 49,
+        "height": 49
+      }
+    ],
+    "linkCount": 13,
+    "linksSample": [
+      {
+        "href": "https://kaveh.moeinwp.com/43/#",
+        "text": "مشاهده بیشتر"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/#",
+        "text": "امیرحسین شبانی"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/#",
+        "text": "محـصــــولات\nمشاهده همه"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/#",
+        "text": "امیرحسین شبانی"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/#",
+        "text": "محـصــــولات\nمشاهده همه"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/#",
+        "text": "امیرحسین شبانی"
+      }
+    ],
+    "isSlider": true,
+    "hasTimer": false,
+    "productCount": 0,
+    "productTitlesSample": [],
+    "subContainerCount": 1,
+    "subContainers": [
+      {
+        "className": "elementor-element elementor-element-39f2483d elementor-widget elementor-widget-videosnkkaveh",
+        "width": 1420,
+        "height": 717
+      }
+    ],
+    "rawText": "ویدیو های برسی محصول زمانت قیمت و کیفیت مشاهده بیشتر امیرحسین شبانی تاریخ انتشار 23 مرداد 1402 محـصــــولات مشاهده همه امیرحسین شبانی تاریخ انتشار 23 مرداد 1402 محـصــــولات مشاهده همه امیرحسین شبانی "
+  },
+  {
+    "index": 31,
+    "className": "elementor-element elementor-element-6dea67ef e-flex e-con-boxed e-con e-parent e-lazyloaded",
+    "id": "",
+    "rect": {
+      "top": 15712.75,
+      "left": 0,
+      "width": 1440,
+      "height": 274
+    },
+    "styles": {
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "backgroundImage": "none",
+      "padding": "0px 10px 0px 10px",
+      "margin": "50px 0px 0px 0px",
+      "borderRadius": "0px",
+      "boxShadow": "none"
+    },
+    "headings": [
+      {
+        "tag": "DIV",
+        "text": "محل قرار گیری بنر",
+        "fontSize": "25px",
+        "fontWeight": "700",
+        "color": "rgb(19, 39, 95)"
+      },
+      {
+        "tag": "DIV",
+        "text": "محل قرار گیری بنر",
+        "fontSize": "25px",
+        "fontWeight": "700",
+        "color": "rgb(19, 39, 95)"
+      }
+    ],
+    "imageCount": 2,
+    "imagesSample": [
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/themes/kavehTheme/assets/images/new-demo/banner-01.png",
+        "alt": "محل قرار گیری بنر",
+        "width": 218,
+        "height": 245
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/banner-02-1.png",
+        "alt": "محل قرار گیری بنر",
+        "width": 218,
+        "height": 243
+      }
+    ],
+    "linkCount": 0,
+    "linksSample": [],
+    "isSlider": false,
+    "hasTimer": false,
+    "productCount": 0,
+    "productTitlesSample": [],
+    "subContainerCount": 1,
+    "subContainers": [
+      {
+        "className": "e-con-inner",
+        "width": 1320,
+        "height": 274
+      }
+    ],
+    "rawText": "محل قرار گیری بنر همین الان با تخفیف خرید کنید محل قرار گیری بنر همین الان با تخفیف خرید کنید"
+  },
+  {
+    "index": 32,
+    "className": "elementor-element elementor-element-6a35d062 e-con-full e-flex e-con e-parent e-lazyloaded",
+    "id": "",
+    "rect": {
+      "top": 16036.75,
+      "left": 0,
+      "width": 1440,
+      "height": 707
+    },
+    "styles": {
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "backgroundImage": "none",
+      "padding": "10px 10px 10px 10px",
+      "margin": "50px 0px 0px 0px",
+      "borderRadius": "0px",
+      "boxShadow": "none"
+    },
+    "headings": [
+      {
+        "tag": "DIV",
+        "text": "برترین اخبار",
+        "fontSize": "20px",
+        "fontWeight": "500",
+        "color": "rgb(4, 4, 4)"
+      },
+      {
+        "tag": "H2",
+        "text": "آینده هوش مصنوعی در گجت‌های خانگی؛ چه چیزهایی واقعا کاربردی‌اند؟",
+        "fontSize": "15px",
+        "fontWeight": "700",
+        "color": "rgb(255, 255, 255)"
+      },
+      {
+        "tag": "H2",
+        "text": "دوربین گوشی در برابر دوربین کامپکت؛ آیا هنوز به دوربین جدا نیاز داریم؟",
+        "fontSize": "19px",
+        "fontWeight": "700",
+        "color": "rgb(255, 255, 255)"
+      },
+      {
+        "tag": "H2",
+        "text": "بهترین کیبوردهای مکانیکی برای تایپ و گیمینگ",
+        "fontSize": "15px",
+        "fontWeight": "700",
+        "color": "rgb(255, 255, 255)"
+      },
+      {
+        "tag": "H2",
+        "text": "ذخیره‌سازی ابری در برابر هارد اکسترنال؛ کدام مسیر امن‌تر است؟",
+        "fontSize": "15px",
+        "fontWeight": "700",
+        "color": "rgb(255, 255, 255)"
+      },
+      {
+        "tag": "H2",
+        "text": "راهنمای شروع اسمارت‌هوم؛ از لامپ هوشمند تا هاب مرکزی",
+        "fontSize": "19px",
+        "fontWeight": "700",
+        "color": "rgb(255, 255, 255)"
+      },
+      {
+        "tag": "H2",
+        "text": "گجت‌های پوشیدنی هوشمند؛ ساعت، دستبند و ایرباد در یک نگاه",
+        "fontSize": "15px",
+        "fontWeight": "700",
+        "color": "rgb(255, 255, 255)"
+      },
+      {
+        "tag": "H2",
+        "text": "امنیت دیجیتال برای کاربران روزمره؛ از رمز عبور تا احراز هویت دو مرحله‌ای",
+        "fontSize": "19px",
+        "fontWeight": "700",
+        "color": "rgb(255, 255, 255)"
+      },
+      {
+        "tag": "H2",
+        "text": "خرید کنسول بازی؛ پلی‌استیشن، ایکس‌باکس یا نینتندو؟",
+        "fontSize": "15px",
+        "fontWeight": "700",
+        "color": "rgb(255, 255, 255)"
+      },
+      {
+        "tag": "H2",
+        "text": "بهترین مانیتورهای اولتراواید برای کار و سرگرمی",
+        "fontSize": "15px",
+        "fontWeight": "700",
+        "color": "rgb(255, 255, 255)"
+      },
+      {
+        "tag": "H2",
+        "text": "مقایسه پردازنده‌های نسل جدید؛ کدام تراشه برای کار روزمره کافی است؟",
+        "fontSize": "19px",
+        "fontWeight": "700",
+        "color": "rgb(255, 255, 255)"
+      },
+      {
+        "tag": "H2",
+        "text": "آینده هوش مصنوعی در گجت‌های خانگی؛ چه چیزهایی واقعا کاربردی‌اند؟",
+        "fontSize": "19px",
+        "fontWeight": "700",
+        "color": "rgb(255, 255, 255)"
+      },
+      {
+        "tag": "H2",
+        "text": "دوربین گوشی در برابر دوربین کامپکت؛ آیا هنوز به دوربین جدا نیاز داریم؟",
+        "fontSize": "19px",
+        "fontWeight": "700",
+        "color": "rgb(255, 255, 255)"
+      },
+      {
+        "tag": "H2",
+        "text": "بهترین کیبوردهای مکانیکی برای تایپ و گیمینگ",
+        "fontSize": "19px",
+        "fontWeight": "700",
+        "color": "rgb(255, 255, 255)"
+      },
+      {
+        "tag": "H2",
+        "text": "ذخیره‌سازی ابری در برابر هارد اکسترنال؛ کدام مسیر امن‌تر است؟",
+        "fontSize": "19px",
+        "fontWeight": "700",
+        "color": "rgb(255, 255, 255)"
+      },
+      {
+        "tag": "H2",
+        "text": "راهنمای شروع اسمارت‌هوم؛ از لامپ هوشمند تا هاب مرکزی",
+        "fontSize": "19px",
+        "fontWeight": "700",
+        "color": "rgb(255, 255, 255)"
+      },
+      {
+        "tag": "H2",
+        "text": "گجت‌های پوشیدنی هوشمند؛ ساعت، دستبند و ایرباد در یک نگاه",
+        "fontSize": "19px",
+        "fontWeight": "700",
+        "color": "rgb(255, 255, 255)"
+      },
+      {
+        "tag": "H2",
+        "text": "امنیت دیجیتال برای کاربران روزمره؛ از رمز عبور تا احراز هویت دو مرحله‌ای",
+        "fontSize": "19px",
+        "fontWeight": "700",
+        "color": "rgb(255, 255, 255)"
+      },
+      {
+        "tag": "H2",
+        "text": "خرید کنسول بازی؛ پلی‌استیشن، ایکس‌باکس یا نینتندو؟",
+        "fontSize": "19px",
+        "fontWeight": "700",
+        "color": "rgb(255, 255, 255)"
+      },
+      {
+        "tag": "H2",
+        "text": "بهترین مانیتورهای اولتراواید برای کار و سرگرمی",
+        "fontSize": "19px",
+        "fontWeight": "700",
+        "color": "rgb(255, 255, 255)"
+      },
+      {
+        "tag": "H2",
+        "text": "مقایسه پردازنده‌های نسل جدید؛ کدام تراشه برای کار روزمره کافی است؟",
+        "fontSize": "19px",
+        "fontWeight": "700",
+        "color": "rgb(255, 255, 255)"
+      }
+    ],
+    "imageCount": 2,
+    "imagesSample": [
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/09/banner-02-150x150.png",
+        "alt": "admin",
+        "width": 150,
+        "height": 150
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/09/banner-02-150x150.png",
+        "alt": "admin",
+        "width": 150,
+        "height": 150
+      }
+    ],
+    "linkCount": 25,
+    "linksSample": [
+      {
+        "href": "https://kaveh.moeinwp.com/43/#",
+        "text": "مشاهده بیشتر"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/category/smarthome/",
+        "text": "خانه هوشمند"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/author/myadmin/",
+        "text": "admin"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/category/compare/",
+        "text": "مقایسه‌ها"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/category/review/",
+        "text": "نقد و بررسی"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/category/compare/",
+        "text": "مقایسه‌ها"
+      }
+    ],
+    "isSlider": true,
+    "hasTimer": false,
+    "productCount": 0,
+    "productTitlesSample": [],
+    "subContainerCount": 1,
+    "subContainers": [
+      {
+        "className": "elementor-element elementor-element-729e5589 elementor-widget elementor-widget-articlesnkkaveh",
+        "width": 1420,
+        "height": 687
+      }
+    ],
+    "rawText": "برترین اخبار زمانت قیمت و کیفیت مشاهده بیشتر خانه هوشمند آینده هوش مصنوعی در گجت‌های خانگی؛ چه چیزهایی واقعا کاربردی‌اند؟ دوربین گوشی در برابر دوربین کامپکت؛ آیا هنوز به دوربین جدا نیاز داریم؟ admin ش"
+  },
+  {
+    "index": 33,
+    "className": "elementor-element elementor-element-467916fb e-flex e-con-boxed e-con e-parent e-lazyloaded",
+    "id": "",
+    "rect": {
+      "top": 16793.75,
+      "left": 0,
+      "width": 1440,
+      "height": 323
+    },
+    "styles": {
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "backgroundImage": "none",
+      "padding": "0px 10px 0px 10px",
+      "margin": "50px 0px 0px 0px",
+      "borderRadius": "0px",
+      "boxShadow": "none"
+    },
+    "headings": [
+      {
+        "tag": "DIV",
+        "text": "خرید برترین ساعتــــ",
+        "fontSize": "44px",
+        "fontWeight": "800",
+        "color": "rgb(19, 39, 95)"
+      },
+      {
+        "tag": "H2",
+        "text": "بازی Ghost of Yotei مخصوص PS5",
+        "fontSize": "13px",
+        "fontWeight": "500",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "بازی Gran Turismo 7 مخصوص PS5",
+        "fontSize": "13px",
+        "fontWeight": "500",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "بازی Horizon Forbidden West نسخه کامل مخصوص PS5",
+        "fontSize": "13px",
+        "fontWeight": "500",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "بازی Ghostrunner 2 مخصوص PS5",
+        "fontSize": "13px",
+        "fontWeight": "500",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "بازی مدل بازی Mortal Kombat 1 مخصوص PS5",
+        "fontSize": "13px",
+        "fontWeight": "500",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "بازی Ghost of Yotei مخصوص PS5",
+        "fontSize": "13px",
+        "fontWeight": "500",
+        "color": "rgb(57, 68, 84)"
+      },
+      {
+        "tag": "H2",
+        "text": "بازی Gran Turismo 7 مخصوص PS5",
+        "fontSize": "13px",
+        "fontWeight": "500",
+        "color": "rgb(57, 68, 84)"
+      }
+    ],
+    "imageCount": 8,
+    "imagesSample": [
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/themes/kavehTheme/assets/images/new-demo/image-02.png",
+        "alt": "خرید برترین ساعتــــ",
+        "width": 291,
+        "height": 290
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/26eb5a74fbf76467080d4a69a6a0dd6f9c5f1008_1786454574-300x300-removebg-preview-1.png",
+        "alt": "بازی Ghost of Yotei مخصوص PS5",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/e2a1ec7e564e1d9555bdf7a48e62cc138ff24cd0_1786388718-removebg-preview-300x300-1.png",
+        "alt": "بازی Gran Turismo 7 مخصوص PS5",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/86f41915edf5a7e926e2ae0bbd19a2d0ba9c5d06_1786388241-300x300-removebg-preview-1.png",
+        "alt": "بازی Horizon Forbidden West نسخه کامل مخصوص PS5",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/3eef521897412a152c5b42551b623c91c41d90c0_1786388224-300x300-removebg-preview-1.png",
+        "alt": "بازی Ghostrunner 2 مخصوص PS5",
+        "width": 300,
+        "height": 300
+      },
+      {
+        "src": "https://kaveh.moeinwp.com/43/wp-content/uploads/2026/08/92d9b95b55d4cf336cee4cf408c8908caf74c7af_1786388232-300x300-removebg-preview-1.png",
+        "alt": "بازی مدل  بازی Mortal Kombat 1 مخصوص PS5",
+        "width": 300,
+        "height": 300
+      }
+    ],
+    "linkCount": 7,
+    "linksSample": [
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d8%a8%d8%a7%d8%b2%db%8c-ghost-of-yotei-%d9%85%d8%ae%d8%b5%d9%88%d8%b5-ps5/",
+        "text": "بازی Ghost of Yotei مخصوص PS5"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d8%a8%d8%a7%d8%b2%db%8c-gran-turismo-7-%d9%85%d8%ae%d8%b5%d9%88%d8%b5-ps5/",
+        "text": "بازی Gran Turismo 7 مخصوص PS5"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d8%a8%d8%a7%d8%b2%db%8c-horizon-forbidden-west-%d9%86%d8%b3%d8%ae%d9%87-%da%a9%d8%a7%d9%85%d9%84-%d9%85%d8%ae%d8%b5%d9%88%d8%b5-ps5/",
+        "text": "بازی Horizon Forbidden West نسخه کامل مخصوص PS5"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d8%a8%d8%a7%d8%b2%db%8c-ghostrunner-2-%d9%85%d8%ae%d8%b5%d9%88%d8%b5-ps5/",
+        "text": "بازی Ghostrunner 2 مخصوص PS5"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d8%a8%d8%a7%d8%b2%db%8c-%d9%85%d8%af%d9%84-%d8%a8%d8%a7%d8%b2%db%8c-mortal-kombat-1-%d9%85%d8%ae%d8%b5%d9%88%d8%b5-ps5/",
+        "text": "بازی مدل بازی Mortal Kombat 1 مخصوص PS5"
+      },
+      {
+        "href": "https://kaveh.moeinwp.com/43/product/%d8%a8%d8%a7%d8%b2%db%8c-ghost-of-yotei-%d9%85%d8%ae%d8%b5%d9%88%d8%b5-ps5/",
+        "text": "بازی Ghost of Yotei مخصوص PS5"
+      }
+    ],
+    "isSlider": true,
+    "hasTimer": false,
+    "productCount": 0,
+    "productTitlesSample": [],
+    "subContainerCount": 1,
+    "subContainers": [
+      {
+        "className": "e-con-inner",
+        "width": 1320,
+        "height": 323
+      }
+    ],
+    "rawText": "خرید برترین ساعتــــ INCIDIDUNT UT LABORE ET DOLORE MAGNA ALIQUA ۵ بازی Ghost of Yotei مخصوص PS5 9.290.000 5/3.5 ۱ بازی Gran Turismo 7 مخصوص PS5 7.389.700 6.374.200 5/4.3 ۲ بازی Horizon Forbidden West"
+  },
+  {
+    "index": 34,
+    "className": "elementor-element elementor-element-797893fc e-flex e-con-boxed e-con e-parent e-lazyloaded",
+    "id": "",
+    "rect": {
+      "top": 17166.75,
+      "left": 0,
+      "width": 1440,
+      "height": 80
+    },
+    "styles": {
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "backgroundImage": "none",
+      "padding": "0px 10px 0px 10px",
+      "margin": "50px 0px 0px 0px",
+      "borderRadius": "0px",
+      "boxShadow": "none"
+    },
+    "headings": [
+      {
+        "tag": "H3",
+        "text": "تیباکس",
+        "fontSize": "16px",
+        "fontWeight": "800",
+        "color": "rgb(245, 107, 29)"
+      },
+      {
+        "tag": "H3",
+        "text": "تیباکس",
+        "fontSize": "16px",
+        "fontWeight": "800",
+        "color": "rgb(254, 189, 17)"
+      },
+      {
+        "tag": "H3",
+        "text": "تیباکس",
+        "fontSize": "16px",
+        "fontWeight": "800",
+        "color": "rgb(145, 120, 221)"
+      },
+      {
+        "tag": "H3",
+        "text": "تیباکس",
+        "fontSize": "16px",
+        "fontWeight": "800",
+        "color": "rgb(253, 100, 149)"
+      },
+      {
+        "tag": "H3",
+        "text": "تیباکس",
+        "fontSize": "16px",
+        "fontWeight": "800",
+        "color": "rgb(145, 120, 221)"
+      }
+    ],
+    "imageCount": 0,
+    "imagesSample": [],
+    "linkCount": 0,
+    "linksSample": [],
+    "isSlider": false,
+    "hasTimer": false,
+    "productCount": 0,
+    "productTitlesSample": [],
+    "subContainerCount": 1,
+    "subContainers": [
+      {
+        "className": "e-con-inner",
+        "width": 1320,
+        "height": 80
+      }
+    ],
+    "rawText": "تیباکس حمل نقل به روش تیباکس حمل نقل به روش تیباکس حمل نقل به روش تیباکس حمل نقل به روش تیباکس حمل نقل به روش"
+  }
+]
