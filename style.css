@@ -1,0 +1,78 @@
+/*
+Theme Name: Negar Shop
+Theme URI: https://example.com/negar-shop
+Author: Antigravity & User Team
+Author URI: https://example.com
+Description: قالب وردپرس فروشگاهی مدرن، پیشرفته و هیبرید، کاملاً بهینه‌شده برای ووکامرس، زبان فارسی و ساختار راست‌چین (RTL)
+Version: 1.0.0
+Requires at least: 6.0
+Tested up to: 7.2
+Requires PHP: 7.4
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: negar-shop
+Tags: e-commerce, custom-header, custom-logo, custom-menu, featured-images, threaded-comments, translation-ready, rtl-language-support, full-site-editing
+*/
+
+/* Reset & Box Sizing */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  line-height: 1.6;
+  -webkit-text-size-adjust: 100%;
+  -moz-tab-size: 4;
+  tab-size: 4;
+  font-feature-settings: normal;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-primary, 'Vazirmatn', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif);
+  font-size: 15px;
+  color: var(--color-foreground, #0f172a);
+  background-color: var(--color-background, #f8fafc);
+  direction: rtl;
+  text-align: right;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: var(--color-primary, #059669);
+  text-decoration: none;
+  transition: color 0.2s ease, opacity 0.2s ease;
+}
+
+a:hover {
+  color: var(--color-accent, #ea580c);
+}
+
+img,
+svg,
+video,
+canvas {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+button,
+input,
+optgroup,
+select,
+textarea {
+  font-family: inherit;
+  font-size: 100%;
+  line-height: inherit;
+  margin: 0;
+}
+
+button {
+  cursor: pointer;
+}
