@@ -269,6 +269,21 @@
         });
       }
     });
+
+    // 5. Generic Data-Swiper Elements (Brands, Selling Products, etc.)
+    const swiperDataElements = document.querySelectorAll('.swiper[data-swiper]');
+    swiperDataElements.forEach(function(swiperEl) {
+      if (swiperEl && !swiperEl.classList.contains('swiper-initialized')) {
+        try {
+          const configStr = swiperEl.getAttribute('data-swiper');
+          const config = configStr ? JSON.parse(configStr) : {};
+          new Swiper(swiperEl, config);
+          swiperEl.setAttribute('data-kaveh-swiper-mounted', '1');
+        } catch(e) {
+          console.warn('Swiper init error', e);
+        }
+      }
+    });
   }
 
   /**
