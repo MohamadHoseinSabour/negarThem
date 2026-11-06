@@ -72,6 +72,18 @@
   - [x] T078: انکیو استایل‌ها و اسکریپت‌های اختصاصی فقط در صفحات تکی محصول
   - [x] T079: ثبت ۵ اسکرین‌شات در ۴ عرض، تایید رفتار استپر تعداد و سوییچ تب مشخصات، و به‌روزرسانی ردیف‌های `PROD-01` تا `PROD-05` به `verified`
 
+### فیچر 006: Cart, Checkout, and My Account
+- **وضعیت:** `CONVERGED / VERIFIED`
+  - [x] T080: قالب‌های سبد خرید (`FLOW-02`) شامل جدول واکنش‌گرا، استپرهای مثبت/منفی تعداد، باکس فاکتور سفارش (`woocommerce/cart/cart.php`, `cart-totals.php`, `cart-empty.php`)
+  - [x] T081: قالب تسویه‌حساب ۲ ستونه (`FLOW-03`) با فیلدهای صورت‌حساب، آدرس تحویل و خلاصه سفارش چسبان (`woocommerce/checkout/form-checkout.php`, `review-order.php`)
+  - [x] T082: صفحه تکمیل سفارش / سپاس (`FLOW-04`) با نشانگر سبز موفقیت و ریبون ۴گانه متاداده خرید (`woocommerce/checkout/thankyou.php`)
+  - [x] T083: داشبورد حساب کاربری من (`FLOW-05`) با منوی تب‌دار کناری، آیکون‌های SVG و جدول تاریخچه سفارش‌ها (`woocommerce/myaccount/navigation.php`, `dashboard.php`, `orders.php`)
+  - [x] T084: فرم‌های مدرن احراز هویت (`FLOW-06`) با کارت‌های ورود و ثبت‌نام مستقل و قابلیت نمایش/پنهان‌سازی رمز عبور (`woocommerce/myaccount/form-login.php`)
+  - [x] T085: استایل‌های اختصاصی `assets/css/checkout-cart.css`
+  - [x] T086: اسکریپت تعاملی `assets/js/checkout-cart.js` جهت به‌روزرسانی خودکار سبد خرید و توگل پسورد
+  - [x] T087: انکیو استایل‌ها و اسکریپت‌ها در برگه‌های فرآیند خرید
+  - [x] T088: ثبت ۱۲ اسکرین‌شات از سبد، تسویه و حساب کاربری در ۴ ویوپورت و ارتقای وضعیت ردیف‌های `FLOW-02` تا `FLOW-06` به `verified`
+
 ---
 
 ## ۲. اسکرین‌شات‌های ثبت‌شده
@@ -79,19 +91,16 @@
 - [home-tablet-768.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/home-tablet-768.png) (صفحه اصلی تبلت ۷۶۸px)
 - [home-desktop-1024.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/home-desktop-1024.png) (صفحه اصلی دسکتاپ ۱۰۲۴px)
 - [home-wide-1440.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/home-wide-1440.png) (صفحه اصلی دسکتاپ عریض ۱۴۴۰px)
-- [shop-mobile-375.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/shop-mobile-375.png) (فروشگاه موبایل با نوار ابزار و گرید ۲ ستونه)
-- [shop-mobile-drawer-open-375.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/shop-mobile-drawer-open-375.png) (فروشگاه موبایل با دراور کشویی فیلترها بازشده)
-- [shop-tablet-768.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/shop-tablet-768.png) (فروشگاه تبلت ۳ ستونه)
-- [shop-desktop-1024.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/shop-desktop-1024.png) (فروشگاه دسکتاپ با سایدبار راست)
 - [shop-wide-1440.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/shop-wide-1440.png) (فروشگاه عریض با سایدبار و گرید ۴ ستونه)
-- [shop-wide-list-view-1440.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/shop-wide-list-view-1440.png) (حالت نمایش ردیفی کالاها در دسکتاپ عریض)
-- [product-mobile-375.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/product-mobile-375.png) (صفحه محصول موبایل ۳۷۵px)
-- [product-tablet-768.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/product-tablet-768.png) (صفحه محصول تبلت ۷۶۸px)
-- [product-desktop-1024.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/product-desktop-1024.png) (صفحه محصول دسکتاپ ۱۰۲۴px)
-- [product-wide-1440.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/product-wide-1440.png) (صفحه محصول عریض با گالری و باکس خرید)
-- [product-wide-specs-tab-1440.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/product-wide-specs-tab-1440.png) (تب مشخصات فنی راه‌راه در دسکتاپ)
+- [product-wide-1440.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/product-wide-1440.png) (صفحه محصول با گالری و باکس خرید)
+- [cart-1440.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/cart-1440.png) (سبد خرید دسکتاپ با جدول کالاها و خلاصه فاکتور چسبان)
+- [cart-375.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/cart-375.png) (سبد خرید موبایل)
+- [checkout-1440.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/checkout-1440.png) (تسویه‌حساب ۲ ستونه دسکتاپ با فیلدهای تحویل و درگاه)
+- [checkout-375.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/checkout-375.png) (تسویه‌حساب موبایل)
+- [account-1440.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/account-1440.png) (برگه احراز هویت و ورود/ثبت‌نام دسکتاپ)
+- [account-375.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/account-375.png) (برگه ورود/ثبت‌نام موبایل)
 
 ---
 
 ## ۳. فیچر بعدی
-- **Feature 006: Cart / Checkout / My Account (`FLOW-02` تا `FLOW-06`)**: صفحه سبد خرید مدرن با تنظیم ایجکس تعداد، فیلد کوپن، صفحه تسویه حساب بهینه‌شده، صفحه سپاس سفارش، و داشبورد حساب کاربری با فرم ورود/ثبت‌نام تمیز.
+- **Feature 007: Content Pages (`CNT-01` تا `CNT-06`)**: آرشیو وبلاگ، صفحه تک‌پست، درباره ما، تماس با ما، خطای ۴۰۴ و حالت‌های خالی.

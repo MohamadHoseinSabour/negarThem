@@ -1,0 +1,230 @@
+/**
+ * Cart, Checkout & My Account Dedicated Stylesheet
+ *
+ * @package Negar_Shop
+ * @version 1.0.0
+ */
+
+/* ==========================================================================
+   1. Cart Page Styles
+   ========================================================================== */
+.negar-cart-wrapper table.shop_table {
+	border-collapse: collapse;
+}
+
+.negar-cart-qty-box .quantity {
+	display: inline-flex;
+	align-items: center;
+	border: 1px solid var(--negar-border, #e2e8f0);
+	border-radius: var(--negar-radius-md, 0.5rem);
+	background-color: #ffffff;
+	overflow: hidden;
+}
+
+.negar-cart-qty-box .quantity input.qty {
+	width: 2.75rem;
+	height: 2.25rem;
+	text-align: center;
+	border: none;
+	font-weight: 700;
+	color: var(--negar-text-dark, #0f172a);
+	background: transparent;
+	padding: 0;
+	-moz-appearance: textfield;
+}
+
+.negar-cart-qty-box .quantity input.qty::-webkit-outer-spin-button,
+.negar-cart-qty-box .quantity input.qty::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+.negar-cart-qty-btn {
+	width: 1.75rem;
+	height: 2.25rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: #f8fafc;
+	border: none;
+	cursor: pointer;
+	color: var(--negar-text-muted, #64748b);
+	font-size: 1rem;
+	font-weight: 700;
+	transition: all 0.15s ease;
+}
+
+.negar-cart-qty-btn:hover {
+	background-color: #f1f5f9;
+	color: var(--negar-primary, #2563eb);
+}
+
+.cart_totals .checkout-button {
+	background-color: var(--negar-primary, #2563eb) !important;
+	color: #ffffff !important;
+	padding: 0.875rem 1.5rem !important;
+	border-radius: var(--negar-radius-md, 0.5rem) !important;
+	font-weight: 700 !important;
+	font-size: 0.9375rem !important;
+	width: 100% !important;
+	display: flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+	transition: all 0.2s ease !important;
+	border: none !important;
+	box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2) !important;
+}
+
+.cart_totals .checkout-button:hover {
+	background-color: var(--negar-primary-dark, #1d4ed8) !important;
+	transform: translateY(-1px) !important;
+	box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3) !important;
+}
+
+/* ==========================================================================
+   2. Checkout Page Styles
+   ========================================================================== */
+.woocommerce-checkout .woocommerce-billing-fields__field-wrapper,
+.woocommerce-checkout .woocommerce-shipping-fields__field-wrapper {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 1rem;
+}
+
+@media (min-width: 640px) {
+	.woocommerce-checkout .woocommerce-billing-fields__field-wrapper {
+		grid-template-columns: repeat(2, 1fr);
+	}
+
+	.woocommerce-checkout .form-row-wide,
+	.woocommerce-checkout #billing_address_1_field,
+	.woocommerce-checkout #billing_address_2_field,
+	.woocommerce-checkout #order_comments_field {
+		grid-column: span 2;
+	}
+}
+
+.woocommerce-checkout input[type="text"],
+.woocommerce-checkout input[type="tel"],
+.woocommerce-checkout input[type="email"],
+.woocommerce-checkout input[type="password"],
+.woocommerce-checkout select,
+.woocommerce-checkout textarea {
+	width: 100%;
+	padding: 0.625rem 0.875rem;
+	border-radius: var(--negar-radius-md, 0.5rem);
+	border: 1px solid var(--negar-border, #e2e8f0);
+	background-color: #f8fafc;
+	font-size: 0.875rem;
+	color: var(--negar-text-dark, #0f172a);
+	transition: all 0.2s ease;
+}
+
+.woocommerce-checkout input:focus,
+.woocommerce-checkout select:focus,
+.woocommerce-checkout textarea:focus {
+	background-color: #ffffff;
+	border-color: var(--negar-primary, #2563eb);
+	outline: none;
+	box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+}
+
+.woocommerce-checkout label {
+	display: block;
+	font-size: 0.8125rem;
+	font-weight: 600;
+	color: var(--negar-text-dark, #0f172a);
+	margin-bottom: 0.375rem;
+}
+
+/* Payment Methods List */
+ul.wc_payment_methods {
+	list-style: none;
+	padding: 0;
+	margin: 0 0 1.5rem 0;
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+}
+
+ul.wc_payment_methods li {
+	border: 1px solid var(--negar-border, #e2e8f0);
+	border-radius: var(--negar-radius-md, 0.5rem);
+	padding: 0.875rem 1rem;
+	background-color: #ffffff;
+	transition: all 0.2s ease;
+}
+
+ul.wc_payment_methods li:has(input[type="radio"]:checked) {
+	border-color: var(--negar-primary, #2563eb);
+	background-color: rgba(37, 99, 235, 0.03);
+}
+
+ul.wc_payment_methods li label {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	font-weight: 700;
+	cursor: pointer;
+	margin-bottom: 0;
+}
+
+ul.wc_payment_methods li .payment_box {
+	margin-top: 0.5rem;
+	padding-top: 0.5rem;
+	border-top: 1px dashed var(--negar-border, #e2e8f0);
+	font-size: 0.75rem;
+	color: var(--negar-text-muted, #64748b);
+	line-height: 1.6;
+}
+
+/* Place Order Button */
+#place_order {
+	background-color: var(--negar-primary, #2563eb) !important;
+	color: #ffffff !important;
+	padding: 0.875rem 2rem !important;
+	border-radius: var(--negar-radius-md, 0.5rem) !important;
+	font-weight: 700 !important;
+	font-size: 1rem !important;
+	width: 100% !important;
+	border: none !important;
+	cursor: pointer !important;
+	transition: all 0.2s ease !important;
+	box-shadow: 0 2px 6px rgba(37, 99, 235, 0.25) !important;
+}
+
+#place_order:hover {
+	background-color: var(--negar-primary-dark, #1d4ed8) !important;
+	transform: translateY(-1px) !important;
+	box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35) !important;
+}
+
+/* ==========================================================================
+   3. My Account Layout
+   ========================================================================== */
+.woocommerce-account .woocommerce {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 2rem;
+	align-items: start;
+}
+
+@media (min-width: 1024px) {
+	.woocommerce-account .woocommerce {
+		grid-template-columns: 280px 1fr;
+	}
+}
+
+.woocommerce-MyAccount-content {
+	background-color: var(--negar-surface, #ffffff);
+	border: 1px solid var(--negar-border, #e2e8f0);
+	border-radius: var(--negar-radius-lg, 1rem);
+	padding: 1.5rem;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+@media (min-width: 640px) {
+	.woocommerce-MyAccount-content {
+		padding: 2rem;
+	}
+}
