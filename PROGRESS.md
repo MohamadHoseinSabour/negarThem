@@ -29,15 +29,32 @@
   - [x] T030: اتصال کامل در `header.php`، `footer.php` و `functions.php`
   - [x] T031: ثبت اسکرین‌شات‌ها در ۴ عرض ۳۷۵، ۷۶۸، ۱۰۲۴، ۱۴۴۰ پیکسل در `docs/compare/` و تایید دروازه کیفیت
 
+### فیچر 003: Home Page
+- **وضعیت:** `CONVERGED / VERIFIED`
+  - [x] T040: کامپوننت کارت محصول استاندارد و چندمنظوره (`template-parts/product/card.php`) با بج تخفیف، دکمه خرید، علاقه‌مندی و پیش‌نمایش سریع
+  - [x] T041: هیرو سکشن اصلی شامل اسلایدر بزرگ و ۲ بنر تبلیغاتی کناری (`HOME-01`)
+  - [x] T042: حباب‌های دسته‌بندی سریع محصولات با آیکون و شمارنده محصولات (`HOME-02`)
+  - [x] T043: بخش شگفت‌انگیزها با باکس قرمز زرشکی، تایمر معکوس زنده و اسلایدر کالاهای تخفیف‌دار (`HOME-03`)
+  - [x] T044: گرید بنرهای چندگانه تبلیغاتی میانی با ترنزیشن‌های نرم (`HOME-04`)
+  - [x] T045: تب‌های محصولات منتخب (جدیدترین‌ها، پرفروش‌ترین‌ها، حراجی) با سوییچ آنی (`HOME-05`)
+  - [x] T046: اسلایدر لوگوهای برندهای برتر همکار با فیلتر خاکستری و هاور رنگی (`HOME-06`)
+  - [x] T047: شوکیس دسته‌بندی با بنر عمودی و کاروسل محصولات اختصاصی (`HOME-07`)
+  - [x] T048: ویترین مقالات وبلاگ و اخبار با تصاویر ۱۶:۹ و متادیتا (`HOME-08`)
+  - [x] T049: تمپلیت یکپارچه `front-page.php` با چینش منطقی و پشتیبانی از برگه المنتوری
+  - [x] T050: استایل‌های اختصاصی `assets/css/home.css` برای تمامی بخش‌های صفحه اصلی
+  - [x] T051: اسکریپت تعاملی `assets/js/home.js` (کنترلر کاروسل‌های وانیلا، تایمر معکوس، تب‌ها)
+  - [x] T052: راه‌انداز ویجت‌های المنتور (`inc/elementor/class-elementor-init.php`)
+  - [x] T053: ثبت اسکرین‌شات‌ها در ۴ عرض و به‌روزرسانی ماتریس پوشش (وضعیت `verified`)
+
 ---
 
 ## ۲. اسکرین‌شات‌های ثبت‌شده
-- [home-mobile-375.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/home-mobile-375.png) (موبایل با نوار پایین و هدر موبایل)
-- [home-tablet-768.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/home-tablet-768.png) (تبلت)
-- [home-desktop-1024.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/home-desktop-1024.png) (لپ‌تاپ)
-- [home-wide-1440.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/home-wide-1440.png) (دسکتاپ عریض کامل)
+- [home-mobile-375.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/home-mobile-375.png) (موبایل ۳۷۵ پیکسل)
+- [home-tablet-768.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/home-tablet-768.png) (تبلت ۷۶۸ پیکسل)
+- [home-desktop-1024.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/home-desktop-1024.png) (دسکتاپ ۱۰۲۴ پیکسل)
+- [home-wide-1440.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/home-wide-1440.png) (دسکتاپ عریض ۱۴۴۰ پیکسل)
 
 ---
 
 ## ۳. فیچر بعدی
-- **Feature 003: Home Page** (اسلایدر هیرو، دسترسی سریع دسته‌ها، اسلایدر شگفت‌انگیزها با تایمر معکوس، بنرهای میانی، تب‌های محصولات منتخب، اسلایدر برندها و آخرین مقالات وبلاگ طبق inventory)
+- **Feature 004: Shop & Archive (`SHOP-01` تا `SHOP-05`)**: آرشیو فروشگاه، سایدبار فیلترها (دسکتاپ و دراور موبایل)، نوار ابزار سورت/گرید، فیلترهای ایجکس و صفحه‌بندی عددی / لود مور.
