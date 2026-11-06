@@ -100,6 +100,12 @@ function negar_shop_scripts() {
 		array( 'bootstrap-rtl' ),
 		NEGAR_SHOP_VERSION
 	);
+	wp_enqueue_style(
+		'kaveh-carousel-seventeen',
+		NEGAR_SHOP_URI . '/assets/css/vendor/productscarouselseventeennkkaveh.css',
+		array( 'bootstrap-rtl', 'kaveh-product-carts' ),
+		NEGAR_SHOP_VERSION
+	);
 
 	// Tailwind Engine Compiled Utility CSS
 	wp_enqueue_style(
