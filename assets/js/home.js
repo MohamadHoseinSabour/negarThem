@@ -252,21 +252,23 @@
       });
     }
 
-    // 4. Popular Deals Slider
-    const popularEl = document.querySelector('.swiper-products-popular');
-    if (popularEl) {
-      new Swiper(popularEl, {
-        watchSlidesProgress: true,
-        slidesPerView: 1.5,
-        spaceBetween: 8,
-        breakpoints: {
-          320: { slidesPerView: 1.5, spaceBetween: 8 },
-          768: { slidesPerView: 2.2, spaceBetween: 10 },
-          992: { slidesPerView: 3.2, spaceBetween: 10 },
-          1200: { slidesPerView: 3.2, spaceBetween: 10 },
-        },
-      });
-    }
+    // 4. Popular Deals Slider (Initialize all instances across the page)
+    const popularElements = document.querySelectorAll('.swiper-products-popular');
+    popularElements.forEach(function(popularEl) {
+      if (popularEl && !popularEl.classList.contains('swiper-initialized')) {
+        new Swiper(popularEl, {
+          watchSlidesProgress: true,
+          slidesPerView: 1.5,
+          spaceBetween: 10,
+          breakpoints: {
+            320: { slidesPerView: 1.5, spaceBetween: 10 },
+            768: { slidesPerView: 2.2, spaceBetween: 12 },
+            992: { slidesPerView: 2.8, spaceBetween: 14 },
+            1200: { slidesPerView: 3.2, spaceBetween: 14 },
+          },
+        });
+      }
+    });
   }
 
   /**

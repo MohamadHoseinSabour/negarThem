@@ -800,3 +800,82 @@
 @media (min-width: 768px) {
   .popular-products-nk .d-md-none { display: none !important; }
 }
+
+/* ──────────────────────────────────────────────
+ * Variant 2: Gray Theme (.popular-products-nk-375f8bd8 / Section 17)
+ * ────────────────────────────────────────────── */
+.popular-products-nk-375f8bd8 .popular-products-nk__wrapper {
+  background-image: linear-gradient(180deg, #F8F9FB 0%, #F8F9FB 100%) !important;
+  background-color: #F8F9FB !important;
+  box-shadow: 0 16px 40px -10px rgba(100, 116, 139, 0.12) !important;
+  border: 1px solid rgba(0, 0, 0, 0.05) !important;
+}
+
+.popular-products-nk-375f8bd8 .popular-products-nk__left::before {
+  background-color: rgba(0, 0, 0, 0.035) !important;
+}
+
+.popular-products-nk-375f8bd8 .popular-products-nk__right .title {
+  color: #040404 !important;
+  -webkit-text-fill-color: #040404 !important;
+  background-image: none !important;
+}
+
+.popular-products-nk-375f8bd8 .popular-products-nk__right .title svg path {
+  fill: #040404 !important;
+}
+
+.popular-products-nk-375f8bd8 .popular-products-nk__right .sub-title {
+  color: #64748b !important;
+}
+
+.popular-products-nk-375f8bd8 .popular-products-nk__right .btn {
+  background-color: #ffffff !important;
+  color: #040404 !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08) !important;
+  border: 1px solid rgba(0, 0, 0, 0.06) !important;
+}
+
+.popular-products-nk-375f8bd8 .popular-products-nk__right .btn:hover {
+  background-color: #f1f5f9 !important;
+  color: #040404 !important;
+}
+
+/* ──────────────────────────────────────────────
+ * Variant 3: Purple Theme (.popular-products-nk-5e78b899 / Section 22)
+ * ────────────────────────────────────────────── */
+.popular-products-nk-5e78b899 .popular-products-nk__wrapper {
+  background-image: linear-gradient(180deg, #8142EB 0%, #8142EB 100%) !important;
+  background-color: #8142EB !important;
+  box-shadow: 0 20px 48px -10px rgba(129, 66, 235, 0.35) !important;
+}
+
+.popular-products-nk-5e78b899 .popular-products-nk__left::before {
+  background-color: rgba(255, 255, 255, 0.24) !important;
+}
+
+.popular-products-nk-5e78b899 .popular-products-nk__right .title {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  background-image: none !important;
+}
+
+.popular-products-nk-5e78b899 .popular-products-nk__right .title svg path {
+  fill: #ffffff !important;
+}
+
+.popular-products-nk-5e78b899 .popular-products-nk__right .sub-title {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.popular-products-nk-5e78b899 .popular-products-nk__right .btn {
+  background-color: #ffffff !important;
+  color: #8142EB !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12) !important;
+}
+
+.popular-products-nk-5e78b899 .popular-products-nk__right .btn:hover {
+  background-color: #f3f0ff !important;
+  color: #702fe0 !important;
+}
+
