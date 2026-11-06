@@ -143,9 +143,9 @@ $carousel_products_sec11 = array(
 
 					<div class="row flex-row-reverse flex-md-row align-items-stretch">
 						
-						<!-- Carousel Column on Right (col-12 col-md-7 col-lg-8) -->
-						<div class="col-12 col-md-7 col-lg-8">
-							<div class="swiper swiper-top-selling-products-two-nk overflow-hidden w-100 h-100" data-swiper='{"autoHeight":false,"watchSlidesProgress":true,"breakpoints":{"320":{"slidesPerView":1.1,"spaceBetween":12},"576":{"slidesPerView":1.8,"spaceBetween":14},"992":{"slidesPerView":2.2,"spaceBetween":16},"1200":{"slidesPerView":2.5,"spaceBetween":20}}}' data-kaveh-swiper-mounted="1">
+						<!-- Carousel Column on Right (col-6 col-sm-8 col-lg-9) -->
+						<div class="col-6 col-sm-8 col-lg-9">
+							<div class="swiper swiper-top-selling-products-two-nk overflow-hidden w-100 h-100" data-swiper='{"autoHeight":false,"watchSlidesProgress":true,"breakpoints":{"320":{"slidesPerView":1,"spaceBetween":16},"576":{"slidesPerView":2,"spaceBetween":12},"992":{"slidesPerView":2.7,"spaceBetween":16},"1200":{"slidesPerView":3,"spaceBetween":24}}}' data-kaveh-swiper-mounted="1">
 								<div class="swiper-wrapper">
 									<?php foreach ( $carousel_products_sec11 as $idx => $prod ) : 
 										$match = negar_get_matching_product_info( $prod['keyword'], $shop_url );
@@ -163,31 +163,32 @@ $carousel_products_sec11 = array(
 												</div>
 												<?php endif; ?>
 
-												<div class="product-six-nk__top d-flex align-items-center">
-													<div class="rate d-flex align-items-center position-relative f-iransans ms-auto">
-														<i class="icon icon-star-6 lh-1" aria-hidden="true"></i>
-														<span class="lh-1"><?php echo esc_html( $prod['rating'] ); ?></span>
-													</div>
-													<button type="button" class="like wlm-button" aria-label="علاقه‌مندی" data-product-id="<?php echo esc_attr( $prod_id ); ?>" aria-pressed="false">
-														<i class="icon-heart-8 lh-1" aria-hidden="true"></i>
-													</button>
+												<div class="rate d-flex align-items-center gap-1 gap-md-2 position-absolute">
+													<?php echo esc_html( $prod['rating'] ); ?>
+													<svg xmlns="http://www.w3.org/2000/svg" width="18" height="19" fill="none" viewBox="0 0 18 19" aria-hidden="true">
+														<path fill="#FFC700" stroke="#FFC700" stroke-linecap="round" stroke-linejoin="round" d="M11.543 4.407 12.6 6.522c.143.293.525.57.848.63l1.912.315c1.223.203 1.508 1.088.63 1.973l-1.492 1.492c-.248.248-.39.736-.308 1.088l.428 1.845c.337 1.455-.443 2.025-1.726 1.26L11.1 14.06c-.322-.195-.862-.195-1.185 0l-1.792 1.065c-1.283.758-2.063.195-1.725-1.26l.427-1.845c.083-.345-.06-.832-.307-1.088L5.025 9.44c-.877-.877-.592-1.763.63-1.973l1.913-.315c.322-.052.705-.337.847-.63l1.058-2.115c.562-1.147 1.492-1.147 2.07 0Z"></path>
+														<path stroke="#FFC700" stroke-linecap="round" stroke-linejoin="round" d="M6 4.25H1.5m2.25 10.5H1.5m.75-5.25H1.5" opacity=".4"></path>
+													</svg>
 												</div>
 
 												<div class="image position-relative">
-													<a href="<?php echo esc_url( $prod_url ); ?>" class="img d-block mx-auto mxw-fit">
-														<img loading="lazy" decoding="async" src="<?php echo esc_url( $prod['image'] ); ?>" alt="<?php echo esc_attr( $prod['title'] ); ?>" width="162" height="177" class="d-block w-auto">
-													</a>
 													<?php if ( ! empty( $prod['colors'] ) ) : ?>
-													<ul class="colors d-flex flex-column position-absolute end-0">
-														<?php foreach ( $prod['colors'] as $color ) : ?>
-														<li class="rounded-circle" style="background-color: <?php echo esc_attr( $color ); ?>;"></li>
+													<ul class="colors d-flex flex-column position-absolute">
+														<?php foreach ( $prod['colors'] as $c ) : 
+															$c_val = is_array( $c ) ? $c['color'] : $c;
+															$c_name = is_array( $c ) ? $c['name'] : '';
+														?>
+														<li class="rounded-circle" style="background-color: <?php echo esc_attr( $c_val ); ?>;" <?php if ( $c_name ) echo 'title="' . esc_attr( $c_name ) . '"'; ?>></li>
 														<?php endforeach; ?>
 													</ul>
 													<?php endif; ?>
+													<a href="<?php echo esc_url( $prod_url ); ?>" class="d-block">
+														<img loading="lazy" decoding="async" src="<?php echo esc_url( $prod['image'] ); ?>" alt="<?php echo esc_attr( $prod['title'] ); ?>" width="143" height="156" class="d-block w-auto mx-auto">
+													</a>
 												</div>
 
-												<h2 class="title fw-semibold f-iran-yekan line-clamp-2">
-													<a href="<?php echo esc_url( $prod_url ); ?>"><?php echo esc_html( $prod['title'] ); ?></a>
+												<h2 class="title f-iran-yekan line-clamp-2">
+													<a href="<?php echo esc_url( $prod_url ); ?>"><?php echo esc_html( ! empty( $prod['short_title'] ) ? $prod['short_title'] : $prod['title'] ); ?></a>
 												</h2>
 
 												<div class="product-six-nk__footer d-flex align-items-end justify-content-between gap-2">
@@ -214,13 +215,14 @@ $carousel_products_sec11 = array(
 									</div>
 									<?php endforeach; ?>
 								</div>
+								<span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span>
 							</div>
 						</div>
 
-						<!-- Red Discount Card Column on Left (col-12 col-md-5 col-lg-4) -->
-						<div class="col-12 col-md-5 col-lg-4">
+						<!-- Red Discount Card Column on Left (col-6 col-sm-4 col-lg-3) -->
+						<div class="col-6 col-sm-4 col-lg-3">
 							<div class="top-selling-products-two-nk__discount position-relative h-100">
-								<div class="swiper swiper-top-selling-products-two-nk__discount overflow-visible" data-swiper='{"autoHeight":true,"slidesPerView":1,"spaceBetween":0,"effect":"fade","fadeEffect":{"crossFade":true},"pagination":{"el":".elementor-element-ee3dc51 .top-selling-products-two-nk__discount .swiper-pagination","clickable":true}}' data-kaveh-swiper-mounted="1">
+								<div class="swiper swiper-top-selling-products-two-nk__discount swiper-fade" data-swiper='{"autoHeight":true,"slidesPerView":1,"spaceBetween":0,"effect":"fade","fadeEffect":{"crossFade":true},"pagination":{"el":".elementor-element-ee3dc51 .top-selling-products-two-nk__discount .swiper-pagination","clickable":true}}' data-kaveh-swiper-mounted="1">
 									<div class="swiper-wrapper">
 										<?php foreach ( $discount_items_sec11 as $d_idx => $d_item ) : 
 											$d_match = negar_get_matching_product_info( $d_item['keyword'], $shop_url );
@@ -234,19 +236,21 @@ $carousel_products_sec11 = array(
 													<div class="cir cir-2 position-absolute top-50 start-50 translate-middle rounded-circle"></div>
 													<div class="cir cir-3 position-absolute top-50 start-50 translate-middle rounded-circle"></div>
 													<a href="<?php echo esc_url( $d_url ); ?>" class="d-block">
-														<img loading="lazy" decoding="async" src="<?php echo esc_url( $d_item['image'] ); ?>" alt="<?php echo esc_attr( $d_item['title'] ); ?>" width="175" height="175" class="d-block w-auto">
+														<img loading="lazy" decoding="async" src="<?php echo esc_url( $d_item['image'] ); ?>" alt="<?php echo esc_attr( $d_item['title'] ); ?>" width="147" height="147" class="d-block w-auto">
 													</a>
 												</div>
 												<h2 class="title f-iran-yekan fw-semibold text-truncate">
 													<a href="<?php echo esc_url( $d_url ); ?>"><?php echo esc_html( $d_item['short_title'] ); ?></a>
 												</h2>
-												<div class="comments-rate d-flex align-items-center">
-													<span class="rate f-iransans fw-normal position-relative"><?php echo esc_html( $d_item['rating'] ); ?></span>
-													<span class="line flex-grow-1"></span>
-													<div class="comments f-iransans fw-normal d-flex align-items-center gap-1">
-														<span><?php echo esc_html( $d_item['comments'] ); ?> نظر</span>
-														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 16 16" aria-hidden="true">
-															<path stroke="#FFC700" stroke-linecap="round" stroke-linejoin="round" d="M14.5 9.5a5.002 5.002 0 0 1-5 5H6l-3.5 2V14A5.002 5.002 0 0 1 1.5 9.5c0-2.76 2.24-5 5-5h3c2.76 0 5 2.24 5 5Z"></path>
+												<div class="comments-rate d-none d-md-flex align-items-center">
+													<div class="comments f-iransans">
+														<?php echo esc_html( $d_item['comments'] ); ?> نظر
+													</div>
+													<div class="line flex-grow-1"></div>
+													<div class="rate d-flex align-items-center justify-content-end gap-1 gap-md-2">
+														<?php echo esc_html( $d_item['rating'] ); ?>
+														<svg xmlns="http://www.w3.org/2000/svg" width="18" height="19" fill="none" viewBox="0 0 18 19" aria-hidden="true">
+															<path fill="#FFC700" stroke="#FFC700" stroke-linecap="round" stroke-linejoin="round" d="M11.543 4.407 12.6 6.522c.143.293.525.57.848.63l1.912.315c1.223.203 1.508 1.088.63 1.973l-1.492 1.492c-.248.248-.39.736-.308 1.088l.428 1.845c.337 1.455-.443 2.025-1.726 1.26L11.1 14.06c-.322-.195-.862-.195-1.185 0l-1.792 1.065c-1.283.758-2.063.195-1.725-1.26l.427-1.845c.083-.345-.06-.832-.307-1.088L5.025 9.44c-.877-.877-.592-1.763.63-1.973l1.913-.315c.322-.052.705-.337.847-.63l1.058-2.115c.562-1.147 1.492-1.147 2.07 0Z"></path>
 															<path stroke="#FFC700" stroke-linecap="round" stroke-linejoin="round" d="M6 4.25H1.5m2.25 10.5H1.5m.75-5.25H1.5" opacity=".4"></path>
 														</svg>
 													</div>
@@ -293,14 +297,14 @@ $carousel_products_sec11 = array(
 		var mainSwiperEl = document.querySelector('.elementor-element-ee3dc51 .swiper-top-selling-products-two-nk');
 		if (mainSwiperEl && !mainSwiperEl.classList.contains('swiper-initialized')) {
 			new Swiper(mainSwiperEl, {
-				slidesPerView: 1.1,
-				spaceBetween: 12,
+				slidesPerView: 1,
+				spaceBetween: 16,
 				watchSlidesProgress: true,
 				breakpoints: {
-					320: { slidesPerView: 1.1, spaceBetween: 12 },
-					576: { slidesPerView: 1.8, spaceBetween: 14 },
-					992: { slidesPerView: 2.2, spaceBetween: 16 },
-					1200: { slidesPerView: 2.5, spaceBetween: 20 }
+					320: { slidesPerView: 1, spaceBetween: 16 },
+					576: { slidesPerView: 2, spaceBetween: 12 },
+					992: { slidesPerView: 2.7, spaceBetween: 16 },
+					1200: { slidesPerView: 3, spaceBetween: 24 }
 				}
 			});
 		}

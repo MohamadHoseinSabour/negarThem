@@ -199,9 +199,9 @@ $carousel_products = array(
 
 					<div class="row flex-row-reverse flex-md-row align-items-stretch">
 						
-						<!-- Carousel Column on Right (col-12 col-md-7 col-lg-8) -->
-						<div class="col-12 col-md-7 col-lg-8">
-							<div class="swiper swiper-top-selling-products-two-nk overflow-hidden w-100 h-100" data-swiper='{"autoHeight":false,"watchSlidesProgress":true,"breakpoints":{"320":{"slidesPerView":1.1,"spaceBetween":12},"576":{"slidesPerView":1.8,"spaceBetween":14},"992":{"slidesPerView":2.2,"spaceBetween":16},"1200":{"slidesPerView":2.5,"spaceBetween":20}}}' data-kaveh-swiper-mounted="1">
+						<!-- Carousel Column on Right (col-6 col-sm-8 col-lg-9) -->
+						<div class="col-6 col-sm-8 col-lg-9">
+							<div class="swiper swiper-top-selling-products-two-nk overflow-hidden w-100 h-100" data-swiper='{"autoHeight":false,"watchSlidesProgress":true,"breakpoints":{"320":{"slidesPerView":1,"spaceBetween":16},"576":{"slidesPerView":2,"spaceBetween":12},"992":{"slidesPerView":2.7,"spaceBetween":16},"1200":{"slidesPerView":3,"spaceBetween":24}}}' data-kaveh-swiper-mounted="1">
 								<div class="swiper-wrapper">
 									<?php foreach ( $carousel_products as $idx => $prod ) : 
 										$match = negar_get_matching_product_info( $prod['keyword'], $shop_url );
@@ -271,8 +271,8 @@ $carousel_products = array(
 							</div>
 						</div>
 
-						<!-- Red Discount Card Column on Left (col-12 col-md-5 col-lg-4) -->
-						<div class="col-12 col-md-5 col-lg-4">
+						<!-- Red Discount Card Column on Left (col-6 col-sm-4 col-lg-3) -->
+						<div class="col-6 col-sm-4 col-lg-3">
 							<div class="top-selling-products-two-nk__discount position-relative h-100">
 								<div class="swiper swiper-top-selling-products-two-nk__discount swiper-fade" data-swiper='{"autoHeight":true,"slidesPerView":1,"spaceBetween":0,"effect":"fade","fadeEffect":{"crossFade":true},"pagination":{"el":".elementor-element-6b1a7cb3 .top-selling-products-two-nk__discount .swiper-pagination","clickable":true}}' data-kaveh-swiper-mounted="1">
 									<div class="swiper-wrapper">
@@ -353,10 +353,10 @@ $carousel_products = array(
 				spaceBetween: 16,
 				watchSlidesProgress: true,
 				breakpoints: {
-					320: { slidesPerView: 1.1, spaceBetween: 12 },
-					576: { slidesPerView: 1.8, spaceBetween: 14 },
-					992: { slidesPerView: 2.2, spaceBetween: 16 },
-					1200: { slidesPerView: 2.5, spaceBetween: 20 }
+					320: { slidesPerView: 1, spaceBetween: 16 },
+					576: { slidesPerView: 2, spaceBetween: 12 },
+					992: { slidesPerView: 2.7, spaceBetween: 16 },
+					1200: { slidesPerView: 3, spaceBetween: 24 }
 				}
 			});
 		}

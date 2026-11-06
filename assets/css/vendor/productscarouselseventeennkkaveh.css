@@ -899,8 +899,6 @@
 .top-selling-products-two-nk .container,
 .top-selling-products-two-nk .row {
   overflow: visible !important;
-}
-.top-selling-products-two-nk .row {
   margin-bottom: 25px !important;
 }
 .top-selling-products-two-nk__discount,
@@ -909,43 +907,392 @@
 .top-selling-products-two-nk__discount .swiper-slide {
   overflow: visible !important;
 }
-.top-selling-products-two-nk__discount__item .btn-more {
-  z-index: 10 !important;
+
+/* ─────────────────────────────────────────────────────────────
+ * Pixel-Perfect Layout Two (top-selling-products-two-nk) Matching Reference & Demo 43
+ * ───────────────────────────────────────────────────────────── */
+
+/* Red Discount Showcase Card */
+.top-selling-products-two-nk__discount {
+  background-color: var(--kaveh-primary-color, #e90544) !important;
+  border-radius: 32px !important;
+  position: relative !important;
+  height: 100% !important;
+  overflow: visible !important;
+  box-shadow: 0 14px 36px -6px rgba(233, 5, 68, 0.3) !important;
 }
 
-/* 3. Larger Red Product Card (User Request: "کارت محصولی که قرمزه باید بزرگ تر از بقیه باشه") */
-@media (min-width: 992px) {
-  .top-selling-products-two-nk__discount {
-    border-radius: 36px;
-  }
-  .top-selling-products-two-nk__discount__item {
-    padding: 85px 28px 75px;
-  }
-  .top-selling-products-two-nk__discount__item .image {
-    width: 175px;
-    height: 175px;
-  }
-  .top-selling-products-two-nk__discount__item .image img {
-    width: 175px !important;
-    height: 175px !important;
-    object-fit: contain;
-  }
-  .top-selling-products-two-nk__discount__item .title {
-    font-size: 15px;
-    line-height: 26px;
-    margin-bottom: 12px;
-  }
-  .top-selling-products-two-nk__discount__item .price .price span {
-    font-size: 18px;
-    line-height: 34px;
-  }
-  .top-selling-products-two-nk__discount__item .btn-more {
-    width: 80px;
-    height: 64px;
-    font-size: 16px;
-    transform: translate(-50%, 46px);
-  }
+/* Semicircular bottom cutout arch */
+.top-selling-products-two-nk__discount::before {
+  content: "" !important;
+  position: absolute !important;
+  left: 50% !important;
+  bottom: 0 !important;
+  transform: translateX(-50%) !important;
+  width: 130px !important;
+  height: 38px !important;
+  background-color: var(--bg-body, #fff) !important;
+  -webkit-mask-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNDAiIGhlaWdodD0iNDAiIGZpbGw9Im5vbmUiPjxwYXRoIGZpbGw9IiNEOUQ5RDkiIGQ9Ik00OS4wNSAxMi4yM2M5LjQ2LTE1Ljg3IDMyLjQ0LTE1Ljg3IDQxLjkgMEE1Ni45IDU2LjkgMCAwIDAgMTM5LjgzIDQwSC4xN2E1Ni45IDU2LjkgMCAwIDAgNDguODgtMjcuNzciIHN0eWxlPSJmaWxsOiNkOWQ5ZDk7ZmlsbDpjb2xvcihkaXNwbGF5LXAzIC44NTEgLjg1MSAuODUxKTtmaWxsLW9wYWNpdHk6MSIvPjwvc3ZnPg==") !important;
+  mask-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNDAiIGhlaWdodD0iNDAiIGZpbGw9Im5vbmUiPjxwYXRoIGZpbGw9IiNEOUQ5RDkiIGQ9Ik00OS4wNSAxMi4yM2M5LjQ2LTE1Ljg3IDMyLjQ0LTE1Ljg3IDQxLjkgMEE1Ni45IDU2LjkgMCAwIDAgMTM5LjgzIDQwSC4xN2E1Ni45IDU2LjkgMCAwIDAgNDguODgtMjcuNzciIHN0eWxlPSJmaWxsOiNkOWQ5ZDk7ZmlsbDpjb2xvcihkaXNwbGF5LXAzIC44NTEgLjg1MSAuODUxKTtmaWxsLW9wYWNpdHk6MSIvPjwvc3ZnPg==") !important;
+  -webkit-mask-size: contain !important;
+  mask-size: contain !important;
+  -webkit-mask-repeat: no-repeat !important;
+  mask-repeat: no-repeat !important;
+  -webkit-mask-position: center bottom !important;
+  mask-position: center bottom !important;
+  z-index: 4 !important;
 }
+
+.top-selling-products-two-nk__discount::after {
+  display: none !important;
+}
+
+.top-selling-products-two-nk__discount__item {
+  padding: 56px 20px 48px !important;
+  position: relative !important;
+  height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+}
+
+/* Discount Badge on Red Card: Top-Left */
+.top-selling-products-two-nk__discount__item .off {
+  top: 24px !important;
+  left: 24px !important;
+  right: auto !important;
+  font-size: 15px !important;
+  font-weight: 800 !important;
+  color: #fff !important;
+  direction: rtl !important;
+  z-index: 5 !important;
+}
+
+/* Swiper Pagination: Top-Right White Pill Capsule */
+.top-selling-products-two-nk__discount .swiper-pagination {
+  top: 26px !important;
+  right: 24px !important;
+  bottom: auto !important;
+  left: auto !important;
+  width: auto !important;
+  height: auto !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  background: rgba(255, 255, 255, 0.25) !important;
+  padding: 4px 8px !important;
+  border-radius: 50rem !important;
+  z-index: 5 !important;
+}
+
+.top-selling-products-two-nk__discount .swiper-pagination-bullet {
+  width: 6px !important;
+  height: 6px !important;
+  background: #fff !important;
+  opacity: 0.6 !important;
+  margin: 0 !important;
+  border-radius: 50% !important;
+}
+
+.top-selling-products-two-nk__discount .swiper-pagination-bullet-active {
+  width: 16px !important;
+  height: 6px !important;
+  border-radius: 4px !important;
+  opacity: 1 !important;
+}
+
+/* Center Image & Concentric Rings */
+.top-selling-products-two-nk__discount__item .image {
+  margin: 16px auto 20px !important;
+  width: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  position: relative !important;
+}
+
+.top-selling-products-two-nk__discount__item .image img {
+  height: 145px !important;
+  width: auto !important;
+  max-width: 80% !important;
+  object-fit: contain !important;
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+/* Title on Red Card */
+.top-selling-products-two-nk__discount__item .title {
+  font-size: 15px !important;
+  line-height: 24px !important;
+  font-weight: 700 !important;
+  color: #fff !important;
+  text-align: right !important;
+  margin-bottom: 12px !important;
+}
+
+.top-selling-products-two-nk__discount__item .title a {
+  color: #fff !important;
+  text-decoration: none !important;
+}
+
+/* Rating & Comments on Red Card */
+.top-selling-products-two-nk__discount__item .comments-rate {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  margin-bottom: 14px !important;
+  color: rgba(255, 255, 255, 0.9) !important;
+  font-size: 12px !important;
+}
+
+.top-selling-products-two-nk__discount__item .comments-rate .comments {
+  font-size: 12px !important;
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
+.top-selling-products-two-nk__discount__item .comments-rate .line {
+  background-color: rgba(255, 255, 255, 0.15) !important;
+  margin: 0 10px !important;
+}
+
+.top-selling-products-two-nk__discount__item .comments-rate .rate {
+  font-size: 12px !important;
+  color: rgba(255, 255, 255, 0.95) !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+}
+
+/* Price on Red Card */
+.top-selling-products-two-nk__discount__item .price {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  color: #fff !important;
+}
+
+.top-selling-products-two-nk__discount__item .price del {
+  font-size: 14px !important;
+  color: rgba(255, 255, 255, 0.65) !important;
+}
+
+.top-selling-products-two-nk__discount__item .price .price {
+  font-size: 17px !important;
+  font-weight: 800 !important;
+  color: #fff !important;
+}
+
+.top-selling-products-two-nk__discount__item .price .toman-symbol svg {
+  fill: #fff !important;
+}
+
+/* Circular Button inside the bottom cutout */
+.top-selling-products-two-nk__discount__item .btn-more {
+  position: absolute !important;
+  bottom: -24px !important;
+  left: 50% !important;
+  right: auto !important;
+  transform: translateX(-50%) !important;
+  width: 54px !important;
+  height: 54px !important;
+  border-radius: 50% !important;
+  background-color: var(--kaveh-primary-color, #e90544) !important;
+  color: #fff !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 15px !important;
+  box-shadow: 0 8px 20px rgba(233, 5, 68, 0.35) !important;
+  border: 2px solid #fff !important;
+  z-index: 10 !important;
+  text-decoration: none !important;
+}
+
+.top-selling-products-two-nk__discount__item .btn-more:hover {
+  transform: translateX(-50%) scale(1.06) !important;
+  color: #fff !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+ * White Cards (.product-cart-thirty-three-nk / .product-six-nk)
+ * ───────────────────────────────────────────────────────────── */
+.top-selling-products-two-nk .product-cart-thirty-three-nk {
+  height: 100% !important;
+}
+
+.top-selling-products-two-nk .product-cart-thirty-three-nk .product-six-nk {
+  background-color: #fff !important;
+  border: 1px solid rgba(0, 0, 0, 0.07) !important;
+  border-radius: 28px !important;
+  padding: 24px 18px 20px !important;
+  position: relative !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  height: 100% !important;
+  transition: transform 0.25s ease, box-shadow 0.25s ease !important;
+}
+
+.top-selling-products-two-nk .product-cart-thirty-three-nk .product-six-nk:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 12px 28px -4px rgba(15, 23, 42, 0.1) !important;
+}
+
+/* Offer Badge on White Card: Top-Left Corner */
+.top-selling-products-two-nk .product-cart-thirty-three-nk .product-six-nk .offer {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: auto !important;
+  background-color: var(--kaveh-primary-color, #e90544) !important;
+  color: #fff !important;
+  border-radius: 28px 0 18px 0 !important;
+  padding: 6px 14px 7px 12px !important;
+  font-size: 13px !important;
+  font-weight: 800 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  z-index: 5 !important;
+}
+
+.top-selling-products-two-nk .product-cart-thirty-three-nk .product-six-nk .offer i {
+  font-size: 8px !important;
+}
+
+/* Rating on White Card: Top-Right */
+.top-selling-products-two-nk .product-cart-thirty-three-nk .product-six-nk .rate {
+  position: absolute !important;
+  top: 20px !important;
+  right: 20px !important;
+  left: auto !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  color: #1e293b !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  z-index: 4 !important;
+}
+
+.top-selling-products-two-nk .product-cart-thirty-three-nk .product-six-nk .rate svg {
+  width: 16px !important;
+  height: 16px !important;
+}
+
+/* Product Image & Colors on White Card */
+.top-selling-products-two-nk .product-cart-thirty-three-nk .product-six-nk .image {
+  margin: 28px auto 14px !important;
+  width: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-height: 156px !important;
+  position: relative !important;
+}
+
+.top-selling-products-two-nk .product-cart-thirty-three-nk .product-six-nk .image .colors {
+  position: absolute !important;
+  left: 0 !important;
+  top: -10px !important;
+  right: auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  z-index: 3 !important;
+}
+
+.top-selling-products-two-nk .product-cart-thirty-three-nk .product-six-nk .image .colors li {
+  width: 8px !important;
+  height: 8px !important;
+  border-radius: 50% !important;
+}
+
+.top-selling-products-two-nk .product-cart-thirty-three-nk .product-six-nk .image img {
+  height: 148px !important;
+  width: auto !important;
+  max-width: 85% !important;
+  object-fit: contain !important;
+  margin: 0 auto !important;
+  display: block !important;
+}
+
+/* Product Title */
+.top-selling-products-two-nk .product-cart-thirty-three-nk .product-six-nk .title {
+  font-size: 14px !important;
+  line-height: 22px !important;
+  font-weight: 600 !important;
+  color: #0f172a !important;
+  margin: 12px 0 16px !important;
+  min-height: 44px !important;
+  text-align: right !important;
+}
+
+.top-selling-products-two-nk .product-cart-thirty-three-nk .product-six-nk .title a {
+  color: #0f172a !important;
+  text-decoration: none !important;
+}
+
+.top-selling-products-two-nk .product-cart-thirty-three-nk .product-six-nk .title a:hover {
+  color: var(--kaveh-primary-color, #e90544) !important;
+}
+
+/* Footer: Price & Add to Cart */
+.top-selling-products-two-nk .product-cart-thirty-three-nk .product-six-nk__footer {
+  display: flex !important;
+  align-items: flex-end !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  margin-top: auto !important;
+  padding-top: 6px !important;
+}
+
+.top-selling-products-two-nk .product-cart-thirty-three-nk .product-six-nk__footer .price {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-end !important;
+  text-align: right !important;
+}
+
+.top-selling-products-two-nk .product-cart-thirty-three-nk .product-six-nk__footer .price .off del {
+  font-size: 12px !important;
+  color: #94a3b8 !important;
+  text-decoration: line-through !important;
+}
+
+.top-selling-products-two-nk .product-cart-thirty-three-nk .product-six-nk__footer .price .price {
+  font-size: 16px !important;
+  font-weight: 800 !important;
+  color: #0f172a !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 3px !important;
+}
+
+/* Add to Cart Circular Button */
+.top-selling-products-two-nk .product-cart-thirty-three-nk .buy-now__btn {
+  width: 42px !important;
+  height: 42px !important;
+  border-radius: 50% !important;
+  background-color: var(--kaveh-primary-color, #e90544) !important;
+  color: #fff !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 18px !important;
+  box-shadow: 0 6px 16px -2px rgba(233, 5, 68, 0.4) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+  border: none !important;
+}
+
+.top-selling-products-two-nk .product-cart-thirty-three-nk .buy-now__btn:hover {
+  transform: scale(1.06) !important;
+  box-shadow: 0 8px 20px -2px rgba(233, 5, 68, 0.5) !important;
+}
+
 
 
 
