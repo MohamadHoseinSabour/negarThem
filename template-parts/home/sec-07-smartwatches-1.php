@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 $query_args = array(
 	'post_type'      => 'product',
 	'post_status'    => 'publish',
-	'posts_per_page' => 6,
+	'posts_per_page' => 5,
 	'tax_query'      => array(
 		array(
 			'taxonomy' => 'product_cat',
@@ -28,7 +28,7 @@ if ( ! $cat_products->have_posts() ) {
 	$cat_products = new WP_Query( array(
 		'post_type'      => 'product',
 		'post_status'    => 'publish',
-		'posts_per_page' => 6,
+		'posts_per_page' => 5,
 	) );
 }
 ?>

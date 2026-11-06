@@ -1,10 +1,11 @@
 <?php
 /**
- * Section 25: Gaming Zone Showcase (HOME-25)
+ * Section 25: Gaming Zone Showcase (HOME-25) - Combo Pack Layout
  * Reference: Demo 43 Section 24 (Top: 11832px, Height: ~640px)
  * Heading: "محصول گیم - بازی Assassin’s Creed Shadows مخصوص PS5"
  *
  * @package Negar_Shop
+ * @version 2.0.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -12,91 +13,123 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 $upload_dir = wp_upload_dir();
-$game_banner = $upload_dir['baseurl'] . '/kaveh-demo/banner-03.png';
+$game_banner = $upload_dir['baseurl'] . '/kaveh-demo/product-pack.png';
+if ( ! file_exists( $upload_dir['basedir'] . '/kaveh-demo/product-pack.png' ) ) {
+	$game_banner = $upload_dir['baseurl'] . '/kaveh-demo/banner-03.png';
+}
 
-$game_products = new WP_Query( array(
-	'post_type'      => 'product',
-	'post_status'    => 'publish',
-	'posts_per_page' => 4,
-	'orderby'        => 'rand',
-) );
+$bundle_items = array(
+	array(
+		'title'  => 'بازی Assassin’s Creed Shadows مخصوص PS5',
+		'price'  => '۵,۷۵۰,۰۰۰',
+		'rating' => '۵ / ۳',
+		'img'    => $upload_dir['baseurl'] . '/kaveh-demo/products/samsung-s25-fe.png',
+	),
+	array(
+		'title'  => 'بازی Assassins Creed Mirage مخصوص PS5',
+		'price'  => '۴,۳۶۲,۵۰۰',
+		'rating' => '۵ / ۴',
+		'img'    => $upload_dir['baseurl'] . '/kaveh-demo/products/iphone-16-pro-max.png',
+	),
+	array(
+		'title'  => 'بازی EA Sports FC 26 نسخه استاندارد مخصوص PS5',
+		'price'  => '۴,۱۹۹,۰۰۰',
+		'rating' => '۵ / ۴.۵',
+		'img'    => $upload_dir['baseurl'] . '/kaveh-demo/products/xiaomi-15-ultra.png',
+	),
+	array(
+		'title'  => 'بازی Ghost of Yotei مخصوص PS5',
+		'price'  => '۹,۲۸۹,۰۰۰',
+		'rating' => '۵ / ۳.۵',
+		'img'    => $upload_dir['baseurl'] . '/kaveh-demo/products/nothing-phone-2a.png',
+	),
+);
 ?>
 
-<section class="negar-sec-25-gaming py-8" aria-label="<?php esc_attr_e( 'منطقه ویژه گیمینگ و کنسول', 'negar-shop' ); ?>">
+<section class="negar-sec-25-gaming py-4" aria-label="<?php esc_attr_e( 'بسته ویژه گیمینگ و کنسول', 'negar-shop' ); ?>">
 	<div class="container max-w-[1320px] mx-auto px-3">
 		
-		<div class="bg-gradient-to-r from-slate-950 via-slate-900 to-indigo-950 rounded-3xl p-6 md:p-8 text-white shadow-2xl overflow-hidden relative border border-slate-800">
+		<div class="bg-white rounded-3xl p-4 md:p-6 border border-slate-200/80 shadow-xs overflow-hidden">
 			
-			<div class="flex items-center justify-between pb-4 mb-6 border-b border-slate-800">
-				<div>
-					<span class="text-xs font-bold text-rose-500 tracking-wider inline-block mb-1">
-						<?php esc_html_e( 'GAMING ZONE', 'negar-shop' ); ?>
-					</span>
-					<h2 class="text-xl md:text-3xl font-black text-white">
-						<?php esc_html_e( 'دنیای گیمینگ؛ بازی Assassin’s Creed Shadows و عناوین برتر', 'negar-shop' ); ?>
-					</h2>
-				</div>
-				<a href="<?php echo esc_url( wc_get_page_permalink( 'shop' ) ); ?>" class="text-xs font-bold text-rose-400 hover:text-rose-300 flex items-center gap-1 transition">
-					<span><?php esc_html_e( 'مشاهده همه بازی‌ها', 'negar-shop' ); ?></span>
-					<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
-				</a>
-			</div>
-
-			<div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+			<div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
 				
-				<!-- Featured Big Game Card (5 Cols) -->
-				<div class="lg:col-span-5 bg-slate-900/90 rounded-2xl p-5 border border-slate-700/60 shadow-lg flex flex-col justify-between">
-					<div class="aspect-[16/10] rounded-xl overflow-hidden bg-slate-800 mb-4">
-						<img src="<?php echo esc_url( $game_banner ); ?>" alt="<?php esc_attr_e( 'بازی Assassin’s Creed Shadows', 'negar-shop' ); ?>" class="w-full h-full object-cover">
+				<!-- Right Column (In RTL): Big Media with Interactive Hotspot Pins (8 Cols) -->
+				<div class="lg:col-span-8 relative rounded-2xl overflow-hidden bg-slate-900 min-h-[380px] lg:min-h-[520px] flex items-center justify-center p-4">
+					<img src="<?php echo esc_url( $game_banner ); ?>" alt="<?php esc_attr_e( 'بسته گیمینگ PS5', 'negar-shop' ); ?>" class="w-full h-full object-cover object-center absolute inset-0 opacity-90">
+					
+					<!-- Hotspot Pin 1 -->
+					<div class="absolute bottom-[20%] right-[15%] hidden md:flex items-center gap-2 bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-2xl shadow-lg border border-slate-100 z-10">
+						<span class="w-2.5 h-2.5 rounded-full bg-rose-600 animate-ping"></span>
+						<span class="text-3xs font-black text-[#212341]">Assassin's Creed Shadows</span>
+						<span class="text-3xs font-black text-rose-600">۵,۷۵۰,۰۰۰ ت</span>
 					</div>
-					<div>
-						<div class="flex items-center gap-2 mb-2">
-							<span class="bg-rose-600 text-white text-3xs font-bold px-2 py-0.5 rounded-full">PS5 Exclusive</span>
-							<span class="text-amber-400 text-xs font-bold">★ ۴.۹</span>
-						</div>
-						<h3 class="text-base font-black text-white mb-2">
-							<?php esc_html_e( 'بازی Assassin’s Creed Shadows نسخه استاندارد PS5', 'negar-shop' ); ?>
-						</h3>
-						<p class="text-xs text-slate-300 line-clamp-2 leading-relaxed mb-4">
-							<?php esc_html_e( 'ورود به ژاپن فئودال با داستان حماسی نائوئه و یاسوکه در پیشرفته‌ترین جلوه‌های بصری نسل نهم.', 'negar-shop' ); ?>
-						</p>
-						<div class="flex items-center justify-between pt-3 border-t border-slate-800">
-							<span class="text-sm font-black text-rose-400">۴,۲۹۰,۰۰۰ تومان</span>
-							<a href="<?php echo esc_url( wc_get_page_permalink( 'shop' ) ); ?>" class="bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold px-4 py-2 rounded-xl transition">
-								<?php esc_html_e( 'خرید فوری', 'negar-shop' ); ?>
-							</a>
-						</div>
+
+					<!-- Hotspot Pin 2 -->
+					<div class="absolute top-[25%] left-[20%] hidden md:flex items-center gap-2 bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-2xl shadow-lg border border-slate-100 z-10">
+						<span class="w-2.5 h-2.5 rounded-full bg-indigo-600 animate-ping"></span>
+						<span class="text-3xs font-black text-[#212341]">Ghost of Yotei</span>
+						<span class="text-3xs font-black text-rose-600">۹,۲۸۹,۰۰۰ ت</span>
+					</div>
+
+					<!-- Hotspot Pin 3 -->
+					<div class="absolute bottom-[28%] left-[30%] hidden md:flex items-center gap-2 bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-2xl shadow-lg border border-slate-100 z-10">
+						<span class="w-2.5 h-2.5 rounded-full bg-amber-500 animate-ping"></span>
+						<span class="text-3xs font-black text-[#212341]">EA Sports FC 26</span>
+						<span class="text-3xs font-black text-rose-600">۴,۱۹۹,۰۰۰ ت</span>
 					</div>
 				</div>
 
-				<!-- Adjacent 4 Game Cards (7 Cols) -->
-				<div class="lg:col-span-7 grid grid-cols-2 sm:grid-cols-2 gap-4">
-					<?php
-					if ( $game_products->have_posts() ) :
-						while ( $game_products->have_posts() ) :
-							$game_products->the_post();
-							$price_html = function_exists( 'wc_get_product' ) ? wc_get_product( get_the_ID() )->get_price_html() : '';
-							?>
-							<div class="bg-white rounded-2xl p-4 text-slate-800 shadow-sm flex flex-col justify-between group hover:shadow-xl transition">
-								<a href="<?php the_permalink(); ?>" class="block aspect-square rounded-xl bg-slate-50 p-2 mb-2 flex items-center justify-center overflow-hidden">
-									<?php if ( has_post_thumbnail() ) : ?>
-										<?php the_post_thumbnail( 'woocommerce_thumbnail', array( 'class' => 'w-full h-full object-contain group-hover:scale-105 transition' ) ); ?>
-									<?php endif; ?>
-								</a>
-								<div>
-									<h4 class="text-xs font-bold text-slate-800 line-clamp-2 mb-1 group-hover:text-rose-600 transition">
-										<?php the_title(); ?>
-									</h4>
-									<div class="text-xs font-black text-rose-600">
-										<?php echo wp_kses_post( $price_html ); ?>
+				<!-- Left Column: Bundle Sidebar with Items & Total (4 Cols) -->
+				<div class="lg:col-span-4 bg-slate-50/80 rounded-2xl p-4 md:p-5 flex flex-col justify-between border border-slate-100">
+					
+					<!-- Header -->
+					<div>
+						<div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-200/70">
+							<div class="flex items-center gap-2">
+								<span class="w-8 h-8 rounded-xl bg-rose-600 text-white flex items-center justify-center text-xs font-black">
+									<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+								</span>
+								<h3 class="text-sm font-black text-[#212341]"><?php esc_html_e( 'محصول گیم (پک ۴ عددی)', 'negar-shop' ); ?></h3>
+							</div>
+							<span class="text-3xs font-bold text-rose-600 bg-rose-50 px-2 py-0.5 rounded-md">
+								<?php esc_html_e( '۹٪ تخفیف پک', 'negar-shop' ); ?>
+							</span>
+						</div>
+
+						<!-- Items List -->
+						<div class="space-y-2.5">
+							<?php foreach ( $bundle_items as $item ) : ?>
+								<div class="flex items-center justify-between gap-2 p-2 bg-white rounded-xl border border-slate-100 shadow-2xs">
+									<div class="flex-1 min-w-0">
+										<h4 class="text-2xs font-bold text-slate-800 truncate mb-0.5">
+											<?php echo esc_html( $item['title'] ); ?>
+										</h4>
+										<div class="flex items-center gap-2 text-3xs text-slate-400">
+											<span class="text-amber-500 font-bold">★ <?php echo esc_html( $item['rating'] ); ?></span>
+											<span>•</span>
+											<span class="font-black text-rose-600"><?php echo esc_html( $item['price'] ); ?> تومان</span>
+										</div>
 									</div>
 								</div>
+							<?php endforeach; ?>
+						</div>
+					</div>
+
+					<!-- Order Footer -->
+					<div class="pt-4 mt-3 border-t border-slate-200">
+						<div class="flex items-center justify-between mb-3">
+							<span class="text-xs font-bold text-slate-500">۴ کالا در سبد پک</span>
+							<div class="text-left">
+								<span class="text-3xs text-slate-400 line-through block">۲۵,۸۹۰,۶۰۰ تومان</span>
+								<span class="text-sm font-black text-rose-600">۲۳,۶۰۱,۵۰۰ تومان</span>
 							</div>
-							<?php
-						endwhile;
-						wp_reset_postdata();
-					endif;
-					?>
+						</div>
+						<a href="<?php echo esc_url( wc_get_page_permalink( 'shop' ) ); ?>" class="w-full inline-flex items-center justify-center gap-2 bg-rose-600 hover:bg-rose-700 text-white font-black text-xs py-2.5 rounded-xl transition shadow-md">
+							<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+							<span><?php esc_html_e( 'افزودن همه به سبد خرید', 'negar-shop' ); ?></span>
+						</a>
+					</div>
+
 				</div>
 
 			</div>

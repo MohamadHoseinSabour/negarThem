@@ -19,10 +19,10 @@ $bar2_products = new WP_Query( array(
 ) );
 ?>
 
-<section class="negar-sec-23-feature-bar py-6" aria-label="<?php esc_attr_e( 'ساعت و گجت‌های برتر', 'negar-shop' ); ?>">
+<section class="negar-sec-23-feature-bar py-3 md:py-4" aria-label="<?php esc_attr_e( 'ساعت و گجت‌های برتر', 'negar-shop' ); ?>">
 	<div class="container max-w-[1320px] mx-auto px-3">
 		
-		<div class="bg-gradient-to-r from-slate-900 to-indigo-950 rounded-3xl p-5 md:p-6 text-white overflow-hidden shadow-xl">
+		<div class="bg-gradient-to-r from-slate-900 to-indigo-950 rounded-3xl p-4 md:p-5 text-white overflow-hidden shadow-xl">
 			
 			<div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-center">
 				

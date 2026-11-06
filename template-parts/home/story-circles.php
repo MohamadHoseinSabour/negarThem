@@ -1,9 +1,10 @@
 <?php
 /**
- * Story Circles Component - 100% Matching Kaveh Demo 43
+ * Story Circles Component (HOME-01) - 100% Matching Kaveh Demo 43
+ * Reference: Demo 43 Section 0 (Top: 257px, Height: ~188px)
  *
  * @package Negar_Shop
- * @version 1.0.0
+ * @version 2.0.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -11,115 +12,45 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 $upload_dir = wp_upload_dir();
-$story_base = $upload_dir['baseurl'] . '/kaveh-demo/kaveh-demo/stories';
+$story_base = $upload_dir['baseurl'] . '/kaveh-demo/stories';
 
 $stories = array(
-	array(
-		'title'       => 'پیشنهاد داغ',
-		'badge'       => 'ویژه ما',
-		'badge_color' => 'bg-gradient-to-r from-rose-600 to-red-600',
-		'ring_color'  => 'from-rose-500 via-red-500 to-amber-500',
-		'image'       => $story_base . '/12-150x150-1.jpg',
-	),
-	array(
-		'title'       => 'شروتی متفاوت',
-		'badge'       => '',
-		'badge_color' => '',
-		'ring_color'  => 'from-fuchsia-500 to-rose-500',
-		'image'       => $story_base . '/11c84a6efb8352f41b63a80222c4e5e9d923c2b5_1739995946-150x150-1.jpg',
-	),
-	array(
-		'title'       => 'ویژه تو',
-		'badge'       => 'محصول ویژه',
-		'badge_color' => 'bg-gradient-to-r from-amber-500 to-orange-500',
-		'ring_color'  => 'from-rose-600 to-amber-500',
-		'image'       => $story_base . '/0ca0161bda0b47d19aa49cb9225c0f73b37e72ef_1738957158-150x150-1.jpg',
-	),
-	array(
-		'title'       => 'شانس با توست',
-		'badge'       => '',
-		'badge_color' => '',
-		'ring_color'  => 'from-purple-500 to-pink-500',
-		'image'       => $story_base . '/eaa2235390c5b4953f8a7263ef5673fefc932a8a_1739293537-150x150-1.jpg',
-	),
-	array(
-		'title'       => 'تخفیف رویایی',
-		'badge'       => 'تخفیف ویژه',
-		'badge_color' => 'bg-gradient-to-r from-rose-600 to-red-600',
-		'ring_color'  => 'from-pink-500 to-rose-600',
-		'image'       => $story_base . '/fcf5df508d005982feac77ce3c7feaff599f092b_1738870860-150x150-1.jpg',
-	),
-	array(
-		'title'       => 'تکرار نمیشه',
-		'badge'       => '',
-		'badge_color' => '',
-		'ring_color'  => 'from-rose-500 to-orange-400',
-		'image'       => $story_base . '/4-3-150x150-1.jpg',
-	),
-	array(
-		'title'       => 'دایره تکونی',
-		'badge'       => '',
-		'badge_color' => '',
-		'ring_color'  => 'from-violet-500 to-fuchsia-500',
-		'image'       => $story_base . '/bdacdf20f670352a4b6c52ea8ade329632dd5f3c_1739723592-150x150-1.jpg',
-	),
-	array(
-		'title'       => 'انتخاب خاص',
-		'badge'       => 'ویژه',
-		'badge_color' => 'bg-gradient-to-r from-amber-500 to-orange-500',
-		'ring_color'  => 'from-red-500 to-pink-500',
-		'image'       => $story_base . '/9d92f832e9dfad79b7dde268fe7cc100c8192767_1736272111-150x150-1.jpg',
-	),
-	array(
-		'title'       => 'یک خرید خاص',
-		'badge'       => '',
-		'badge_color' => '',
-		'ring_color'  => 'from-pink-500 to-rose-600',
-		'image'       => $story_base . '/22-150x150-1.jpg',
-	),
-	array(
-		'title'       => 'برای تو',
-		'badge'       => 'تخفیف ویژه',
-		'badge_color' => 'bg-gradient-to-r from-rose-600 to-red-600',
-		'ring_color'  => 'from-purple-500 to-rose-500',
-		'image'       => $story_base . '/30-150x150-1.jpg',
-	),
+	array( 'title' => 'پیشنهاد داغ', 'badge' => 'ویژه ما', 'img' => $story_base . '/story-1-pishnahad-dagh.jpg', 'ring' => 'from-rose-500 via-red-500 to-amber-500' ),
+	array( 'title' => 'شروعی متفاوت', 'badge' => '', 'img' => $story_base . '/story-2-shoru-motafavet.jpg', 'ring' => 'from-fuchsia-500 via-pink-500 to-rose-500' ),
+	array( 'title' => 'ویژه تو', 'badge' => 'محصول ویژه', 'img' => $story_base . '/story-3-vizhe-to.jpg', 'ring' => 'from-amber-500 via-orange-500 to-rose-500' ),
+	array( 'title' => 'شانس با توست', 'badge' => '', 'img' => $story_base . '/story-4-shans-ba-tost.jpg', 'ring' => 'from-purple-500 via-indigo-500 to-pink-500' ),
+	array( 'title' => 'تخفیف رویایی', 'badge' => 'تخفیف ویژه', 'img' => $story_base . '/story-5-takhfif-royaei.jpg', 'ring' => 'from-rose-600 via-pink-600 to-amber-400' ),
+	array( 'title' => 'تکرار نمیشه', 'badge' => '', 'img' => $story_base . '/story-1-pishnahad-dagh.jpg', 'ring' => 'from-rose-500 via-orange-500 to-amber-500' ),
+	array( 'title' => 'باورنکردنی', 'badge' => 'فرصت ناب', 'img' => $story_base . '/story-2-shoru-motafavet.jpg', 'ring' => 'from-pink-500 via-rose-500 to-red-500' ),
+	array( 'title' => 'انتخاب خاص', 'badge' => '', 'img' => $story_base . '/story-3-vizhe-to.jpg', 'ring' => 'from-indigo-500 via-purple-500 to-pink-500' ),
+	array( 'title' => 'یک خرید خاص', 'badge' => '', 'img' => $story_base . '/story-4-shans-ba-tost.jpg', 'ring' => 'from-emerald-500 via-teal-500 to-cyan-500' ),
+	array( 'title' => 'برای تو', 'badge' => 'کالای لوکس', 'img' => $story_base . '/story-5-takhfif-royaei.jpg', 'ring' => 'from-rose-500 via-amber-500 to-orange-500' ),
 );
 ?>
 
-<section class="story-circles-section py-3.5 bg-white border-b border-slate-100 relative">
-	<div class="container relative">
+<section class="negar-story-circles-section py-4 bg-white border-b border-slate-100/80" aria-label="<?php esc_attr_e( 'استوری‌ها و پیشنهادات سریع', 'negar-shop' ); ?>">
+	<div class="container max-w-[1320px] mx-auto px-3">
 		
-		<!-- Left / Right Carousel Navigation Arrows -->
-		<button type="button" class="story-nav-btn story-prev absolute right-1 top-1/2 -translate-y-1/2 z-10 w-7 h-7 rounded-full bg-white shadow-md border border-slate-200 text-slate-700 flex items-center justify-center hover:bg-rose-50 hover:text-rose-600 transition" aria-label="<?php esc_attr_e( 'قبلی', 'negar-shop' ); ?>">
-			<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
-		</button>
-		<button type="button" class="story-nav-btn story-next absolute left-1 top-1/2 -translate-y-1/2 z-10 w-7 h-7 rounded-full bg-white shadow-md border border-slate-200 text-slate-700 flex items-center justify-center hover:bg-rose-50 hover:text-rose-600 transition" aria-label="<?php esc_attr_e( 'بعدی', 'negar-shop' ); ?>">
-			<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m15 18-6-6 6-6"/></svg>
-		</button>
-
-		<!-- Horizontal Story Circles Track -->
-		<div class="story-track flex items-center justify-between gap-3 sm:gap-4 overflow-x-auto no-scrollbar px-6 sm:px-8 py-1">
-			<?php foreach ( $stories as $story ) : ?>
-				<a href="<?php echo esc_url( wc_get_page_permalink( 'shop' ) ); ?>" class="story-item flex flex-col items-center shrink-0 group">
+		<div class="stories-track flex items-start gap-4 md:gap-6 overflow-x-auto pb-2 no-scrollbar scroll-smooth">
+			<?php foreach ( $stories as $s ) : ?>
+				<a href="<?php echo esc_url( wc_get_page_permalink( 'shop' ) ); ?>" class="story-circle-item group flex flex-col items-center shrink-0 w-[76px] sm:w-[84px] text-center cursor-pointer">
 					
-					<!-- Circle Avatar with Gradient Ring -->
-					<div class="relative w-15 h-15 sm:w-16 sm:h-16 rounded-full p-0.5 bg-gradient-to-tr <?php echo esc_attr( $story['ring_color'] ); ?> group-hover:scale-105 transition-transform duration-300">
-						<div class="w-full h-full rounded-full p-0.5 bg-white overflow-hidden">
-							<img src="<?php echo esc_url( $story['image'] ); ?>" alt="<?php echo esc_attr( $story['title'] ); ?>" class="w-full h-full object-cover rounded-full" loading="lazy">
+					<!-- Ring & Avatar -->
+					<div class="relative w-[72px] h-[72px] sm:w-[80px] sm:h-[80px] rounded-full p-[2.5px] bg-gradient-to-tr <?php echo esc_attr( $s['ring'] ); ?> flex items-center justify-center shadow-xs group-hover:scale-105 group-hover:shadow-md transition-all duration-300">
+						<div class="w-full h-full rounded-full overflow-hidden border-2 border-white bg-slate-100 flex items-center justify-center">
+							<img src="<?php echo esc_url( $s['img'] ); ?>" alt="<?php echo esc_attr( $s['title'] ); ?>" class="w-full h-full object-cover">
 						</div>
 
-						<!-- Optional Bottom Pill Badge -->
-						<?php if ( ! empty( $story['badge'] ) ) : ?>
-							<span class="absolute -bottom-1 left-1/2 -translate-x-1/2 <?php echo esc_attr( $story['badge_color'] ); ?> text-white text-[9px] font-black px-1.5 py-0.5 rounded-full shadow-xs whitespace-nowrap leading-none scale-90">
-								<?php echo esc_html( $story['badge'] ); ?>
+						<?php if ( ! empty( $s['badge'] ) ) : ?>
+							<span class="absolute -bottom-1 bg-rose-600 text-white text-[9px] font-black px-1.5 py-0.2 rounded-full shadow-xs border border-white whitespace-nowrap">
+								<?php echo esc_html( $s['badge'] ); ?>
 							</span>
 						<?php endif; ?>
 					</div>
 
-					<!-- Story Title -->
-					<span class="text-3xs sm:text-2xs font-bold text-slate-700 group-hover:text-rose-600 transition-colors mt-2 text-center whitespace-nowrap">
-						<?php echo esc_html( $story['title'] ); ?>
+					<!-- Title -->
+					<span class="text-xs font-bold text-[#212341] group-hover:text-rose-600 transition-colors mt-2 line-clamp-1 leading-snug">
+						<?php echo esc_html( $s['title'] ); ?>
 					</span>
 
 				</a>

@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 $sale_products_2 = new WP_Query( array(
 	'post_type'      => 'product',
 	'post_status'    => 'publish',
-	'posts_per_page' => 6,
+	'posts_per_page' => 4,
 	'orderby'        => 'rand',
 ) );
 ?>

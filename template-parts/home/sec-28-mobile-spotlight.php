@@ -5,6 +5,7 @@
  * Heading: "پربازدید ترین محصولات - گلکسی اس ۲۵ اف ای"
  *
  * @package Negar_Shop
+ * @version 2.0.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -17,16 +18,17 @@ $s25_img    = $upload_dir['baseurl'] . '/kaveh-demo/products/samsung-s25-fe.png'
 $adjacent_products = new WP_Query( array(
 	'post_type'      => 'product',
 	'post_status'    => 'publish',
-	'posts_per_page' => 4,
+	'posts_per_page' => 3,
 	'orderby'        => 'date',
 	'order'          => 'DESC',
 ) );
 ?>
 
-<section class="negar-sec-28-s25-spotlight py-8" aria-label="<?php esc_attr_e( 'ویترین گلکسی S25 FE', 'negar-shop' ); ?>">
+<section class="negar-sec-28-s25-spotlight py-5" aria-label="<?php esc_attr_e( 'ویترین گلکسی S25 FE', 'negar-shop' ); ?>">
 	<div class="container max-w-[1320px] mx-auto px-3">
 		
-		<div class="flex items-center justify-between pb-4 mb-6 border-b border-slate-100">
+		<!-- Section Heading -->
+		<div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-100">
 			<div class="flex items-baseline gap-3">
 				<h2 class="text-xl md:text-2xl font-black text-[#212341]">
 					<?php esc_html_e( 'پربازدید ترین محصولات بر اساس مخاطبان', 'negar-shop' ); ?>
@@ -41,42 +43,42 @@ $adjacent_products = new WP_Query( array(
 			</a>
 		</div>
 
-		<div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+		<div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch">
 			
-			<!-- Spotlight Card (5 Cols) -->
-			<div class="lg:col-span-5 bg-gradient-to-bl from-slate-50 via-white to-blue-50/40 rounded-3xl p-6 border border-slate-200 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col justify-between">
-				<div class="flex items-center justify-between mb-4">
-					<span class="text-xs font-bold text-blue-600 bg-blue-100/70 px-3 py-1 rounded-full">
+			<!-- Spotlight Featured Card (4 Cols) -->
+			<div class="lg:col-span-4 bg-gradient-to-bl from-slate-50 via-white to-blue-50/40 rounded-3xl p-5 border border-slate-200 shadow-xs hover:shadow-lg transition-all duration-300 flex flex-col justify-between">
+				<div class="flex items-center justify-between mb-2">
+					<span class="text-3xs font-bold text-blue-600 bg-blue-100/70 px-2.5 py-0.5 rounded-full">
 						<?php esc_html_e( 'پیشنهاد ویژه هواداران سامسونگ', 'negar-shop' ); ?>
 					</span>
 					<span class="text-amber-500 font-bold text-xs flex items-center gap-1">★ ۴.۹</span>
 				</div>
 				
-				<div class="aspect-square max-h-[300px] flex items-center justify-center p-4 my-2">
-					<img src="<?php echo esc_url( $s25_img ); ?>" alt="<?php esc_attr_e( 'گوشی سامسونگ Galaxy S25 FE', 'negar-shop' ); ?>" class="w-full h-full object-contain hover:scale-105 transition-transform duration-500">
+				<div class="h-[200px] flex items-center justify-center p-2 my-1">
+					<img src="<?php echo esc_url( $s25_img ); ?>" alt="<?php esc_attr_e( 'گوشی سامسونگ Galaxy S25 FE', 'negar-shop' ); ?>" class="max-h-full max-w-full object-contain hover:scale-105 transition-transform duration-500">
 				</div>
 
 				<div>
-					<h3 class="text-base md:text-lg font-black text-[#212341] mb-2">
+					<h3 class="text-sm md:text-base font-black text-[#212341] mb-1 line-clamp-2">
 						<?php esc_html_e( 'گوشی موبایل سامسونگ مدل Galaxy S25 FE دو سیم‌کارت ظرفیت ۲۵۶ گیگابایت', 'negar-shop' ); ?>
 					</h3>
-					<p class="text-xs text-slate-500 line-clamp-2 leading-relaxed mb-4">
-						<?php esc_html_e( 'صفحه نمایش Dynamic AMOLED 2X با پردازنده قدرتمند و دوربین ارتقا یافته با هوش مصنوعی Galaxy AI.', 'negar-shop' ); ?>
+					<p class="text-2xs text-slate-500 line-clamp-2 leading-relaxed mb-3">
+						<?php esc_html_e( 'صفحه نمایش Dynamic AMOLED 2X با پردازنده قدرتمند و هوش مصنوعی Galaxy AI.', 'negar-shop' ); ?>
 					</p>
-					<div class="flex items-center justify-between pt-3 border-t border-slate-100">
+					<div class="flex items-center justify-between pt-2.5 border-t border-slate-100">
 						<div>
 							<span class="text-3xs text-slate-400 block line-through">۴۹,۸۰۰,۰۰۰ تومان</span>
-							<span class="text-base font-black text-rose-600">۴۴,۵۰۰,۰۰۰ تومان</span>
+							<span class="text-sm font-black text-rose-600">۴۴,۵۰۰,۰۰۰ تومان</span>
 						</div>
-						<a href="<?php echo esc_url( wc_get_page_permalink( 'shop' ) ); ?>" class="bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs px-5 py-2.5 rounded-full transition shadow-md">
+						<a href="<?php echo esc_url( wc_get_page_permalink( 'shop' ) ); ?>" class="bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs px-4 py-2 rounded-full transition shadow-xs">
 							<?php esc_html_e( 'خرید آنی', 'negar-shop' ); ?>
 						</a>
 					</div>
 				</div>
 			</div>
 
-			<!-- 4 Adjacent Cards (7 Cols) -->
-			<div class="lg:col-span-7 grid grid-cols-2 sm:grid-cols-2 gap-4">
+			<!-- 3 Adjacent Cards in Single Row (8 Cols) -->
+			<div class="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
 				<?php
 				if ( $adjacent_products->have_posts() ) :
 					while ( $adjacent_products->have_posts() ) :

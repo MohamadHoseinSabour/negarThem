@@ -1,161 +1,201 @@
-﻿<?php
+<?php
 /**
- * Product Tabs Carousel Component (HOME-05)
+ * Product Tabs Component - Matching Kaveh Demo 43 (HOME-05)
+ * Reference: Demo 43 Section 4 (Top: 2067px, Height: ~486px)
+ * Heading: "پربازدید ترین محصولات بر اساس مخاطبان"
+ * Tabs: لپتاپ ها | کنسول ها | موبایل | ساعت هوشمند
  *
  * @package Negar_Shop
- * @version 1.0.0
+ * @version 2.0.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$newest_products    = array();
-$bestseller_products = array();
-$onsale_products    = array();
-
-if ( class_exists( 'WooCommerce' ) ) {
-	// 1. Newest
-	$newest_products = new WP_Query(
+// 1. Laptops
+$laptops_query = new WP_Query( array(
+	'post_type'      => 'product',
+	'post_status'    => 'publish',
+	'posts_per_page' => 5,
+	'tax_query'      => array(
 		array(
-			'post_type'      => 'product',
-			'post_status'    => 'publish',
-			'posts_per_page' => 8,
-			'orderby'        => 'date',
-			'order'          => 'DESC',
-		)
-	);
+			'taxonomy' => 'product_cat',
+			'field'    => 'slug',
+			'terms'    => array( 'laptop', 'لپ-تاپ', 'لپتاپ' ),
+		),
+	),
+) );
+if ( ! $laptops_query->have_posts() ) {
+	$laptops_query = new WP_Query( array( 'post_type' => 'product', 'post_status' => 'publish', 'posts_per_page' => 5 ) );
+}
 
-	// 2. Best Sellers
-	$bestseller_products = new WP_Query(
+// 2. Consoles
+$consoles_query = new WP_Query( array(
+	'post_type'      => 'product',
+	'post_status'    => 'publish',
+	'posts_per_page' => 5,
+	'tax_query'      => array(
 		array(
-			'post_type'      => 'product',
-			'post_status'    => 'publish',
-			'posts_per_page' => 8,
-			'meta_key'       => 'total_sales',
-			'orderby'        => 'meta_value_num',
-			'order'          => 'DESC',
-		)
-	);
+			'taxonomy' => 'product_cat',
+			'field'    => 'slug',
+			'terms'    => array( 'console', 'کنسول-بازی', 'کنسول' ),
+		),
+	),
+) );
+if ( ! $consoles_query->have_posts() ) {
+	$consoles_query = new WP_Query( array( 'post_type' => 'product', 'post_status' => 'publish', 'posts_per_page' => 5, 'orderby' => 'rand' ) );
+}
 
-	// 3. On Sale
-	$sale_ids = wc_get_product_ids_on_sale();
-	$onsale_products = new WP_Query(
+// 3. Mobile
+$mobile_query = new WP_Query( array(
+	'post_type'      => 'product',
+	'post_status'    => 'publish',
+	'posts_per_page' => 5,
+	'tax_query'      => array(
 		array(
-			'post_type'      => 'product',
-			'post_status'    => 'publish',
-			'posts_per_page' => 8,
-			'post__in'       => ! empty( $sale_ids ) ? $sale_ids : array( 0 ),
-		)
-	);
+			'taxonomy' => 'product_cat',
+			'field'    => 'slug',
+			'terms'    => array( 'mobile', 'گوشی-موبایل', 'موبایل' ),
+		),
+	),
+) );
+if ( ! $mobile_query->have_posts() ) {
+	$mobile_query = new WP_Query( array( 'post_type' => 'product', 'post_status' => 'publish', 'posts_per_page' => 5, 'orderby' => 'date' ) );
+}
+
+// 4. Smartwatches
+$watches_query = new WP_Query( array(
+	'post_type'      => 'product',
+	'post_status'    => 'publish',
+	'posts_per_page' => 5,
+	'tax_query'      => array(
+		array(
+			'taxonomy' => 'product_cat',
+			'field'    => 'slug',
+			'terms'    => array( 'smartwatch', 'ساعت-هوشمند' ),
+		),
+	),
+) );
+if ( ! $watches_query->have_posts() ) {
+	$watches_query = new WP_Query( array( 'post_type' => 'product', 'post_status' => 'publish', 'posts_per_page' => 5, 'orderby' => 'comment_count' ) );
 }
 ?>
 
-<section class="negar-product-tabs-section py-6" aria-label="<?php esc_attr_e( 'محصولات منتخب فروشگاه', 'negar-shop' ); ?>">
-	<div class="container">
+<section class="negar-product-tabs-section py-6" aria-label="<?php esc_attr_e( 'پربازدید ترین محصولات بر اساس مخاطبان', 'negar-shop' ); ?>">
+	<div class="container max-w-[1320px] mx-auto px-3">
 		
-		<!-- Section Header with Tabs Navigation -->
-		<div class="tabs-header flex flex-col sm:flex-row items-center justify-between gap-4 mb-6 pb-3 border-b border-slate-200">
-			<div class="flex items-center gap-2">
-				<span class="w-2.5 h-6 rounded-full bg-rose-600 inline-block"></span>
-				<h2 class="text-base md:text-lg font-bold text-slate-800 m-0">
-					<?php esc_html_e( 'منتخب محصولات نگار شاپ', 'negar-shop' ); ?>
+		<!-- Section Header with Title, Tabs, and View All Link -->
+		<div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 mb-4 border-b border-slate-100">
+			
+			<!-- Right: Title & Subtitle -->
+			<div class="flex items-baseline gap-3">
+				<h2 class="text-xl md:text-2xl font-black text-[#212341]">
+					<?php esc_html_e( 'پربازدید ترین محصولات', 'negar-shop' ); ?>
 				</h2>
+				<span class="text-xs text-slate-400 font-medium hidden sm:inline">
+					<?php esc_html_e( 'بر اساس مخاطبان', 'negar-shop' ); ?>
+				</span>
 			</div>
 
-			<!-- Tab Buttons -->
-			<div class="product-tab-buttons flex items-center gap-1.5 bg-slate-100 p-1 rounded-xl">
-				<button type="button" class="tab-trigger active text-xs font-bold px-4 py-2 rounded-lg transition" data-target="#tab-panel-newest">
-					<?php esc_html_e( 'جدیدترین‌ها', 'negar-shop' ); ?>
+			<!-- Center: Tabs Navigation Pills (Matching Demo) -->
+			<div class="product-tab-buttons flex items-center gap-1.5 bg-slate-100/80 p-1 rounded-2xl overflow-x-auto no-scrollbar">
+				<button type="button" class="tab-trigger active text-xs font-bold px-4 py-1.5 rounded-xl transition-all duration-200 bg-white text-rose-600 shadow-xs" data-target="#tab-panel-laptops">
+					<?php esc_html_e( 'لپتاپ ها', 'negar-shop' ); ?>
 				</button>
-				<button type="button" class="tab-trigger text-xs font-bold px-4 py-2 rounded-lg transition" data-target="#tab-panel-bestseller">
-					<?php esc_html_e( 'پرفروش‌ترین‌ها', 'negar-shop' ); ?>
+				<button type="button" class="tab-trigger text-xs font-bold px-4 py-1.5 rounded-xl transition-all duration-200 text-slate-600 hover:text-slate-900" data-target="#tab-panel-consoles">
+					<?php esc_html_e( 'کنسول ها', 'negar-shop' ); ?>
 				</button>
-				<button type="button" class="tab-trigger text-xs font-bold px-4 py-2 rounded-lg transition" data-target="#tab-panel-onsale">
-					<?php esc_html_e( 'تخفیف‌دارها', 'negar-shop' ); ?>
+				<button type="button" class="tab-trigger text-xs font-bold px-4 py-1.5 rounded-xl transition-all duration-200 text-slate-600 hover:text-slate-900" data-target="#tab-panel-mobile">
+					<?php esc_html_e( 'موبایل', 'negar-shop' ); ?>
+				</button>
+				<button type="button" class="tab-trigger text-xs font-bold px-4 py-1.5 rounded-xl transition-all duration-200 text-slate-600 hover:text-slate-900" data-target="#tab-panel-watches">
+					<?php esc_html_e( 'ساعت هوشمند', 'negar-shop' ); ?>
 				</button>
 			</div>
+
+			<!-- Left: View All Link -->
+			<a href="<?php echo esc_url( wc_get_page_permalink( 'shop' ) ); ?>" class="text-xs font-bold text-rose-600 hover:text-rose-700 flex items-center gap-1 transition-colors shrink-0">
+				<span><?php esc_html_e( 'مشاهده همه', 'negar-shop' ); ?></span>
+				<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+			</a>
+
 		</div>
 
-		<!-- Tab Panels Container -->
+		<!-- Single-Row Panels Container (Max 5 items per panel) -->
 		<div class="product-tab-panels">
 
-			<!-- Panel 1: Newest -->
-			<div id="tab-panel-newest" class="product-tab-panel active">
-				<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4">
+			<!-- Panel 1: Laptops -->
+			<div id="tab-panel-laptops" class="product-tab-panel active">
+				<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
 					<?php
-					if ( ! empty( $newest_products ) && $newest_products->have_posts() ) :
-						while ( $newest_products->have_posts() ) :
-							$newest_products->the_post();
-							get_template_part( 'template-parts/product/card' );
-						endwhile;
-						wp_reset_postdata();
-					else :
-						for ( $i = 1; $i <= 4; $i++ ) :
+					if ( $laptops_query->have_posts() ) :
+						while ( $laptops_query->have_posts() ) :
+							$laptops_query->the_post();
 							?>
-							<div class="sample-card bg-white p-4 rounded-2xl border border-slate-100 text-center">
-								<div class="w-full aspect-square bg-slate-100 rounded-xl mb-3 flex items-center justify-center text-slate-400">
-									<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line></svg>
-								</div>
-								<h4 class="text-xs font-bold text-slate-800 mb-1">کالای جدید <?php echo esc_html( $i ); ?></h4>
-								<span class="text-xs font-bold text-rose-600">۹۵۰,۰۰۰ تومان</span>
+							<div class="product-grid-item">
+								<?php get_template_part( 'template-parts/product/card' ); ?>
 							</div>
 							<?php
-						endfor;
+						endwhile;
+						wp_reset_postdata();
 					endif;
 					?>
 				</div>
 			</div>
 
-			<!-- Panel 2: Best Sellers -->
-			<div id="tab-panel-bestseller" class="product-tab-panel hidden">
-				<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4">
+			<!-- Panel 2: Consoles -->
+			<div id="tab-panel-consoles" class="product-tab-panel hidden">
+				<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
 					<?php
-					if ( ! empty( $bestseller_products ) && $bestseller_products->have_posts() ) :
-						while ( $bestseller_products->have_posts() ) :
-							$bestseller_products->the_post();
-							get_template_part( 'template-parts/product/card' );
-						endwhile;
-						wp_reset_postdata();
-					else :
-						for ( $i = 1; $i <= 4; $i++ ) :
+					if ( $consoles_query->have_posts() ) :
+						while ( $consoles_query->have_posts() ) :
+							$consoles_query->the_post();
 							?>
-							<div class="sample-card bg-white p-4 rounded-2xl border border-slate-100 text-center">
-								<div class="w-full aspect-square bg-slate-100 rounded-xl mb-3 flex items-center justify-center text-slate-400">
-									<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-								</div>
-								<h4 class="text-xs font-bold text-slate-800 mb-1">کالای پرفروش <?php echo esc_html( $i ); ?></h4>
-								<span class="text-xs font-bold text-rose-600">۱,۳۵۰,۰۰۰ تومان</span>
+							<div class="product-grid-item">
+								<?php get_template_part( 'template-parts/product/card' ); ?>
 							</div>
 							<?php
-						endfor;
+						endwhile;
+						wp_reset_postdata();
 					endif;
 					?>
 				</div>
 			</div>
 
-			<!-- Panel 3: On Sale -->
-			<div id="tab-panel-onsale" class="product-tab-panel hidden">
-				<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4">
+			<!-- Panel 3: Mobile -->
+			<div id="tab-panel-mobile" class="product-tab-panel hidden">
+				<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
 					<?php
-					if ( ! empty( $onsale_products ) && $onsale_products->have_posts() ) :
-						while ( $onsale_products->have_posts() ) :
-							$onsale_products->the_post();
-							get_template_part( 'template-parts/product/card' );
-						endwhile;
-						wp_reset_postdata();
-					else :
-						for ( $i = 1; $i <= 4; $i++ ) :
+					if ( $mobile_query->have_posts() ) :
+						while ( $mobile_query->have_posts() ) :
+							$mobile_query->the_post();
 							?>
-							<div class="sample-card bg-white p-4 rounded-2xl border border-slate-100 text-center">
-								<div class="w-full aspect-square bg-slate-100 rounded-xl mb-3 flex items-center justify-center text-slate-400">
-									<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-								</div>
-								<h4 class="text-xs font-bold text-slate-800 mb-1">کالای تخفیف‌دار <?php echo esc_html( $i ); ?></h4>
-								<span class="text-xs font-bold text-rose-600">۷۹۰,۰۰۰ تومان</span>
+							<div class="product-grid-item">
+								<?php get_template_part( 'template-parts/product/card' ); ?>
 							</div>
 							<?php
-						endfor;
+						endwhile;
+						wp_reset_postdata();
+					endif;
+					?>
+				</div>
+			</div>
+
+			<!-- Panel 4: Watches -->
+			<div id="tab-panel-watches" class="product-tab-panel hidden">
+				<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+					<?php
+					if ( $watches_query->have_posts() ) :
+						while ( $watches_query->have_posts() ) :
+							$watches_query->the_post();
+							?>
+							<div class="product-grid-item">
+								<?php get_template_part( 'template-parts/product/card' ); ?>
+							</div>
+							<?php
+						endwhile;
+						wp_reset_postdata();
 					endif;
 					?>
 				</div>
