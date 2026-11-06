@@ -18,7 +18,7 @@ $shop_link  = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink
 <div class="elementor-element elementor-element-2ab93256 e-con-full e-flex e-con e-parent" data-id="2ab93256" data-element_type="container" data-e-type="container">
 				<div class="elementor-element elementor-element-6ef6dd31 elementor-widget elementor-widget-popularproductsnkkaveh" data-id="6ef6dd31" data-element_type="widget" data-e-type="widget" data-widget_type="popularproductsnkkaveh.default">
 				<div class="elementor-widget-container">
-							<section class="popular-products-nk popular-products-nk-6ef6dd31">
+							<section class="popular-products-nk popular-products-nk-6ef6dd31 my-10 lg:my-16">
 			<div class="container">
 				<div class="popular-products-nk__wrapper position-relative d-flex align-items-center overflow-hidden">
 					<div class="line position-absolute top-0 end-0 w-100 h-100"></div>

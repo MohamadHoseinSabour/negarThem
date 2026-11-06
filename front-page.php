@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 get_header();
 ?>
 
-<main id="primary" class="site-main homepage-main space-y-2 md:space-y-4">
+<main id="primary" class="site-main homepage-main">
 
 	<?php
 	// Check if this page is edited with Elementor

@@ -88,7 +88,7 @@ $stories = array(
 );
 ?>
 
-<section class="story-shop position-relative my-4" aria-label="<?php esc_attr_e( 'استوری‌ها و پیشنهادات سریع', 'negar-shop' ); ?>">
+<section class="story-shop position-relative my-6 lg:my-8" aria-label="<?php esc_attr_e( 'استوری‌ها و پیشنهادات سریع', 'negar-shop' ); ?>">
 	<div class="container max-w-[1320px] mx-auto px-3">
 		
 		<!-- Swiper Container with left/right fade markers matching Demo 43 -->

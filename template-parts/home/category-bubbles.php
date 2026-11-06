@@ -18,7 +18,7 @@ $shop_link  = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink
 <div class="elementor-element elementor-element-619bae2e e-con-full e-flex e-con e-parent e-lazyloaded" data-id="619bae2e" data-element_type="container" data-e-type="container">
 				<div class="elementor-element elementor-element-57191199 elementor-widget elementor-widget-categoriesnkkaveh" data-id="57191199" data-element_type="widget" data-e-type="widget" data-widget_type="categoriesnkkaveh.default">
 				<div class="elementor-widget-container">
-							<section class="categories-nk categories-nk-57191199">
+							<section class="categories-nk categories-nk-57191199 my-10 lg:my-16">
 			<div class="container">
 									<div class="section-heading-one-nk d-flex align-items-center gap-2">
 													<div class="title f-iran-yekan">

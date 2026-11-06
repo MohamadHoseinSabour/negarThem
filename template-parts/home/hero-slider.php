@@ -24,7 +24,7 @@ if ( $fc_prod ) {
 <div class="elementor-element elementor-element-229ccc7d e-con-full e-flex e-con e-parent e-lazyloaded" data-id="229ccc7d" data-element_type="container" data-e-type="container">
 				<div class="elementor-element elementor-element-6b94d804 elementor-widget elementor-widget-landingnkkaveh" data-id="6b94d804" data-element_type="widget" data-e-type="widget" data-widget_type="landingnkkaveh.default">
 				<div class="elementor-widget-container">
-							<section class="landing-nk landing-nk-6b94d804 is-first-slide" data-landing-nk-id="6b94d804" data-landing-nk-carousel-loop="1" data-landing-nk-products-loop="0" data-landing-nk-btn-view-dynamic="1" data-landing-nk-ready="1">
+							<section class="landing-nk landing-nk-6b94d804 is-first-slide my-8 lg:my-14" data-landing-nk-id="6b94d804" data-landing-nk-carousel-loop="1" data-landing-nk-products-loop="0" data-landing-nk-btn-view-dynamic="1" data-landing-nk-ready="1">
 			<div class="container">
 				<div class="landing-nk__wrapper d-flex align-items-lg-center position-relative flex-column flex-lg-row">
 					<div class="landing-nk__carousel w-100 position-relative d-flex align-items-center">
@@ -153,13 +153,14 @@ if ( $fc_prod ) {
 																							</div>
 										</div>
 									</div></div>
-															<div class="swiper-button-prev d-flex align-items-center justify-content-center" tabindex="0" role="button" aria-label="Previous slide" aria-controls="swiper-wrapper-4ec72bd21c10de77d">
+													<span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span></div>
+								<!-- Slider navigation buttons nested right inside the crescents -->
+								<div class="swiper-button-prev d-flex align-items-center justify-content-center" tabindex="0" role="button" aria-label="Previous slide">
 									<i class="icon-chevron-right lh-1"></i>
 								</div>
-								<div class="swiper-button-next d-flex align-items-center justify-content-center" tabindex="0" role="button" aria-label="Next slide" aria-controls="swiper-wrapper-4ec72bd21c10de77d">
+								<div class="swiper-button-next d-flex align-items-center justify-content-center" tabindex="0" role="button" aria-label="Next slide">
 									<i class="icon-chevron-left lh-1"></i>
 								</div>
-													<span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span></div>
 					</div>
 
 					<div class="landing-nk__products position-relative w-100">

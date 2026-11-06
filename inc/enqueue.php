@@ -51,11 +51,19 @@ function negar_shop_scripts() {
 		NEGAR_SHOP_VERSION
 	);
 
+	// Icomoon Official Icon Fonts
+	wp_enqueue_style(
+		'kaveh-icomoon',
+		NEGAR_SHOP_URI . '/assets/css/vendor/icomoon.css',
+		array(),
+		'5.0.0'
+	);
+
 	// Bootstrap 5 RTL Framework Utilities
 	wp_enqueue_style(
 		'bootstrap-rtl',
 		NEGAR_SHOP_URI . '/assets/css/vendor/bootstrap.rtl.min.css',
-		array(),
+		array( 'kaveh-icomoon' ),
 		'5.3.0'
 	);
 
