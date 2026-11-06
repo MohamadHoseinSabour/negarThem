@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * Mobile Header Template Part
  *
@@ -38,7 +38,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div>
 
 		<!-- Cart Trigger Icon -->
-		<button type="button" class="negar-cart-trigger w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-700 relative" aria-label="<?php esc_attr_e( 'سبد خرید', 'negar-shop' ); ?>">
+		<button type="button" class="negar-cart-trigger w-10 h-10 rounded-xl bg-rose-50 border border-rose-200 flex items-center justify-center text-rose-700 relative" aria-label="<?php esc_attr_e( 'سبد خرید', 'negar-shop' ); ?>">
 			<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 				<path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
 				<line x1="3" y1="6" x2="21" y2="6"></line>
@@ -52,7 +52,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<!-- Mobile Search Row -->
 	<div class="px-4 pb-3">
-		<form role="search" method="get" class="negar-ajax-search-form flex items-center rounded-xl border border-slate-200 bg-slate-50 focus-within:border-emerald-600 focus-within:bg-white transition" action="<?php echo esc_url( home_url( '/' ) ); ?>">
+		<form role="search" method="get" class="negar-ajax-search-form flex items-center rounded-xl border border-slate-200 bg-slate-50 focus-within:border-rose-600 focus-within:bg-white transition" action="<?php echo esc_url( home_url( '/' ) ); ?>">
 			<input
 				type="search"
 				name="s"
@@ -64,7 +64,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<?php if ( class_exists( 'WooCommerce' ) ) : ?>
 				<input type="hidden" name="post_type" value="product">
 			<?php endif; ?>
-			<button type="submit" class="p-2 text-slate-400 hover:text-emerald-600" aria-label="<?php esc_attr_e( 'جستجو', 'negar-shop' ); ?>">
+			<button type="submit" class="p-2 text-slate-400 hover:text-rose-600" aria-label="<?php esc_attr_e( 'جستجو', 'negar-shop' ); ?>">
 				<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
 					<circle cx="11" cy="11" r="8"></circle>
 					<line x1="21" y1="21" x2="16.65" y2="16.65"></line>

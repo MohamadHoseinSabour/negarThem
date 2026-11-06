@@ -33,16 +33,19 @@ get_header();
 		endwhile;
 	else :
 		/**
-		 * Default High-Conversion Standalone Homepage Layout
+		 * Default High-Conversion Standalone Homepage Layout (Kaveh Demo 43 Spec)
 		 */
 
-		// 1. Hero Slider & Side Banners (HOME-01)
+		// 1. Story Circles Row (Matching Demo Image 2)
+		get_template_part( 'template-parts/home/story-circles' );
+
+		// 2. Hero Section: Xbox Crimson Banner + Flash Deal Card (HOME-01 / Matching Demo Image 2)
 		get_template_part( 'template-parts/home/hero-slider' );
 
-		// 2. Quick Category Bubbles (HOME-02)
+		// 3. Quick Category Bubbles (HOME-02)
 		get_template_part( 'template-parts/home/category-bubbles' );
 
-		// 3. Flash Deals Slider with Realtime Timer (HOME-03)
+		// 4. Flash Deals Slider with Realtime Timer (HOME-03)
 		get_template_part( 'template-parts/home/flash-deals' );
 
 		// 4. Promotional Banners Grid (HOME-04)

@@ -88,3 +88,19 @@ if ( ! function_exists( 'negar_shop_product_discount_percentage' ) ) :
 		return 0;
 	}
 endif;
+
+if ( ! function_exists( 'negar_shop_get_discount_badge' ) ) :
+	/**
+	 * Output discount badge HTML for single product and cards.
+	 *
+	 * @param WC_Product $product Product instance.
+	 * @return string Badge HTML.
+	 */
+	function negar_shop_get_discount_badge( $product ) {
+		$discount = negar_shop_product_discount_percentage( $product );
+		if ( $discount <= 0 ) {
+			return '';
+		}
+		return '<span class="badge badge-discount bg-rose-600 text-white text-xs font-black py-1 px-2.5 rounded-full shadow-xs">٪' . esc_html( $discount ) . ' تخفیف</span>';
+	}
+endif;

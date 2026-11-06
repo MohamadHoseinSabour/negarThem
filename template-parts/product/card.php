@@ -77,7 +77,7 @@ $discount_pct = function_exists( 'negar_shop_product_discount_percentage' ) ? ne
 
 		<!-- Quick View Floating Button -->
 		<div class="quick-view-overlay absolute bottom-2 left-0 right-0 flex justify-center opacity-0 group-hover:opacity-100 transition duration-200">
-			<button type="button" class="btn-quickview bg-white/95 backdrop-blur-xs text-slate-800 hover:text-emerald-600 px-3 py-1.5 rounded-lg text-2xs font-bold shadow-md flex items-center gap-1.5 border border-slate-200 transition" data-id="<?php echo esc_attr( $product_id ); ?>">
+			<button type="button" class="btn-quickview bg-white/95 backdrop-blur-xs text-slate-800 hover:text-rose-600 px-3 py-1.5 rounded-lg text-2xs font-bold shadow-md flex items-center gap-1.5 border border-slate-200 transition" data-id="<?php echo esc_attr( $product_id ); ?>">
 				<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 					<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
 					<circle cx="12" cy="12" r="3"></circle>
@@ -93,13 +93,13 @@ $discount_pct = function_exists( 'negar_shop_product_discount_percentage' ) ? ne
 		$terms = get_the_terms( $product_id, 'product_cat' );
 		if ( ! empty( $terms ) && ! is_wp_error( $terms ) ) :
 			?>
-			<a href="<?php echo esc_url( get_term_link( $terms[0] ) ); ?>" class="text-3xs font-medium text-slate-400 hover:text-emerald-600 transition block mb-1">
+			<a href="<?php echo esc_url( get_term_link( $terms[0] ) ); ?>" class="text-3xs font-medium text-slate-400 hover:text-rose-600 transition block mb-1">
 				<?php echo esc_html( $terms[0]->name ); ?>
 			</a>
 		<?php endif; ?>
 
 		<h3 class="product-title text-xs font-bold text-slate-800 line-clamp-2 leading-snug m-0">
-			<a href="<?php echo esc_url( get_permalink( $product_id ) ); ?>" class="hover:text-emerald-600 transition">
+			<a href="<?php echo esc_url( get_permalink( $product_id ) ); ?>" class="hover:text-rose-600 transition">
 				<?php echo esc_html( $product->get_name() ); ?>
 			</a>
 		</h3>
@@ -109,7 +109,7 @@ $discount_pct = function_exists( 'negar_shop_product_discount_percentage' ) ? ne
 	<div class="card-footer pt-2 border-t border-slate-50 flex items-center justify-between gap-2">
 		<!-- Price -->
 		<div class="price-wrap text-right">
-			<div class="text-xs font-black text-emerald-700 leading-tight">
+			<div class="text-xs font-black text-rose-600 leading-tight">
 				<?php echo wp_kses_post( $product->get_price_html() ); ?>
 			</div>
 		</div>

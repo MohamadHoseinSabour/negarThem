@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * Flash Deals / Amazing Offers Slider Component (HOME-03)
  *
@@ -111,7 +111,7 @@ if ( class_exists( 'WooCommerce' ) ) {
 										<h4 class="text-xs font-bold text-slate-800 mb-2 line-clamp-2">کالای شگفت‌انگیز نمونه <?php echo esc_html( $i ); ?></h4>
 										<div class="flex items-center justify-between text-xs">
 											<span class="text-slate-400 line-through text-3xs">۱,۲۰۰,۰۰۰ تومان</span>
-											<span class="text-emerald-600 font-bold">۷۸۰,۰۰۰ تومان</span>
+											<span class="text-rose-600 font-bold">۷۸۰,۰۰۰ تومان</span>
 										</div>
 									</div>
 									<?php

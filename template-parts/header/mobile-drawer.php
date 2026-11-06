@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * Mobile Navigation Drawer Template Part
  *
@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<!-- Drawer Header -->
 	<div class="drawer-header p-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
 		<span class="font-bold text-slate-800 text-sm flex items-center gap-2">
-			<span class="w-2.5 h-2.5 rounded-full bg-emerald-600 inline-block"></span>
+			<span class="w-2.5 h-2.5 rounded-full bg-rose-600 inline-block"></span>
 			<?php bloginfo( 'name' ); ?>
 		</span>
 		<button type="button" class="drawer-close-btn w-8 h-8 rounded-full bg-white hover:bg-slate-200 border border-slate-200 flex items-center justify-center text-slate-500" aria-label="<?php esc_attr_e( 'بستن منو', 'negar-shop' ); ?>">
@@ -88,7 +88,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<ul class="mobile-cat-list list-none m-0 p-0 space-y-1 text-sm">
 						<?php foreach ( $mobile_cats as $mcat ) : ?>
 							<li>
-								<a href="<?php echo esc_url( get_term_link( $mcat ) ); ?>" class="flex items-center justify-between py-2.5 px-3 rounded-lg text-slate-700 hover:bg-emerald-50 hover:text-emerald-700 transition">
+								<a href="<?php echo esc_url( get_term_link( $mcat ) ); ?>" class="flex items-center justify-between py-2.5 px-3 rounded-lg text-slate-700 hover:bg-rose-50 hover:text-rose-700 transition">
 									<span><?php echo esc_html( $mcat->name ); ?></span>
 									<span class="text-xs bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full"><?php echo esc_html( $mcat->count ); ?></span>
 								</a>
@@ -104,7 +104,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<!-- Drawer Footer: User & Support -->
 	<div class="drawer-footer p-4 border-t border-slate-100 bg-slate-50">
-		<a href="tel:02112345678" class="flex items-center justify-center gap-2 w-full py-2.5 rounded-lg bg-emerald-600 text-white font-bold text-xs dir-ltr">
+		<a href="tel:02112345678" class="flex items-center justify-center gap-2 w-full py-2.5 rounded-lg bg-rose-600 text-white font-bold text-xs dir-ltr">
 			<span>۰۲۱-۱۲۳۴۵۶۷۸</span>
 			<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 				<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>

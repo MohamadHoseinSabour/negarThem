@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * Latest Blog Posts Component (HOME-08)
  *
@@ -26,12 +26,12 @@ $latest_posts = new WP_Query(
 		<!-- Section Header -->
 		<div class="section-heading flex items-center justify-between mb-5">
 			<div class="flex items-center gap-2">
-				<span class="w-2.5 h-6 rounded-full bg-emerald-600 inline-block"></span>
+				<span class="w-2.5 h-6 rounded-full bg-rose-600 inline-block"></span>
 				<h2 class="text-base md:text-lg font-bold text-slate-800 m-0">
 					<?php esc_html_e( 'آخرین مقالات و راهنماهای خرید', 'negar-shop' ); ?>
 				</h2>
 			</div>
-			<a href="<?php echo esc_url( home_url( '/blog' ) ); ?>" class="text-xs font-bold text-emerald-600 hover:text-emerald-700 flex items-center gap-1">
+			<a href="<?php echo esc_url( home_url( '/blog' ) ); ?>" class="text-xs font-bold text-rose-600 hover:text-rose-700 flex items-center gap-1">
 				<span><?php esc_html_e( 'مشاهده همه مقالات', 'negar-shop' ); ?></span>
 				<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
 			</a>
@@ -66,7 +66,7 @@ $latest_posts = new WP_Query(
 								</div>
 
 								<h3 class="post-title text-xs font-bold text-slate-800 line-clamp-2 leading-snug mb-2 m-0">
-									<a href="<?php the_permalink(); ?>" class="hover:text-emerald-600 transition">
+									<a href="<?php the_permalink(); ?>" class="hover:text-rose-600 transition">
 										<?php the_title(); ?>
 									</a>
 								</h3>
@@ -79,7 +79,7 @@ $latest_posts = new WP_Query(
 
 						<!-- Footer -->
 						<div class="px-4 py-3 border-t border-slate-50 flex items-center justify-between text-xs">
-							<a href="<?php the_permalink(); ?>" class="text-emerald-600 font-bold text-2xs hover:underline flex items-center gap-1">
+							<a href="<?php the_permalink(); ?>" class="text-rose-600 font-bold text-2xs hover:underline flex items-center gap-1">
 								<span><?php esc_html_e( 'مطالعه مقاله', 'negar-shop' ); ?></span>
 								<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
 							</a>
@@ -109,7 +109,7 @@ $latest_posts = new WP_Query(
 								<p class="text-3xs text-slate-500 line-clamp-2 m-0">بررسی مهم‌ترین فاکتورها، مشخصات فنی و نکات کلیدی قبل از خرید برای انتخاب هوشمندانه‌تر.</p>
 							</div>
 						</div>
-						<div class="px-4 py-3 border-t border-slate-50 text-emerald-600 font-bold text-2xs">
+						<div class="px-4 py-3 border-t border-slate-50 text-rose-600 font-bold text-2xs">
 							<span>مطالعه ادامه مقاله ←</span>
 						</div>
 					</article>

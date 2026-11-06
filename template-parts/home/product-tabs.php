@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * Product Tabs Carousel Component (HOME-05)
  *
@@ -57,7 +57,7 @@ if ( class_exists( 'WooCommerce' ) ) {
 		<!-- Section Header with Tabs Navigation -->
 		<div class="tabs-header flex flex-col sm:flex-row items-center justify-between gap-4 mb-6 pb-3 border-b border-slate-200">
 			<div class="flex items-center gap-2">
-				<span class="w-2.5 h-6 rounded-full bg-emerald-600 inline-block"></span>
+				<span class="w-2.5 h-6 rounded-full bg-rose-600 inline-block"></span>
 				<h2 class="text-base md:text-lg font-bold text-slate-800 m-0">
 					<?php esc_html_e( 'منتخب محصولات نگار شاپ', 'negar-shop' ); ?>
 				</h2>
@@ -98,7 +98,7 @@ if ( class_exists( 'WooCommerce' ) ) {
 									<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line></svg>
 								</div>
 								<h4 class="text-xs font-bold text-slate-800 mb-1">کالای جدید <?php echo esc_html( $i ); ?></h4>
-								<span class="text-xs font-bold text-emerald-600">۹۵۰,۰۰۰ تومان</span>
+								<span class="text-xs font-bold text-rose-600">۹۵۰,۰۰۰ تومان</span>
 							</div>
 							<?php
 						endfor;
@@ -125,7 +125,7 @@ if ( class_exists( 'WooCommerce' ) ) {
 									<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
 								</div>
 								<h4 class="text-xs font-bold text-slate-800 mb-1">کالای پرفروش <?php echo esc_html( $i ); ?></h4>
-								<span class="text-xs font-bold text-emerald-600">۱,۳۵۰,۰۰۰ تومان</span>
+								<span class="text-xs font-bold text-rose-600">۱,۳۵۰,۰۰۰ تومان</span>
 							</div>
 							<?php
 						endfor;

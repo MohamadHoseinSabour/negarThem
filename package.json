@@ -23,5 +23,8 @@
   "homepage": "https://github.com/MohamadHoseinSabour/negarThem#readme",
   "dependencies": {
     "playwright": "^1.65.0"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.19"
   }
 }

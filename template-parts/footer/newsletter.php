@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * Footer Newsletter Template Part
  *
@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<!-- Text Information -->
 		<div class="newsletter-meta text-center md:text-right">
 			<h3 class="text-lg md:text-xl font-bold text-white mb-1 flex items-center justify-center md:justify-start gap-2">
-				<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-emerald-400">
+				<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-rose-400">
 					<path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
 					<polyline points="22,6 12,13 2,6"></polyline>
 				</svg>
@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		<!-- Form -->
 		<div class="newsletter-form-wrap w-full md:w-auto md:min-w-[420px]">
-			<form class="negar-newsletter-form flex items-center rounded-xl bg-slate-800 border border-slate-700 p-1 focus-within:border-emerald-500 transition" onsubmit="event.preventDefault(); window.NegarShop && window.NegarShop.toast ? window.NegarShop.toast('با تشکر! اشتراک شما در خبرنامه ثبت گردید.', 'success') : alert('با تشکر!');">
+			<form class="negar-newsletter-form flex items-center rounded-xl bg-slate-800 border border-slate-700 p-1 focus-within:border-rose-500 transition" onsubmit="event.preventDefault(); window.NegarShop && window.NegarShop.toast ? window.NegarShop.toast('با تشکر! اشتراک شما در خبرنامه ثبت گردید.', 'success') : alert('با تشکر!');">
 				<input
 					type="email"
 					name="newsletter_email"

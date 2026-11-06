@@ -1,0 +1,19 @@
+# Codebase Memory MCP
+.codebase-memory/
+*.retired-*
+
+# Scratch and backups
+scratch/
+backups/
+
+# Dependencies & build
+node_modules/
+npm-debug.log*
+
+# OS files
+Thumbs.db
+.DS_Store
+
+# IDE / local configs
+.vscode/
+.idea/

@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * My Account Orders History Component
  *
@@ -61,7 +61,7 @@ do_action( 'woocommerce_before_account_orders', $has_orders ); ?>
 										$status_name = wc_get_order_status_name( $status_slug );
 										$status_classes = 'bg-slate-100 text-slate-700';
 										if ( 'completed' === $status_slug ) {
-											$status_classes = 'bg-emerald-50 text-emerald-700 border border-emerald-200';
+											$status_classes = 'bg-rose-50 text-rose-700 border border-rose-200';
 										} elseif ( 'processing' === $status_slug ) {
 											$status_classes = 'bg-blue-50 text-blue-700 border border-blue-200';
 										} elseif ( 'failed' === $status_slug || 'cancelled' === $status_slug ) {

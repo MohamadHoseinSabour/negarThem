@@ -51,11 +51,19 @@ function negar_shop_scripts() {
 		NEGAR_SHOP_VERSION
 	);
 
+	// Tailwind Engine Compiled Utility CSS
+	wp_enqueue_style(
+		'negar-shop-tailwind',
+		NEGAR_SHOP_URI . '/assets/css/tailwind.css',
+		array( 'negar-shop-style' ),
+		NEGAR_SHOP_VERSION
+	);
+
 	// Design System Tokens & Base Component CSS
 	wp_enqueue_style(
 		'negar-shop-main',
 		NEGAR_SHOP_URI . '/assets/css/main.css',
-		array( 'negar-shop-style' ),
+		array( 'negar-shop-tailwind' ),
 		NEGAR_SHOP_VERSION
 	);
 

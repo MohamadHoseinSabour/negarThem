@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * Mobile Sticky Bottom App Bar Template Part
  *
@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<div class="flex items-center justify-around">
 
 		<!-- 1. Home -->
-		<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="bottom-bar-item flex flex-col items-center gap-1 text-slate-500 hover:text-emerald-600 transition <?php echo is_front_page() ? 'text-emerald-600 font-bold' : ''; ?>">
+		<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="bottom-bar-item flex flex-col items-center gap-1 text-slate-500 hover:text-rose-600 transition <?php echo is_front_page() ? 'text-rose-600 font-bold' : ''; ?>">
 			<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 				<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
 				<polyline points="9 22 9 12 15 12 15 22"></polyline>
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</a>
 
 		<!-- 2. Categories / Shop -->
-		<a href="<?php echo esc_url( class_exists( 'WooCommerce' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/' ) ); ?>" class="bottom-bar-item flex flex-col items-center gap-1 text-slate-500 hover:text-emerald-600 transition <?php echo ( function_exists( 'is_shop' ) && is_shop() ) ? 'text-emerald-600 font-bold' : ''; ?>">
+		<a href="<?php echo esc_url( class_exists( 'WooCommerce' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/' ) ); ?>" class="bottom-bar-item flex flex-col items-center gap-1 text-slate-500 hover:text-rose-600 transition <?php echo ( function_exists( 'is_shop' ) && is_shop() ) ? 'text-rose-600 font-bold' : ''; ?>">
 			<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 				<rect x="3" y="3" width="7" height="7"></rect>
 				<rect x="14" y="3" width="7" height="7"></rect>
@@ -34,7 +34,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</a>
 
 		<!-- 3. Cart Trigger -->
-		<button type="button" class="bottom-bar-item negar-cart-trigger flex flex-col items-center gap-1 text-slate-500 hover:text-emerald-600 transition relative">
+		<button type="button" class="bottom-bar-item negar-cart-trigger flex flex-col items-center gap-1 text-slate-500 hover:text-rose-600 transition relative">
 			<div class="relative">
 				<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 					<path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
@@ -49,7 +49,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</button>
 
 		<!-- 4. Wishlist -->
-		<a href="<?php echo esc_url( home_url( '/wishlist' ) ); ?>" class="bottom-bar-item flex flex-col items-center gap-1 text-slate-500 hover:text-emerald-600 transition">
+		<a href="<?php echo esc_url( home_url( '/wishlist' ) ); ?>" class="bottom-bar-item flex flex-col items-center gap-1 text-slate-500 hover:text-rose-600 transition">
 			<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 				<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
 			</svg>
@@ -57,7 +57,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</a>
 
 		<!-- 5. User Account -->
-		<a href="<?php echo esc_url( class_exists( 'WooCommerce' ) ? wc_get_page_permalink( 'myaccount' ) : wp_login_url() ); ?>" class="bottom-bar-item flex flex-col items-center gap-1 text-slate-500 hover:text-emerald-600 transition <?php echo ( function_exists( 'is_account_page' ) && is_account_page() ) ? 'text-emerald-600 font-bold' : ''; ?>">
+		<a href="<?php echo esc_url( class_exists( 'WooCommerce' ) ? wc_get_page_permalink( 'myaccount' ) : wp_login_url() ); ?>" class="bottom-bar-item flex flex-col items-center gap-1 text-slate-500 hover:text-rose-600 transition <?php echo ( function_exists( 'is_account_page' ) && is_account_page() ) ? 'text-rose-600 font-bold' : ''; ?>">
 			<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 				<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
 				<circle cx="12" cy="7" r="4"></circle>

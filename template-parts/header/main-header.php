@@ -1,6 +1,6 @@
 <?php
 /**
- * Main Header Template Part
+ * Main Header Component - 100% Matching Kaveh Demo 43
  *
  * @package Negar_Shop
  * @version 1.0.0
@@ -9,160 +9,112 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
-?>
-<div class="negar-main-header py-4 bg-white border-b border-slate-100 hidden md:block">
-	<div class="container flex items-center justify-between gap-6">
 
-		<!-- Brand Logo (Right side in RTL) -->
-		<div class="header-logo shrink-0">
-			<?php
-			if ( has_custom_logo() ) :
-				the_custom_logo();
-			else :
-				?>
-				<a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home" class="logo-text block">
-					<span class="text-2xl font-black text-slate-900 tracking-tight flex items-center gap-1.5">
-						<span class="w-3 h-3 rounded-full bg-emerald-600 inline-block"></span>
-						<?php bloginfo( 'name' ); ?>
-					</span>
+$upload_dir = wp_upload_dir();
+$logo_svg   = $upload_dir['basedir'] . '/kaveh-demo/kaveh-demo/general/logo.svg';
+$logo_url   = $upload_dir['baseurl'] . '/kaveh-demo/kaveh-demo/general/logo.svg';
+$has_logo   = file_exists( $logo_svg );
+?>
+
+<div class="negar-main-header py-3.5 bg-white border-b border-slate-100">
+	<div class="container flex items-center justify-between gap-4 lg:gap-8">
+
+		<!-- 1. Right: Logo & Branding -->
+		<div class="header-logo shrink-0 flex items-center">
+			<?php if ( has_custom_logo() ) : ?>
+				<?php the_custom_logo(); ?>
+			<?php elseif ( $has_logo ) : ?>
+				<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="flex items-center">
+					<img src="<?php echo esc_url( $logo_url ); ?>" alt="<?php bloginfo( 'name' ); ?>" class="h-9 w-auto object-contain">
 				</a>
-				<?php
-			endif;
-			?>
+			<?php else : ?>
+				<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="flex items-center gap-2 text-slate-900 group">
+					<div class="w-9 h-9 rounded-2xl bg-gradient-to-tr from-rose-700 to-rose-500 flex items-center justify-center text-white shadow-md shadow-rose-500/20 group-hover:scale-105 transition-transform">
+						<span class="font-black text-lg leading-none">ک</span>
+					</div>
+					<div class="flex flex-col">
+						<span class="text-2xl font-black tracking-tight text-slate-900 group-hover:text-rose-600 transition-colors">کاوه</span>
+						<span class="text-[10px] text-slate-400 font-medium -mt-1">فروشگاه آنلاین برتر</span>
+					</div>
+				</a>
+			<?php endif; ?>
 		</div>
 
-		<!-- Live Ajax Search Bar (Center) -->
-		<div class="header-search-wrap flex-1 max-w-2xl relative">
-			<form role="search" method="get" class="negar-ajax-search-form flex items-center rounded-xl border-2 border-slate-200 bg-slate-50 focus-within:border-emerald-600 focus-within:bg-white transition shadow-xs" action="<?php echo esc_url( home_url( '/' ) ); ?>">
+		<!-- 2. Center: Search Bar with Nested Red Category Button -->
+		<div class="header-search flex-1 max-w-xl lg:max-w-2xl relative hidden md:block">
+			<form role="search" method="get" action="<?php echo esc_url( home_url( '/' ) ); ?>" class="relative flex items-center bg-slate-100/90 hover:bg-slate-100 focus-within:bg-white rounded-full border border-slate-200/70 focus-within:border-rose-500 focus-within:ring-2 focus-within:ring-rose-500/10 transition-all p-1">
 				
-				<!-- Category Dropdown Select (Optional refinement) -->
-				<?php if ( class_exists( 'WooCommerce' ) ) : ?>
-					<div class="search-category-select hidden lg:block border-l border-slate-200 pl-2 pr-3 shrink-0">
-						<?php
-						$categories = get_terms(
-							array(
-								'taxonomy'   => 'product_cat',
-								'hide_empty' => false,
-								'parent'     => 0,
-								'number'     => 10,
-							)
-						);
-						?>
-						<select name="product_cat" class="bg-transparent border-0 text-xs font-medium text-slate-600 cursor-pointer outline-none">
-							<option value=""><?php esc_html_e( 'همه دسته‌ها', 'negar-shop' ); ?></option>
-							<?php if ( ! empty( $categories ) && ! is_wp_error( $categories ) ) : ?>
-								<?php foreach ( $categories as $cat ) : ?>
-									<option value="<?php echo esc_attr( $cat->slug ); ?>"><?php echo esc_html( $cat->name ); ?></option>
-								<?php endforeach; ?>
-							<?php endif; ?>
-						</select>
-					</div>
-					<input type="hidden" name="post_type" value="product">
-				<?php endif; ?>
+				<!-- Nested Category Pill Button (Right side inside input in RTL) -->
+				<div class="relative shrink-0">
+					<button type="button" class="category-menu-btn flex items-center gap-1.5 bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold px-4 py-2 rounded-full transition-all shadow-xs">
+						<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+							<path d="M4 4h4v4H4zm6 0h4v4h-4zm6 0h4v4h-4zM4 10h4v4H4zm6 0h4v4h-4zm6 0h4v4h-4zM4 16h4v4H4zm6 0h4v4h-4zm6 0h4v4h-4z"/>
+						</svg>
+						<span><?php esc_html_e( 'دسته‌بندی', 'negar-shop' ); ?></span>
+						<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+					</button>
+				</div>
 
 				<!-- Search Input -->
 				<input
 					type="search"
 					name="s"
-					class="negar-search-input w-full bg-transparent border-0 px-4 py-2.5 text-sm text-slate-800 placeholder-slate-400 outline-none"
-					placeholder="<?php esc_attr_e( 'جستجوی نام کالا، برند یا دسته‌بندی...', 'negar-shop' ); ?>"
+					class="negar-search-input flex-1 bg-transparent border-0 px-4 py-1.5 text-xs sm:text-sm text-slate-800 placeholder-slate-400 outline-none"
+					placeholder="<?php esc_attr_e( 'جستجوی محصول...', 'negar-shop' ); ?>"
 					autocomplete="off"
 					required
 				>
+				<input type="hidden" name="post_type" value="product">
 
-				<!-- Clear / Loading Spinner -->
-				<div class="search-indicator flex items-center px-3 text-slate-400">
-					<div class="search-spinner hidden animate-spin w-4 h-4 border-2 border-emerald-600 border-t-transparent rounded-full"></div>
-				</div>
-
-				<!-- Submit Button -->
-				<button type="submit" class="search-submit bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-l-lg transition flex items-center justify-center" aria-label="<?php esc_attr_e( 'جستجو', 'negar-shop' ); ?>">
-					<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+				<!-- Submit / Search Icon Button (Left side inside input in RTL) -->
+				<button type="submit" class="search-submit p-2 text-slate-400 hover:text-rose-600 transition flex items-center justify-center shrink-0" aria-label="<?php esc_attr_e( 'جستجو', 'negar-shop' ); ?>">
+					<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
 						<circle cx="11" cy="11" r="8"></circle>
 						<line x1="21" y1="21" x2="16.65" y2="16.65"></line>
 					</svg>
 				</button>
 			</form>
 
-			<!-- Live AJAX Results Dropdown Container -->
-			<div class="negar-ajax-search-results hidden absolute top-full right-0 left-0 mt-2 bg-white rounded-xl shadow-card-hover border border-slate-100 overflow-hidden z-50"></div>
+			<!-- Live AJAX Results Dropdown -->
+			<div class="negar-ajax-search-results hidden absolute top-full right-0 left-0 mt-2 bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden z-50"></div>
 		</div>
 
-		<!-- Action Buttons: Account, Wishlist, Mini-Cart (Left side in RTL) -->
+		<!-- 3. Left: User Account & Cart (Matching Demo Screenshot 1:1) -->
 		<div class="header-actions flex items-center gap-3 shrink-0">
 
-			<!-- User Account -->
+			<!-- User Account Pill Button -->
 			<div class="header-action-item">
-				<?php if ( is_user_logged_in() ) : ?>
-					<a href="<?php echo esc_url( wc_get_page_permalink( 'myaccount' ) ); ?>" class="btn-action flex items-center gap-2 p-2 rounded-xl text-slate-700 hover:text-emerald-600 hover:bg-slate-50 transition" title="<?php esc_attr_e( 'حساب کاربری من', 'negar-shop' ); ?>">
-						<div class="w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center text-slate-600">
-							<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-								<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-								<circle cx="12" cy="7" r="4"></circle>
-							</svg>
-						</div>
-						<div class="account-meta text-right hidden xl:block">
-							<span class="block text-2xs text-slate-400 leading-tight"><?php esc_html_e( 'خوش آمدید', 'negar-shop' ); ?></span>
-							<span class="block text-xs font-bold text-slate-800 leading-tight"><?php echo esc_html( wp_get_current_user()->display_name ); ?></span>
-						</div>
-					</a>
-				<?php else : ?>
-					<a href="<?php echo esc_url( wc_get_page_permalink( 'myaccount' ) ); ?>" class="btn-action flex items-center gap-2 p-2 rounded-xl text-slate-700 hover:text-emerald-600 hover:bg-slate-50 transition">
-						<div class="w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center text-slate-600">
-							<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-								<path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
-								<polyline points="10 17 15 12 10 7"></polyline>
-								<line x1="15" y1="12" x2="3" y2="12"></line>
-							</svg>
-						</div>
-						<div class="account-meta text-right hidden xl:block">
-							<span class="block text-2xs text-slate-400 leading-tight"><?php esc_html_e( 'ورود به حساب', 'negar-shop' ); ?></span>
-							<span class="block text-xs font-bold text-slate-800 leading-tight"><?php esc_html_e( 'ثبت‌نام کاربر', 'negar-shop' ); ?></span>
-						</div>
-					</a>
-				<?php endif; ?>
-			</div>
-
-			<!-- Compare Button -->
-			<div class="header-action-item">
-				<button type="button" class="btn-icon relative negar-compare-trigger" aria-label="<?php esc_attr_e( 'مقایسه کالاها', 'negar-shop' ); ?>" title="<?php esc_attr_e( 'مقایسه کالاها', 'negar-shop' ); ?>">
-					<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-						<path d="m16 3 4 4-4 4"/><path d="M20 7H4"/><path d="m8 21-4-4 4-4"/><path d="M4 17h16"/>
-					</svg>
-					<span class="negar-compare-count badge badge-info absolute -top-1.5 -right-1.5 text-2xs px-1.5 py-0.5">0</span>
-				</button>
-			</div>
-
-			<!-- Wishlist Button -->
-			<div class="header-action-item">
-				<a href="<?php echo esc_url( home_url( '/wishlist' ) ); ?>" class="btn-icon relative" aria-label="<?php esc_attr_e( 'علاقه‌مندی‌ها', 'negar-shop' ); ?>">
-					<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-						<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-					</svg>
-					<span class="negar-wishlist-count badge badge-warning absolute -top-1.5 -right-1.5 text-2xs px-1.5 py-0.5">0</span>
+				<a href="<?php echo esc_url( wc_get_page_permalink( 'myaccount' ) ); ?>" class="flex items-center gap-2 py-1.5 px-3.5 rounded-full bg-slate-50 hover:bg-slate-100 text-slate-700 transition border border-slate-200 text-xs font-bold shadow-2xs">
+					<span><?php echo is_user_logged_in() ? esc_html( wp_get_current_user()->display_name ) : esc_html__( 'ورود / ثبت‌نام', 'negar-shop' ); ?></span>
+					<div class="w-6 h-6 rounded-full bg-slate-200 flex items-center justify-center text-slate-600 overflow-hidden shrink-0">
+						<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+					</div>
 				</a>
 			</div>
 
-			<!-- Cart Button (Triggers Slide-out Mini-Cart Drawer) -->
+			<!-- Cart Button with Red Circle + Label (Matching Demo) -->
 			<?php if ( class_exists( 'WooCommerce' ) ) : ?>
 				<div class="header-action-item">
-					<button type="button" class="negar-cart-trigger flex items-center gap-3 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 px-4 py-2 rounded-xl transition border border-emerald-200" aria-label="<?php esc_attr_e( 'مشاهده سبد خرید', 'negar-shop' ); ?>">
-						<div class="relative">
-							<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+					<button type="button" class="negar-cart-trigger flex items-center gap-2 group cursor-pointer" aria-label="<?php esc_attr_e( 'سبد خرید', 'negar-shop' ); ?>">
+						
+						<!-- Red Circle with Bag Icon -->
+						<div class="relative w-9 h-9 rounded-full bg-rose-600 group-hover:bg-rose-700 text-white flex items-center justify-center shadow-md shadow-rose-600/30 transition-transform group-hover:scale-105 shrink-0">
+							<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
 								<path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
 								<line x1="3" y1="6" x2="21" y2="6"></line>
 								<path d="M16 10a4 4 0 0 1-8 0"></path>
 							</svg>
-							<span class="negar-cart-count badge badge-discount absolute -top-2.5 -right-2.5 text-2xs px-1.5 py-0.5">
+							
+							<!-- Badge Count -->
+							<span class="negar-cart-count absolute -top-1 -right-1 bg-white text-rose-600 border border-rose-600 rounded-full text-[10px] w-4.5 h-4.5 flex items-center justify-center font-black leading-none">
 								<?php echo esc_html( WC()->cart->get_cart_contents_count() ); ?>
 							</span>
 						</div>
-						<div class="cart-text text-right hidden lg:block">
-							<span class="block text-2xs text-emerald-600 font-medium"><?php esc_html_e( 'سبد خرید', 'negar-shop' ); ?></span>
-							<span class="negar-cart-total-price block text-xs font-bold text-emerald-900">
-								<?php echo wp_kses_post( WC()->cart->get_cart_subtotal() ); ?>
-							</span>
-						</div>
+
+						<span class="text-xs font-bold text-slate-700 group-hover:text-rose-600 transition hidden sm:inline-block">
+							<?php esc_html_e( 'سبد خرید', 'negar-shop' ); ?>
+						</span>
+
 					</button>
 				</div>
 			<?php endif; ?>

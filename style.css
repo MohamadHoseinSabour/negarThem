@@ -44,7 +44,7 @@ body {
 }
 
 a {
-  color: var(--color-primary, #059669);
+  color: var(--color-primary, #e11242);
   text-decoration: none;
   transition: color 0.2s ease, opacity 0.2s ease;
 }

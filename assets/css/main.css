@@ -6,14 +6,14 @@
  */
 
 :root {
-  /* Design System Palette */
-  --color-primary: #059669;
-  --color-primary-hover: #047857;
-  --color-primary-light: #ecfdf5;
-  --color-secondary: #10b981;
-  --color-accent: #ea580c;
-  --color-accent-hover: #c2410c;
-  --color-accent-light: #fff7ed;
+  /* Design System Palette - Kaveh Demo 43 Crimson */
+  --color-primary: #e11242;
+  --color-primary-hover: #be123c;
+  --color-primary-light: #fff1f2;
+  --color-secondary: #f43f5e;
+  --color-accent: #e11242;
+  --color-accent-hover: #be123c;
+  --color-accent-light: #fff1f2;
   --color-background: #f8fafc;
   --color-foreground: #0f172a;
   --color-card: #ffffff;

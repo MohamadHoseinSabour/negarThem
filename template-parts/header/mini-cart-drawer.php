@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * Off-canvas Slide-out Mini Cart Drawer
  *
@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<!-- Drawer Header -->
 	<div class="drawer-header p-5 border-b border-slate-100 flex items-center justify-between bg-slate-50">
 		<div class="flex items-center gap-2.5">
-			<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-emerald-600">
+			<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-rose-600">
 				<path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
 				<line x1="3" y1="6" x2="21" y2="6"></line>
 				<path d="M16 10a4 4 0 0 1-8 0"></path>

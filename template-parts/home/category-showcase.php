@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * Category Showcase Component (Vertical Banner + Products) (HOME-07)
  *
@@ -30,9 +30,9 @@ if ( class_exists( 'WooCommerce' ) ) {
 			<div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
 
 				<!-- 1. Vertical Campaign Banner (3 Cols on Desktop) -->
-				<div class="lg:col-span-3 rounded-2xl bg-gradient-to-br from-emerald-800 via-teal-800 to-slate-900 p-6 text-white flex flex-col justify-between shadow-md relative overflow-hidden">
+				<div class="lg:col-span-3 rounded-2xl bg-gradient-to-br from-rose-800 via-teal-800 to-slate-900 p-6 text-white flex flex-col justify-between shadow-md relative overflow-hidden">
 					<div class="relative z-10">
-						<span class="badge bg-emerald-500 text-white text-3xs font-bold px-2.5 py-1 rounded-full inline-block mb-3">
+						<span class="badge bg-rose-500 text-white text-3xs font-bold px-2.5 py-1 rounded-full inline-block mb-3">
 							<?php esc_html_e( 'دسته برگزیده ماه', 'negar-shop' ); ?>
 						</span>
 						<h3 class="text-xl md:text-2xl font-black text-white m-0 leading-tight mb-2">
@@ -44,7 +44,7 @@ if ( class_exists( 'WooCommerce' ) ) {
 					</div>
 
 					<div class="relative z-10 pt-6">
-						<a href="<?php echo esc_url( class_exists( 'WooCommerce' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/' ) ); ?>" class="btn bg-white hover:bg-emerald-50 text-emerald-800 text-xs font-bold py-2.5 px-4 rounded-xl shadow-md transition flex items-center justify-between w-full">
+						<a href="<?php echo esc_url( class_exists( 'WooCommerce' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/' ) ); ?>" class="btn bg-white hover:bg-rose-50 text-rose-800 text-xs font-bold py-2.5 px-4 rounded-xl shadow-md transition flex items-center justify-between w-full">
 							<span><?php esc_html_e( 'مشاهده همه کالاها', 'negar-shop' ); ?></span>
 							<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
 						</a>
@@ -69,7 +69,7 @@ if ( class_exists( 'WooCommerce' ) ) {
 										<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18v-6a9 9 0 0 1 18 0v6"></path><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path></svg>
 									</div>
 									<h4 class="text-xs font-bold text-slate-800 mb-1">هدفون بلوتوثی نمونه <?php echo esc_html( $i ); ?></h4>
-									<span class="text-xs font-bold text-emerald-600">۱,۱۵۰,۰۰۰ تومان</span>
+									<span class="text-xs font-bold text-rose-600">۱,۱۵۰,۰۰۰ تومان</span>
 								</div>
 								<?php
 							endfor;

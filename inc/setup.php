@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * Theme Setup and Configuration
  *
@@ -155,7 +155,7 @@ function negar_shop_widgets_init() {
 				'description'   => sprintf( esc_html__( 'ابزارک‌های ستون %d فوتر وب‌سایت.', 'negar-shop' ), $i ),
 				'before_widget' => '<div id="%1$s" class="footer-widget space-y-3 %2$s">',
 				'after_widget'  => '</div>',
-				'before_title'  => '<h4 class="text-white text-sm font-bold mb-4 relative pb-2 after:content-[\'\'] after:absolute after:bottom-0 after:right-0 after:w-8 after:h-0.5 after:bg-emerald-500">',
+				'before_title'  => '<h4 class="text-white text-sm font-bold mb-4 relative pb-2 after:content-[\'\'] after:absolute after:bottom-0 after:right-0 after:w-8 after:h-0.5 after:bg-rose-500">',
 				'after_title'   => '</h4>',
 			)
 		);
