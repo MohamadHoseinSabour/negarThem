@@ -1,9 +1,9 @@
 <?php
 /**
- * The template for displaying the footer
+ * The template for displaying the footer - 100% Matching Kaveh Demo 43
  *
  * @package Negar_Shop
- * @version 1.0.0
+ * @version 3.0.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -13,12 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<footer id="colophon" class="site-footer">
 		<?php
 		/**
-		 * 1. Value Guarantee Badges (FTR-01)
-		 */
-		get_template_part( 'template-parts/footer/features' );
-
-		/**
-		 * 2. Full Multi-Layer Light Footer matching Kaveh Demo 43 (FTR-03, FTR-04, FTR-05)
+		 * Full Multi-Layer Light Footer matching Kaveh Demo 43 (#ag-theme-builder-footer)
 		 */
 		get_template_part( 'template-parts/footer/columns' );
 		?>

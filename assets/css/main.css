@@ -486,3 +486,387 @@ select:focus {
   transform: translateY(-1px);
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
 }
+
+/* ==========================================================================
+   KAVEH DEMO 43 FIDELITY V3 - STORIES, HERO BANNERS & FOOTER STYLES
+   ========================================================================== */
+
+/* 1. STORIES WIDGET & INTERACTIVE MODAL */
+.story-shop {
+  margin: 16px 0 24px;
+}
+.story-shop__r::before, .story-shop__r::after, .story-shop__l::before, .story-shop__l::after {
+  content: "";
+  position: absolute;
+  mask-position: center center;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+}
+.story-shop__r::before, .story-shop__r::after { left: 100%; }
+.story-shop__l::before, .story-shop__l::after { right: 100%; }
+.story-shop__r::before, .story-shop__l::before {
+  mask-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMiIgaGVpZ2h0PSIxODYiIGZpbGw9Im5vbmUiPjxwYXRoIHN0cm9rZT0idXJsKCNhKSIgc3Ryb2tlLW9wYWNpdHk9Ii4xIiBzdHJva2Utd2lkdGg9IjIiIGQ9Ik0xIDB2NjIuM2MwIDQuOCAxLjc4IDkuNDIgNSAxMi45OSAzLjIyIDMuNTYgNSA4LjE5IDUgMTN2OC45MWEyMCAyMCAwIDAgMS00Ljg0IDEzLjA1bC0uMzIuMzhBMjAgMjAgMCAwIDAgMSAxMjMuNjdWMTg2Ii8+PGRlZnM+PHJhZGlhbEdyYWRpZW50IGlkPSJhIiBjeD0iMCIgY3k9IjAiIHI9IjEiIGdyYWRpZW50VHJhbnNmb3JtPSJtYXRyaXgoMCA5MyAtOS40NTQxOSAwIDYgOTMpIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHN0b3Agc3RvcC1jb2xvcj0iI0Q0MjQyRSIgc3R5bGU9InN0b3AtY29sb3I6I2Q0MjQyZTtzdG9wLWNvbG9yOmNvbG9yKGRpc3BsYXktcDMgLjgzMTQgLjE0MTIgLjE4MDQpO3N0b3Atb3BhY2l0eToxIi8+PHN0b3Agb2Zmc2V0PSIuNTEiIHN0b3AtY29sb3I9IiNENDI0MkUiIHN0b3Atb3BhY2l0eT0iLjIxIiBzdHlsZT0ic3RvcC1jb2xvcjojZDQyNDJlO3N0b3AtY29sb3I6Y29sb3IoZGlzcGxheS1wMyAuODMxNCAuMTQxMiAuMTgwNCk7c3RvcC1vcGFjaXR5Oi4yMSIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI0Q0MjQyRSIgc3RvcC1vcGFjaXR5PSIwIiBzdHlsZT0ic3RvcC1jb2xvcjpub25lO3N0b3Atb3BhY2l0eTowIi8+PC9yYWRpYWxHcmFkaWVudD48L2RlZnM+PC9zdmc+");
+  background-color: rgb(212, 36, 46);
+  width: 12px;
+  height: 186px;
+  top: 0px;
+  transform: translate(25px, -52px);
+}
+.story-shop__l::before { transform: translate(-25px, -52px) scaleX(-1); }
+.story-shop__r::after, .story-shop__l::after {
+  mask-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIzMSIgZmlsbD0ibm9uZSI+PHBhdGggZmlsbD0idXJsKCNhKSIgZD0iTS41IDMwLjM1YzAgLjM2LjI5LjY1LjY1LjY0QTE1LjUgMTUuNSAwIDAgMCAxLjE1IDAgLjYzLjYzIDAgMCAwIC41LjY1YzAgLjM2LjI5LjY0LjY1LjY2YTE0LjIgMTQuMiAwIDAgMSAwIDI4LjM4LjY3LjY3IDAgMCAwLS42NS42NiIvPjxkZWZzPjxsaW5lYXJHcmFkaWVudCBpZD0iYSIgeDE9IjMuNSIgeDI9IjE2IiB5MT0iMTUuNSIgeTI9IjE1LjUiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj48c3RvcCBzdG9wLWNvbG9yPSIjRTgwNjQ1IiBzdG9wLW9wYWNpdHk9IjAiIHN0eWxlPSJzdG9wLWNvbG9yOm5vbmU7c3RvcC1vcGFjaXR5OjAiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNFODA2NDUiIHN0b3Atb3BhY2l0eT0iLjkiIHN0eWxlPSJzdG9wLWNvbG9yOiNlODA2NDU7c3RvcC1jb2xvcjpjb2xvcihkaXNwbGF5LXAzIC45MDk4IC4wMjM1IC4yNzA2KTtzdG9wLW9wYWNpdHk6LjkiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48L3N2Zz4=");
+  background-color: rgb(232, 6, 69);
+  width: 16px;
+  height: 31px;
+  top: 26px;
+  transform: translateX(12px);
+}
+.story-shop__l::after { transform: translateX(-12px) scaleX(-1); }
+
+.story-shop__item {
+  width: 86px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.25s ease;
+}
+.story-shop__item:hover {
+  transform: translateY(-2px);
+}
+.story-shop__item .image {
+  background: linear-gradient(180deg, #e90544 0%, #e90544 50%, #e90544 100%) !important;
+  padding: 2.5px;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.story-shop__item .image span {
+  background-color: #fff;
+  width: 74px;
+  height: 74px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+}
+.story-shop__item .image .storyhoverimg {
+  width: 70px;
+  height: 70px;
+  position: relative;
+  border-radius: 50%;
+  overflow: hidden;
+}
+.story-shop__item .image .storyhoverimg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+.story-shop__item:hover .image .storyhoverimg img {
+  transform: scale(1.08);
+}
+.story-shop__item .image .storyhoverimg svg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.7);
+  opacity: 0;
+  transition: all 0.25s ease;
+  z-index: 5;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
+}
+.story-shop__item:hover .image .storyhoverimg svg {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+.story-shop__item .image .storyhoverimg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.25);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  border-radius: 50%;
+}
+.story-shop__item:hover .image .storyhoverimg::after {
+  opacity: 1;
+}
+
+.upperstorytitle {
+  position: absolute;
+  bottom: -4px;
+  right: 50%;
+  transform: translateX(50%);
+  background-color: #e90544;
+  color: #fff;
+  font-size: 9px;
+  font-weight: 800;
+  padding: 1px 7px;
+  border-radius: 50rem;
+  box-shadow: 0 2px 8px rgba(233, 5, 68, 0.4);
+  white-space: nowrap;
+  border: 1.5px solid #fff;
+  z-index: 10;
+  line-height: 1.3;
+}
+.story-shop__item .title {
+  font-size: 11px;
+  font-weight: 700;
+  color: #212341;
+  text-align: center;
+  margin-top: 8px;
+  line-height: 1.3;
+}
+
+/* Story Interactive Modal Viewer */
+.modal-story-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(8px);
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.modal-story-backdrop.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+.modal-story-dialog {
+  position: relative;
+  width: 360px;
+  max-width: 92vw;
+  height: 640px;
+  max-height: 90vh;
+  border-radius: 28px;
+  overflow: hidden;
+  background: #111;
+  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+}
+.story-progress-container {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  right: 14px;
+  display: flex;
+  gap: 4px;
+  z-index: 30;
+}
+.story-progress-bar {
+  flex: 1;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.35);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.story-progress-bar-fill {
+  width: 0%;
+  height: 100%;
+  background: #fff;
+}
+.story-modal-header {
+  position: absolute;
+  top: 24px;
+  left: 16px;
+  right: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 30;
+  color: #fff;
+}
+.story-modal-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-size: cover;
+  background-position: center;
+}
+.story-modal-content::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 25%, rgba(0,0,0,0) 65%, rgba(0,0,0,0.8) 100%);
+  pointer-events: none;
+}
+.story-modal-footer {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+  z-index: 30;
+}
+
+/* 2. HERO LANDING (LANDING-NK) FIDELITY STYLES */
+.landing-nk {
+  position: relative;
+}
+.landing-nk__wrapper {
+  position: relative;
+  z-index: 2;
+  overflow: visible;
+}
+.landing-nk__wrapper::before {
+  content: "";
+  position: absolute;
+  inset: -14px 16px -14px 300px;
+  background-color: #e6ecf3;
+  border-radius: 32px;
+  z-index: 1;
+}
+@media (max-width: 991px) {
+  .landing-nk__wrapper::before {
+    inset: -8px 0;
+  }
+}
+.landing-nk__carousel {
+  background-color: #e90544;
+  border-radius: 26px;
+  padding: 60px 80px;
+  min-height: 440px;
+  position: relative;
+  z-index: 2;
+  overflow: visible;
+  box-shadow: 0 15px 35px -5px rgba(233, 5, 68, 0.35);
+}
+.landing-nk__carousel::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: -0.65px;
+  transform: translateY(-50%);
+  width: 60px;
+  height: 177px;
+  mask-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MCIgaGVpZ2h0PSIxNzciIGZpbGw9Im5vbmUiPjxwYXRoIGZpbGw9IiNEOUQ5RDkiIGQ9Ik02MCAxNzYuNzhhNTAgNTAgMCAwIDAtMjguMy00NS4wNGwtNS42LTIuN2MtMzMuOTUtMTYuMzctMzMuOTUtNjQuNzEgMC04MS4wOGw1LjYtMi43QTUwIDUwIDAgMCAwIDYwLjAxLjIyeiIgc3R5bGU9ImZpbGw6I2Q5ZDlkOTtmaWxsOmNvbG9yKGRpc3BsYXktcDMgLjg1MSAuODUxIC44NTEpO2ZpbGwtb3BhY2l0eToxIi8+PC9zdmc+");
+  mask-size: 100% 100%;
+  mask-repeat: no-repeat;
+  background-color: #fff;
+  z-index: 3;
+}
+.landing-nk__carousel::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: -0.65px;
+  transform: translateY(-50%);
+  width: 41px;
+  height: 163px;
+  mask-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MiIgaGVpZ2h0PSIxNjMiIGZpbGw9Im5vbmUiPjxwYXRoIGZpbGw9IiNEOUQ5RDkiIGQ9Ik0wIDBhNTUgNTUgMCAwIDAgMTguMzcgNDEuMDNsNy43NCA2LjlhNDUgNDUgMCAwIDEgMCA2Ny4xNGwtNy43NCA2LjlBNTUgNTUgMCAwIDAgMCAxNjN6IiBzdHlsZT0iZmlsbDojZDlkOWQ5O2ZpbGw6Y29sb3IoZGlzcGxheS1wMyAuODUxIC44NTEgLjg1MSk7ZmlsbC1vcGFjaXR5OjEiLz48L3N2Zz4=");
+  mask-size: 100% 100%;
+  mask-repeat: no-repeat;
+  background-color: #e6ecf3;
+  z-index: 3;
+}
+
+/* Slider Nav Buttons on Notches */
+.landing-nk__btn-prev, .landing-nk__btn-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background-color: #fff;
+  color: #e90544;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
+  z-index: 10;
+  transition: all 0.25s ease;
+  border: none;
+  cursor: pointer;
+}
+.landing-nk__btn-prev { right: 8px; }
+.landing-nk__btn-next { left: 8px; }
+.landing-nk__btn-prev:hover, .landing-nk__btn-next:hover {
+  background-color: #fff;
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: 0 6px 20px rgba(233, 5, 68, 0.25);
+}
+
+/* Concentric Circles & Controller Accents */
+.hero-circles-wrapper {
+  position: relative;
+  width: 340px;
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.hero-circles-wrapper .h-circle {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid #fff;
+  pointer-events: none;
+}
+.hero-circles-wrapper .h-circle-1 { width: 220px; height: 220px; opacity: 0.5; }
+.hero-circles-wrapper .h-circle-2 { width: 260px; height: 260px; opacity: 0.35; }
+.hero-circles-wrapper .h-circle-3 { width: 300px; height: 300px; opacity: 0.2; }
+.hero-circles-wrapper .h-circle-4 { width: 340px; height: 340px; opacity: 0.1; }
+
+/* Promotional Deal Card (PS5 Game) */
+.landing-nk__deal-card {
+  position: relative;
+  z-index: 2;
+  background: #fff;
+  border-radius: 28px;
+  padding: 24px;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.landing-nk__deal-card .deal-ribbon {
+  background: #e90544;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 4px 12px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(233, 5, 68, 0.3);
+}
+
+/* 3. FOOTER FIDELITY REFINEMENTS */
+.footer-back-to-top {
+  position: absolute;
+  top: -24px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(20px);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+.footer-back-to-top:hover {
+  background: #e90544;
+  transform: translateX(-50%) translateY(-3px);
+  box-shadow: 0 14px 30px rgba(233, 5, 68, 0.35);
+}

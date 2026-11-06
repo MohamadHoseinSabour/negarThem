@@ -58,19 +58,25 @@ $sample_articles = array(
 <section class="negar-sec-33-blog py-8 bg-slate-50/60 border-t border-slate-100" aria-label="<?php esc_attr_e( 'برترین اخبار و مقالات', 'negar-shop' ); ?>">
 	<div class="container max-w-[1320px] mx-auto px-3">
 		
-		<!-- Section Header -->
-		<div class="flex items-center justify-between pb-4 mb-6 border-b border-slate-200/80">
-			<div class="flex items-baseline gap-3">
-				<h2 class="text-xl md:text-2xl font-black text-[#212341]">
-					<?php esc_html_e( 'برترین اخبار و راهنماهای خرید', 'negar-shop' ); ?>
+		<!-- Section Heading & Divider matching Demo 43 -->
+		<div class="section-heading-one-nk mb-6 flex items-center justify-between gap-4">
+			<div class="flex items-center gap-3">
+				<h2 class="title text-base sm:text-lg font-black text-[#212341] m-0">
+					<span class="text-rose-600"><?php esc_html_e( 'برترین', 'negar-shop' ); ?></span> <?php esc_html_e( 'اخبار و راهنماهای خرید', 'negar-shop' ); ?>
 				</h2>
-				<span class="text-xs text-slate-400 font-medium hidden sm:inline">
-					<?php esc_html_e( 'نقد و بررسی و بررسی اخبار دنیای تکنولوژی', 'negar-shop' ); ?>
-				</span>
+				<div class="sub-title text-2xs text-slate-400 font-medium hidden sm:inline-block">
+					<?php esc_html_e( 'نقد و بررسی و تازه ترین اخبار دنیای تکنولوژی', 'negar-shop' ); ?>
+				</div>
 			</div>
-			<a href="<?php echo esc_url( get_permalink( get_option( 'page_for_posts' ) ) ); ?>" class="text-xs font-bold text-rose-600 hover:text-rose-700 flex items-center gap-1 transition-colors">
-				<span><?php esc_html_e( 'مشاهده همه مقالات', 'negar-shop' ); ?></span>
-				<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+			
+			<div class="line flex-grow h-px bg-slate-200 hidden md:flex items-center relative mx-2">
+				<span class="bar h-0.5 bg-rose-600 w-12 absolute right-0"></span>
+				<span class="dot w-1.5 h-1.5 rounded-full bg-rose-600 absolute right-12"></span>
+			</div>
+
+			<a href="<?php echo esc_url( get_permalink( get_option( 'page_for_posts' ) ) ); ?>" class="btn-nk-danger">
+				<span><?php esc_html_e( 'مشاهده بیشتر', 'negar-shop' ); ?></span>
+				<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
 			</a>
 		</div>
 

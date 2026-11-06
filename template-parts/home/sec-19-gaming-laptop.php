@@ -35,18 +35,25 @@ if ( ! $laptop_products->have_posts() ) {
 <section class="negar-sec-19-laptops py-6" aria-label="<?php esc_attr_e( 'لپ‌تاپ‌های گیمینگ پربازدید', 'negar-shop' ); ?>">
 	<div class="container max-w-[1320px] mx-auto px-3">
 		
-		<div class="flex items-center justify-between pb-4 mb-4 border-b border-slate-100">
-			<div class="flex items-baseline gap-3">
-				<h2 class="text-xl md:text-2xl font-black text-[#212341]">
-					<?php esc_html_e( 'پربازدید ترین لپ‌تاپ‌های گیمینگ', 'negar-shop' ); ?>
+		<!-- Section Heading & Divider matching Demo 43 -->
+		<div class="section-heading-one-nk mb-6 flex items-center justify-between gap-4">
+			<div class="flex items-center gap-3">
+				<h2 class="title text-base sm:text-lg font-black text-[#212341] m-0">
+					<span class="text-rose-600"><?php esc_html_e( 'پربازدید', 'negar-shop' ); ?></span> <?php esc_html_e( 'ترین لپ‌تاپ‌های گیمینگ', 'negar-shop' ); ?>
 				</h2>
-				<span class="text-xs text-slate-400 font-medium hidden sm:inline">
+				<div class="sub-title text-2xs text-slate-400 font-medium hidden sm:inline-block">
 					<?php esc_html_e( 'کانفیگ‌های حرفه‌ای پردازنده و کارت گرافیک', 'negar-shop' ); ?>
-				</span>
+				</div>
 			</div>
-			<a href="<?php echo esc_url( wc_get_page_permalink( 'shop' ) ); ?>" class="text-xs font-bold text-rose-600 hover:text-rose-700 flex items-center gap-1 transition-colors">
-				<span><?php esc_html_e( 'مشاهده همه لپ‌تاپ‌ها', 'negar-shop' ); ?></span>
-				<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+			
+			<div class="line flex-grow h-px bg-slate-200 hidden md:flex items-center relative mx-2">
+				<span class="bar h-0.5 bg-rose-600 w-12 absolute right-0"></span>
+				<span class="dot w-1.5 h-1.5 rounded-full bg-rose-600 absolute right-12"></span>
+			</div>
+
+			<a href="<?php echo esc_url( wc_get_page_permalink( 'shop' ) ); ?>" class="btn-nk-danger">
+				<span><?php esc_html_e( 'مشاهده بیشتر', 'negar-shop' ); ?></span>
+				<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
 			</a>
 		</div>
 
