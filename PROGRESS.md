@@ -108,6 +108,13 @@
   - [x] T107: اتصال کامل در `footer.php`، لود در `functions.php`، انکیو سراسری در `inc/enqueue.php` و افزودن دکمه‌های مقایسه و علاقه‌مندی در کارت کالا و هدر
   - [x] T108: ثبت ۴ اسکرین‌شات تعاملی از پیش‌نمایش سریع، لیست علاقه‌مندی، توست الرت و جدول مقایسه، و به‌روزرسانی ردیف‌های `MODAL-01` تا `MODAL-04` به `verified`
 
+### فیچر 009: Theme Options & Customizer
+- **وضعیت:** `CONVERGED / VERIFIED`
+  - [x] T110: ساخت `inc/customizer.php` (`OPT-01`) ثبت پنل اختصاصی `negar_shop_panel`، بخش‌های ۴گانه رنگ‌بندی، هدر و تاپ‌بار، شبکه‌های اجتماعی و فوتر، همراه با هوک خروجی استایل‌های پویا در `wp_head`
+  - [x] T111: به‌روزرسانی `inc/setup.php` (`OPT-02`) و ثبت ۶ ناحیه ابزارک اختصاصی (سایدبار فروشگاه، سایدبار وبلاگ و ۴ ستون فوتر) با تایید کامل خروجی در `wp sidebar list`
+  - [x] T112: اتصال تنظیمات پویا در قالب‌های `template-parts/header/top-bar.php`، `template-parts/footer/columns.php` و `template-parts/footer/copyright.php`
+  - [x] T113: آزمون مقادیر کاستومایزر از طریق WP-CLI (`wp theme mod set`)، تایید تزریق مقادیر در مارک‌آپ زنده و ثبت اسکرین‌شات‌های اختصاصی از هدر، تاپ‌بار و فوتر
+
 ---
 
 ## ۲. اسکرین‌شات‌های ثبت‌شده
@@ -126,8 +133,11 @@
 - [008-modal-wishlist-drawer.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/008-modal-wishlist-drawer.png) (دراور کشویی علاقه‌مندی‌ها با کارت‌های محصولات ذخیره شده)
 - [008-modal-compare-table.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/008-modal-compare-table.png) (جدول مقایسه ویژگی‌های محصولات منتخب)
 - [008-modal-toast-alert.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/008-modal-toast-alert.png) (اعلان گرافیکی موفقیت شناور در گوشه صفحه)
+- [009-customizer-topbar.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/009-customizer-topbar.png) (نوار بالای هدر با متن اعلان و تلفن سفارشی‌شده از کاستومایزر)
+- [009-customizer-header.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/009-customizer-header.png) (هدر کامل با رنگ‌بندی داینامیک)
+- [009-customizer-footer.png](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/docs/compare/009-customizer-footer.png) (فوتر با متن معرفی اختصاصی و شبکه‌های اجتماعی)
 
 ---
 
 ## ۳. فیچر بعدی
-- **Feature 009: Theme Options (`OPT-01`, `OPT-02`)**: پنل سفارشی‌سازی وردپرس (Theme Customizer) جهت تنظیم رنگ‌های اصلی سازمانی، متن‌های هدر/فوتر، تلفن پشتیبانی، آیکون‌های شبکه‌های اجتماعی، و تعریف رسمی سایدبارها و نواحی ابزارک‌های فوتر.
+- **Feature 010: Demo Content & Safe Reset (`DMO-01`, `DMO-02`)**: تهیه نسخه پشتیبان کامل از دیتابیس (`wp db export`) و ایجاد اسکریپت ایمپورت محتوای آزمایشی و ساخت دسته‌بندی‌ها، محصولات، منوها و ویجت‌های نمونه.

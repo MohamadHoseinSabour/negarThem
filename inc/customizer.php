@@ -1,0 +1,328 @@
+<?php
+/**
+ * Theme Customizer Settings and Controls
+ *
+ * @package Negar_Shop
+ * @version 1.0.0
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * Register Theme Customizer Options.
+ *
+ * @param WP_Customize_Manager $wp_customize Theme Customizer object.
+ */
+function negar_shop_customize_register( $wp_customize ) {
+
+	// --------------------------------------------------------------------------
+	// Master Panel: Negar Shop Theme Settings
+	// --------------------------------------------------------------------------
+	$wp_customize->add_panel(
+		'negar_shop_panel',
+		array(
+			'title'       => __( 'تنظیمات قالب نگار شاپ', 'negar-shop' ),
+			'description' => __( 'مدیریت و سفارشی‌سازی رنگ‌بندی، هدر، شبکه‌های اجتماعی و فوتر فروشگاه', 'negar-shop' ),
+			'priority'    => 25,
+		)
+	);
+
+	// --------------------------------------------------------------------------
+	// Section 1: Colors & Branding
+	// --------------------------------------------------------------------------
+	$wp_customize->add_section(
+		'negar_shop_section_colors',
+		array(
+			'title'    => __( 'رنگ‌بندی فروشگاه', 'negar-shop' ),
+			'panel'    => 'negar_shop_panel',
+			'priority' => 10,
+		)
+	);
+
+	// Primary Color
+	$wp_customize->add_setting(
+		'negar_shop_primary_color',
+		array(
+			'default'           => '#059669',
+			'sanitize_callback' => 'sanitize_hex_color',
+			'transport'         => 'refresh',
+		)
+	);
+	$wp_customize->add_control(
+		new WP_Customize_Color_Control(
+			$wp_customize,
+			'negar_shop_primary_color',
+			array(
+				'label'       => __( 'رنگ اصلی سازمانی (Primary)', 'negar-shop' ),
+				'description' => __( 'رنگ پیش‌فرض دکمه‌ها، لینک‌ها و اِلمان‌های کلیدی', 'negar-shop' ),
+				'section'     => 'negar_shop_section_colors',
+				'settings'    => 'negar_shop_primary_color',
+			)
+		)
+	);
+
+	// Accent / Offer Color
+	$wp_customize->add_setting(
+		'negar_shop_accent_color',
+		array(
+			'default'           => '#e11d48',
+			'sanitize_callback' => 'sanitize_hex_color',
+			'transport'         => 'refresh',
+		)
+	);
+	$wp_customize->add_control(
+		new WP_Customize_Color_Control(
+			$wp_customize,
+			'negar_shop_accent_color',
+			array(
+				'label'       => __( 'رنگ تخفیف و پیشنهاد ویژه (Accent / Sale)', 'negar-shop' ),
+				'description' => __( 'رنگ بج‌های تخفیف و باکس شگفت‌انگیزها', 'negar-shop' ),
+				'section'     => 'negar_shop_section_colors',
+				'settings'    => 'negar_shop_accent_color',
+			)
+		)
+	);
+
+	// --------------------------------------------------------------------------
+	// Section 2: Header & Top Bar
+	// --------------------------------------------------------------------------
+	$wp_customize->add_section(
+		'negar_shop_section_header',
+		array(
+			'title'    => __( 'تنظیمات هدر و نوار بالا', 'negar-shop' ),
+			'panel'    => 'negar_shop_panel',
+			'priority' => 20,
+		)
+	);
+
+	// Top Bar Announcement
+	$wp_customize->add_setting(
+		'negar_shop_topbar_announcement',
+		array(
+			'default'           => __( 'ارسال رایگان برای سفارش‌های بالای ۱,۰۰۰,۰۰۰ تومان در سراسر کشور', 'negar-shop' ),
+			'sanitize_callback' => 'sanitize_text_field',
+			'transport'         => 'refresh',
+		)
+	);
+	$wp_customize->add_control(
+		'negar_shop_topbar_announcement',
+		array(
+			'label'       => __( 'متن اعلان نوار بالا (Announcement)', 'negar-shop' ),
+			'description' => __( 'پیام اطلاع‌رسانی بالای هدر در تمامی صفحات', 'negar-shop' ),
+			'section'     => 'negar_shop_section_header',
+			'type'        => 'text',
+		)
+	);
+
+	// Phone Hotline
+	$wp_customize->add_setting(
+		'negar_shop_phone_hotline',
+		array(
+			'default'           => '۰۲۱-۱۲۳۴۵۶۷۸',
+			'sanitize_callback' => 'sanitize_text_field',
+			'transport'         => 'refresh',
+		)
+	);
+	$wp_customize->add_control(
+		'negar_shop_phone_hotline',
+		array(
+			'label'       => __( 'شماره تلفن پشتیبانی هدر', 'negar-shop' ),
+			'description' => __( 'شماره تماس جهت نمایش در نوار بالای هدر', 'negar-shop' ),
+			'section'     => 'negar_shop_section_header',
+			'type'        => 'text',
+		)
+	);
+
+	// Sticky Header Toggle
+	$wp_customize->add_setting(
+		'negar_shop_sticky_header',
+		array(
+			'default'           => true,
+			'sanitize_callback' => 'negar_shop_sanitize_checkbox',
+			'transport'         => 'refresh',
+		)
+	);
+	$wp_customize->add_control(
+		'negar_shop_sticky_header',
+		array(
+			'label'       => __( 'فعال‌سازی هدر چسبان (Sticky Header)', 'negar-shop' ),
+			'description' => __( 'هدر هنگام اسکرول به سمت پایین ثابت باقی می‌ماند', 'negar-shop' ),
+			'section'     => 'negar_shop_section_header',
+			'type'        => 'checkbox',
+		)
+	);
+
+	// --------------------------------------------------------------------------
+	// Section 3: Social Media Links
+	// --------------------------------------------------------------------------
+	$wp_customize->add_section(
+		'negar_shop_section_social',
+		array(
+			'title'    => __( 'شبکه‌های اجتماعی', 'negar-shop' ),
+			'panel'    => 'negar_shop_panel',
+			'priority' => 30,
+		)
+	);
+
+	// Instagram URL
+	$wp_customize->add_setting(
+		'negar_shop_instagram_url',
+		array(
+			'default'           => 'https://instagram.com',
+			'sanitize_callback' => 'esc_url_raw',
+			'transport'         => 'refresh',
+		)
+	);
+	$wp_customize->add_control(
+		'negar_shop_instagram_url',
+		array(
+			'label'   => __( 'لینک اینستاگرام (Instagram)', 'negar-shop' ),
+			'section' => 'negar_shop_section_social',
+			'type'    => 'url',
+		)
+	);
+
+	// Telegram URL
+	$wp_customize->add_setting(
+		'negar_shop_telegram_url',
+		array(
+			'default'           => 'https://t.me',
+			'sanitize_callback' => 'esc_url_raw',
+			'transport'         => 'refresh',
+		)
+	);
+	$wp_customize->add_control(
+		'negar_shop_telegram_url',
+		array(
+			'label'   => __( 'لینک تلگرام (Telegram)', 'negar-shop' ),
+			'section' => 'negar_shop_section_social',
+			'type'    => 'url',
+		)
+	);
+
+	// WhatsApp URL
+	$wp_customize->add_setting(
+		'negar_shop_whatsapp_url',
+		array(
+			'default'           => 'https://wa.me',
+			'sanitize_callback' => 'esc_url_raw',
+			'transport'         => 'refresh',
+		)
+	);
+	$wp_customize->add_control(
+		'negar_shop_whatsapp_url',
+		array(
+			'label'   => __( 'لینک واتس‌اپ (WhatsApp)', 'negar-shop' ),
+			'section' => 'negar_shop_section_social',
+			'type'    => 'url',
+		)
+	);
+
+	// LinkedIn URL
+	$wp_customize->add_setting(
+		'negar_shop_linkedin_url',
+		array(
+			'default'           => 'https://linkedin.com',
+			'sanitize_callback' => 'esc_url_raw',
+			'transport'         => 'refresh',
+		)
+	);
+	$wp_customize->add_control(
+		'negar_shop_linkedin_url',
+		array(
+			'label'   => __( 'لینک لینکدین (LinkedIn)', 'negar-shop' ),
+			'section' => 'negar_shop_section_social',
+			'type'    => 'url',
+		)
+	);
+
+	// --------------------------------------------------------------------------
+	// Section 4: Footer & Copyright
+	// --------------------------------------------------------------------------
+	$wp_customize->add_section(
+		'negar_shop_section_footer',
+		array(
+			'title'    => __( 'تنظیمات فوتر و کپی‌رایت', 'negar-shop' ),
+			'panel'    => 'negar_shop_panel',
+			'priority' => 40,
+		)
+	);
+
+	// Footer About Description
+	$wp_customize->add_setting(
+		'negar_shop_footer_about',
+		array(
+			'default'           => __( 'فروشگاه اینترنتی نگار شاپ، مرجع تخصصی خرید آنلاین با تضمین اصالت، بهترین قیمت و ارسال اکسپرس به تمام نقاط کشور.', 'negar-shop' ),
+			'sanitize_callback' => 'wp_kses_post',
+			'transport'         => 'refresh',
+		)
+	);
+	$wp_customize->add_control(
+		'negar_shop_footer_about',
+		array(
+			'label'       => __( 'متن معرفی کوتاه فروشگاه در فوتر', 'negar-shop' ),
+			'description' => __( 'توضیحات ستون اول فوتر زیر نام فروشگاه', 'negar-shop' ),
+			'section'     => 'negar_shop_section_footer',
+			'type'        => 'textarea',
+		)
+	);
+
+	// Copyright Text
+	$wp_customize->add_setting(
+		'negar_shop_copyright_text',
+		array(
+			'default'           => __( 'تمامی حقوق مادی و معنوی این وب‌سایت محفوظ می‌باشد.', 'negar-shop' ),
+			'sanitize_callback' => 'sanitize_text_field',
+			'transport'         => 'refresh',
+		)
+	);
+	$wp_customize->add_control(
+		'negar_shop_copyright_text',
+		array(
+			'label'       => __( 'متن کپی‌رایت پایین فوتر', 'negar-shop' ),
+			'section'     => 'negar_shop_section_footer',
+			'type'        => 'text',
+		)
+	);
+}
+add_action( 'customize_register', 'negar_shop_customize_register' );
+
+/**
+ * Sanitize Checkbox Input.
+ *
+ * @param mixed $checked Input value.
+ * @return bool
+ */
+function negar_shop_sanitize_checkbox( $checked ) {
+	return ( ( isset( $checked ) && true === (bool) $checked ) ? true : false );
+}
+
+/**
+ * Output Custom CSS from Customizer settings into wp_head.
+ */
+function negar_shop_customizer_css() {
+	$primary_color = get_theme_mod( 'negar_shop_primary_color', '#059669' );
+	$accent_color  = get_theme_mod( 'negar_shop_accent_color', '#e11d48' );
+
+	$css = '';
+	if ( '#059669' !== $primary_color || '#e11d48' !== $accent_color ) {
+		$css .= ':root {';
+		if ( '#059669' !== $primary_color ) {
+			$css .= '--color-primary: ' . esc_attr( $primary_color ) . ';';
+			$css .= '--negar-primary: ' . esc_attr( $primary_color ) . ';';
+		}
+		if ( '#e11d48' !== $accent_color ) {
+			$css .= '--color-accent: ' . esc_attr( $accent_color ) . ';';
+			$css .= '--color-secondary: ' . esc_attr( $accent_color ) . ';';
+		}
+		$css .= '}';
+	}
+
+	if ( ! empty( $css ) ) {
+		echo "\n<!-- Negar Shop Customizer CSS -->\n";
+		echo '<style id="negar-shop-customizer-css">' . wp_strip_all_tags( $css ) . "</style>\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	}
+}
+add_action( 'wp_head', 'negar_shop_customizer_css', 100 );

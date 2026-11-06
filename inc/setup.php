@@ -113,3 +113,52 @@ function negar_shop_content_width() {
 	$GLOBALS['content_width'] = apply_filters( 'negar_shop_content_width', 1200 );
 }
 add_action( 'after_setup_theme', 'negar_shop_content_width', 0 );
+
+/**
+ * Register Widget Areas / Sidebars (OPT-02)
+ */
+function negar_shop_widgets_init() {
+	// Shop & Category Archive Sidebar
+	register_sidebar(
+		array(
+			'name'          => esc_html__( 'سایدبار فروشگاه و محصولات', 'negar-shop' ),
+			'id'            => 'sidebar-shop',
+			'description'   => esc_html__( 'ابزارک‌های این بخش در سایدبار فروشگاه و دسته‌بندی محصولات نمایش داده می‌شوند.', 'negar-shop' ),
+			'before_widget' => '<div id="%1$s" class="shop-widget bg-white rounded-2xl border border-slate-100 p-5 shadow-xs mb-6 %2$s">',
+			'after_widget'  => '</div>',
+			'before_title'  => '<h4 class="text-xs font-bold text-slate-800 pb-3 mb-4 border-b border-slate-100 flex items-center justify-between">',
+			'after_title'   => '</h4>',
+		)
+	);
+
+	// Blog & Single Post Sidebar
+	register_sidebar(
+		array(
+			'name'          => esc_html__( 'سایدبار وبلاگ و مقالات', 'negar-shop' ),
+			'id'            => 'sidebar-blog',
+			'description'   => esc_html__( 'ابزارک‌های این بخش در سایدبار وبلاگ و صفحات داخلی مقالات نمایش داده می‌شوند.', 'negar-shop' ),
+			'before_widget' => '<div id="%1$s" class="blog-widget bg-white rounded-2xl border border-slate-100 p-5 shadow-xs mb-6 %2$s">',
+			'after_widget'  => '</div>',
+			'before_title'  => '<h4 class="text-xs font-bold text-slate-800 pb-3 mb-4 border-b border-slate-100 flex items-center justify-between">',
+			'after_title'   => '</h4>',
+		)
+	);
+
+	// Footer Columns 1 to 4
+	for ( $i = 1; $i <= 4; $i++ ) {
+		register_sidebar(
+			array(
+				/* translators: %d: Column index */
+				'name'          => sprintf( esc_html__( 'ستون فوتر %d', 'negar-shop' ), $i ),
+				'id'            => 'footer-' . $i,
+				/* translators: %d: Column index */
+				'description'   => sprintf( esc_html__( 'ابزارک‌های ستون %d فوتر وب‌سایت.', 'negar-shop' ), $i ),
+				'before_widget' => '<div id="%1$s" class="footer-widget space-y-3 %2$s">',
+				'after_widget'  => '</div>',
+				'before_title'  => '<h4 class="text-white text-sm font-bold mb-4 relative pb-2 after:content-[\'\'] after:absolute after:bottom-0 after:right-0 after:w-8 after:h-0.5 after:bg-emerald-500">',
+				'after_title'   => '</h4>',
+			)
+		);
+	}
+}
+add_action( 'widgets_init', 'negar_shop_widgets_init' );

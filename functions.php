@@ -48,6 +48,11 @@ require_once NEGAR_SHOP_DIR . '/inc/ajax-search.php';
 require_once NEGAR_SHOP_DIR . '/inc/elementor/class-elementor-init.php';
 
 /**
+ * Theme Customizer Settings & Controls (OPT-01)
+ */
+require_once NEGAR_SHOP_DIR . '/inc/customizer.php';
+
+/**
  * WooCommerce Integration & Hooks
  */
 if ( class_exists( 'WooCommerce' ) || file_exists( WP_PLUGIN_DIR . '/woocommerce/woocommerce.php' ) ) {
