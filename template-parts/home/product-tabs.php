@@ -98,16 +98,16 @@ if ( ! $watches_query->have_posts() ) {
 
 			<!-- Center: Tabs Navigation Pills (Matching Demo) -->
 			<div class="product-tab-buttons flex items-center gap-1 bg-slate-100 p-1 rounded-2xl mx-1 sm:mx-3">
-				<button type="button" class="tab-trigger active text-xs font-bold px-3.5 py-1.5 rounded-xl transition-all duration-200 bg-white text-rose-600 shadow-xs" data-target="#tab-panel-laptops">
+				<button type="button" class="tab-trigger active text-xs font-bold px-3.5 py-1.5 rounded-xl transition-all duration-200" data-target="#tab-panel-laptops">
 					<?php esc_html_e( 'لپتاپ ها', 'negar-shop' ); ?>
 				</button>
-				<button type="button" class="tab-trigger text-xs font-bold px-3.5 py-1.5 rounded-xl transition-all duration-200 text-slate-600 hover:text-slate-900" data-target="#tab-panel-consoles">
+				<button type="button" class="tab-trigger text-xs font-bold px-3.5 py-1.5 rounded-xl transition-all duration-200" data-target="#tab-panel-consoles">
 					<?php esc_html_e( 'کنسول ها', 'negar-shop' ); ?>
 				</button>
-				<button type="button" class="tab-trigger text-xs font-bold px-3.5 py-1.5 rounded-xl transition-all duration-200 text-slate-600 hover:text-slate-900" data-target="#tab-panel-mobile">
+				<button type="button" class="tab-trigger text-xs font-bold px-3.5 py-1.5 rounded-xl transition-all duration-200" data-target="#tab-panel-mobile">
 					<?php esc_html_e( 'موبایل', 'negar-shop' ); ?>
 				</button>
-				<button type="button" class="tab-trigger text-xs font-bold px-3.5 py-1.5 rounded-xl transition-all duration-200 text-slate-600 hover:text-slate-900" data-target="#tab-panel-watches">
+				<button type="button" class="tab-trigger text-xs font-bold px-3.5 py-1.5 rounded-xl transition-all duration-200" data-target="#tab-panel-watches">
 					<?php esc_html_e( 'ساعت هوشمند', 'negar-shop' ); ?>
 				</button>
 			</div>

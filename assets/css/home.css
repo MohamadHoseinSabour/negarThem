@@ -77,19 +77,23 @@
 }
 
 /* 5. Product Tabs Trigger */
+.product-tab-buttons .tab-trigger {
+  background-color: transparent !important;
+  color: #475569 !important;
+  border: none !important;
+  cursor: pointer;
+  outline: none;
+}
+
+.product-tab-buttons .tab-trigger:hover:not(.active) {
+  color: var(--color-primary, #e11242) !important;
+  background-color: rgba(255, 255, 255, 0.5) !important;
+}
+
 .product-tab-buttons .tab-trigger.active {
-  background-color: var(--color-primary);
-  color: #ffffff;
-  box-shadow: 0 2px 6px rgba(5, 150, 105, 0.25);
-}
-
-.product-tab-buttons .tab-trigger:not(.active) {
-  color: var(--color-foreground);
-}
-
-.product-tab-buttons .tab-trigger:not(.active):hover {
-  color: var(--color-primary);
-  background-color: rgba(255, 255, 255, 0.6);
+  background-color: var(--color-primary, #e11242) !important;
+  color: #ffffff !important;
+  box-shadow: 0 3px 10px rgba(225, 18, 66, 0.3) !important;
 }
 
 /* 6. Product Card Component Details */
