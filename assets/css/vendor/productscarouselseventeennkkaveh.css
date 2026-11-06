@@ -210,7 +210,7 @@
 .buy-accessories-nk__right__box .more {
   width: 70px;
   height: 57px;
-  background-color: var(--kaveh-primary-color, #d4242e);
+  background-color: var(--kaveh-primary-color, #e90544);
   border: 1px solid rgba(217, 217, 217, 0.3);
   border-radius: 30px;
   font-size: 14px;
@@ -237,12 +237,12 @@
   right: 28px;
   bottom: -3px;
   left: -18px;
-  background-color: color-mix(in srgb, var(--kaveh-primary-color, #d4242e) 70%, transparent);
+  background-color: color-mix(in srgb, var(--kaveh-primary-color, #e90544) 70%, transparent);
   filter: blur(48px);
   z-index: -1;
 }
 .buy-accessories-nk__right__box .more:hover, .buy-accessories-nk__right__box .more:focus, .buy-accessories-nk__right__box .more:active {
-  background-color: var(--kaveh-primary-hover, var(--kaveh-primary-color, #b11e26));
+  background-color: var(--kaveh-primary-hover, var(--kaveh-primary-color, #d0043c));
 }
 .buy-accessories-nk__left {
   max-width: calc(100% - 304px);
@@ -461,7 +461,7 @@
 .top-selling-products-two-nk .btn-nk-danger:hover,
 .top-selling-products-two-nk .btn-nk-danger:focus,
 .top-selling-products-two-nk .btn-nk-danger:active {
-  background-color: var(--kaveh-primary-color, #d4242e);
+  background-color: var(--kaveh-primary-color, #e90544);
   color: #fff;
 }
 .top-selling-products-two-nk .section-heading-one-nk {
@@ -750,12 +750,12 @@
   right: 29px;
   bottom: 40px;
   left: -18px;
-  background-color: color-mix(in srgb, var(--kaveh-primary-color, #d4242e) 70%, transparent);
+  background-color: color-mix(in srgb, var(--kaveh-primary-color, #e90544) 70%, transparent);
   filter: blur(48px);
   z-index: -1;
 }
 .top-selling-products-two-nk__discount__item .btn-more:hover, .top-selling-products-two-nk__discount__item .btn-more:active, .top-selling-products-two-nk__discount__item .btn-more:focus {
-  background-color: var(--kaveh-primary-color, #d4242e);
+  background-color: var(--kaveh-primary-color, #e90544);
 }
 .top-selling-products-two-nk__discount .swiper-pagination {
   gap: 2px;

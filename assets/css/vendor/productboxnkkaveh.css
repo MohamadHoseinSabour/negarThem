@@ -46,8 +46,8 @@
 /* Section */
 .your-taste-box-nk {
   --bg-body: #fff;
-  --kaveh-primary-color: #e11242;
-  --kaveh-primary-hover: #be123c;
+  --kaveh-primary-color: #e90544;
+  --kaveh-primary-hover: #d0043c;
   margin: 45px 0 50px;
 }
 
@@ -73,7 +73,7 @@
 .your-taste-box-nk__heading .heading-icon-wrap {
   width: 62px;
   height: 62px;
-  background-color: var(--kaveh-primary-color, #d4242e);
+  background-color: var(--kaveh-primary-color, #e90544);
   border-radius: 20px;
   font-size: 31px;
   margin-bottom: 18px;
@@ -149,7 +149,7 @@
 }
 .your-taste-box-nk .swiper-pagination-bullet-active {
   width: 35px;
-  background-color: var(--kaveh-primary-color, #ff0030);
+  background-color: var(--kaveh-primary-color, #e90544);
 }
 
 /* Box */
@@ -178,7 +178,7 @@
 .your-taste-box-nk__box__heading .btn-more {
   width: 59px;
   height: 48px;
-  background-color: var(--kaveh-primary-color, #d4242e);
+  background-color: var(--kaveh-primary-color, #e90544);
   border: 1px solid rgba(217, 217, 217, 0.3);
   border-radius: 30px;
   font-size: 14px;
@@ -194,7 +194,7 @@
   right: 20px;
   left: -11px;
   bottom: 0;
-  background-color: color-mix(in srgb, var(--kaveh-primary-color, #d4242e) 70%, transparent);
+  background-color: color-mix(in srgb, var(--kaveh-primary-color, #e90544) 70%, transparent);
   filter: blur(48px);
   z-index: -1;
 }
@@ -205,7 +205,7 @@
   display: inline-flex;
 }
 .your-taste-box-nk__box__heading .btn-more:hover {
-  background-color: var(--kaveh-primary-hover, var(--kaveh-primary-color, #b31e27));
+  background-color: var(--kaveh-primary-hover, var(--kaveh-primary-color, #d0043c));
   color: #fff;
 }
 
@@ -297,8 +297,8 @@
   width: 15px;
   height: 4px;
   border-radius: 10px;
-  background-color: var(--kaveh-primary-color, #ff0030);
-  box-shadow: 0px 1px 2px color-mix(in srgb, var(--kaveh-primary-color, #ff0030) 25%, transparent);
+  background-color: var(--kaveh-primary-color, #e90544);
+  box-shadow: 0px 1px 2px color-mix(in srgb, var(--kaveh-primary-color, #e90544) 25%, transparent);
   display: inline-block;
 }
 .your-taste-box-nk__box__products__item .price .price {

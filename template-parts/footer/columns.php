@@ -59,7 +59,7 @@ $demo_base  = $upload_dir['baseurl'] . '/kaveh-demo';
 			<!-- Column 3: About Shop Box matching Demo 43 (3 Cols) -->
 			<div class="lg:col-span-3 bg-white p-6 rounded-3xl border border-slate-200/80 shadow-xs flex flex-col justify-between">
 				<div>
-					<div class="w-14 h-14 rounded-2xl bg-[#D4242E] text-white flex items-center justify-center mb-4 shadow-md shadow-rose-700/25">
+					<div class="w-14 h-14 rounded-2xl bg-[#e90544] text-white flex items-center justify-center mb-4 shadow-md shadow-rose-700/25">
 						<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
 					</div>
 					<p class="text-2xs text-slate-500 leading-relaxed line-clamp-4 mb-4">

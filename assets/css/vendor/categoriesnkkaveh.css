@@ -30,15 +30,15 @@
   color: #fff;
 }
 .btn-nk-danger:hover, .btn-nk-danger:focus, .btn-nk-danger:active {
-  background-color: var(--kaveh-primary-color, #d4242e);
+  background-color: var(--kaveh-primary-color, #e90544);
   color: #fff;
 }
 .btn-nk-danger-2 {
-  background-color: var(--kaveh-primary-color, #d4242e);
+  background-color: var(--kaveh-primary-color, #e90544);
   color: #fff;
 }
 .btn-nk-danger-2:hover, .btn-nk-danger-2:focus, .btn-nk-danger-2:active {
-  background-color: var(--kaveh-primary-hover, var(--kaveh-primary-color, #b11e26));
+  background-color: var(--kaveh-primary-hover, var(--kaveh-primary-color, #d0043c));
   color: #fff;
 }
 .section-heading-one-nk {
@@ -50,7 +50,7 @@
 .section-heading-one-nk .with-icon i {
   width: 57px;
   height: 57px;
-  background-color: var(--kaveh-primary-color, #d4242e);
+  background-color: var(--kaveh-primary-color, #e90544);
   border-radius: 20px;
   font-size: 28px;
   color: #fff;
@@ -261,7 +261,7 @@
 .categories-nk__item .btn {
   width: 54px;
   height: 25px;
-  box-shadow: 0px 14px 35px color-mix(in srgb, var(--kaveh-primary-color, #d4242e) 25%, transparent);
+  box-shadow: 0px 14px 35px color-mix(in srgb, var(--kaveh-primary-color, #e90544) 25%, transparent);
   font-size: 14px;
 }
 .categories-nk__item .btn .cat-btn-icon-svg {

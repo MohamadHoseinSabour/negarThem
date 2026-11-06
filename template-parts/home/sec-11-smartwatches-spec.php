@@ -190,23 +190,23 @@ $carousel_products_sec11 = array(
 													<a href="<?php echo esc_url( $prod_url ); ?>"><?php echo esc_html( $prod['title'] ); ?></a>
 												</h2>
 
-												<div class="product-six-nk__footer d-flex align-items-center mt-auto">
+												<div class="product-six-nk__footer d-flex align-items-end justify-content-between gap-2">
+													<div class="add-to-cart buy-now d-flex align-items-center align-self-center">
+														<button type="button" class="kaveh-variation-modal-trigger buy-now__btn d-flex align-items-center justify-content-center rounded-circle flex-fill flex-grow-0 flex-shrink-0" data-product_id="<?php echo esc_attr( $prod_id ); ?>" aria-label="افزودن به سبد خرید">
+															<i class="icon icon-bag-6 lh-1" aria-hidden="true"></i>
+														</button>
+													</div>
 													<div class="price">
 														<?php if ( ! empty( $prod['regular_price'] ) ) : ?>
-														<del class="f-iransans fw-normal text-muted d-block text-decoration-line-through mb-1" style="font-size: 11px;">
-															<?php echo esc_html( $prod['regular_price'] ); ?>
-														</del>
+														<div class="off">
+															<del class="fw-light f-iransans"><?php echo esc_html( $prod['regular_price'] ); ?></del>
+														</div>
 														<?php endif; ?>
 														<div class="price d-flex align-items-center gap-1">
 															<?php echo esc_html( $prod['price'] ); ?>
-															<span class="toman-symbol toman-symbol--modern lh-1">
-																<svg width="19.5" height="18" viewBox="0 0 13 12" fill="#0a0a0a" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><use href="#kaveh-toman-mark"></use></svg>
-															</span>
+															<span class="toman-symbol toman-symbol--modern lh-1"><svg width="19.5" height="18" viewBox="0 0 13 12" fill="#0a0a0a" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><use href="#kaveh-toman-mark"></use></svg></span>
 														</div>
 													</div>
-													<a href="<?php echo esc_url( $prod_url ); ?>" class="btn-cart d-flex align-items-center justify-content-center rounded-circle flex-shrink-0 ms-auto">
-														<i class="icon icon-bag-6 lh-1" aria-hidden="true"></i>
-													</a>
 												</div>
 
 											</div>

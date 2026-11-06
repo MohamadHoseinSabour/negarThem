@@ -143,6 +143,12 @@ function negar_shop_scripts() {
 		NEGAR_SHOP_VERSION
 	);
 
+	// Ensure Demo 43 primary brand color (#e90544) is globally active
+	wp_add_inline_style(
+		'negar-shop-main',
+		':root { --kaveh-primary-color: #e90544 !important; --kaveh-primary-hover: #d0043c !important; --color-primary: #e90544 !important; --color-primary-hover: #d0043c !important; }'
+	);
+
 	// Header and Footer Dedicated CSS
 	wp_enqueue_style(
 		'negar-shop-header-footer',
