@@ -1,9 +1,10 @@
 <?php
 /**
  * The template for displaying product content in the single-product.php template
+ * 100% Matching Kaveh Demo 43 (Style 5 Modern Tech)
  *
  * @package Negar_Shop
- * @version 1.0.0
+ * @version 2.0.0
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -24,122 +25,204 @@ $categories_list = wc_get_product_category_list( $product->get_id(), '، ' );
 $rating_count    = $product->get_rating_count();
 $review_count    = $product->get_review_count();
 $average         = $product->get_average_rating();
+$product_id      = $product->get_id();
+$sku             = $product->get_sku();
+$specs           = negar_shop_get_product_specs( $product );
 ?>
 
-<div id="product-<?php the_ID(); ?>" <?php wc_product_class( 'negar-product-detail-card', $product ); ?>>
+<div id="product-<?php the_ID(); ?>" <?php wc_product_class( 'insingle_pr kav-single-product-root kav-style5-has-fixed-nav', $product ); ?>>
 
-	<!-- 2-Column Product Main Section -->
-	<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start bg-surface border border-border rounded-2xl p-6 sm:p-8 shadow-sm">
+	<div class="kav-single-product pt-2 pb-8">
+		<div class="container">
 
-		<!-- Gallery Column (Right in RTL, 5 cols) -->
-		<div class="lg:col-span-5 w-full">
-			<?php get_template_part( 'woocommerce/single-product/product-gallery' ); ?>
-		</div>
-
-		<!-- Summary & Buy Box Column (Left in RTL, 7 cols) -->
-		<div class="lg:col-span-7 w-full flex flex-col">
-
-			<!-- Category and SKU Header -->
-			<div class="flex items-center justify-between text-xs text-muted mb-2 pb-2 border-b border-border/50">
-				<?php if ( $categories_list ) : ?>
-					<span class="product-category hover:text-primary transition-colors">
-						<?php echo wp_kses_post( $categories_list ); ?>
-					</span>
-				<?php endif; ?>
-
-				<?php if ( $product->get_sku() ) : ?>
-					<span class="product-sku font-mono">
-						<?php echo esc_html__( 'کد کالا:', 'negar-shop' ) . ' ' . esc_html( $product->get_sku() ); ?>
-					</span>
-				<?php endif; ?>
-			</div>
-
-			<!-- Product Title -->
-			<h1 class="product_title entry-title text-xl sm:text-2xl font-black text-dark leading-snug mb-3">
-				<?php the_title(); ?>
-			</h1>
-
-			<!-- Ratings & Review Count -->
-			<div class="flex items-center gap-3 text-xs mb-4">
-				<?php if ( wc_review_ratings_enabled() && $average > 0 ) : ?>
-					<div class="flex items-center gap-1 text-amber-400">
-						<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-						<span class="font-bold text-dark"><?php echo esc_html( number_format_i18n( $average, 1 ) ); ?></span>
-					</div>
-					<span class="text-muted">|</span>
-				<?php endif; ?>
-
-				<span class="text-muted">
-					<?php
-					printf(
-						/* translators: %s: review count */
-						esc_html__( '%s دیدگاه خریداران', 'negar-shop' ),
-						'<strong>' . number_format_i18n( $review_count ) . '</strong>'
-					);
-					?>
-				</span>
-			</div>
-
-			<!-- Short Description -->
-			<?php if ( $product->get_short_description() ) : ?>
-				<div class="product-short-description text-xs sm:text-sm text-muted leading-relaxed mb-6 p-4 rounded-xl bg-slate-50 border border-border">
-					<?php echo apply_filters( 'woocommerce_short_description', $product->get_short_description() ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+			<!-- Breadcrumb Row -->
+			<nav class="kav-single-product-breadcrumb mb-4" aria-label="<?php esc_attr_e( 'بردکرامب', 'negar-shop' ); ?>">
+				<div class="breadcrumb-nk d-flex align-items-center">
+					<?php negar_shop_breadcrumbs(); ?>
 				</div>
-			<?php endif; ?>
+			</nav>
 
-			<!-- Buy Box Container -->
-			<div class="negar-buy-box p-4 sm:p-6 rounded-xl border border-primary/20 bg-primary/5 mb-6">
-				
-				<!-- Price Row -->
-				<div class="flex items-center justify-between mb-4 pb-4 border-b border-primary/10">
-					<span class="text-xs sm:text-sm font-medium text-muted"><?php esc_html_e( 'قیمت محصول:', 'negar-shop' ); ?></span>
-					<div class="flex flex-col items-end">
-						<?php if ( $product->is_on_sale() && $product->get_regular_price() ) : ?>
-							<del class="text-xs text-muted font-normal">
-								<?php echo wp_kses_post( wc_price( $product->get_regular_price() ) ); ?>
-							</del>
-						<?php endif; ?>
-						<span class="text-lg sm:text-2xl font-black text-primary">
-							<?php echo wp_kses_post( $product->get_price_html() ); ?>
-						</span>
+			<!-- 3-Column Modern Tech Product Row (Style 5) -->
+			<div class="row g-4 align-items-start">
+
+				<!-- 1. Right Column: Product Image Gallery (4 Cols) -->
+				<div class="col-12 col-lg-4">
+					<div class="bg-white rounded-3xl border border-slate-100 p-4 shadow-2xs">
+						<?php get_template_part( 'woocommerce/single-product/product-gallery' ); ?>
 					</div>
 				</div>
 
-				<!-- Stock Status -->
-				<div class="flex items-center gap-2 text-xs mb-4">
-					<?php if ( $product->is_in_stock() ) : ?>
-						<span class="w-2.5 h-2.5 rounded-full bg-success inline-block"></span>
-						<span class="text-success font-medium"><?php esc_html_e( 'موجود در انبار - آماده ارسال فوری', 'negar-shop' ); ?></span>
-					<?php else : ?>
-						<span class="w-2.5 h-2.5 rounded-full bg-danger inline-block"></span>
-						<span class="text-danger font-medium"><?php esc_html_e( 'ناموجود در انبار', 'negar-shop' ); ?></span>
-					<?php endif; ?>
+				<!-- 2. Center Column: Product Specs & Details (5 Cols) -->
+				<div class="col-12 col-lg-5">
+					<div class="kav-single-product-info bg-white rounded-3xl border border-slate-100 p-6 shadow-2xs">
+
+						<!-- Rating & Badges Meta Row -->
+						<div class="kav-single-product-meta-row d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+							
+							<div class="kav-single-product-rating-row d-flex align-items-center flex-wrap gap-2">
+								<div class="kav-single-product-rate d-flex align-items-center gap-1 text-amber-500 font-bold text-xs bg-amber-50 px-2.5 py-1 rounded-full">
+									<span><?php echo esc_html( number_format_i18n( $average > 0 ? $average : 5.0, 1 ) ); ?></span>
+									<i class="icon-star-5 lh-1 text-xs"></i>
+								</div>
+								<div class="kav-single-product-count-comments text-xs text-slate-400">
+									(<?php echo esc_html( number_format_i18n( $review_count ) ); ?> <?php esc_html_e( 'دیدگاه خریداران', 'negar-shop' ); ?>)
+								</div>
+							</div>
+
+							<!-- Badges -->
+							<div class="kav-single-product-badges d-flex align-items-center gap-1.5 flex-wrap">
+								<span class="kav-single-product-badge rounded-pill text-[10px] font-bold px-2 py-0.5 bg-slate-100 text-slate-700 border border-slate-200">
+									<?php esc_html_e( 'رجیستر شده', 'negar-shop' ); ?>
+								</span>
+								<span class="kav-single-product-badge rounded-pill text-[10px] font-bold px-2 py-0.5 bg-blue-500 text-white">
+									<?php esc_html_e( 'اصل شرکتی', 'negar-shop' ); ?>
+								</span>
+								<span class="kav-single-product-badge rounded-pill text-[10px] font-bold px-2 py-0.5 bg-amber-500 text-white">
+									<?php esc_html_e( 'آکبند', 'negar-shop' ); ?>
+								</span>
+							</div>
+
+						</div>
+
+						<!-- Product Title -->
+						<h1 class="kav-single-product-title letter-spacing-2 fw-bold text-base sm:text-xl text-slate-900 leading-snug mb-3">
+							<?php the_title(); ?>
+						</h1>
+
+						<!-- Category & SKU Meta -->
+						<div class="kav-single-product-key-category d-flex align-items-center justify-content-between text-xs text-slate-400 pb-3 mb-4 border-b border-slate-100">
+							<?php if ( $categories_list ) : ?>
+								<div class="kav-single-product-category flex items-center gap-1">
+									<span><?php esc_html_e( 'دسته‌بندی:', 'negar-shop' ); ?></span>
+									<span class="text-rose-600 font-bold"><?php echo wp_kses_post( $categories_list ); ?></span>
+								</div>
+							<?php endif; ?>
+
+							<?php if ( $sku ) : ?>
+								<div class="kav-single-product-sku font-mono">
+									<span><?php esc_html_e( 'شناسه:', 'negar-shop' ); ?></span>
+									<span><?php echo esc_html( $sku ); ?></span>
+								</div>
+							<?php endif; ?>
+						</div>
+
+						<!-- Short Description / Key Features List -->
+						<div class="d-flex justify-content-between align-items-start gap-3 mb-4 flex-wrap flex-column">
+							<ul class="kav-single-product-info-options d-flex flex-column gap-2 list-unstyled p-0 m-0 text-xs text-slate-600">
+								<li class="d-flex align-items-center gap-2">
+									<i class="icon-truck-fast text-rose-600"></i>
+									<span><?php esc_html_e( 'ارسال سریع اکسپرس در کمتر از ۲ ساعت در تهران', 'negar-shop' ); ?></span>
+								</li>
+								<li class="d-flex align-items-center gap-2">
+									<i class="icon-box-time text-rose-600"></i>
+									<span><?php esc_html_e( 'تحویل تیپاکس و پست پیشتاز سراسر کشور ۲ الی ۳ روز کاری', 'negar-shop' ); ?></span>
+								</li>
+								<li class="d-flex align-items-center gap-2">
+									<i class="icon-shield-security text-rose-600"></i>
+									<span><?php esc_html_e( 'گارانتی ۱۸ ماهه شرکتی و اصالت فیزیکی کالا', 'negar-shop' ); ?></span>
+								</li>
+							</ul>
+
+							<!-- Key Specs Summary Grid -->
+							<?php if ( ! empty( $specs ) ) : ?>
+								<div class="kav-single-product-specs-wrap w-100 mt-3 pt-3 border-t border-slate-100">
+									<div class="text-xs font-bold text-slate-800 mb-2"><?php esc_html_e( 'ویژگی‌های کلیدی:', 'negar-shop' ); ?></div>
+									<ul class="kav-single-product-info-options-product kav-single-product-specs-grid list-unstyled m-0 p-0 grid grid-cols-2 gap-2 text-xs">
+										<?php
+										$count = 0;
+										foreach ( $specs as $spec_item ) :
+											if ( ++$count > 4 ) break;
+											$s_label = is_array( $spec_item ) && isset( $spec_item['label'] ) ? $spec_item['label'] : '';
+											$s_val   = is_array( $spec_item ) && isset( $spec_item['value'] ) ? $spec_item['value'] : (string) $spec_item;
+										?>
+											<li class="kav-single-product-specs-item p-2 rounded-xl bg-slate-50 border border-slate-100 flex flex-col">
+												<span class="kav-single-product-specs-label text-slate-400 text-[10px]"><?php echo esc_html( $s_label ); ?></span>
+												<span class="kav-single-product-specs-value text-slate-800 font-bold truncate mt-0.5"><?php echo esc_html( $s_val ); ?></span>
+											</li>
+										<?php endforeach; ?>
+									</ul>
+								</div>
+							<?php endif; ?>
+						</div>
+
+					</div>
 				</div>
 
-				<!-- Standard WooCommerce Add to Cart (Handles simple, variable swatches, external, grouped) -->
-				<div class="negar-add-to-cart-wrapper">
-					<?php woocommerce_template_single_add_to_cart(); ?>
+				<!-- 3. Left Column: Modern Buy Box Sidebar (3 Cols) -->
+				<div class="col-12 col-lg-3">
+					<div class="kav-single-product-sidebar">
+						<div class="kav-single-product-info-payment bg-white p-5 rounded-3xl border border-slate-100 shadow-2xs">
+
+							<!-- Stock Status -->
+							<div class="kav-single-product-info-payment-title letter-spacing-2 d-flex align-items-center mb-3 pb-3 border-b border-slate-100">
+								<?php if ( $product->is_in_stock() ) : ?>
+									<span class="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block me-2 animate-pulse"></span>
+									<span class="kav-style5-stock-text text-emerald-600 font-bold text-xs"><?php esc_html_e( 'موجود در انبار و آماده ارسال', 'negar-shop' ); ?></span>
+								<?php else : ?>
+									<span class="w-2.5 h-2.5 rounded-full bg-rose-500 inline-block me-2"></span>
+									<span class="kav-style5-stock-text text-rose-600 font-bold text-xs"><?php esc_html_e( 'در حال حاضر ناموجود', 'negar-shop' ); ?></span>
+								<?php endif; ?>
+							</div>
+
+							<!-- Seller Info Row -->
+							<div class="seller-info d-flex align-items-center justify-between text-xs text-slate-600 mb-4 pb-3 border-b border-slate-50">
+								<div class="d-flex align-items-center gap-1.5">
+									<i class="icon-shop text-slate-400"></i>
+									<span><?php esc_html_e( 'فروشنده:', 'negar-shop' ); ?></span>
+									<span class="font-bold text-slate-800"><?php esc_html_e( 'کاوه دیجیتال', 'negar-shop' ); ?></span>
+								</div>
+								<span class="badge bg-emerald-50 text-emerald-600 text-[10px] px-2 py-0.5 rounded-full font-bold">
+									<?php esc_html_e( '۱۰۰٪ رضایت', 'negar-shop' ); ?>
+								</span>
+							</div>
+
+							<!-- Price Output Stack -->
+							<div class="kav-single-product-info-payment-price mb-4">
+								<div class="text-xs text-slate-400 mb-1"><?php esc_html_e( 'قیمت نهایی برای شما:', 'negar-shop' ); ?></div>
+								<div class="d-flex align-items-baseline justify-content-between">
+									<div class="kav-style5-price-stack fw-bold letter-spacing-4 d-flex align-items-baseline gap-1 text-rose-600 font-black text-xl sm:text-2xl">
+										<?php echo wp_kses_post( $product->get_price_html() ); ?>
+									</div>
+								</div>
+							</div>
+
+							<!-- Standard WooCommerce Add To Cart Form (Supports Simple & Variable) -->
+							<div class="kav-single-product-style5-cart">
+								<?php woocommerce_template_single_add_to_cart(); ?>
+							</div>
+
+							<!-- Better Price Found Modal Trigger -->
+							<div class="kav-single-product-more-reasonable-price d-flex align-items-center justify-content-between gap-2 mt-4 pt-3 border-t border-slate-100 text-[11px] text-slate-400">
+								<div class="text d-flex align-items-center gap-1">
+									<i class="icon-coins text-amber-500"></i>
+									<span><?php esc_html_e( 'قیمت مناسب‌تری سراغ دارید؟', 'negar-shop' ); ?></span>
+								</div>
+								<button type="button" class="btn p-0 border-0 bg-transparent text-rose-600 font-bold hover:underline text-[11px]" onclick="alert('پیشنهاد قیمت شما دریافت شد.')">
+									<?php esc_html_e( 'اطلاع دهید', 'negar-shop' ); ?>
+								</button>
+							</div>
+
+						</div>
+					</div>
 				</div>
 
-			</div>
+			</div><!-- /.row -->
 
-			<!-- Delivery & Trust Perks -->
+			<!-- 4. Delivery & Trust Options Bar (4 Cards) -->
 			<?php get_template_part( 'woocommerce/single-product/delivery-perks' ); ?>
 
-		</div>
+			<!-- 5. Product Tabs (Specifications, Description, Reviews) -->
+			<?php get_template_part( 'woocommerce/single-product/product-tabs' ); ?>
 
-	</div>
+			<!-- 6. Related Products Carousel Slider -->
+			<?php get_template_part( 'woocommerce/single-product/related' ); ?>
 
-	<!-- Product Detailed Tabs (Description, Specifications, Reviews) -->
-	<?php get_template_part( 'woocommerce/single-product/product-tabs' ); ?>
+		</div><!-- /.container -->
+	</div><!-- /.kav-single-product -->
 
-	<!-- Related Products Slider -->
-	<?php get_template_part( 'woocommerce/single-product/related' ); ?>
+	<!-- 7. Sticky Bottom Add-to-Cart Bar (Style 5) -->
+	<?php get_template_part( 'woocommerce/single-product/sticky-bottom-cart' ); ?>
 
-</div>
+</div><!-- #product-<?php the_ID(); ?> -->
 
-<?php
-/**
- * Hook: woocommerce_after_single_product.
- */
-do_action( 'woocommerce_after_single_product' );
+<?php do_action( 'woocommerce_after_single_product' ); ?>

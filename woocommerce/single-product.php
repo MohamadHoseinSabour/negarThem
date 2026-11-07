@@ -1,9 +1,9 @@
 <?php
 /**
- * The Template for displaying all single products
+ * The Template for displaying all single products - 100% Matching Demo 43
  *
  * @package Negar_Shop
- * @version 1.0.0
+ * @version 2.0.0
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -11,18 +11,12 @@ defined( 'ABSPATH' ) || exit;
 get_header( 'shop' );
 ?>
 
-<div class="negar-single-product-page py-6">
-	<div class="container mx-auto px-4">
-		
-		<?php negar_shop_breadcrumbs(); ?>
-
-		<?php while ( have_posts() ) : ?>
-			<?php the_post(); ?>
-			<?php wc_get_template_part( 'content', 'single-product' ); ?>
-		<?php endwhile; ?>
-
-	</div>
-</div>
+<main id="primary" class="site-main single-product-main-wrapper bg-slate-50/50">
+	<?php while ( have_posts() ) : ?>
+		<?php the_post(); ?>
+		<?php wc_get_template_part( 'content', 'single-product' ); ?>
+	<?php endwhile; ?>
+</main>
 
 <?php
 get_footer( 'shop' );

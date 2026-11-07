@@ -23,61 +23,95 @@ $demo_base  = $upload_dir['baseurl'] . '/kaveh-demo';
 
 	<div class="container max-w-[1320px] mx-auto px-4">
 		
-		<!-- 2. Main 4-Column Grid -->
-		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 pb-10 border-b border-slate-200/70">
+		<!-- 2. Main Footer Section: Links (25%) + About Card (47%) + Trust Badges (25%) matching Demo 43 -->
+		<div class="flex flex-col lg:flex-row items-stretch justify-between gap-6 pb-10 border-b border-slate-200/70">
 			
-			<!-- Column 1: Fast Access Links (3 Cols) -->
-			<div class="lg:col-span-3">
-				<div class="flex items-center gap-2 mb-5">
-					<svg width="28" height="7" viewBox="0 0 34 8" fill="none"><path d="M33.1839 0H0V8.0099H33.1839V0Z" fill="#E90544"></path></svg>
-					<h3 class="text-base font-black text-[#212341] m-0"><?php esc_html_e( 'دسترسی سریع', 'negar-shop' ); ?></h3>
-				</div>
-				<ul class="space-y-3 text-xs text-slate-600 font-medium">
-					<li><a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="hover:text-rose-600 transition-colors">دوره‌های آموزشی</a></li>
-					<li><a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="hover:text-rose-600 transition-colors">اتاق خبر دیجی‌کالا</a></li>
-					<li><a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="hover:text-rose-600 transition-colors">فروش در دیجی‌کالا</a></li>
-					<li><a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="hover:text-rose-600 transition-colors">فرصت‌های شغلی</a></li>
-					<li><a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="hover:text-rose-600 transition-colors">تماس با دیجی‌کالا</a></li>
-				</ul>
-			</div>
-
-			<!-- Column 2: Customer Services (3 Cols) -->
-			<div class="lg:col-span-3">
-				<div class="flex items-center gap-2 mb-5">
-					<svg width="28" height="7" viewBox="0 0 34 8" fill="none"><path d="M33.1839 0H0V8.0099H33.1839V0Z" fill="#E90544"></path></svg>
-					<h3 class="text-base font-black text-[#212341] m-0"><?php esc_html_e( 'خدمات مشتریان', 'negar-shop' ); ?></h3>
-				</div>
-				<ul class="space-y-3 text-xs text-slate-600 font-medium">
-					<li><a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="hover:text-rose-600 transition-colors">دوره‌های آموزشی</a></li>
-					<li><a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="hover:text-rose-600 transition-colors">اتاق خبر و وبلاگ</a></li>
-					<li><a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="hover:text-rose-600 transition-colors">قوانین و رویه‌های مرجوعی</a></li>
-					<li><a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="hover:text-rose-600 transition-colors">حفظ حریم خصوصی</a></li>
-					<li><a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="hover:text-rose-600 transition-colors">پاسخ به سوالات متداول</a></li>
-				</ul>
-			</div>
-
-			<!-- Column 3: About Shop Box matching Demo 43 (3 Cols) -->
-			<div class="lg:col-span-3 bg-white p-6 rounded-3xl border border-slate-200/80 shadow-xs flex flex-col justify-between">
-				<div>
-					<div class="w-14 h-14 rounded-2xl bg-[#e90544] text-white flex items-center justify-center mb-4 shadow-md shadow-rose-700/25">
-						<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+			<!-- Links Column: Fast Access & Customer Services (25% on Desktop) -->
+			<div class="w-full lg:w-[25%] flex flex-row gap-6 justify-between">
+				<!-- Sub-column 1: Fast Access -->
+				<div class="w-1/2">
+					<div class="flex items-center gap-2 mb-4">
+						<svg width="28" height="7" viewBox="0 0 34 8" fill="none"><path d="M33.1839 0H0V8.0099H33.1839V0Z" fill="#E90544"></path></svg>
+						<h3 class="text-sm font-black text-[#212341] m-0"><?php esc_html_e( 'دسترسی سریع', 'negar-shop' ); ?></h3>
 					</div>
-					<p class="text-2xs text-slate-500 leading-relaxed line-clamp-4 mb-4">
-						<?php esc_html_e( 'فعالیت خود را از سال ۱۳۹۸ در زمینه فروش کالاهای دیجیتال و تجهیزات هوشمند آغاز نموده است. این مجموعه کالاها را بدون واسطه و از طریق شرکت‌های اصلی سازنده به صورت مستقیم تامین می‌کند و ضمانت اصالت را به تمام مشتریان ارائه می‌دهد.', 'negar-shop' ); ?>
-					</p>
+					<ul class="space-y-2.5 text-xs text-slate-600 font-medium">
+						<li><a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="hover:text-rose-600 transition-colors">دوره‌های آموزشی</a></li>
+						<li><a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="hover:text-rose-600 transition-colors">اتاق خبر دیجی‌کالا</a></li>
+						<li><a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="hover:text-rose-600 transition-colors">فروش در دیجی‌کالا</a></li>
+						<li><a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="hover:text-rose-600 transition-colors">فرصت‌های شغلی</a></li>
+						<li><a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="hover:text-rose-600 transition-colors">تماس با دیجی‌کالا</a></li>
+					</ul>
 				</div>
-				<a href="<?php echo esc_url( home_url( '/about/' ) ); ?>" class="inline-flex items-center justify-center gap-1.5 bg-[#e90544] hover:bg-rose-700 text-white font-bold text-xs py-2 px-5 rounded-full transition shadow-xs w-fit">
-					<span><?php esc_html_e( 'درباره ما', 'negar-shop' ); ?></span>
-					<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
-				</a>
+
+				<!-- Sub-column 2: Customer Services -->
+				<div class="w-1/2">
+					<div class="flex items-center gap-2 mb-4">
+						<svg width="28" height="7" viewBox="0 0 34 8" fill="none"><path d="M33.1839 0H0V8.0099H33.1839V0Z" fill="#E90544"></path></svg>
+						<h3 class="text-sm font-black text-[#212341] m-0"><?php esc_html_e( 'خدمات مشتریان', 'negar-shop' ); ?></h3>
+					</div>
+					<ul class="space-y-2.5 text-xs text-slate-600 font-medium">
+						<li><a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="hover:text-rose-600 transition-colors">دوره‌های آموزشی</a></li>
+						<li><a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="hover:text-rose-600 transition-colors">اتاق خبر و وبلاگ</a></li>
+						<li><a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="hover:text-rose-600 transition-colors">قوانین و رویه‌های مرجوعی</a></li>
+						<li><a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="hover:text-rose-600 transition-colors">حفظ حریم خصوصی</a></li>
+						<li><a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="hover:text-rose-600 transition-colors">پاسخ به سوالات متداول</a></li>
+					</ul>
+				</div>
 			</div>
 
-			<!-- Column 4: Trust Badges (Enamad & Samandehi) & Dual Phone Boxes (3 Cols) -->
-			<div class="lg:col-span-3 flex flex-col justify-between">
+			<!-- Center Column: About Us Card (47% on Desktop - Exact 1:1 Match to Demo 43 Container a9752bd) -->
+			<div class="w-full lg:w-[47%] flex flex-col justify-between negar-footer-about-card" style="background-image: url('<?php echo esc_url( $demo_base . '/Rectangle-259.png' ); ?>');">
+				
+				<!-- Top SVG Icon inside the Notch Cutout -->
+				<div class="negar-footer-about-icon">
+					<svg xmlns="http://www.w3.org/2000/svg" width="62" height="62" viewBox="0 0 65 65" fill="none">
+						<rect width="64.4178" height="64.4178" rx="20" fill="#D4242E"></rect>
+						<path fill-rule="evenodd" clip-rule="evenodd" d="M26.0975 12.4701H38.0472C45.7091 12.4701 52.0002 18.5003 52.0002 25.8444V37.2985C52.0002 44.6426 45.7091 50.6728 38.0472 50.6728H26.0975C18.4356 50.6728 12.1445 44.6426 12.1445 37.2985V25.8444C12.1445 18.5003 18.4005 12.4701 26.0975 12.4701Z" fill="url(#paint0_linear_about)"></path>
+						<path fill-rule="evenodd" clip-rule="evenodd" d="M37.4137 48.6836H26.6941C19.8055 48.6836 14.1821 43.2934 14.1821 36.6905V26.4492C14.1821 19.8463 19.8055 14.4561 26.6941 14.4561H37.4137C44.3024 14.4561 49.9258 19.8463 49.9258 26.4492V36.7242C49.9258 43.2934 44.3024 48.6836 37.4137 48.6836Z" fill="url(#paint1_linear_about)"></path>
+						<path fill-rule="evenodd" clip-rule="evenodd" d="M33.7592 39.1537H36.0788C38.293 39.1537 40.0855 37.4356 40.0855 35.3132C40.0855 33.1908 38.293 31.4727 36.0788 31.4727H25.3592C24.9023 31.4727 24.4806 31.2369 24.2697 30.8327C24.0588 30.4284 24.094 29.9904 24.3751 29.6199L26.8705 26.4868C27.1165 26.1836 27.4329 26.0489 27.8195 26.0489H36.0437C41.3859 26.0489 45.744 30.2263 45.744 35.3469C45.744 40.3665 41.5265 44.5102 36.2897 44.6449C36.2546 44.6449 36.2194 44.6449 36.2194 44.6449H36.0788H33.7592H30.2446H27.9249H27.7843C27.7492 44.6449 27.714 44.6449 27.6789 44.6449C22.9342 44.5439 18.9626 41.1076 18.33 36.7281C18.2246 36.1217 18.5057 35.3806 19.3844 35.3469H22.7584C23.4262 35.3806 23.848 35.7175 24.0237 36.3576V36.3913C24.5157 38.0083 26.0622 39.1874 27.8898 39.1874H30.2094L33.7592 39.1537ZM44.2327 20.4229L41.7374 23.5559C41.4913 23.8591 41.175 23.9939 40.7884 23.9939H25.3944C24.9375 23.9939 24.5157 23.7581 24.3049 23.3538C24.094 22.9495 24.1291 22.5116 24.4103 22.141L26.9057 19.008C27.1517 18.7048 27.468 18.57 27.8546 18.57H43.2486C43.7055 18.57 44.1273 18.8059 44.3382 19.2101C44.549 19.6144 44.5139 20.086 44.2327 20.4229Z" fill="white"></path>
+						<defs>
+							<linearGradient id="paint0_linear_about" x1="48.104" y1="55.9417" x2="28.0208" y2="22.7134" gradientUnits="userSpaceOnUse">
+								<stop stop-color="#680B00"></stop>
+								<stop offset="0.1025" stop-color="#7B1000"></stop>
+								<stop offset="0.3166" stop-color="#9F1806"></stop>
+								<stop offset="0.5201" stop-color="#BD1D0B"></stop>
+								<stop offset="0.7076" stop-color="#D2210E"></stop>
+								<stop offset="0.8733" stop-color="#E0230E"></stop>
+								<stop offset="1" stop-color="#E4240E"></stop>
+							</linearGradient>
+							<linearGradient id="paint1_linear_about" x1="17.6938" y1="9.74041" x2="35.6932" y2="39.521" gradientUnits="userSpaceOnUse">
+								<stop stop-color="#680B00"></stop>
+								<stop offset="0.1025" stop-color="#7B1000"></stop>
+								<stop offset="0.3166" stop-color="#9F1806"></stop>
+								<stop offset="0.5201" stop-color="#BD1D0B"></stop>
+								<stop offset="0.7076" stop-color="#D2210E"></stop>
+								<stop offset="0.8733" stop-color="#E0230E"></stop>
+								<stop offset="1" stop-color="#E4240E"></stop>
+							</linearGradient>
+						</defs>
+					</svg>
+				</div>
+
+				<!-- Persian Body Text -->
+				<p class="negar-footer-about-text">
+					<?php esc_html_e( 'در زمینه فروش کیف پول های سخت افزاری شروع نموده۱۳۹۸فعالیت خود را از سال است . این مجموعه کالا های خود را بدون واسطه و از طریق شرکت های اصلی سازنده کیف پول های سخت افزاری به صورت مستقیم تامین می کند و همچنین ضمانت اصالت و سلامت کالا را به تمام مشتریان ارائه می دهد. هدف اصلی ما در و از طریق شرکت های اصلی سازنده کیف پول های سخت افزاری به صورت مستقیم تامین می کند', 'negar-shop' ); ?>
+				</p>
+
+				<!-- White Pill Button "درباره ما" (No Arrow) -->
+				<div class="negar-footer-about-btn-wrap">
+					<a href="<?php echo esc_url( home_url( '/about/' ) ); ?>" class="negar-footer-about-btn">
+						<?php esc_html_e( 'درباره ما', 'negar-shop' ); ?>
+					</a>
+				</div>
+
+			</div>
+
+			<!-- Left Column: Trust Badges (Enamad & Samandehi) & Dual Phone Boxes (25% on Desktop) -->
+			<div class="w-full lg:w-[25%] flex flex-col justify-between">
 				<div>
 					<div class="flex items-center gap-2 mb-4">
 						<svg width="28" height="7" viewBox="0 0 34 8" fill="none"><path d="M33.1839 0H0V8.0099H33.1839V0Z" fill="#E90544"></path></svg>
-						<h3 class="text-base font-black text-[#212341] m-0"><?php esc_html_e( 'چگونه به ما اعتماد کنید', 'negar-shop' ); ?></h3>
+						<h3 class="text-sm font-black text-[#212341] m-0"><?php esc_html_e( 'چگونه به ما اعتماد کنید', 'negar-shop' ); ?></h3>
 					</div>
 					<div class="grid grid-cols-2 gap-3 items-center mb-4">
 						<div class="bg-white p-3 rounded-2xl border border-slate-200/80 flex items-center justify-center aspect-square shadow-2xs hover:shadow-md transition">
