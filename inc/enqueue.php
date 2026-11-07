@@ -311,9 +311,16 @@ function negar_shop_scripts() {
 	// Homepage Interactivity Script
 	if ( is_front_page() || is_home() ) {
 		wp_enqueue_script(
+			'kaveh-videos-script',
+			NEGAR_SHOP_URI . '/assets/js/vendor/videosnkkaveh.js',
+			array( 'jquery', 'swiper-bundle' ),
+			NEGAR_SHOP_VERSION,
+			true
+		);
+		wp_enqueue_script(
 			'negar-shop-home',
 			NEGAR_SHOP_URI . '/assets/js/home.js',
-			array( 'negar-shop-header-footer' ),
+			array( 'negar-shop-header-footer', 'swiper-bundle', 'kaveh-videos-script' ),
 			NEGAR_SHOP_VERSION,
 			true
 		);
