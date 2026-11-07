@@ -1,0 +1,279 @@
+/* =========================================================
+   Search widget — Elementor container / flex-row compatibility
+   Neutralize theme fixed widths & auto-margins in all 7 layouts
+   ========================================================= */
+
+.elementor-widget-searchkaveh {
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.elementor-widget-searchkaveh > .elementor-widget-container {
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.elementor-widget-searchkaveh .kav-search-widget {
+  box-sizing: border-box;
+  max-width: 100%;
+  min-width: 0;
+}
+
+/* Icon-popup layouts: shrink to trigger button in inline headers */
+.elementor-widget-searchkaveh .kav-search-widget--four,
+.elementor-widget-searchkaveh .kav-search-widget--five {
+  width: auto;
+  max-width: 100%;
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+/* Shared form shells */
+.elementor-widget-searchkaveh .top-header-search,
+.elementor-widget-searchkaveh .top-header-two-search,
+.elementor-widget-searchkaveh .top-header-three-search,
+.elementor-widget-searchkaveh .top-header-eleven-search,
+.elementor-widget-searchkaveh .header-nk__search {
+  box-sizing: border-box;
+  margin: 0 !important;
+  max-width: 100% !important;
+  min-width: 0;
+  flex-shrink: 1;
+}
+
+/* Layout 1 */
+.elementor-widget-searchkaveh .top-header-search {
+  width: 100% !important;
+}
+
+.elementor-widget-searchkaveh .top-header-search .input-group {
+  width: 100%;
+  flex-wrap: nowrap;
+  min-width: 0;
+}
+
+.elementor-widget-searchkaveh .top-header-search .form-control {
+  min-width: 0;
+  flex: 1 1 auto;
+  width: 1%;
+}
+
+/* Layout 2 */
+.elementor-widget-searchkaveh .top-header-two-search {
+  width: 100% !important;
+  display: flex !important;
+  align-items: center;
+  gap: 0;
+}
+
+.elementor-widget-searchkaveh .top-header-two-search .form-control {
+  min-width: 0;
+  flex: 1 1 auto;
+  width: auto !important;
+}
+
+.elementor-widget-searchkaveh .top-header-two-search .btn {
+  flex-shrink: 0;
+}
+
+/* Layout 3 */
+.elementor-widget-searchkaveh .top-header-three-search {
+  width: 100% !important;
+  display: flex !important;
+  align-items: center;
+}
+
+.elementor-widget-searchkaveh .top-header-three-search .form-control {
+  min-width: 0;
+  flex: 1 1 auto;
+  width: auto !important;
+}
+
+.elementor-widget-searchkaveh .top-header-three-search .btn {
+  flex-shrink: 0;
+}
+
+/* Layout 4 — icon trigger (overlay stays position:fixed from theme) */
+.elementor-widget-searchkaveh .top-header-four-btn-search {
+  margin: 0 !important;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.elementor-widget-searchkaveh .kav-search-widget--four .top-header-four-search {
+  position: fixed;
+}
+
+/* Layout 5 */
+.elementor-widget-searchkaveh .top-header-fourteen {
+  width: auto !important;
+  max-width: 100%;
+  margin: 0 !important;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.elementor-widget-searchkaveh .top-header-fourteen::before {
+  content: none !important;
+  display: none !important;
+}
+
+.elementor-widget-searchkaveh .top-header-fourteen .nav-header-cart {
+  margin-right: 0 !important;
+  margin-left: 0 !important;
+}
+
+.elementor-widget-searchkaveh .top-header-fourteen .top-header-four-btn-search {
+  margin: 0 !important;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.elementor-widget-searchkaveh .kav-search-widget--five .top-header-four-search {
+  position: fixed;
+}
+
+/* Layout 6 */
+.elementor-widget-searchkaveh .top-header-eleven-search {
+  width: 100% !important;
+  display: flex !important;
+  align-items: center;
+}
+
+.elementor-widget-searchkaveh .top-header-eleven-search select.form-control {
+  min-width: 0;
+  flex: 0 1 auto;
+  max-width: 42%;
+}
+
+.elementor-widget-searchkaveh .top-header-eleven-search input.form-control {
+  min-width: 0;
+  flex: 1 1 auto;
+  width: auto !important;
+}
+
+.elementor-widget-searchkaveh .top-header-eleven-search button {
+  flex-shrink: 0;
+}
+
+.elementor-widget-searchkaveh .kav-search-widget--six div[id^="searchResults"] {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Layout 7 — header-nk search (RTL) */
+.elementor-widget-searchkaveh .header-nk__search {
+  position: relative;
+  width: 100% !important;
+  display: block;
+}
+
+.elementor-widget-searchkaveh .header-nk__search .form-control {
+  background-color: #edf4f7;
+  border: 1px solid #edf4f7;
+  padding-block: 0;
+  padding-inline: 29px 45px;
+  font-size: 12px;
+  color: #000;
+  font-weight: 400;
+  height: 59px;
+  width: 100%;
+  max-width: 100%;
+  box-shadow: none;
+  outline: none;
+  transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.elementor-widget-searchkaveh .header-nk__search .form-control::-moz-placeholder {
+  color: #5f7086;
+  opacity: 1;
+}
+
+.elementor-widget-searchkaveh .header-nk__search .form-control::placeholder {
+  color: #5f7086;
+  opacity: 1;
+}
+
+.elementor-widget-searchkaveh .header-nk__search .form-control:focus {
+  background-color: #fff;
+  border-color: var(--kaveh-primary-color, #e80645);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--kaveh-primary-color, #e80645) 20%, transparent) !important;
+}
+
+.elementor-widget-searchkaveh .header-nk__search button {
+  inset-inline-end: 25px;
+  inset-inline-start: auto;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 0;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  line-height: 0;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.elementor-widget-searchkaveh .header-nk__search button:focus,
+.elementor-widget-searchkaveh .header-nk__search button:focus-visible {
+  outline: none;
+}
+
+.elementor-widget-searchkaveh .header-nk__search .search-kaveh-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  line-height: 1;
+  color: #a4a8ba;
+  flex-shrink: 0;
+}
+
+.elementor-widget-searchkaveh .header-nk__search .search-kaveh-icon > i,
+.elementor-widget-searchkaveh .header-nk__search .search-kaveh-icon > svg,
+.elementor-widget-searchkaveh .header-nk__search .search-kaveh-icon > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.elementor-widget-searchkaveh .header-nk__search .search-kaveh-icon > i {
+  font-size: inherit;
+  line-height: 1;
+  color: inherit;
+}
+
+.elementor-widget-searchkaveh .header-nk__search .search-kaveh-icon path.accent {
+  stroke: var(--kaveh-primary-color, #d4242e);
+}
+
+.elementor-widget-searchkaveh .header-nk__search .search-kaveh-icon path.base {
+  stroke: #a4a8ba;
+}
+
+.elementor-widget-searchkaveh .header-nk__search .search-kaveh-icon > svg [fill]:not([fill="none"]):not(.accent):not(.base) {
+  fill: currentColor;
+}
+
+/* Flex containers (Elementor e-con) — allow shrink beside siblings */
+.e-con.e-flex .elementor-widget-searchkaveh,
+.e-con.e-flex .elementor-widget-searchkaveh > .elementor-widget-container,
+.e-con.e-flex .elementor-widget-searchkaveh .kav-search-widget {
+  min-width: 0;
+}

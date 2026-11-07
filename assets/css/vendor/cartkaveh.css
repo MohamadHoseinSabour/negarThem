@@ -1,0 +1,359 @@
+/* Shared cart icon / SVG — sizing box so uploaded SVGs never blow layouts */
+.kaveh-cart-el .cart-kaveh-icon {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  line-height: 1 !important;
+  width: 1em !important;
+  height: 1em !important;
+  font-size: 18px;
+  /* visible, not hidden: some icon-font glyphs are wider than 1em or have zero
+     advance (see `> i` below) and clipping cut them in half */
+  overflow: visible;
+  vertical-align: middle;
+  position: static !important;
+  top: auto !important;
+  right: auto !important;
+  left: auto !important;
+  bottom: auto !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  color: inherit;
+  text-align: center;
+}
+
+.kaveh-cart-el .cart-kaveh-icon > i,
+.kaveh-cart-el .cart-kaveh-icon > svg,
+.kaveh-cart-el .cart-kaveh-icon > img {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  object-fit: contain;
+}
+
+.kaveh-cart-el .cart-kaveh-icon > i {
+  font-size: inherit !important;
+  line-height: 1 !important;
+  /* iconsax maps some glyphs to combining codepoints (isax-bag-25 = U+0333,
+     isax-bag-happy5 = U+0336): zero advance, painted to the left of the pen.
+     Centring the text shifts those half a box; right-aligning puts both kinds
+     of glyph exactly inside the 1em box, in RTL and LTR alike. */
+  text-align: right !important;
+}
+
+.kaveh-cart-el .cart-kaveh-icon svg * {
+  vector-effect: non-scaling-stroke;
+}
+
+/* Counter badge — keep number centered; no display:!important so Bootstrap d-none / d-*-flex work */
+.kaveh-cart-el .cart-counter-badge {
+  display: inline-flex;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  line-height: 1 !important;
+  box-sizing: border-box;
+}
+
+.kaveh-cart-el .cart-counter-badge .cart-aj-span {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  position: static !important;
+  top: auto !important;
+  right: auto !important;
+  left: auto !important;
+  bottom: auto !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  line-height: 1 !important;
+  text-align: center !important;
+  /* Theme `.nav-header-cart > .btn span` sets color:#fff on ALL nested spans */
+  color: inherit;
+}
+
+/* Layout 3 — reset theme absolute/stretch on counter only */
+.kaveh-cart-el .top-header-sixteen .nav-header-cart > a > .cart-counter-badge {
+  position: relative !important;
+  top: auto !important;
+  right: auto !important;
+  left: auto !important;
+  bottom: auto !important;
+  transform: none !important;
+  flex-shrink: 0;
+}
+
+.kaveh-cart-el .top-header-sixteen .nav-header-cart > a > .cart-kaveh-label {
+  position: relative !important;
+  top: auto !important;
+  right: auto !important;
+  left: auto !important;
+  width: auto !important;
+  height: auto !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+}
+
+/* Layout 4 — restore / increase icon–label gap (theme targeted `i`, icon is now `.cart-kaveh-icon`) */
+.kaveh-cart-el .header-cart > .btn {
+  gap: 0;
+}
+
+.kaveh-cart-el .header-cart > .btn > .cart-kaveh-icon {
+  /* Theme used 7px on `i`; icon is now a div — give label clearer breathing room */
+  margin-left: 18px !important;
+  margin-right: 0 !important;
+}
+
+.kaveh-cart-el .header-cart > .btn > .cart-counter-wrap {
+  position: relative !important;
+  top: auto !important;
+  right: auto !important;
+  left: auto !important;
+  bottom: auto !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  line-height: 1 !important;
+}
+
+.kaveh-cart-el .header-cart > .btn .mob_cart_tot {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  position: static !important;
+  top: auto !important;
+  right: auto !important;
+  left: auto !important;
+  bottom: auto !important;
+  line-height: 1 !important;
+  width: 100% !important;
+  height: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  text-align: center;
+  color: inherit;
+}
+
+/* Layout 5 — keep badge in-flow and centered; kill theme absolute + inset utilities */
+.kaveh-cart-el .header-three-cart > .btn > .cart-counter-badge {
+  position: relative !important;
+  top: auto !important;
+  right: auto !important;
+  left: auto !important;
+  bottom: auto !important;
+  transform: none !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0;
+  line-height: 1 !important;
+}
+
+/* Color inheritance for uploaded / font icons */
+.kaveh-cart-el .cart-kaveh-icon svg [fill]:not([fill="none"]) {
+  fill: currentColor;
+}
+.kaveh-cart-el .cart-kaveh-icon svg [stroke]:not([stroke="none"]) {
+  stroke: currentColor;
+}
+.kaveh-cart-el .cart-kaveh-icon svg [fill="none"] {
+  fill: none !important;
+}
+
+/* Keep dual-tone design SVG colors unless widget controls override */
+.kaveh-cart-el .header-nk__cart .cart-kaveh-icon path.accent {
+  stroke: var(--kaveh-primary-color, #d4242e);
+}
+.kaveh-cart-el .header-nk__cart .cart-kaveh-icon path.base {
+  stroke: #292d32;
+}
+
+/* Layout Six — header-nk cart */
+.header-nk-cart-wrap {
+  position: relative;
+  width: auto;
+  display: inline-flex;
+}
+
+.header-nk__cart {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 15px 17px 14px 22px;
+  font-size: 13px;
+  line-height: 20px;
+  font-weight: 400;
+  color: #040404;
+  gap: 7px;
+  border: 1px solid rgba(255, 255, 255, 0);
+  text-decoration: none;
+  background: transparent;
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+  z-index: 2;
+}
+
+.header-nk__cart::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 1px;
+  border-radius: inherit;
+  background-image: radial-gradient(18.6% 36.99% at 19.94% 106.78%, var(--kaveh-primary-color, #d4242e) 0%, transparent 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: xor;
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.header-nk__cart > .cart-kaveh-icon {
+  width: 17px;
+  height: 17px;
+  font-size: 17px;
+}
+
+.header-nk__cart .header-nk__cart-label {
+  white-space: nowrap;
+}
+
+.header-nk__cart > .counter {
+  margin-right: 10px;
+  width: 28px;
+  height: 28px;
+  background-color: var(--kaveh-primary-color, #fd4739);
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25) inset;
+  color: #fff;
+  font-size: 12px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.header-nk__cart > .counter::before,
+.header-nk__cart > .counter::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background-color: color-mix(in srgb, var(--kaveh-primary-color, #fd4739) 40%, transparent);
+  z-index: -1;
+  pointer-events: none;
+}
+
+.header-nk__cart > .counter::before {
+  width: 34px;
+  height: 34px;
+}
+
+.header-nk__cart > .counter::after {
+  width: 40px;
+  height: 40px;
+}
+
+.header-nk__cart:hover {
+  background-color: color-mix(in srgb, var(--kaveh-primary-color, #fd4739) 10%, transparent);
+  border-color: var(--kaveh-primary-color, #fd4739);
+  color: var(--kaveh-primary-color, #fd4739);
+}
+
+.header-nk__cart:hover .header-nk__cart-label {
+  color: var(--kaveh-primary-color, #fd4739);
+}
+
+/* Hide counter below lg (matches d-none d-lg-flex); keep icon-only circle on mobile */
+@media only screen and (max-width: 991.98px) {
+  .header-nk__cart > .counter {
+    display: none !important;
+  }
+}
+
+@media only screen and (max-width: 767.98px) {
+  .header-nk__cart {
+    width: 46px !important;
+    height: 46px !important;
+    padding: 0 !important;
+    gap: 0;
+    border: 1px solid rgba(0, 0, 0, 0.07);
+    border-radius: 50% !important;
+    overflow: hidden;
+  }
+
+  .header-nk__cart::before {
+    content: none;
+  }
+
+  .header-nk__cart > .cart-kaveh-icon {
+    margin: 0;
+  }
+}
+
+/*
+ * Closed cart dropdown: keep original opacity/top open animation.
+ * Only clip the closed panel so its full-size box cannot create page scroll.
+ */
+.kaveh-cart-el {
+  overflow: visible;
+}
+
+.kaveh-cart-el .nav-header-cart,
+.kaveh-cart-el .header-nk-cart-wrap {
+  position: relative;
+}
+
+.kaveh-cart-el .nav-header-cart-dropdown,
+.kaveh-cart-el .nav-header-cart-dropdown-two {
+  position: absolute;
+  z-index: 1000;
+  box-sizing: border-box;
+}
+
+.kaveh-cart-el .nav-header-cart:not(:hover):not(:focus-within) > .nav-header-cart-dropdown,
+.kaveh-cart-el .nav-header-cart:not(:hover):not(:focus-within) > .nav-header-cart-dropdown-two,
+.kaveh-cart-el .header-nk-cart-wrap:not(:hover):not(:focus-within) > .nav-header-cart-dropdown,
+.kaveh-cart-el .header-nk-cart-wrap:not(:hover):not(:focus-within) > .nav-header-cart-dropdown-two {
+  pointer-events: none;
+  clip-path: inset(50%);
+  clip: rect(0, 0, 0, 0);
+}
+
+.kaveh-cart-el .nav-header-cart:hover > .nav-header-cart-dropdown,
+.kaveh-cart-el .nav-header-cart:hover > .nav-header-cart-dropdown-two,
+.kaveh-cart-el .nav-header-cart:focus-within > .nav-header-cart-dropdown,
+.kaveh-cart-el .nav-header-cart:focus-within > .nav-header-cart-dropdown-two,
+.kaveh-cart-el .header-nk-cart-wrap:hover > .nav-header-cart-dropdown,
+.kaveh-cart-el .header-nk-cart-wrap:hover > .nav-header-cart-dropdown-two,
+.kaveh-cart-el .header-nk-cart-wrap:focus-within > .nav-header-cart-dropdown,
+.kaveh-cart-el .header-nk-cart-wrap:focus-within > .nav-header-cart-dropdown-two {
+  clip: auto;
+  clip-path: none;
+  pointer-events: auto;
+}
+
+/* Editor preview: keep dropdown fully out of flow */
+.kaveh-cart-el--editor .nav-header-cart-dropdown,
+.kaveh-cart-el--editor .nav-header-cart-dropdown-two {
+  display: none !important;
+}

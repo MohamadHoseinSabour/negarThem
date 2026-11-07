@@ -155,6 +155,38 @@ function negar_shop_scripts() {
 		NEGAR_SHOP_VERSION
 	);
 
+	// Kaveh Official Header & MegaMenu Styles
+	wp_enqueue_style(
+		'kaveh-megamenu',
+		NEGAR_SHOP_URI . '/assets/css/vendor/kavehmegamenu.css',
+		array( 'bootstrap-rtl' ),
+		NEGAR_SHOP_VERSION
+	);
+	wp_enqueue_style(
+		'kaveh-megamenu-three',
+		NEGAR_SHOP_URI . '/assets/css/vendor/megamenuthreekaveh.css',
+		array( 'kaveh-megamenu' ),
+		NEGAR_SHOP_VERSION
+	);
+	wp_enqueue_style(
+		'kaveh-cart-header',
+		NEGAR_SHOP_URI . '/assets/css/vendor/cartkaveh.css',
+		array( 'bootstrap-rtl' ),
+		NEGAR_SHOP_VERSION
+	);
+	wp_enqueue_style(
+		'kaveh-auth-header',
+		NEGAR_SHOP_URI . '/assets/css/vendor/loginandsignupkaveh.css',
+		array( 'bootstrap-rtl' ),
+		NEGAR_SHOP_VERSION
+	);
+	wp_enqueue_style(
+		'kaveh-search-header',
+		NEGAR_SHOP_URI . '/assets/css/vendor/searchkaveh.css',
+		array( 'bootstrap-rtl' ),
+		NEGAR_SHOP_VERSION
+	);
+
 	// Tailwind Engine Compiled Utility CSS
 	wp_enqueue_style(
 		'negar-shop-tailwind',
@@ -206,9 +238,21 @@ function negar_shop_scripts() {
 	// Shop & Archive Dedicated CSS
 	if ( function_exists( 'is_woocommerce' ) && ( is_shop() || is_product_taxonomy() ) ) {
 		wp_enqueue_style(
+			'kaveh-nouislider',
+			NEGAR_SHOP_URI . '/assets/css/vendor/nouislider.min.css',
+			array( 'bootstrap-rtl' ),
+			NEGAR_SHOP_VERSION
+		);
+		wp_enqueue_style(
+			'kaveh-term-description',
+			NEGAR_SHOP_URI . '/assets/css/vendor/kaveh-term-description.css',
+			array( 'bootstrap-rtl' ),
+			NEGAR_SHOP_VERSION
+		);
+		wp_enqueue_style(
 			'negar-shop-shop',
 			NEGAR_SHOP_URI . '/assets/css/shop.css',
-			array( 'negar-shop-header-footer' ),
+			array( 'negar-shop-header-footer', 'kaveh-nouislider' ),
 			NEGAR_SHOP_VERSION
 		);
 	}
@@ -216,9 +260,27 @@ function negar_shop_scripts() {
 	// Single Product Dedicated CSS
 	if ( function_exists( 'is_product' ) && is_product() ) {
 		wp_enqueue_style(
+			'kaveh-single-product-main',
+			NEGAR_SHOP_URI . '/assets/css/vendor/main-single-product.min.css',
+			array( 'bootstrap-rtl' ),
+			NEGAR_SHOP_VERSION
+		);
+		wp_enqueue_style(
+			'kaveh-magnify',
+			NEGAR_SHOP_URI . '/assets/css/vendor/magnify.css',
+			array(),
+			NEGAR_SHOP_VERSION
+		);
+		wp_enqueue_style(
+			'kaveh-select2',
+			NEGAR_SHOP_URI . '/assets/css/vendor/select2.min.css',
+			array(),
+			NEGAR_SHOP_VERSION
+		);
+		wp_enqueue_style(
 			'negar-shop-single-product',
 			NEGAR_SHOP_URI . '/assets/css/single-product.css',
-			array( 'negar-shop-header-footer' ),
+			array( 'negar-shop-header-footer', 'kaveh-single-product-main' ),
 			NEGAR_SHOP_VERSION
 		);
 	}
@@ -236,9 +298,15 @@ function negar_shop_scripts() {
 	// Content Pages Dedicated CSS (Blog, Single Post, About, Contact, 404, Search)
 	if ( is_singular( 'post' ) || is_archive() || is_search() || is_404() || is_page_template( 'page-templates/page-about.php' ) || is_page_template( 'page-templates/page-contact.php' ) ) {
 		wp_enqueue_style(
+			'kaveh-main-blog',
+			NEGAR_SHOP_URI . '/assets/css/vendor/main-blog.min.css',
+			array( 'bootstrap-rtl' ),
+			NEGAR_SHOP_VERSION
+		);
+		wp_enqueue_style(
 			'negar-shop-content-pages',
 			NEGAR_SHOP_URI . '/assets/css/content-pages.css',
-			array( 'negar-shop-header-footer' ),
+			array( 'negar-shop-header-footer', 'kaveh-main-blog' ),
 			NEGAR_SHOP_VERSION
 		);
 	}
@@ -299,11 +367,34 @@ function negar_shop_scripts() {
 		)
 	);
 
+	// Kaveh Official Global Header & Cart/Auth Scripts
+	wp_enqueue_script(
+		'kaveh-megamenu-js',
+		NEGAR_SHOP_URI . '/assets/js/vendor/kavehmegamenu.js',
+		array( 'jquery' ),
+		NEGAR_SHOP_VERSION,
+		true
+	);
+	wp_enqueue_script(
+		'kaveh-ajax-cart-js',
+		NEGAR_SHOP_URI . '/assets/js/vendor/kaveh-ajax-cart.js',
+		array( 'jquery' ),
+		NEGAR_SHOP_VERSION,
+		true
+	);
+	wp_enqueue_script(
+		'kaveh-login-ajax-js',
+		NEGAR_SHOP_URI . '/assets/js/vendor/kaveh-login-ajax.js',
+		array( 'jquery' ),
+		NEGAR_SHOP_VERSION,
+		true
+	);
+
 	// Header & Footer Interactive Script
 	wp_enqueue_script(
 		'negar-shop-header-footer',
 		NEGAR_SHOP_URI . '/assets/js/header-footer.js',
-		array( 'negar-shop-main' ),
+		array( 'negar-shop-main', 'kaveh-megamenu-js', 'kaveh-ajax-cart-js' ),
 		NEGAR_SHOP_VERSION,
 		true
 	);
@@ -329,9 +420,23 @@ function negar_shop_scripts() {
 	// Shop & Archive Interactive Script
 	if ( function_exists( 'is_woocommerce' ) && ( is_shop() || is_product_taxonomy() ) ) {
 		wp_enqueue_script(
+			'kaveh-nouislider-js',
+			NEGAR_SHOP_URI . '/assets/js/vendor/nouislider.min.js',
+			array(),
+			NEGAR_SHOP_VERSION,
+			true
+		);
+		wp_enqueue_script(
+			'kaveh-ajax-shop-method-js',
+			NEGAR_SHOP_URI . '/assets/js/vendor/kaveh-ajax-shop-method.js',
+			array( 'jquery' ),
+			NEGAR_SHOP_VERSION,
+			true
+		);
+		wp_enqueue_script(
 			'negar-shop-shop',
 			NEGAR_SHOP_URI . '/assets/js/shop.js',
-			array( 'negar-shop-header-footer' ),
+			array( 'negar-shop-header-footer', 'kaveh-nouislider-js' ),
 			NEGAR_SHOP_VERSION,
 			true
 		);
@@ -349,9 +454,30 @@ function negar_shop_scripts() {
 	// Single Product Interactive Script
 	if ( function_exists( 'is_product' ) && is_product() ) {
 		wp_enqueue_script(
+			'kaveh-magnify-js',
+			NEGAR_SHOP_URI . '/assets/js/vendor/jquery.magnify.js',
+			array( 'jquery' ),
+			NEGAR_SHOP_VERSION,
+			true
+		);
+		wp_enqueue_script(
+			'kaveh-product-zoom-js',
+			NEGAR_SHOP_URI . '/assets/js/vendor/kaveh-product-zoom.js',
+			array( 'jquery', 'kaveh-magnify-js' ),
+			NEGAR_SHOP_VERSION,
+			true
+		);
+		wp_enqueue_script(
+			'kaveh-main-single-product-js',
+			NEGAR_SHOP_URI . '/assets/js/vendor/main-single-product.min.js',
+			array( 'jquery', 'swiper-bundle' ),
+			NEGAR_SHOP_VERSION,
+			true
+		);
+		wp_enqueue_script(
 			'negar-shop-single-product',
 			NEGAR_SHOP_URI . '/assets/js/single-product.js',
-			array( 'negar-shop-header-footer' ),
+			array( 'negar-shop-header-footer', 'kaveh-main-single-product-js', 'kaveh-product-zoom-js' ),
 			NEGAR_SHOP_VERSION,
 			true
 		);

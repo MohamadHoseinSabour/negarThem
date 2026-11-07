@@ -1,0 +1,696 @@
+/**
+ * Kaveh — Product taxonomy / shop archive description
+ * Soft editorial block aligned with category sidebar & megamenu tokens.
+ * Also shared with single-product description via `.kaveh-rich-description`.
+ */
+
+.kaveh-archive-description {
+  margin-block: 28px 8px;
+}
+
+.kaveh-archive-description:empty,
+.kaveh-archive-description:not(:has(.term-description)),
+.kaveh-archive-description .term-description:empty {
+  display: none;
+}
+
+/* Product / shared rich description — same tokens as category */
+.kaveh-rich-description {
+  --kaveh-desc-text: #61646c;
+  --kaveh-desc-title: #494949;
+  --kaveh-desc-muted: #afafaf;
+  --kaveh-desc-line: #eef1f4;
+  --kaveh-desc-surface: #f9fbfc;
+  --kaveh-desc-surface-2: #ffffff;
+  --kaveh-desc-accent: var(--kaveh-primary-color, #ea5656);
+}
+
+.kaveh-archive-description .term-description,
+.kaveh-rich-description {
+  --kaveh-desc-text: #61646c;
+  --kaveh-desc-title: #494949;
+  --kaveh-desc-muted: #afafaf;
+  --kaveh-desc-line: #eef1f4;
+  --kaveh-desc-surface: #f9fbfc;
+  --kaveh-desc-surface-2: #ffffff;
+  --kaveh-desc-accent: var(--kaveh-primary-color, #ea5656);
+
+  box-sizing: border-box;
+  background:
+    linear-gradient(180deg, rgba(249, 251, 252, 0.95) 0%, #fff 42%),
+    var(--kaveh-desc-surface);
+  border: 1px solid var(--kaveh-desc-line);
+  border-radius: 20px;
+  padding: 28px 28px 24px;
+  color: var(--kaveh-desc-text);
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.9;
+  max-width: 100%;
+  min-width: 0;
+  /* Keep the description card fixed; wide tables scroll on their own */
+  overflow-x: hidden;
+}
+
+.kaveh-archive-description .term-description > *:first-child,
+.kaveh-rich-description > *:first-child {
+  margin-block-start: 0 !important;
+}
+
+.kaveh-archive-description .term-description > *:last-child,
+.kaveh-rich-description > *:last-child {
+  margin-block-end: 0 !important;
+}
+
+/* ---------- Headings ---------- */
+.kaveh-archive-description .term-description :is(h1, h2, h3, h4, h5, h6),
+.kaveh-rich-description :is(h1, h2, h3, h4, h5, h6) {
+  color: var(--kaveh-desc-title);
+  line-height: 1.45;
+  margin: 1.25em 0 0.45em;
+  letter-spacing: -0.01em;
+}
+
+.kaveh-archive-description .term-description h1,
+.kaveh-rich-description h1 {
+  font-size: 28px;
+  font-weight: 800;
+}
+
+.kaveh-archive-description .term-description h2,
+.kaveh-rich-description h2 {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.kaveh-archive-description .term-description h3,
+.kaveh-rich-description h3 {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.kaveh-archive-description .term-description h4,
+.kaveh-rich-description h4 {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.kaveh-archive-description .term-description h5,
+.kaveh-rich-description h5 {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.kaveh-archive-description .term-description h6,
+.kaveh-rich-description h6 {
+  font-size: 15px;
+  font-weight: 500;
+  color: #555861;
+}
+
+/* ---------- Inline formatting (classic editor toolbar) ---------- */
+.kaveh-archive-description .term-description :is(strong, b),
+.kaveh-rich-description :is(strong, b) {
+  display: inline;
+  color: var(--kaveh-desc-title);
+  font-weight: 700;
+}
+
+.kaveh-archive-description .term-description :is(em, i),
+.kaveh-rich-description :is(em, i) {
+  font-style: italic;
+  color: #555861;
+}
+
+.kaveh-archive-description .term-description :is(u, ins),
+.kaveh-rich-description :is(u, ins) {
+  text-decoration: underline;
+}
+
+.kaveh-archive-description .term-description :is(s, del, strike),
+.kaveh-rich-description :is(s, del, strike) {
+  text-decoration: line-through;
+}
+
+.kaveh-archive-description .term-description :is(sub, sup),
+.kaveh-rich-description :is(sub, sup) {
+  position: relative;
+  font-size: 0.75em;
+  line-height: 0;
+  vertical-align: baseline;
+}
+
+.kaveh-archive-description .term-description sup,
+.kaveh-rich-description sup {
+  top: -0.5em;
+}
+
+.kaveh-archive-description .term-description sub,
+.kaveh-rich-description sub {
+  bottom: -0.25em;
+}
+
+/* ---------- Paragraphs ---------- */
+.kaveh-archive-description .term-description p,
+.kaveh-rich-description p {
+  margin: 0 0 0.85em;
+  color: var(--kaveh-desc-text);
+}
+
+.kaveh-archive-description .term-description > p + p,
+.kaveh-rich-description > p + p {
+  margin-top: 0;
+}
+
+/* ---------- Links ---------- */
+.kaveh-archive-description .term-description a,
+.kaveh-archive-description .term-description a:visited,
+.kaveh-rich-description a,
+.kaveh-rich-description a:visited {
+  color: var(--kaveh-desc-accent) !important;
+  text-decoration: none !important;
+  border-bottom: 0 !important;
+  box-shadow: none !important;
+  transition: opacity 0.2s ease, color 0.2s ease;
+  font-weight: inherit;
+}
+
+.kaveh-archive-description .term-description a:hover,
+.kaveh-archive-description .term-description a:focus,
+.kaveh-rich-description a:hover,
+.kaveh-rich-description a:focus {
+  color: var(--kaveh-desc-accent) !important;
+  opacity: 0.82;
+  text-decoration: none !important;
+  border-bottom: 0 !important;
+}
+
+/* Keep accent on linked headings (don't fall back to black title color) */
+.kaveh-archive-description .term-description :is(h1, h2, h3, h4, h5, h6) a,
+.kaveh-archive-description .term-description :is(h1, h2, h3, h4, h5, h6) a:hover,
+.kaveh-archive-description .term-description :is(h1, h2, h3, h4, h5, h6) a:focus,
+.kaveh-archive-description .term-description :is(strong, b) a,
+.kaveh-archive-description .term-description :is(strong, b) a:hover,
+.kaveh-rich-description :is(h1, h2, h3, h4, h5, h6) a,
+.kaveh-rich-description :is(h1, h2, h3, h4, h5, h6) a:hover,
+.kaveh-rich-description :is(h1, h2, h3, h4, h5, h6) a:focus,
+.kaveh-rich-description :is(strong, b) a,
+.kaveh-rich-description :is(strong, b) a:hover {
+  color: var(--kaveh-desc-accent) !important;
+  text-decoration: none !important;
+  border-bottom: 0 !important;
+}
+
+/* Taxonomy / product tags inside description */
+.kaveh-archive-description .term-description a[rel="tag"],
+.kaveh-archive-description .term-description .tag-cloud-link,
+.kaveh-archive-description .term-description .wp-tag-cloud a,
+.kaveh-rich-description a[rel="tag"],
+.kaveh-rich-description .tag-cloud-link,
+.kaveh-rich-description .wp-tag-cloud a {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin: 0 0 8px;
+  margin-inline-end: 6px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--kaveh-desc-line);
+  background: var(--kaveh-desc-surface-2);
+  color: var(--kaveh-desc-title) !important;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.4;
+  opacity: 1;
+}
+
+.kaveh-archive-description .term-description a[rel="tag"]:hover,
+.kaveh-archive-description .term-description .tag-cloud-link:hover,
+.kaveh-archive-description .term-description .wp-tag-cloud a:hover,
+.kaveh-rich-description a[rel="tag"]:hover,
+.kaveh-rich-description .tag-cloud-link:hover,
+.kaveh-rich-description .wp-tag-cloud a:hover {
+  background: var(--kaveh-desc-accent);
+  border-color: var(--kaveh-desc-accent);
+  color: #fff !important;
+  opacity: 1;
+}
+
+/* ---------- Lists ----------
+   Theme reset sets * { list-style: none } and ul,ol { padding: 0 }.
+   Force visible bullets/numbers inside archive descriptions. */
+.kaveh-archive-description .term-description :is(ul, ol),
+.kaveh-rich-description :is(ul, ol) {
+  margin: 0 0 1.15em !important;
+  padding: 0 !important;
+  padding-inline-start: 1.6em !important;
+  list-style-position: outside !important;
+}
+
+.kaveh-archive-description .term-description ul,
+.kaveh-rich-description ul {
+  list-style: disc !important;
+  list-style-type: disc !important;
+}
+
+.kaveh-archive-description .term-description ol,
+.kaveh-rich-description ol {
+  list-style: decimal !important;
+  list-style-type: decimal !important;
+}
+
+.kaveh-archive-description .term-description :is(ul, ol) ul,
+.kaveh-rich-description :is(ul, ol) ul {
+  list-style-type: circle !important;
+  margin-top: 0.35em !important;
+  margin-bottom: 0.35em !important;
+}
+
+.kaveh-archive-description .term-description :is(ul, ol) ol,
+.kaveh-rich-description :is(ul, ol) ol {
+  list-style-type: decimal !important;
+  margin-top: 0.35em !important;
+  margin-bottom: 0.35em !important;
+}
+
+.kaveh-archive-description .term-description li,
+.kaveh-rich-description li {
+  display: list-item !important;
+  list-style: inherit !important;
+  margin: 0 0 0.45em !important;
+  padding: 0 !important;
+  color: var(--kaveh-desc-text);
+}
+
+.kaveh-archive-description .term-description li::marker,
+.kaveh-rich-description li::marker {
+  color: var(--kaveh-desc-accent);
+  font-weight: 700;
+}
+
+/* ---------- Images / figures ---------- */
+.kaveh-archive-description .term-description :is(img, figure, video),
+.kaveh-rich-description :is(img, figure, video) {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Keep the iframe height attribute; only known video players are made fluid. */
+.kaveh-archive-description .term-description iframe,
+.kaveh-rich-description iframe {
+  max-width: 100%;
+  border: 0;
+}
+
+.kaveh-archive-description .term-description iframe:is([src*="youtube.com"], [src*="youtube-nocookie.com"], [src*="youtu.be"], [src*="vimeo.com"], [src*="aparat.com"]),
+.kaveh-rich-description iframe:is([src*="youtube.com"], [src*="youtube-nocookie.com"], [src*="youtu.be"], [src*="vimeo.com"], [src*="aparat.com"]) {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  margin: 1.1em 0;
+  border-radius: 14px;
+}
+
+.kaveh-archive-description .term-description img,
+.kaveh-rich-description img {
+  display: block;
+  border-radius: 14px;
+  margin: 1.1em 0;
+  border: 1px solid var(--kaveh-desc-line);
+}
+
+.kaveh-archive-description .term-description figure,
+.kaveh-rich-description figure {
+  margin: 1.25em 0;
+}
+
+.kaveh-archive-description .term-description figcaption,
+.kaveh-rich-description figcaption {
+  margin-top: 0.5em;
+  font-size: 12px;
+  color: var(--kaveh-desc-muted);
+  text-align: center;
+}
+
+/* Editor alignment classes (physical left/right, as WordPress outputs them) */
+.kaveh-archive-description .term-description :is(img, figure, .wp-caption).aligncenter,
+.kaveh-rich-description :is(img, figure, .wp-caption).aligncenter {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.kaveh-archive-description .term-description :is(img, figure, .wp-caption).alignright,
+.kaveh-rich-description :is(img, figure, .wp-caption).alignright {
+  float: right;
+  margin: 0.35em 0 1em 1.25em;
+}
+
+.kaveh-archive-description .term-description :is(img, figure, .wp-caption).alignleft,
+.kaveh-rich-description :is(img, figure, .wp-caption).alignleft {
+  float: left;
+  margin: 0.35em 1.25em 1em 0;
+}
+
+.kaveh-archive-description .term-description .wp-caption,
+.kaveh-rich-description .wp-caption {
+  max-width: 100%;
+}
+
+.kaveh-archive-description .term-description .wp-caption img,
+.kaveh-rich-description .wp-caption img {
+  margin: 0 auto;
+}
+
+/* [gallery] shortcode */
+.kaveh-archive-description .term-description .gallery,
+.kaveh-rich-description .gallery {
+  display: flow-root;
+  margin: 1.25em 0;
+}
+
+.kaveh-archive-description .term-description .gallery .gallery-item,
+.kaveh-rich-description .gallery .gallery-item {
+  margin-bottom: 0;
+  padding: 0 4px;
+  box-sizing: border-box;
+}
+
+.kaveh-archive-description .term-description .gallery img,
+.kaveh-rich-description .gallery img {
+  margin: 0 auto;
+}
+
+/* ---------- Blockquote ---------- */
+.kaveh-archive-description .term-description blockquote,
+.kaveh-rich-description blockquote {
+  position: relative;
+  margin: 1.5em 0;
+  padding: 18px 22px;
+  padding-inline-start: 22px;
+  border: 1px solid var(--kaveh-desc-line);
+  border-inline-start: 3px solid var(--kaveh-desc-accent);
+  background:
+    linear-gradient(135deg, rgba(249, 251, 252, 0.98) 0%, #fff 55%),
+    var(--kaveh-desc-surface);
+  border-radius: 14px;
+  color: #555861;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.85;
+  font-style: normal;
+  box-shadow: none;
+  quotes: none;
+}
+
+.kaveh-archive-description .term-description blockquote::before,
+.kaveh-rich-description blockquote::before {
+  content: "";
+  position: absolute;
+  inset-inline-end: 16px;
+  top: 12px;
+  width: 28px;
+  height: 22px;
+  opacity: 0.18;
+  background-color: var(--kaveh-desc-accent);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='black'%3E%3Cpath d='M7.17 6A5.17 5.17 0 0 0 2 11.17V18h6.83v-6.83H5.17A3.17 3.17 0 0 1 8.34 8.1L7.17 6Zm12 0A5.17 5.17 0 0 0 14 11.17V18h6.83v-6.83h-3.66A3.17 3.17 0 0 1 20.34 8.1L19.17 6Z'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='black'%3E%3Cpath d='M7.17 6A5.17 5.17 0 0 0 2 11.17V18h6.83v-6.83H5.17A3.17 3.17 0 0 1 8.34 8.1L7.17 6Zm12 0A5.17 5.17 0 0 0 14 11.17V18h6.83v-6.83h-3.66A3.17 3.17 0 0 1 20.34 8.1L19.17 6Z'/%3E%3C/svg%3E") center / contain no-repeat;
+  pointer-events: none;
+}
+
+.kaveh-archive-description .term-description blockquote p,
+.kaveh-rich-description blockquote p {
+  margin: 0 0 0.65em;
+  color: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.kaveh-archive-description .term-description blockquote p:last-child,
+.kaveh-rich-description blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+.kaveh-archive-description .term-description blockquote cite,
+.kaveh-rich-description blockquote cite {
+  display: block;
+  margin-top: 0.75em;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 600;
+  color: var(--kaveh-desc-muted);
+}
+
+/* ---------- HR ---------- */
+.kaveh-archive-description .term-description hr,
+.kaveh-rich-description hr {
+  display: block;
+  clear: both;
+  border: 0;
+  height: 1px;
+  margin: 1.75em 0;
+  color: transparent;
+  opacity: 1;
+  background: linear-gradient(
+    90deg,
+    rgba(73, 73, 73, 0.05),
+    rgba(73, 73, 73, 0.24) 15%,
+    rgba(73, 73, 73, 0.24) 85%,
+    rgba(73, 73, 73, 0.05)
+  );
+}
+
+/* ---------- Code ---------- */
+.kaveh-archive-description .term-description code,
+.kaveh-archive-description .term-description kbd,
+.kaveh-rich-description code,
+.kaveh-rich-description kbd {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.9em;
+  padding: 0.12em 0.4em;
+  border-radius: 6px;
+  background: #f3f5f7;
+  color: #3d4148;
+  border: 1px solid var(--kaveh-desc-line);
+}
+
+.kaveh-archive-description .term-description pre,
+.kaveh-rich-description pre {
+  margin: 1.2em 0;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: #1f2329;
+  color: #f3f5f7;
+  overflow-x: auto;
+  font-size: 12.5px;
+  line-height: 1.7;
+  /* Global `pre { direction: ltr }` garbles Persian; pick direction per line. */
+  unicode-bidi: plaintext;
+  text-align: start;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.kaveh-archive-description .term-description pre code,
+.kaveh-rich-description pre code {
+  background: none;
+  border: 0;
+  padding: 0;
+  color: inherit;
+}
+
+/* ---------- Tables ---------- */
+.kaveh-archive-description .term-description table,
+.kaveh-rich-description table {
+  width: max-content;
+  min-width: 100%;
+  table-layout: auto;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.7;
+  background: var(--kaveh-desc-surface-2);
+  border: 1px solid var(--kaveh-desc-line);
+  border-radius: 14px;
+}
+
+.kaveh-archive-description .term-description table.has-fixed-layout,
+.kaveh-rich-description table.has-fixed-layout {
+  table-layout: auto;
+}
+
+.kaveh-archive-description .term-description thead th,
+.kaveh-rich-description thead th {
+  background: #f3f6f8;
+  color: var(--kaveh-desc-title);
+  font-weight: 800;
+  text-align: start;
+}
+
+.kaveh-archive-description .term-description :is(th, td),
+.kaveh-rich-description :is(th, td) {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--kaveh-desc-line);
+  border-inline-end: 1px solid var(--kaveh-desc-line);
+  vertical-align: top;
+  color: var(--kaveh-desc-text);
+}
+
+.kaveh-archive-description .term-description :is(th, td):last-child,
+.kaveh-rich-description :is(th, td):last-child {
+  border-inline-end: 0;
+}
+
+.kaveh-archive-description .term-description tr:last-child :is(th, td),
+.kaveh-rich-description tr:last-child :is(th, td) {
+  border-bottom: 0;
+}
+
+.kaveh-archive-description .term-description tbody tr:nth-child(even),
+.kaveh-rich-description tbody tr:nth-child(even) {
+  background: rgba(249, 251, 252, 0.9);
+}
+
+.kaveh-archive-description .term-description tbody tr:hover,
+.kaveh-rich-description tbody tr:hover {
+  background: rgba(234, 86, 86, 0.04);
+}
+
+.kaveh-archive-description .term-description caption,
+.kaveh-rich-description caption {
+  caption-side: bottom;
+  padding-top: 0.65em;
+  font-size: 12px;
+  color: var(--kaveh-desc-muted);
+  text-align: center;
+}
+
+/*
+ * Horizontal scroll lives on the table wrapper only — never on the whole
+ * `.kaveh-rich-description` / `.term-description` card.
+ */
+.kaveh-archive-description .term-description .table-responsive,
+.kaveh-archive-description .term-description figure.wp-block-table,
+.kaveh-rich-description .table-responsive,
+.kaveh-rich-description figure.wp-block-table {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+  margin: 1.35em 0;
+  border-radius: 14px;
+}
+
+.kaveh-archive-description .term-description .table-responsive > table,
+.kaveh-archive-description .term-description figure.wp-block-table > table,
+.kaveh-rich-description .table-responsive > table,
+.kaveh-rich-description figure.wp-block-table > table {
+  margin: 0;
+}
+
+/* Inside product tabs: don't fight outer fade/height wrappers with extra margin */
+.detail-product-review-content > .kaveh-rich-description,
+.detail-product-two-review .content > .kaveh-rich-description {
+  margin: 0;
+}
+
+.detail-product-review-content > .kaveh-rich-description {
+  /* Keep readable when collapsed “show more” is active */
+  min-height: 0;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 767.98px) {
+  .kaveh-archive-description .term-description,
+  .kaveh-rich-description {
+    padding: 20px 16px 18px;
+    border-radius: 16px;
+    font-size: 14.5px;
+    line-height: 1.9;
+  }
+
+  .kaveh-archive-description .term-description h1,
+  .kaveh-rich-description h1 { font-size: 24px; }
+
+  .kaveh-archive-description .term-description h2,
+  .kaveh-rich-description h2 { font-size: 21px; }
+
+  .kaveh-archive-description .term-description h3,
+  .kaveh-rich-description h3 { font-size: 18px; }
+
+  .kaveh-archive-description .term-description h4,
+  .kaveh-rich-description h4 { font-size: 16px; }
+
+  .kaveh-archive-description .term-description :is(th, td),
+  .kaveh-rich-description :is(th, td) {
+    padding: 10px 11px;
+    font-size: 12.5px;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .kaveh-archive-description .term-description :is(img, figure, .wp-caption):is(.alignleft, .alignright),
+  .kaveh-rich-description :is(img, figure, .wp-caption):is(.alignleft, .alignright) {
+    float: none;
+    display: block;
+    margin: 1.1em auto;
+  }
+}
+
+/* ---------- Single product styles 1–4: short description (set by JS, no "Show More") ---------- */
+.detail-product-review-content.kaveh-desc-short,
+.detail-product-two-review .content.kaveh-desc-short {
+  height: auto !important;
+}
+
+.detail-product-review-content.kaveh-desc-short::before {
+  content: none;
+}
+
+.detail-product-review > .btn.kaveh-desc-more-hidden,
+.detail-product-two-review .btn.kaveh-desc-more-hidden {
+  display: none !important;
+}
+
+/* ---------- Elementor product tabs (layout two): description "More" toggle ---------- */
+.kaveh-tabs-desc-clamp > .kaveh-rich-description {
+  position: relative;
+}
+
+/* Clamp the card itself so its border and rounded corners stay visible. */
+.kaveh-tabs-desc-clamp:not(.is-expanded):not(.is-short) > .kaveh-rich-description {
+  max-height: 800px;
+  overflow: hidden;
+}
+
+.kaveh-tabs-desc-clamp:not(.is-expanded):not(.is-short) > .kaveh-rich-description::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 110px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #fff 85%);
+  pointer-events: none;
+}
+
+.kaveh-tabs-desc-more {
+  margin-top: 16px;
+  margin-bottom: 24px;
+}
+
+.kaveh-tabs-desc-more.is-hidden {
+  display: none !important;
+}
+
+.kaveh-tabs-desc-more i {
+  transition: transform 0.2s ease;
+}
+
+.kaveh-tabs-desc-more.is-open i {
+  transform: rotate(90deg);
+}
