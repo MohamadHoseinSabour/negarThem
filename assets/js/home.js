@@ -287,6 +287,61 @@
   }
 
   /**
+   * Video Review Popup / Modal Handler (Demo 43 parity)
+   */
+  function initVideoPopups() {
+    const playButtons = document.querySelectorAll('.videos-nk__play');
+    playButtons.forEach(function(btn) {
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        const popup = document.getElementById('videos-nk-popup-39f2483d') || document.querySelector('.videos-nk-popup');
+        if (!popup) return;
+
+        const videoSrc = btn.getAttribute('data-video-src');
+        const player = popup.querySelector('[data-videos-nk-player]');
+        if (player && videoSrc) {
+          player.innerHTML = '<iframe src="' + videoSrc + '?autoplay=1" allow="autoplay; fullscreen" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>';
+        }
+
+        popup.removeAttribute('hidden');
+        popup.setAttribute('aria-hidden', 'false');
+        popup.classList.add('is-open');
+        document.body.classList.add('videos-nk-popup-open');
+      });
+    });
+
+    document.addEventListener('click', function(e) {
+      const closeTarget = e.target.closest('[data-videos-nk-close]');
+      if (closeTarget) {
+        const popup = closeTarget.closest('.videos-nk-popup');
+        if (popup) {
+          closePopup(popup);
+        }
+      }
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        const openPopup = document.querySelector('.videos-nk-popup.is-open');
+        if (openPopup) {
+          closePopup(openPopup);
+        }
+      }
+    });
+
+    function closePopup(popup) {
+      popup.classList.remove('is-open');
+      popup.setAttribute('hidden', '');
+      popup.setAttribute('aria-hidden', 'true');
+      const player = popup.querySelector('[data-videos-nk-player]');
+      if (player) {
+        player.innerHTML = '';
+      }
+      document.body.classList.remove('videos-nk-popup-open');
+    }
+  }
+
+  /**
    * DOM Ready Initializer
    */
   function init() {
@@ -295,6 +350,7 @@
     initDealsCarousel();
     initProductTabs();
     initKavehSwipers();
+    initVideoPopups();
   }
 
   if (document.readyState === 'loading') {

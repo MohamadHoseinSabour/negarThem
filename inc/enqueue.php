@@ -136,6 +136,18 @@ function negar_shop_scripts() {
 		array( 'bootstrap-rtl', 'kaveh-icomoon' ),
 		NEGAR_SHOP_VERSION
 	);
+	wp_enqueue_style(
+		'kaveh-videos',
+		NEGAR_SHOP_URI . '/assets/css/vendor/videosnkkaveh.css',
+		array( 'bootstrap-rtl', 'kaveh-icomoon' ),
+		NEGAR_SHOP_VERSION
+	);
+	wp_enqueue_style(
+		'kaveh-articles',
+		NEGAR_SHOP_URI . '/assets/css/vendor/articlesnkkaveh.css',
+		array( 'bootstrap-rtl', 'kaveh-icomoon' ),
+		NEGAR_SHOP_VERSION
+	);
 
 	// Tailwind Engine Compiled Utility CSS
 	wp_enqueue_style(
