@@ -301,6 +301,16 @@ function negar_shop_scripts() {
 		);
 	}
 
+	// My Account & Auth Dedicated CSS
+	if ( function_exists( 'is_account_page' ) && is_account_page() ) {
+		wp_enqueue_style(
+			'negar-shop-auth',
+			NEGAR_SHOP_URI . '/assets/css/auth.css',
+			array( 'bootstrap-rtl' ),
+			NEGAR_SHOP_VERSION
+		);
+	}
+
 	// Content Pages Dedicated CSS (Blog, Single Post, About, Contact, 404, Search)
 	if ( is_singular( 'post' ) || is_archive() || is_search() || is_404() || is_page_template( 'page-templates/page-about.php' ) || is_page_template( 'page-templates/page-contact.php' ) ) {
 		wp_enqueue_style(

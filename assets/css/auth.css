@@ -1,0 +1,65 @@
+.auth__tab{gap:14px}
+.auth__tab__item{max-width:50%;flex:0 0 auto;border:1px solid #bababa;color:#bababa;padding:15px 12px;cursor:pointer;font-size:12px;line-height:18px;font-weight:800}
+.auth__tab__item img{opacity:.4;margin-left:8px}
+.auth__tab__item::before{top:0;left:0;width:calc(100% + 11px);height:37px;border-radius:20px;background-color:#f1f5fb;transform:translateY(-14px);z-index:-1;opacity:0;visibility:hidden}
+.auth__tab__item.active{color:#121212}
+.auth__tab__item.active img{opacity:1}
+.auth__tab__item.active::before{opacity:1;visibility:visible}
+.auth__tab__pane{display:none}
+.auth__tab__pane.active{display:block}
+.auth__fix__link{z-index:3;height:100%;top:0;left:0}
+.auth__modal{z-index:999;overflow:hidden auto;opacity:0;visibility:hidden}
+.auth__modal,.auth__modal__backdrop{position:fixed;top:0;left:0;width:100%;height:100%;transition:all .3s ease-in-out}
+.auth__modal__backdrop{z-index:990;background-color:rgba(0,0,0,.1);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px)}
+.auth__modal__dialog{margin:8px;min-height:calc(100vh - 16px);display:flex;align-items:center;justify-content:center}
+.auth__modal__content{transform:scale(0);transition:all .3s linear}
+.auth__modal__close{top:12px;left:12px;border-radius:50%;width:32px;height:32px;font-size:30px;z-index:99}
+.auth__modal.opened{opacity:1;visibility:visible}
+.auth__modal.opened .auth__modal__content{transform:scale(1)}
+.auth__relative{position:relative}
+.auth__absolute{position:absolute}
+.auth__flex{display:flex}
+.auth__items__center{align-items:center}
+.auth__content__center{justify-content:center}
+.auth__content__between{justify-content:space-between}
+.auth__b__white{background-color:#fff}
+.auth__ease__in__out{transition:all .3s ease-in-out}
+.auth__rounded__15{border-radius:15px}
+.auth__page{min-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:24px 12px}
+.auth__page,.auth__page__wrapper{max-width:100%}
+.auth__mx__auto{margin:0 auto}
+.auth__block{display:block}
+.auth__w__fit{max-width:-moz-fit-content;max-width:fit-content}
+.auth__tab__pane{transition:all .3s ease-in-out}
+.auth__page{position:relative}
+.auth__page__btn__success{background-color:#85c441;color:#fff}
+.auth__page__btn__success:hover{background-color:#70a834}
+.auth__page__twelve{max-width:400px;padding:0 0 24px}
+.auth__page__twelve__logo{margin-bottom:30px;top:40px;left:50%;transform:translateX(-50%)}
+.auth__page__twelve__logo img{width:180px;height:auto}
+.auth__page__twelve__wrapper{padding:30px 25px 10px}
+.auth__page__twelve__wrapper::before{content:"";position:absolute;top:0;bottom:55px;left:0;width:100%;border-radius:25px;box-shadow:0 2px 8px rgba(13,60,95,.1);background-color:rgba(255,255,255,.45);z-index:0}
+.auth__page__twelve__tabs{gap:8px;margin:0 18px 30px;position:relative}
+.auth__page__twelve__tabs li{padding:10px;font-size:17px;width:100%;max-width:calc(50% - 4px);text-align:center;color:#0e1935;font-weight:500;border-radius:10px;line-height:27px;cursor:pointer}
+.auth__page__twelve__tabs li.active{background-color:#fff;box-shadow:0 2px 8px rgba(13,60,95,.1)}
+.auth__page__twelve__content{position:relative;background-color:#fff;padding:30px 25px 25px;border-radius:25px;box-shadow:0 2px 8px rgba(13,60,95,.1)}
+.auth__page__twelve__content img{width:105px;height:105px;margin-bottom:45px}
+.auth__page__twelve__content form .auth__page__form__group{margin-bottom:10px}
+.auth__page__twelve__content form .auth__page__form__control{padding:0 30px;height:60px;font-size:13px;font-weight:700;border:1px solid #dfe1e8;background-color:#fff;border-radius:15px}
+.auth__page__twelve__content form .auth__page__form__control:focus{border-color:#1ebcc5;color:#1ebcc5}
+.auth__page__twelve__content form .auth_check a{color:#1ebcc5;font-weight:700}
+.auth__page__twelve__content form .link{margin-bottom:25px;font-size:15px;line-height:23px;font-weight:500;color:#8a929c}
+.auth__page__twelve__content form .link:hover{color:#1ebcc5}
+.auth__page__twelve__content form .link i{font-size:16px;margin:0 8px 0 12px}
+.auth__page__twelve__content form .auth__page__btn{min-width:140px;margin-right:auto;padding:13px 10px;border-radius:10px;line-height:24px}
+.auth__page__twelve__nav{gap:8px;flex-wrap:wrap;bottom:10px;left:50%;transform:translateX(-50%);width:100%}
+.auth__page__twelve__nav li a{font-size:14px;font-weight:500;line-height:22px;color:#0e1935}
+.auth__page__twelve__nav li a:hover{font-weight:700}
+.auth__page__twelve__wrapper{padding:24px 8px 10px}
+.auth__page__twelve__tabs li{font-size:15px}
+.auth__page__twelve__content{padding:20px 12px}
+.auth__page__twelve__content form .auth__page__form__control{height:50px}
+.auth__page__twelve__content form .auth__page__btn{width:100%;min-width:100%;padding:9px 10px}
+.auth__modal .auth__page__twelve{padding:0}
+.auth__modal .auth__page__twelve__logo{position:relative;margin:0 auto 24px;top:0;left:0;transform:unset}
+.auth__fix__link,.auth__modal__content,.auth__page,.auth__page__btn,.auth__page__form__control,.auth__page__wrapper,.auth__tab__item{width:100%}
