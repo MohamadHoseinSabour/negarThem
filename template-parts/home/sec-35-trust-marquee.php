@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 ?>
-<div class="elementor-element elementor-element-797893fc e-flex e-con-boxed e-con e-parent e-lazyloaded" data-id="797893fc" data-element_type="container" data-e-type="container">
+<div class="elementor-element elementor-element-797893fc e-flex e-con-boxed e-con e-parent e-lazyloaded mb-12 md:mb-16 lg:mb-20" data-id="797893fc" data-element_type="container" data-e-type="container">
 					<div class="e-con-inner">
 				<div class="elementor-element elementor-element-53a26a08 elementor-view-stacked elementor-shape-rounded elementor-position-inline-start elementor-tablet-position-block-start elementor-widget-tablet__width-initial elementor-widget-mobile__width-initial elementor-mobile-position-block-start elementor-widget elementor-widget-icon-box" data-id="53a26a08" data-element_type="widget" data-e-type="widget" data-widget_type="icon-box.default">
 							<div class="elementor-icon-box-wrapper">

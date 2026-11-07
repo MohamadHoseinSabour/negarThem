@@ -14,7 +14,7 @@ $upload_dir = wp_upload_dir();
 $demo_base  = $upload_dir['baseurl'] . '/kaveh-demo';
 ?>
 
-<div class="negar-footer-wrapper bg-[#f8fafc] text-slate-700 pt-0 pb-2 border-t border-slate-200/80 relative">
+<div class="negar-footer-wrapper bg-white text-slate-700 pt-0 pb-0 relative">
 	
 	<!-- 1. Top Decorative Wave Vector Image matching Group-427321238.png -->
 	<div class="w-full overflow-hidden mb-6 leading-none select-none">
@@ -176,7 +176,7 @@ $demo_base  = $upload_dir['baseurl'] . '/kaveh-demo';
 		</div>
 
 		<!-- 4. Bottom Decorative Wave Image matching Vector-3180.png with Floating Blur Button -->
-		<div class="relative w-full my-6 select-none">
+		<div class="relative w-full mt-4 mb-1 select-none">
 			<img src="<?php echo esc_url( $demo_base . '/footer-wave-bottom.png' ); ?>" alt="" class="w-full h-auto object-cover max-h-12" loading="lazy">
 			
 			<!-- Floating Circular Back-to-Top Button matching Elementor 3fce803c -->
@@ -191,9 +191,11 @@ $demo_base  = $upload_dir['baseurl'] . '/kaveh-demo';
 		</div>
 
 		<!-- 5. Copyright Bar & Social Icons matching Demo 43 (Container 388eea2c) -->
-		<div class="py-4 flex flex-col md:flex-row items-center justify-between text-xs text-slate-500 font-medium gap-4">
+		<div class="pt-2 pb-1.5 flex flex-col md:flex-row items-center justify-between text-xs text-slate-500 font-medium gap-3">
 			<p class="m-0 text-center md:text-right">
-				<?php esc_html_e( 'کلیه حقوق این سایت متعلق به شرکت نام فروشگاه می‌باشد.', 'negar-shop' ); ?>
+				<a href="https://mohamadhoseinsabour.github.io/myResume/" target="_blank" rel="noopener noreferrer" class="text-slate-600 hover:text-rose-600 font-bold transition-colors">
+					<?php esc_html_e( 'طراحی و اجرا توسط محمدحسین صبور', 'negar-shop' ); ?>
+				</a>
 			</p>
 
 			<!-- Social Icons in One Row -->

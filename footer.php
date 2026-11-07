@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 ?>
-	<footer id="colophon" class="site-footer">
+	<footer id="colophon" class="site-footer bg-white mt-8 md:mt-12 lg:mt-16">
 		<?php
 		/**
 		 * Full Multi-Layer Light Footer matching Kaveh Demo 43 (#ag-theme-builder-footer)
