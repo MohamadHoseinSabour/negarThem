@@ -130,6 +130,12 @@ function negar_shop_scripts() {
 		array( 'bootstrap-rtl', 'kaveh-product-carts' ),
 		NEGAR_SHOP_VERSION
 	);
+	wp_enqueue_style(
+		'kaveh-topviewproductsthreefull',
+		NEGAR_SHOP_URI . '/assets/css/vendor/topviewproductsthreefullnkkaveh.css',
+		array( 'bootstrap-rtl', 'kaveh-icomoon' ),
+		NEGAR_SHOP_VERSION
+	);
 
 	// Tailwind Engine Compiled Utility CSS
 	wp_enqueue_style(

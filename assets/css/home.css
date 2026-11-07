@@ -188,10 +188,10 @@
     grid-template-columns: 773fr 538fr !important;
     gap: 20px !important;
     align-items: stretch;
-    max-width: 1320px !important;
+    max-width: 1400px !important;
     width: 100% !important;
     margin-inline: auto !important;
-    padding-inline: 15px !important;
+    padding-inline: 20px !important;
     box-sizing: border-box !important;
   }
 
