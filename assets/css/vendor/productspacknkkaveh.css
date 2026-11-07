@@ -514,6 +514,7 @@
 }
 .products-pack-nk__products {
   padding: 47px 0 44px 58px;
+  isolation: isolate;
 }
 .products-pack-nk__products::before, .products-pack-nk__products::after {
   content: "";
@@ -908,6 +909,9 @@
 }
 .elementor-element-61f16945 .products-pack-nk {
   --bg: rgba(230, 239, 243, 0.68);
+}
+.elementor-element-61f16945 .products-pack-nk .products-pack-nk__products {
+  isolation: isolate;
 }
 .elementor-element-61f16945 .products-pack-nk .products-pack-nk__image__bg {
   background-color: #e6eff3;
