@@ -148,6 +148,12 @@ function negar_shop_scripts() {
 		array( 'bootstrap-rtl', 'kaveh-icomoon' ),
 		NEGAR_SHOP_VERSION
 	);
+	wp_enqueue_style(
+		'kaveh-features',
+		NEGAR_SHOP_URI . '/assets/css/vendor/featureskaveh.css',
+		array( 'bootstrap-rtl' ),
+		NEGAR_SHOP_VERSION
+	);
 
 	// Tailwind Engine Compiled Utility CSS
 	wp_enqueue_style(

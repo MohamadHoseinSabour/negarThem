@@ -1,8 +1,8 @@
 <?php
 /**
- * Section 35: Shipping & Delivery Trust Marquee (HOME-35)
- * Reference: Demo 43 Section 34 (Top: 17167px, Height: ~80px)
- * Heading: "تیباکس - حمل نقل به روش تیباکس"
+ * Section 35: Features & Trust Bar (HOME-35)
+ * Reference: Demo 43 Section 34 (elementor-element-797893fc)
+ * Static 5-column trust icons (Tipax Delivery & Quality Guarantees)
  *
  * @package Negar_Shop
  * @version 2.0.0
@@ -11,45 +11,118 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
-
-$marquee_items = array(
-	'ارسال سریع با تیپاکس به سراسر کشور',
-	'ضمانت اصالت ۷ روزه کالا',
-	'بسته‌بندی ایمن و ضدضربه',
-	'پشتیبانی ۲۴ ساعته در ۷ روز هفته',
-	'امکان پرداخت آنلاین امن شتاب',
-	'تحویل اکسپرس کمتر از ۲ ساعت در تهران',
-);
 ?>
+<div class="elementor-element elementor-element-797893fc e-flex e-con-boxed e-con e-parent e-lazyloaded" data-id="797893fc" data-element_type="container" data-e-type="container">
+					<div class="e-con-inner">
+				<div class="elementor-element elementor-element-53a26a08 elementor-view-stacked elementor-shape-rounded elementor-position-inline-start elementor-tablet-position-block-start elementor-widget-tablet__width-initial elementor-widget-mobile__width-initial elementor-mobile-position-block-start elementor-widget elementor-widget-icon-box" data-id="53a26a08" data-element_type="widget" data-e-type="widget" data-widget_type="icon-box.default">
+							<div class="elementor-icon-box-wrapper">
 
-<section class="negar-sec-35-marquee py-5 bg-slate-900 text-white overflow-hidden border-t border-slate-800" aria-label="<?php esc_attr_e( 'روش‌های ارسال و تضمین خرید', 'negar-shop' ); ?>">
-	<div class="relative w-full overflow-hidden flex whitespace-nowrap">
-		
-		<div class="marquee-track flex items-center gap-10 text-xs sm:text-sm font-bold text-slate-300 animate-marquee select-none">
-			<?php for ( $loop = 0; $loop < 4; $loop++ ) : ?>
-				<?php foreach ( $marquee_items as $item ) : ?>
-					<div class="flex items-center gap-3 shrink-0">
-						<span class="w-2.5 h-2.5 rounded-full bg-rose-500 shadow-xs shadow-rose-500/50"></span>
-						<span class="text-white font-black tracking-wide"><?php echo esc_html( $item ); ?></span>
-					</div>
-				<?php endforeach; ?>
-			<?php endfor; ?>
+						<div class="elementor-icon-box-icon">
+				<span class="elementor-icon">
+				<svg xmlns="http://www.w3.org/2000/svg" width="31" height="31" viewBox="0 0 31 31" fill="none"><path opacity="0.4" d="M25.9103 8.94416C25.9103 9.64025 25.5365 10.2719 24.9435 10.5941L22.7005 11.8059L20.7927 12.8243L16.8352 14.9641C16.4098 15.1961 15.9458 15.3122 15.4688 15.3122C14.9919 15.3122 14.5278 15.1961 14.1024 14.9641L5.99415 10.5941C5.40117 10.2719 5.02734 9.64025 5.02734 8.94416C5.02734 8.24806 5.40117 7.61638 5.99415 7.29411L8.53362 5.9277L10.5575 4.83202L14.1024 2.92422C14.9532 2.46016 15.9844 2.46016 16.8352 2.92422L24.9435 7.29411C25.5365 7.61638 25.9103 8.24806 25.9103 8.94416Z" fill="white"></path><path opacity="0.4" d="M12.7619 16.4889L5.2208 12.7119C4.64072 12.4154 3.97041 12.4541 3.41611 12.7892C2.86181 13.1244 2.53955 13.7174 2.53955 14.362V21.4905C2.53955 22.728 3.22274 23.8366 4.33134 24.3909L11.8724 28.155C12.1302 28.2839 12.4138 28.3483 12.6974 28.3483C13.0326 28.3483 13.3677 28.2581 13.6642 28.0648C14.2185 27.7296 14.5408 27.1366 14.5408 26.4921V19.3636C14.5537 18.1518 13.8705 17.0432 12.7619 16.4889Z" fill="white"></path><path opacity="0.4" d="M28.3984 14.3722V21.5007C28.3984 22.7253 27.7152 23.8339 26.6066 24.3882L19.0656 28.1652C18.8078 28.2941 18.5241 28.3586 18.2405 28.3586C17.9054 28.3586 17.5703 28.2684 17.2609 28.075C16.7195 27.7399 16.3843 27.1468 16.3843 26.5023V19.3866C16.3843 18.1491 17.0675 17.0405 18.1761 16.4862L20.9476 15.1069L22.8812 14.1401L25.7172 12.7222C26.2973 12.4257 26.9676 12.4514 27.5219 12.7995C28.0633 13.1347 28.3984 13.7277 28.3984 14.3722Z" fill="white"></path><path d="M22.7006 11.8078L20.7928 12.8262L8.53369 5.92966L10.5575 4.83398L22.3912 11.5114C22.5201 11.5887 22.6232 11.6918 22.7006 11.8078Z" fill="white"></path><path d="M22.8809 14.1406V17.0668C22.8809 17.5954 22.4426 18.0336 21.9141 18.0336C21.3855 18.0336 20.9473 17.5954 20.9473 17.0668V15.1074L22.8809 14.1406Z" fill="white"></path></svg>				</span>
+			</div>
+			
+						<div class="elementor-icon-box-content">
+
+									<h3 class="elementor-icon-box-title">
+						<span>
+							تیباکس						</span>
+					</h3>
+				
+									<p class="elementor-icon-box-description">
+						حمل نقل به روش					</p>
+				
+			</div>
+			
 		</div>
+						</div>
+				<div class="elementor-element elementor-element-375e3104 elementor-view-stacked elementor-shape-rounded elementor-position-inline-start elementor-tablet-position-block-start elementor-widget-tablet__width-initial elementor-widget-mobile__width-initial elementor-mobile-position-block-start elementor-widget elementor-widget-icon-box" data-id="375e3104" data-element_type="widget" data-e-type="widget" data-widget_type="icon-box.default">
+							<div class="elementor-icon-box-wrapper">
 
-	</div>
-</section>
+						<div class="elementor-icon-box-icon">
+				<span class="elementor-icon">
+				<svg xmlns="http://www.w3.org/2000/svg" width="31" height="31" viewBox="0 0 31 31" fill="none"><path d="M19.336 3.86524V15.4669C19.336 16.8848 18.1759 18.045 16.7579 18.045H2.57812V7.73245C2.57812 4.88361 4.88556 2.57617 7.7344 2.57617H18.047C18.756 2.57617 19.336 3.15625 19.336 3.86524Z" fill="white"></path><path opacity="0.4" d="M28.3595 18.0469V21.9142C28.3595 24.054 26.6322 25.7814 24.4923 25.7814H23.2032C23.2032 24.3634 22.0431 23.2032 20.6251 23.2032C19.2071 23.2032 18.047 24.3634 18.047 25.7814H12.8907C12.8907 24.3634 11.7305 23.2032 10.3125 23.2032C8.89457 23.2032 7.7344 24.3634 7.7344 25.7814H6.44533C4.30548 25.7814 2.57812 24.054 2.57812 21.9142V18.0469H16.7579C18.1759 18.0469 19.336 16.8868 19.336 15.4688V6.44531H21.7079C22.636 6.44531 23.4868 6.94806 23.9509 7.74729L26.1552 11.6016H24.4923C23.7833 11.6016 23.2032 12.1817 23.2032 12.8907V16.7579C23.2032 17.4669 23.7833 18.0469 24.4923 18.0469H28.3595Z" fill="white"></path><path d="M10.3125 28.3594C11.7364 28.3594 12.8907 27.2051 12.8907 25.7813C12.8907 24.3574 11.7364 23.2031 10.3125 23.2031C8.88865 23.2031 7.73438 24.3574 7.73438 25.7813C7.73438 27.2051 8.88865 28.3594 10.3125 28.3594Z" fill="white"></path><path d="M20.625 28.3594C22.0489 28.3594 23.2032 27.2051 23.2032 25.7813C23.2032 24.3574 22.0489 23.2031 20.625 23.2031C19.2011 23.2031 18.0469 24.3574 18.0469 25.7813C18.0469 27.2051 19.2011 28.3594 20.625 28.3594Z" fill="white"></path><path d="M28.3594 16.152V18.0469H24.4922C23.7832 18.0469 23.2031 17.4668 23.2031 16.7578V12.8906C23.2031 12.1816 23.7832 11.6016 24.4922 11.6016H26.1551L28.0242 14.8758C28.2434 15.2625 28.3594 15.7008 28.3594 16.152Z" fill="white"></path></svg>				</span>
+			</div>
+			
+						<div class="elementor-icon-box-content">
 
-<style>
-@keyframes marquee-rtl {
-	0% { transform: translateX(0); }
-	100% { transform: translateX(50%); }
-}
-.animate-marquee {
-	display: flex;
-	width: max-content;
-	animation: marquee-rtl 25s linear infinite;
-}
-.animate-marquee:hover {
-	animation-play-state: paused;
-}
-</style>
+									<h3 class="elementor-icon-box-title">
+						<span>
+							تیباکس						</span>
+					</h3>
+				
+									<p class="elementor-icon-box-description">
+						حمل نقل به روش					</p>
+				
+			</div>
+			
+		</div>
+						</div>
+				<div class="elementor-element elementor-element-1c038809 elementor-view-stacked elementor-shape-rounded elementor-position-inline-start elementor-tablet-position-block-start elementor-widget-tablet__width-initial elementor-widget-mobile__width-initial elementor-mobile-position-block-start elementor-widget elementor-widget-icon-box" data-id="1c038809" data-element_type="widget" data-e-type="widget" data-widget_type="icon-box.default">
+							<div class="elementor-icon-box-wrapper">
+
+						<div class="elementor-icon-box-icon">
+				<span class="elementor-icon">
+				<svg xmlns="http://www.w3.org/2000/svg" width="31" height="31" viewBox="0 0 31 31" fill="none"><path opacity="0.4" d="M19.336 29.3262C18.988 29.3262 18.6657 29.1329 18.4981 28.8364C18.3306 28.5399 18.3306 28.1661 18.511 27.8696L19.8646 25.6137C20.1353 25.1496 20.7282 25.0078 21.1923 25.2785C21.6564 25.5492 21.7982 26.1423 21.5274 26.6063L21.1794 27.1864C24.7372 26.3485 27.4056 23.1516 27.4056 19.3359C27.4056 18.8074 27.8439 18.3691 28.3724 18.3691C28.9009 18.3691 29.3392 18.8074 29.3392 19.3359C29.3263 24.8403 24.8404 29.3262 19.336 29.3262Z" fill="white"></path><path opacity="0.4" d="M2.57813 12.5665C2.04961 12.5665 1.61133 12.1282 1.61133 11.5997C1.61133 6.09534 6.09729 1.60938 11.6016 1.60938C11.9497 1.60938 12.2719 1.80274 12.4395 2.09923C12.6071 2.39571 12.6071 2.76954 12.4266 3.06603L11.0731 5.3219C10.8024 5.78597 10.2094 5.92778 9.74536 5.65707C9.28129 5.38637 9.1395 4.79336 9.4102 4.32929L9.75826 3.7492C6.20043 4.58709 3.53205 7.78402 3.53205 11.5997C3.54494 12.1282 3.10665 12.5665 2.57813 12.5665Z" fill="white"></path><path d="M13.7546 17.8545L9.70696 15.676C9.28156 15.4439 8.76594 15.4439 8.34055 15.676L4.29287 17.8545C3.99638 18.0092 3.81592 18.3315 3.81592 18.6795C3.81592 19.0276 3.99638 19.3499 4.29287 19.5046L8.34055 21.6831C8.55969 21.7991 8.79172 21.8507 9.02375 21.8507C9.25578 21.8507 9.48782 21.7991 9.70696 21.6831L13.7546 19.5046C14.0511 19.3499 14.2316 19.0276 14.2316 18.6795C14.2316 18.3315 14.0382 18.0221 13.7546 17.8545Z" fill="white"></path><path d="M7.67014 22.4443L3.90605 20.5623C3.62246 20.4205 3.2873 20.4334 3.00371 20.601C2.733 20.7686 2.56543 21.0651 2.56543 21.3874V24.9451C2.56543 25.5639 2.90057 26.1182 3.45487 26.3889L7.21897 28.271C7.34788 28.3354 7.48967 28.3741 7.63146 28.3741C7.79904 28.3741 7.96663 28.3226 8.12132 28.2323C8.39202 28.0647 8.5596 27.7682 8.5596 27.4459V23.8882C8.57249 23.2694 8.22444 22.715 7.67014 22.4443Z" fill="white"></path><path d="M15.031 20.601C14.7603 20.4334 14.4251 20.4205 14.1286 20.5623L10.3645 22.4443C9.81024 22.715 9.4751 23.2694 9.4751 23.8882V27.4459C9.4751 27.7682 9.64267 28.0647 9.91338 28.2323C10.0681 28.3226 10.2357 28.3741 10.4032 28.3741C10.545 28.3741 10.6868 28.3354 10.8157 28.271L14.5798 26.3889C15.1341 26.1182 15.4693 25.5639 15.4693 24.9451V21.3874C15.4693 21.0651 15.3017 20.7686 15.031 20.601Z" fill="white"></path><path d="M26.6453 4.93654L22.5976 2.75801C22.1722 2.52598 21.6566 2.52598 21.2312 2.75801L17.1835 4.93654C16.887 5.09123 16.7065 5.41344 16.7065 5.76149C16.7065 6.10953 16.887 6.43182 17.1835 6.58651L21.2312 8.76504C21.4503 8.88106 21.6823 8.93263 21.9144 8.93263C22.1464 8.93263 22.3784 8.88106 22.5976 8.76504L26.6453 6.58651C26.9417 6.43182 27.1222 6.10953 27.1222 5.76149C27.1222 5.40055 26.9289 5.09123 26.6453 4.93654Z" fill="white"></path><path d="M20.5608 9.51274L16.7967 7.63067C16.5131 7.48887 16.1779 7.5018 15.8943 7.66938C15.6236 7.83696 15.4561 8.13343 15.4561 8.4557V12.0135C15.4561 12.6323 15.7912 13.1866 16.3455 13.4573L20.1096 15.3394C20.2385 15.4038 20.3803 15.4424 20.5221 15.4424C20.6897 15.4424 20.8573 15.3909 21.0119 15.3007C21.2826 15.1331 21.4502 14.8366 21.4502 14.5143V10.9565C21.4631 10.3377 21.1151 9.78345 20.5608 9.51274Z" fill="white"></path><path d="M27.9216 7.66938C27.6509 7.5018 27.3158 7.48887 27.0193 7.63067L23.2552 9.51274C22.7009 9.78345 22.3657 10.3377 22.3657 10.9565V14.5143C22.3657 14.8366 22.5333 15.1331 22.804 15.3007C22.9587 15.3909 23.1263 15.4424 23.2939 15.4424C23.4357 15.4424 23.5774 15.4038 23.7063 15.3394L27.4704 13.4573C28.0247 13.1866 28.3599 12.6323 28.3599 12.0135V8.4557C28.3599 8.13343 28.1923 7.83696 27.9216 7.66938Z" fill="white"></path></svg>				</span>
+			</div>
+			
+						<div class="elementor-icon-box-content">
+
+									<h3 class="elementor-icon-box-title">
+						<span>
+							تیباکس						</span>
+					</h3>
+				
+									<p class="elementor-icon-box-description">
+						حمل نقل به روش					</p>
+				
+			</div>
+			
+		</div>
+						</div>
+				<div class="elementor-element elementor-element-334dcbf3 elementor-view-stacked elementor-shape-rounded elementor-position-inline-start elementor-tablet-position-block-start elementor-widget-tablet__width-initial elementor-widget-mobile__width-initial elementor-mobile-position-block-start elementor-widget elementor-widget-icon-box" data-id="334dcbf3" data-element_type="widget" data-e-type="widget" data-widget_type="icon-box.default">
+							<div class="elementor-icon-box-wrapper">
+
+						<div class="elementor-icon-box-icon">
+				<span class="elementor-icon">
+				<svg xmlns="http://www.w3.org/2000/svg" width="31" height="31" viewBox="0 0 31 31" fill="none"><path opacity="0.4" d="M23.1388 9.93918L22.9583 9.83606L21.1665 8.8048L17.4669 6.66494C16.3325 6.00752 14.6051 6.00752 13.4707 6.66494L9.77112 8.8048L7.97931 9.84895L7.74728 9.97785C5.43985 11.5247 5.28516 11.8083 5.28516 14.2962V20.2389C5.28516 22.7268 5.43984 23.0104 7.79884 24.5959L13.4707 27.8701C14.0379 28.2053 14.7469 28.36 15.4688 28.36C16.1778 28.36 16.8997 28.2053 17.4669 27.8701L23.1903 24.5572C25.4978 23.0104 25.6525 22.7268 25.6525 20.2389V14.2962C25.6525 11.8083 25.4978 11.5247 23.1388 9.93918Z" fill="white"></path><path d="M7.97949 9.84653L9.7713 8.80238L13.3034 6.76565L13.4709 6.66252C14.6053 6.0051 16.3327 6.0051 17.467 6.66252L17.6346 6.76565L21.1667 8.80238L22.9585 9.83364V7.07503C22.9585 4.17462 21.36 2.57617 18.4596 2.57617H12.4655C9.56505 2.57617 7.97949 4.17462 7.97949 7.07503V9.84653Z" fill="white"></path><path d="M19.1299 17.195L18.3307 18.1747C18.2018 18.3165 18.1116 18.6001 18.1244 18.7935L18.2018 20.0568C18.2534 20.8302 17.6991 21.2298 16.9772 20.9462L15.8041 20.4822C15.6237 20.4177 15.3143 20.4177 15.1338 20.4822L13.9608 20.9462C13.2389 21.2298 12.6846 20.8302 12.7361 20.0568L12.8135 18.7935C12.8264 18.6001 12.7361 18.3165 12.6072 18.1747L11.808 17.195C11.3053 16.6021 11.5244 15.9446 12.2721 15.7513L13.4967 15.4419C13.69 15.3903 13.9221 15.2099 14.0252 15.0423L14.7084 13.9853C15.1338 13.3278 15.8041 13.3278 16.2295 13.9853L16.9127 15.0423C17.0158 15.2099 17.2479 15.3903 17.4412 15.4419L18.6659 15.7513C19.4135 15.9446 19.6327 16.6021 19.1299 17.195Z" fill="white"></path></svg>				</span>
+			</div>
+			
+						<div class="elementor-icon-box-content">
+
+									<h3 class="elementor-icon-box-title">
+						<span>
+							تیباکس						</span>
+					</h3>
+				
+									<p class="elementor-icon-box-description">
+						حمل نقل به روش					</p>
+				
+			</div>
+			
+		</div>
+						</div>
+				<div class="elementor-element elementor-element-2adb1017 elementor-view-stacked elementor-shape-rounded elementor-position-inline-start elementor-tablet-position-block-start elementor-widget-tablet__width-initial elementor-widget-mobile__width-initial elementor-hidden-mobile elementor-hidden-tablet elementor-mobile-position-block-start elementor-widget elementor-widget-icon-box" data-id="2adb1017" data-element_type="widget" data-e-type="widget" data-widget_type="icon-box.default">
+							<div class="elementor-icon-box-wrapper">
+
+						<div class="elementor-icon-box-icon">
+				<span class="elementor-icon">
+				<svg xmlns="http://www.w3.org/2000/svg" width="31" height="31" viewBox="0 0 31 31" fill="none"><path opacity="0.4" d="M19.336 29.3262C18.988 29.3262 18.6657 29.1329 18.4981 28.8364C18.3306 28.5399 18.3306 28.1661 18.511 27.8696L19.8646 25.6137C20.1353 25.1496 20.7282 25.0078 21.1923 25.2785C21.6564 25.5492 21.7982 26.1423 21.5274 26.6063L21.1794 27.1864C24.7372 26.3485 27.4056 23.1516 27.4056 19.3359C27.4056 18.8074 27.8439 18.3691 28.3724 18.3691C28.9009 18.3691 29.3392 18.8074 29.3392 19.3359C29.3263 24.8403 24.8404 29.3262 19.336 29.3262Z" fill="white"></path><path opacity="0.4" d="M2.57813 12.5665C2.04961 12.5665 1.61133 12.1282 1.61133 11.5997C1.61133 6.09534 6.09729 1.60938 11.6016 1.60938C11.9497 1.60938 12.2719 1.80274 12.4395 2.09923C12.6071 2.39571 12.6071 2.76954 12.4266 3.06603L11.0731 5.3219C10.8024 5.78597 10.2094 5.92778 9.74536 5.65707C9.28129 5.38637 9.1395 4.79336 9.4102 4.32929L9.75826 3.7492C6.20043 4.58709 3.53205 7.78402 3.53205 11.5997C3.54494 12.1282 3.10665 12.5665 2.57813 12.5665Z" fill="white"></path><path d="M13.7546 17.8545L9.70696 15.676C9.28156 15.4439 8.76594 15.4439 8.34055 15.676L4.29287 17.8545C3.99638 18.0092 3.81592 18.3315 3.81592 18.6795C3.81592 19.0276 3.99638 19.3499 4.29287 19.5046L8.34055 21.6831C8.55969 21.7991 8.79172 21.8507 9.02375 21.8507C9.25578 21.8507 9.48782 21.7991 9.70696 21.6831L13.7546 19.5046C14.0511 19.3499 14.2316 19.0276 14.2316 18.6795C14.2316 18.3315 14.0382 18.0221 13.7546 17.8545Z" fill="white"></path><path d="M7.67014 22.4443L3.90605 20.5623C3.62246 20.4205 3.2873 20.4334 3.00371 20.601C2.733 20.7686 2.56543 21.0651 2.56543 21.3874V24.9451C2.56543 25.5639 2.90057 26.1182 3.45487 26.3889L7.21897 28.271C7.34788 28.3354 7.48967 28.3741 7.63146 28.3741C7.79904 28.3741 7.96663 28.3226 8.12132 28.2323C8.39202 28.0647 8.5596 27.7682 8.5596 27.4459V23.8882C8.57249 23.2694 8.22444 22.715 7.67014 22.4443Z" fill="white"></path><path d="M15.031 20.601C14.7603 20.4334 14.4251 20.4205 14.1286 20.5623L10.3645 22.4443C9.81024 22.715 9.4751 23.2694 9.4751 23.8882V27.4459C9.4751 27.7682 9.64267 28.0647 9.91338 28.2323C10.0681 28.3226 10.2357 28.3741 10.4032 28.3741C10.545 28.3741 10.6868 28.3354 10.8157 28.271L14.5798 26.3889C15.1341 26.1182 15.4693 25.5639 15.4693 24.9451V21.3874C15.4693 21.0651 15.3017 20.7686 15.031 20.601Z" fill="white"></path><path d="M26.6453 4.93654L22.5976 2.75801C22.1722 2.52598 21.6566 2.52598 21.2312 2.75801L17.1835 4.93654C16.887 5.09123 16.7065 5.41344 16.7065 5.76149C16.7065 6.10953 16.887 6.43182 17.1835 6.58651L21.2312 8.76504C21.4503 8.88106 21.6823 8.93263 21.9144 8.93263C22.1464 8.93263 22.3784 8.88106 22.5976 8.76504L26.6453 6.58651C26.9417 6.43182 27.1222 6.10953 27.1222 5.76149C27.1222 5.40055 26.9289 5.09123 26.6453 4.93654Z" fill="white"></path><path d="M20.5608 9.51274L16.7967 7.63067C16.5131 7.48887 16.1779 7.5018 15.8943 7.66938C15.6236 7.83696 15.4561 8.13343 15.4561 8.4557V12.0135C15.4561 12.6323 15.7912 13.1866 16.3455 13.4573L20.1096 15.3394C20.2385 15.4038 20.3803 15.4424 20.5221 15.4424C20.6897 15.4424 20.8573 15.3909 21.0119 15.3007C21.2826 15.1331 21.4502 14.8366 21.4502 14.5143V10.9565C21.4631 10.3377 21.1151 9.78345 20.5608 9.51274Z" fill="white"></path><path d="M27.9216 7.66938C27.6509 7.5018 27.3158 7.48887 27.0193 7.63067L23.2552 9.51274C22.7009 9.78345 22.3657 10.3377 22.3657 10.9565V14.5143C22.3657 14.8366 22.5333 15.1331 22.804 15.3007C22.9587 15.3909 23.1263 15.4424 23.2939 15.4424C23.4357 15.4424 23.5774 15.4038 23.7063 15.3394L27.4704 13.4573C28.0247 13.1866 28.3599 12.6323 28.3599 12.0135V8.4557C28.3599 8.13343 28.1923 7.83696 27.9216 7.66938Z" fill="white"></path></svg>				</span>
+			</div>
+			
+						<div class="elementor-icon-box-content">
+
+									<h3 class="elementor-icon-box-title">
+						<span>
+							تیباکس						</span>
+					</h3>
+				
+									<p class="elementor-icon-box-description">
+						حمل نقل به روش					</p>
+				
+			</div>
+			
+		</div>
+						</div>
+					</div>
+				</div>
