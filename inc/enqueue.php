@@ -288,9 +288,15 @@ function negar_shop_scripts() {
 	// Cart, Checkout & My Account Dedicated CSS
 	if ( function_exists( 'is_cart' ) && ( is_cart() || is_checkout() || is_account_page() ) ) {
 		wp_enqueue_style(
+			'kaveh-main-cart-checkout',
+			NEGAR_SHOP_URI . '/assets/css/vendor/main-cart-checkout.min.css',
+			array( 'bootstrap-rtl' ),
+			NEGAR_SHOP_VERSION
+		);
+		wp_enqueue_style(
 			'negar-shop-checkout-cart',
 			NEGAR_SHOP_URI . '/assets/css/checkout-cart.css',
-			array( 'negar-shop-header-footer' ),
+			array( 'negar-shop-header-footer', 'kaveh-main-cart-checkout' ),
 			NEGAR_SHOP_VERSION
 		);
 	}
@@ -513,9 +519,33 @@ function negar_shop_scripts() {
 	// Cart, Checkout & My Account Dedicated Script
 	if ( function_exists( 'is_cart' ) && ( is_cart() || is_checkout() || is_account_page() ) ) {
 		wp_enqueue_script(
+			'kaveh-cart-style-2-js',
+			NEGAR_SHOP_URI . '/assets/js/vendor/kaveh-cart-style-2.js',
+			array( 'jquery' ),
+			NEGAR_SHOP_VERSION,
+			true
+		);
+		wp_localize_script(
+			'kaveh-cart-style-2-js',
+			'kavehCartNkStrings',
+			array(
+				'couponEmpty' => 'لطفاً کد تخفیف را وارد کنید.',
+				'couponError' => 'خطایی در اعمال کد تخفیف رخ داد. لطفاً مجدداً تلاش کنید.',
+			)
+		);
+
+		wp_enqueue_script(
+			'kaveh-cart-page-ajax-js',
+			NEGAR_SHOP_URI . '/assets/js/vendor/kaveh-cart-page-ajax.js',
+			array( 'jquery', 'kaveh-cart-style-2-js' ),
+			NEGAR_SHOP_VERSION,
+			true
+		);
+
+		wp_enqueue_script(
 			'negar-shop-checkout-cart',
 			NEGAR_SHOP_URI . '/assets/js/checkout-cart.js',
-			array( 'negar-shop-header-footer' ),
+			array( 'negar-shop-header-footer', 'kaveh-cart-style-2-js' ),
 			NEGAR_SHOP_VERSION,
 			true
 		);

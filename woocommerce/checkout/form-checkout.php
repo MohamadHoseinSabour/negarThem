@@ -1,14 +1,12 @@
 <?php
 /**
- * Checkout Form Template
+ * Checkout Form Template - Exact Match to Demo 43 (cart-nk cart-nk-checkout)
  *
  * @package Negar_Shop
- * @version 1.0.0
+ * @version 2.2.0
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+defined( 'ABSPATH' ) || exit;
 
 do_action( 'woocommerce_before_checkout_form', $checkout );
 
@@ -19,60 +17,79 @@ if ( ! $checkout->is_registration_enabled() && $checkout->is_registration_requir
 }
 ?>
 
-<div class="negar-checkout-wrapper py-6">
-	<div class="container mx-auto px-4">
+<section class="cart-nk cart-nk-checkout py-4">
+	<div class="container">
 
-		<div class="section-title mb-6 pb-3 border-b border-border">
-			<h1 class="text-xl sm:text-2xl font-black text-dark flex items-center gap-2">
-				<span class="w-2.5 h-6 bg-primary rounded-full inline-block"></span>
-				<span><?php esc_html_e( 'تسویه‌حساب و ثبت نهایی سفارش', 'negar-shop' ); ?></span>
-			</h1>
+		<!-- Steps Indicator: Step 2 Active -->
+		<div class="cart-nk__steps d-flex align-items-center justify-content-center mb-5 gap-3 gap-md-5">
+			<a href="<?php echo esc_url( wc_get_cart_url() ); ?>" class="cart-nk__steps__item completed d-flex align-items-center gap-2 f-payda text-decoration-none">
+				<i class="icon-bag-2 lh-1 fs-5"></i>
+				<span>سبد خرید</span>
+			</a>
+			<div class="cart-nk__steps__item active d-flex align-items-center gap-2 f-payda">
+				<i class="icon-card-pos lh-1 fs-5"></i>
+				<span class="fw-bold">جزئیات پرداخت</span>
+			</div>
+			<div class="cart-nk__steps__item d-flex align-items-center gap-2 f-payda text-muted">
+				<i class="icon-tick-circle lh-1 fs-5"></i>
+				<span>تکمیل سفارش</span>
+			</div>
 		</div>
 
+		<!-- Coupon Notice Slot -->
+		<div class="cart-nk-coupon-notices mb-4" style="display: none;"></div>
+
 		<form name="checkout" method="post" class="checkout woocommerce-checkout" action="<?php echo esc_url( wc_get_checkout_url() ); ?>" enctype="multipart/form-data">
+			<div class="row">
 
-			<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-
-				<!-- Customer Billing & Shipping Column (Right in RTL, 7 cols) -->
+				<!-- Right Column: Customer Details (8 cols) -->
 				<?php if ( $checkout->get_checkout_fields() ) : ?>
-
-					<?php do_action( 'woocommerce_checkout_before_customer_details' ); ?>
-
-					<div class="lg:col-span-7 w-full flex flex-col gap-6" id="customer_details">
+					<div class="col-12 col-lg-8 mb-4 mb-lg-0" id="customer_details">
 						
-						<!-- Billing Fields Card -->
-						<div class="bg-surface border border-border rounded-2xl p-6 shadow-sm">
-							<h3 class="text-base font-bold text-dark pb-3 mb-4 border-b border-border flex items-center gap-2">
-								<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-								<span><?php esc_html_e( 'اطلاعات گیرنده و نشانی تحویل', 'negar-shop' ); ?></span>
-							</h3>
+						<!-- Billing Card -->
+						<div class="cart-nk__box bg-white p-4 rounded-4 shadow-sm border border-light-subtle mb-4">
+							<div class="cart-nk__box__heading fs-6 fw-bold f-payda mb-4 pb-2 border-bottom text-dark d-flex align-items-center gap-2">
+								<i class="icon-location-2 fs-5 text-primary"></i>
+								<span>اطلاعات گیرنده و آدرس تحویل</span>
+							</div>
+
+							<?php do_action( 'woocommerce_checkout_before_customer_details' ); ?>
 							<div class="woocommerce-billing-fields">
 								<?php do_action( 'woocommerce_checkout_billing' ); ?>
 							</div>
 						</div>
 
-						<!-- Shipping Fields Card -->
-						<div class="bg-surface border border-border rounded-2xl p-6 shadow-sm">
+						<!-- Shipping Card -->
+						<div class="cart-nk__box bg-white p-4 rounded-4 shadow-sm border border-light-subtle">
 							<div class="woocommerce-shipping-fields">
 								<?php do_action( 'woocommerce_checkout_shipping' ); ?>
 							</div>
+							<?php do_action( 'woocommerce_checkout_after_customer_details' ); ?>
 						</div>
 
 					</div>
-
-					<?php do_action( 'woocommerce_checkout_after_customer_details' ); ?>
-
 				<?php endif; ?>
 
-				<!-- Order Review & Payments Column (Left in RTL, 5 cols, Sticky) -->
-				<div class="lg:col-span-5 w-full sticky top-24">
-					
-					<div class="bg-surface border border-border rounded-2xl p-6 shadow-sm">
+				<!-- Left Column: Order Review & Payments (4 cols, Sticky) -->
+				<div class="col-12 col-lg-4">
+					<div class="cart-nk__box bg-white p-4 rounded-4 shadow-sm border border-light-subtle sticky-top" style="top: 100px;">
 						
-						<h3 id="order_review_heading" class="text-base font-bold text-dark pb-3 mb-4 border-b border-border flex items-center gap-2">
-							<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-							<span><?php esc_html_e( 'خلاصه سفارش و انتخاب درگاه', 'negar-shop' ); ?></span>
-						</h3>
+						<div class="cart-nk__box__heading fs-6 fw-bold f-payda mb-3 pb-2 border-bottom text-dark d-flex align-items-center justify-content-between">
+							<span>سفارش شما</span>
+							<i class="icon-bag-2 fs-5 text-primary"></i>
+						</div>
+
+						<!-- Coupon Box in Checkout -->
+						<?php if ( wc_coupons_enabled() ) : ?>
+							<div class="cart-nk__offer-code mb-4 p-3 rounded-3 bg-light-subtle border border-light-subtle">
+								<div class="d-flex align-items-center gap-2">
+									<input type="text" id="kaveh-nk-coupon-input" class="form-control rounded-pill px-3 py-1 fs-7 f-payda" placeholder="کد تخفیف دارید؟">
+									<button type="button" id="kaveh-nk-apply-coupon" class="btn btn-dark rounded-pill px-3 py-1 fs-7 f-payda flex-shrink-0">
+										اعمال
+									</button>
+								</div>
+							</div>
+						<?php endif; ?>
 
 						<?php do_action( 'woocommerce_checkout_before_order_review' ); ?>
 
@@ -83,14 +100,12 @@ if ( ! $checkout->is_registration_enabled() && $checkout->is_registration_requir
 						<?php do_action( 'woocommerce_checkout_after_order_review' ); ?>
 
 					</div>
-
 				</div>
 
 			</div>
-
 		</form>
 
 	</div>
-</div>
+</section>
 
 <?php do_action( 'woocommerce_after_checkout_form', $checkout ); ?>

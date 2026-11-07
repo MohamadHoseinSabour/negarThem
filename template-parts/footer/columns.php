@@ -24,7 +24,7 @@ $demo_base  = $upload_dir['baseurl'] . '/kaveh-demo';
 	<div class="container max-w-[1320px] mx-auto px-4">
 		
 		<!-- 2. Main Footer Section: Links (25%) + About Card (47%) + Trust Badges (25%) matching Demo 43 -->
-		<div class="flex flex-col lg:flex-row items-stretch justify-between gap-6 pb-10 border-b border-slate-200/70">
+		<div class="flex flex-col lg:flex-row items-stretch justify-between gap-6 pb-6">
 			
 			<!-- Links Column: Fast Access & Customer Services (25% on Desktop) -->
 			<div class="w-full lg:w-[25%] flex flex-row gap-6 justify-between">
@@ -140,7 +140,7 @@ $demo_base  = $upload_dir['baseurl'] . '/kaveh-demo';
 		</div>
 
 		<!-- 3. Contact Channels & App Download Bar (Matching Demo 43 Container 7bafa34a) -->
-		<div class="py-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6 items-center border-b border-slate-200/70">
+		<div class="py-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6 items-center">
 			
 			<!-- Contact Info & Address (4 Cols) -->
 			<div class="lg:col-span-4">

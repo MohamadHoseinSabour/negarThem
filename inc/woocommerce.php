@@ -90,3 +90,21 @@ function negar_shop_cart_fragments( $fragments ) {
 	return $fragments;
 }
 add_filter( 'woocommerce_add_to_cart_fragments', 'negar_shop_cart_fragments' );
+
+/**
+ * Add custom body classes for WooCommerce flows.
+ *
+ * @param array $classes Body classes.
+ * @return array
+ */
+function negar_shop_body_classes( $classes ) {
+	if ( function_exists( 'is_cart' ) && is_cart() ) {
+		$classes[] = 'kaveh-woo-flow-style-2';
+	}
+	if ( function_exists( 'is_checkout' ) && is_checkout() ) {
+		$classes[] = 'kaveh-woo-flow-style-2';
+	}
+	return $classes;
+}
+add_filter( 'body_class', 'negar_shop_body_classes' );
+
