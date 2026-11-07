@@ -1,9 +1,9 @@
 <?php
 /**
- * The template for displaying all single posts
+ * Single Post Template - Exact Match to Demo 43 (detail-blog / detail-blog-nk)
  *
  * @package Negar_Shop
- * @version 1.0.0
+ * @version 2.2.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -12,143 +12,130 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 get_header();
 
-$categories = get_the_category();
+$categories  = get_the_category();
 $primary_cat = ! empty( $categories ) ? $categories[0] : null;
 $thumb_url   = has_post_thumbnail() ? get_the_post_thumbnail_url( get_the_ID(), 'full' ) : '';
+$post_id     = get_the_ID();
 ?>
 
-<div class="negar-single-post py-8">
-	<div class="container mx-auto px-4">
+<div class="detail-blog detail-blog-nk py-4">
+	<div class="container">
 
-		<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+		<!-- Breadcrumb -->
+		<div class="detail-blog-nk__breadcrumb mb-4">
+			<nav class="breadcrumb-nk d-flex align-items-center gap-2 fs-7 text-muted" aria-label="مسیر راهنما">
+				<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="text-muted text-decoration-none hover-primary">خانه</a>
+				<i class="icon-chevron-left fs-8"></i>
+				<a href="<?php echo esc_url( get_permalink( get_option( 'page_for_posts' ) ) ?: home_url( '/blog/' ) ); ?>" class="text-muted text-decoration-none hover-primary">وبلاگ</a>
+				<?php if ( $primary_cat ) : ?>
+					<i class="icon-chevron-left fs-8"></i>
+					<a href="<?php echo esc_url( get_category_link( $primary_cat->term_id ) ); ?>" class="text-muted text-decoration-none hover-primary">
+						<?php echo esc_html( $primary_cat->name ); ?>
+					</a>
+				<?php endif; ?>
+				<i class="icon-chevron-left fs-8"></i>
+				<span class="text-dark fw-bold truncate"><?php the_title(); ?></span>
+			</nav>
+		</div>
 
-			<!-- Main Article Column (Right in RTL, 8 cols) -->
-			<main class="lg:col-span-8 w-full bg-surface border border-border rounded-2xl p-6 sm:p-10 shadow-sm">
-				
+		<div class="row g-4 items-start position-relative">
+			<!-- Main Column (8 cols) -->
+			<div class="col-12 col-lg-8">
 				<?php while ( have_posts() ) : the_post(); ?>
 
-					<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+					<article id="post-<?php the_ID(); ?>" <?php post_class( 'bg-white rounded-4 border border-light-subtle shadow-sm p-4 p-md-5 mb-4' ); ?>>
 						
-						<!-- Header & Meta -->
-						<header class="entry-header mb-6 pb-6 border-b border-border">
-							
+						<!-- Post Header Info -->
+						<div class="detail-blog-nk__info p-0 border-0 mb-4">
 							<?php if ( $primary_cat ) : ?>
-								<a href="<?php echo esc_url( get_category_link( $primary_cat->term_id ) ); ?>" class="inline-block text-xs font-bold text-primary bg-primary/10 px-3 py-1 rounded-full mb-3">
+								<a href="<?php echo esc_url( get_category_link( $primary_cat->term_id ) ); ?>" class="d-inline-block px-3 py-1 rounded-pill fs-7 fw-bold mb-3 text-decoration-none" style="background-color: rgba(233, 5, 68, 0.1); color: var(--kaveh-primary-color, #e90544);">
 									<?php echo esc_html( $primary_cat->name ); ?>
 								</a>
 							<?php endif; ?>
 
-							<h1 class="entry-title text-xl sm:text-3xl font-black text-dark leading-snug mb-4">
+							<h1 class="detail-blog-nk__title fs-4 fs-md-3 fw-bold text-dark lh-base mb-3">
 								<?php the_title(); ?>
 							</h1>
 
-							<div class="entry-meta flex flex-wrap items-center gap-4 text-xs text-muted">
-								<span class="flex items-center gap-1.5">
-									<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-									<time datetime="<?php echo esc_attr( get_the_date( 'c' ) ); ?>"><?php echo esc_html( get_the_date() ); ?></time>
-								</span>
+							<!-- Author Meta Row -->
+							<div class="detail-blog-nk__author d-flex align-items-center gap-3 pb-3 border-bottom border-light-subtle fs-7 text-muted">
+								<div class="d-flex align-items-center gap-2">
+									<div class="rounded-circle overflow-hidden" style="width: 36px; height: 36px;">
+										<?php echo get_avatar( get_the_author_meta( 'ID' ), 36, '', '', array( 'class' => 'w-100 h-100 object-fit-cover' ) ); ?>
+									</div>
+									<span class="name fw-bold text-dark"><?php echo esc_html( get_the_author() ); ?></span>
+								</div>
 								<span>•</span>
-								<span class="flex items-center gap-1.5">
-									<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-									<span><?php echo esc_html( get_the_author() ); ?></span>
-								</span>
+								<div class="date d-flex align-items-center gap-1">
+									<i class="icon-calendar fs-7"></i>
+									<time datetime="<?php echo esc_attr( get_the_date( 'c' ) ); ?>">
+										<?php echo esc_html( get_the_date() ); ?>
+									</time>
+								</div>
 								<span>•</span>
-								<span class="flex items-center gap-1.5">
-									<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-									<span><?php comments_number( __( 'بدون دیدگاه', 'negar-shop' ), __( '۱ دیدگاه', 'negar-shop' ), __( '% دیدگاه', 'negar-shop' ) ); ?></span>
-								</span>
+								<div class="d-flex align-items-center gap-1">
+									<i class="icon-comment fs-7"></i>
+									<span><?php comments_number( 'بدون دیدگاه', '۱ دیدگاه', '% دیدگاه' ); ?></span>
+								</div>
 							</div>
-
-						</header>
+						</div>
 
 						<!-- Featured Image -->
 						<?php if ( $thumb_url ) : ?>
-							<div class="featured-image mb-8 rounded-xl overflow-hidden max-h-[440px]">
-								<img src="<?php echo esc_url( $thumb_url ); ?>" alt="<?php the_title_attribute(); ?>" class="w-full h-full object-cover">
+							<div class="detail-blog-nk__image overflow-hidden mb-4 rounded-4" style="max-height: 480px;">
+								<img src="<?php echo esc_url( $thumb_url ); ?>" alt="<?php the_title_attribute(); ?>" class="w-100 h-100 object-fit-cover">
 							</div>
 						<?php endif; ?>
 
-						<!-- Content Body -->
-						<div class="entry-content prose prose-slate max-w-none text-sm sm:text-base leading-relaxed text-dark mb-10">
-							<?php
-							the_content();
+						<!-- Excerpt Lead Box -->
+						<?php if ( has_excerpt() ) : ?>
+							<div class="detail-blog-nk__excerpt mb-4">
+								<div class="detail-blog-nk__excerpt__label">
+									<i class="icon-info-circle fs-6"></i>
+									<span>خلاصه مطلب</span>
+								</div>
+								<p class="detail-blog-nk__excerpt__text m-0">
+									<?php echo esc_html( get_the_excerpt() ); ?>
+								</p>
+							</div>
+						<?php endif; ?>
 
-							wp_link_pages(
-								array(
-									'before' => '<div class="page-links mt-6 pt-4 border-t border-border flex items-center gap-2 text-xs font-bold">' . esc_html__( 'صفحات:', 'negar-shop' ),
-									'after'  => '</div>',
-								)
-							);
-							?>
+						<!-- Post Content -->
+						<div class="detail-blog-content detail-blog-nk__content lh-lg text-dark fs-6">
+							<?php the_content(); ?>
 						</div>
 
-						<!-- Tags -->
+						<!-- Tags & Sharing -->
 						<?php
-						$tags = get_the_tags();
-						if ( $tags ) :
+						$post_tags = get_the_tags();
+						if ( $post_tags ) :
 							?>
-							<div class="entry-tags flex flex-wrap items-center gap-2 mb-8 pt-6 border-t border-border">
-								<span class="text-xs text-muted font-bold"><?php esc_html_e( 'برچسب‌ها:', 'negar-shop' ); ?></span>
-								<?php foreach ( $tags as $tag ) : ?>
-									<a href="<?php echo esc_url( get_tag_link( $tag->term_id ) ); ?>" class="text-xs px-3 py-1 rounded-full bg-slate-100 hover:bg-primary hover:text-white transition-colors text-dark font-medium">
+							<div class="post-tags mt-5 pt-3 border-top border-light-subtle d-flex align-items-center gap-2 flex-wrap">
+								<span class="fw-bold fs-7 text-muted">برچسب‌ها:</span>
+								<?php foreach ( $post_tags as $tag ) : ?>
+									<a href="<?php echo esc_url( get_tag_link( $tag->term_id ) ); ?>" class="badge rounded-pill bg-light text-dark text-decoration-none px-3 py-2 fs-7 hover-primary">
 										#<?php echo esc_html( $tag->name ); ?>
 									</a>
 								<?php endforeach; ?>
 							</div>
 						<?php endif; ?>
 
-						<!-- Author Box -->
-						<div class="author-box flex items-start gap-4 p-5 rounded-2xl bg-slate-50 border border-border mb-10">
-							<div class="w-14 h-14 rounded-full overflow-hidden bg-white border border-border flex-shrink-0">
-								<?php echo get_avatar( get_the_author_meta( 'ID' ), 56, '', '', array( 'class' => 'w-full h-full object-cover' ) ); ?>
-							</div>
-							<div class="min-w-0 flex-1">
-								<h4 class="text-sm font-bold text-dark mb-1"><?php echo esc_html( get_the_author() ); ?></h4>
-								<p class="text-xs text-muted leading-relaxed"><?php echo esc_html( get_the_author_meta( 'description' ) ? get_the_author_meta( 'description' ) : __( 'نویسنده و کارشناس تخصصی تولید محتوا در نگار شاپ.', 'negar-shop' ) ); ?></p>
-							</div>
-						</div>
-
-						<!-- Adjacent Posts Navigation -->
-						<div class="adjacent-posts grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10 pt-6 border-t border-border">
-							<?php
-							$prev_post = get_previous_post();
-							$next_post = get_next_post();
-							?>
-							<?php if ( $prev_post ) : ?>
-								<a href="<?php echo esc_url( get_permalink( $prev_post->ID ) ); ?>" class="p-4 rounded-xl border border-border hover:border-primary transition-all flex flex-col group">
-									<span class="text-2xs text-muted mb-1"><?php esc_html_e( '← مقاله قبلی', 'negar-shop' ); ?></span>
-									<span class="text-xs font-bold text-dark group-hover:text-primary transition-colors line-clamp-1"><?php echo esc_html( $prev_post->post_title ); ?></span>
-								</a>
-							<?php else : ?>
-								<div></div>
-							<?php endif; ?>
-
-							<?php if ( $next_post ) : ?>
-								<a href="<?php echo esc_url( get_permalink( $next_post->ID ) ); ?>" class="p-4 rounded-xl border border-border hover:border-primary transition-all flex flex-col items-end text-left group">
-									<span class="text-2xs text-muted mb-1"><?php esc_html_e( 'مقاله بعدی →', 'negar-shop' ); ?></span>
-									<span class="text-xs font-bold text-dark group-hover:text-primary transition-colors line-clamp-1"><?php echo esc_html( $next_post->post_title ); ?></span>
-								</a>
-							<?php endif; ?>
-						</div>
-
-						<!-- Comments -->
-						<?php
-						if ( comments_open() || get_comments_number() ) :
-							comments_template();
-						endif;
-						?>
-
 					</article>
 
+					<!-- Comments Section -->
+					<?php
+					if ( comments_open() || get_comments_number() ) :
+						comments_template();
+					endif;
+					?>
+
 				<?php endwhile; ?>
-
-			</main>
-
-			<!-- Blog Sidebar (Left in RTL, 4 cols) -->
-			<div class="lg:col-span-4 w-full">
-				<?php get_template_part( 'template-parts/blog/sidebar' ); ?>
 			</div>
 
+			<!-- Sidebar Column (4 cols) -->
+			<div class="col-12 col-lg-4">
+				<?php get_template_part( 'template-parts/blog/sidebar' ); ?>
+			</div>
 		</div>
 
 	</div>

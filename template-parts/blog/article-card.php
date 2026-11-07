@@ -1,66 +1,78 @@
 <?php
 /**
- * Blog Article Card Component
+ * Blog Article Card Component - Exact Match to Demo 43
  *
  * @package Negar_Shop
- * @version 1.0.0
+ * @version 2.2.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$categories = get_the_category();
+$categories  = get_the_category();
 $primary_cat = ! empty( $categories ) ? $categories[0] : null;
-$thumb_url = has_post_thumbnail() ? get_the_post_thumbnail_url( get_the_ID(), 'medium_large' ) : 'https://placehold.co/600x400/f1f5f9/94a3b8?text=Negar+Shop';
+$thumb_url   = has_post_thumbnail() ? get_the_post_thumbnail_url( get_the_ID(), 'medium_large' ) : NEGAR_SHOP_URI . '/assets/images/new-demo/1.jpeg';
+$author_id   = get_the_author_meta( 'ID' );
 ?>
 
-<article id="post-<?php the_ID(); ?>" <?php post_class( 'negar-article-card bg-surface border border-border rounded-2xl overflow-hidden shadow-xs hover:shadow-md transition-all flex flex-col group' ); ?>>
-	
-	<!-- 16:9 Image -->
-	<a href="<?php the_permalink(); ?>" class="article-thumb block relative aspect-video overflow-hidden bg-slate-100">
-		<img src="<?php echo esc_url( $thumb_url ); ?>" alt="<?php the_title_attribute(); ?>" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-		<?php if ( $primary_cat ) : ?>
-			<span class="absolute top-3 right-3 text-2xs font-bold py-1 px-2.5 rounded-full bg-surface/90 backdrop-blur-xs text-primary shadow-xs">
-				<?php echo esc_html( $primary_cat->name ); ?>
-			</span>
-		<?php endif; ?>
-	</a>
-
-	<!-- Body -->
-	<div class="article-body p-5 flex-1 flex flex-col justify-between">
+<div class="col-12 col-md-6 mb-4">
+	<article id="post-<?php the_ID(); ?>" <?php post_class( 'article-card-nk bg-white rounded-4 overflow-hidden border border-light-subtle shadow-xs h-100 d-flex flex-column transition-all' ); ?>>
 		
-		<div>
-			<!-- Meta (Date & Author) -->
-			<div class="article-meta flex items-center gap-3 text-xs text-muted mb-2">
-				<span class="flex items-center gap-1">
-					<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-					<time datetime="<?php echo esc_attr( get_the_date( 'c' ) ); ?>"><?php echo esc_html( get_the_date() ); ?></time>
-				</span>
-				<span>•</span>
-				<span><?php echo esc_html( get_the_author() ); ?></span>
+		<!-- 16:9 Thumbnail -->
+		<div class="article-thumb position-relative overflow-hidden" style="aspect-ratio: 16/9; background-color: #f1f5f9;">
+			<a href="<?php the_permalink(); ?>" class="d-block w-100 h-100">
+				<img src="<?php echo esc_url( $thumb_url ); ?>" alt="<?php the_title_attribute(); ?>" class="w-100 h-100 object-fit-cover transition-transform duration-300" loading="lazy">
+			</a>
+			<?php if ( $primary_cat ) : ?>
+				<a href="<?php echo esc_url( get_category_link( $primary_cat->term_id ) ); ?>" class="position-absolute top-0 end-0 m-3 px-3 py-1 rounded-pill bg-white text-dark fs-7 fw-bold shadow-sm text-decoration-none" style="z-index: 2;">
+					<?php echo esc_html( $primary_cat->name ); ?>
+				</a>
+			<?php endif; ?>
+		</div>
+
+		<!-- Body -->
+		<div class="article-body p-4 d-flex flex-column justify-content-between flex-grow-1">
+			<div>
+				<!-- Meta: Author & Date -->
+				<div class="article-meta d-flex align-items-center gap-2 mb-2 text-muted fs-7">
+					<div class="d-flex align-items-center gap-1">
+						<i class="icon-calendar fs-7" aria-hidden="true"></i>
+						<time datetime="<?php echo esc_attr( get_the_date( 'c' ) ); ?>">
+							<?php echo esc_html( get_the_date() ); ?>
+						</time>
+					</div>
+					<span>•</span>
+					<div class="d-flex align-items-center gap-1">
+						<i class="icon-user fs-7" aria-hidden="true"></i>
+						<span><?php echo esc_html( get_the_author() ); ?></span>
+					</div>
+				</div>
+
+				<!-- Title -->
+				<h3 class="article-title fs-6 fw-bold mb-2">
+					<a href="<?php the_permalink(); ?>" class="text-dark text-decoration-none hover-primary line-clamp-2">
+						<?php the_title(); ?>
+					</a>
+				</h3>
+
+				<!-- Excerpt -->
+				<p class="article-excerpt text-muted fs-7 leading-relaxed mb-3 line-clamp-2">
+					<?php echo esc_html( wp_trim_words( get_the_excerpt(), 18, '...' ) ); ?>
+				</p>
 			</div>
 
-			<!-- Title -->
-			<h3 class="article-title text-base font-bold text-dark group-hover:text-primary transition-colors leading-snug mb-2 line-clamp-2">
-				<a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
-			</h3>
-
-			<!-- Excerpt -->
-			<p class="article-excerpt text-xs text-muted leading-relaxed line-clamp-2 mb-4">
-				<?php echo esc_html( wp_trim_words( get_the_excerpt(), 18, '...' ) ); ?>
-			</p>
+			<!-- Footer Action -->
+			<div class="article-footer pt-3 border-top border-light-subtle d-flex align-items-center justify-content-between">
+				<a href="<?php the_permalink(); ?>" class="d-inline-flex align-items-center gap-1 text-decoration-none fw-bold fs-7" style="color: var(--kaveh-primary-color, #e90544);">
+					<span>مشاهده مقاله</span>
+					<i class="icon-arrow-left fs-7" aria-hidden="true"></i>
+				</a>
+				<span class="text-muted fs-7">
+					<?php comments_number( '۰ دیدگاه', '۱ دیدگاه', '% دیدگاه' ); ?>
+				</span>
+			</div>
 		</div>
 
-		<!-- Footer Link -->
-		<div class="article-footer pt-3 border-t border-border flex items-center justify-between text-xs">
-			<a href="<?php the_permalink(); ?>" class="text-primary font-bold inline-flex items-center gap-1 group-hover:gap-1.5 transition-all">
-				<span><?php esc_html_e( 'ادامه مطلب', 'negar-shop' ); ?></span>
-				<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-			</a>
-			<span class="text-2xs text-muted font-medium"><?php esc_html_e( 'زمان مطالعه: ۵ دقیقه', 'negar-shop' ); ?></span>
-		</div>
-
-	</div>
-
-</article>
+	</article>
+</div>

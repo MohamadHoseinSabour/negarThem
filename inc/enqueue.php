@@ -312,7 +312,7 @@ function negar_shop_scripts() {
 	}
 
 	// Content Pages Dedicated CSS (Blog, Single Post, About, Contact, 404, Search)
-	if ( is_singular( 'post' ) || is_archive() || is_search() || is_404() || is_page_template( 'page-templates/page-about.php' ) || is_page_template( 'page-templates/page-contact.php' ) ) {
+	if ( is_home() || is_singular( 'post' ) || ( is_archive() && ! is_shop() && ! is_product_taxonomy() ) || is_search() || is_404() || is_page_template( 'page-templates/page-about.php' ) || is_page_template( 'page-templates/page-contact.php' ) ) {
 		wp_enqueue_style(
 			'kaveh-main-blog',
 			NEGAR_SHOP_URI . '/assets/css/vendor/main-blog.min.css',

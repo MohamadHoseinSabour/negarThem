@@ -1,9 +1,9 @@
 <?php
 /**
- * The main template file
+ * The main template file - Matches Demo 43 (latest-articles-nk)
  *
  * @package Negar_Shop
- * @version 1.0.0
+ * @version 2.2.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -11,65 +11,88 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 get_header();
+
+$categories = get_categories( array( 'hide_empty' => true ) );
 ?>
 
-<main id="primary" class="site-main py-10">
+<section class="latest-articles-nk py-5">
 	<div class="container">
+		
+		<!-- Heading -->
+		<div class="latest-articles-nk__heading mb-5">
+			<div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-3">
+				<div>
+					<span class="latest-articles-nk__heading__sup-title d-inline-flex align-items-center rounded-pill mb-2">
+						<i class="icon-document text-primary" aria-hidden="true"></i>
+						<span>وبلاگ و اخبار تکنولوژی</span>
+					</span>
+					<h1 class="latest-articles-nk__heading__title position-relative m-0 fw-bold">
+						<?php esc_html_e( 'آخرین مقالات و راهنماهای خرید', 'negar-shop' ); ?>
+					</h1>
+				</div>
 
-		<?php if ( have_posts() ) : ?>
-
-			<div class="posts-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-				<?php
-				/* Start the Loop */
-				while ( have_posts() ) :
-					the_post();
-					?>
-					<article id="post-<?php the_ID(); ?>" <?php body_class( 'card bg-white p-6 rounded-xl border border-slate-200 shadow-sm' ); ?>>
-						<header class="entry-header mb-4">
-							<?php negar_shop_post_thumbnail( 'medium' ); ?>
-							<div class="entry-meta text-xs text-slate-500 mb-2">
-								<?php negar_shop_posted_on(); ?>
-							</div>
-							<?php the_title( '<h2 class="entry-title text-xl font-bold m-0"><a href="' . esc_url( get_permalink() ) . '" class="text-slate-900 hover:text-emerald-600">', '</a></h2>' ); ?>
-						</header>
-
-						<div class="entry-summary text-sm text-slate-600 line-clamp-3 mb-4">
-							<?php the_excerpt(); ?>
-						</div>
-
-						<footer class="entry-footer pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-							<?php negar_shop_posted_by(); ?>
-							<a href="<?php the_permalink(); ?>" class="text-emerald-600 font-semibold hover:underline">
-								<?php esc_html_e( 'ادامه مطلب ←', 'negar-shop' ); ?>
+				<!-- Category Tabs Pills -->
+				<?php if ( ! empty( $categories ) ) : ?>
+					<div class="d-flex align-items-center gap-2 flex-wrap">
+						<a href="<?php echo esc_url( home_url( '/blog/' ) ); ?>" class="latest-articles-nk__heading__tab text-decoration-none active">
+							همه مقالات
+						</a>
+						<?php foreach ( array_slice( $categories, 0, 5 ) as $cat ) : ?>
+							<a href="<?php echo esc_url( get_category_link( $cat->term_id ) ); ?>" class="latest-articles-nk__heading__tab text-decoration-none">
+								<?php echo esc_html( $cat->name ); ?>
 							</a>
-						</footer>
-					</article>
-					<?php
-				endwhile;
-				?>
+						<?php endforeach; ?>
+					</div>
+				<?php endif; ?>
+			</div>
+		</div>
+
+		<!-- Main 2-Column Grid -->
+		<div class="row g-4">
+			<!-- Articles Column (8 cols) -->
+			<div class="col-12 col-lg-8">
+				<?php if ( have_posts() ) : ?>
+					<div class="latest-articles-nk__articles row g-4">
+						<?php
+						while ( have_posts() ) :
+							the_post();
+							get_template_part( 'template-parts/blog/article-card' );
+						endwhile;
+						?>
+					</div>
+
+					<!-- Pagination -->
+					<div class="pagination-nk d-flex justify-content-center align-items-center gap-2 mt-5">
+						<?php
+						echo paginate_links(
+							array(
+								'prev_text' => '<span class="prev d-flex align-items-center justify-content-center rounded-3"><i class="icon-chevron-right fs-7"></i></span>',
+								'next_text' => '<span class="next d-flex align-items-center justify-content-center rounded-3"><i class="icon-chevron-left fs-7"></i></span>',
+								'type'      => 'plain',
+							)
+						);
+						?>
+					</div>
+				<?php else : ?>
+					<div class="bg-white rounded-4 border border-light-subtle p-5 text-center shadow-xs">
+						<i class="icon-document fs-1 text-muted mb-3 d-block" aria-hidden="true"></i>
+						<h3 class="fs-6 fw-bold mb-2">مقاله‌ای در این بخش یافت نشد!</h3>
+						<p class="text-muted fs-7 mb-4">می‌توانید سایر دسته‌بندی‌ها یا صفحه اصلی را مشاهده فرمایید.</p>
+						<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="btn rounded-pill px-4 text-white fw-bold fs-7" style="background-color: var(--kaveh-primary-color, #e90544);">
+							بازگشت به صفحه اصلی
+						</a>
+					</div>
+				<?php endif; ?>
 			</div>
 
-			<div class="pagination-wrapper mt-8">
-				<?php the_posts_pagination( array(
-					'prev_text' => esc_html__( '← قبلی', 'negar-shop' ),
-					'next_text' => esc_html__( 'بعدی →', 'negar-shop' ),
-				) ); ?>
+			<!-- Sidebar Column (4 cols) -->
+			<div class="col-12 col-lg-4">
+				<?php get_template_part( 'template-parts/blog/sidebar' ); ?>
 			</div>
-
-		<?php else : ?>
-
-			<div class="no-results not-found bg-white p-12 rounded-xl text-center border border-slate-200">
-				<h2 class="text-2xl font-bold text-slate-800 mb-3"><?php esc_html_e( 'مطلبی یافت نشد!', 'negar-shop' ); ?></h2>
-				<p class="text-slate-500 max-w-md mx-auto mb-6"><?php esc_html_e( 'به نظر می‌رسد هیچ محتوایی در این بخش وجود ندارد. لطفاً جستجو کنید یا به صفحه اصلی بازگردید.', 'negar-shop' ); ?></p>
-				<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="btn btn-primary">
-					<?php esc_html_e( 'بازگشت به صفحه اصلی', 'negar-shop' ); ?>
-				</a>
-			</div>
-
-		<?php endif; ?>
+		</div>
 
 	</div>
-</main>
+</section>
 
 <?php
 get_footer();
