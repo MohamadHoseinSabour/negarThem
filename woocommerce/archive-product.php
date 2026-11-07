@@ -1,9 +1,10 @@
 <?php
 /**
  * The Template for displaying product archives, including the main shop page
+ * Exact match to Demo 43 (category-nk)
  *
  * @package Negar_Shop
- * @version 1.0.0
+ * @version 2.2.0
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -11,69 +12,48 @@ defined( 'ABSPATH' ) || exit;
 get_header( 'shop' );
 ?>
 
-<div class="negar-shop-page py-6">
-	<div class="container mx-auto px-4">
+<div id="primary" class="content-area">
+	<main id="main" class="site-main" role="main">
+		<section class="category-nk mt-4">
+			<div class="container">
 
-		<!-- Breadcrumbs -->
-		<?php negar_shop_breadcrumbs(); ?>
-
-		<!-- Archive Header Title -->
-		<header class="woocommerce-products-header mb-6">
-			<?php if ( apply_filters( 'woocommerce_show_page_title', true ) ) : ?>
-				<h1 class="woocommerce-products-header__title page-title text-xl sm:text-2xl font-black text-dark mb-2">
-					<?php woocommerce_page_title(); ?>
-				</h1>
-			<?php endif; ?>
-
-			<?php
-			/**
-			 * Hook: woocommerce_archive_description.
-			 */
-			do_action( 'woocommerce_archive_description' );
-			?>
-		</header>
-
-		<!-- Main Shop Layout -->
-		<div class="negar-shop-layout grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-
-			<!-- Desktop Sidebar (Right side in RTL) -->
-			<aside class="negar-shop-sidebar hidden lg:block lg:col-span-3 sticky top-24" aria-label="<?php esc_attr_e( 'فیلترهای فروشگاه', 'negar-shop' ); ?>">
-				<?php get_template_part( 'template-parts/shop/sidebar-filters' ); ?>
-			</aside>
-
-			<!-- Mobile Filter Off-Canvas Drawer -->
-			<div class="negar-filters-backdrop fixed inset-0 bg-dark/50 z-50 lg:hidden opacity-0 pointer-events-none transition-opacity duration-300" aria-hidden="true"></div>
-			<div class="negar-filters-drawer fixed top-0 bottom-0 right-0 w-[300px] max-w-[85vw] bg-surface z-50 lg:hidden flex flex-col shadow-2xl transition-transform duration-300 translate-x-full overflow-hidden" id="negar-shop-filters-drawer" role="dialog" aria-modal="true" aria-label="<?php esc_attr_e( 'فیلتر محصولات', 'negar-shop' ); ?>">
-				<!-- Drawer Header -->
-				<div class="negar-drawer-header flex items-center justify-between p-4 border-b border-border bg-slate-50">
-					<span class="text-sm font-bold text-dark flex items-center gap-2">
-						<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary">
-							<polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
-						</svg>
-						<?php esc_html_e( 'فیلتر محصولات', 'negar-shop' ); ?>
-					</span>
-					<button type="button" class="negar-close-filters-drawer p-1 text-muted hover:text-dark focus:outline-none" aria-label="<?php esc_attr_e( 'بستن منوی فیلترها', 'negar-shop' ); ?>">
-						<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
-					</button>
+				<!-- Breadcrumbs -->
+				<div class="breadcrumb-nk d-flex align-items-center mb-4">
+					<ul class="d-flex align-items-center flex-nowrap">
+						<li class="d-flex align-items-center flex-shrink-0">
+							<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="d-block d-flex align-items-center gap-2">
+								<i class="iconly-Home lh-1"></i>خانه
+							</a>
+						</li>
+						<li class="d-flex align-items-center flex-shrink-0 is-current" aria-current="page">
+							<span class="breadcrumb-nk__current"><?php woocommerce_page_title(); ?></span>
+						</li>
+					</ul>
 				</div>
-				<!-- Drawer Body -->
-				<div class="negar-drawer-body p-4 flex-1 overflow-y-auto">
-					<?php get_template_part( 'template-parts/shop/sidebar-filters' ); ?>
+
+				<div class="row">
+					<!-- Sidebar Filters Column: col-6 col-md-4 col-xl-3 category-nk__filter-col -->
+					<div class="col-6 col-md-4 col-xl-3 category-nk__filter-col">
+						<?php get_template_part( 'template-parts/shop/sidebar-filters' ); ?>
+					</div>
+
+					<!-- Products Column: col-lg-8 col-xl-9 -->
+					<div class="col-lg-8 col-xl-9">
+						<?php get_template_part( 'template-parts/shop/toolbar' ); ?>
+						<?php get_template_part( 'template-parts/shop/loop' ); ?>
+					</div>
 				</div>
+
+				<!-- Archive Description -->
+				<?php if ( is_product_taxonomy() ) : ?>
+					<div class="kaveh-archive-description mt-5">
+						<?php do_action( 'woocommerce_archive_description' ); ?>
+					</div>
+				<?php endif; ?>
+
 			</div>
-
-			<!-- Main Catalog Content -->
-			<div class="negar-shop-content lg:col-span-9">
-				<!-- Toolbar (Count, Sort, Grid/List switch, Mobile button) -->
-				<?php get_template_part( 'template-parts/shop/toolbar' ); ?>
-
-				<!-- Products Loop & Pagination -->
-				<?php get_template_part( 'template-parts/shop/loop' ); ?>
-			</div>
-
-		</div>
-
-	</div>
+		</section>
+	</main>
 </div>
 
 <?php

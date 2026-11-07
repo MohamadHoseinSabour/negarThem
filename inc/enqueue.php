@@ -429,14 +429,41 @@ function negar_shop_scripts() {
 		wp_enqueue_script(
 			'kaveh-ajax-shop-method-js',
 			NEGAR_SHOP_URI . '/assets/js/vendor/kaveh-ajax-shop-method.js',
-			array( 'jquery' ),
+			array( 'jquery', 'kaveh-nouislider-js' ),
 			NEGAR_SHOP_VERSION,
 			true
 		);
+
+		global $wpdb;
+		$prices = $wpdb->get_row( "SELECT MIN(CAST(meta_value AS DECIMAL(10,2))) as min_p, MAX(CAST(meta_value AS DECIMAL(10,2))) as max_p FROM {$wpdb->postmeta} WHERE meta_key = '_price' AND meta_value > 0" );
+		$lowest_price  = ( $prices && $prices->min_p ) ? (int) $prices->min_p : 10000;
+		$highest_price = ( $prices && $prices->max_p ) ? (int) $prices->max_p : 100000000;
+
+		wp_localize_script(
+			'kaveh-ajax-shop-method-js',
+			'kavehShopData',
+			array(
+				'ajaxurl'           => admin_url( 'admin-ajax.php' ),
+				'ksiteurl'          => admin_url( 'admin-ajax.php' ),
+				'fallback_url'      => admin_url( 'admin-ajax.php' ),
+				'shop_filter_nonce' => wp_create_nonce( 'kaveh_shop_filter_nonce' ),
+				'highestPrice'      => $highest_price,
+				'lowestPrice'       => $lowest_price,
+				'currency_code'     => get_woocommerce_currency(),
+				'archiveContext'    => array(
+					'is_shop'  => is_shop(),
+					'taxonomy' => is_tax() ? get_queried_object()->taxonomy : '',
+					'term_id'  => is_tax() ? get_queried_object_id() : 0,
+				),
+				'invalid_response'  => 'پاسخی از سرور دریافت نشد.',
+				'filter_error'      => 'خطایی در فیلتر محصولات رخ داد.',
+			)
+		);
+
 		wp_enqueue_script(
 			'negar-shop-shop',
 			NEGAR_SHOP_URI . '/assets/js/shop.js',
-			array( 'negar-shop-header-footer', 'kaveh-nouislider-js' ),
+			array( 'negar-shop-header-footer', 'kaveh-ajax-shop-method-js' ),
 			NEGAR_SHOP_VERSION,
 			true
 		);

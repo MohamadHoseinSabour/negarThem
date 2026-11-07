@@ -1,120 +1,188 @@
 <?php
 /**
- * Shop Sidebar Filters Component
+ * Shop Sidebar Filters Component - Exact Match to Demo 43 (category-nk__filter)
  *
  * @package Negar_Shop
- * @version 1.0.0
+ * @version 2.2.0
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+defined( 'ABSPATH' ) || exit;
 
-$price_range   = negar_shop_get_price_range();
-$current_cat   = is_product_category() ? get_queried_object()->slug : ( isset( $_GET['product_cat'] ) ? sanitize_text_field( wp_unslash( $_GET['product_cat'] ) ) : '' ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-$current_min   = isset( $_GET['min_price'] ) ? absint( $_GET['min_price'] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-$current_max   = isset( $_GET['max_price'] ) ? absint( $_GET['max_price'] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-$in_stock      = isset( $_GET['in_stock'] ) && '1' === $_GET['in_stock']; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-$on_sale       = isset( $_GET['on_sale'] ) && '1' === $_GET['on_sale']; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+// Retrieve prices
+global $wpdb;
+$prices = $wpdb->get_row( "SELECT MIN(CAST(meta_value AS DECIMAL(10,2))) as min_p, MAX(CAST(meta_value AS DECIMAL(10,2))) as max_p FROM {$wpdb->postmeta} WHERE meta_key = '_price' AND meta_value > 0" );
+$lowest_price  = ( $prices && $prices->min_p ) ? (int) $prices->min_p : 10000;
+$highest_price = ( $prices && $prices->max_p ) ? (int) $prices->max_p : 100000000;
 
+$min_price = isset( $_GET['min_price'] ) ? absint( $_GET['min_price'] ) : '';
+$max_price = isset( $_GET['max_price'] ) ? absint( $_GET['max_price'] ) : '';
+$in_stock  = isset( $_GET['in_stock'] ) && '1' === $_GET['in_stock'];
+$on_sale   = isset( $_GET['on_sale'] ) && '1' === $_GET['on_sale'];
+
+// Retrieve categories
 $categories = get_terms(
 	array(
 		'taxonomy'   => 'product_cat',
 		'hide_empty' => true,
-		'parent'     => 0,
+	)
+);
+
+// Retrieve brands
+$brands = get_terms(
+	array(
+		'taxonomy'   => 'product_brand',
+		'hide_empty' => true,
 	)
 );
 ?>
 
-<div class="negar-sidebar-filters flex flex-col gap-5">
+<div id="filter" class="category-nk__filter d-flex flex-column justify-content-end justify-content-lg-start">
+	<div class="category-nk__filter__backdrop position-fixed top-0 end-0 w-100 h-100 d-lg-none" data-close="#filter"></div>
+	<div class="category-nk__filter__content bg-white d-flex flex-column">
 
-	<!-- Widget 1: Categories -->
-	<div class="negar-filter-widget bg-surface border border-border rounded-lg p-4 shadow-sm">
-		<h4 class="negar-filter-widget-title text-sm font-bold text-dark pb-3 mb-3 border-b border-border flex items-center justify-between">
-			<span><?php esc_html_e( 'دسته‌بندی محصولات', 'negar-shop' ); ?></span>
-			<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-muted"><path d="m6 9 6 6 6-6"/></svg>
-		</h4>
-		<ul class="negar-filter-categories flex flex-col gap-2 max-h-60 overflow-y-auto pr-1">
-			<li>
-				<label class="flex items-center justify-between text-xs sm:text-sm text-dark hover:text-primary cursor-pointer transition-colors py-1">
-					<span class="inline-flex items-center gap-2">
-						<input type="radio" name="product_cat" value="" <?php checked( empty( $current_cat ) ); ?> class="negar-filter-cat-radio text-primary focus:ring-primary h-4 w-4">
-						<span><?php esc_html_e( 'همه دسته‌ها', 'negar-shop' ); ?></span>
-					</span>
-				</label>
-			</li>
-			<?php if ( ! empty( $categories ) && ! is_wp_error( $categories ) ) : ?>
-				<?php foreach ( $categories as $cat ) : ?>
-					<li>
-						<label class="flex items-center justify-between text-xs sm:text-sm text-dark hover:text-primary cursor-pointer transition-colors py-1">
-							<span class="inline-flex items-center gap-2">
-								<input type="radio" name="product_cat" value="<?php echo esc_attr( $cat->slug ); ?>" <?php checked( $current_cat === $cat->slug ); ?> class="negar-filter-cat-radio text-primary focus:ring-primary h-4 w-4">
-								<span><?php echo esc_html( $cat->name ); ?></span>
-							</span>
-							<span class="text-xs text-muted font-normal bg-slate-100 px-2 py-0.5 rounded-full">
-								<?php echo esc_html( number_format_i18n( $cat->count ) ); ?>
-							</span>
-						</label>
-					</li>
-				<?php endforeach; ?>
-			<?php endif; ?>
-		</ul>
-	</div>
-
-	<!-- Widget 2: Availability & Deals Toggles -->
-	<div class="negar-filter-widget bg-surface border border-border rounded-lg p-4 shadow-sm flex flex-col gap-3">
-		<!-- In Stock Toggle -->
-		<label class="flex items-center justify-between cursor-pointer py-1">
-			<span class="text-xs sm:text-sm font-medium text-dark"><?php esc_html_e( 'فقط کالاهای موجود', 'negar-shop' ); ?></span>
-			<span class="relative inline-flex items-center">
-				<input type="checkbox" id="negar-filter-in-stock" name="in_stock" value="1" <?php checked( $in_stock ); ?> class="sr-only peer">
-				<span class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary transition-colors"></span>
-			</span>
-		</label>
-
-		<hr class="border-border">
-
-		<!-- On Sale Toggle -->
-		<label class="flex items-center justify-between cursor-pointer py-1">
-			<span class="text-xs sm:text-sm font-medium text-dark"><?php esc_html_e( 'فقط کالاهای تخفیف‌دار', 'negar-shop' ); ?></span>
-			<span class="relative inline-flex items-center">
-				<input type="checkbox" id="negar-filter-on-sale" name="on_sale" value="1" <?php checked( $on_sale ); ?> class="sr-only peer">
-				<span class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-danger transition-colors"></span>
-			</span>
-		</label>
-	</div>
-
-	<!-- Widget 3: Price Range -->
-	<div class="negar-filter-widget bg-surface border border-border rounded-lg p-4 shadow-sm">
-		<h4 class="negar-filter-widget-title text-sm font-bold text-dark pb-3 mb-3 border-b border-border flex items-center justify-between">
-			<span><?php esc_html_e( 'محدوده قیمت (تومان)', 'negar-shop' ); ?></span>
-			<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-muted"><path d="m6 9 6 6 6-6"/></svg>
-		</h4>
-		<div class="flex flex-col gap-3">
-			<div class="flex items-center gap-2">
-				<div class="flex-1">
-					<label for="negar-min-price" class="text-xs text-muted block mb-1"><?php esc_html_e( 'از', 'negar-shop' ); ?></label>
-					<input type="number" id="negar-min-price" name="min_price" value="<?php echo esc_attr( $current_min ); ?>" placeholder="<?php echo esc_attr( number_format_i18n( $price_range['min'] ) ); ?>" min="<?php echo esc_attr( $price_range['min'] ); ?>" max="<?php echo esc_attr( $price_range['max'] ); ?>" step="50000" class="w-full text-xs p-2 rounded border border-border bg-slate-50 focus:border-primary focus:bg-white transition-all text-left dir-ltr">
-				</div>
-				<span class="text-muted text-xs mt-4">-</span>
-				<div class="flex-1">
-					<label for="negar-max-price" class="text-xs text-muted block mb-1"><?php esc_html_e( 'تا', 'negar-shop' ); ?></label>
-					<input type="number" id="negar-max-price" name="max_price" value="<?php echo esc_attr( $current_max ); ?>" placeholder="<?php echo esc_attr( number_format_i18n( $price_range['max'] ) ); ?>" min="<?php echo esc_attr( $price_range['min'] ); ?>" max="<?php echo esc_attr( $price_range['max'] ); ?>" step="50000" class="w-full text-xs p-2 rounded border border-border bg-slate-50 focus:border-primary focus:bg-white transition-all text-left dir-ltr">
-				</div>
-			</div>
-			<button type="button" id="negar-apply-price-filter" class="btn btn-outline btn-sm w-full py-1.5 text-xs inline-flex items-center justify-center gap-1">
-				<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-				<span><?php esc_html_e( 'اعمال فیلتر قیمت', 'negar-shop' ); ?></span>
+		<!-- Filter Heading -->
+		<div class="category-nk__filter__heading d-flex align-items-center gap-2 f-payda fw-semibold">
+			<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 18 18" aria-hidden="true">
+				<path fill="#000" d="M3.75 12.9c0-.84 0-1.26.163-1.581a1.5 1.5 0 0 1 .656-.655c.32-.164.74-.164 1.581-.164h1.2c.84 0 1.26 0 1.581.164a1.5 1.5 0 0 1 .656.655c.163.32.163.74.163 1.581v1.2c0 .84 0 1.26-.163 1.581a1.5 1.5 0 0 1-.656.656c-.32.163-.74.163-1.581.163h-1.2c-.84 0-1.26 0-1.581-.163a1.5 1.5 0 0 1-.656-.656c-.163-.32-.163-.74-.163-1.581v-1.2Zm4.5-9c0-.84 0-1.26.163-1.581a1.5 1.5 0 0 1 .656-.656c.32-.163.74-.163 1.581-.163h1.2c.84 0 1.26 0 1.581.163a1.5 1.5 0 0 1 .655.656c.164.32.164.74.164 1.581v1.2c0 .84 0 1.26-.164 1.581a1.5 1.5 0 0 1-.655.656c-.32.163-.74.163-1.581.163h-1.2c-.84 0-1.26 0-1.581-.163a1.5 1.5 0 0 1-.656-.656c-.163-.32-.163-.74-.163-1.581V3.9Z" opacity=".12"></path>
+				<path stroke="#000" stroke-linecap="round" stroke-width="1.125" d="M1.5 13.5h2.25m10.5-9h2.25m-4.5 9h4.5m-15-9H6m.15 12h1.2c.84 0 1.26 0 1.581-.163a1.5 1.5 0 0 0 .656-.656c.163-.32.163-.74.163-1.581v-1.2c0-.84 0-1.26-.163-1.581a1.5 1.5 0 0 0-.656-.655c-.32-.164-.74-.164-1.581-.164h-1.2c-.84 0-1.26 0-1.581.164a1.5 1.5 0 0 0-.656.655c-.163.32-.163.74-.163 1.581v1.2c0 .84 0 1.26.163 1.581a1.5 1.5 0 0 0 .656.656c.32.163.74.163 1.581.163Zm4.5-9h1.2c.84 0 1.26 0 1.581-.163a1.5 1.5 0 0 0 .655-.656c.164-.32.164-.74.164-1.581V3.9c0-.84 0-1.26-.164-1.581a1.5 1.5 0 0 0-.655-.656c-.32-.163-.74-.163-1.581-.163h-1.2c-.84 0-1.26 0-1.581.163a1.5 1.5 0 0 0-.656.656c-.163.32-.163.74-.163 1.581v1.2c0 .84 0 1.26.163 1.581a1.5 1.5 0 0 0 .656.656c.32.163.74.163 1.581.163Z"></path>
+			</svg>
+			فیلترها
+			<button type="button" class="category-nk__filter__close d-lg-none ms-auto p-0" data-close="#filter">
+				<i class="icon-close fs-5 lh-1"></i>
 			</button>
 		</div>
-	</div>
 
-	<!-- Widget 4: Clear Filters Button -->
-	<div class="text-center">
-		<button type="button" class="negar-clear-all-filters btn btn-outline btn-sm w-full py-2 text-xs text-danger border-danger/30 hover:bg-danger hover:text-white transition-colors inline-flex items-center justify-center gap-1.5">
-			<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
-			<span><?php esc_html_e( 'حذف همه فیلترها', 'negar-shop' ); ?></span>
-		</button>
-	</div>
+		<div class="category-nk__filter__items py-4 px-3 d-flex flex-column gap-2">
 
+			<!-- 1. Stock / Sale Switcher -->
+			<div class="widget products-only-filter-widget">
+				<div class="category-nk__filter__box category-nk__filter__products-only d-flex flex-column gap-4">
+					<div class="category-nk__filter__products-only__item">
+						<input type="checkbox" name="exists" id="exists-products" class="kaveh-filter-onstock" hidden="" value="1" autocomplete="off" <?php checked( $in_stock ); ?>>
+						<label for="exists-products" class="d-flex align-items-center justify-content-between gap-2 f-payda">
+							فقط محصولات موجود
+							<span class="position-relative flex-fill flex-grow-0 flex-shrink-0" aria-hidden="true"></span>
+						</label>
+					</div>
+					<div class="category-nk__filter__products-only__item">
+						<input type="checkbox" name="off" id="onlysale" class="kaveh-filter-onsale" hidden="" value="1" autocomplete="off" <?php checked( $on_sale ); ?>>
+						<label for="onlysale" class="d-flex align-items-center justify-content-between gap-2 f-payda">
+							فقط تخفیف دار
+							<span class="position-relative flex-fill flex-grow-0 flex-shrink-0" aria-hidden="true"></span>
+						</label>
+					</div>
+				</div>
+			</div>
+
+			<!-- 2. Price Range Slider -->
+			<div class="widget range-price-widget">
+				<div class="category-nk__filter__box category-nk__filter__range-price">
+					<div class="category-nk__filter__box__heading d-flex align-items-center gap-2 f-payda fw-semibold" data-bs-toggle="collapse" data-bs-target="#range-price-box" aria-expanded="true">
+						<i class="icon icon-sliders-horiz lh-1" aria-hidden="true"></i>
+						<span>بر اساس قیمت</span>
+						<i class="arrow icon-chevron-down-2 lh-1 ms-auto" aria-hidden="true"></i>
+					</div>
+					<div id="range-price-box" class="collapse show">
+						<div class="category-nk__filter__range-price__field d-flex align-items-center gap-3 mt-4 mb-2">
+							<span class="f-payda">از</span>
+							<div class="position-relative flex-grow-1">
+								<input type="text" name="min" value="<?php echo esc_attr( $min_price ); ?>" id="category-price-min" class="form-control f-payda" inputmode="numeric" autocomplete="off">
+								<span class="toman-symbol toman-symbol--modern category-nk__filter__range-price__currency lh-1 position-absolute top-50 translate-middle-y" aria-hidden="true">
+									<svg width="19.5" height="18" viewBox="0 0 13 12" fill="#0a0a0a"><use href="#kaveh-toman-mark"></use></svg>
+								</span>
+							</div>
+						</div>
+						<div class="category-nk__filter__range-price__field d-flex align-items-center gap-3">
+							<span class="f-payda">تا</span>
+							<div class="position-relative flex-grow-1">
+								<input type="text" name="max" value="<?php echo esc_attr( $max_price ); ?>" id="category-price-max" class="form-control f-payda" inputmode="numeric" autocomplete="off">
+								<span class="toman-symbol toman-symbol--modern category-nk__filter__range-price__currency lh-1 position-absolute top-50 translate-middle-y" aria-hidden="true">
+									<svg width="19.5" height="18" viewBox="0 0 13 12" fill="#0a0a0a"><use href="#kaveh-toman-mark"></use></svg>
+								</span>
+							</div>
+						</div>
+						<div id="category-price" class="range-price-nk mt-4 mb-3"></div>
+						<div class="range-price-text d-flex align-items-center justify-content-end gap-1 f-payda">
+							<div>
+								از <span id="range-price-text-min"><?php echo esc_html( number_format_i18n( (float) $lowest_price ) ); ?></span>
+								تا <span id="range-price-text-max"><?php echo esc_html( number_format_i18n( (float) $highest_price ) ); ?></span>
+							</div>
+							<span class="toman-symbol toman-symbol--modern category-nk__filter__range-price__currency lh-1" aria-hidden="true">
+								<svg width="19.5" height="18" viewBox="0 0 13 12" fill="#0a0a0a"><use href="#kaveh-toman-mark"></use></svg>
+							</span>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- 3. Category Filter -->
+			<?php if ( ! empty( $categories ) && ! is_wp_error( $categories ) ) : ?>
+			<div class="widget category-filter-widget">
+				<div class="category-nk__filter__box category-nk__filter__categories">
+					<div class="category-nk__filter__box__heading d-flex align-items-center gap-2 f-payda fw-semibold" data-bs-toggle="collapse" data-bs-target="#category-filter-box" aria-expanded="true">
+						<i class="icon icon-menu-rec lh-1" aria-hidden="true"></i>
+						<span>بر اساس دسته‌بندی</span>
+						<i class="arrow icon-chevron-down-2 lh-1 ms-auto" aria-hidden="true"></i>
+					</div>
+					<div id="category-filter-box" class="collapse show">
+						<div class="category-nk__filter__search position-relative mt-4 mb-3">
+							<i class="icon-search-4 position-absolute top-50 translate-middle-y lh-1" aria-hidden="true"></i>
+							<input type="search" class="form-control category-nk__filter__search-input f-payda shadow-none" placeholder="جستجوی دسته‌بندی‌ها..." autocomplete="off">
+						</div>
+						<div class="category-nk__filter__categories__title f-payda mb-3">همه محصولات</div>
+						<div class="category-nk__filter__scroll">
+							<ul class="category-nk__filter__categories__items cathidden d-flex flex-column gap-3">
+								<input class="filterhiddeninput" type="hidden" id="filters-category" autocomplete="off" value="">
+								<?php foreach ( $categories as $cat ) : ?>
+									<li>
+										<input type="checkbox" name="category" id="category-<?php echo esc_attr( $cat->term_id ); ?>" myid="<?php echo esc_attr( $cat->term_id ); ?>" hidden="" autocomplete="off">
+										<label for="category-<?php echo esc_attr( $cat->term_id ); ?>" class="d-flex align-items-center gap-3 f-payda fw-normal">
+											<span class="position-relative rounded-circle flex-fill flex-grow-0 flex-shrink-0" aria-hidden="true"></span>
+											<?php echo esc_html( $cat->name ); ?>
+										</label>
+									</li>
+								<?php endforeach; ?>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+			<?php endif; ?>
+
+			<!-- 4. Brand Filter -->
+			<?php if ( ! empty( $brands ) && ! is_wp_error( $brands ) ) : ?>
+			<div class="widget brand-filter-widget">
+				<div class="category-nk__filter__box category-nk__filter__categories category-nk__filter__brands">
+					<div class="category-nk__filter__box__heading d-flex align-items-center gap-2 f-payda fw-semibold" data-bs-toggle="collapse" data-bs-target="#brand-filter-box" aria-expanded="true">
+						<i class="icon icon-menu-rec lh-1" aria-hidden="true"></i>
+						<span>بر اساس برند</span>
+						<i class="arrow icon-chevron-down-2 lh-1 ms-auto" aria-hidden="true"></i>
+					</div>
+					<div id="brand-filter-box" class="collapse show">
+						<div class="category-nk__filter__search position-relative mt-4 mb-3">
+							<i class="icon-search-4 position-absolute top-50 translate-middle-y lh-1" aria-hidden="true"></i>
+							<input type="search" class="form-control category-nk__filter__search-input f-payda shadow-none" placeholder="جستجوی برندها..." autocomplete="off">
+						</div>
+						<div class="category-nk__filter__categories__title f-payda mb-3">همه برندها</div>
+						<div class="category-nk__filter__scroll">
+							<ul class="category-nk__filter__categories__items brandhidden d-flex flex-column gap-3">
+								<input class="filterhiddeninputbrand" type="hidden" id="filters-brand" autocomplete="off" value="">
+								<?php foreach ( $brands as $brand ) : ?>
+									<li>
+										<input type="checkbox" name="brand" id="brand-<?php echo esc_attr( $brand->term_id ); ?>" myid="<?php echo esc_attr( $brand->term_id ); ?>" hidden="" autocomplete="off">
+										<label for="brand-<?php echo esc_attr( $brand->term_id ); ?>" class="d-flex align-items-center gap-3 f-payda fw-normal">
+											<span class="position-relative rounded-circle flex-fill flex-grow-0 flex-shrink-0" aria-hidden="true"></span>
+											<?php echo esc_html( $brand->name ); ?>
+										</label>
+									</li>
+								<?php endforeach; ?>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+			<?php endif; ?>
+
+		</div>
+	</div>
 </div>
