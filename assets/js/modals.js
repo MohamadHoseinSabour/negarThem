@@ -69,18 +69,30 @@
 		});
 	}
 
+	let lastActionMap = {};
+
 	/**
-	 * Canonical toast notification function with de-duplication and a11y announcement.
+	 * Canonical toast notification function with action-based & string-based de-duplication and a11y announcement.
 	 *
 	 * @param {string} message Toast message.
 	 * @param {string} type 'success' | 'error' | 'warning' | 'info'
 	 * @param {number} duration Timeout in ms.
+	 * @param {string|null} actionKey Action ID to deduplicate across different messages (e.g. 'cart_add')
 	 */
-	window.negarToast = function (message, type = 'info', duration = 3500) {
+	window.negarToast = function (message, type = 'info', duration = 3500, actionKey = null) {
 		if (!message) return;
 
-		// De-duplication: prevent identical toasts within 1500ms
 		const now = Date.now();
+
+		// Action-based deduplication: suppress duplicate actions within 1800ms
+		if (actionKey) {
+			if (lastActionMap[actionKey] && (now - lastActionMap[actionKey]) < 1800) {
+				return;
+			}
+			lastActionMap[actionKey] = now;
+		}
+
+		// De-duplication: prevent identical toasts within 1500ms
 		if (lastToast.message === message && (now - lastToast.timestamp) < 1500) {
 			return;
 		}
@@ -670,13 +682,275 @@
 		// Listen to jQuery / WooCommerce added to cart event for toast feedback
 		if (window.jQuery) {
 			window.jQuery(document.body).on('added_to_cart', function () {
-				window.negarToast('محصول با موفقیت به سبد خرید اضافه شد.', 'success');
+				window.negarToast('محصول با موفقیت به سبد خرید اضافه شد.', 'success', 3500, 'cart_add');
 				// On non-cart/non-checkout pages, hide duplicate notices
 				if (!document.body.classList.contains('woocommerce-cart') && !document.body.classList.contains('woocommerce-checkout')) {
 					window.jQuery('.woocommerce-message, .woocommerce-notices-wrapper .woocommerce-message').hide();
 				}
 			});
 		}
+
+		// Customer Phone OTP Authentication Modal Controller
+		initLoginOtpModal();
 	});
+
+	/**
+	 * Customer Phone OTP Authentication Modal Controller
+	 */
+	function initLoginOtpModal() {
+		const modal = document.getElementById('negar-login-otp-modal');
+		if (!modal) return;
+
+		const closeBtn = modal.querySelector('.negar-modal-close');
+		const step1Form = document.getElementById('negar-otp-step1-form');
+		const step2Form = document.getElementById('negar-otp-step2-form');
+		const phoneInput = document.getElementById('negar-otp-phone-input');
+		const codeInput = document.getElementById('negar-otp-code-input');
+		const targetDisplay = document.getElementById('negar-otp-target-display');
+		const backBtn = document.getElementById('negar-otp-back-btn');
+		const timerWrap = document.getElementById('negar-otp-timer-wrap');
+		const timerEl = document.getElementById('negar-otp-timer');
+		const resendBtn = document.getElementById('negar-otp-resend-btn');
+		const step1Error = document.getElementById('negar-otp-step1-error');
+		const step2Error = document.getElementById('negar-otp-step2-error');
+		const step1Submit = document.getElementById('negar-otp-step1-submit');
+		const step2Submit = document.getElementById('negar-otp-step2-submit');
+
+		let countdownInterval = null;
+		let activePhone = '';
+
+		function toPersianDigits(num) {
+			const persian = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+			return String(num).padStart(2, '0').replace(/[0-9]/g, (w) => persian[+w]);
+		}
+
+		function normalizePhoneDigits(val) {
+			const persian = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+			const arabic  = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+			let res = val || '';
+			for (let i = 0; i < 10; i++) {
+				res = res.replaceAll(persian[i], String(i)).replaceAll(arabic[i], String(i));
+			}
+			return res.replace(/[^\d+]/g, '');
+		}
+
+		function openModal() {
+			modal.classList.remove('hidden');
+			resetForms();
+			setTimeout(() => {
+				if (phoneInput) phoneInput.focus();
+			}, 100);
+			document.body.classList.add('overflow-hidden');
+		}
+
+		function closeModal() {
+			modal.classList.add('hidden');
+			clearInterval(countdownInterval);
+			document.body.classList.remove('overflow-hidden');
+		}
+
+		function resetForms() {
+			if (step1Form) {
+				step1Form.reset();
+				step1Form.classList.remove('hidden');
+			}
+			if (step2Form) {
+				step2Form.reset();
+				step2Form.classList.add('hidden');
+			}
+			if (step1Error) step1Error.classList.add('hidden');
+			if (step2Error) step2Error.classList.add('hidden');
+			clearInterval(countdownInterval);
+		}
+
+		function startTimer(seconds) {
+			clearInterval(countdownInterval);
+			let remaining = seconds;
+			if (timerWrap) timerWrap.classList.remove('hidden');
+			if (resendBtn) {
+				resendBtn.classList.add('hidden');
+				resendBtn.disabled = true;
+			}
+
+			function updateTimerUI() {
+				const m = Math.floor(remaining / 60);
+				const s = remaining % 60;
+				if (timerEl) {
+					timerEl.textContent = `${toPersianDigits(m)}:${toPersianDigits(s)}`;
+				}
+				if (remaining <= 0) {
+					clearInterval(countdownInterval);
+					if (timerWrap) timerWrap.classList.add('hidden');
+					if (resendBtn) {
+						resendBtn.classList.remove('hidden');
+						resendBtn.disabled = false;
+					}
+				}
+				remaining--;
+			}
+
+			updateTimerUI();
+			countdownInterval = setInterval(updateTimerUI, 1000);
+		}
+
+		// Triggers: any button with class .negar-login-trigger
+		document.addEventListener('click', function (e) {
+			const trigger = e.target.closest('.negar-login-trigger');
+			if (trigger) {
+				e.preventDefault();
+				openModal();
+			}
+		});
+
+		if (closeBtn) {
+			closeBtn.addEventListener('click', closeModal);
+		}
+
+		modal.addEventListener('click', function (e) {
+			if (e.target === modal) {
+				closeModal();
+			}
+		});
+
+		document.addEventListener('keydown', function (e) {
+			if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+				closeModal();
+			}
+		});
+
+		if (backBtn) {
+			backBtn.addEventListener('click', function () {
+				clearInterval(countdownInterval);
+				if (step2Form) step2Form.classList.add('hidden');
+				if (step1Form) step1Form.classList.remove('hidden');
+				if (step1Error) step1Error.classList.add('hidden');
+				if (phoneInput) phoneInput.focus();
+			});
+		}
+
+		if (resendBtn) {
+			resendBtn.addEventListener('click', function () {
+				if (!activePhone) return;
+				requestOtp(activePhone);
+			});
+		}
+
+		function requestOtp(phone) {
+			const spinner = step1Submit ? step1Submit.querySelector('.negar-otp-spinner') : null;
+			if (spinner) spinner.classList.remove('hidden');
+			if (step1Submit) step1Submit.disabled = true;
+			if (step1Error) step1Error.classList.add('hidden');
+
+			const formData = new URLSearchParams();
+			formData.append('action', 'negar_auth_send_otp');
+			formData.append('nonce', params.nonce);
+			formData.append('phone', phone);
+
+			fetch(params.ajaxUrl, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
+				body: formData.toString(),
+			})
+				.then((res) => res.json())
+				.then((data) => {
+					if (spinner) spinner.classList.add('hidden');
+					if (step1Submit) step1Submit.disabled = false;
+
+					if (data.success) {
+						activePhone = phone;
+						if (targetDisplay) targetDisplay.textContent = phone;
+						if (step1Form) step1Form.classList.add('hidden');
+						if (step2Form) step2Form.classList.remove('hidden');
+						startTimer(data.data.cooldown || 60);
+						if (data.data.mock_code && codeInput) {
+							codeInput.value = data.data.mock_code;
+						}
+						if (codeInput) codeInput.focus();
+						window.negarToast(data.data.message || 'کد تایید ارسال شد.', 'info');
+					} else {
+						if (step1Error) {
+							step1Error.textContent = data.data?.message || 'خطا در ارسال کد تایید';
+							step1Error.classList.remove('hidden');
+						}
+					}
+				})
+				.catch(() => {
+					if (spinner) spinner.classList.add('hidden');
+					if (step1Submit) step1Submit.disabled = false;
+					if (step1Error) {
+						step1Error.textContent = 'خطای ارتباط با سرور. لطفاً مجدداً امتحان کنید.';
+						step1Error.classList.remove('hidden');
+					}
+				});
+		}
+
+		if (step1Form) {
+			step1Form.addEventListener('submit', function (e) {
+				e.preventDefault();
+				const raw = phoneInput ? phoneInput.value.trim() : '';
+				const normalized = normalizePhoneDigits(raw);
+				requestOtp(normalized);
+			});
+		}
+
+		if (step2Form) {
+			step2Form.addEventListener('submit', function (e) {
+				e.preventDefault();
+				const rawCode = codeInput ? codeInput.value.trim() : '';
+				const code = normalizePhoneDigits(rawCode);
+				const spinner = step2Submit ? step2Submit.querySelector('.negar-otp-spinner') : null;
+
+				if (!code || code.length < 5) {
+					if (step2Error) {
+						step2Error.textContent = 'لطفاً کد ۵ رقمی را کامل وارد نمایید.';
+						step2Error.classList.remove('hidden');
+					}
+					return;
+				}
+
+				if (spinner) spinner.classList.remove('hidden');
+				if (step2Submit) step2Submit.disabled = true;
+				if (step2Error) step2Error.classList.add('hidden');
+
+				const formData = new URLSearchParams();
+				formData.append('action', 'negar_auth_verify_otp');
+				formData.append('nonce', params.nonce);
+				formData.append('phone', activePhone);
+				formData.append('code', code);
+
+				fetch(params.ajaxUrl, {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
+					body: formData.toString(),
+				})
+					.then((res) => res.json())
+					.then((data) => {
+						if (spinner) spinner.classList.add('hidden');
+						if (step2Submit) step2Submit.disabled = false;
+
+						if (data.success) {
+							window.negarToast(data.data.message || 'ورود با موفقیت انجام شد.', 'success');
+							closeModal();
+							setTimeout(() => {
+								window.location.reload();
+							}, 600);
+						} else {
+							if (step2Error) {
+								step2Error.textContent = data.data?.message || 'کد وارد شده معتبر نمی‌باشد.';
+								step2Error.classList.remove('hidden');
+							}
+						}
+					})
+					.catch(() => {
+						if (spinner) spinner.classList.add('hidden');
+						if (step2Submit) step2Submit.disabled = false;
+						if (step2Error) {
+							step2Error.textContent = 'خطای سرور در بررسی کد. لطفاً دوباره تلاش کنید.';
+							step2Error.classList.remove('hidden');
+						}
+					});
+			});
+		}
+	}
 
 })();

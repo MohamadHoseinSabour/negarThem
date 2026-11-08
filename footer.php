@@ -42,6 +42,9 @@ get_template_part( 'template-parts/modals/wishlist-drawer' );
 // Product Compare Modal (MODAL-03)
 get_template_part( 'template-parts/modals/compare-modal' );
 
+// Customer Phone OTP Authentication Modal (AUTH-01)
+get_template_part( 'template-parts/modals/login-otp-modal' );
+
 // Toast Notification Alerts Container (MODAL-04)
 get_template_part( 'template-parts/modals/toast' );
 ?>

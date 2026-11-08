@@ -18,9 +18,9 @@ jQuery(document).ready(function ($) {
   var cart_url = kavehShopData.cart_url;
   var fontFamily = kavehShopData.fontFamily || 'IRANSans';
 
-  function notifySuccess(msg) {
+  function notifySuccess(msg, actionKey = 'cart_add') {
     if (typeof window.negarToast === 'function') {
-      window.negarToast(msg, 'success');
+      window.negarToast(msg, 'success', 3500, actionKey);
       return;
     }
     if (window.Notiflix && Notiflix.Notify) {
