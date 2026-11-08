@@ -41,7 +41,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<line x1="3" y1="6" x2="21" y2="6"></line>
 					<path d="M16 10a4 4 0 0 1-8 0"></path>
 				</svg>
-				<span class="negar-cart-count badge badge-discount absolute -top-1.5 -right-2 text-3xs px-1 py-0">
+				<span class="negar-cart-count-mobile negar-cart-count badge badge-discount absolute -top-1.5 -right-2 text-3xs px-1 py-0">
 					<?php echo class_exists( 'WooCommerce' ) ? esc_html( WC()->cart->get_cart_contents_count() ) : '0'; ?>
 				</span>
 			</div>

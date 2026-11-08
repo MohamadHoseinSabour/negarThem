@@ -28,8 +28,8 @@ $has_logo       = true;
 		</div>
 
 		<!-- 2. Center: Search Bar with Nested Red Category Button -->
-		<div class="header-search flex-1 max-w-xl lg:max-w-2xl relative hidden md:block">
-			<form role="search" method="get" action="<?php echo esc_url( home_url( '/' ) ); ?>" class="relative flex items-center bg-slate-100/90 hover:bg-slate-100 focus-within:bg-white rounded-full border border-slate-200/70 focus-within:border-rose-500 focus-within:ring-2 focus-within:ring-rose-500/10 transition-all p-1">
+		<div class="header-search header-search-wrap flex-1 max-w-xl lg:max-w-2xl relative hidden md:block">
+			<form role="search" method="get" action="<?php echo esc_url( home_url( '/' ) ); ?>" class="negar-ajax-search-form relative flex items-center bg-slate-100/90 hover:bg-slate-100 focus-within:bg-white rounded-full border border-slate-200/70 focus-within:border-rose-500 focus-within:ring-2 focus-within:ring-rose-500/10 transition-all p-1">
 				
 				<!-- Nested Category Pill Button (Right side inside input in RTL) -->
 				<div class="relative shrink-0">
@@ -52,6 +52,11 @@ $has_logo       = true;
 					required
 				>
 				<input type="hidden" name="post_type" value="product">
+
+				<!-- Search Spinner Indicator -->
+				<span class="search-spinner hidden p-1.5 text-rose-500 animate-spin flex items-center justify-center shrink-0">
+					<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
+				</span>
 
 				<!-- Submit / Search Icon Button (Left side inside input in RTL) -->
 				<button type="submit" class="search-submit p-2 text-slate-400 hover:text-rose-600 transition flex items-center justify-center shrink-0" aria-label="<?php esc_attr_e( 'جستجو', 'negar-shop' ); ?>">
@@ -93,7 +98,7 @@ $has_logo       = true;
 							</svg>
 							
 							<!-- Badge Count -->
-							<span class="negar-cart-count absolute -top-1 -right-1 bg-white text-rose-600 border border-rose-600 rounded-full text-[10px] w-4.5 h-4.5 flex items-center justify-center font-black leading-none">
+							<span class="negar-cart-count-header negar-cart-count absolute -top-1 -right-1 bg-white text-rose-600 border border-rose-600 rounded-full text-[10px] w-4.5 h-4.5 flex items-center justify-center font-black leading-none">
 								<?php echo esc_html( WC()->cart->get_cart_contents_count() ); ?>
 							</span>
 						</div>

@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<h3 class="text-base font-bold text-slate-800 m-0">
 				<?php esc_html_e( 'سبد خرید شما', 'negar-shop' ); ?>
 			</h3>
-			<span class="negar-cart-count badge badge-discount text-xs">
+			<span class="negar-cart-count-drawer negar-cart-count badge badge-discount text-xs">
 				<?php echo class_exists( 'WooCommerce' ) ? esc_html( WC()->cart->get_cart_contents_count() ) : '0'; ?>
 			</span>
 		</div>

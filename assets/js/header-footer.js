@@ -26,10 +26,16 @@
 
       let debounceTimer = null;
       let selectedIndex = -1;
+      let activeController = null;
 
       input.addEventListener('input', function () {
         clearTimeout(debounceTimer);
         const query = this.value.trim();
+
+        if (activeController) {
+          activeController.abort();
+          activeController = null;
+        }
 
         if (query.length < 2) {
           resultsContainer.innerHTML = '';
@@ -41,10 +47,12 @@
         if (spinner) spinner.classList.remove('hidden');
 
         debounceTimer = setTimeout(() => {
+          activeController = new AbortController();
+          const signal = activeController.signal;
           const category = catSelect ? catSelect.value : '';
           const url = `${params.ajaxUrl}?action=negar_shop_ajax_search&nonce=${params.nonce}&term=${encodeURIComponent(query)}&category=${encodeURIComponent(category)}`;
 
-          fetch(url)
+          fetch(url, { signal: signal })
             .then((res) => res.json())
             .then((data) => {
               if (spinner) spinner.classList.add('hidden');
@@ -54,18 +62,15 @@
                 resultsContainer.classList.remove('hidden');
                 selectedIndex = -1;
               } else {
-                resultsContainer.innerHTML = `
-                  <div class="p-6 text-center text-xs text-slate-500">
-                    <p class="m-0">${params.i18n ? params.i18n.error || 'کالایی با این مشخصات یافت نشد.' : 'کالایی یافت نشد.'}</p>
-                  </div>
-                `;
+                renderEmptySearchResults(resultsContainer);
                 resultsContainer.classList.remove('hidden');
               }
             })
-            .catch(() => {
+            .catch((err) => {
+              if (err.name === 'AbortError') return;
               if (spinner) spinner.classList.add('hidden');
             });
-        }, 300);
+        }, 280);
       });
 
       // Keyboard Navigation
@@ -100,31 +105,74 @@
     });
   }
 
+  function renderEmptySearchResults(container) {
+    container.innerHTML = '';
+    const emptyBox = document.createElement('div');
+    emptyBox.className = 'p-6 text-center text-xs text-slate-500';
+    const p = document.createElement('p');
+    p.className = 'm-0';
+    p.textContent = (params.i18n && params.i18n.error) ? params.i18n.error : 'کالایی با این مشخصات یافت نشد.';
+    emptyBox.appendChild(p);
+    container.appendChild(emptyBox);
+  }
+
   function renderSearchResults(items, viewAllUrl, container) {
-    let html = '<div class="search-results-list divide-y divide-slate-100">';
+    container.innerHTML = '';
+    const list = document.createElement('div');
+    list.className = 'search-results-list divide-y divide-slate-100 max-h-96 overflow-y-auto';
 
     items.forEach((item) => {
-      html += `
-        <a href="${item.url}" class="search-result-item flex items-center gap-3 p-3 hover:bg-slate-50 transition">
-          <img src="${item.thumb || ''}" alt="${item.title}" class="search-result-thumb w-12 h-12 object-cover rounded-lg bg-slate-100">
-          <div class="flex-1 min-w-0">
-            <h5 class="search-result-title text-xs font-bold text-slate-800 line-clamp-1 m-0">${item.title}</h5>
-            ${item.category ? `<span class="search-result-category text-3xs text-slate-400 block">${item.category}</span>` : ''}
-          </div>
-          ${item.price ? `<div class="search-result-price text-xs font-bold text-emerald-600 shrink-0">${item.price}</div>` : ''}
-        </a>
-      `;
+      const a = document.createElement('a');
+      a.className = 'search-result-item flex items-center gap-3 p-3 hover:bg-slate-50 transition';
+      a.href = item.url || '#';
+
+      if (item.thumb) {
+        const img = document.createElement('img');
+        img.className = 'search-result-thumb w-12 h-12 object-cover rounded-lg bg-slate-100 shrink-0';
+        img.src = item.thumb;
+        img.alt = item.title || '';
+        img.loading = 'lazy';
+        a.appendChild(img);
+      }
+
+      const meta = document.createElement('div');
+      meta.className = 'flex-1 min-w-0';
+
+      const title = document.createElement('h5');
+      title.className = 'search-result-title text-xs font-bold text-slate-800 line-clamp-1 m-0';
+      title.textContent = item.title || '';
+      meta.appendChild(title);
+
+      if (item.category) {
+        const cat = document.createElement('span');
+        cat.className = 'search-result-category text-3xs text-slate-400 block mt-0.5';
+        cat.textContent = item.category;
+        meta.appendChild(cat);
+      }
+      a.appendChild(meta);
+
+      if (item.price) {
+        const price = document.createElement('div');
+        price.className = 'search-result-price text-xs font-bold text-emerald-600 shrink-0';
+        price.innerHTML = item.price; // Backend price markup is pre-sanitized by WooCommerce
+        a.appendChild(price);
+      }
+
+      list.appendChild(a);
     });
 
-    html += `
-      <div class="p-3 bg-slate-50 text-center border-t border-slate-100">
-        <a href="${viewAllUrl}" class="text-xs font-bold text-emerald-600 hover:underline">
-          مشاهده همه نتایج جستجو ←
-        </a>
-      </div>
-    </div>`;
+    if (viewAllUrl) {
+      const footer = document.createElement('div');
+      footer.className = 'p-3 bg-slate-50 text-center border-t border-slate-100';
+      const viewAllLink = document.createElement('a');
+      viewAllLink.className = 'text-xs font-bold text-rose-600 hover:underline';
+      viewAllLink.href = viewAllUrl;
+      viewAllLink.textContent = 'مشاهده همه نتایج جستجو ←';
+      footer.appendChild(viewAllLink);
+      list.appendChild(footer);
+    }
 
-    container.innerHTML = html;
+    container.appendChild(list);
   }
 
   function highlightItem(items, index) {
@@ -193,6 +241,14 @@
       }
       document.body.classList.add('drawer-open');
     }
+
+    // Expose drawer openers globally
+    window.negarOpenCartDrawer = function () {
+      openDrawer(cartDrawer);
+    };
+    window.negarCloseAllDrawers = function () {
+      closeAllDrawers();
+    };
 
     function closeAllDrawers() {
       if (cartDrawer) {

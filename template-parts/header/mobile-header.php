@@ -51,7 +51,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 
 	<!-- Mobile Search Row -->
-	<div class="px-4 pb-3">
+	<div class="px-4 pb-3 relative header-search-wrap">
 		<form role="search" method="get" class="negar-ajax-search-form flex items-center rounded-xl border border-slate-200 bg-slate-50 focus-within:border-rose-600 focus-within:bg-white transition" action="<?php echo esc_url( home_url( '/' ) ); ?>">
 			<input
 				type="search"
@@ -64,6 +64,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<?php if ( class_exists( 'WooCommerce' ) ) : ?>
 				<input type="hidden" name="post_type" value="product">
 			<?php endif; ?>
+			<span class="search-spinner hidden p-1.5 text-rose-500 animate-spin flex items-center justify-center shrink-0">
+				<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
+			</span>
 			<button type="submit" class="p-2 text-slate-400 hover:text-rose-600" aria-label="<?php esc_attr_e( 'جستجو', 'negar-shop' ); ?>">
 				<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
 					<circle cx="11" cy="11" r="8"></circle>
@@ -71,5 +74,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</svg>
 			</button>
 		</form>
+		<!-- Mobile AJAX Results Dropdown -->
+		<div class="negar-ajax-search-results hidden absolute top-full right-4 left-4 mt-1 bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden z-50"></div>
 	</div>
 </div>

@@ -415,12 +415,30 @@ function negar_shop_scripts() {
 		NEGAR_SHOP_VERSION,
 		true
 	);
-	wp_enqueue_script(
-		'kaveh-login-ajax-js',
-		NEGAR_SHOP_URI . '/assets/js/vendor/kaveh-login-ajax.js',
-		array( 'jquery' ),
-		NEGAR_SHOP_VERSION,
-		true
+
+	$cart_url           = function_exists( 'wc_get_cart_url' ) ? wc_get_cart_url() : home_url( '/cart/' );
+	$redirect_after_add = get_option( 'woocommerce_cart_redirect_after_add' );
+
+	wp_localize_script(
+		'kaveh-ajax-cart-js',
+		'kavehShopData',
+		array(
+			'ajaxurl'                             => admin_url( 'admin-ajax.php' ),
+			'ksiteurl'                            => admin_url( 'admin-ajax.php' ),
+			'fallback_url'                        => admin_url( 'admin-ajax.php' ),
+			'add_to_cart_url'                     => admin_url( 'admin-ajax.php' ),
+			'cart_update_url'                     => admin_url( 'admin-ajax.php' ),
+			'cart_remove_url'                     => admin_url( 'admin-ajax.php' ),
+			'cart_url'                            => $cart_url,
+			'woocommerce_cart_redirect_after_add' => $redirect_after_add ? $redirect_after_add : 'no',
+			'opencartonaddtocart'                 => '1',
+			'product_added_to_cart'               => __( 'محصول با موفقیت به سبد خرید اضافه شد.', 'negar-shop' ),
+			'product_removed_from_cart'           => __( 'محصول از سبد خرید حذف شد.', 'negar-shop' ),
+			'product_remove_error'                => __( 'خطا در حذف محصول از سبد خرید.', 'negar-shop' ),
+			'filter_error'                        => __( 'خطایی در انجام عملیات رخ داد.', 'negar-shop' ),
+			'invalid_response'                    => __( 'پاسخ دریافتی از سرور نامعتبر است.', 'negar-shop' ),
+			'fontFamily'                          => 'Vazirmatn',
+		)
 	);
 
 	// Header & Footer Interactive Script
