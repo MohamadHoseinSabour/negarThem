@@ -485,8 +485,11 @@ function negar_shop_scripts() {
 				'currency_code'     => get_woocommerce_currency(),
 				'archiveContext'    => array(
 					'is_shop'  => is_shop(),
+					'type'     => is_product_category() ? 'category' : ( ( function_exists( 'is_tax' ) && is_tax( 'product_brand' ) ) ? 'brand' : ( is_shop() ? 'shop' : 'archive' ) ),
 					'taxonomy' => is_tax() ? get_queried_object()->taxonomy : '',
 					'term_id'  => is_tax() ? get_queried_object_id() : 0,
+					'termId'   => is_tax() ? get_queried_object_id() : 0,
+					'baseUrl'  => is_shop() ? ( function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/shop/' ) ) : ( is_tax() ? get_term_link( get_queried_object_id() ) : '' ),
 				),
 				'invalid_response'  => 'پاسخی از سرور دریافت نشد.',
 				'filter_error'      => 'خطایی در فیلتر محصولات رخ داد.',
