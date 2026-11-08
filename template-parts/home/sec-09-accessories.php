@@ -36,7 +36,7 @@ $products_query = new WP_Query( $args );
 
 						<!-- 1. Right Side Dedicated Promo Card (Desktop) -->
 						<div class="buy-accessories-nk__right w-100 flex-fill flex-grow-0 flex-shrink-0 position-relative d-none d-lg-block">
-							<div class="buy-accessories-nk__right__box position-relative h-100 d-flex flex-column" style="min-height: 410px;">
+							<div class="buy-accessories-nk__right__box position-relative h-100 d-flex flex-column">
 								<div class="title f-iran-yekan fw-bold text-center position-relative mxw-fit mx-auto mb-2">
 									<?php esc_html_e( 'خرید لوازم جانبی', 'negar-shop' ); ?>
 									<svg xmlns="http://www.w3.org/2000/svg" width="33" height="19" fill="none" viewBox="0 0 33 19" class="position-absolute top-0 end-100" aria-hidden="true">
@@ -72,9 +72,9 @@ $products_query = new WP_Query( $args );
 								<div class="swiper-wrapper">
 
 									<!-- Mobile-only Promo Card in first slide -->
-									<div class="swiper-slide d-lg-none" style="min-width: 240px;">
+									<div class="swiper-slide d-lg-none">
 										<div class="buy-accessories-nk__right w-100 flex-fill flex-grow-0 flex-shrink-0 position-relative">
-											<div class="buy-accessories-nk__right__box position-relative h-100 d-flex flex-column" style="min-height: 410px;">
+											<div class="buy-accessories-nk__right__box position-relative h-100 d-flex flex-column">
 												<div class="title f-iran-yekan fw-bold text-center position-relative mxw-fit mx-auto mb-2">
 													<?php esc_html_e( 'خرید لوازم جانبی', 'negar-shop' ); ?>
 													<svg xmlns="http://www.w3.org/2000/svg" width="33" height="19" fill="none" viewBox="0 0 33 19" class="position-absolute top-0 end-100" aria-hidden="true">
@@ -119,8 +119,8 @@ $products_query = new WP_Query( $args );
 											$discount_pct   = $is_on_sale ? round( ( ( $regular_price - $sale_price ) / $regular_price ) * 100 ) : 0;
 											$active_price   = $is_on_sale ? $sale_price : ( $regular_price ?: (float) $product->get_price() );
 											?>
-											<div class="swiper-slide" style="min-width: 260px;">
-												<div class="product-cart-thirty-one-nk h-100" style="min-height: 410px;">
+											<div class="swiper-slide">
+												<div class="product-cart-thirty-one-nk h-100">
 													<div class="product-nk product-four-nk d-flex flex-column h-100 position-relative">
 
 														<!-- Star Rating -->
