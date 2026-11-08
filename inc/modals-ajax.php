@@ -98,8 +98,13 @@ add_action( 'wp_ajax_nopriv_negar_shop_quickview', 'negar_shop_ajax_quickview' )
 function negar_shop_ajax_get_wishlist_cards() {
 	check_ajax_referer( 'negar_shop_nonce', 'nonce' );
 
-	$raw_ids = isset( $_POST['ids'] ) ? (array) $_POST['ids'] : array();
-	$ids     = array_filter( array_map( 'absint', $raw_ids ) );
+	$raw_ids = array();
+	if ( isset( $_POST['ids'] ) ) {
+		$raw_ids = is_array( $_POST['ids'] ) ? $_POST['ids'] : explode( ',', (string) $_POST['ids'] );
+	} elseif ( isset( $_POST['ids[]'] ) ) {
+		$raw_ids = is_array( $_POST['ids[]'] ) ? $_POST['ids[]'] : explode( ',', (string) $_POST['ids[]'] );
+	}
+	$ids = array_filter( array_map( 'absint', $raw_ids ) );
 
 	if ( empty( $ids ) ) {
 		ob_start();
@@ -158,8 +163,13 @@ add_action( 'wp_ajax_nopriv_negar_shop_get_wishlist_cards', 'negar_shop_ajax_get
 function negar_shop_ajax_get_compare_data() {
 	check_ajax_referer( 'negar_shop_nonce', 'nonce' );
 
-	$raw_ids = isset( $_POST['ids'] ) ? (array) $_POST['ids'] : array();
-	$ids     = array_slice( array_filter( array_map( 'absint', $raw_ids ) ), 0, 4 );
+	$raw_ids = array();
+	if ( isset( $_POST['ids'] ) ) {
+		$raw_ids = is_array( $_POST['ids'] ) ? $_POST['ids'] : explode( ',', (string) $_POST['ids'] );
+	} elseif ( isset( $_POST['ids[]'] ) ) {
+		$raw_ids = is_array( $_POST['ids[]'] ) ? $_POST['ids[]'] : explode( ',', (string) $_POST['ids[]'] );
+	}
+	$ids = array_slice( array_filter( array_map( 'absint', $raw_ids ) ), 0, 4 );
 
 	if ( empty( $ids ) ) {
 		ob_start();
@@ -174,6 +184,18 @@ function negar_shop_ajax_get_compare_data() {
 	}
 
 	$products = wc_get_products( array( 'include' => $ids ) );
+	// Collect all unique attribute names across compared products
+	$all_attributes = array();
+	foreach ( $products as $prod ) {
+		$attrs = $prod->get_attributes();
+		foreach ( $attrs as $attr_key => $attr_obj ) {
+			$label = wc_attribute_label( $attr_key, $prod );
+			if ( ! isset( $all_attributes[ $attr_key ] ) ) {
+				$all_attributes[ $attr_key ] = $label;
+			}
+		}
+	}
+
 	ob_start();
 	?>
 	<div class="overflow-x-auto">
@@ -215,7 +237,32 @@ function negar_shop_ajax_get_compare_data() {
 					<?php endforeach; ?>
 				</tr>
 
-				<!-- Row 4: SKU -->
+				<!-- Row 4: Categories -->
+				<tr class="border-b border-border">
+					<th class="py-3 px-4 bg-slate-50 font-bold text-muted"><?php esc_html_e( 'دسته‌بندی', 'negar-shop' ); ?></th>
+					<?php foreach ( $products as $prod ) : ?>
+						<td class="py-3 px-4 text-center text-xs">
+							<?php echo wc_get_product_category_list( $prod->get_id(), '، ' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+						</td>
+					<?php endforeach; ?>
+				</tr>
+
+				<!-- Row 5: Brand -->
+				<?php if ( taxonomy_exists( 'product_brand' ) ) : ?>
+					<tr class="border-b border-border">
+						<th class="py-3 px-4 bg-slate-50 font-bold text-muted"><?php esc_html_e( 'برند', 'negar-shop' ); ?></th>
+						<?php foreach ( $products as $prod ) : ?>
+							<td class="py-3 px-4 text-center text-xs">
+								<?php
+								$brand_terms = get_the_terms( $prod->get_id(), 'product_brand' );
+								echo ( ! empty( $brand_terms ) && ! is_wp_error( $brand_terms ) ) ? esc_html( $brand_terms[0]->name ) : '—';
+								?>
+							</td>
+						<?php endforeach; ?>
+					</tr>
+				<?php endif; ?>
+
+				<!-- Row 6: SKU -->
 				<tr class="border-b border-border">
 					<th class="py-3 px-4 bg-slate-50 font-bold text-muted"><?php esc_html_e( 'کد کالا (SKU)', 'negar-shop' ); ?></th>
 					<?php foreach ( $products as $prod ) : ?>
@@ -225,13 +272,28 @@ function negar_shop_ajax_get_compare_data() {
 					<?php endforeach; ?>
 				</tr>
 
-				<!-- Row 5: Action Button -->
+				<!-- Dynamic Attributes Rows -->
+				<?php foreach ( $all_attributes as $attr_key => $attr_label ) : ?>
+					<tr class="border-b border-border">
+						<th class="py-3 px-4 bg-slate-50 font-bold text-muted"><?php echo esc_html( $attr_label ); ?></th>
+						<?php foreach ( $products as $prod ) : ?>
+							<td class="py-3 px-4 text-center text-xs">
+								<?php
+								$attr_val = $prod->get_attribute( $attr_key );
+								echo esc_html( ! empty( $attr_val ) ? $attr_val : '—' );
+								?>
+							</td>
+						<?php endforeach; ?>
+					</tr>
+				<?php endforeach; ?>
+
+				<!-- Action Buttons -->
 				<tr>
 					<th class="py-4 px-4 bg-slate-50 font-bold text-muted"><?php esc_html_e( 'عملیات', 'negar-shop' ); ?></th>
 					<?php foreach ( $products as $prod ) : ?>
 						<td class="py-4 px-4 text-center">
 							<a href="<?php echo esc_url( $prod->add_to_cart_url() ); ?>" class="btn btn-primary btn-sm py-2 px-4 text-xs font-bold inline-block">
-								<?php esc_html_e( 'افزودن به سبد', 'negar-shop' ); ?>
+								<?php esc_html_e( 'خرید کالا', 'negar-shop' ); ?>
 							</a>
 						</td>
 					<?php endforeach; ?>

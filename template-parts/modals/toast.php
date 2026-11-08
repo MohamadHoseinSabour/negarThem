@@ -14,3 +14,4 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div class="negar-toast-container fixed bottom-6 right-6 z-50 flex flex-col gap-2 pointer-events-none" id="negar-toast-container" aria-live="polite">
 	<!-- Toasts dynamically appended via JavaScript -->
 </div>
+<div id="negar-live-announcer" class="sr-only" aria-live="polite" aria-atomic="true"></div>

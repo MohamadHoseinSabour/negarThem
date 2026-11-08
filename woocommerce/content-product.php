@@ -29,7 +29,8 @@ if ( $is_on_sale && $regular_p && $sale_p ) {
 }
 
 $rating = $product->get_average_rating();
-$rating_num = ( ! empty( $rating ) && floatval( $rating ) > 0 ) ? number_format( (float) $rating, 1 ) : '4.0';
+$has_rating = ( ! empty( $rating ) && floatval( $rating ) > 0 );
+$rating_num = $has_rating ? number_format( (float) $rating, 1 ) : '';
 $review_count = $product->get_review_count();
 $review_text = ( $review_count > 0 ) ? $review_count . ' نظر' : 'بدون نظر';
 ?>
@@ -41,6 +42,19 @@ $review_text = ( $review_count > 0 ) ? $review_count . ' نظر' : 'بدون ن�
 			<?php if ( ! $in_stock ) : ?>
 				<span class="oos-badge">ناموجود</span>
 			<?php endif; ?>
+
+			<!-- Quick Action Icons -->
+			<div class="product-card-quick-actions position-absolute top-2 start-2 z-2 d-flex flex-column gap-1">
+				<button type="button" class="btn-wishlist-toggle wlm-button btn-icon-round" data-product-id="<?php echo esc_attr( $product_id ); ?>" data-id="<?php echo esc_attr( $product_id ); ?>" aria-label="<?php esc_attr_e( 'علاقه‌مندی', 'negar-shop' ); ?>">
+					<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+				</button>
+				<button type="button" class="btn-quickview btn-icon-round" data-product-id="<?php echo esc_attr( $product_id ); ?>" data-id="<?php echo esc_attr( $product_id ); ?>" aria-label="<?php esc_attr_e( 'نمایش سریع', 'negar-shop' ); ?>">
+					<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+				</button>
+				<button type="button" class="btn-compare-toggle compare-button btn-icon-round" data-product-id="<?php echo esc_attr( $product_id ); ?>" data-id="<?php echo esc_attr( $product_id ); ?>" aria-label="<?php esc_attr_e( 'مقایسه', 'negar-shop' ); ?>">
+					<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m16 3 4 4-4 4"/><path d="M20 7H4"/><path d="m8 21-4-4 4-4"/><path d="M4 17h16"/></svg>
+				</button>
+			</div>
 
 			<a href="<?php echo esc_url( get_permalink( $product_id ) ); ?>" class="image mxw-fit mx-auto d-block position-relative">
 				<?php
@@ -66,11 +80,15 @@ $review_text = ( $review_count > 0 ) ? $review_count . ' نظر' : 'بدون ن�
 				</div>
 				<div class="line flex-grow-1"></div>
 				<div class="rate d-flex align-items-center justify-content-end gap-1 gap-md-2">
-					5/<?php echo esc_html( $rating_num ); ?>
-					<svg xmlns="http://www.w3.org/2000/svg" width="18" height="19" fill="none" viewBox="0 0 18 19" aria-hidden="true">
-						<path fill="#FFC700" stroke="#FFC700" stroke-linecap="round" stroke-linejoin="round" d="M11.543 4.407 12.6 6.522c.143.293.525.57.848.63l1.912.315c1.223.203 1.508 1.088.63 1.973l-1.492 1.492c-.248.248-.39.736-.308 1.088l.428 1.845c.337 1.455-.443 2.025-1.726 1.26L11.1 14.06c-.322-.195-.862-.195-1.185 0l-1.792 1.065c-1.283.758-2.063.195-1.725-1.26l.427-1.845c.083-.345-.06-.832-.307-1.088L5.025 9.44c-.877-.877-.592-1.763.63-1.973l1.913-.315c.322-.052.705-.337.847-.63l1.058-2.115c.562-1.147 1.492-1.147 2.07 0Z"></path>
-						<path stroke="#FFC700" stroke-linecap="round" stroke-linejoin="round" d="M6 4.25H1.5m2.25 10.5H1.5m.75-5.25H1.5" opacity=".4"></path>
-					</svg>
+					<?php if ( $has_rating ) : ?>
+						5/<?php echo esc_html( $rating_num ); ?>
+						<svg xmlns="http://www.w3.org/2000/svg" width="18" height="19" fill="none" viewBox="0 0 18 19" aria-hidden="true">
+							<path fill="#FFC700" stroke="#FFC700" stroke-linecap="round" stroke-linejoin="round" d="M11.543 4.407 12.6 6.522c.143.293.525.57.848.63l1.912.315c1.223.203 1.508 1.088.63 1.973l-1.492 1.492c-.248.248-.39.736-.308 1.088l.428 1.845c.337 1.455-.443 2.025-1.726 1.26L11.1 14.06c-.322-.195-.862-.195-1.185 0l-1.792 1.065c-1.283.758-2.063.195-1.725-1.26l.427-1.845c.083-.345-.06-.832-.307-1.088L5.025 9.44c-.877-.877-.592-1.763.63-1.973l1.913-.315c.322-.052.705-.337.847-.63l1.058-2.115c.562-1.147 1.492-1.147 2.07 0Z"></path>
+							<path stroke="#FFC700" stroke-linecap="round" stroke-linejoin="round" d="M6 4.25H1.5m2.25 10.5H1.5m.75-5.25H1.5" opacity=".4"></path>
+						</svg>
+					<?php else : ?>
+						<span class="text-muted small f-iransans"><?php esc_html_e( 'بدون امتیاز', 'negar-shop' ); ?></span>
+					<?php endif; ?>
 				</div>
 			</div>
 

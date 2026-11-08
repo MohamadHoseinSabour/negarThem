@@ -205,13 +205,25 @@ $specs = negar_shop_get_product_specs( $product );
 					<div class="sticker">
 						<div class="inner-wrapper-sticky">
 							<div class="kav-single-product-comments-total-info">
+								<?php
+								$actual_rating = (float) $product->get_average_rating();
+								$actual_reviews = (int) $product->get_review_count();
+								?>
 								<div class="kav-single-product-comments-total-info-rate d-flex align-items-center letter-spacing-4 gap-2 mb-2">
-									<?php echo esc_html( number_format( max( 4.5, (float) $product->get_average_rating() ), 1, ',', '' ) ); ?>
-									<i class="icon-star-6 lh-1"></i>
+									<?php if ( $actual_reviews > 0 ) : ?>
+										<?php echo esc_html( number_format( $actual_rating, 1, ',', '' ) ); ?>
+										<i class="icon-star-6 lh-1"></i>
+									<?php else : ?>
+										<span class="fs-6 fw-normal text-muted"><?php esc_html_e( 'بدون امتیاز', 'negar-shop' ); ?></span>
+									<?php endif; ?>
 								</div>
 								<div class="kav-single-product-comments-total-info-total-count mb-4">
-									<span><?php echo esc_html( max( 3, $product->get_review_count() ) ); ?></span>
-									<?php esc_html_e( 'نظر ثبت شده توسط کاربران', 'negar-shop' ); ?>
+									<?php if ( $actual_reviews > 0 ) : ?>
+										<span><?php echo esc_html( $actual_reviews ); ?></span>
+										<?php esc_html_e( 'نظر ثبت شده توسط کاربران', 'negar-shop' ); ?>
+									<?php else : ?>
+										<span><?php esc_html_e( 'هنوز نظری برای این کالا ثبت نشده است', 'negar-shop' ); ?></span>
+									<?php endif; ?>
 								</div>
 
 								<div class="d-flex flex-column gap-3">

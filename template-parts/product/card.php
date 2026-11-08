@@ -31,22 +31,35 @@ if ( ! $discount_pct && $is_on_sale && $regular_p && $sale_p ) {
 }
 
 $rating = $product->get_average_rating();
-if ( empty( $rating ) || floatval( $rating ) <= 0 ) {
-	$rating = '4.5';
-} else {
-	$rating = number_format( (float) $rating, 1 );
-}
+$has_rating = ( ! empty( $rating ) && floatval( $rating ) > 0 );
+$rating_display = $has_rating ? number_format( (float) $rating, 1 ) : '';
 ?>
 
 <div class="product-nk product-one-nk group relative bg-white rounded-[26px] md:rounded-[30px] p-4 md:p-5 border border-slate-100 hover:border-rose-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between h-full" data-product-id="<?php echo esc_attr( $product_id ); ?>">
 
-	<!-- 1. Top Bar: Wishlist Heart & Attribute Badge -->
+	<!-- 1. Top Bar: Actions (Wishlist, QuickView, Compare) & Attribute Badge -->
 	<div class="like-size flex items-center justify-between gap-2 mb-2 z-10">
-		<button type="button" class="btn-wishlist-toggle w-7 h-7 rounded-full bg-slate-50 hover:bg-rose-50 text-slate-400 hover:text-rose-600 flex items-center justify-center transition border border-slate-100 shadow-2xs" data-id="<?php echo esc_attr( $product_id ); ?>" aria-label="<?php esc_attr_e( 'علاقه‌مندی', 'negar-shop' ); ?>">
-			<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-				<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-			</svg>
-		</button>
+		<div class="card-actions flex items-center gap-1.5">
+			<button type="button" class="btn-wishlist-toggle w-7 h-7 rounded-full bg-slate-50 hover:bg-rose-50 text-slate-400 hover:text-rose-600 flex items-center justify-center transition border border-slate-100 shadow-2xs" data-id="<?php echo esc_attr( $product_id ); ?>" aria-label="<?php esc_attr_e( 'علاقه‌مندی', 'negar-shop' ); ?>">
+				<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+					<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+				</svg>
+			</button>
+			<button type="button" class="btn-quickview w-7 h-7 rounded-full bg-slate-50 hover:bg-sky-50 text-slate-400 hover:text-sky-600 flex items-center justify-center transition border border-slate-100 shadow-2xs" data-id="<?php echo esc_attr( $product_id ); ?>" aria-label="<?php esc_attr_e( 'نمایش سریع', 'negar-shop' ); ?>">
+				<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+					<path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+					<circle cx="12" cy="12" r="3"></circle>
+				</svg>
+			</button>
+			<button type="button" class="btn-compare-toggle w-7 h-7 rounded-full bg-slate-50 hover:bg-indigo-50 text-slate-400 hover:text-indigo-600 flex items-center justify-center transition border border-slate-100 shadow-2xs" data-id="<?php echo esc_attr( $product_id ); ?>" aria-label="<?php esc_attr_e( 'مقایسه', 'negar-shop' ); ?>">
+				<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+					<path d="m16 3 4 4-4 4"></path>
+					<path d="M20 7H4"></path>
+					<path d="m8 21-4-4 4-4"></path>
+					<path d="M4 17h16"></path>
+				</svg>
+			</button>
+		</div>
 
 		<?php if ( ! $in_stock ) : ?>
 			<span class="text-3xs font-bold text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-full">
@@ -109,10 +122,14 @@ if ( empty( $rating ) || floatval( $rating ) <= 0 ) {
 
 		<!-- Star Rating -->
 		<div class="rate flex items-center gap-1 text-3xs font-bold text-slate-700 shrink-0">
-			<span>5/<?php echo esc_html( $rating ); ?></span>
-			<svg width="13" height="13" viewBox="0 0 24 24" fill="#FFC700" stroke="#FFC700" stroke-width="1.5">
-				<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-			</svg>
+			<?php if ( $has_rating ) : ?>
+				<span>5/<?php echo esc_html( $rating_display ); ?></span>
+				<svg width="13" height="13" viewBox="0 0 24 24" fill="#FFC700" stroke="#FFC700" stroke-width="1.5">
+					<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+				</svg>
+			<?php else : ?>
+				<span class="text-slate-400 font-normal"><?php esc_html_e( 'بدون امتیاز', 'negar-shop' ); ?></span>
+			<?php endif; ?>
 		</div>
 	</div>
 
