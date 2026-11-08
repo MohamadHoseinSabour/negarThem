@@ -701,6 +701,10 @@
 		const modal = document.getElementById('negar-login-otp-modal');
 		if (!modal) return;
 
+		const params = getParams();
+		const ajaxUrl = params.ajaxUrl || (window.kavehShopData && (window.kavehShopData.ajaxurl || window.kavehShopData.ksiteurl)) || '/wp-admin/admin-ajax.php';
+		const nonce = params.nonce || (window.kavehShopData && window.kavehShopData.nonce) || '';
+
 		const closeBtn = modal.querySelector('.negar-modal-close');
 		const step1Form = document.getElementById('negar-otp-step1-form');
 		const step2Form = document.getElementById('negar-otp-step2-form');
@@ -843,10 +847,10 @@
 
 			const formData = new URLSearchParams();
 			formData.append('action', 'negar_auth_send_otp');
-			formData.append('nonce', params.nonce);
+			formData.append('nonce', nonce);
 			formData.append('phone', phone);
 
-			fetch(params.ajaxUrl, {
+			fetch(ajaxUrl, {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
 				body: formData.toString(),
@@ -914,11 +918,11 @@
 
 				const formData = new URLSearchParams();
 				formData.append('action', 'negar_auth_verify_otp');
-				formData.append('nonce', params.nonce);
+				formData.append('nonce', nonce);
 				formData.append('phone', activePhone);
 				formData.append('code', code);
 
-				fetch(params.ajaxUrl, {
+				fetch(ajaxUrl, {
 					method: 'POST',
 					headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
 					body: formData.toString(),
