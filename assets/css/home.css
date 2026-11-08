@@ -220,3 +220,220 @@
     transform: scale(1.02);
   }
 }
+
+
+/* ==========================================================================
+   11. Hero Slider Stabilization & Crescent Alignment (Desktop & Mobile)
+   ========================================================================== */
+
+/* Base visibility fallback: Slide content must NEVER collapse to scale(0) */
+.landing-nk__carousel__item .image img {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.landing-nk__carousel__item .detail .sup-title > *,
+.landing-nk__carousel__item .detail .title > *,
+.landing-nk__carousel__item .detail .btn {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Progressive enhancement: Active slide transform */
+.landing-nk__carousel .swiper-slide-active .landing-nk__carousel__item .image img {
+  transform: scale(1) rotate(10.8deg) !important;
+}
+
+.landing-nk__carousel .swiper-slide-active .landing-nk__carousel__item .detail .sup-title > *,
+.landing-nk__carousel .swiper-slide-active .landing-nk__carousel__item .detail .title > * {
+  transform: translate(0) !important;
+}
+
+.landing-nk__carousel .swiper-slide-active .landing-nk__carousel__item .detail .btn {
+  transform: scale(1) !important;
+}
+
+/* Desktop Hero Arrow Positioning (Centered inside crescent cutouts) */
+@media (min-width: 992px) {
+  .landing-nk__carousel {
+    max-width: calc(100% - 314px) !important;
+    min-height: 455px !important;
+    padding: 81px 140px 81px 80px !important;
+  }
+
+  /* Right crescent notch centered navigation button (Prev / > in RTL) */
+  .landing-nk__carousel .swiper-button-prev {
+    right: 8px !important;
+    left: auto !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    width: 38px !important;
+    height: 38px !important;
+    z-index: 20 !important;
+    display: flex !important;
+  }
+
+  /* Left crescent notch centered navigation button (Next / < in RTL) */
+  .landing-nk__carousel .swiper-button-next {
+    left: 4px !important;
+    right: auto !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    width: 38px !important;
+    height: 38px !important;
+    z-index: 20 !important;
+    display: flex !important;
+  }
+}
+
+/* Mobile Hero Slider Redesign & Fitting (320px - 991px) */
+@media (max-width: 991px) {
+  .landing-nk__wrapper {
+    gap: 16px !important;
+  }
+
+  .landing-nk__carousel {
+    max-width: 100% !important;
+    width: 100% !important;
+    min-height: auto !important;
+    padding: 28px 36px !important;
+    border-radius: 24px !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+  }
+
+  .landing-nk__carousel > .swiper {
+    width: 100% !important;
+    overflow: hidden !important;
+  }
+
+  .landing-nk__carousel__item {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 14px !important;
+    width: 100% !important;
+  }
+
+  .landing-nk__carousel__item .image {
+    max-width: 44% !important;
+    width: 44% !important;
+    flex: 0 0 44% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    position: relative !important;
+  }
+
+  .landing-nk__carousel__item .image img {
+    max-width: 100% !important;
+    height: auto !important;
+    max-height: 160px !important;
+    object-fit: contain !important;
+    display: block !important;
+    transform: scale(1) rotate(10.8deg) !important;
+  }
+
+  .landing-nk__carousel__item .image .shape {
+    display: none !important;
+  }
+
+  .landing-nk__carousel__item .detail {
+    max-width: 53% !important;
+    width: 53% !important;
+    flex: 0 0 53% !important;
+    text-align: right !important;
+  }
+
+  .landing-nk__carousel__item .detail .sup-title > * {
+    font-size: 11px !important;
+    line-height: 16px !important;
+    color: rgba(255, 255, 255, 0.9) !important;
+    transform: translate(0) !important;
+  }
+
+  .landing-nk__carousel__item .detail .title {
+    margin: 4px 0 10px !important;
+  }
+
+  .landing-nk__carousel__item .detail .title > * {
+    font-size: 15px !important;
+    line-height: 22px !important;
+    font-weight: 800 !important;
+    color: #ffffff !important;
+    transform: translate(0) !important;
+  }
+
+  .landing-nk__carousel__item .detail .btn {
+    font-size: 11px !important;
+    line-height: 16px !important;
+    padding: 7px 14px !important;
+    border-radius: 9999px !important;
+    background-color: #ffffff !important;
+    color: #0f172a !important;
+    border: none !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    transform: scale(1) !important;
+    font-weight: 700 !important;
+  }
+
+  /* Compact crescent notches on mobile */
+  .landing-nk__carousel::before,
+  .landing-nk__carousel::after {
+    width: 22px !important;
+    height: 70px !important;
+  }
+
+  /* Navigation arrows on mobile */
+  .landing-nk__carousel .swiper-button-prev {
+    width: 28px !important;
+    height: 28px !important;
+    font-size: 11px !important;
+    right: 2px !important;
+    left: auto !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    z-index: 20 !important;
+    display: flex !important;
+  }
+
+  .landing-nk__carousel .swiper-button-next {
+    width: 28px !important;
+    height: 28px !important;
+    font-size: 11px !important;
+    left: 2px !important;
+    right: auto !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    z-index: 20 !important;
+    display: flex !important;
+  }
+}
+
+@media (max-width: 430px) {
+  .landing-nk__carousel {
+    padding: 22px 28px !important;
+    border-radius: 20px !important;
+  }
+
+  .landing-nk__carousel__item .image img {
+    max-height: 130px !important;
+  }
+
+  .landing-nk__carousel__item .detail .title > * {
+    font-size: 13px !important;
+    line-height: 19px !important;
+  }
+
+  .landing-nk__carousel__item .detail .sup-title > * {
+    font-size: 10px !important;
+  }
+
+  .landing-nk__carousel__item .detail .btn {
+    font-size: 10px !important;
+    padding: 6px 12px !important;
+  }
+}

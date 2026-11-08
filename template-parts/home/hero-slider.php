@@ -106,15 +106,14 @@ if ( $fc_prod ) {
 										</div>
 									</div>
 
-								</div>
+								</div></div>
 
-								<!-- Slider navigation buttons nested inside the crescents -->
-								<div class="swiper-button-prev d-flex align-items-center justify-content-center" tabindex="0" role="button" aria-label="<?php esc_attr_e( 'اسلاید قبلی', 'negar-shop' ); ?>">
-									<i class="icon-chevron-right lh-1"></i>
-								</div>
-								<div class="swiper-button-next d-flex align-items-center justify-content-center" tabindex="0" role="button" aria-label="<?php esc_attr_e( 'اسلاید بعدی', 'negar-shop' ); ?>">
-									<i class="icon-chevron-left lh-1"></i>
-								</div>
+							<!-- Slider navigation buttons centered directly inside the crescents -->
+							<div class="swiper-button-prev d-flex align-items-center justify-content-center" tabindex="0" role="button" aria-label="<?php esc_attr_e( 'اسلاید قبلی', 'negar-shop' ); ?>">
+								<i class="icon-chevron-right lh-1"></i>
+							</div>
+							<div class="swiper-button-next d-flex align-items-center justify-content-center" tabindex="0" role="button" aria-label="<?php esc_attr_e( 'اسلاید بعدی', 'negar-shop' ); ?>">
+								<i class="icon-chevron-left lh-1"></i>
 							</div>
 						</div>
 
