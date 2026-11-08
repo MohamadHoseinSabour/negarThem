@@ -89,6 +89,7 @@ async function captureScreenshots() {
     {
       name: 'cart',
       url: `${BASE_URL}/cart/`,
+      seed: `${BASE_URL}/?add-to-cart=131`,
       viewports: [
         { vp: '1440', file: 'cart-1440.png' },
         { vp: '1024', file: 'cart-1024.png' },
@@ -99,11 +100,38 @@ async function captureScreenshots() {
     {
       name: 'checkout',
       url: `${BASE_URL}/checkout/`,
+      seed: `${BASE_URL}/?add-to-cart=131`,
       viewports: [
         { vp: '1440', file: 'checkout-1440.png' },
         { vp: '1024', file: 'checkout-1024.png' },
         { vp: '768',  file: 'checkout-768.png' },
         { vp: '375',  file: 'checkout-375.png' }
+      ]
+    },
+    {
+      name: 'single-product',
+      url: `${BASE_URL}/?p=131`,
+      viewports: [
+        { vp: '1440', file: 'single-product-1440.png' },
+        { vp: '1024', file: 'single-product-1024.png' },
+        { vp: '768',  file: 'single-product-768.png' },
+        { vp: '375',  file: 'single-product-375.png' }
+      ]
+    },
+    {
+      name: 'contact',
+      url: `${BASE_URL}/contact/`,
+      viewports: [
+        { vp: '1440', file: 'contact-1440.png' },
+        { vp: '375',  file: 'contact-375.png' }
+      ]
+    },
+    {
+      name: 'about',
+      url: `${BASE_URL}/about/`,
+      viewports: [
+        { vp: '1440', file: 'about-1440.png' },
+        { vp: '375',  file: 'about-375.png' }
       ]
     },
     {
@@ -134,6 +162,9 @@ async function captureScreenshots() {
       const page = await context.newPage();
       try {
         console.log(`Capturing ${p.name} @ ${v.vp}px -> ${v.file}...`);
+        if (p.seed) {
+          await page.goto(p.seed, { waitUntil: 'domcontentloaded', timeout: 30000 });
+        }
         await page.goto(p.url, { waitUntil: 'networkidle', timeout: 30000 });
         await page.waitForTimeout(500);
         const dest = path.join(COMPARE_DIR, v.file);
@@ -267,6 +298,31 @@ async function captureScreenshots() {
     });
   } catch (e) {
     console.error('Toast notification capture error:', e.message);
+  }
+
+  // 5. Customer OTP Login Modal
+  try {
+    const loginTrigger = await mPage.$('.negar-login-trigger');
+    if (loginTrigger) {
+      await mPage.evaluate(el => el.click(), loginTrigger);
+      await mPage.waitForTimeout(600);
+      const otpFile = '008-modal-login-otp.png';
+      const otpDest = path.join(COMPARE_DIR, otpFile);
+      await mPage.screenshot({ path: otpDest });
+      manifest.screenshots.push({
+        file: otpFile,
+        route: 'modal-login-otp',
+        viewport: '1440',
+        size_bytes: fs.statSync(otpDest).size,
+        md5: calculateMD5(otpDest),
+        timestamp: timestamp
+      });
+      const otpClose = await mPage.$('#negar-login-otp-modal .negar-modal-close');
+      if (otpClose) await mPage.evaluate(el => el.click(), otpClose);
+      await mPage.waitForTimeout(300);
+    }
+  } catch (e) {
+    console.error('OTP login modal capture error:', e.message);
   }
 
   await modalContext.close();
