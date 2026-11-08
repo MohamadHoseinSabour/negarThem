@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 ?>
-<nav class="negar-mobile-bottom-bar md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 py-2 px-3 shadow-lg" aria-label="<?php esc_attr_e( 'ناوبری سریع موبایل', 'negar-shop' ); ?>">
+<nav class="negar-mobile-bottom-bar md:hidden fixed z-40 bg-white/95 backdrop-blur-md border border-slate-200/90 rounded-2xl shadow-xl shadow-slate-900/10 py-2 px-3" style="bottom: calc(10px + env(safe-area-inset-bottom, 0px)); left: 12px; right: 12px;" aria-label="<?php esc_attr_e( 'ناوبری سریع موبایل', 'negar-shop' ); ?>">
 	<div class="flex items-center justify-around">
 
 		<!-- 1. Home -->
@@ -60,13 +60,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</a>
 
 		<!-- 5. User Account -->
-		<a href="<?php echo esc_url( class_exists( 'WooCommerce' ) ? wc_get_page_permalink( 'myaccount' ) : wp_login_url() ); ?>" class="bottom-bar-item flex flex-col items-center gap-1 text-slate-500 hover:text-rose-600 transition <?php echo ( function_exists( 'is_account_page' ) && is_account_page() ) ? 'text-rose-600 font-bold' : ''; ?>">
-			<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-				<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-				<circle cx="12" cy="7" r="4"></circle>
-			</svg>
-			<span class="text-3xs"><?php esc_html_e( 'حساب من', 'negar-shop' ); ?></span>
-		</a>
+		<?php if ( is_user_logged_in() ) : ?>
+			<a href="<?php echo esc_url( class_exists( 'WooCommerce' ) ? wc_get_page_permalink( 'myaccount' ) : home_url( '/' ) ); ?>" class="bottom-bar-item flex flex-col items-center gap-1 text-slate-500 hover:text-rose-600 transition <?php echo ( function_exists( 'is_account_page' ) && is_account_page() ) ? 'text-rose-600 font-bold' : ''; ?>">
+				<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+					<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+					<circle cx="12" cy="7" r="4"></circle>
+				</svg>
+				<span class="text-3xs"><?php esc_html_e( 'حساب من', 'negar-shop' ); ?></span>
+			</a>
+		<?php else : ?>
+			<button type="button" class="bottom-bar-item negar-login-trigger flex flex-col items-center gap-1 text-slate-500 hover:text-rose-600 transition" aria-label="<?php esc_attr_e( 'ورود به حساب', 'negar-shop' ); ?>">
+				<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+					<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+					<circle cx="12" cy="7" r="4"></circle>
+				</svg>
+				<span class="text-3xs"><?php esc_html_e( 'ورود', 'negar-shop' ); ?></span>
+			</button>
+		<?php endif; ?>
 
 	</div>
 </nav>

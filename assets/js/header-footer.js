@@ -11,18 +11,80 @@
   const params = window.negarShopParams || {};
 
   /**
-   * 1. Live Ajax Search Controller
+   * 1. Live Ajax Search Controller with Category Filter
    */
   function initLiveSearch() {
     const searchForms = document.querySelectorAll('.negar-ajax-search-form');
+
+    function closeAllCategoryDropdowns() {
+      document.querySelectorAll('.negar-category-dropdown').forEach((dd) => {
+        dd.classList.add('hidden');
+      });
+      document.querySelectorAll('.category-menu-btn').forEach((btn) => {
+        btn.setAttribute('aria-expanded', 'false');
+      });
+    }
+
+    document.addEventListener('click', function (e) {
+      if (!e.target.closest('.category-select-wrapper')) {
+        closeAllCategoryDropdowns();
+      }
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') {
+        closeAllCategoryDropdowns();
+      }
+    });
 
     searchForms.forEach((form) => {
       const input = form.querySelector('.negar-search-input');
       const resultsContainer = form.parentElement.querySelector('.negar-ajax-search-results');
       const spinner = form.querySelector('.search-spinner');
-      const catSelect = form.querySelector('select[name="product_cat"]');
+      const catInput = form.querySelector('[name="product_cat"]');
+      const catBtn = form.querySelector('.category-menu-btn');
+      const catDropdown = form.querySelector('.negar-category-dropdown');
 
       if (!input || !resultsContainer) return;
+
+      // Category Dropdown Interaction
+      if (catBtn && catDropdown) {
+        catBtn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          const isOpen = !catDropdown.classList.contains('hidden');
+          closeAllCategoryDropdowns();
+          if (!isOpen) {
+            catDropdown.classList.remove('hidden');
+            catBtn.setAttribute('aria-expanded', 'true');
+          }
+        });
+
+        const options = catDropdown.querySelectorAll('.category-option');
+        options.forEach((opt) => {
+          opt.addEventListener('click', function (e) {
+            e.stopPropagation();
+            const slug = this.getAttribute('data-cat-slug') || '';
+            const name = this.getAttribute('data-cat-name') || '';
+            if (catInput) catInput.value = slug;
+            const labelEl = catBtn.querySelector('.category-btn-label');
+            if (labelEl) labelEl.textContent = name;
+
+            options.forEach((o) => {
+              const check = o.querySelector('.cat-check');
+              if (check) check.classList.add('hidden');
+            });
+            const thisCheck = this.querySelector('.cat-check');
+            if (thisCheck) thisCheck.classList.remove('hidden');
+
+            catDropdown.classList.add('hidden');
+            catBtn.setAttribute('aria-expanded', 'false');
+
+            if (input.value.trim().length >= 2) {
+              input.dispatchEvent(new Event('input'));
+            }
+          });
+        });
+      }
 
       let debounceTimer = null;
       let selectedIndex = -1;
@@ -49,7 +111,7 @@
         debounceTimer = setTimeout(() => {
           activeController = new AbortController();
           const signal = activeController.signal;
-          const category = catSelect ? catSelect.value : '';
+          const category = catInput ? catInput.value : '';
           const url = `${params.ajaxUrl}?action=negar_shop_ajax_search&nonce=${params.nonce}&term=${encodeURIComponent(query)}&category=${encodeURIComponent(category)}`;
 
           fetch(url, { signal: signal })

@@ -9,8 +9,13 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
+
+$theme_logo_url = get_template_directory_uri() . '/assets/images/logo.svg';
+$upload_dir     = wp_upload_dir();
+$logo_svg       = $upload_dir['basedir'] . '/kaveh-demo/kaveh-demo/general/logo.svg';
+$logo_url       = file_exists( $logo_svg ) ? $upload_dir['baseurl'] . '/kaveh-demo/kaveh-demo/general/logo.svg' : $theme_logo_url;
 ?>
-<div class="negar-mobile-header md:hidden bg-white border-b border-slate-200 sticky top-0 z-30">
+<div class="negar-mobile-header md:hidden bg-white border-b border-slate-200 sticky top-0 z-30" style="padding-top: max(0.5rem, env(safe-area-inset-top, 0px));">
 	<!-- Top Bar in Mobile -->
 	<div class="px-4 py-3 flex items-center justify-between gap-3">
 		<!-- Hamburger Menu Trigger -->
@@ -23,18 +28,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</button>
 
 		<!-- Brand Logo -->
-		<div class="mobile-logo flex-1 text-center">
-			<?php
-			if ( has_custom_logo() ) :
-				the_custom_logo();
-			else :
-				?>
-				<a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home" class="inline-block text-xl font-black text-slate-900 tracking-tight">
-					<?php bloginfo( 'name' ); ?>
-				</a>
-				<?php
-			endif;
-			?>
+		<div class="mobile-logo flex-1 flex items-center justify-center text-center">
+			<a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home" class="inline-flex items-center justify-center">
+				<img src="<?php echo esc_url( $logo_url ); ?>" alt="<?php bloginfo( 'name' ); ?>" width="120" height="32" class="h-8 w-auto object-contain d-inline-block" style="max-height: 32px; width: auto;">
+			</a>
 		</div>
 
 		<!-- Cart Trigger Icon -->

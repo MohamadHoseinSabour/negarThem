@@ -15,6 +15,13 @@ $upload_dir     = wp_upload_dir();
 $logo_svg       = $upload_dir['basedir'] . '/kaveh-demo/kaveh-demo/general/logo.svg';
 $logo_url       = file_exists( $logo_svg ) ? $upload_dir['baseurl'] . '/kaveh-demo/kaveh-demo/general/logo.svg' : $theme_logo_url;
 $has_logo       = true;
+
+$product_cats = function_exists( 'get_terms' ) ? get_terms( array(
+	'taxonomy'   => 'product_cat',
+	'hide_empty' => false,
+	'parent'     => 0,
+	'exclude'    => array( (int) get_option( 'default_product_cat' ) ),
+) ) : array();
 ?>
 
 <div class="negar-main-header py-3.5 bg-white border-b border-slate-100">
@@ -31,15 +38,38 @@ $has_logo       = true;
 		<div class="header-search header-search-wrap flex-1 max-w-xl lg:max-w-2xl relative hidden md:block">
 			<form role="search" method="get" action="<?php echo esc_url( home_url( '/' ) ); ?>" class="negar-ajax-search-form relative flex items-center bg-slate-100/90 hover:bg-slate-100 focus-within:bg-white rounded-full border border-slate-200/70 focus-within:border-rose-500 focus-within:ring-2 focus-within:ring-rose-500/10 transition-all p-1">
 				
-				<!-- Nested Category Pill Button (Right side inside input in RTL) -->
-				<div class="relative shrink-0">
-					<button type="button" class="category-menu-btn flex items-center gap-1.5 bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold px-4 py-2 rounded-full transition-all shadow-xs">
+				<!-- Nested Category Pill Button & Dropdown (Right side inside input in RTL) -->
+				<div class="relative shrink-0 category-select-wrapper">
+					<button type="button" class="category-menu-btn flex items-center gap-1.5 bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold px-3.5 py-2 rounded-full transition-all shadow-xs" id="negar-category-menu-btn" aria-haspopup="true" aria-expanded="false" aria-controls="negar-category-dropdown">
 						<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
 							<path d="M4 4h4v4H4zm6 0h4v4h-4zm6 0h4v4h-4zM4 10h4v4H4zm6 0h4v4h-4zm6 0h4v4h-4zM4 16h4v4H4zm6 0h4v4h-4zm6 0h4v4h-4z"/>
 						</svg>
-						<span><?php esc_html_e( 'دسته‌بندی', 'negar-shop' ); ?></span>
-						<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+						<span class="category-btn-label"><?php esc_html_e( 'دسته‌بندی', 'negar-shop' ); ?></span>
+						<svg class="category-chevron transition-transform duration-200" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
 					</button>
+
+					<input type="hidden" name="product_cat" id="negar-search-cat-input" value="">
+
+					<!-- Category Dropdown Menu -->
+					<div id="negar-category-dropdown" class="negar-category-dropdown hidden absolute top-full right-0 mt-2 w-56 bg-white rounded-2xl shadow-xl border border-slate-100 py-2 z-50 overflow-hidden text-right" role="menu" aria-labelledby="negar-category-menu-btn">
+						<div class="px-3 py-1.5 text-[11px] font-bold text-slate-400 border-b border-slate-100">
+							<?php esc_html_e( 'انتخاب دسته‌بندی جستجو', 'negar-shop' ); ?>
+						</div>
+						<div class="max-h-60 overflow-y-auto py-1" role="none">
+							<button type="button" class="category-option w-full text-right px-3.5 py-2 text-xs font-medium text-slate-700 hover:bg-rose-50 hover:text-rose-600 transition flex items-center justify-between" data-cat-slug="" data-cat-name="<?php esc_attr_e( 'دسته‌بندی', 'negar-shop' ); ?>" role="menuitem">
+								<span><?php esc_html_e( 'همه دسته‌بندی‌ها', 'negar-shop' ); ?></span>
+								<span class="cat-check text-rose-600 font-bold">&#10003;</span>
+							</button>
+							<?php if ( ! empty( $product_cats ) && ! is_wp_error( $product_cats ) ) : ?>
+								<?php foreach ( $product_cats as $cat ) : ?>
+									<button type="button" class="category-option w-full text-right px-3.5 py-2 text-xs font-medium text-slate-700 hover:bg-rose-50 hover:text-rose-600 transition flex items-center justify-between" data-cat-slug="<?php echo esc_attr( $cat->slug ); ?>" data-cat-name="<?php echo esc_attr( $cat->name ); ?>" role="menuitem">
+										<span><?php echo esc_html( $cat->name ); ?></span>
+										<span class="cat-check text-rose-600 font-bold hidden">&#10003;</span>
+									</button>
+								<?php endforeach; ?>
+							<?php endif; ?>
+						</div>
+					</div>
 				</div>
 
 				<!-- Search Input -->
@@ -86,12 +116,21 @@ $has_logo       = true;
 
 			<!-- User Account Pill Button -->
 			<div class="header-action-item">
-				<a href="<?php echo esc_url( wc_get_page_permalink( 'myaccount' ) ); ?>" class="flex items-center gap-2 py-1.5 px-3.5 rounded-full bg-slate-50 hover:bg-slate-100 text-slate-700 transition border border-slate-200 text-xs font-bold shadow-2xs">
-					<span><?php echo is_user_logged_in() ? esc_html( wp_get_current_user()->display_name ) : esc_html__( 'ورود / ثبت‌نام', 'negar-shop' ); ?></span>
-					<div class="w-6 h-6 rounded-full bg-slate-200 flex items-center justify-center text-slate-600 overflow-hidden shrink-0">
-						<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-					</div>
-				</a>
+				<?php if ( is_user_logged_in() ) : ?>
+					<a href="<?php echo esc_url( wc_get_page_permalink( 'myaccount' ) ); ?>" class="flex items-center gap-2 py-1.5 px-3.5 rounded-full bg-slate-50 hover:bg-slate-100 text-slate-700 transition border border-slate-200 text-xs font-bold shadow-2xs">
+						<span><?php echo esc_html( wp_get_current_user()->display_name ); ?></span>
+						<div class="w-6 h-6 rounded-full bg-slate-200 flex items-center justify-center text-slate-600 overflow-hidden shrink-0">
+							<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+						</div>
+					</a>
+				<?php else : ?>
+					<button type="button" class="negar-login-trigger flex items-center gap-2 py-1.5 px-3.5 rounded-full bg-slate-50 hover:bg-slate-100 text-slate-700 transition border border-slate-200 text-xs font-bold shadow-2xs cursor-pointer" aria-label="<?php esc_attr_e( 'ورود به حساب کاربری', 'negar-shop' ); ?>">
+						<span><?php esc_html_e( 'ورود / ثبت‌نام', 'negar-shop' ); ?></span>
+						<div class="w-6 h-6 rounded-full bg-slate-200 flex items-center justify-center text-slate-600 overflow-hidden shrink-0">
+							<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+						</div>
+					</button>
+				<?php endif; ?>
 			</div>
 
 			<!-- Cart Button with Red Circle + Label (Matching Demo) -->
