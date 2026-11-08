@@ -313,7 +313,7 @@ $specs           = negar_shop_get_product_specs( $product );
 				<div class="modal-body text-center">
 					<p class="text-muted small"><?php esc_html_e( 'لینک این محصول را با دوستان خود به اشتراک بگذارید:', 'negar-shop' ); ?></p>
 					<div class="input-group my-3" dir="ltr">
-						<button class="btn btn-outline-danger" type="button" onclick="navigator.clipboard.writeText('<?php echo esc_url( get_permalink() ); ?>'); alert('لینک کپی شد!');">
+						<button class="btn btn-outline-danger" type="button" onclick="navigator.clipboard.writeText('<?php echo esc_url( get_permalink() ); ?>'); if(typeof window.negarToast === 'function') { window.negarToast('<?php echo esc_js( __( 'لینک محصول کپی شد!', 'negar-shop' ) ); ?>', 'success'); }">
 							<?php esc_html_e( 'کپی لینک', 'negar-shop' ); ?>
 						</button>
 						<input type="text" class="form-control text-start font-monospace small" value="<?php echo esc_url( get_permalink() ); ?>" readonly>
@@ -332,7 +332,7 @@ $specs           = negar_shop_get_product_specs( $product );
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="<?php esc_attr_e( 'بستن', 'negar-shop' ); ?>"></button>
 				</div>
 				<div class="modal-body">
-					<form onsubmit="event.preventDefault(); alert('پیشنهاد شما با موفقیت ثبت شد.'); bootstrap.Modal.getInstance(document.getElementById('modal-register-price-offer')).hide();">
+					<form onsubmit="event.preventDefault(); if(typeof window.negarToast === 'function') { window.negarToast('<?php echo esc_js( __( 'پیشنهاد شما با موفقیت ثبت شد.', 'negar-shop' ) ); ?>', 'success'); } var m = bootstrap.Modal.getInstance(document.getElementById('modal-register-price-offer')); if(m) m.hide(); this.reset();">
 						<div class="mb-3">
 							<label class="form-label small"><?php esc_html_e( 'قیمت پیشنهادی شما (تومان):', 'negar-shop' ); ?></label>
 							<input type="number" class="form-control" placeholder="مثال: 5000000" required>

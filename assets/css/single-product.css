@@ -1161,3 +1161,17 @@ body.kav-single-product-style-5-page .nav-bottom,body.kav-single-product-style-5
 	color: #ffffff !important;
 	border-radius: 12px !important;
 }
+
+/* ==========================================================================
+   Mobile Bottom Navigation Collision Prevention & Safe Area
+   ========================================================================== */
+body.single-product .negar-mobile-bottom-bar {
+	display: none !important;
+}
+
+.kav-single-product-bottom-nav-price {
+	z-index: 1040 !important;
+	padding-bottom: max(10px, env(safe-area-inset-bottom, 0px)) !important;
+	border-top: 1px solid #f1f5f9;
+	box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.06);
+}
