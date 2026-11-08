@@ -396,6 +396,90 @@
   }
 
   /**
+   * 5. Contact Form AJAX Handler
+   */
+  function initContactForm() {
+    const form = document.getElementById('negar-contact-form');
+    if (!form) return;
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const nameInput = document.getElementById('contact-name');
+      const phoneInput = document.getElementById('contact-phone');
+      const subjectInput = document.getElementById('contact-subject');
+      const messageInput = document.getElementById('contact-message');
+      const alertBox = document.getElementById('negar-contact-alert');
+      const submitBtn = document.getElementById('negar-contact-submit');
+      const spinner = submitBtn ? submitBtn.querySelector('.contact-spinner') : null;
+
+      const name = nameInput ? nameInput.value.trim() : '';
+      const phone = phoneInput ? phoneInput.value.trim() : '';
+      const subject = subjectInput ? subjectInput.value.trim() : '';
+      const message = messageInput ? messageInput.value.trim() : '';
+
+      if (!name || !phone || message.length < 8) {
+        if (alertBox) {
+          alertBox.textContent = 'لطفاً تمامی فیلدها را با دقت تکمیل نمایید.';
+          alertBox.className = 'mb-3 p-3 rounded-3 text-xs font-medium bg-danger-subtle text-danger';
+          alertBox.classList.remove('hidden');
+        }
+        return;
+      }
+
+      if (submitBtn) submitBtn.disabled = true;
+      if (spinner) spinner.classList.remove('hidden');
+      if (alertBox) alertBox.classList.add('hidden');
+
+      const formData = new URLSearchParams();
+      formData.append('action', 'negar_submit_contact_form');
+      formData.append('nonce', params.nonce);
+      formData.append('name', name);
+      formData.append('phone', phone);
+      formData.append('subject', subject);
+      formData.append('message', message);
+
+      fetch(params.ajaxUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
+        body: formData.toString(),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (submitBtn) submitBtn.disabled = false;
+          if (spinner) spinner.classList.add('hidden');
+
+          if (data.success) {
+            form.reset();
+            if (alertBox) {
+              alertBox.textContent = data.data.message;
+              alertBox.className = 'mb-3 p-3 rounded-3 text-xs font-medium bg-success-subtle text-success';
+              alertBox.classList.remove('hidden');
+            }
+            if (typeof window.negarToast === 'function') {
+              window.negarToast(data.data.message, 'success');
+            }
+          } else {
+            if (alertBox) {
+              alertBox.textContent = data.data?.message || 'خطا در ثبت پیام.';
+              alertBox.className = 'mb-3 p-3 rounded-3 text-xs font-medium bg-danger-subtle text-danger';
+              alertBox.classList.remove('hidden');
+            }
+          }
+        })
+        .catch(() => {
+          if (submitBtn) submitBtn.disabled = false;
+          if (spinner) spinner.classList.add('hidden');
+          if (alertBox) {
+            alertBox.textContent = 'خطای اتصال به سرور. لطفاً دوباره تلاش کنید.';
+            alertBox.className = 'mb-3 p-3 rounded-3 text-xs font-medium bg-danger-subtle text-danger';
+            alertBox.classList.remove('hidden');
+          }
+        });
+    });
+  }
+
+  /**
    * Initialize on DOM Ready
    */
   function init() {
@@ -403,6 +487,7 @@
     initStickyHeader();
     initDrawers();
     initBackToTop();
+    initContactForm();
   }
 
   if (document.readyState === 'loading') {

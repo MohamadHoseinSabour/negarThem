@@ -99,28 +99,32 @@ get_header();
 			<div class="col-12 col-lg-7">
 				<div class="bg-white rounded-4 p-4 p-md-5 shadow-sm h-100">
 					<h2 class="f-iran-yekan fw-bold fs-4 text-dark mb-4"><?php esc_html_e( 'ارسال پیام مستقیم به مدیریت', 'negar-shop' ); ?></h2>
-					<form onsubmit="event.preventDefault(); alert('پیام شما با موفقیت ثبت شد و به زودی با شما تماس خواهیم گرفت.'); this.reset();">
+					<form id="negar-contact-form">
+						<div id="negar-contact-alert" class="hidden mb-3 p-3 rounded-3 text-xs font-medium"></div>
 						<div class="row g-3 mb-3">
 							<div class="col-12 col-sm-6">
-								<label class="form-label small text-muted"><?php esc_html_e( 'نام و نام خانوادگی:', 'negar-shop' ); ?></label>
-								<input type="text" class="form-control rounded-3 py-2" placeholder="مثال: علی محمدی" required>
+								<label for="contact-name" class="form-label small text-muted"><?php esc_html_e( 'نام و نام خانوادگی:', 'negar-shop' ); ?></label>
+								<input type="text" id="contact-name" name="name" class="form-control rounded-3 py-2" placeholder="مثال: علی محمدی" required>
 							</div>
 							<div class="col-12 col-sm-6">
-								<label class="form-label small text-muted"><?php esc_html_e( 'شماره موبایل:', 'negar-shop' ); ?></label>
-								<input type="tel" class="form-control rounded-3 py-2 text-start font-monospace" placeholder="۰۹۱۲..." required>
+								<label for="contact-phone" class="form-label small text-muted"><?php esc_html_e( 'شماره موبایل:', 'negar-shop' ); ?></label>
+								<input type="tel" id="contact-phone" name="phone" class="form-control rounded-3 py-2 text-start font-monospace" placeholder="۰۹۱۲..." required>
 							</div>
 						</div>
 						<div class="mb-3">
-							<label class="form-label small text-muted"><?php esc_html_e( 'موضوع پیام:', 'negar-shop' ); ?></label>
-							<input type="text" class="form-control rounded-3 py-2" placeholder="موضوع پیام یا شماره سفارش" required>
+							<label for="contact-subject" class="form-label small text-muted"><?php esc_html_e( 'موضوع پیام:', 'negar-shop' ); ?></label>
+							<input type="text" id="contact-subject" name="subject" class="form-control rounded-3 py-2" placeholder="موضوع پیام یا شماره سفارش" required>
 						</div>
 						<div class="mb-4">
-							<label class="form-label small text-muted"><?php esc_html_e( 'متن پیام شما:', 'negar-shop' ); ?></label>
-							<textarea class="form-control rounded-3 p-3" rows="5" placeholder="پیام یا پرسش خود را اینجا بنویسید..." required></textarea>
+							<label for="contact-message" class="form-label small text-muted"><?php esc_html_e( 'متن پیام شما:', 'negar-shop' ); ?></label>
+							<textarea id="contact-message" name="message" class="form-control rounded-3 p-3" rows="5" placeholder="پیام یا پرسش خود را اینجا بنویسید..." required></textarea>
 						</div>
-						<button type="submit" class="btn btn-danger rounded-pill px-5 py-2.5 fw-bold f-payda">
-							<?php esc_html_e( 'ارسال پیام', 'negar-shop' ); ?>
-							<i class="icon-arrow-left-11 ms-2"></i>
+						<button type="submit" id="negar-contact-submit" class="btn btn-danger rounded-pill px-5 py-2.5 fw-bold f-payda d-inline-flex align-items-center gap-2">
+							<span><?php esc_html_e( 'ارسال پیام', 'negar-shop' ); ?></span>
+							<i class="icon-arrow-left-11 ms-1"></i>
+							<span class="contact-spinner hidden animate-spin">
+								<svg class="w-4 h-4" width="16" height="16" viewBox="0 0 24 24" fill="none"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
+							</span>
 						</button>
 					</form>
 				</div>
