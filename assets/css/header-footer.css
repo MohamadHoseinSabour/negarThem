@@ -24,6 +24,45 @@
 }
 
 /* ==========================================================================
+   Header Logo & Sizing Component Contract (Preserves identity across WooCommerce pages)
+   ========================================================================== */
+.site-header .custom-logo-link img,
+.site-header .header-logo img,
+.site-header .mobile-logo img,
+.negar-mobile-header .mobile-logo img,
+.woocommerce .site-header .mobile-logo img,
+.woocommerce-page .site-header .mobile-logo img {
+  object-fit: contain !important;
+}
+
+.negar-mobile-header .mobile-logo {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-height: 32px;
+}
+
+.negar-mobile-header .mobile-logo a {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 32px !important;
+}
+
+.site-header .negar-mobile-header .mobile-logo img,
+.negar-mobile-header .mobile-logo img,
+.woocommerce .negar-mobile-header .mobile-logo img,
+.woocommerce-page .negar-mobile-header .mobile-logo img {
+  height: 32px !important;
+  max-height: 32px !important;
+  width: auto !important;
+  min-width: 60px !important;
+  max-width: 160px !important;
+  display: inline-block !important;
+  vertical-align: middle !important;
+}
+
+/* ==========================================================================
    Sticky Floating Island Header with Glassmorphism
    ========================================================================== */
 .site-header {

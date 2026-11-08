@@ -30,7 +30,7 @@ $logo_url       = file_exists( $logo_svg ) ? $upload_dir['baseurl'] . '/kaveh-de
 		<!-- Brand Logo -->
 		<div class="mobile-logo flex-1 flex items-center justify-center text-center">
 			<a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home" class="inline-flex items-center justify-center">
-				<img src="<?php echo esc_url( $logo_url ); ?>" alt="<?php bloginfo( 'name' ); ?>" width="120" height="32" class="h-8 w-auto object-contain d-inline-block" style="max-height: 32px; width: auto;">
+				<img src="<?php echo esc_url( $logo_url ); ?>" alt="<?php bloginfo( 'name' ); ?>" width="120" height="32" class="h-8 w-auto object-contain d-inline-block" style="height: 32px !important; max-height: 32px !important; width: auto !important; min-width: 60px;">
 			</a>
 		</div>
 
