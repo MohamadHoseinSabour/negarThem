@@ -866,9 +866,7 @@
 						if (step1Form) step1Form.classList.add('hidden');
 						if (step2Form) step2Form.classList.remove('hidden');
 						startTimer(data.data.cooldown || 60);
-						if (data.data.mock_code && codeInput) {
-							codeInput.value = data.data.mock_code;
-						}
+						if (codeInput) { codeInput.value = ""; }
 						if (codeInput) codeInput.focus();
 						window.negarToast(data.data.message || 'کد تایید ارسال شد.', 'info');
 					} else {

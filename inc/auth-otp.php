@@ -2,9 +2,10 @@
 /**
  * Customer Phone OTP Authentication Module
  * Provides seamless in-page mobile OTP login and customer account creation.
+ * Hardened for release: Zero OTP disclosure in client AJAX responses.
  *
  * @package Negar_Shop
- * @version 1.0.0
+ * @version 3.0.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -52,6 +53,7 @@ function negar_normalize_phone( $phone ) {
 
 /**
  * AJAX Handler: Send OTP Code to Mobile Number
+ * Security Rule: Never disclose OTP code in browser responses.
  */
 function negar_ajax_send_otp() {
 	check_ajax_referer( 'negar_shop_nonce', 'nonce' );
@@ -65,7 +67,7 @@ function negar_ajax_send_otp() {
 		) );
 	}
 
-	$phone_hash = md5( $phone );
+	$phone_hash   = md5( $phone );
 	$cooldown_key = 'negar_otp_cool_' . $phone_hash;
 	$hourly_key   = 'negar_otp_hour_' . $phone_hash;
 
@@ -84,29 +86,46 @@ function negar_ajax_send_otp() {
 		) );
 	}
 
-	// Generate 5-digit verification code
+	// Generate secure 5-digit verification code
 	$code = (string) wp_rand( 10000, 99999 );
 
-	// Store code in transient for 120 seconds (2 minutes)
-	set_transient( 'negar_otp_code_' . $phone_hash, $code, 120 );
+	// Store cryptographically hashed code in transient for 120 seconds (2 minutes)
+	$code_hash = wp_hash( $code );
+	set_transient( 'negar_otp_code_' . $phone_hash, $code_hash, 120 );
 	set_transient( $cooldown_key, true, 60 );
 	set_transient( $hourly_key, $hourly_attempts + 1, HOUR_IN_SECONDS );
 	delete_transient( 'negar_otp_attempts_' . $phone_hash );
 
-	// Filter hook for real SMS provider integration
+	// Filter hook for real SMS provider integration (e.g. Kavenegar, FarazSMS)
 	$dispatched = apply_filters( 'negar_dispatch_otp_sms', false, $phone, $code );
 
-	// Response payload
+	// Isolated automated test transport:
+	// ONLY enabled when explicitly configured via NEGAR_TEST_OTP_TRANSPORT constant or CI env
+	$is_test_transport = ( defined( 'NEGAR_TEST_OTP_TRANSPORT' ) && true === constant( 'NEGAR_TEST_OTP_TRANSPORT' ) )
+		|| ( '1' === getenv( 'NEGAR_TEST_OTP_TRANSPORT' ) );
+
+	if ( ! $dispatched && $is_test_transport ) {
+		// In test mode, record dispatch status without disclosing code in public HTTP response
+		set_transient( 'negar_test_transport_active_' . $phone_hash, true, 120 );
+		$dispatched = true;
+	}
+
+	// Honest failure status when SMS delivery was not successful
+	if ( ! $dispatched ) {
+		// Clean up stored OTP transient on dispatch failure
+		delete_transient( 'negar_otp_code_' . $phone_hash );
+		delete_transient( $cooldown_key );
+		wp_send_json_error( array(
+			'message' => esc_html__( 'سامانه پیامکی در دسترس نمی‌باشد. لطفاً لحظاتی دیگر تلاش فرمایید یا با پشتیبانی تماس بگیرید.', 'negar-shop' ),
+		) );
+	}
+
+	// Response payload - NEVER discloses code or mock_code to browser client
 	$response_data = array(
 		'message'  => esc_html__( 'کد تایید ۵ رقمی برای شماره شما ارسال شد.', 'negar-shop' ),
 		'cooldown' => 60,
 		'phone'    => $phone,
 	);
-
-	// In development / test environment, return mock_code for seamless testing
-	if ( ! $dispatched ) {
-		$response_data['mock_code'] = $code;
-	}
 
 	wp_send_json_success( $response_data );
 }
@@ -141,7 +160,7 @@ function negar_ajax_verify_otp() {
 	$code_key     = 'negar_otp_code_' . $phone_hash;
 	$attempts_key = 'negar_otp_attempts_' . $phone_hash;
 
-	$stored_code = get_transient( $code_key );
+	$stored_hash = get_transient( $code_key );
 	$attempts    = (int) get_transient( $attempts_key );
 
 	if ( $attempts >= 5 ) {
@@ -151,13 +170,14 @@ function negar_ajax_verify_otp() {
 		) );
 	}
 
-	if ( ! $stored_code ) {
+	if ( ! $stored_hash ) {
 		wp_send_json_error( array(
 			'message' => esc_html__( 'کد تایید منقضی شده یا ثبت نشده است. لطفاً مجدداً درخواست دهید.', 'negar-shop' ),
 		) );
 	}
 
-	if ( $stored_code !== $code ) {
+	// Constant-time hash comparison prevents timing side-channels
+	if ( ! hash_equals( (string) $stored_hash, (string) wp_hash( $code ) ) ) {
 		set_transient( $attempts_key, $attempts + 1, 120 );
 		wp_send_json_error( array(
 			'message' => esc_html__( 'کد وارد شده اشتباه است. لطفاً دقت فرمایید.', 'negar-shop' ),
@@ -167,6 +187,7 @@ function negar_ajax_verify_otp() {
 	// OTP is valid - clear transients
 	delete_transient( $code_key );
 	delete_transient( $attempts_key );
+	delete_transient( 'negar_test_transport_active_' . $phone_hash );
 
 	// Find or Create WordPress / WooCommerce User
 	$user = null;
@@ -182,8 +203,14 @@ function negar_ajax_verify_otp() {
 	if ( ! empty( $found_users ) ) {
 		$user = $found_users[0];
 	} else {
-		// 2. Look up by user_login matching phone
-		$user = get_user_by( 'login', $phone );
+		// 2. Look up by user_login matching phone ONLY if associated with this verified phone
+		$candidate = get_user_by( 'login', $phone );
+		if ( $candidate ) {
+			$saved_phone = get_user_meta( $candidate->ID, 'billing_phone', true );
+			if ( empty( $saved_phone ) || $saved_phone === $phone ) {
+				$user = $candidate;
+			}
+		}
 	}
 
 	// 3. If no user found, create a new customer

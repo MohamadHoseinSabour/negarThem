@@ -1,0 +1,68 @@
+[
+  {
+    "file": "header-shop-mobile-375.png",
+    "name": "header-shop-mobile-375",
+    "viewport": "375x812",
+    "md5": "5DA526AE5D1BB214376085829EFCF4D3"
+  },
+  {
+    "file": "header-product-mobile-375.png",
+    "name": "header-product-mobile-375",
+    "viewport": "375x812",
+    "md5": "4E9A738819490C9DFC04C1C255E8D14A"
+  },
+  {
+    "file": "hero-mobile-375.png",
+    "name": "hero-mobile-375",
+    "viewport": "375x812",
+    "md5": "BBED690A68A5543F3FD4B4F79AF4BEA7"
+  },
+  {
+    "file": "hero-desktop-1440.png",
+    "name": "hero-desktop-1440",
+    "viewport": "1440x900",
+    "md5": "3879CD86FD7FD441507120241C812B1C"
+  },
+  {
+    "file": "hero-desktop-1024.png",
+    "name": "hero-desktop-1024",
+    "viewport": "1024x768",
+    "md5": "61F0F095DF4A22C219F5532F47104432"
+  },
+  {
+    "file": "bottom-nav-mobile-375.png",
+    "name": "bottom-nav-mobile-375",
+    "viewport": "375x812",
+    "md5": "86D040B1BBE198CE7D1CAED9A1BF3CAC"
+  },
+  {
+    "file": "checkout-mobile-375.png",
+    "name": "checkout-mobile-375",
+    "viewport": "375x812",
+    "md5": "A21519AC31BF74B0B1278E94EE405C7A"
+  },
+  {
+    "file": "about-mobile-375.png",
+    "name": "about-mobile-375",
+    "viewport": "375x812",
+    "md5": "E48FF8CE2BF5D893B3EBD46B38140A45"
+  },
+  {
+    "file": "about-desktop-1440.png",
+    "name": "about-desktop-1440",
+    "viewport": "1440x900",
+    "md5": "94FC3CF949880F17A2703D4039FF0DF0"
+  },
+  {
+    "file": "contact-mobile-375.png",
+    "name": "contact-mobile-375",
+    "viewport": "375x812",
+    "md5": "3732866361DEC00E80E673D848BCAD60"
+  },
+  {
+    "file": "contact-desktop-1440.png",
+    "name": "contact-desktop-1440",
+    "viewport": "1440x900",
+    "md5": "D7F1E613EBC6E544FD807ECCA00D8F6D"
+  }
+]
