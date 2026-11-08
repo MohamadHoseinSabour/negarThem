@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Off-canvas Slide-out Mini Cart Drawer
  *

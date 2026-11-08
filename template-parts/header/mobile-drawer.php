@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Mobile Navigation Drawer Template Part
  *

@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Footer Newsletter Template Part
  *

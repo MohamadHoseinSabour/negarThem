@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Mobile Header Template Part
  *

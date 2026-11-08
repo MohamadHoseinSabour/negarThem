@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Footer Copyright, Socials and Back to Top
  *

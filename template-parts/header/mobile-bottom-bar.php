@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Mobile Sticky Bottom App Bar Template Part
  *
