@@ -1,0 +1,271 @@
+{
+  "generated_at": "2026-11-08T11:37:54.018Z",
+  "git_commit": "d4d0017e35f4faa5c48767aee0d324dab4a4af90",
+  "base_url": "http://localhost/wp4",
+  "screenshots": [
+    {
+      "file": "home-wide-1440.png",
+      "route": "home",
+      "url": "http://localhost/wp4",
+      "viewport": "1440",
+      "dimensions": "1440x900",
+      "size_bytes": 358410,
+      "md5": "5ED15C4F16F0CDF7D630886F2D5228FD",
+      "timestamp": "2026-11-08T11:37:54.018Z"
+    },
+    {
+      "file": "home-desktop-1024.png",
+      "route": "home",
+      "url": "http://localhost/wp4",
+      "viewport": "1024",
+      "dimensions": "1024x768",
+      "size_bytes": 320616,
+      "md5": "B4C1DC6041EF4A0C2A93A56C2D90E9F2",
+      "timestamp": "2026-11-08T11:37:54.018Z"
+    },
+    {
+      "file": "home-tablet-768.png",
+      "route": "home",
+      "url": "http://localhost/wp4",
+      "viewport": "768",
+      "dimensions": "768x1024",
+      "size_bytes": 297906,
+      "md5": "16CC262608AF21A5CD9A049AFD3178E8",
+      "timestamp": "2026-11-08T11:37:54.018Z"
+    },
+    {
+      "file": "home-mobile-375.png",
+      "route": "home",
+      "url": "http://localhost/wp4",
+      "viewport": "375",
+      "dimensions": "375x812",
+      "size_bytes": 135415,
+      "md5": "295F536FCA9ABB57F7A38EF5AF2327E1",
+      "timestamp": "2026-11-08T11:37:54.018Z"
+    },
+    {
+      "file": "shop-wide-1440.png",
+      "route": "shop",
+      "url": "http://localhost/wp4/?post_type=product",
+      "viewport": "1440",
+      "dimensions": "1440x900",
+      "size_bytes": 269755,
+      "md5": "234F5B431678996FD67A0CE1F1DFD232",
+      "timestamp": "2026-11-08T11:37:54.018Z"
+    },
+    {
+      "file": "shop-desktop-1024.png",
+      "route": "shop",
+      "url": "http://localhost/wp4/?post_type=product",
+      "viewport": "1024",
+      "dimensions": "1024x768",
+      "size_bytes": 217167,
+      "md5": "E35EDD62B255EDBFE629B12E483C66D0",
+      "timestamp": "2026-11-08T11:37:54.018Z"
+    },
+    {
+      "file": "shop-tablet-768.png",
+      "route": "shop",
+      "url": "http://localhost/wp4/?post_type=product",
+      "viewport": "768",
+      "dimensions": "768x1024",
+      "size_bytes": 260090,
+      "md5": "10AC6F19C290D8DF2D14C2FE7E4E4D5A",
+      "timestamp": "2026-11-08T11:37:54.018Z"
+    },
+    {
+      "file": "shop-mobile-375.png",
+      "route": "shop",
+      "url": "http://localhost/wp4/?post_type=product",
+      "viewport": "375",
+      "dimensions": "375x812",
+      "size_bytes": 112646,
+      "md5": "117645ED37C581B4A25409AC4C275CAB",
+      "timestamp": "2026-11-08T11:37:54.018Z"
+    },
+    {
+      "file": "account-1440.png",
+      "route": "account",
+      "url": "http://localhost/wp4/my-account/",
+      "viewport": "1440",
+      "dimensions": "1440x900",
+      "size_bytes": 75931,
+      "md5": "4A2D02ED4F2719ED9FD9D2CB41D42AFF",
+      "timestamp": "2026-11-08T11:37:54.018Z"
+    },
+    {
+      "file": "account-1024.png",
+      "route": "account",
+      "url": "http://localhost/wp4/my-account/",
+      "viewport": "1024",
+      "dimensions": "1024x768",
+      "size_bytes": 68180,
+      "md5": "F757E5E5D5F0567F9983B5DCDACC2902",
+      "timestamp": "2026-11-08T11:37:54.018Z"
+    },
+    {
+      "file": "account-768.png",
+      "route": "account",
+      "url": "http://localhost/wp4/my-account/",
+      "viewport": "768",
+      "dimensions": "768x1024",
+      "size_bytes": 68972,
+      "md5": "0A702C1D00BC67748656157D94CECFE5",
+      "timestamp": "2026-11-08T11:37:54.018Z"
+    },
+    {
+      "file": "account-375.png",
+      "route": "account",
+      "url": "http://localhost/wp4/my-account/",
+      "viewport": "375",
+      "dimensions": "375x812",
+      "size_bytes": 46715,
+      "md5": "C6EE3619264D7D5C37CD16D5D372E2D4",
+      "timestamp": "2026-11-08T11:37:54.018Z"
+    },
+    {
+      "file": "cart-1440.png",
+      "route": "cart",
+      "url": "http://localhost/wp4/cart/",
+      "viewport": "1440",
+      "dimensions": "1440x900",
+      "size_bytes": 161588,
+      "md5": "93FB6F05160B097C098584CECA1C1B69",
+      "timestamp": "2026-11-08T11:37:54.018Z"
+    },
+    {
+      "file": "cart-1024.png",
+      "route": "cart",
+      "url": "http://localhost/wp4/cart/",
+      "viewport": "1024",
+      "dimensions": "1024x768",
+      "size_bytes": 91731,
+      "md5": "528650375DD99CD8011E02941DBCEAC8",
+      "timestamp": "2026-11-08T11:37:54.018Z"
+    },
+    {
+      "file": "cart-768.png",
+      "route": "cart",
+      "url": "http://localhost/wp4/cart/",
+      "viewport": "768",
+      "dimensions": "768x1024",
+      "size_bytes": 116921,
+      "md5": "FA1E13E5F141F38503601CF7914A7490",
+      "timestamp": "2026-11-08T11:37:54.018Z"
+    },
+    {
+      "file": "cart-375.png",
+      "route": "cart",
+      "url": "http://localhost/wp4/cart/",
+      "viewport": "375",
+      "dimensions": "375x812",
+      "size_bytes": 64695,
+      "md5": "502BAF175A3291986ABE4E6B9893EA86",
+      "timestamp": "2026-11-08T11:37:54.018Z"
+    },
+    {
+      "file": "checkout-1440.png",
+      "route": "checkout",
+      "url": "http://localhost/wp4/checkout/",
+      "viewport": "1440",
+      "dimensions": "1440x900",
+      "size_bytes": 161588,
+      "md5": "93FB6F05160B097C098584CECA1C1B69",
+      "timestamp": "2026-11-08T11:37:54.018Z"
+    },
+    {
+      "file": "checkout-1024.png",
+      "route": "checkout",
+      "url": "http://localhost/wp4/checkout/",
+      "viewport": "1024",
+      "dimensions": "1024x768",
+      "size_bytes": 91731,
+      "md5": "528650375DD99CD8011E02941DBCEAC8",
+      "timestamp": "2026-11-08T11:37:54.018Z"
+    },
+    {
+      "file": "checkout-768.png",
+      "route": "checkout",
+      "url": "http://localhost/wp4/checkout/",
+      "viewport": "768",
+      "dimensions": "768x1024",
+      "size_bytes": 116921,
+      "md5": "FA1E13E5F141F38503601CF7914A7490",
+      "timestamp": "2026-11-08T11:37:54.018Z"
+    },
+    {
+      "file": "checkout-375.png",
+      "route": "checkout",
+      "url": "http://localhost/wp4/checkout/",
+      "viewport": "375",
+      "dimensions": "375x812",
+      "size_bytes": 64695,
+      "md5": "502BAF175A3291986ABE4E6B9893EA86",
+      "timestamp": "2026-11-08T11:37:54.018Z"
+    },
+    {
+      "file": "search-empty-1440.png",
+      "route": "search-empty",
+      "url": "http://localhost/wp4/?s=nonexistentproductqueryxyz12345&post_type=product",
+      "viewport": "1440",
+      "dimensions": "1440x900",
+      "size_bytes": 100929,
+      "md5": "15653A4E589FB765F1675EA7340AD2B2",
+      "timestamp": "2026-11-08T11:37:54.018Z"
+    },
+    {
+      "file": "search-empty-375.png",
+      "route": "search-empty",
+      "url": "http://localhost/wp4/?s=nonexistentproductqueryxyz12345&post_type=product",
+      "viewport": "375",
+      "dimensions": "375x812",
+      "size_bytes": 55984,
+      "md5": "61FF1A5983D2602C4FA5B3235D0E0797",
+      "timestamp": "2026-11-08T11:37:54.018Z"
+    },
+    {
+      "file": "404-1440.png",
+      "route": "404",
+      "url": "http://localhost/wp4/nonexistent-404-test-page/",
+      "viewport": "1440",
+      "dimensions": "1440x900",
+      "size_bytes": 105803,
+      "md5": "B8B0DDD8E368BF939CB0E57FBE04311B",
+      "timestamp": "2026-11-08T11:37:54.018Z"
+    },
+    {
+      "file": "404-375.png",
+      "route": "404",
+      "url": "http://localhost/wp4/nonexistent-404-test-page/",
+      "viewport": "375",
+      "dimensions": "375x812",
+      "size_bytes": 62849,
+      "md5": "89E258A36E35BDAE8DC6CCEB9CC41DD6",
+      "timestamp": "2026-11-08T11:37:54.018Z"
+    },
+    {
+      "file": "008-modal-quickview-desktop.png",
+      "route": "modal-quickview",
+      "viewport": "1440",
+      "size_bytes": 386070,
+      "md5": "0322F9441D88CFE7888AE9D8B3B47ABD",
+      "timestamp": "2026-11-08T11:37:54.018Z"
+    },
+    {
+      "file": "008-modal-wishlist-drawer.png",
+      "route": "modal-wishlist",
+      "viewport": "1440",
+      "size_bytes": 276704,
+      "md5": "3C00CBBDF0E919FFB5AAF4703C16E67C",
+      "timestamp": "2026-11-08T11:37:54.018Z"
+    },
+    {
+      "file": "008-modal-toast-alert.png",
+      "route": "toast-notification",
+      "viewport": "1440",
+      "size_bytes": 272951,
+      "md5": "DF7F1DFAB312CEE73DBD704F507BB35C",
+      "timestamp": "2026-11-08T11:37:54.018Z"
+    }
+  ]
+}

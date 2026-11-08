@@ -74,6 +74,16 @@ $has_logo       = true;
 		<!-- 3. Left: User Account & Cart (Matching Demo Screenshot 1:1) -->
 		<div class="header-actions flex items-center gap-3 shrink-0">
 
+			<!-- Wishlist Button -->
+			<div class="header-action-item hidden md:block">
+				<a href="<?php echo esc_url( home_url( '/wishlist' ) ); ?>" class="negar-wishlist-trigger relative w-9 h-9 rounded-full bg-slate-50 hover:bg-rose-50 text-slate-600 hover:text-rose-600 border border-slate-200 flex items-center justify-center transition shadow-2xs" aria-label="<?php esc_attr_e( 'لیست علاقه‌مندی‌ها', 'negar-shop' ); ?>">
+					<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+						<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+					</svg>
+					<span class="negar-wishlist-count absolute -top-1 -right-1 bg-rose-600 text-white rounded-full text-[10px] w-4.5 h-4.5 flex items-center justify-center font-black leading-none">0</span>
+				</a>
+			</div>
+
 			<!-- User Account Pill Button -->
 			<div class="header-action-item">
 				<a href="<?php echo esc_url( wc_get_page_permalink( 'myaccount' ) ); ?>" class="flex items-center gap-2 py-1.5 px-3.5 rounded-full bg-slate-50 hover:bg-slate-100 text-slate-700 transition border border-slate-200 text-xs font-bold shadow-2xs">
