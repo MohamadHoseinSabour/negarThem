@@ -98,6 +98,10 @@ add_filter( 'woocommerce_add_to_cart_fragments', 'negar_shop_cart_fragments' );
  * @return array
  */
 function negar_shop_body_classes( $classes ) {
+	if ( function_exists( 'is_product' ) && is_product() ) {
+		$classes[] = 'kav-single-product-style-5-page';
+		$classes[] = 'kaveh-modern-toman';
+	}
 	if ( function_exists( 'is_cart' ) && is_cart() ) {
 		$classes[] = 'kaveh-woo-flow-style-2';
 	}

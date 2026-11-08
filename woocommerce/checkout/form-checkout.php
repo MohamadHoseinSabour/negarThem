@@ -21,18 +21,23 @@ if ( ! $checkout->is_registration_enabled() && $checkout->is_registration_requir
 	<div class="container">
 
 		<!-- Steps Indicator: Step 2 Active -->
-		<div class="cart-nk__steps d-flex align-items-center justify-content-center mb-5 gap-3 gap-md-5">
+		<div class="cart-nk__steps d-flex align-items-center justify-content-center mb-5">
 			<a href="<?php echo esc_url( wc_get_cart_url() ); ?>" class="cart-nk__steps__item completed d-flex align-items-center gap-2 f-payda text-decoration-none">
-				<i class="icon-bag-2 lh-1 fs-5"></i>
-				<span>سبد خرید</span>
+				<span class="step-badge"><i class="icon-check-3 lh-1"></i></span>
+				<i class="icon-shopping-cart-5 lh-1 fs-5"></i>
+				<span><?php esc_html_e( 'سبد خرید', 'negar-shop' ); ?></span>
 			</a>
+			<div class="cart-step-line completed"></div>
 			<div class="cart-nk__steps__item active d-flex align-items-center gap-2 f-payda">
-				<i class="icon-card-pos lh-1 fs-5"></i>
-				<span class="fw-bold">جزئیات پرداخت</span>
+				<span class="step-badge">2</span>
+				<i class="icon-pin lh-1 fs-5"></i>
+				<span class="fw-bold"><?php esc_html_e( 'اطلاعات ارسال و پرداخت', 'negar-shop' ); ?></span>
 			</div>
-			<div class="cart-nk__steps__item d-flex align-items-center gap-2 f-payda text-muted">
+			<div class="cart-step-line"></div>
+			<div class="cart-nk__steps__item d-flex align-items-center gap-2 f-payda">
+				<span class="step-badge">3</span>
 				<i class="icon-tick-circle lh-1 fs-5"></i>
-				<span>تکمیل سفارش</span>
+				<span><?php esc_html_e( 'تکمیل سفارش', 'negar-shop' ); ?></span>
 			</div>
 		</div>
 

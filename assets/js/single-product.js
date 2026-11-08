@@ -1,164 +1,193 @@
 /**
- * Single Product JavaScript Controller
+ * Negar Shop - Single Product JavaScript Controller
+ * 100% Matching Kaveh Demo 43 (Style 5 Modern Tech)
  *
  * @package Negar_Shop
- * @version 1.0.0
+ * @version 2.5.0
  */
 
 (function () {
 	'use strict';
 
 	document.addEventListener('DOMContentLoaded', function () {
-		initGallery();
-		initQuantitySteppers();
-		initProductTabs();
+		initKavehGallery();
+		initKavehTabs();
+		initKavehCollapse();
+		initSpecsShowMore();
+		initKavehVotes();
 	});
 
 	/* ==========================================================================
-	   1. Product Gallery & Lightbox
+	   1. Kaveh Product Gallery (Style 5)
 	   ========================================================================== */
-	function initGallery() {
-		var mainImg = document.getElementById('negar-main-gallery-image');
-		var thumbBtns = document.querySelectorAll('.negar-thumb-btn');
-		var zoomBtn = document.querySelector('.negar-zoom-btn');
-		var lightbox = document.getElementById('negar-gallery-lightbox');
-		var lightboxImg = document.getElementById('negar-lightbox-img');
-		var closeLightbox = document.querySelector('.negar-close-lightbox');
+	function initKavehGallery() {
+		var mainImg = document.querySelector('.kav-style5-main-image');
+		var thumbs = document.querySelectorAll('.kav-style5-thumb');
 
-		if (!mainImg) return;
+		if (!mainImg || !thumbs.length) return;
 
-		// Thumbnail switching
-		thumbBtns.forEach(function (btn) {
-			btn.addEventListener('click', function () {
-				var largeSrc = this.getAttribute('data-large-src');
+		thumbs.forEach(function (thumb) {
+			thumb.addEventListener('click', function () {
 				var fullSrc = this.getAttribute('data-full-src');
+				var thumbImg = this.querySelector('img');
 
-				if (largeSrc) {
+				if (fullSrc) {
 					mainImg.style.opacity = '0.3';
+					mainImg.style.transition = 'opacity 0.2s ease';
 					setTimeout(function () {
-						mainImg.src = largeSrc;
-						mainImg.setAttribute('data-zoom-src', fullSrc);
+						mainImg.src = fullSrc;
+						mainImg.setAttribute('data-large_image', fullSrc);
 						mainImg.style.opacity = '1';
 					}, 150);
+				} else if (thumbImg && thumbImg.src) {
+					mainImg.src = thumbImg.src;
 				}
 
-				if (lightboxImg && fullSrc) {
-					lightboxImg.src = fullSrc;
-				}
-
-				thumbBtns.forEach(function (b) {
-					b.classList.remove('border-primary', 'shadow-sm', 'scale-105');
-					b.classList.add('border-border', 'opacity-70');
+				thumbs.forEach(function (t) {
+					t.style.borderColor = '#f2f2f2';
 				});
-				this.classList.add('border-primary', 'shadow-sm', 'scale-105');
-				this.classList.remove('border-border', 'opacity-70');
+				this.style.borderColor = '#e90544';
 			});
 		});
+	}
 
-		// Lightbox Zoom
-		if (zoomBtn && lightbox) {
-			zoomBtn.addEventListener('click', function () {
-				var fullSrc = mainImg.getAttribute('data-zoom-src') || mainImg.src;
-				if (lightboxImg) lightboxImg.src = fullSrc;
-				lightbox.classList.add('is-open');
-				document.body.classList.add('overflow-hidden');
+	/* ==========================================================================
+	   2. Kaveh Product Tabs (True Tab Switching: Info, Comments, Questions)
+	   ========================================================================== */
+	function initKavehTabs() {
+		var tabItems = document.querySelectorAll('.kav-single-product-tabs li');
+		var tabPanes = document.querySelectorAll('.kav-single-product-tab-content');
+
+		if (!tabItems.length) return;
+
+		function activateTab(targetSelector, shouldScroll) {
+			tabItems.forEach(function (t) {
+				if (t.getAttribute('data-content') === targetSelector) {
+					t.classList.add('active');
+				} else {
+					t.classList.remove('active');
+				}
 			});
 
-			function hideLightbox() {
-				lightbox.classList.remove('is-open');
-				document.body.classList.remove('overflow-hidden');
+			tabPanes.forEach(function (pane) {
+				if ('#' + pane.id === targetSelector) {
+					pane.classList.add('is-active');
+					pane.style.display = 'block';
+				} else {
+					pane.classList.remove('is-active');
+					pane.style.display = 'none';
+				}
+			});
+
+			if (shouldScroll) {
+				var tabsBar = document.querySelector('.kav-single-product-tabs');
+				if (tabsBar) {
+					var offset = 100;
+					var elPos = tabsBar.getBoundingClientRect().top + window.pageYOffset - offset;
+					window.scrollTo({
+						top: elPos,
+						behavior: 'smooth'
+					});
+				}
 			}
+		}
 
-			if (closeLightbox) closeLightbox.addEventListener('click', hideLightbox);
-			lightbox.addEventListener('click', function (e) {
-				if (e.target === lightbox) hideLightbox();
-			});
-
-			document.addEventListener('keydown', function (e) {
-				if (e.key === 'Escape' && lightbox.classList.contains('is-open')) {
-					hideLightbox();
+		tabItems.forEach(function (tab) {
+			tab.addEventListener('click', function () {
+				var targetSelector = this.getAttribute('data-content');
+				if (targetSelector) {
+					activateTab(targetSelector, false);
 				}
 			});
-		}
+		});
+
+		// External triggers (like "مشاهده همه ویژگی ها" link)
+		var specsMoreLinks = document.querySelectorAll('a[href="#info-product-tab"], .kav-single-product-specs-more');
+		specsMoreLinks.forEach(function (link) {
+			link.addEventListener('click', function (e) {
+				e.preventDefault();
+				activateTab('#info-product-tab', true);
+			});
+		});
+
+		// Sort buttons in comments and questions tabs
+		var sortBtns = document.querySelectorAll('.kav-single-product-comments-sort');
+		sortBtns.forEach(function (btn) {
+			btn.addEventListener('click', function () {
+				var parentGroup = this.closest('.kav-reviews2-sort');
+				if (parentGroup) {
+					parentGroup.querySelectorAll('.kav-single-product-comments-sort').forEach(function (b) {
+						b.classList.remove('active');
+					});
+				}
+				this.classList.add('active');
+			});
+		});
 	}
 
 	/* ==========================================================================
-	   2. Quantity Controls (+ / -)
+	   3. Kaveh Heading Collapse (Bootstrap Compatible)
 	   ========================================================================== */
-	function initQuantitySteppers() {
-		var qtyWrappers = document.querySelectorAll('.negar-add-to-cart-wrapper .quantity');
+	function initKavehCollapse() {
+		var headings = document.querySelectorAll('.kav-single-product-heading');
 
-		qtyWrappers.forEach(function (wrapper) {
-			var input = wrapper.querySelector('input.qty');
-			if (!input || wrapper.querySelector('.negar-qty-btn')) return;
+		headings.forEach(function (heading) {
+			heading.addEventListener('click', function () {
+				var targetId = this.getAttribute('data-bs-target');
+				if (!targetId) return;
 
-			// Create Minus Button
-			var minusBtn = document.createElement('button');
-			minusBtn.type = 'button';
-			minusBtn.className = 'negar-qty-btn minus';
-			minusBtn.innerHTML = '&minus;';
-			minusBtn.setAttribute('aria-label', 'کاهش تعداد');
+				var target = document.querySelector(targetId);
+				var chevron = this.querySelector('.kav-single-product-heading-chevron');
 
-			// Create Plus Button
-			var plusBtn = document.createElement('button');
-			plusBtn.type = 'button';
-			plusBtn.className = 'negar-qty-btn plus';
-			plusBtn.innerHTML = '+';
-			plusBtn.setAttribute('aria-label', 'افزایش تعداد');
-
-			wrapper.insertBefore(minusBtn, input);
-			wrapper.appendChild(plusBtn);
-
-			minusBtn.addEventListener('click', function () {
-				var current = parseInt(input.value, 10) || 1;
-				var min = parseInt(input.getAttribute('min'), 10) || 1;
-				var step = parseInt(input.getAttribute('step'), 10) || 1;
-				if (current > min) {
-					input.value = current - step;
-					input.dispatchEvent(new Event('change', { bubbles: true }));
-				}
-			});
-
-			plusBtn.addEventListener('click', function () {
-				var current = parseInt(input.value, 10) || 1;
-				var max = parseInt(input.getAttribute('max'), 10) || 9999;
-				var step = parseInt(input.getAttribute('step'), 10) || 1;
-				if (current < max) {
-					input.value = current + step;
-					input.dispatchEvent(new Event('change', { bubbles: true }));
+				if (target) {
+					if (target.classList.contains('show')) {
+						target.classList.remove('show');
+						if (chevron) chevron.style.transform = 'rotate(180deg)';
+					} else {
+						target.classList.add('show');
+						if (chevron) chevron.style.transform = 'rotate(0deg)';
+					}
 				}
 			});
 		});
 	}
 
 	/* ==========================================================================
-	   3. Product Tabs Navigation
+	   4. Specifications Show More / Less Toggle
 	   ========================================================================== */
-	function initProductTabs() {
-		var tabButtons = document.querySelectorAll('.negar-tab-btn');
-		var tabPanels = document.querySelectorAll('.negar-tab-panel');
+	function initSpecsShowMore() {
+		var btn = document.querySelector('.kav-single-product-btn-show-more');
+		var content = document.querySelector('#kav-single-product-info-product-content');
 
-		if (!tabButtons.length || !tabPanels.length) return;
+		if (!btn || !content) return;
 
-		tabButtons.forEach(function (btn) {
+		btn.addEventListener('click', function () {
+			var isExpanded = btn.classList.contains('is-expanded');
+			if (isExpanded) {
+				content.style.maxHeight = '464px';
+				btn.classList.remove('is-expanded');
+			} else {
+				content.style.maxHeight = 'none';
+				btn.classList.add('is-expanded');
+			}
+		});
+	}
+
+	/* ==========================================================================
+	   5. Thumbs Up / Down Voting
+	   ========================================================================== */
+	function initKavehVotes() {
+		var voteBtns = document.querySelectorAll('[data-kav-vote]');
+		voteBtns.forEach(function (btn) {
 			btn.addEventListener('click', function () {
-				var targetId = this.getAttribute('data-tab');
-
-				tabButtons.forEach(function (b) {
-					b.classList.remove('is-active');
-					b.setAttribute('aria-selected', 'false');
-				});
-
-				tabPanels.forEach(function (panel) {
-					panel.classList.add('hidden');
-				});
-
-				this.classList.add('is-active');
-				this.setAttribute('aria-selected', 'true');
-
-				var activePanel = document.getElementById(targetId);
-				if (activePanel) {
-					activePanel.classList.remove('hidden');
+				var countEl = this.querySelector('.kav-vote-count');
+				var current = countEl ? parseInt(countEl.textContent, 10) || 0 : 0;
+				if (this.classList.contains('is-active')) {
+					this.classList.remove('is-active');
+					if (countEl && current > 0) countEl.textContent = current - 1;
+				} else {
+					this.classList.add('is-active');
+					if (countEl) countEl.textContent = current + 1;
 				}
 			});
 		});

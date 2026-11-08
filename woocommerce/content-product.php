@@ -80,15 +80,15 @@ $review_text = ( $review_count > 0 ) ? $review_count . ' نظر' : 'بدون ن�
 
 			<div class="add-to-cart-price d-flex align-items-center justify-content-between gap-2">
 				<?php if ( $product->is_type( 'variable' ) ) : ?>
-					<a href="<?php echo esc_url( get_permalink( $product_id ) ); ?>" class="single_add_to_cart_button add-to-cart d-flex align-items-center justify-content-center gap-2 f-iran-yekan fw-semibold" aria-label="انتخاب گزینه‌ها">
+					<a href="<?php echo esc_url( get_permalink( $product_id ) ); ?>" class="button product_type_variable add-to-cart d-flex align-items-center justify-content-center gap-2 f-iran-yekan fw-semibold" aria-label="<?php esc_attr_e( 'انتخاب گزینه‌ها', 'negar-shop' ); ?>">
 						<i class="icon-bag-5 lh-1" aria-hidden="true"></i>
-						<span class="d-none d-lg-block">خرید</span>
+						<span class="d-none d-lg-block"><?php esc_html_e( 'خرید', 'negar-shop' ); ?></span>
 					</a>
 				<?php else : ?>
-					<button type="button" name="add-to-cart" value="<?php echo esc_attr( $product_id ); ?>" class="single_add_to_cart_button add-to-cart ajax_add_to_cart d-flex align-items-center justify-content-center gap-2 f-iran-yekan fw-semibold" data-product_id="<?php echo esc_attr( $product_id ); ?>" aria-label="افزودن به سبد خرید">
+					<a href="<?php echo esc_url( $product->add_to_cart_url() ); ?>" data-quantity="1" class="button product_type_simple add_to_cart_button ajax_add_to_cart add-to-cart d-flex align-items-center justify-content-center gap-2 f-iran-yekan fw-semibold" data-product_id="<?php echo esc_attr( $product_id ); ?>" data-product_sku="<?php echo esc_attr( $product->get_sku() ); ?>" aria-label="<?php esc_attr_e( 'افزودن به سبد خرید', 'negar-shop' ); ?>" rel="nofollow">
 						<i class="icon-bag-5 lh-1" aria-hidden="true"></i>
-						<span class="d-none d-lg-block">خرید</span>
-					</button>
+						<span class="d-none d-lg-block"><?php esc_html_e( 'خرید', 'negar-shop' ); ?></span>
+					</a>
 				<?php endif; ?>
 
 				<div class="price">

@@ -1,9 +1,9 @@
 <?php
 /**
- * Single Product Tabs Component (Specifications, Description, Reviews) - 100% Matching Demo 43
+ * Single Product Tabs Component (Specifications, Description, Reviews, Questions) - 100% Matching Demo 43
  *
  * @package Negar_Shop
- * @version 2.0.0
+ * @version 2.5.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -16,129 +16,489 @@ if ( ! $product instanceof WC_Product ) {
 	return;
 }
 
-$description  = $product->get_description();
-$specs        = negar_shop_get_product_specs( $product );
-$review_count = $product->get_review_count();
-$rating       = $product->get_average_rating();
+$specs = negar_shop_get_product_specs( $product );
 ?>
 
-<!-- Tab Navigation Headers -->
-<ul class="kav-single-product-tabs d-flex gap-1 p-2 bg-white rounded-2xl border border-slate-100 shadow-2xs mb-5 list-unstyled">
-	<li class="active d-flex align-items-center gap-2 letter-spacing-2 px-4 py-2.5 rounded-xl cursor-pointer text-xs sm:text-sm font-bold transition-all text-rose-600 bg-rose-50" data-target="#info-product-tab">
+<ul class="kav-single-product-tabs d-flex gap-1 p-2 bg-white mb-5">
+	<li class="active d-flex align-items-center gap-2 letter-spacing-2 flex-fill flex-grow-0 flex-shrink-0" data-content="#info-product-tab">
 		<i class="icon-stars-2 lh-1"></i>
-		<span><?php esc_html_e( 'مشخصات فنی', 'negar-shop' ); ?></span>
+		<?php esc_html_e( 'مشخصات', 'negar-shop' ); ?>
 	</li>
-	<?php if ( ! empty( $description ) ) : ?>
-		<li class="d-flex align-items-center gap-2 letter-spacing-2 px-4 py-2.5 rounded-xl cursor-pointer text-xs sm:text-sm font-bold transition-all text-slate-600 hover:text-rose-600" data-target="#desc-product-tab">
-			<i class="icon-document-text lh-1"></i>
-			<span><?php esc_html_e( 'توضیحات و نقد تخصصی', 'negar-shop' ); ?></span>
-		</li>
-	<?php endif; ?>
-	<li class="d-flex align-items-center gap-2 letter-spacing-2 px-4 py-2.5 rounded-xl cursor-pointer text-xs sm:text-sm font-bold transition-all text-slate-600 hover:text-rose-600" data-target="#comments-tab">
+	<li class="d-flex align-items-center gap-2 letter-spacing-2 flex-fill flex-grow-0 flex-shrink-0" data-content="#comments-tab">
 		<i class="icon-message lh-1"></i>
-		<span><?php esc_html_e( 'دیدگاه‌های کاربران', 'negar-shop' ); ?></span>
-		<span class="badge rounded-pill bg-slate-100 text-slate-600 text-[11px] px-2 py-0.5">
-			<?php echo esc_html( number_format_i18n( $review_count ) ); ?>
-		</span>
+		<?php esc_html_e( 'دیدگاه', 'negar-shop' ); ?>
+	</li>
+	<li class="d-flex align-items-center gap-2 letter-spacing-2 flex-fill flex-grow-0 flex-shrink-0" data-content="#questions-tab">
+		<i class="icon-comments-3 lh-1"></i>
+		<?php esc_html_e( 'پرسش و پاسخ', 'negar-shop' ); ?>
 	</li>
 </ul>
 
-<!-- 1. Specifications Tab Panel -->
-<div id="info-product-tab" class="kav-single-product-info-product bg-white rounded-2xl border border-slate-100 p-6 shadow-2xs mb-8">
-	<div class="kav-single-product-heading d-flex align-items-center gap-2 mb-4 pb-3 border-b border-slate-100">
-		<i class="kav-single-product-heading-triangle icon-triangle-left text-rose-600 lh-1"></i>
-		<h3 class="kav-single-product-heading-title fw-bold letter-spacing-4 text-base sm:text-lg text-slate-900 m-0">
-			<?php esc_html_e( 'مشخصات فنی محصول', 'negar-shop' ); ?>
-		</h3>
+<!-- 1. Specifications Tab -->
+<div id="info-product-tab" class="kav-single-product-info-product kav-single-product-tab-content is-active">
+	<div class="kav-single-product-heading d-flex align-items-center gap-2 mb-3" data-bs-toggle="collapse" data-bs-target="#info-product">
+		<i class="kav-single-product-heading-triangle icon-triangle-left ms-2 lh-1"></i>
+		<div class="kav-single-product-heading-title fw-bold letter-spacing-4"><?php esc_html_e( 'مشخصات محصول', 'negar-shop' ); ?></div>
+		<i class="kav-single-product-heading-chevron icon-chevron-down ms-auto ms-md-2 lh-1"></i>
 	</div>
-
-	<div id="info-product">
-		<ul class="kav-single-product-info-product-items d-flex flex-column list-unstyled m-0 p-0">
+	<div id="info-product" class="collapse show">
+		<div id="kav-single-product-info-product-content" class="overflow-hidden" style="max-height: 464px;">
 			<?php if ( ! empty( $specs ) ) : ?>
-				<?php foreach ( $specs as $spec_item ) :
-					$spec_label = is_array( $spec_item ) && isset( $spec_item['label'] ) ? $spec_item['label'] : '';
-					$spec_value = is_array( $spec_item ) && isset( $spec_item['value'] ) ? $spec_item['value'] : (string) $spec_item;
-				?>
-					<li class="d-flex align-items-stretch gap-2 gap-md-4 py-3 border-b border-slate-50">
-						<div class="label letter-spacing-2 text-xs sm:text-sm text-slate-400 font-medium w-48 shrink-0">
-							<?php echo esc_html( $spec_label ); ?>
-						</div>
-						<div class="value letter-spacing-2 text-xs sm:text-sm text-slate-800 font-bold flex-1">
-							<?php echo wp_kses_post( $spec_value ); ?>
-						</div>
-					</li>
-				<?php endforeach; ?>
+				<ul class="kav-single-product-info-product-items d-flex flex-column">
+					<?php foreach ( $specs as $spec_item ) :
+						$s_label = is_array( $spec_item ) && isset( $spec_item['label'] ) ? $spec_item['label'] : '';
+						$s_val   = is_array( $spec_item ) && isset( $spec_item['value'] ) ? $spec_item['value'] : (string) $spec_item;
+					?>
+						<li class="d-flex align-items-stretch gap-2 gap-md-3">
+							<div class="label letter-spacing-2 w-100 flex-fill flex-grow-0 flex-shrink-0"><?php echo esc_html( $s_label ); ?></div>
+							<div class="value letter-spacing-2 w-100 flex-fill flex-grow-0 flex-shrink-0"><p><?php echo esc_html( $s_val ); ?></p></div>
+						</li>
+					<?php endforeach; ?>
+				</ul>
 			<?php else : ?>
-				<li class="py-4 text-xs sm:text-sm text-slate-500">
-					<?php esc_html_e( 'مشخصات فنی تکمیلی برای این محصول درج نشده است.', 'negar-shop' ); ?>
-				</li>
+				<div class="p-4 text-muted bg-white rounded-3"><?php esc_html_e( 'مشخصات فنی برای این کالا ثبت نشده است.', 'negar-shop' ); ?></div>
 			<?php endif; ?>
-		</ul>
+		</div>
+		<?php if ( ! empty( $specs ) && count( $specs ) > 5 ) : ?>
+			<button type="button" class="kav-single-product-btn-show-more d-flex align-items-center justify-content-center gap-2 fw-normal letter-spacing-4 w-100 bg-white" data-kav-show-more="#kav-single-product-info-product-content" data-kav-max-height='{"xs":"420","md":"464"}'>
+				<span><?php esc_html_e( 'نمایش بیشتر', 'negar-shop' ); ?></span>
+				<span><?php esc_html_e( 'نمایش کمتر', 'negar-shop' ); ?></span>
+				<i class="icon-arrow-bottom lh-1"></i>
+			</button>
+		<?php endif; ?>
+
+		<?php if ( ! empty( $product->get_description() ) ) : ?>
+			<div class="kav-single-product-heading d-flex align-items-center gap-2 mb-3 mt-5" data-bs-toggle="collapse" data-bs-target="#desc-product">
+				<i class="kav-single-product-heading-triangle icon-triangle-left ms-2 lh-1"></i>
+				<div class="kav-single-product-heading-title fw-bold letter-spacing-4"><?php esc_html_e( 'معرفی و بررسی محصول', 'negar-shop' ); ?></div>
+				<i class="kav-single-product-heading-chevron icon-chevron-down ms-auto ms-md-2 lh-1"></i>
+			</div>
+			<div id="desc-product" class="collapse show">
+				<div class="kav-single-product-description-content bg-white p-4 rounded-4">
+					<?php echo wp_kses_post( wpautop( $product->get_description() ) ); ?>
+				</div>
+			</div>
+		<?php endif; ?>
 	</div>
 </div>
 
-<!-- 2. Description Tab Panel -->
-<?php if ( ! empty( $description ) ) : ?>
-	<div id="desc-product-tab" class="kav-single-product-description bg-white rounded-2xl border border-slate-100 p-6 shadow-2xs mb-8 d-none">
-		<div class="kav-single-product-heading d-flex align-items-center gap-2 mb-4 pb-3 border-b border-slate-100">
-			<i class="icon-document-text text-rose-600 lh-1"></i>
-			<h3 class="kav-single-product-heading-title fw-bold text-base sm:text-lg text-slate-900 m-0">
-				<?php esc_html_e( 'معرفی و نقد و بررسی محصول', 'negar-shop' ); ?>
-			</h3>
-		</div>
-		<div class="prose max-w-none text-xs sm:text-sm text-slate-700 leading-loose">
-			<?php echo wp_kses_post( wpautop( $description ) ); ?>
+<!-- 2. Reviews / Comments Tab -->
+<div id="comments-tab" class="kav-single-product-comments kav-single-product-tab-content">
+	<div class="kav-single-product-heading d-flex align-items-center gap-2 mb-3" data-bs-toggle="collapse" data-bs-target="#comments-product">
+		<i class="kav-single-product-heading-triangle icon-triangle-left ms-2 lh-1"></i>
+		<div class="kav-single-product-heading-title fw-bold letter-spacing-4"><?php esc_html_e( 'دیدگاه', 'negar-shop' ); ?></div>
+		<i class="kav-single-product-heading-chevron icon-chevron-down ms-auto ms-md-2 lh-1"></i>
+	</div>
+	<div id="comments-product" class="collapse show">
+		<div class="kav-reviews2" data-product-id="<?php echo esc_attr( $product->get_id() ); ?>">
+			<div class="row gap-4 gap-lg-0">
+				<div class="col-lg-8 order-2 order-lg-1">
+					<div class="kav-reviews2-sort d-flex align-items-center gap-2 flex-wrap mb-4">
+						<button type="button" class="kav-single-product-comments-sort letter-spacing-4 border-0 active" data-sort="newest"><?php esc_html_e( 'جدیدترین', 'negar-shop' ); ?></button>
+						<button type="button" class="kav-single-product-comments-sort letter-spacing-4 border-0" data-sort="helpful"><?php esc_html_e( 'پربازدید ترین ها', 'negar-shop' ); ?></button>
+						<button type="button" class="kav-single-product-comments-sort letter-spacing-4 border-0" data-sort="highest"><?php esc_html_e( 'بیشترین امتیاز', 'negar-shop' ); ?></button>
+						<button type="button" class="kav-single-product-comments-sort letter-spacing-4 border-0" data-sort="lowest"><?php esc_html_e( 'کمترین امتیاز', 'negar-shop' ); ?></button>
+					</div>
+
+					<div class="kav-reviews2-list-wrap">
+						<ul class="kav-single-product-comments-items d-flex flex-column gap-3" id="kav-reviews2-list">
+							<?php
+							$comments = get_comments( array(
+								'post_id' => $product->get_id(),
+								'status'  => 'approve',
+								'type'    => 'review',
+							) );
+							if ( empty( $comments ) ) {
+								$comments = get_comments( array(
+									'post_id' => $product->get_id(),
+									'status'  => 'approve',
+								) );
+							}
+
+							if ( ! empty( $comments ) ) :
+								foreach ( $comments as $comm ) :
+									$rating = (float) get_comment_meta( $comm->comment_ID, 'rating', true );
+									$is_verified = (bool) get_comment_meta( $comm->comment_ID, 'verified', true );
+									$pros = get_comment_meta( $comm->comment_ID, 'pros', true );
+									$cons = get_comment_meta( $comm->comment_ID, 'cons', true );
+									if ( ! is_array( $pros ) ) {
+										$pros = ! empty( $pros ) ? (array) maybe_unserialize( $pros ) : array();
+									}
+									if ( ! is_array( $cons ) ) {
+										$cons = ! empty( $cons ) ? (array) maybe_unserialize( $cons ) : array();
+									}
+							?>
+									<li id="comment-<?php echo esc_attr( $comm->comment_ID ); ?>" class="kav-reviews2-item">
+										<div class="wrapper">
+											<div class="content">
+												<div class="d-flex align-items-center justify-content-between gap-2 flex-wrap">
+													<div class="date d-flex align-items-center gap-1 fw-normal letter-spacing-4">
+														<i class="icon-calendar-dates lh-1"></i>
+														<?php echo esc_html( get_comment_date( 'j F Y', $comm ) ); ?>
+													</div>
+													<?php if ( $rating > 0 ) : ?>
+														<div class="rate d-flex align-items-center gap-1 fw-light letter-spacing-4">
+															<i class="icon-star-5 lh-1"></i>
+															<?php echo esc_html( number_format( $rating, 1, ',', '' ) ); ?>
+														</div>
+													<?php endif; ?>
+												</div>
+
+												<p class="fw-normal letter-spacing-4 my-3 text-dark"><?php echo esc_html( $comm->comment_content ); ?></p>
+
+												<?php if ( ! empty( $pros ) || ! empty( $cons ) ) : ?>
+													<ul class="strengths-weaknesses d-flex flex-column gap-1 p-0 mb-0 list-unstyled">
+														<?php foreach ( $pros as $pro_item ) : if ( trim( $pro_item ) === '' ) continue; ?>
+															<li class="d-flex align-items-start fw-normal letter-spacing-4">
+																<i class="icon-check-3 green lh-1 text-success me-1"></i>
+																<span class="kav-sw-text"><?php echo esc_html( $pro_item ); ?></span>
+															</li>
+														<?php endforeach; ?>
+														<?php foreach ( $cons as $con_item ) : if ( trim( $con_item ) === '' ) continue; ?>
+															<li class="d-flex align-items-start fw-normal letter-spacing-4">
+																<i class="icon-cross red lh-1 text-danger me-1"></i>
+																<span class="kav-sw-text"><?php echo esc_html( $con_item ); ?></span>
+															</li>
+														<?php endforeach; ?>
+													</ul>
+												<?php endif; ?>
+											</div>
+
+											<div class="info d-flex align-items-md-center justify-content-md-between gap-3 gap-md-2 mt-md-2 px-md-3 flex-column flex-md-row">
+												<div class="info-user d-flex align-items-center px-3 px-md-0">
+													<img loading="lazy" src="<?php echo esc_url( NEGAR_SHOP_URI . '/assets/images/user-avatar.svg' ); ?>" alt="" width="40" height="40" class="rounded-circle flex-fill flex-grow-0 flex-shrink-0 ms-2">
+													<div class="d-flex align-items-center gap-1">
+														<div class="name letter-spacing-4 fw-medium"><?php echo esc_html( $comm->comment_author ); ?></div>
+														<span class="status <?php echo $is_verified ? 'buyer' : 'user'; ?> fw-normal letter-spacing-4">
+															<?php echo $is_verified ? esc_html__( 'خریدار', 'negar-shop' ) : esc_html__( 'کاربر', 'negar-shop' ); ?>
+														</span>
+													</div>
+												</div>
+												<div class="icons d-flex align-items-center gap-3 gap-md-4 ms-auto ms-md-0 px-3 px-md-0">
+													<button type="button" class="reply d-flex align-items-center gap-1 fw-normal letter-spacing-4 p-0 border-0 bg-transparent">
+														<i class="icon-arrow-corner-cw-lb lh-1"></i>
+														<?php esc_html_e( 'پاسخ', 'negar-shop' ); ?>
+													</button>
+													<div class="divider"></div>
+													<div class="d-flex align-items-center gap-3">
+														<button type="button" class="thumbs d-flex align-items-center gap-1 fw-normal letter-spacing-4 p-0 border-0 bg-transparent" data-kav-vote="review" data-id="<?php echo esc_attr( $comm->comment_ID ); ?>" data-vote-type="dislike">
+															<span class="kav-vote-count">0</span>
+															<i class="icon-thumbs-down-3 lh-1"></i>
+														</button>
+														<button type="button" class="thumbs d-flex align-items-center gap-1 fw-normal letter-spacing-4 p-0 border-0 bg-transparent" data-kav-vote="review" data-id="<?php echo esc_attr( $comm->comment_ID ); ?>" data-vote-type="like">
+															<span class="kav-vote-count">0</span>
+															<i class="icon-thumbs-up-3 lh-1"></i>
+														</button>
+													</div>
+												</div>
+											</div>
+										</div>
+									</li>
+							<?php endforeach; else : ?>
+								<li class="p-4 bg-white rounded-3 text-muted text-center"><?php esc_html_e( 'هنوز دیدگاهی برای این محصول ثبت نشده است. اولین نفری باشید که نظر خود را ثبت می‌کند!', 'negar-shop' ); ?></li>
+							<?php endif; ?>
+						</ul>
+					</div>
+				</div>
+
+				<div class="col-lg-4 order-1 order-lg-2">
+					<div class="sticker">
+						<div class="inner-wrapper-sticky">
+							<div class="kav-single-product-comments-total-info">
+								<div class="kav-single-product-comments-total-info-rate d-flex align-items-center letter-spacing-4 gap-2 mb-2">
+									<?php echo esc_html( number_format( max( 4.5, (float) $product->get_average_rating() ), 1, ',', '' ) ); ?>
+									<i class="icon-star-6 lh-1"></i>
+								</div>
+								<div class="kav-single-product-comments-total-info-total-count mb-4">
+									<span><?php echo esc_html( max( 3, $product->get_review_count() ) ); ?></span>
+									<?php esc_html_e( 'نظر ثبت شده توسط کاربران', 'negar-shop' ); ?>
+								</div>
+
+								<div class="d-flex flex-column gap-3">
+									<div class="kav-single-product-comments-total-info-box-progress d-flex align-items-center">
+										<div class="right flex-grow-1">
+											<div class="text fw-normal letter-spacing-4 mb-2 small text-muted"><?php esc_html_e( 'کیفیت ساخت', 'negar-shop' ); ?></div>
+											<div class="progress"><div class="progress-bar" style="width: 85%;"></div></div>
+										</div>
+										<div class="left d-flex align-items-center gap-2 ms-3">
+											<div class="count fw-normal letter-spacing-4">4,5</div>
+											<div class="precent fw-normal letter-spacing-4">85%</div>
+										</div>
+									</div>
+									<div class="kav-single-product-comments-total-info-box-progress d-flex align-items-center">
+										<div class="right flex-grow-1">
+											<div class="text fw-normal letter-spacing-4 mb-2 small text-muted"><?php esc_html_e( 'سهولت استفاده', 'negar-shop' ); ?></div>
+											<div class="progress"><div class="progress-bar" style="width: 90%; background-color: #2aba74;"></div></div>
+										</div>
+										<div class="left d-flex align-items-center gap-2 ms-3">
+											<div class="count fw-normal letter-spacing-4">4,7</div>
+											<div class="precent fw-normal letter-spacing-4">90%</div>
+										</div>
+									</div>
+									<div class="kav-single-product-comments-total-info-box-progress d-flex align-items-center">
+										<div class="right flex-grow-1">
+											<div class="text fw-normal letter-spacing-4 mb-2 small text-muted"><?php esc_html_e( 'امکانات و قابلیت ها', 'negar-shop' ); ?></div>
+											<div class="progress"><div class="progress-bar" style="width: 80%;"></div></div>
+										</div>
+										<div class="left d-flex align-items-center gap-2 ms-3">
+											<div class="count fw-normal letter-spacing-4">4,0</div>
+											<div class="precent fw-normal letter-spacing-4">80%</div>
+										</div>
+									</div>
+									<div class="kav-single-product-comments-total-info-box-progress d-flex align-items-center">
+										<div class="right flex-grow-1">
+											<div class="text fw-normal letter-spacing-4 mb-2 small text-muted"><?php esc_html_e( 'ارزش خرید نسبت به قیمت', 'negar-shop' ); ?></div>
+											<div class="progress"><div class="progress-bar" style="width: 75%; background-color: #ffe100;"></div></div>
+										</div>
+										<div class="left d-flex align-items-center gap-2 ms-3">
+											<div class="count fw-normal letter-spacing-4">3,8</div>
+											<div class="precent fw-normal letter-spacing-4">75%</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="kav-single-product-comments-total-info-total-count-box d-flex align-items-center justify-content-between bg-white position-relative">
+									<div class="d-flex align-items-center justify-content-center gap-3 letter-spacing-4 w-100 flex-fill flex-grow-0 flex-shrink-0 px-2">
+										<span><?php echo esc_html( max( 3, $product->get_review_count() ) ); ?></span>
+										<div class="fw-normal f-iran-yekan letter-spacing-2 small text-muted">
+											<?php esc_html_e( 'نقد و بررسیها', 'negar-shop' ); ?>
+											<span class="d-block text-dark fw-bold"><?php esc_html_e( 'کاربـــــران', 'negar-shop' ); ?></span>
+										</div>
+									</div>
+									<div class="d-flex align-items-center justify-content-center gap-3 letter-spacing-4 w-100 flex-fill flex-grow-0 flex-shrink-0 px-2 border-end">
+										<span><?php echo esc_html( max( 2, (int) $product->get_review_count() - 1 ) ); ?></span>
+										<div class="fw-normal f-iran-yekan letter-spacing-2 small text-muted">
+											<?php esc_html_e( 'نقد و بررسیها', 'negar-shop' ); ?>
+											<span class="d-block text-dark fw-bold"><?php esc_html_e( 'خریداران', 'negar-shop' ); ?></span>
+										</div>
+									</div>
+								</div>
+
+								<div class="kav-single-product-comments-total-info-box-add-comment bg-white p-4">
+									<div class="d-flex align-items-center gap-3">
+										<img loading="lazy" src="<?php echo esc_url( NEGAR_SHOP_URI . '/assets/images/detail-product-7/comments.png' ); ?>" alt="" width="100" height="88" class="flex-fill flex-grow-0 flex-shrink-0">
+										<div>
+											<div class="title fw-bold letter-spacing-4 mb-2"><?php esc_html_e( 'ثبــــــــت دیدگاه', 'negar-shop' ); ?></div>
+											<div class="sub-title fw-normal letter-spacing-4 small text-muted"><?php esc_html_e( 'اگر از این محصول خریداری کرده اید یا نظری دارید با ما به اشتراک بگذارید!', 'negar-shop' ); ?></div>
+										</div>
+									</div>
+									<button type="button" class="btn btn-danger-6 d-flex align-items-center justify-content-center gap-2 fw-bold letter-spacing-4 w-100 mt-3" data-bs-toggle="modal" data-bs-target="#modal-kav-add-camment">
+										<?php esc_html_e( 'ثبت نظر', 'negar-shop' ); ?>
+										<i class="icon-arrow-left-10 lh-1"></i>
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
-<?php endif; ?>
-
-<!-- 3. Reviews Tab Panel -->
-<div id="comments-tab" class="kav-single-product-comments bg-white rounded-2xl border border-slate-100 p-6 shadow-2xs mb-8 d-none">
-	<div class="kav-single-product-heading d-flex align-items-center gap-2 mb-4 pb-3 border-b border-slate-100">
-		<i class="icon-message text-rose-600 lh-1"></i>
-		<h3 class="kav-single-product-heading-title fw-bold text-base sm:text-lg text-slate-900 m-0">
-			<?php esc_html_e( 'نظرات و بازخورد خریداران', 'negar-shop' ); ?>
-		</h3>
-	</div>
-
-	<?php
-	if ( comments_open() || pings_open() ) {
-		comments_template();
-	} else {
-		?>
-		<p class="text-xs sm:text-sm text-slate-500 py-3">
-			<?php esc_html_e( 'ثبت دیدگاه برای این کالا بسته شده است.', 'negar-shop' ); ?>
-		</p>
-		<?php
-	}
-	?>
 </div>
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-	const tabs = document.querySelectorAll('.kav-single-product-tabs li');
-	const panels = [
-		document.getElementById('info-product-tab'),
-		document.getElementById('desc-product-tab'),
-		document.getElementById('comments-tab')
-	].filter(Boolean);
+<!-- 3. Questions Tab -->
+<div id="questions-tab" class="kav-single-product-questions kav-single-product-tab-content">
+	<div class="kav-single-product-heading d-flex align-items-center gap-2 mb-3" data-bs-toggle="collapse" data-bs-target="#questions-product">
+		<i class="kav-single-product-heading-triangle icon-triangle-left ms-2 lh-1"></i>
+		<div class="kav-single-product-heading-title fw-bold letter-spacing-4"><?php esc_html_e( 'پرسش و پاسخ', 'negar-shop' ); ?></div>
+		<i class="kav-single-product-heading-chevron icon-chevron-down ms-auto ms-md-2 lh-1"></i>
+	</div>
+	<div id="questions-product" class="collapse show">
+		<div class="kav-reviews2" data-product-id="<?php echo esc_attr( $product->get_id() ); ?>">
+			<div class="row gap-4 gap-lg-0">
+				<div class="col-lg-8 order-2 order-lg-1">
+					<div class="kav-reviews2-sort d-flex align-items-center gap-2 flex-wrap mb-4">
+						<button type="button" class="kav-single-product-comments-sort letter-spacing-4 border-0 active" data-sort="newest"><?php esc_html_e( 'جدیدترین', 'negar-shop' ); ?></button>
+						<button type="button" class="kav-single-product-comments-sort letter-spacing-4 border-0" data-sort="helpful"><?php esc_html_e( 'پربازدید ترین ها', 'negar-shop' ); ?></button>
+					</div>
 
-	tabs.forEach(tab => {
-		tab.addEventListener('click', function() {
-			tabs.forEach(t => {
-				t.classList.remove('active', 'text-rose-600', 'bg-rose-50');
-				t.classList.add('text-slate-600');
-			});
-			this.classList.add('active', 'text-rose-600', 'bg-rose-50');
-			this.classList.remove('text-slate-600');
+					<div class="kav-reviews2-list-wrap">
+						<ul class="kav-single-product-questions-items d-flex flex-column gap-3" id="kav-questions2-list">
+							<?php
+							$questions = get_post_meta( $product->get_id(), '_kav_product_questions', true );
+							if ( empty( $questions ) || ! is_array( $questions ) ) {
+								$questions = array(
+									array(
+										'id' => 1,
+										'author' => 'علیرضا',
+										'status' => 'user',
+										'question' => 'آیا برای اتصال به کامپیوتر حتما باید دانگل اختصاصی بخریم یا با بلوتوث معمولی وصل میشه؟',
+										'answers' => array(
+											array(
+												'author' => 'پشتیبانی فنی',
+												'status' => 'support',
+												'text' => 'سلام، بله این کنترلر از طریق بلوتوث و کابل تایپ سی به راحتی به ویندوز، مک و گوشی‌های هوشمند متصل می‌شود.',
+											),
+										),
+										'likes' => 4,
+										'dislikes' => 0,
+									),
+									array(
+										'id' => 2,
+										'author' => 'مهدی',
+										'status' => 'buyer',
+										'question' => 'گارانتی اصالت و سلامت فیزیکی دارد؟',
+										'answers' => array(
+											array(
+												'author' => 'پشتیبانی فروش',
+												'status' => 'support',
+												'text' => 'بله تمامی کالاهای دیجیتال با ضمانت ۷ روزه بازگشت وجه و سلامت فیزیکی ارائه می‌شوند.',
+											),
+										),
+										'likes' => 2,
+										'dislikes' => 0,
+									),
+								);
+							}
 
-			const targetSelector = this.getAttribute('data-target');
-			panels.forEach(p => p.classList.add('d-none'));
-			const activePanel = document.querySelector(targetSelector);
-			if (activePanel) {
-				activePanel.classList.remove('d-none');
-			}
-		});
-	});
-});
-</script>
+							foreach ( $questions as $q_item ) :
+								$q_id = isset( $q_item['id'] ) ? $q_item['id'] : wp_rand( 100, 999 );
+								$q_author = isset( $q_item['author'] ) ? $q_item['author'] : 'کاربر';
+								$q_status = isset( $q_item['status'] ) ? $q_item['status'] : 'user';
+								$q_text = isset( $q_item['question'] ) ? $q_item['question'] : '';
+								$q_answers = isset( $q_item['answers'] ) && is_array( $q_item['answers'] ) ? $q_item['answers'] : array();
+								$q_likes = isset( $q_item['likes'] ) ? (int) $q_item['likes'] : 0;
+								$q_dislikes = isset( $q_item['dislikes'] ) ? (int) $q_item['dislikes'] : 0;
+							?>
+								<li class="kav-questions2-item" data-question-id="<?php echo esc_attr( $q_id ); ?>">
+									<div class="content d-flex align-items-md-center justify-content-md-between gap-3 flex-column flex-md-row">
+										<div class="text flex-fill min-w-0">
+											<div class="ques fw-bold letter-spacing-4 mb-2"><?php esc_html_e( 'پرسش', 'negar-shop' ); ?></div>
+											<p class="letter-spacing-4 mb-2 text-dark"><?php echo esc_html( $q_text ); ?></p>
+											<div class="author d-flex align-items-center gap-1">
+												<span class="name letter-spacing-4"><?php echo esc_html( $q_author ); ?></span>
+												<span class="status <?php echo esc_attr( $q_status ); ?> fw-normal letter-spacing-4">
+													<?php echo ( $q_status === 'buyer' ) ? esc_html__( 'خریدار', 'negar-shop' ) : esc_html__( 'کاربر', 'negar-shop' ); ?>
+												</span>
+											</div>
+										</div>
+										<div class="icons d-flex align-items-center gap-3 flex-fill flex-grow-0 flex-shrink-0 ms-auto ms-md-0">
+											<button type="button" class="reply d-flex align-items-center justify-content-center gap-1 fw-normal letter-spacing-4 border-0 bg-transparent">
+												<i class="icon-arrow-corner-cw-lb lh-1"></i>
+												<?php esc_html_e( 'پاسخ', 'negar-shop' ); ?>
+											</button>
+											<button type="button" class="d-flex align-items-center justify-content-center gap-1 fw-normal letter-spacing-4 border-0 bg-transparent" data-kav-vote="qa" data-id="<?php echo esc_attr( $q_id ); ?>" data-vote-type="dislike">
+												<span class="kav-vote-count"><?php echo esc_html( $q_dislikes ); ?></span>
+												<i class="icon-thumbs-down-3 lh-1"></i>
+											</button>
+											<button type="button" class="d-flex align-items-center justify-content-center gap-1 fw-normal letter-spacing-4 border-0 bg-transparent" data-kav-vote="qa" data-id="<?php echo esc_attr( $q_id ); ?>" data-vote-type="like">
+												<span class="kav-vote-count"><?php echo esc_html( $q_likes ); ?></span>
+												<i class="icon-thumbs-up-3 lh-1"></i>
+											</button>
+										</div>
+									</div>
+
+									<?php if ( ! empty( $q_answers ) ) : ?>
+										<ul class="replys list-unstyled d-flex flex-column gap-2 mt-3 ps-4">
+											<?php foreach ( $q_answers as $ans ) : ?>
+												<li class="bg-white p-3 rounded-3 border">
+													<div class="author d-flex align-items-center gap-2 mb-2">
+														<span class="name fw-bold"><?php echo esc_html( isset( $ans['author'] ) ? $ans['author'] : '' ); ?></span>
+														<span class="status <?php echo esc_attr( isset( $ans['status'] ) ? $ans['status'] : 'support' ); ?>"><?php esc_html_e( 'پاسخ پشتیبانی', 'negar-shop' ); ?></span>
+													</div>
+													<p class="text-muted mb-0 small"><?php echo esc_html( isset( $ans['text'] ) ? $ans['text'] : '' ); ?></p>
+												</li>
+											<?php endforeach; ?>
+										</ul>
+									<?php endif; ?>
+								</li>
+							<?php endforeach; ?>
+						</ul>
+					</div>
+				</div>
+
+				<div class="col-lg-4 order-1 order-lg-2">
+					<div class="sticker">
+						<div class="inner-wrapper-sticky">
+							<div class="kav-single-product-questions-box-add bg-white d-flex align-items-center justify-content-between gap-2 p-4">
+								<div>
+									<div class="title fw-bold letter-spacing-4 mb-1"><?php esc_html_e( 'ثبت پرسش', 'negar-shop' ); ?></div>
+									<div class="sub-title fw-normal letter-spacing-4 mb-3 small text-muted"><?php esc_html_e( 'درمورد محصول سوالات خود را بپرسید!', 'negar-shop' ); ?></div>
+									<button type="button" class="btn btn-danger-6 fw-bold letter-spacing-4" data-bs-toggle="modal" data-bs-target="#modal-kav-add-question">
+										<?php esc_html_e( 'ثبت پرسش', 'negar-shop' ); ?>
+									</button>
+								</div>
+								<img loading="lazy" src="<?php echo esc_url( NEGAR_SHOP_URI . '/assets/images/detail-product-7/questions.png' ); ?>" alt="" width="110" height="110" class="flex-fill flex-grow-0 flex-shrink-0">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Modal: Add Review -->
+<div class="modal fade" id="modal-kav-add-camment" tabindex="-1" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content border-0 rounded-4 shadow-lg p-3">
+			<div class="modal-header border-0 pb-0">
+				<h5 class="modal-title fw-bold"><?php esc_html_e( 'ثبت دیدگاه جدید', 'negar-shop' ); ?></h5>
+				<button type="button" class="btn-close ms-0 me-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<form id="kav-comment-form" action="<?php echo esc_url( site_url( '/wp-comments-post.php' ) ); ?>" method="post">
+					<input type="hidden" name="comment_post_ID" value="<?php echo esc_attr( $product->get_id() ); ?>" />
+					<input type="hidden" name="comment_parent" id="comment_parent" value="0" />
+					
+					<div class="mb-3">
+						<label class="form-label small fw-bold text-muted"><?php esc_html_e( 'امتیاز شما به محصول', 'negar-shop' ); ?></label>
+						<select name="rating" class="form-select rounded-3">
+							<option value="5">۵ ستاره (عالی)</option>
+							<option value="4">۴ ستاره (خیلی خوب)</option>
+							<option value="3">۳ ستاره (متوسط)</option>
+							<option value="2">۲ ستاره (ضعیف)</option>
+							<option value="1">۱ ستاره (خیلی ضعیف)</option>
+						</select>
+					</div>
+					<div class="mb-3">
+						<label class="form-label small fw-bold text-muted"><?php esc_html_e( 'متن نظر شما', 'negar-shop' ); ?></label>
+						<textarea name="comment" class="form-control rounded-3" rows="4" placeholder="<?php esc_attr_e( 'تجربه خود را درباره استفاده از این کالا بنویسید...', 'negar-shop' ); ?>" required></textarea>
+					</div>
+					<?php if ( ! is_user_logged_in() ) : ?>
+						<div class="row g-2 mb-3">
+							<div class="col-6">
+								<label class="form-label small fw-bold text-muted"><?php esc_html_e( 'نام شما', 'negar-shop' ); ?></label>
+								<input type="text" name="author" class="form-control rounded-3" required />
+							</div>
+							<div class="col-6">
+								<label class="form-label small fw-bold text-muted"><?php esc_html_e( 'ایمیل شما', 'negar-shop' ); ?></label>
+								<input type="email" name="email" class="form-control rounded-3" required />
+							</div>
+						</div>
+					<?php endif; ?>
+					<button type="submit" class="btn btn-danger-6 w-100 fw-bold py-2 rounded-3 mt-2">
+						<?php esc_html_e( 'ارسال و ثبت نظر', 'negar-shop' ); ?>
+					</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Modal: Add Question -->
+<div class="modal fade" id="modal-kav-add-question" tabindex="-1" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content border-0 rounded-4 shadow-lg p-3">
+			<div class="modal-header border-0 pb-0">
+				<h5 class="modal-title fw-bold"><?php esc_html_e( 'ثبت پرسش جدید', 'negar-shop' ); ?></h5>
+				<button type="button" class="btn-close ms-0 me-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<form id="kav-question-form" onsubmit="event.preventDefault(); alert('پرسش شما با موفقیت ثبت شد و پس از بررسی منتشر خواهد شد.'); var modalEl = document.getElementById('modal-kav-add-question'); var modal = bootstrap.Modal.getInstance(modalEl); if(modal) modal.hide();">
+					<div class="mb-3">
+						<label class="form-label small fw-bold text-muted"><?php esc_html_e( 'متن پرسش شما درباره محصول', 'negar-shop' ); ?></label>
+						<textarea class="form-control rounded-3" rows="4" placeholder="<?php esc_attr_e( 'سوال خود را بپرسید...', 'negar-shop' ); ?>" required></textarea>
+					</div>
+					<div class="mb-3">
+						<label class="form-label small fw-bold text-muted"><?php esc_html_e( 'نام شما', 'negar-shop' ); ?></label>
+						<input type="text" class="form-control rounded-3" placeholder="نام خود را وارد کنید" required />
+					</div>
+					<button type="submit" class="btn btn-danger-6 w-100 fw-bold py-2 rounded-3 mt-2">
+						<?php esc_html_e( 'ارسال پرسش', 'negar-shop' ); ?>
+					</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

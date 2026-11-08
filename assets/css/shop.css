@@ -53,6 +53,15 @@
 /* ==========================================================================
    2. Sidebar Filters (.category-nk__filter)
    ========================================================================== */
+/* Fix Bootstrap vs Tailwind .collapse conflict */
+.category-nk__filter .collapse,
+.category-nk__filter .collapse.show,
+#category-filter-box,
+#brand-filter-box,
+#range-price-box {
+  visibility: visible !important;
+}
+
 .category-nk__filter__content {
   border: 1px solid #ededed;
   border-radius: 16px;

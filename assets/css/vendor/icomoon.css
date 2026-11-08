@@ -956,6 +956,41 @@
 .icon-bag-6:before {
   content: "\ea3e";
 }
+/* Single product & perk icons */
+.icon-headphone-2:before {
+  content: "\ea18";
+}
+.icon-security-3:before {
+  content: "\ea1e";
+}
+.icon-energy:before {
+  content: "\ea16";
+}
+.icon-backward:before {
+  content: "\ea25";
+}
+.icon-star-5:before {
+  content: "\ea07";
+}
+.icon-calendar-dates:before {
+  content: "\ea26";
+}
+.icon-cross:before {
+  content: "\ea15";
+}
+.icon-comparison:before {
+  content: "\ea0d";
+}
+.icon-more-vert:before {
+  content: "\ea11";
+}
+.icon-bag-5:before {
+  content: "\ea36";
+}
+.icon-angle-circle-top-left:before {
+  content: "\ea2f";
+}
+
 .icon-happy-emoji:before {
   content: "\ea3f";
 }

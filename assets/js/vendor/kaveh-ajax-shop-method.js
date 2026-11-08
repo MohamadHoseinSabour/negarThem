@@ -345,31 +345,53 @@ jQuery(document).ready(function ($) {
     filterProducts();
   });
 
-  jQuery(document).on('click', 'ul.cathidden li input', function (e) {
+  jQuery(document).on('click', 'ul.cathidden li', function (e) {
+    if (jQuery(e.target).is('.filterhiddeninput') || jQuery(e.target).closest('.filterhiddeninput').length) {
+      return;
+    }
+    var $li = jQuery(this);
+    var $input = $li.find('input[type="checkbox"]').first();
+    if (!$input.length || !$input.attr('myid')) {
+      return;
+    }
     e.preventDefault();
-    var $input = jQuery(this);
+    e.stopPropagation();
+
     $input.toggleClass('activeFilter');
     var isOn = $input.hasClass('activeFilter');
     $input.prop('checked', isOn);
     if (isOn) {
       $input.attr('checked', 'checked');
+      $li.find('label').addClass('active');
     } else {
       $input.removeAttr('checked');
+      $li.find('label').removeClass('active');
     }
     editFilterInputs(jQuery('.filterhiddeninput'), $input.attr('myid'));
     filterProducts();
   });
 
-  jQuery(document).on('click', 'ul.brandhidden li input', function (e) {
+  jQuery(document).on('click', 'ul.brandhidden li', function (e) {
+    if (jQuery(e.target).is('.filterhiddeninputbrand') || jQuery(e.target).closest('.filterhiddeninputbrand').length) {
+      return;
+    }
+    var $li = jQuery(this);
+    var $input = $li.find('input[type="checkbox"]').first();
+    if (!$input.length || !$input.attr('myid')) {
+      return;
+    }
     e.preventDefault();
-    var $input = jQuery(this);
+    e.stopPropagation();
+
     $input.toggleClass('activeFilter');
     var isOn = $input.hasClass('activeFilter');
     $input.prop('checked', isOn);
     if (isOn) {
       $input.attr('checked', 'checked');
+      $li.find('label').addClass('active');
     } else {
       $input.removeAttr('checked');
+      $li.find('label').removeClass('active');
     }
     editFilterInputs(jQuery('.filterhiddeninputbrand'), $input.attr('myid'));
     filterProducts();

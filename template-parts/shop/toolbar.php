@@ -60,7 +60,3 @@ $current_label = isset( $orderby_options[ $current_orderby ] ) ? $orderby_option
 		فیلترها
 	</button>
 </div>
-
-<p class="woocommerce-result-count" role="status" aria-relevant="all">
-	<?php woocommerce_result_count(); ?>
-</p>

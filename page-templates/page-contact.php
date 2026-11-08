@@ -3,7 +3,7 @@
  * Template Name: Contact Us / تماس با ما
  *
  * @package Negar_Shop
- * @version 1.0.0
+ * @version 2.5.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -13,151 +13,145 @@ if ( ! defined( 'ABSPATH' ) ) {
 get_header();
 ?>
 
-<div class="negar-contact-page py-10">
-	<div class="container mx-auto px-4 max-w-5xl">
+<main id="primary" class="site-main py-5 bg-light">
+	<div class="container">
 
-		<!-- Page Title -->
-		<div class="text-center mb-12">
-			<span class="inline-block text-xs font-bold text-primary bg-primary/10 px-3.5 py-1.5 rounded-full mb-3">
+		<!-- Breadcrumb -->
+		<div class="breadcrumb-nk d-flex align-items-center mb-4">
+			<ul class="d-flex align-items-center flex-nowrap list-unstyled m-0 p-0">
+				<li class="d-flex align-items-center flex-shrink-0">
+					<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="d-block d-flex align-items-center gap-2 text-decoration-none text-muted">
+						<i class="iconly-Home lh-1"></i><?php esc_html_e( 'خانه', 'negar-shop' ); ?>
+					</a>
+				</li>
+				<li class="d-flex align-items-center flex-shrink-0 ms-2 is-current fw-bold text-dark" aria-current="page">
+					/ <?php esc_html_e( 'تماس با ما', 'negar-shop' ); ?>
+				</li>
+			</ul>
+		</div>
+
+		<!-- Page Header -->
+		<div class="bg-white rounded-4 p-4 p-md-5 shadow-sm text-center mb-4">
+			<span class="badge rounded-pill bg-danger-subtle text-danger px-3 py-2 mb-3 fw-bold f-payda">
 				<?php esc_html_e( 'مرکز ارتباط با مشتریان', 'negar-shop' ); ?>
 			</span>
-			<h1 class="text-2xl sm:text-4xl font-black text-dark mb-3">
+			<h1 class="f-iran-yekan fw-black fs-2 fs-md-1 text-dark mb-3">
 				<?php esc_html_e( 'همیشه آماده پاسخگویی به شما هستیم', 'negar-shop' ); ?>
 			</h1>
-			<p class="text-xs sm:text-sm text-muted max-w-xl mx-auto">
-				<?php esc_html_e( 'سوالی دارید یا به مشاوره خرید نیاز دارید؟ از طریق راه‌های ارتباطی زیر یا فرم پیام با ما در تماس باشید.', 'negar-shop' ); ?>
+			<p class="text-secondary f-payda fs-6 max-w-75 mx-auto mb-0" style="max-width: 650px;">
+				<?php esc_html_e( 'سوالی دارید یا نیاز به مشاوره قبل از خرید کالا دارید؟ همکاران ما در واحد پشتیبانی مشتاقانه آماده راهنمایی شما هستند.', 'negar-shop' ); ?>
 			</p>
 		</div>
 
 		<!-- 4 Contact Cards Grid -->
-		<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
-			
-			<div class="contact-card bg-surface border border-border rounded-2xl p-5 shadow-xs flex items-center gap-3">
-				<div class="p-3 rounded-xl bg-primary/10 text-primary flex-shrink-0">
-					<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-				</div>
-				<div>
-					<span class="text-2xs text-muted block mb-0.5"><?php esc_html_e( 'تماس مستقیم تلفنی', 'negar-shop' ); ?></span>
-					<a href="tel:02112345678" class="text-sm font-bold text-dark hover:text-primary font-mono dir-ltr block">۰۲۱-۱۲۳۴۵۶۷۸</a>
-				</div>
-			</div>
-
-			<div class="contact-card bg-surface border border-border rounded-2xl p-5 shadow-xs flex items-center gap-3">
-				<div class="p-3 rounded-xl bg-primary/10 text-primary flex-shrink-0">
-					<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-				</div>
-				<div>
-					<span class="text-2xs text-muted block mb-0.5"><?php esc_html_e( 'پشتیبانی ایمیلی', 'negar-shop' ); ?></span>
-					<a href="mailto:info@negarshop.local" class="text-xs font-bold text-dark hover:text-primary font-mono block">info@negarshop.local</a>
+		<div class="row g-3 g-md-4 mb-4">
+			<div class="col-12 col-sm-6 col-lg-3">
+				<div class="card border-0 rounded-4 shadow-sm p-4 h-100 bg-white d-flex flex-row align-items-center gap-3">
+					<div class="p-3 rounded-3 bg-danger-subtle text-danger flex-shrink-0">
+						<i class="icon-headphone-2 fs-4"></i>
+					</div>
+					<div>
+						<span class="text-muted small d-block mb-1"><?php esc_html_e( 'تماس تلفنی', 'negar-shop' ); ?></span>
+						<a href="tel:02112345678" class="fw-bold text-dark text-decoration-none font-monospace dir-ltr d-block">۰۲۱-۱۲۳۴۵۶۷۸</a>
+					</div>
 				</div>
 			</div>
 
-			<div class="contact-card bg-surface border border-border rounded-2xl p-5 shadow-xs flex items-center gap-3">
-				<div class="p-3 rounded-xl bg-primary/10 text-primary flex-shrink-0">
-					<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-				</div>
-				<div>
-					<span class="text-2xs text-muted block mb-0.5"><?php esc_html_e( 'ساعات پاسخگویی', 'negar-shop' ); ?></span>
-					<span class="text-xs font-bold text-dark block"><?php esc_html_e( 'شنبه تا پنجشنبه ۹ الی ۲۱', 'negar-shop' ); ?></span>
-				</div>
-			</div>
-
-			<div class="contact-card bg-surface border border-border rounded-2xl p-5 shadow-xs flex items-center gap-3">
-				<div class="p-3 rounded-xl bg-primary/10 text-primary flex-shrink-0">
-					<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
-				</div>
-				<div>
-					<span class="text-2xs text-muted block mb-0.5"><?php esc_html_e( 'دفتر مرکزی', 'negar-shop' ); ?></span>
-					<span class="text-xs font-bold text-dark block"><?php esc_html_e( 'تهران، ولیعصر، برج نگار', 'negar-shop' ); ?></span>
+			<div class="col-12 col-sm-6 col-lg-3">
+				<div class="card border-0 rounded-4 shadow-sm p-4 h-100 bg-white d-flex flex-row align-items-center gap-3">
+					<div class="p-3 rounded-3 bg-danger-subtle text-danger flex-shrink-0">
+						<i class="icon-message fs-4"></i>
+					</div>
+					<div>
+						<span class="text-muted small d-block mb-1"><?php esc_html_e( 'پشتیبانی ایمیلی', 'negar-shop' ); ?></span>
+						<a href="mailto:info@negarshop.local" class="fw-bold text-dark text-decoration-none font-monospace d-block small">info@negarshop.local</a>
+					</div>
 				</div>
 			</div>
 
+			<div class="col-12 col-sm-6 col-lg-3">
+				<div class="card border-0 rounded-4 shadow-sm p-4 h-100 bg-white d-flex flex-row align-items-center gap-3">
+					<div class="p-3 rounded-3 bg-danger-subtle text-danger flex-shrink-0">
+						<i class="icon-calendar-dates fs-4"></i>
+					</div>
+					<div>
+						<span class="text-muted small d-block mb-1"><?php esc_html_e( 'ساعات کاری', 'negar-shop' ); ?></span>
+						<span class="fw-bold text-dark small d-block"><?php esc_html_e( 'شنبه تا پنجشنبه ۹ الی ۲۱', 'negar-shop' ); ?></span>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-12 col-sm-6 col-lg-3">
+				<div class="card border-0 rounded-4 shadow-sm p-4 h-100 bg-white d-flex flex-row align-items-center gap-3">
+					<div class="p-3 rounded-3 bg-danger-subtle text-danger flex-shrink-0">
+						<i class="icon-pin fs-4"></i>
+					</div>
+					<div>
+						<span class="text-muted small d-block mb-1"><?php esc_html_e( 'آدرس دفتر مرکزی', 'negar-shop' ); ?></span>
+						<span class="fw-bold text-dark small d-block"><?php esc_html_e( 'تهران، خیابان ولیعصر', 'negar-shop' ); ?></span>
+					</div>
+				</div>
+			</div>
 		</div>
 
-		<!-- 2-Column Form & FAQ -->
-		<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-			
-			<!-- Contact Form Column (Right in RTL, 7 cols) -->
-			<div class="lg:col-span-7 bg-surface border border-border rounded-2xl p-6 sm:p-8 shadow-sm">
-				<h3 class="text-base font-bold text-dark pb-3 mb-6 border-b border-border flex items-center gap-2">
-					<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary"><path d="m3 21 1.9-5.7a8.5 8.5 0 1 1 3.8 3.8z"/></svg>
-					<span><?php esc_html_e( 'ارسال پیام مستقیم برای مدیریت و پشتیبانی', 'negar-shop' ); ?></span>
-				</h3>
-
-				<form action="#" method="post" class="flex flex-col gap-4 text-xs sm:text-sm">
-					<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-						<div>
-							<label for="contact_name" class="font-bold text-dark block mb-1.5"><?php esc_html_e( 'نام و نام خانوادگی', 'negar-shop' ); ?>&nbsp;<span class="text-danger">*</span></label>
-							<input type="text" id="contact_name" name="contact_name" required placeholder="<?php esc_attr_e( 'مثال: علی محمدی', 'negar-shop' ); ?>" class="w-full p-2.5 rounded-xl border border-border bg-slate-50 focus:bg-white focus:border-primary transition-all">
+		<!-- Contact Form & Info Columns -->
+		<div class="row g-4">
+			<div class="col-12 col-lg-7">
+				<div class="bg-white rounded-4 p-4 p-md-5 shadow-sm h-100">
+					<h2 class="f-iran-yekan fw-bold fs-4 text-dark mb-4"><?php esc_html_e( 'ارسال پیام مستقیم به مدیریت', 'negar-shop' ); ?></h2>
+					<form onsubmit="event.preventDefault(); alert('پیام شما با موفقیت ثبت شد و به زودی با شما تماس خواهیم گرفت.'); this.reset();">
+						<div class="row g-3 mb-3">
+							<div class="col-12 col-sm-6">
+								<label class="form-label small text-muted"><?php esc_html_e( 'نام و نام خانوادگی:', 'negar-shop' ); ?></label>
+								<input type="text" class="form-control rounded-3 py-2" placeholder="مثال: علی محمدی" required>
+							</div>
+							<div class="col-12 col-sm-6">
+								<label class="form-label small text-muted"><?php esc_html_e( 'شماره موبایل:', 'negar-shop' ); ?></label>
+								<input type="tel" class="form-control rounded-3 py-2 text-start font-monospace" placeholder="۰۹۱۲..." required>
+							</div>
 						</div>
-						<div>
-							<label for="contact_phone" class="font-bold text-dark block mb-1.5"><?php esc_html_e( 'شماره موبایل', 'negar-shop' ); ?>&nbsp;<span class="text-danger">*</span></label>
-							<input type="tel" id="contact_phone" name="contact_phone" required placeholder="09123456789" class="w-full p-2.5 rounded-xl border border-border bg-slate-50 focus:bg-white focus:border-primary transition-all text-left dir-ltr">
+						<div class="mb-3">
+							<label class="form-label small text-muted"><?php esc_html_e( 'موضوع پیام:', 'negar-shop' ); ?></label>
+							<input type="text" class="form-control rounded-3 py-2" placeholder="موضوع پیام یا شماره سفارش" required>
 						</div>
-					</div>
-
-					<div>
-						<label for="contact_subject" class="font-bold text-dark block mb-1.5"><?php esc_html_e( 'موضوع پیام', 'negar-shop' ); ?>&nbsp;<span class="text-danger">*</span></label>
-						<input type="text" id="contact_subject" name="contact_subject" required placeholder="<?php esc_attr_e( 'مثال: پیگیری سفارش یا مشاوره خرید کالا', 'negar-shop' ); ?>" class="w-full p-2.5 rounded-xl border border-border bg-slate-50 focus:bg-white focus:border-primary transition-all">
-					</div>
-
-					<div>
-						<label for="contact_message" class="font-bold text-dark block mb-1.5"><?php esc_html_e( 'متن پیام شما', 'negar-shop' ); ?>&nbsp;<span class="text-danger">*</span></label>
-						<textarea id="contact_message" name="contact_message" rows="5" required placeholder="<?php esc_attr_e( 'توضیحات خود را اینجا بنویسید...', 'negar-shop' ); ?>" class="w-full p-2.5 rounded-xl border border-border bg-slate-50 focus:bg-white focus:border-primary transition-all"></textarea>
-					</div>
-
-					<button type="submit" class="btn btn-primary py-3 px-8 text-sm font-bold shadow-md hover:shadow-lg transition-all self-start mt-2">
-						<?php esc_html_e( 'ارسال پیام', 'negar-shop' ); ?>
-					</button>
-				</form>
-			</div>
-
-			<!-- FAQ Accordion Column (Left in RTL, 5 cols) -->
-			<div class="lg:col-span-5 bg-surface border border-border rounded-2xl p-6 sm:p-8 shadow-sm">
-				<h3 class="text-base font-bold text-dark pb-3 mb-6 border-b border-border flex items-center gap-2">
-					<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary"><circle cx="12" cy="12" r="10"/><path d="9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-					<span><?php esc_html_e( 'پرسش‌های متداول خریداران', 'negar-shop' ); ?></span>
-				</h3>
-
-				<div class="flex flex-col gap-3 text-xs sm:text-sm">
-					
-					<details class="border border-border rounded-xl p-3 bg-slate-50 group open:bg-white transition-all">
-						<summary class="font-bold text-dark cursor-pointer list-none flex items-center justify-between">
-							<span><?php esc_html_e( 'چگونه سفارش خود را پیگیری کنم؟', 'negar-shop' ); ?></span>
-							<span class="text-muted group-open:rotate-180 transition-transform">▼</span>
-						</summary>
-						<p class="text-xs text-muted leading-relaxed mt-2 pt-2 border-t border-border/50">
-							<?php esc_html_e( 'از طریق بخش «سفارش‌های من» در حساب کاربری یا صفحه «پیگیری سفارش» با وارد کردن کد پیگیری می‌توانید وضعیت ارسال را به صورت لحظه‌ای مشاهده کنید.', 'negar-shop' ); ?>
-						</p>
-					</details>
-
-					<details class="border border-border rounded-xl p-3 bg-slate-50 group open:bg-white transition-all">
-						<summary class="font-bold text-dark cursor-pointer list-none flex items-center justify-between">
-							<span><?php esc_html_e( 'هزینه ارسال چقدر است؟', 'negar-shop' ); ?></span>
-							<span class="text-muted group-open:rotate-180 transition-transform">▼</span>
-						</summary>
-						<p class="text-xs text-muted leading-relaxed mt-2 pt-2 border-t border-border/50">
-							<?php esc_html_e( 'ارسال کلیه خریدهای بالای ۱ میلیون تومان به سراسر کشور کاملاً رایگان است. برای مبالغ کمتر بر اساس تعرفه مصوب پست محاسبه می‌شود.', 'negar-shop' ); ?>
-						</p>
-					</details>
-
-					<details class="border border-border rounded-xl p-3 bg-slate-50 group open:bg-white transition-all">
-						<summary class="font-bold text-dark cursor-pointer list-none flex items-center justify-between">
-							<span><?php esc_html_e( 'شرایط گارانتی و مرجوعی چیست؟', 'negar-shop' ); ?></span>
-							<span class="text-muted group-open:rotate-180 transition-transform">▼</span>
-						</summary>
-						<p class="text-xs text-muted leading-relaxed mt-2 pt-2 border-t border-border/50">
-							<?php esc_html_e( 'تمامی کالاها تا ۷ روز پس از تحویل در صورت مغایرت یا نقص فنی بدون کسر هزینه تعویض یا مرجوع می‌شوند.', 'negar-shop' ); ?>
-						</p>
-					</details>
-
+						<div class="mb-4">
+							<label class="form-label small text-muted"><?php esc_html_e( 'متن پیام شما:', 'negar-shop' ); ?></label>
+							<textarea class="form-control rounded-3 p-3" rows="5" placeholder="پیام یا پرسش خود را اینجا بنویسید..." required></textarea>
+						</div>
+						<button type="submit" class="btn btn-danger rounded-pill px-5 py-2.5 fw-bold f-payda">
+							<?php esc_html_e( 'ارسال پیام', 'negar-shop' ); ?>
+							<i class="icon-arrow-left-11 ms-2"></i>
+						</button>
+					</form>
 				</div>
 			</div>
 
+			<div class="col-12 col-lg-5">
+				<div class="bg-white rounded-4 p-4 p-md-5 shadow-sm h-100 d-flex flex-column justify-content-between">
+					<div>
+						<h3 class="f-iran-yekan fw-bold fs-5 text-dark mb-3"><?php esc_html_e( 'موقعیت مکانی فروشگاه', 'negar-shop' ); ?></h3>
+						<p class="text-secondary small mb-4">
+							<?php esc_html_e( 'برای خریدهای عمده یا دریافت حضوری سفارش‌ها، با هماهنگی قبلی می‌توانید به دفتر مرکزی ما مراجعه نمایید.', 'negar-shop' ); ?>
+						</p>
+					</div>
+
+					<div class="rounded-4 overflow-hidden border border-light shadow-2xs position-relative" style="height: 280px; background: #e2e8f0;">
+						<iframe
+							src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3239.948275685511!2d51.4099!3d35.7006!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzXCsDQyJzAyLjIiTiA1McKwMjQnMzUuNiJF!5e0!3m2!1sen!2sir!4v1620000000000!5m2!1sen!2sir"
+							width="100%"
+							height="100%"
+							style="border:0;"
+							allowfullscreen=""
+							loading="lazy"
+							title="<?php esc_attr_e( 'نقشه موقعیت دفتر مرکزی', 'negar-shop' ); ?>">
+						</iframe>
+					</div>
+				</div>
+			</div>
 		</div>
 
 	</div>
-</div>
+</main>
 
 <?php
 get_footer();

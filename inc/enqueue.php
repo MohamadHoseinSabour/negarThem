@@ -67,6 +67,14 @@ function negar_shop_scripts() {
 		'5.3.0'
 	);
 
+	// Notiflix Toasts and Notifications
+	wp_enqueue_style(
+		'notiflix-css',
+		NEGAR_SHOP_URI . '/assets/css/vendor/notiflix.css',
+		array(),
+		'3.2.7'
+	);
+
 	// Kaveh Product Cards Official CSS
 	wp_enqueue_style(
 		'kaveh-product-carts',
@@ -354,11 +362,20 @@ function negar_shop_scripts() {
 		true
 	);
 
+	// Notiflix Official JS
+	wp_enqueue_script(
+		'notiflix-js',
+		NEGAR_SHOP_URI . '/assets/js/vendor/notiflix.js',
+		array(),
+		'3.2.7',
+		true
+	);
+
 	// Main Vanilla JS Framework
 	wp_enqueue_script(
 		'negar-shop-main',
 		NEGAR_SHOP_URI . '/assets/js/main.js',
-		array( 'swiper-bundle' ),
+		array( 'swiper-bundle', 'notiflix-js' ),
 		NEGAR_SHOP_VERSION,
 		true
 	);

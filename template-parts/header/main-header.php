@@ -10,10 +10,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$upload_dir = wp_upload_dir();
-$logo_svg   = $upload_dir['basedir'] . '/kaveh-demo/kaveh-demo/general/logo.svg';
-$logo_url   = $upload_dir['baseurl'] . '/kaveh-demo/kaveh-demo/general/logo.svg';
-$has_logo   = file_exists( $logo_svg );
+$theme_logo_url = get_template_directory_uri() . '/assets/images/logo.svg';
+$upload_dir     = wp_upload_dir();
+$logo_svg       = $upload_dir['basedir'] . '/kaveh-demo/kaveh-demo/general/logo.svg';
+$logo_url       = file_exists( $logo_svg ) ? $upload_dir['baseurl'] . '/kaveh-demo/kaveh-demo/general/logo.svg' : $theme_logo_url;
+$has_logo       = true;
 ?>
 
 <div class="negar-main-header py-3.5 bg-white border-b border-slate-100">
@@ -21,23 +22,9 @@ $has_logo   = file_exists( $logo_svg );
 
 		<!-- 1. Right: Logo & Branding -->
 		<div class="header-logo shrink-0 flex items-center">
-			<?php if ( has_custom_logo() ) : ?>
-				<?php the_custom_logo(); ?>
-			<?php elseif ( $has_logo ) : ?>
-				<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="flex items-center">
-					<img src="<?php echo esc_url( $logo_url ); ?>" alt="<?php bloginfo( 'name' ); ?>" class="h-9 w-auto object-contain">
-				</a>
-			<?php else : ?>
-				<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="flex items-center gap-2 text-slate-900 group">
-					<div class="w-9 h-9 rounded-2xl bg-gradient-to-tr from-rose-700 to-rose-500 flex items-center justify-center text-white shadow-md shadow-rose-500/20 group-hover:scale-105 transition-transform">
-						<span class="font-black text-lg leading-none">ک</span>
-					</div>
-					<div class="flex flex-col">
-						<span class="text-2xl font-black tracking-tight text-slate-900 group-hover:text-rose-600 transition-colors">کاوه</span>
-						<span class="text-[10px] text-slate-400 font-medium -mt-1">فروشگاه آنلاین برتر</span>
-					</div>
-				</a>
-			<?php endif; ?>
+			<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="flex items-center">
+				<img src="<?php echo esc_url( $logo_url ); ?>" alt="<?php bloginfo( 'name' ); ?>" width="135" height="40" class="h-9 w-auto object-contain kavehlogost d-block" style="width: 135px !important; height: auto !important; max-height: 40px !important;">
+			</a>
 		</div>
 
 		<!-- 2. Center: Search Bar with Nested Red Category Button -->

@@ -8,7 +8,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-get_header( 'shop' );
+get_header();
 ?>
 
 <main id="primary" class="site-main single-product-main-wrapper bg-slate-50/50">
@@ -19,4 +19,4 @@ get_header( 'shop' );
 </main>
 
 <?php
-get_footer( 'shop' );
+get_footer();
