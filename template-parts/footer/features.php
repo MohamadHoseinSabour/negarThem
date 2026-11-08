@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Footer Features / Value Badges Template Part
  *

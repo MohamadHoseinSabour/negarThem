@@ -204,33 +204,40 @@
     if (typeof Swiper === 'undefined') return;
 
     // 1. Landing Hero Carousel
-    const landingEl = document.querySelector('.swiper-landing-nk');
-    if (landingEl) {
+    const landingContainer = document.querySelector('.landing-nk__carousel');
+    const landingEl = landingContainer ? landingContainer.querySelector('.swiper-landing-nk') : document.querySelector('.swiper-landing-nk');
+    if (landingEl && !landingEl.classList.contains('swiper-initialized')) {
+      const prevBtn = landingContainer ? landingContainer.querySelector('.swiper-button-prev') : landingEl.parentElement?.querySelector('.swiper-button-prev');
+      const nextBtn = landingContainer ? landingContainer.querySelector('.swiper-button-next') : landingEl.parentElement?.querySelector('.swiper-button-next');
       new Swiper(landingEl, {
         loop: true,
         effect: 'fade',
         fadeEffect: { crossFade: true },
+        speed: 600,
         navigation: {
-          prevEl: '.swiper-button-prev',
-          nextEl: '.swiper-button-next',
+          prevEl: prevBtn,
+          nextEl: nextBtn,
         },
         autoplay: {
-          delay: 5000,
+          delay: 5500,
           disableOnInteraction: false,
+          pauseOnMouseEnter: true,
         },
       });
     }
 
     // 2. Landing Flash Product (Left box in Hero)
-    const landingProdEl = document.querySelector('.swiper-landing-product-nk');
-    if (landingProdEl) {
+    const landingProdContainer = document.querySelector('.landing-nk__products');
+    const landingProdEl = landingProdContainer ? landingProdContainer.querySelector('.swiper-landing-product-nk') : document.querySelector('.swiper-landing-product-nk');
+    if (landingProdEl && !landingProdEl.classList.contains('swiper-initialized')) {
+      const pagEl = landingProdContainer ? landingProdContainer.querySelector('.swiper-pagination') : null;
       new Swiper(landingProdEl, {
         effect: 'fade',
         fadeEffect: { crossFade: true },
-        pagination: {
-          el: '.landing-nk__products .swiper-pagination',
+        pagination: pagEl ? {
+          el: pagEl,
           clickable: true,
-        },
+        } : false,
       });
     }
 

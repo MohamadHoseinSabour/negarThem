@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Mobile Header Template Part
  *
@@ -9,8 +9,13 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
+
+$theme_logo_url = get_template_directory_uri() . '/assets/images/logo.svg';
+$upload_dir     = wp_upload_dir();
+$logo_svg       = $upload_dir['basedir'] . '/kaveh-demo/kaveh-demo/general/logo.svg';
+$logo_url       = file_exists( $logo_svg ) ? $upload_dir['baseurl'] . '/kaveh-demo/kaveh-demo/general/logo.svg' : $theme_logo_url;
 ?>
-<div class="negar-mobile-header md:hidden bg-white border-b border-slate-200 sticky top-0 z-30">
+<div class="negar-mobile-header md:hidden bg-white border-b border-slate-200 sticky top-0 z-30" style="padding-top: max(0.5rem, env(safe-area-inset-top, 0px));">
 	<!-- Top Bar in Mobile -->
 	<div class="px-4 py-3 flex items-center justify-between gap-3">
 		<!-- Hamburger Menu Trigger -->
@@ -23,18 +28,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</button>
 
 		<!-- Brand Logo -->
-		<div class="mobile-logo flex-1 text-center">
-			<?php
-			if ( has_custom_logo() ) :
-				the_custom_logo();
-			else :
-				?>
-				<a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home" class="inline-block text-xl font-black text-slate-900 tracking-tight">
-					<?php bloginfo( 'name' ); ?>
-				</a>
-				<?php
-			endif;
-			?>
+		<div class="mobile-logo flex-1 flex items-center justify-center text-center">
+			<a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home" class="inline-flex items-center justify-center">
+				<img src="<?php echo esc_url( $logo_url ); ?>" alt="<?php bloginfo( 'name' ); ?>" width="120" height="32" class="h-8 w-auto object-contain d-inline-block" style="max-height: 32px; width: auto;">
+			</a>
 		</div>
 
 		<!-- Cart Trigger Icon -->
@@ -51,7 +48,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 
 	<!-- Mobile Search Row -->
-	<div class="px-4 pb-3">
+	<div class="px-4 pb-3 relative header-search-wrap">
 		<form role="search" method="get" class="negar-ajax-search-form flex items-center rounded-xl border border-slate-200 bg-slate-50 focus-within:border-rose-600 focus-within:bg-white transition" action="<?php echo esc_url( home_url( '/' ) ); ?>">
 			<input
 				type="search"
@@ -64,6 +61,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<?php if ( class_exists( 'WooCommerce' ) ) : ?>
 				<input type="hidden" name="post_type" value="product">
 			<?php endif; ?>
+			<span class="search-spinner hidden p-1.5 text-rose-500 animate-spin flex items-center justify-center shrink-0">
+				<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
+			</span>
 			<button type="submit" class="p-2 text-slate-400 hover:text-rose-600" aria-label="<?php esc_attr_e( 'جستجو', 'negar-shop' ); ?>">
 				<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
 					<circle cx="11" cy="11" r="8"></circle>
@@ -71,5 +71,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</svg>
 			</button>
 		</form>
+		<!-- Mobile AJAX Results Dropdown -->
+		<div class="negar-ajax-search-results hidden absolute top-full right-4 left-4 mt-1 bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden z-50"></div>
 	</div>
 </div>

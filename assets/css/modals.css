@@ -113,8 +113,19 @@
 	font-family: inherit !important;
 }
 
-/* Suppress ugly unstyled default WC message banner */
-.woocommerce-notices-wrapper .woocommerce-message {
+/* Suppress unstyled default WC message banner on catalog/product pages only when toast is active */
+body:not(.woocommerce-cart):not(.woocommerce-checkout):not(.woocommerce-account) .woocommerce-notices-wrapper .woocommerce-message {
 	display: none !important;
+}
+
+/* Active states for gallery & card buttons */
+.wlm-button.wlm-button--active,
+.btn-wishlist-toggle.is-active {
+	color: #ef4444 !important;
+}
+
+.compare-button.compare-button--active,
+.btn-compare-toggle.is-active {
+	color: #2563eb !important;
 }
 

@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Define Theme Constants
  */
-define( 'NEGAR_SHOP_VERSION', '1.0.2' );
+define( 'NEGAR_SHOP_VERSION', '2.5.0' );
 define( 'NEGAR_SHOP_DIR', get_template_directory() );
 define( 'NEGAR_SHOP_URI', get_template_directory_uri() );
 
@@ -58,6 +58,11 @@ require_once NEGAR_SHOP_DIR . '/inc/customizer.php';
 require_once NEGAR_SHOP_DIR . '/inc/seo-schema.php';
 
 /**
+ * Contact Form AJAX Handler & Message Persistence
+ */
+require_once NEGAR_SHOP_DIR . '/inc/contact-form.php';
+
+/**
  * WooCommerce Integration & Hooks
  */
 if ( class_exists( 'WooCommerce' ) || file_exists( WP_PLUGIN_DIR . '/woocommerce/woocommerce.php' ) ) {
@@ -66,4 +71,6 @@ if ( class_exists( 'WooCommerce' ) || file_exists( WP_PLUGIN_DIR . '/woocommerce
 	require_once NEGAR_SHOP_DIR . '/inc/shop-ajax.php';
 	require_once NEGAR_SHOP_DIR . '/inc/single-product.php';
 	require_once NEGAR_SHOP_DIR . '/inc/modals-ajax.php';
+	require_once NEGAR_SHOP_DIR . '/inc/auth-otp.php';
+	require_once NEGAR_SHOP_DIR . '/inc/product-qa.php';
 }

@@ -18,23 +18,31 @@ jQuery(document).ready(function ($) {
   var cart_url = kavehShopData.cart_url;
   var fontFamily = kavehShopData.fontFamily || 'IRANSans';
 
-  function notifySuccess(msg) {
+  function notifySuccess(msg, actionKey = 'cart_add') {
+    if (typeof window.negarToast === 'function') {
+      window.negarToast(msg, 'success', 3500, actionKey);
+      return;
+    }
     if (window.Notiflix && Notiflix.Notify) {
       Notiflix.Notify.success(msg, {
         timeout: 3000,
         rtl: true,
-        position: 'left-bottom',
+        position: 'right-top',
         fontFamily: fontFamily,
       });
     }
   }
 
   function notifyFailure(msg) {
+    if (typeof window.negarToast === 'function') {
+      window.negarToast(msg, 'error');
+      return;
+    }
     if (window.Notiflix && Notiflix.Notify) {
       Notiflix.Notify.failure(msg, {
         timeout: 3000,
         rtl: true,
-        position: 'left-bottom',
+        position: 'right-top',
         fontFamily: fontFamily,
       });
     }
@@ -90,9 +98,13 @@ jQuery(document).ready(function ($) {
     }
 
     if (opencartonaddtocart == '1') {
-      var cartSliding = document.querySelector('body .cart-sliding');
-      if (cartSliding) {
-        cartSliding.classList.add('opened');
+      if (typeof window.negarOpenCartDrawer === 'function') {
+        window.negarOpenCartDrawer();
+      } else {
+        var cartTrigger = document.querySelector('.negar-cart-trigger');
+        if (cartTrigger) {
+          cartTrigger.click();
+        }
       }
     }
 

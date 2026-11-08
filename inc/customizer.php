@@ -312,10 +312,13 @@ function negar_shop_customizer_css() {
 		if ( '#059669' !== $primary_color ) {
 			$css .= '--color-primary: ' . esc_attr( $primary_color ) . ';';
 			$css .= '--negar-primary: ' . esc_attr( $primary_color ) . ';';
+			$css .= '--kaveh-primary-color: ' . esc_attr( $primary_color ) . ';';
+			$css .= '--wp--preset--color--primary: ' . esc_attr( $primary_color ) . ';';
 		}
 		if ( '#e11d48' !== $accent_color ) {
 			$css .= '--color-accent: ' . esc_attr( $accent_color ) . ';';
 			$css .= '--color-secondary: ' . esc_attr( $accent_color ) . ';';
+			$css .= '--wp--preset--color--secondary: ' . esc_attr( $accent_color ) . ';';
 		}
 		$css .= '}';
 	}

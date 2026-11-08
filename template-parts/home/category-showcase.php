@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Category Showcase Component (Vertical Banner + Products) (HOME-07)
  *

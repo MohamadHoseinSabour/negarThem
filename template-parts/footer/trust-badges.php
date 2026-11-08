@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Trust Badges (Enamad, Samandehi, Gateways)
  *
