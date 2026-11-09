@@ -1,13 +1,393 @@
 /**
- * Content Pages Stylesheet (Blog, Single Post, About, Contact, 404, Search)
+ * Content Pages Stylesheet (About Us, Contact Us, Blog, Single Post, 404)
+ *
+ * Dedicated styling adhering to Kaveh Demo 43 design tokens (#e90544, IRANYekanX, soft cards).
  *
  * @package Negar_Shop
- * @version 1.0.0
+ * @version 2.3.0
  */
 
 /* ==========================================================================
-   1. Typography & Prose Styling for Single Articles
+   1. Shared Content Page Wrapper & Breadcrumbs
    ========================================================================== */
+.negar-content-page {
+	background-color: #f8fafc;
+	min-height: calc(100vh - 350px);
+	padding-top: 1.5rem;
+	padding-bottom: 3.5rem;
+}
+
+.negar-page-breadcrumb {
+	display: flex;
+	align-items: center;
+	margin-bottom: 1.5rem;
+	font-size: 0.8125rem;
+}
+
+.negar-page-breadcrumb ol,
+.negar-page-breadcrumb ul {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.negar-page-breadcrumb a {
+	color: #64748b;
+	text-decoration: none;
+	transition: color 0.2s ease;
+	display: inline-flex;
+	align-items: center;
+	gap: 0.35rem;
+}
+
+.negar-page-breadcrumb a:hover {
+	color: #e90544;
+}
+
+.negar-page-breadcrumb .separator {
+	color: #cbd5e1;
+	font-size: 0.75rem;
+}
+
+.negar-page-breadcrumb .current {
+	color: #0f172a;
+	font-weight: 700;
+}
+
+/* ==========================================================================
+   2. Editorial Hero Section
+   ========================================================================== */
+.negar-editorial-hero {
+	background: #ffffff;
+	border: 1px solid #e2e8f0;
+	border-radius: 24px;
+	padding: 2.5rem 1.75rem;
+	margin-bottom: 2rem;
+	box-shadow: 0 4px 25px -4px rgba(15, 23, 42, 0.04);
+	position: relative;
+	overflow: hidden;
+}
+
+@media (min-width: 768px) {
+	.negar-editorial-hero {
+		padding: 3.5rem 2.5rem;
+	}
+}
+
+.negar-editorial-hero::before {
+	content: '';
+	position: absolute;
+	top: -50px;
+	left: -50px;
+	width: 200px;
+	height: 200px;
+	background: radial-gradient(circle, rgba(233, 5, 68, 0.06) 0%, rgba(233, 5, 68, 0) 70%);
+	border-radius: 50%;
+	pointer-events: none;
+}
+
+.negar-hero-badge {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.375rem 1rem;
+	background-color: #fff1f2;
+	color: #e90544;
+	border: 1px solid #ffe4e6;
+	border-radius: 9999px;
+	font-size: 0.8125rem;
+	font-weight: 700;
+	margin-bottom: 1.25rem;
+}
+
+.negar-hero-title {
+	font-size: 1.75rem;
+	font-weight: 900;
+	color: #0f172a;
+	line-height: 1.35;
+	margin-bottom: 1rem;
+}
+
+@media (min-width: 768px) {
+	.negar-hero-title {
+		font-size: 2.25rem;
+	}
+}
+
+.negar-hero-lead {
+	font-size: 1rem;
+	line-height: 1.85;
+	color: #475569;
+	max-width: 800px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+/* ==========================================================================
+   3. Feature & Pillar Cards
+   ========================================================================== */
+.negar-pillar-card {
+	background: #ffffff;
+	border: 1.5px solid #e2e8f0;
+	border-radius: 20px;
+	padding: 1.5rem;
+	height: 100%;
+	box-shadow: 0 4px 15px -2px rgba(15, 23, 42, 0.02);
+	transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+	display: flex;
+	flex-direction: column;
+}
+
+.negar-pillar-card:hover {
+	transform: translateY(-4px);
+	border-color: #fbcfe8;
+	box-shadow: 0 12px 25px -4px rgba(233, 5, 68, 0.08);
+}
+
+.negar-pillar-icon {
+	width: 52px;
+	height: 52px;
+	border-radius: 16px;
+	background: #fff1f2;
+	border: 1px solid #ffe4e6;
+	color: #e90544;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 1.5rem;
+	margin-bottom: 1.25rem;
+	flex-shrink: 0;
+	transition: transform 0.25s ease;
+}
+
+.negar-pillar-card:hover .negar-pillar-icon {
+	transform: scale(1.08);
+}
+
+.negar-pillar-title {
+	font-size: 1.0625rem;
+	font-weight: 800;
+	color: #0f172a;
+	margin-bottom: 0.5rem;
+}
+
+.negar-pillar-desc {
+	font-size: 0.875rem;
+	line-height: 1.7;
+	color: #64748b;
+	margin: 0;
+}
+
+/* ==========================================================================
+   4. Brand Story Section (About Page)
+   ========================================================================== */
+.negar-story-box {
+	background: #ffffff;
+	border: 1px solid #e2e8f0;
+	border-radius: 24px;
+	padding: 2.25rem 1.75rem;
+	margin-bottom: 2rem;
+	box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.03);
+}
+
+@media (min-width: 768px) {
+	.negar-story-box {
+		padding: 3rem 2.5rem;
+	}
+}
+
+.negar-story-heading {
+	font-size: 1.35rem;
+	font-weight: 800;
+	color: #0f172a;
+	margin-bottom: 1.25rem;
+	display: flex;
+	align-items: center;
+	gap: 0.65rem;
+}
+
+.negar-story-heading i {
+	color: #e90544;
+}
+
+.negar-story-text {
+	font-size: 0.9375rem;
+	line-height: 2;
+	color: #334155;
+	margin-bottom: 1.25rem;
+}
+
+/* ==========================================================================
+   5. Contact Info Cards (Contact Page)
+   ========================================================================== */
+.negar-contact-card {
+	background: #ffffff;
+	border: 1.5px solid #e2e8f0;
+	border-radius: 20px;
+	padding: 1.5rem;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	gap: 1.15rem;
+	box-shadow: 0 4px 15px -2px rgba(15, 23, 42, 0.02);
+	transition: all 0.25s ease;
+	text-decoration: none !important;
+}
+
+.negar-contact-card:hover {
+	transform: translateY(-3px);
+	border-color: #fbcfe8;
+	box-shadow: 0 10px 25px -4px rgba(233, 5, 68, 0.08);
+}
+
+.negar-contact-icon {
+	width: 52px;
+	height: 52px;
+	border-radius: 16px;
+	background: #fff1f2;
+	border: 1px solid #ffe4e6;
+	color: #e90544;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 1.4rem;
+	flex-shrink: 0;
+}
+
+.negar-contact-card-label {
+	font-size: 0.8125rem;
+	color: #64748b;
+	margin-bottom: 0.25rem;
+	display: block;
+}
+
+.negar-contact-card-value {
+	font-size: 0.9375rem;
+	font-weight: 700;
+	color: #0f172a;
+	line-height: 1.4;
+	display: block;
+}
+
+/* ==========================================================================
+   6. Contact Inquiry Form
+   ========================================================================== */
+.negar-contact-form-box {
+	background: #ffffff;
+	border: 1px solid #e2e8f0;
+	border-radius: 24px;
+	padding: 2rem 1.5rem;
+	box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.03);
+	height: 100%;
+}
+
+@media (min-width: 768px) {
+	.negar-contact-form-box {
+		padding: 2.75rem 2.25rem;
+	}
+}
+
+.negar-contact-form-box .form-label {
+	font-size: 0.8125rem;
+	font-weight: 600;
+	color: #334155;
+	margin-bottom: 0.375rem;
+	display: block;
+}
+
+.negar-contact-form-box input[type="text"],
+.negar-contact-form-box input[type="tel"],
+.negar-contact-form-box input[type="email"],
+.negar-contact-form-box textarea {
+	width: 100% !important;
+	box-sizing: border-box !important;
+	height: 46px;
+	padding: 0 1rem;
+	border-radius: 12px !important;
+	border: 1.5px solid #e2e8f0 !important;
+	background-color: #f8fafc !important;
+	font-size: 0.875rem !important;
+	font-family: inherit !important;
+	color: #0f172a !important;
+	transition: all 0.2s ease !important;
+}
+
+.negar-contact-form-box textarea {
+	height: auto !important;
+	min-height: 120px !important;
+	padding: 0.875rem 1rem !important;
+	resize: vertical;
+}
+
+.negar-contact-form-box input:focus,
+.negar-contact-form-box textarea:focus {
+	background-color: #ffffff !important;
+	border-color: #e90544 !important;
+	outline: none !important;
+	box-shadow: 0 0 0 3px rgba(233, 5, 68, 0.12) !important;
+}
+
+.negar-contact-btn {
+	background: linear-gradient(135deg, #e90544 0%, #c40439 100%) !important;
+	color: #ffffff !important;
+	padding: 0.875rem 2.5rem !important;
+	border-radius: 9999px !important;
+	font-weight: 800 !important;
+	font-size: 0.9375rem !important;
+	border: none !important;
+	cursor: pointer !important;
+	transition: all 0.2s ease !important;
+	box-shadow: 0 4px 14px rgba(233, 5, 68, 0.3) !important;
+	display: inline-flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+	gap: 0.5rem;
+}
+
+.negar-contact-btn:hover {
+	background: linear-gradient(135deg, #c40439 0%, #9f022c 100%) !important;
+	transform: translateY(-1px) !important;
+	box-shadow: 0 6px 20px rgba(233, 5, 68, 0.4) !important;
+}
+
+.negar-contact-btn:active {
+	transform: translateY(0) !important;
+}
+
+/* ==========================================================================
+   7. Map & Office Box
+   ========================================================================== */
+.negar-map-box {
+	background: #ffffff;
+	border: 1px solid #e2e8f0;
+	border-radius: 24px;
+	padding: 2rem 1.5rem;
+	box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.03);
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+@media (min-width: 768px) {
+	.negar-map-box {
+		padding: 2.75rem 2.25rem;
+	}
+}
+
+.negar-map-frame {
+	border-radius: 16px;
+	overflow: hidden;
+	border: 1.5px solid #e2e8f0;
+	height: 280px;
+	background: #f1f5f9;
+}
+
+/* Single Post typography & content */
 .negar-single-post .entry-content p {
 	margin-bottom: 1.5rem;
 	line-height: 2;
@@ -16,88 +396,27 @@
 .negar-single-post .entry-content h2 {
 	font-size: 1.5rem;
 	font-weight: 800;
-	color: var(--negar-text-dark, #0f172a);
+	color: #0f172a;
 	margin-top: 2rem;
 	margin-bottom: 1rem;
 	padding-bottom: 0.5rem;
-	border-bottom: 1px solid var(--negar-border, #e2e8f0);
+	border-bottom: 1px solid #e2e8f0;
 }
 
 .negar-single-post .entry-content h3 {
 	font-size: 1.25rem;
 	font-weight: 700;
-	color: var(--negar-text-dark, #0f172a);
+	color: #0f172a;
 	margin-top: 1.5rem;
 	margin-bottom: 0.75rem;
 }
 
 .negar-single-post .entry-content blockquote {
-	border-right: 4px solid var(--negar-primary, #2563eb);
+	border-right: 4px solid #e90544;
 	padding: 1rem 1.5rem;
 	margin: 1.5rem 0;
 	background-color: #f8fafc;
-	border-radius: 0 0.75rem 0.75rem 0;
+	border-radius: 0 12px 12px 0;
 	font-style: italic;
-	color: var(--negar-text-muted, #475569);
-}
-
-.negar-single-post .entry-content img {
-	border-radius: var(--negar-radius-lg, 1rem);
-	margin: 1.5rem auto;
-}
-
-/* ==========================================================================
-   2. About Us Cards & Metrics
-   ========================================================================== */
-.about-metrics .metric-card {
-	transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.about-metrics .metric-card:hover {
-	transform: translateY(-3px);
-	box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
-}
-
-.about-values .value-card {
-	transition: all 0.2s ease;
-}
-
-.about-values .value-card:hover {
-	border-color: var(--negar-primary, #2563eb);
-	transform: translateY(-2px);
-}
-
-/* ==========================================================================
-   3. Contact Form & FAQ
-   ========================================================================== */
-.contact-card {
-	transition: all 0.2s ease;
-}
-
-.contact-card:hover {
-	border-color: var(--negar-primary, #2563eb);
-	transform: translateY(-2px);
-}
-
-.negar-contact-page details summary::-webkit-details-marker {
-	display: none;
-}
-
-/* ==========================================================================
-   4. 404 & Empty State Transitions
-   ========================================================================== */
-.negar-404-page,
-.negar-search-empty {
-	animation: fadeIn 0.3s ease-out;
-}
-
-@keyframes fadeIn {
-	from {
-		opacity: 0;
-		transform: translateY(10px);
-	}
-	to {
-		opacity: 1;
-		transform: translateY(0);
-	}
+	color: #475569;
 }
