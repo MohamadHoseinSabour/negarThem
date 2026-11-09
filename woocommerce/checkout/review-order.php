@@ -89,7 +89,7 @@ defined( 'ABSPATH' ) || exit;
 
 		<tr class="order-total border-t border-border pt-4 text-sm sm:text-base">
 			<th class="py-4 text-dark font-black pr-1"><?php esc_html_e( 'مبلغ قابل پرداخت:', 'negar-shop' ); ?></th>
-			<td class="py-4 text-primary font-black text-left pl-1 text-base sm:text-lg"><?php wc_cart_totals_order_total_html(); ?></td>
+			<td class="py-4 text-rose-600 font-black text-left pl-1 text-base sm:text-lg"><?php wc_cart_totals_order_total_html(); ?></td>
 		</tr>
 
 		<?php do_action( 'woocommerce_review_order_after_order_total' ); ?>
