@@ -428,11 +428,47 @@ body.drawer-open {
   color: var(--color-foreground);
 }
 
-/* Mobile Bottom Bar Spacing */
+/* Mobile Bottom Bar Spacing & Aesthetics */
 @media (max-width: 767px) {
   body {
-    padding-bottom: 64px;
+    padding-bottom: 72px;
   }
+}
+
+.negar-mobile-bottom-bar {
+  transition: transform 0.25s ease, opacity 0.25s ease;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.negar-mobile-bottom-bar .bottom-bar-item {
+  color: #64748b;
+  text-decoration: none;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+  min-height: 44px;
+}
+
+.negar-mobile-bottom-bar .bottom-bar-item:hover,
+.negar-mobile-bottom-bar .bottom-bar-item:active,
+.negar-mobile-bottom-bar .bottom-bar-item.is-active {
+  color: #e90544;
+}
+
+.negar-mobile-bottom-bar .bottom-bar-item svg {
+  width: 22px;
+  height: 22px;
+  stroke-width: 1.8;
+  transition: transform 0.2s ease;
+}
+
+.negar-mobile-bottom-bar .bottom-bar-item:active svg {
+  transform: scale(0.92);
+}
+
+.negar-mobile-bottom-bar .bottom-bar-item span {
+  font-size: 11px;
+  line-height: 1.2;
 }
 
 /* Mobile Drawer Tabs */

@@ -77,8 +77,8 @@ function negar_shop_cart_fragments( $fragments ) {
 	// 1. Desktop Main Header Cart Count Badge
 	$fragments['span.negar-cart-count-header'] = '<span class="negar-cart-count-header absolute -top-1 -right-1 bg-white text-rose-600 border border-rose-600 rounded-full text-[10px] w-4.5 h-4.5 flex items-center justify-center font-black leading-none">' . esc_html( $count ) . '</span>';
 
-	// 2. Mobile Bottom Bar Cart Count Badge
-	$fragments['span.negar-cart-count-mobile'] = '<span class="negar-cart-count-mobile badge badge-discount absolute -top-1.5 -right-2 text-3xs px-1 py-0">' . esc_html( $count ) . '</span>';
+	// 2. Mobile Header Cart Count Badge
+	$fragments['span.negar-cart-count-mobile'] = '<span class="negar-cart-count-mobile negar-cart-count badge badge-discount absolute -top-1.5 -right-1.5 text-2xs px-1.5 py-0.5">' . esc_html( $count ) . '</span>';
 
 	// 3. Mini Cart Drawer Header Count
 	$fragments['span.negar-cart-count-drawer'] = '<span class="negar-cart-count-drawer badge badge-discount text-xs">' . esc_html( $count ) . '</span>';
