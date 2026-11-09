@@ -101,7 +101,7 @@ function negar_ajax_send_otp() {
 
 	// Isolated automated test transport:
 	// ONLY enabled when explicitly configured via NEGAR_TEST_OTP_TRANSPORT constant or CI env
-	$is_test_transport = ( defined( 'NEGAR_TEST_OTP_TRANSPORT' ) && true === constant( 'NEGAR_TEST_OTP_TRANSPORT' ) )
+	$is_test_transport = ( defined( 'NEGAR_TEST_OTP_TRANSPORT' ) && (!empty(constant('NEGAR_TEST_OTP_TRANSPORT'))) )
 		|| ( '1' === getenv( 'NEGAR_TEST_OTP_TRANSPORT' ) );
 
 	if ( ! $dispatched && $is_test_transport ) {

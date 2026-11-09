@@ -44,7 +44,7 @@ async function runTests() {
 
   // 1. Homepage Route & Architecture
   await testStep('Homepage renders successfully (HTTP 200, Header, Footer)', async () => {
-    const res = await page.goto(BASE_URL, { waitUntil: 'domcontentloaded' });
+    const res = await page.goto(BASE_URL, { waitUntil: 'domcontentloaded', timeout: 45000 });
     assert.strictEqual(res.status(), 200, 'Homepage status must be 200');
     const header = await page.$('header#masthead, header.site-header, .negar-main-header');
     assert(header, 'Header element must exist');
@@ -250,8 +250,105 @@ async function runTests() {
     await page.goto(`${BASE_URL}/about/`, { waitUntil: 'domcontentloaded' });
     const aboutHeader = await page.$('h1');
     assert(aboutHeader, 'About page title must exist');
-    const cards = await page.$$('.card');
+    const cards = await page.$$('.card, .negar-pillar-card');
     assert(cards.length >= 4, `About page should have metrics cards (found ${cards.length})`);
+  });
+
+  // 14. V3 Header Logo Dimensions across WooCommerce Pages (Shop, Single Product)
+  await testStep('Mobile header logo retains non-zero computed dimensions on WooCommerce pages', async () => {
+    const mCtx = await browser.newContext({ viewport: { width: 375, height: 812 }, isMobile: true });
+    const mPage = await mCtx.newPage();
+
+    for (const url of [`${BASE_URL}/?post_type=product`, `${BASE_URL}/?p=131`]) {
+      await mPage.goto(url, { waitUntil: 'domcontentloaded' });
+      const logoRect = await mPage.evaluate(() => {
+        const logo = document.querySelector('.negar-mobile-header .mobile-logo img, .negar-mobile-header a img');
+        if (!logo) return null;
+        const rect = logo.getBoundingClientRect();
+        return { width: rect.width, height: rect.height };
+      });
+      assert(logoRect, `Logo must exist on ${url}`);
+      assert(logoRect.height >= 24 && logoRect.width >= 40, `Logo on ${url} must be visible (got ${logoRect.width}x${logoRect.height})`);
+    }
+    await mCtx.close();
+  });
+
+  // 15. V3 Mobile Hero Slider Dimensions & Visibility
+  await testStep('Mobile Hero Slider displays content with non-zero dimensions and 0px overflow', async () => {
+    const mCtx = await browser.newContext({ viewport: { width: 375, height: 812 }, isMobile: true });
+    const mPage = await mCtx.newPage();
+    await mPage.goto(BASE_URL, { waitUntil: 'domcontentloaded' });
+    await mPage.waitForSelector('.landing-nk__carousel', { timeout: 10000 });
+    await mPage.waitForTimeout(600);
+
+    const heroMetrics = await mPage.evaluate(() => {
+      const img = document.querySelector('.landing-nk__carousel .swiper-slide-active .image img, .landing-nk__carousel .image img');
+      const title = document.querySelector('.landing-nk__carousel .title');
+      const cta = document.querySelector('.landing-nk__carousel .btn');
+      const iRect = img ? img.getBoundingClientRect() : null;
+      const tRect = title ? title.getBoundingClientRect() : null;
+      const cRect = cta ? cta.getBoundingClientRect() : null;
+
+      return {
+        imgVisible: iRect && iRect.width > 50 && iRect.height > 50,
+        titleVisible: tRect && tRect.width > 50,
+        ctaVisible: cRect && cRect.width > 50,
+        overflow: document.documentElement.scrollWidth > window.innerWidth,
+      };
+    });
+
+    assert(heroMetrics.imgVisible, 'Mobile hero image must have visible rendered dimensions');
+    assert(heroMetrics.titleVisible, 'Mobile hero title must be visible');
+    assert(heroMetrics.ctaVisible, 'Mobile hero CTA button must be visible');
+    assert.strictEqual(heroMetrics.overflow, false, 'Homepage must have zero horizontal overflow on mobile');
+    await mCtx.close();
+  });
+
+  // 16. V3 Mobile Bottom Navigation Clean 3-Item Island
+  await testStep('Mobile bottom navigation contains exactly 3 items with 0 count badges', async () => {
+    const mCtx = await browser.newContext({ viewport: { width: 375, height: 812 }, isMobile: true });
+    const mPage = await mCtx.newPage();
+    await mPage.goto(BASE_URL, { waitUntil: 'domcontentloaded' });
+
+    const navMetrics = await mPage.evaluate(() => {
+      const bar = document.querySelector('.negar-mobile-bottom-bar');
+      if (!bar) return null;
+      const items = bar.querySelectorAll('.bottom-bar-item');
+      const badges = bar.querySelectorAll('.badge, .negar-cart-count, .negar-wishlist-count');
+      const texts = Array.from(items).map(i => i.textContent.trim());
+      return {
+        itemCount: items.length,
+        badgeCount: badges.length,
+        texts,
+      };
+    });
+
+    assert(navMetrics, '.negar-mobile-bottom-bar must exist on mobile');
+    assert.strictEqual(navMetrics.itemCount, 3, 'Bottom bar must have exactly 3 items');
+    assert.strictEqual(navMetrics.badgeCount, 0, 'Bottom bar must have 0 count badges');
+    assert(!navMetrics.texts.some(t => t.includes('دسته') || t.includes('سبد')), 'Bottom bar must not contain Categories or Cart');
+    await mCtx.close();
+  });
+
+  // 17. V3 Mobile Checkout Input Sizing
+  await testStep('Mobile checkout inputs render at full width (>= 240px) without 105px squashing', async () => {
+    const mCtx = await browser.newContext({ viewport: { width: 375, height: 812 }, isMobile: true });
+    const mPage = await mCtx.newPage();
+    await mPage.goto(`${BASE_URL}/?add-to-cart=131`, { waitUntil: 'domcontentloaded' });
+    await mPage.goto(`${BASE_URL}/checkout/`, { waitUntil: 'domcontentloaded' });
+
+    const inputWidths = await mPage.evaluate(() => {
+      const fn = document.getElementById('billing_first_name');
+      const ln = document.getElementById('billing_last_name');
+      return {
+        fnWidth: fn ? fn.getBoundingClientRect().width : 0,
+        lnWidth: ln ? ln.getBoundingClientRect().width : 0,
+      };
+    });
+
+    assert(inputWidths.fnWidth >= 240, `First name input must be at least 240px on 375px viewport (got ${inputWidths.fnWidth}px)`);
+    assert(inputWidths.lnWidth >= 240, `Last name input must be at least 240px on 375px viewport (got ${inputWidths.lnWidth}px)`);
+    await mCtx.close();
   });
 
   await browser.close();

@@ -35,6 +35,7 @@ const EXCLUDE_NAMES = new Set([
   'scratch',
   'tests',
   'scripts',
+  'docs',
   '.env',
   'package.json',
   'package-lock.json',
