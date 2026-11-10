@@ -81,13 +81,16 @@ function negar_shop_ajax_search_callback() {
 			wp_reset_postdata();
 		}
 
-		$view_all_url = add_query_arg(
-			array(
-				's'         => $term,
-				'post_type' => 'product',
-			),
-			home_url( '/' )
+		$view_all_args = array(
+			's'         => $term,
+			'post_type' => 'product',
 		);
+
+		if ( ! empty( $category_filter ) && '0' !== $category_filter ) {
+			$view_all_args['product_cat'] = $category_filter;
+		}
+
+		$view_all_url = add_query_arg( $view_all_args, home_url( '/' ) );
 	} else {
 		// Fallback for regular posts
 		$search_query = new WP_Query(

@@ -71,6 +71,94 @@ async function runTests() {
     assert.strictEqual(overflowInfo.scrollW, overflowInfo.clientW, 'Desktop viewport must have 0px overflow');
   });
 
+  // 2A. The hero deal must not use demo-only product claims.
+  await testStep('Homepage hero deal reflects its live WooCommerce product', async () => {
+    const productResponse = await page.request.get(`${BASE_URL}/wp-json/wc/store/v1/products?category=51&per_page=1`);
+    assert.strictEqual(productResponse.status(), 200, 'The Store API must provide the live games product used by the hero');
+    const products = await productResponse.json();
+    assert(products.length > 0, 'A live games product must be available for the hero deal');
+    const sourceProduct = products[0];
+
+    const heroDeal = await page.evaluate(() => {
+      const slide = document.querySelector('.swiper-landing-product-nk .swiper-slide');
+      const productLink = slide?.querySelector('.landing-nk__products__item .title a');
+      const rating = slide?.querySelector('.comments-rate')?.textContent.replace(/\s+/g, ' ').trim() || '';
+      return {
+        link: productLink?.href || '',
+        title: productLink?.textContent.trim() || '',
+        rating,
+        content: slide?.textContent.replace(/\s+/g, ' ').trim() || '',
+      };
+    });
+
+    assert.strictEqual(heroDeal.link, sourceProduct.permalink, 'Hero deal link must be the live product permalink');
+    assert.strictEqual(heroDeal.title, sourceProduct.name, 'Hero deal title must be the live product title');
+    assert(!heroDeal.content.includes('FC 26'), 'Hero deal must not retain the demo-only FC 26 product claim');
+
+    if (Number(sourceProduct.review_count) === 0) {
+      assert(heroDeal.rating.includes('بدون دیدگاه'), 'A product with no reviews must not display an invented review count or rating');
+    }
+  });
+
+  // 2B. Homepage reviews must reflect the public WooCommerce review source.
+  await testStep('Homepage displays live WooCommerce reviews or a truthful empty state', async () => {
+    const reviewState = await page.evaluate(async () => {
+      const section = document.querySelector('.negar-sec-21-testimonials');
+      if (!section) return { sectionFound: false };
+
+      const reviewsUrl = new URL('wp-json/wc/store/v1/products/reviews?per_page=3&orderby=date&order=desc', window.location.href);
+      const response = await fetch(reviewsUrl.toString());
+      const sourceReviews = response.ok ? await response.json() : [];
+      const cards = Array.from(section.querySelectorAll('article'));
+
+      return {
+        sectionFound: true,
+        sourceReviews,
+        hasEmptyState: Boolean(section.querySelector('.border-dashed')),
+        cards: cards.map((card) => ({
+          author: card.querySelector('h3')?.textContent.trim() || '',
+          productUrl: card.querySelector('a[href*="/product/"]')?.href || '',
+          text: card.textContent.replace(/\s+/g, ' ').trim(),
+        })),
+      };
+    });
+
+    assert(reviewState.sectionFound, 'The homepage review section must exist');
+
+    if (reviewState.sourceReviews.length === 0) {
+      assert(reviewState.hasEmptyState, 'An empty review source must show the truthful empty state');
+      assert.strictEqual(reviewState.cards.length, 0, 'An empty review source must not render invented cards');
+      return;
+    }
+
+    const expectedReviews = reviewState.sourceReviews.slice(0, 3);
+    assert.strictEqual(reviewState.cards.length, expectedReviews.length, 'Homepage review cards must match the live review count');
+
+    expectedReviews.forEach((review, index) => {
+      const card = reviewState.cards[index];
+      assert.strictEqual(card.author, review.reviewer, `Review card ${index + 1} must use the live reviewer name`);
+      assert.strictEqual(card.productUrl, review.product_permalink, `Review card ${index + 1} must link to its reviewed product`);
+      const sourceText = review.review.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
+      assert(card.text.includes(sourceText), `Review card ${index + 1} must use the live review content`);
+    });
+  });
+
+  // 2C. Video-review content must not pretend that sample presenters are customers.
+  await testStep('Homepage video-review section uses a truthful no-content state', async () => {
+    const videoReviewState = await page.evaluate(() => {
+      const section = document.querySelector('.videos-nk-39f2483d');
+      return {
+        sectionFound: Boolean(section),
+        hasEmptyState: Boolean(section?.querySelector('.videos-nk__empty')),
+        videoButtons: section?.querySelectorAll('.videos-nk__play').length || 0,
+      };
+    });
+
+    assert(videoReviewState.sectionFound, 'The homepage video-review section must exist');
+    assert(videoReviewState.hasEmptyState, 'Video reviews without a verified source must show a truthful empty state');
+    assert.strictEqual(videoReviewState.videoButtons, 0, 'The empty state must not present sample videos as customer reviews');
+  });
+
   // 3. Category Search Dropdown
   await testStep('Main search bar contains interactive category dropdown and hidden input', async () => {
     const catBtn = await page.$('#negar-category-menu-btn, .category-menu-btn');
@@ -87,6 +175,49 @@ async function runTests() {
       return dd && !dd.classList.contains('hidden');
     });
     assert(isOpened, 'Category dropdown must open when category button is clicked');
+  });
+
+  // 3A. Category selection must affect live results and retained search URLs.
+  await testStep('Category-filtered search returns matching products and preserves the category', async () => {
+    await page.goto(BASE_URL, { waitUntil: 'domcontentloaded' });
+
+    const catalogueResponse = await page.request.get(`${BASE_URL}/wp-json/wc/store/v1/products?category=48&per_page=1`);
+    assert.strictEqual(catalogueResponse.status(), 200, 'The Store API must provide a product in the consoles category');
+    const catalogue = await catalogueResponse.json();
+    assert(catalogue.length > 0, 'The consoles category must contain a product for this local regression test');
+    const expectedProduct = catalogue[0];
+
+    const categoryButton = await page.$('#negar-category-menu-btn');
+    const categoryOption = await page.$('.category-option[data-cat-slug="consoles"]');
+    const searchInput = await page.$('.negar-ajax-search-form .negar-search-input');
+    assert(categoryButton && categoryOption && searchInput, 'Search category controls must be available');
+
+    await categoryButton.click();
+    await categoryOption.click();
+
+    const selectedCategory = await page.$eval('#negar-search-cat-input', (input) => input.value);
+    assert.strictEqual(selectedCategory, 'consoles', 'Selecting a category must update the submitted hidden field');
+
+    await searchInput.fill(expectedProduct.name);
+    await page.waitForFunction(
+      (title) => Array.from(document.querySelectorAll('.negar-ajax-search-results .search-result-title'))
+        .some((element) => element.textContent.trim() === title),
+      expectedProduct.name,
+      { timeout: 10000 }
+    );
+
+    const resultState = await page.evaluate(() => {
+      const result = document.querySelector('.negar-ajax-search-results .search-result-item');
+      const viewAll = document.querySelector('.negar-ajax-search-results a:not(.search-result-item)');
+      return {
+        resultTitle: result?.querySelector('.search-result-title')?.textContent.trim() || '',
+        viewAllUrl: viewAll?.href || '',
+      };
+    });
+
+    assert.strictEqual(resultState.resultTitle, expectedProduct.name, 'The live search result must belong to the selected category');
+    const decodedViewAllUrl = resultState.viewAllUrl.replace(/&#0*38;/g, '&');
+    assert.strictEqual(new URL(decodedViewAllUrl).searchParams.get('product_cat'), 'consoles', 'View-all searches must preserve the selected category');
   });
 
   // 4. Customer Phone OTP Authentication Modal Flow
@@ -106,11 +237,25 @@ async function runTests() {
       // Submit Step 1
       const submitStep1 = await page.$('#negar-otp-step1-submit');
       await page.evaluate(el => el.click(), submitStep1);
-      await page.waitForTimeout(1000);
+      await page.waitForFunction(() => {
+        const step2 = document.getElementById('negar-otp-step2-form');
+        const error = document.getElementById('negar-otp-step1-error');
+        return !step2.classList.contains('hidden') || !error.classList.contains('hidden');
+      }, { timeout: 10000 });
 
-      // Check transition to Step 2
-      const step2Form = await page.$('#negar-otp-step2-form:not(.hidden)');
-      assert(step2Form, 'Step 2 form must be visible after sending OTP');
+      const otpState = await page.evaluate(() => {
+        const step2 = document.getElementById('negar-otp-step2-form');
+        const error = document.getElementById('negar-otp-step1-error');
+        return {
+          step2Visible: !step2.classList.contains('hidden'),
+          errorVisible: !error.classList.contains('hidden'),
+          errorText: error.textContent.trim(),
+        };
+      });
+      assert(otpState.step2Visible || otpState.errorVisible, 'OTP submission must produce either verification controls or an honest server response');
+      if (!otpState.step2Visible) {
+        assert(otpState.errorText.length > 0, 'Rate-limit or delivery failures must be shown honestly in the OTP form');
+      }
 
       // Close modal for subsequent tests
       const closeBtn = await page.$('#negar-login-otp-modal .negar-modal-close');
@@ -146,15 +291,50 @@ async function runTests() {
     }
   });
 
-  // 7. Wishlist Storage and Counter Sync
-  await testStep('Wishlist toggle adds product to localStorage and updates counter', async () => {
+  // 7. Wishlist Storage, Drawer State & Counter Sync
+  await testStep('Wishlist drawer is opaque and supports add, remove, and close interactions', async () => {
     const wlBtn = await page.$('.btn-wishlist-toggle');
-    if (wlBtn) {
-      await page.evaluate(el => el.click(), wlBtn);
-      await page.waitForTimeout(500);
-      const wishlistStorage = await page.evaluate(() => localStorage.getItem('negar_wishlist'));
-      assert(wishlistStorage, 'localStorage negar_wishlist must exist');
-    }
+    assert(wlBtn, 'A product-card wishlist toggle must exist');
+    // The compact card action is visually covered until card hover; dispatch its
+    // registered click handler directly so this test exercises the wishlist flow.
+    await page.evaluate((button) => button.click(), wlBtn);
+    await page.waitForFunction(() => {
+      try {
+        return JSON.parse(localStorage.getItem('negar_wishlist') || '[]').length > 0;
+      } catch (error) {
+        return false;
+      }
+    });
+
+    await page.goto(BASE_URL, { waitUntil: 'domcontentloaded' });
+    const wishlistTrigger = await page.$('.negar-wishlist-trigger');
+    assert(wishlistTrigger, 'The header wishlist trigger must exist');
+    await wishlistTrigger.click();
+    await page.waitForSelector('#negar-wishlist-drawer.is-open');
+    await page.waitForSelector('.wishlist-item');
+
+    const drawerVisual = await page.evaluate(() => {
+      const drawer = document.getElementById('negar-wishlist-drawer');
+      const backdrop = document.getElementById('negar-wishlist-backdrop');
+      return {
+        drawerBackground: getComputedStyle(drawer).backgroundColor,
+        drawerZIndex: getComputedStyle(drawer).zIndex,
+        backdropBackground: getComputedStyle(backdrop).backgroundColor,
+      };
+    });
+    assert.strictEqual(drawerVisual.drawerBackground, 'rgb(255, 255, 255)', 'Wishlist drawer must have an opaque white surface');
+    assert.strictEqual(drawerVisual.drawerZIndex, '50', 'Wishlist drawer must remain above page content');
+    assert.notStrictEqual(drawerVisual.backdropBackground, 'rgba(0, 0, 0, 0)', 'Wishlist backdrop must dim the page');
+
+    const removeButton = await page.$('.negar-remove-wishlist-item');
+    assert(removeButton, 'A populated wishlist item must offer a remove action');
+    await removeButton.click();
+    await page.waitForSelector('.negar-empty-wishlist');
+
+    const closeButton = await page.$('.negar-close-wishlist');
+    assert(closeButton, 'Wishlist drawer must expose a close action');
+    await closeButton.click();
+    await page.waitForFunction(() => !document.getElementById('negar-wishlist-drawer').classList.contains('is-open'));
   });
 
   // 8. Single Product: Gallery, Tabs, Truthful Reviews & Real Q&A

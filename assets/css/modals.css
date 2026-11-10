@@ -23,8 +23,15 @@
 }
 
 .negar-wishlist-drawer {
+	/* Utility classes are not guaranteed to provide this token in every build. */
+	background-color: var(--negar-surface, #ffffff) !important;
 	transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 	will-change: transform;
+}
+
+.negar-wishlist-backdrop {
+	/* Keep the drawer legible even when utility colour classes are unavailable. */
+	background-color: rgba(15, 23, 42, 0.6) !important;
 }
 
 .negar-wishlist-drawer.is-open {

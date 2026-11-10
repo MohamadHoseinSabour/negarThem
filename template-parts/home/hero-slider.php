@@ -14,12 +14,40 @@ if ( ! defined( 'ABSPATH' ) ) {
 $upload_dir = wp_upload_dir();
 $kaveh_base = $upload_dir['baseurl'] . '/kaveh-demo';
 $shop_link  = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/shop/' );
-$fc26_link  = $shop_link;
+$featured_product_posts = get_posts(
+	array(
+		'post_type'      => 'product',
+		'post_status'    => 'publish',
+		'posts_per_page' => 1,
+		'tax_query'      => array(
+			array(
+				'taxonomy' => 'product_cat',
+				'field'    => 'slug',
+				'terms'    => 'games',
+			),
+		),
+	)
+);
 
-$fc_prod = get_page_by_path( 'بازی-ea-sports-fc-26-نسخه-استاندارد-مخصوص-ps5', OBJECT, 'product' );
-if ( $fc_prod ) {
-	$fc26_link = get_permalink( $fc_prod->ID );
+if ( empty( $featured_product_posts ) ) {
+	$featured_product_posts = get_posts(
+		array(
+			'post_type'      => 'product',
+			'post_status'    => 'publish',
+			'posts_per_page' => 1,
+		)
+	);
 }
+
+$featured_product       = ! empty( $featured_product_posts ) && function_exists( 'wc_get_product' ) ? wc_get_product( $featured_product_posts[0]->ID ) : false;
+$featured_product_link  = $featured_product ? get_permalink( $featured_product->get_id() ) : $shop_link;
+$featured_product_title = $featured_product ? $featured_product->get_name() : __( 'پیشنهاد ویژه امروز', 'negar-shop' );
+$featured_product_image = $featured_product && $featured_product->get_image_id() ? wp_get_attachment_image_url( $featured_product->get_image_id(), 'woocommerce_thumbnail' ) : ( function_exists( 'wc_placeholder_img_src' ) ? wc_placeholder_img_src( 'woocommerce_thumbnail' ) : '' );
+$featured_regular_price = $featured_product ? (float) $featured_product->get_regular_price() : 0;
+$featured_sale_price    = $featured_product ? (float) $featured_product->get_price() : 0;
+$featured_discount      = $featured_regular_price > $featured_sale_price && $featured_sale_price > 0 ? (int) round( 100 - ( $featured_sale_price / $featured_regular_price * 100 ) ) : 0;
+$featured_review_count  = $featured_product ? (int) $featured_product->get_review_count() : 0;
+$featured_rating        = $featured_product ? (float) $featured_product->get_average_rating() : 0;
 ?>
 <div class="elementor-element elementor-element-229ccc7d e-con-full e-flex e-con e-parent e-lazyloaded" data-id="229ccc7d" data-element_type="container" data-e-type="container">
 	<div class="elementor-element elementor-element-6b94d804 elementor-widget elementor-widget-landingnkkaveh" data-id="6b94d804" data-element_type="widget" data-e-type="widget" data-widget_type="landingnkkaveh.default">
@@ -139,11 +167,13 @@ if ( $fc_prod ) {
 
 								<div class="swiper swiper-landing-product-nk swiper-landing-product-nk-6b94d804">
 									<div class="swiper-wrapper">
-										<div class="swiper-slide" data-product-url="<?php echo esc_url( $fc26_link ); ?>" role="group" aria-label="<?php esc_attr_e( 'پیشنهاد شگفت‌انگیز', 'negar-shop' ); ?>">
+										<div class="swiper-slide" data-product-url="<?php echo esc_url( $featured_product_link ); ?>" role="group" aria-label="<?php esc_attr_e( 'پیشنهاد شگفت‌انگیز', 'negar-shop' ); ?>">
 											<div class="landing-nk__products__item position-relative d-flex align-items-center align-items-start flex-row flex-lg-column">
-												<div class="discount position-absolute f-iran-yekan d-flex align-items-center justify-content-center">
-													۳۵ <i class="icon-discount-4"></i>
-												</div>
+												<?php if ( $featured_discount > 0 ) : ?>
+													<div class="discount position-absolute f-iran-yekan d-flex align-items-center justify-content-center">
+														<?php echo esc_html( number_format_i18n( $featured_discount ) ); ?> <i class="icon-discount-4" aria-hidden="true"></i>
+													</div>
+												<?php endif; ?>
 												<div class="image position-relative mx-lg-auto">
 													<div class="bg position-absolute top-50 start-50 translate-middle rounded-circle"></div>
 													<span class="cir cir-1 position-absolute top-50 start-50 translate-middle rounded-circle"></span>
@@ -152,32 +182,35 @@ if ( $fc_prod ) {
 													<svg xmlns="http://www.w3.org/2000/svg" width="42" height="22" fill="none" viewBox="0 0 42 22" class="position-absolute bottom-100 end-100 d-none d-lg-block" aria-hidden="true">
 														<path stroke="#ddd" stroke-linecap="round" d="M10 17c1.496-4.737 9.79-14.368 31-15M1 10c.917-2.842 6-8.621 19-9m-3 20c.579-1.895 3.79-5.747 12-6"></path>
 													</svg>
-													<a href="<?php echo esc_url( $fc26_link ); ?>" class="d-block mx-auto">
-														<img loading="lazy" decoding="async" src="<?php echo esc_url( $kaveh_base . '/5a11a470554a92905e74facee6978604b2f3fd09_1754815528-300x300-removebg-preview-1.png' ); ?>" alt="<?php esc_attr_e( 'بازی EA Sports FC 26 نسخه استاندارد مخصوص PS5', 'negar-shop' ); ?>" width="122" height="134" class="d-block w-100">
+													<a href="<?php echo esc_url( $featured_product_link ); ?>" class="d-block mx-auto">
+														<img loading="lazy" decoding="async" src="<?php echo esc_url( $featured_product_image ); ?>" alt="<?php echo esc_attr( $featured_product_title ); ?>" width="122" height="134" class="d-block w-100">
 													</a>
 												</div>
 												<div class="detail">
 													<h2 class="title f-iran-yekan fw-semibold">
-														<a href="<?php echo esc_url( $fc26_link ); ?>"><?php esc_html_e( 'بازی EA Sports FC 26 نسخه استاندارد مخصوص PS5', 'negar-shop' ); ?></a>
+														<a href="<?php echo esc_url( $featured_product_link ); ?>"><?php echo esc_html( $featured_product_title ); ?></a>
 													</h2>
 													<div class="comments-rate d-none d-lg-flex align-items-center justify-content-between mb-3">
 														<div class="comments f-iransans">
-															<?php esc_html_e( '۲ نقد و بررسی', 'negar-shop' ); ?>
+															<?php echo esc_html( $featured_review_count ? sprintf( _n( '%s دیدگاه', '%s دیدگاه', $featured_review_count, 'negar-shop' ), number_format_i18n( $featured_review_count ) ) : __( 'بدون دیدگاه', 'negar-shop' ) ); ?>
 														</div>
 														<div class="line flex-grow-1"></div>
+														<?php if ( $featured_review_count > 0 ) : ?>
 														<div class="rate d-flex align-items-center gap-2 f-iransans">
-															۴.۵ / ۵
+															<?php echo esc_html( number_format_i18n( $featured_rating, 1 ) . ' / 5' ); ?>
 															<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 18 18" aria-hidden="true">
 																<path fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M11.543 3.908 12.6 6.023c.143.292.525.57.848.63l1.912.314c1.223.203 1.508 1.088.63 1.973l-1.492 1.492c-.248.248-.39.736-.308 1.088l.428 1.845c.337 1.455-.443 2.025-1.726 1.26L11.1 13.56c-.322-.195-.862-.195-1.185 0l-1.792 1.065c-1.283.758-2.063.195-1.725-1.26l.427-1.845c.083-.345-.06-.832-.307-1.088L5.025 8.94c-.877-.877-.592-1.763.63-1.973l1.913-.315c.322-.052.705-.337.847-.63l1.058-2.115c.562-1.147 1.492-1.147 2.07 0Z"></path>
 																<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M6 3.75H1.5m2.25 10.5H1.5M2.25 9H1.5" opacity=".4"></path>
 															</svg>
 														</div>
+														<?php endif; ?>
 													</div>
 													<div class="price d-flex align-items-center justify-content-between gap-2">
-														<del class="off fw-normal f-iransans text-uppercase">۶,۴۸۸,۱۰۰</del>
+														<?php if ( $featured_regular_price > $featured_sale_price && $featured_sale_price > 0 ) : ?>
+															<del class="off fw-normal f-iransans text-uppercase"><?php echo esc_html( number_format_i18n( $featured_regular_price ) ); ?></del>
+														<?php endif; ?>
 														<div class="price d-flex align-items-center f-iransans">
-															۴,۱۹۹,۰۰۰
-															<span class="toman-symbol toman-symbol--modern lh-1"><svg width="19.5" height="18" viewBox="0 0 13 12" fill="#0a0a0a" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><use href="#kaveh-toman-mark"></use></svg></span>
+															<?php echo $featured_product ? wp_kses_post( $featured_product->get_price_html() ) : esc_html__( 'قیمت در فروشگاه', 'negar-shop' ); ?>
 														</div>
 													</div>
 												</div>
@@ -188,13 +221,14 @@ if ( $fc_prod ) {
 								</div>
 
 								<div class="landing-nk__products__price price d-none d-lg-flex align-items-center justify-content-between gap-2 position-absolute">
-									<del class="off fw-normal f-iransans text-uppercase">۶,۴۸۸,۱۰۰</del>
+									<?php if ( $featured_regular_price > $featured_sale_price && $featured_sale_price > 0 ) : ?>
+										<del class="off fw-normal f-iransans text-uppercase"><?php echo esc_html( number_format_i18n( $featured_regular_price ) ); ?></del>
+									<?php endif; ?>
 									<div class="price d-flex align-items-center f-iransans">
-										۴,۱۹۹,۰۰۰
-										<span class="toman-symbol toman-symbol--modern lh-1"><svg width="19.5" height="18" viewBox="0 0 13 12" fill="#0a0a0a" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><use href="#kaveh-toman-mark"></use></svg></span>
+										<?php echo $featured_product ? wp_kses_post( $featured_product->get_price_html() ) : esc_html__( 'قیمت در فروشگاه', 'negar-shop' ); ?>
 									</div>
 								</div>
-								<a class="btn-view d-none d-lg-flex align-items-center justify-content-center position-absolute top-100 end-50" aria-label="<?php esc_attr_e( 'مشاهده محصول', 'negar-shop' ); ?>" href="<?php echo esc_url( $fc26_link ); ?>">
+								<a class="btn-view d-none d-lg-flex align-items-center justify-content-center position-absolute top-100 end-50" aria-label="<?php esc_attr_e( 'مشاهده محصول', 'negar-shop' ); ?>" href="<?php echo esc_url( $featured_product_link ); ?>">
 									<i class="icon icon-chevron-left-2 btn-view__icon lh-1" aria-hidden="true"></i>
 								</a>
 							</div>

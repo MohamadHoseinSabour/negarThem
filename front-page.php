@@ -97,7 +97,7 @@ get_header();
 		// 20. Popular Brands Carousel (Samsung, Apple, Sony, Asus)
 		get_template_part( 'template-parts/home/brands-slider' );
 
-		// 21. Customer Reviews & Testimonials Carousel
+		// 21. Latest approved WooCommerce product reviews
 		get_template_part( 'template-parts/home/sec-21-testimonials' );
 
 		// 22. Audio & Headphones Flash Deals Carousel

@@ -350,7 +350,7 @@ function negar_shop_scripts() {
 		'negar-shop-modals',
 		NEGAR_SHOP_URI . '/assets/css/modals.css',
 		array( 'negar-shop-header-footer' ),
-		NEGAR_SHOP_VERSION
+		(string) filemtime( NEGAR_SHOP_DIR . '/assets/css/modals.css' )
 	);
 
 	// Swiper Slider JS
