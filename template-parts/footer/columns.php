@@ -12,6 +12,30 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $upload_dir = wp_upload_dir();
 $demo_base  = $upload_dir['baseurl'] . '/kaveh-demo';
+$shop_url   = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/' );
+$cart_url   = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'cart' ) : home_url( '/' );
+$account_url = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'myaccount' ) : wp_login_url();
+$contact_url = home_url( '/contact/' );
+$about_url   = home_url( '/about/' );
+$blog_page   = (int) get_option( 'page_for_posts' );
+$blog_url    = $blog_page ? get_permalink( $blog_page ) : home_url( '/' );
+$privacy_url = get_privacy_policy_url();
+$footer_about = trim( wp_strip_all_tags( (string) get_theme_mod( 'negar_shop_footer_about', '' ) ) );
+$site_description = trim( (string) get_bloginfo( 'description' ) );
+$footer_about = $footer_about ? $footer_about : ( $site_description ? $site_description : __( 'برای مشاهده و مقایسه محصولات، از فروشگاه بازدید کنید.', 'negar-shop' ) );
+$phone_hotline = trim( (string) get_theme_mod( 'negar_shop_phone_hotline', '' ) );
+$copyright_text = trim( (string) get_theme_mod( 'negar_shop_copyright_text', '' ) );
+$copyright_text = $copyright_text ? $copyright_text : __( 'تمامی حقوق این وب‌سایت محفوظ است.', 'negar-shop' );
+$social_links = array_filter(
+	array(
+		'telegram'  => esc_url_raw( get_theme_mod( 'negar_shop_telegram_url', '' ) ),
+		'instagram' => esc_url_raw( get_theme_mod( 'negar_shop_instagram_url', '' ) ),
+		'whatsapp'  => esc_url_raw( get_theme_mod( 'negar_shop_whatsapp_url', '' ) ),
+	),
+	static function ( $url ) {
+		return ! empty( $url ) && ! in_array( untrailingslashit( $url ), array( 'https://instagram.com', 'https://t.me', 'https://wa.me' ), true );
+	}
+);
 ?>
 
 <div class="negar-footer-wrapper bg-white text-slate-700 pt-0 pb-0 relative">
@@ -35,11 +59,11 @@ $demo_base  = $upload_dir['baseurl'] . '/kaveh-demo';
 						<h3 class="text-sm font-black text-[#212341] m-0"><?php esc_html_e( 'دسترسی سریع', 'negar-shop' ); ?></h3>
 					</div>
 					<ul class="space-y-2.5 text-xs text-slate-600 font-medium">
-						<li><a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="hover:text-rose-600 transition-colors">دوره‌های آموزشی</a></li>
-						<li><a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="hover:text-rose-600 transition-colors">اتاق خبر دیجی‌کالا</a></li>
-						<li><a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="hover:text-rose-600 transition-colors">فروش در دیجی‌کالا</a></li>
-						<li><a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="hover:text-rose-600 transition-colors">فرصت‌های شغلی</a></li>
-						<li><a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="hover:text-rose-600 transition-colors">تماس با دیجی‌کالا</a></li>
+						<li><a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="hover:text-rose-600 transition-colors"><?php esc_html_e( 'صفحه اصلی', 'negar-shop' ); ?></a></li>
+						<li><a href="<?php echo esc_url( $shop_url ); ?>" class="hover:text-rose-600 transition-colors"><?php esc_html_e( 'فروشگاه', 'negar-shop' ); ?></a></li>
+						<li><a href="<?php echo esc_url( $blog_url ); ?>" class="hover:text-rose-600 transition-colors"><?php esc_html_e( 'وبلاگ', 'negar-shop' ); ?></a></li>
+						<li><a href="<?php echo esc_url( $about_url ); ?>" class="hover:text-rose-600 transition-colors"><?php esc_html_e( 'درباره ما', 'negar-shop' ); ?></a></li>
+						<li><a href="<?php echo esc_url( $contact_url ); ?>" class="hover:text-rose-600 transition-colors"><?php esc_html_e( 'تماس با ما', 'negar-shop' ); ?></a></li>
 					</ul>
 				</div>
 
@@ -50,11 +74,13 @@ $demo_base  = $upload_dir['baseurl'] . '/kaveh-demo';
 						<h3 class="text-sm font-black text-[#212341] m-0"><?php esc_html_e( 'خدمات مشتریان', 'negar-shop' ); ?></h3>
 					</div>
 					<ul class="space-y-2.5 text-xs text-slate-600 font-medium">
-						<li><a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="hover:text-rose-600 transition-colors">دوره‌های آموزشی</a></li>
-						<li><a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="hover:text-rose-600 transition-colors">اتاق خبر و وبلاگ</a></li>
-						<li><a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="hover:text-rose-600 transition-colors">قوانین و رویه‌های مرجوعی</a></li>
-						<li><a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="hover:text-rose-600 transition-colors">حفظ حریم خصوصی</a></li>
-						<li><a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="hover:text-rose-600 transition-colors">پاسخ به سوالات متداول</a></li>
+						<li><a href="<?php echo esc_url( $account_url ); ?>" class="hover:text-rose-600 transition-colors"><?php esc_html_e( 'حساب کاربری', 'negar-shop' ); ?></a></li>
+						<li><a href="<?php echo esc_url( $cart_url ); ?>" class="hover:text-rose-600 transition-colors"><?php esc_html_e( 'سبد خرید', 'negar-shop' ); ?></a></li>
+						<li><a href="<?php echo esc_url( $contact_url ); ?>" class="hover:text-rose-600 transition-colors"><?php esc_html_e( 'پشتیبانی', 'negar-shop' ); ?></a></li>
+						<?php if ( $privacy_url ) : ?>
+							<li><a href="<?php echo esc_url( $privacy_url ); ?>" class="hover:text-rose-600 transition-colors"><?php esc_html_e( 'حفظ حریم خصوصی', 'negar-shop' ); ?></a></li>
+						<?php endif; ?>
+						<li><a href="<?php echo esc_url( $contact_url ); ?>" class="hover:text-rose-600 transition-colors"><?php esc_html_e( 'پرسش‌های متداول', 'negar-shop' ); ?></a></li>
 					</ul>
 				</div>
 			</div>
@@ -94,7 +120,7 @@ $demo_base  = $upload_dir['baseurl'] . '/kaveh-demo';
 
 				<!-- Persian Body Text -->
 				<p class="negar-footer-about-text">
-					<?php esc_html_e( 'در زمینه فروش کیف پول های سخت افزاری شروع نموده۱۳۹۸فعالیت خود را از سال است . این مجموعه کالا های خود را بدون واسطه و از طریق شرکت های اصلی سازنده کیف پول های سخت افزاری به صورت مستقیم تامین می کند و همچنین ضمانت اصالت و سلامت کالا را به تمام مشتریان ارائه می دهد. هدف اصلی ما در و از طریق شرکت های اصلی سازنده کیف پول های سخت افزاری به صورت مستقیم تامین می کند', 'negar-shop' ); ?>
+					<?php echo esc_html( $footer_about ); ?>
 				</p>
 
 				<!-- White Pill Button "درباره ما" (No Arrow) -->
@@ -106,107 +132,65 @@ $demo_base  = $upload_dir['baseurl'] . '/kaveh-demo';
 
 			</div>
 
-			<!-- Left Column: Trust Badges (Enamad & Samandehi) & Dual Phone Boxes (25% on Desktop) -->
+			<!-- Left Column: Verified contact entry points (25% on Desktop) -->
 			<div class="w-full lg:w-[25%] flex flex-col justify-between">
 				<div>
 					<div class="flex items-center gap-2 mb-4">
 						<svg width="28" height="7" viewBox="0 0 34 8" fill="none"><path d="M33.1839 0H0V8.0099H33.1839V0Z" fill="#E90544"></path></svg>
-						<h3 class="text-sm font-black text-[#212341] m-0"><?php esc_html_e( 'چگونه به ما اعتماد کنید', 'negar-shop' ); ?></h3>
+						<h3 class="text-sm font-black text-[#212341] m-0"><?php esc_html_e( 'ارتباط با فروشگاه', 'negar-shop' ); ?></h3>
 					</div>
-					<div class="grid grid-cols-2 gap-3 items-center mb-4">
-						<div class="bg-white p-3 rounded-2xl border border-slate-200/80 flex items-center justify-center aspect-square shadow-2xs hover:shadow-md transition">
-							<img src="<?php echo esc_url( $demo_base . '/enamad.png' ); ?>" alt="نماد اعتماد الکترونیکی" class="max-h-20 object-contain">
-						</div>
-						<div class="bg-white p-3 rounded-2xl border border-slate-200/80 flex items-center justify-center aspect-square shadow-2xs hover:shadow-md transition">
-							<img src="<?php echo esc_url( $demo_base . '/samandehi.png' ); ?>" alt="ساماندهی پایگاه‌های اینترنتی" class="max-h-20 object-contain">
-						</div>
+					<div class="rounded-2xl border border-slate-200/80 bg-slate-50 p-4 text-xs text-slate-600 leading-relaxed">
+						<?php esc_html_e( 'برای دریافت راهنمایی یا پیگیری درخواست‌ها، از صفحه تماس با ما استفاده کنید.', 'negar-shop' ); ?>
 					</div>
 				</div>
 
-				<!-- Dual Fast Phone Boxes matching Demo 43 (3f5f71ae & 200af606) -->
-				<div class="grid grid-cols-2 gap-2">
-					<div class="bg-white p-2.5 rounded-2xl border border-slate-200/70 text-center shadow-2xs">
-						<span class="text-3xs text-slate-400 block mb-0.5 font-medium">پشتیبانی سریع</span>
-						<span class="text-xs font-black text-rose-600 block dir-ltr">021-12345678</span>
-					</div>
-					<div class="bg-white p-2.5 rounded-2xl border border-slate-200/70 text-center shadow-2xs">
-						<span class="text-3xs text-slate-400 block mb-0.5 font-medium">پشتیبانی سریع</span>
-						<span class="text-xs font-black text-rose-600 block dir-ltr">021-87654321</span>
-					</div>
+				<div class="grid grid-cols-1 gap-2">
+					<?php if ( $phone_hotline ) : ?>
+						<a href="tel:<?php echo esc_attr( preg_replace( '/[^0-9+]/', '', $phone_hotline ) ); ?>" class="bg-white p-2.5 rounded-2xl border border-slate-200/70 text-center shadow-2xs hover:border-rose-300 transition">
+							<span class="text-3xs text-slate-400 block mb-0.5 font-medium"><?php esc_html_e( 'پشتیبانی تلفنی', 'negar-shop' ); ?></span>
+							<span class="text-xs font-black text-rose-600 block dir-ltr"><?php echo esc_html( $phone_hotline ); ?></span>
+						</a>
+					<?php else : ?>
+						<a href="<?php echo esc_url( $contact_url ); ?>" class="bg-white p-2.5 rounded-2xl border border-slate-200/70 text-center shadow-2xs hover:border-rose-300 transition text-xs font-black text-rose-600">
+							<?php esc_html_e( 'ارسال پیام به پشتیبانی', 'negar-shop' ); ?>
+						</a>
+					<?php endif; ?>
 				</div>
 
 			</div>
 
 		</div>
 
-		<!-- 3. Contact Channels & App Download Bar (Matching Demo 43 Container 7bafa34a) -->
+		<!-- 3. Verified contact and social entry points -->
 		<div class="py-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6 items-center">
-			
-			<!-- Contact Info & Address (4 Cols) -->
 			<div class="lg:col-span-4">
 				<div class="flex items-center gap-2 mb-2">
 					<svg width="20" height="5" viewBox="0 0 34 8" fill="none"><path d="M33.1839 0H0V8.0099H33.1839V0Z" fill="#E90544"></path></svg>
 					<h4 class="text-sm font-black text-[#212341] m-0"><?php esc_html_e( 'تماس با ما', 'negar-shop' ); ?></h4>
 				</div>
-				<p class="text-2xs text-slate-500 leading-relaxed mb-3">
-					<?php esc_html_e( 'اصفهان، خیابان امام خمینی، جنب بیمه تامین اجتماعی، ساختمان طبقه پنجم، واحد ۲', 'negar-shop' ); ?>
-				</p>
-				<a href="mailto:info@Sitename.com" class="inline-flex items-center gap-2 bg-slate-200/80 hover:bg-slate-300 text-slate-700 font-bold text-xs px-4 py-2 rounded-xl transition">
-					<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-					<span>info@Sitename.com</span>
+				<p class="text-2xs text-slate-500 leading-relaxed mb-3"><?php esc_html_e( 'برای ارسال پیام یا دریافت راهنمایی، از فرم تماس با فروشگاه استفاده کنید.', 'negar-shop' ); ?></p>
+				<a href="<?php echo esc_url( $contact_url ); ?>" class="inline-flex items-center gap-2 bg-slate-200/80 hover:bg-slate-300 text-slate-700 font-bold text-xs px-4 py-2 rounded-xl transition">
+					<span><?php esc_html_e( 'صفحه تماس با ما', 'negar-shop' ); ?></span>
 				</a>
 			</div>
 
-			<!-- Support Channels: Telegram, Instagram, WhatsApp (4 Cols) -->
-			<div class="lg:col-span-4 grid grid-cols-3 gap-2 text-center">
-				
-				<!-- Telegram -->
-				<div class="bg-white p-3 rounded-2xl border border-slate-200/60 shadow-2xs">
-					<div class="flex items-center justify-center gap-1 mb-1">
-						<svg width="14" height="4" viewBox="0 0 34 8" fill="none"><path d="M33.1839 0H0V8.0099H33.1839V0Z" fill="#E90544"></path></svg>
-						<span class="text-3xs text-slate-500 font-bold">تلگرام</span>
-					</div>
-					<span class="text-xs font-black text-sky-600 block dir-ltr">moeinwp@</span>
-				</div>
-
-				<!-- Instagram -->
-				<div class="bg-white p-3 rounded-2xl border border-slate-200/60 shadow-2xs">
-					<div class="flex items-center justify-center gap-1 mb-1">
-						<svg width="14" height="4" viewBox="0 0 34 8" fill="none"><path d="M33.1839 0H0V8.0099H33.1839V0Z" fill="#E90544"></path></svg>
-						<span class="text-3xs text-slate-500 font-bold">اینستاگرام</span>
-					</div>
-					<span class="text-xs font-black text-pink-600 block dir-ltr">moeinwp@</span>
-				</div>
-
-				<!-- WhatsApp -->
-				<div class="bg-white p-3 rounded-2xl border border-slate-200/60 shadow-2xs">
-					<div class="flex items-center justify-center gap-1 mb-1">
-						<svg width="14" height="4" viewBox="0 0 34 8" fill="none"><path d="M33.1839 0H0V8.0099H33.1839V0Z" fill="#E90544"></path></svg>
-						<span class="text-3xs text-slate-500 font-bold">واتساپ</span>
-					</div>
-					<span class="text-xs font-black text-emerald-600 block dir-ltr">moeinwp@</span>
-				</div>
-
+			<div class="lg:col-span-4 grid grid-cols-1 sm:grid-cols-3 gap-2 text-center">
+				<?php if ( $social_links ) : ?>
+					<?php foreach ( $social_links as $network => $url ) : ?>
+						<a href="<?php echo esc_url( $url ); ?>" class="bg-white p-3 rounded-2xl border border-slate-200/60 shadow-2xs hover:border-rose-300 transition">
+							<span class="text-3xs text-slate-500 font-bold block mb-1"><?php echo esc_html( ucfirst( $network ) ); ?></span>
+							<span class="text-xs font-black text-slate-700 block dir-ltr"><?php echo esc_html( wp_parse_url( $url, PHP_URL_HOST ) ); ?></span>
+						</a>
+					<?php endforeach; ?>
+				<?php else : ?>
+					<div class="sm:col-span-3 bg-white p-3 rounded-2xl border border-slate-200/60 shadow-2xs text-xs text-slate-500"><?php esc_html_e( 'نشانی شبکه‌های اجتماعی هنوز ثبت نشده است.', 'negar-shop' ); ?></div>
+				<?php endif; ?>
 			</div>
 
-			<!-- App Download Badges (4 Cols) -->
-			<div class="lg:col-span-4">
-				<div class="grid grid-cols-2 gap-2">
-					<a href="#" class="block bg-white p-1.5 rounded-xl border border-slate-200/70 hover:border-slate-300 transition shadow-2xs">
-						<img src="<?php echo esc_url( $demo_base . '/app-bazaar.png' ); ?>" alt="دانلود از کافه بازار" class="w-full h-8 object-contain">
-					</a>
-					<a href="#" class="block bg-white p-1.5 rounded-xl border border-slate-200/70 hover:border-slate-300 transition shadow-2xs">
-						<img src="<?php echo esc_url( $demo_base . '/app-sibche.png' ); ?>" alt="دانلود از سیبچه" class="w-full h-8 object-contain">
-					</a>
-					<a href="#" class="block bg-white p-1.5 rounded-xl border border-slate-200/70 hover:border-slate-300 transition shadow-2xs">
-						<img src="<?php echo esc_url( $demo_base . '/app-googleplay.png' ); ?>" alt="دانلود از گوگل‌پلی" class="w-full h-8 object-contain">
-					</a>
-					<a href="#" class="block bg-white p-1.5 rounded-xl border border-slate-200/70 hover:border-slate-300 transition shadow-2xs">
-						<img src="<?php echo esc_url( $demo_base . '/app-direct.png' ); ?>" alt="دانلود مستقیم" class="w-full h-8 object-contain">
-					</a>
-				</div>
+			<div class="lg:col-span-4 grid grid-cols-2 gap-2">
+				<a href="<?php echo esc_url( $shop_url ); ?>" class="block bg-white p-3 rounded-xl border border-slate-200/70 hover:border-slate-300 transition shadow-2xs text-center text-xs font-bold text-slate-700"><?php esc_html_e( 'مشاهده محصولات', 'negar-shop' ); ?></a>
+				<a href="<?php echo esc_url( $account_url ); ?>" class="block bg-white p-3 rounded-xl border border-slate-200/70 hover:border-slate-300 transition shadow-2xs text-center text-xs font-bold text-slate-700"><?php esc_html_e( 'حساب کاربری', 'negar-shop' ); ?></a>
 			</div>
-
 		</div>
 
 		<!-- 4. Bottom Decorative Wave Image matching Vector-3180.png with Floating Blur Button -->
@@ -224,29 +208,20 @@ $demo_base  = $upload_dir['baseurl'] . '/kaveh-demo';
 			</button>
 		</div>
 
-		<!-- 5. Copyright Bar & Social Icons matching Demo 43 (Container 388eea2c) -->
+		<!-- 5. Copyright and configured social links -->
 		<div class="pt-2 pb-1.5 flex flex-col md:flex-row items-center justify-between text-xs text-slate-500 font-medium gap-3">
-			<p class="m-0 text-center md:text-right">
-				<a href="https://mohamadhoseinsabour.github.io/myResume/" target="_blank" rel="noopener noreferrer" class="text-slate-600 hover:text-rose-600 font-bold transition-colors">
-					<?php esc_html_e( 'طراحی و اجرا توسط محمدحسین صبور', 'negar-shop' ); ?>
-				</a>
-			</p>
+			<p class="m-0 text-center md:text-right"><?php echo esc_html( $copyright_text ); ?></p>
 
-			<!-- Social Icons in One Row -->
-			<div class="flex items-center gap-3">
-				<span class="text-3xs text-slate-400 font-bold"><?php esc_html_e( 'در شبکه‌های اجتماعی همراه ما باشید', 'negar-shop' ); ?></span>
-				<div class="flex items-center gap-2">
-					<a href="#" class="w-8 h-8 rounded-full bg-white border border-slate-200/70 text-slate-600 hover:text-emerald-500 flex items-center justify-center transition shadow-2xs" aria-label="واتساپ">
-						<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
-					</a>
-					<a href="#" class="w-8 h-8 rounded-full bg-white border border-slate-200/70 text-slate-600 hover:text-pink-500 flex items-center justify-center transition shadow-2xs" aria-label="اینستاگرام">
-						<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
-					</a>
-					<a href="#" class="w-8 h-8 rounded-full bg-white border border-slate-200/70 text-slate-600 hover:text-sky-500 flex items-center justify-center transition shadow-2xs" aria-label="تلگرام">
-						<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.121l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.458c.538-.196 1.006.128.832.941z"/></svg>
-					</a>
+			<?php if ( $social_links ) : ?>
+				<div class="flex items-center gap-3">
+					<span class="text-3xs text-slate-400 font-bold"><?php esc_html_e( 'در شبکه‌های اجتماعی همراه ما باشید', 'negar-shop' ); ?></span>
+					<div class="flex items-center gap-2">
+						<?php foreach ( $social_links as $network => $url ) : ?>
+							<a href="<?php echo esc_url( $url ); ?>" class="px-3 py-1.5 rounded-full bg-white border border-slate-200/70 text-slate-600 hover:text-rose-600 transition shadow-2xs" aria-label="<?php echo esc_attr( $network ); ?>"><?php echo esc_html( ucfirst( $network ) ); ?></a>
+						<?php endforeach; ?>
+					</div>
 				</div>
-			</div>
+			<?php endif; ?>
 		</div>
 
 	</div>

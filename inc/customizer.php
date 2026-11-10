@@ -101,7 +101,7 @@ function negar_shop_customize_register( $wp_customize ) {
 	$wp_customize->add_setting(
 		'negar_shop_topbar_announcement',
 		array(
-			'default'           => __( 'ارسال رایگان برای سفارش‌های بالای ۱,۰۰۰,۰۰۰ تومان در سراسر کشور', 'negar-shop' ),
+			'default'           => __( 'به فروشگاه ما خوش آمدید', 'negar-shop' ),
 			'sanitize_callback' => 'sanitize_text_field',
 			'transport'         => 'refresh',
 		)
@@ -120,7 +120,7 @@ function negar_shop_customize_register( $wp_customize ) {
 	$wp_customize->add_setting(
 		'negar_shop_phone_hotline',
 		array(
-			'default'           => '۰۲۱-۱۲۳۴۵۶۷۸',
+			'default'           => '',
 			'sanitize_callback' => 'sanitize_text_field',
 			'transport'         => 'refresh',
 		)
@@ -170,7 +170,7 @@ function negar_shop_customize_register( $wp_customize ) {
 	$wp_customize->add_setting(
 		'negar_shop_instagram_url',
 		array(
-			'default'           => 'https://instagram.com',
+			'default'           => '',
 			'sanitize_callback' => 'esc_url_raw',
 			'transport'         => 'refresh',
 		)
@@ -188,7 +188,7 @@ function negar_shop_customize_register( $wp_customize ) {
 	$wp_customize->add_setting(
 		'negar_shop_telegram_url',
 		array(
-			'default'           => 'https://t.me',
+			'default'           => '',
 			'sanitize_callback' => 'esc_url_raw',
 			'transport'         => 'refresh',
 		)
@@ -206,7 +206,7 @@ function negar_shop_customize_register( $wp_customize ) {
 	$wp_customize->add_setting(
 		'negar_shop_whatsapp_url',
 		array(
-			'default'           => 'https://wa.me',
+			'default'           => '',
 			'sanitize_callback' => 'esc_url_raw',
 			'transport'         => 'refresh',
 		)
@@ -224,7 +224,7 @@ function negar_shop_customize_register( $wp_customize ) {
 	$wp_customize->add_setting(
 		'negar_shop_linkedin_url',
 		array(
-			'default'           => 'https://linkedin.com',
+			'default'           => '',
 			'sanitize_callback' => 'esc_url_raw',
 			'transport'         => 'refresh',
 		)
@@ -254,7 +254,7 @@ function negar_shop_customize_register( $wp_customize ) {
 	$wp_customize->add_setting(
 		'negar_shop_footer_about',
 		array(
-			'default'           => __( 'فروشگاه اینترنتی نگار شاپ، مرجع تخصصی خرید آنلاین با تضمین اصالت، بهترین قیمت و ارسال اکسپرس به تمام نقاط کشور.', 'negar-shop' ),
+			'default'           => __( 'برای مشاهده و مقایسه محصولات، از فروشگاه بازدید کنید.', 'negar-shop' ),
 			'sanitize_callback' => 'wp_kses_post',
 			'transport'         => 'refresh',
 		)

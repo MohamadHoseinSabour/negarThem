@@ -159,6 +159,26 @@ async function runTests() {
     assert.strictEqual(videoReviewState.videoButtons, 0, 'The empty state must not present sample videos as customer reviews');
   });
 
+  // 2D. Footer navigation and contact surfaces must not retain demo-store placeholders.
+  await testStep('Footer uses owned routes without demo contact or retailer placeholders', async () => {
+    const footerState = await page.evaluate(() => {
+      const footer = document.querySelector('footer');
+      return {
+        found: Boolean(footer),
+        text: footer?.textContent.replace(/\s+/g, ' ').trim() || '',
+        links: Array.from(footer?.querySelectorAll('a') || []).map((link) => link.getAttribute('href') || ''),
+        badgeImages: Array.from(footer?.querySelectorAll('img') || []).map((image) => image.getAttribute('src') || ''),
+      };
+    });
+
+    assert(footerState.found, 'The site footer must exist');
+    assert(!footerState.text.includes('دیجی‌کالا'), 'Footer must not present another retailer as this storefront');
+    assert(!footerState.text.includes('moeinwp@'), 'Footer must not expose a demo social-media handle');
+    assert(!footerState.text.includes('info@Sitename.com'), 'Footer must not expose a placeholder email address');
+    assert(!footerState.links.some((href) => href === '#'), 'Footer links must resolve to a real route or configured URL');
+    assert(!footerState.badgeImages.some((src) => /(?:enamad|samandehi)\.png/i.test(src)), 'Unverified demo trust-badge images must not be rendered');
+  });
+
   // 3. Category Search Dropdown
   await testStep('Main search bar contains interactive category dropdown and hidden input', async () => {
     const catBtn = await page.$('#negar-category-menu-btn, .category-menu-btn');
