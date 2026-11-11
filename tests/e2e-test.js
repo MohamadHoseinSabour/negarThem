@@ -122,6 +122,31 @@ async function runTests() {
     }
   });
 
+  await testStep('Homepage featured Apple Watch deal uses the live WooCommerce product', async () => {
+    const productResponse = await page.request.get(`${BASE_URL}/wp-json/wc/store/v1/products?category=36&per_page=100`);
+    assert.strictEqual(productResponse.status(), 200, 'The Store API must expose the featured Apple Watch candidate');
+    const sourceProducts = await productResponse.json();
+    const sourceProduct = sourceProducts.find((product) => /watch|ساعت/i.test(product.name));
+    assert(sourceProduct, 'A published Apple Watch product must be available for the featured-deal check');
+
+    const dealState = await page.evaluate(() => {
+      const section = document.querySelector('.negar-sec-16-spotlight');
+      const links = Array.from(section?.querySelectorAll('a[href]') || []);
+      return {
+        sectionFound: Boolean(section),
+        links: links.map((link) => link.href),
+        title: section?.querySelector('h3')?.textContent.replace(/\s+/g, ' ').trim() || '',
+        text: section?.textContent.replace(/\s+/g, ' ').trim() || '',
+      };
+    });
+
+    assert(dealState.sectionFound, 'The featured deal section must render');
+    assert(dealState.links.length > 0, 'The featured deal must expose a destination');
+    assert(dealState.links.filter((url) => url.includes('/product/')).every((url) => url === sourceProduct.permalink), 'Featured-deal product links must target the live product');
+    assert.strictEqual(dealState.title, sourceProduct.name, 'Featured-deal title must use the live product name');
+    assert(!dealState.text.includes('iphone-17-pro-max'), 'Featured deal must not retain the old mismatched image reference');
+  });
+
   // 2AA. Product carousel cards must always land on their own product page.
   await testStep('Homepage sale carousel exposes only real product destinations', async () => {
     const saleResponse = await page.request.get(`${BASE_URL}/wp-json/wc/store/v1/products?on_sale=true&per_page=100`);
