@@ -112,9 +112,9 @@ $rating_display = $has_rating ? number_format( (float) $rating, 1 ) : '';
 					</del>
 				</div>
 			<?php endif; ?>
-			<div class="text-xs md:text-sm font-black text-rose-600 flex items-center gap-1">
-				<span><?php echo esc_html( number_format_i18n( (float) $product->get_price() ) ); ?></span>
-				<span class="text-3xs font-medium text-slate-500">تومان</span>
+			<div class="product-card-price-current text-xs md:text-sm font-black text-rose-600 flex items-center gap-1">
+				<span class="product-card-price-amount"><?php echo esc_html( number_format_i18n( (float) $product->get_price() ) ); ?></span>
+				<span class="product-card-currency text-3xs font-medium text-slate-500">تومان</span>
 			</div>
 		</div>
 

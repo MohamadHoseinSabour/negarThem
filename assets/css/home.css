@@ -552,3 +552,66 @@
     justify-content: flex-end;
   }
 }
+
+/* Homepage product prices keep the amount and currency as one readable unit. */
+.homepage-main .product-card-price-current,
+.homepage-main .price-rate > .price > .price {
+  display: inline-flex !important;
+  flex: 0 0 auto;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  min-width: max-content;
+  white-space: nowrap !important;
+}
+
+.homepage-main .product-card-currency,
+.homepage-main .price-rate > .price > .price > .toman-symbol {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+/* The live sale carousel uses the same red daily-deals treatment as the
+ * original storefront promo while retaining real WooCommerce product cards. */
+.negar-home-sale-carousel .popular-products-nk__wrapper {
+  background-color: transparent !important;
+  background-image: linear-gradient(247.81deg, #e90544 0.24%, #ff0046 64.49%) !important;
+}
+
+/* Restore the red treatment for the second daily-deals block. Elementor's
+ * generated gray rule is intentionally overridden only for this section. */
+.popular-products-nk-375f8bd8 .popular-products-nk__wrapper {
+  background-color: transparent !important;
+  background-image: linear-gradient(247.81deg, #e90544 0.24%, #ff0046 64.49%) !important;
+}
+
+.popular-products-nk-375f8bd8 .popular-products-nk__right .title,
+.popular-products-nk-375f8bd8 .popular-products-nk__right .sub-title {
+  color: #fff;
+  -webkit-text-fill-color: #fff;
+  background-image: none;
+}
+
+.negar-home-sale-carousel__body .swiper-button-prev,
+.negar-home-sale-carousel__body .swiper-button-next {
+  width: 36px;
+  height: 36px;
+  margin-top: -18px;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  background: #fff;
+  color: #e90544;
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.16);
+}
+
+.negar-home-sale-carousel__body .swiper-button-prev::after,
+.negar-home-sale-carousel__body .swiper-button-next::after {
+  content: none;
+}
+
+.negar-home-sale-carousel__body .swiper-button-prev {
+  right: 2px;
+}
+
+.negar-home-sale-carousel__body .swiper-button-next {
+  left: 2px;
+}

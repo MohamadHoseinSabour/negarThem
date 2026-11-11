@@ -220,6 +220,26 @@ async function runTests() {
     assert(carouselState.allSaleLink.includes('/shop/') && carouselState.allSaleLink.includes('on_sale=1'), 'Only the carousel “view all” link may target the sale catalogue');
   });
 
+  await testStep('Homepage deal styling keeps currency inline and restores red promo panels', async () => {
+    const visualState = await page.evaluate(() => {
+      const card = document.querySelector('.negar-home-sale-carousel .product-card-price-current');
+      const amount = card?.querySelector('.product-card-price-amount');
+      const currency = card?.querySelector('.product-card-currency');
+      const wrappers = Array.from(document.querySelectorAll(
+        '.negar-home-sale-carousel .popular-products-nk__wrapper, .popular-products-nk-375f8bd8 .popular-products-nk__wrapper'
+      ));
+      return {
+        currencyInline: Boolean(card && amount && currency && Math.abs(amount.getBoundingClientRect().top - currency.getBoundingClientRect().top) < 1.5),
+        noWrap: card ? getComputedStyle(card).flexWrap === 'nowrap' : false,
+        redPanels: wrappers.length >= 2 && wrappers.every((wrapper) => getComputedStyle(wrapper).backgroundImage.includes('rgb(233, 5, 68)')),
+      };
+    });
+
+    assert(visualState.currencyInline, 'Sale-card amount and currency must stay on one line');
+    assert(visualState.noWrap, 'Sale-card price row must disable wrapping');
+    assert(visualState.redPanels, 'Daily-deals promo panels must use the red storefront treatment');
+  });
+
   // 2AB. Every product card rendered by the homepage must open its own product page.
   await testStep('Homepage product cards never fall back to the shop archive', async () => {
     await page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded' });

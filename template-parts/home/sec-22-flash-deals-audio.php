@@ -214,7 +214,7 @@ $products_sec22 = array(
 														<?php endif; ?>
 													</div>
 													<?php endif; ?>
-													<div class="price d-flex align-items-center gap-1">
+															<div class="product-card-price-current price d-flex align-items-center gap-1">
 														<?php echo esc_html( $prod['price'] ); ?>
 														<span class="toman-symbol toman-symbol--modern lh-1"><svg width="19.5" height="18" viewBox="0 0 13 12" fill="#0a0a0a" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><use href="#kaveh-toman-mark"></use></svg></span>
 													</div>
