@@ -90,7 +90,7 @@ $render_category_children = static function ( $parent_id = 0, $depth = 0 ) use (
 					type="search"
 					name="s"
 					class="negar-search-input flex-1 bg-transparent border-0 px-4 py-1.5 text-xs sm:text-sm text-slate-800 placeholder-slate-400 outline-none"
-					placeholder="<?php esc_attr_e( 'جستجوی محصول...', 'negar-shop' ); ?>"
+					placeholder="<?php echo esc_attr( negar_theme_text( 'header', 'desktop_search_placeholder' ) ); ?>"
 					autocomplete="off"
 					required
 				>
@@ -183,7 +183,7 @@ $render_category_children = static function ( $parent_id = 0, $depth = 0 ) use (
 					</a>
 				<?php else : ?>
 					<button type="button" class="negar-login-trigger flex items-center gap-2 py-1.5 px-3.5 rounded-full bg-slate-50 hover:bg-slate-100 text-slate-700 transition border border-slate-200 text-xs font-bold shadow-2xs cursor-pointer" aria-label="<?php esc_attr_e( 'ورود به حساب کاربری', 'negar-shop' ); ?>">
-						<span><?php esc_html_e( 'ورود / ثبت‌نام', 'negar-shop' ); ?></span>
+						<span><?php echo esc_html( negar_theme_text( 'header', 'login_label' ) ); ?></span>
 						<div class="w-6 h-6 rounded-full bg-slate-200 flex items-center justify-center text-slate-600 overflow-hidden shrink-0">
 							<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
 						</div>
@@ -211,7 +211,7 @@ $render_category_children = static function ( $parent_id = 0, $depth = 0 ) use (
 						</div>
 
 						<span class="text-xs font-bold text-slate-700 group-hover:text-rose-600 transition hidden sm:inline-block">
-							<?php esc_html_e( 'سبد خرید', 'negar-shop' ); ?>
+							<?php echo esc_html( negar_theme_text( 'header', 'cart_label' ) ); ?>
 						</span>
 
 					</button>

@@ -54,7 +54,7 @@ $logo_url       = file_exists( $logo_svg ) ? $upload_dir['baseurl'] . '/kaveh-de
 				type="search"
 				name="s"
 				class="negar-search-input w-full bg-transparent border-0 px-3.5 py-2 text-xs text-slate-800 placeholder-slate-400 outline-none"
-				placeholder="<?php esc_attr_e( 'جستجوی نام کالا یا برند...', 'negar-shop' ); ?>"
+				placeholder="<?php echo esc_attr( negar_theme_text( 'header', 'mobile_search_placeholder' ) ); ?>"
 				autocomplete="off"
 				required
 			>

@@ -24,6 +24,7 @@ function negar_theme_settings_defaults() {
 	return array(
 		'schema_version' => NEGAR_THEME_SETTINGS_VERSION,
 		'branding'       => array(),
+		'texts'          => array(),
 		'colors'         => array(),
 		'header'         => array(),
 		'footer'         => array(),
@@ -106,6 +107,115 @@ function negar_theme_brand_label() {
 }
 
 /**
+ * Return the Phase 2 whitelist of static, theme-owned frontend copy.
+ *
+ * WordPress page content, WooCommerce product data, customer content and
+ * transactional states intentionally do not appear in this registry.
+ *
+ * @return array<string, array<string, mixed>>
+ */
+function negar_theme_text_registry() {
+	return array(
+		'header'    => array(
+			'label'       => __( 'هدر و جستجو', 'negar-shop' ),
+			'description' => __( 'برچسب‌های ثابت رابط هدر؛ نام دسته‌ها و نام محصولات از وردپرس و ووکامرس خوانده می‌شوند.', 'negar-shop' ),
+			'fields'      => array(
+				'desktop_search_placeholder' => array( 'label' => __( 'راهنمای جستجو در دسکتاپ', 'negar-shop' ), 'default' => __( 'جستجوی محصول...', 'negar-shop' ), 'type' => 'text' ),
+				'mobile_search_placeholder'  => array( 'label' => __( 'راهنمای جستجو در موبایل', 'negar-shop' ), 'default' => __( 'جستجوی نام کالا یا برند...', 'negar-shop' ), 'type' => 'text' ),
+				'login_label'                 => array( 'label' => __( 'برچسب ورود', 'negar-shop' ), 'default' => __( 'ورود / ثبت‌نام', 'negar-shop' ), 'type' => 'text' ),
+				'cart_label'                  => array( 'label' => __( 'برچسب سبد خرید', 'negar-shop' ), 'default' => __( 'سبد خرید', 'negar-shop' ), 'type' => 'text' ),
+			),
+		),
+		'home'      => array(
+			'label'       => __( 'صفحهٔ اصلی › اسلایدر آغازین', 'negar-shop' ),
+			'description' => __( 'فقط متن‌های ثابت اسلایدها و پیشنهاد ویژه قابل ویرایش هستند؛ محصول، قیمت، موجودی و امتیاز از ووکامرس می‌آیند.', 'negar-shop' ),
+			'fields'      => array(
+				'hero_slide_one_eyebrow' => array( 'label' => __( 'اسلاید اول › متن کوچک', 'negar-shop' ), 'default' => __( 'خرید دسته‌های ایکس باکس', 'negar-shop' ), 'type' => 'text' ),
+				'hero_slide_one_title'   => array( 'label' => __( 'اسلاید اول › عنوان', 'negar-shop' ), 'default' => __( 'خرید برترین محصولاتــــــــ', 'negar-shop' ), 'type' => 'text' ),
+				'hero_slide_one_cta'     => array( 'label' => __( 'اسلاید اول › برچسب دکمه', 'negar-shop' ), 'default' => __( 'مشاهده بیشتر', 'negar-shop' ), 'type' => 'text' ),
+				'hero_slide_two_eyebrow' => array( 'label' => __( 'اسلاید دوم › متن کوچک', 'negar-shop' ), 'default' => __( 'کنسول‌های بازی نسل نهم', 'negar-shop' ), 'type' => 'text' ),
+				'hero_slide_two_title'   => array( 'label' => __( 'اسلاید دوم › عنوان', 'negar-shop' ), 'default' => __( 'تجربه بی‌نظیر گیمینگ', 'negar-shop' ), 'type' => 'text' ),
+				'hero_slide_two_cta'     => array( 'label' => __( 'اسلاید دوم › برچسب دکمه', 'negar-shop' ), 'default' => __( 'مشاهده بیشتر', 'negar-shop' ), 'type' => 'text' ),
+				'flash_deals_eyebrow'    => array( 'label' => __( 'پیشنهاد ویژه › متن کوچک', 'negar-shop' ), 'default' => __( 'تخــفیفـــــات', 'negar-shop' ), 'type' => 'text' ),
+				'flash_deals_title'      => array( 'label' => __( 'پیشنهاد ویژه › عنوان', 'negar-shop' ), 'default' => __( 'لـــحظه ایــ', 'negar-shop' ), 'type' => 'text' ),
+			),
+		),
+		'footer'    => array(
+			'label'       => __( 'فوتر › ستون‌ها و راه‌های ارتباطی', 'negar-shop' ),
+			'description' => __( 'متن‌های ثابت فوتر قابل ویرایش‌اند؛ اطلاعات تماس و شبکه‌های اجتماعی در زبانهٔ هدر، فوتر و تماس می‌مانند.', 'negar-shop' ),
+			'fields'      => array(
+				'quick_links_heading'        => array( 'label' => __( 'دسترسی سریع › عنوان', 'negar-shop' ), 'default' => __( 'دسترسی سریع', 'negar-shop' ), 'type' => 'text' ),
+				'customer_services_heading'  => array( 'label' => __( 'خدمات مشتریان › عنوان', 'negar-shop' ), 'default' => __( 'خدمات مشتریان', 'negar-shop' ), 'type' => 'text' ),
+				'contact_heading'            => array( 'label' => __( 'ارتباط با فروشگاه › عنوان', 'negar-shop' ), 'default' => __( 'ارتباط با فروشگاه', 'negar-shop' ), 'type' => 'text' ),
+				'contact_description'        => array( 'label' => __( 'ارتباط با فروشگاه › توضیح', 'negar-shop' ), 'default' => __( 'برای دریافت راهنمایی یا پیگیری درخواست‌ها، از صفحه تماس با ما استفاده کنید.', 'negar-shop' ), 'type' => 'textarea' ),
+				'support_cta'                => array( 'label' => __( 'ارتباط با فروشگاه › برچسب پیام', 'negar-shop' ), 'default' => __( 'ارسال پیام به پشتیبانی', 'negar-shop' ), 'type' => 'text' ),
+				'social_prompt'              => array( 'label' => __( 'شبکه‌های اجتماعی › راهنما', 'negar-shop' ), 'default' => __( 'در شبکه‌های اجتماعی همراه ما باشید', 'negar-shop' ), 'type' => 'text' ),
+			),
+		),
+		'contact'   => array(
+			'label'       => __( 'صفحهٔ تماس', 'negar-shop' ),
+			'description' => __( 'این بخش فقط کپی رابط صفحهٔ تماس را کنترل می‌کند؛ نشانی، ساعت، ایمیل، تلفن و نقشه در زبانهٔ هدر، فوتر و تماس مدیریت می‌شوند.', 'negar-shop' ),
+			'fields'      => array(
+				'hero_eyebrow'    => array( 'label' => __( 'سربرگ › برچسب', 'negar-shop' ), 'default' => __( 'ارتباط با فروشگاه', 'negar-shop' ), 'type' => 'text' ),
+				'hero_title'      => array( 'label' => __( 'سربرگ › عنوان', 'negar-shop' ), 'default' => __( 'از اینجا با ما در تماس باشید', 'negar-shop' ), 'type' => 'text' ),
+				'hero_description'=> array( 'label' => __( 'سربرگ › توضیح', 'negar-shop' ), 'default' => __( 'برای ارسال پیام یا مشاهدهٔ راه‌های ارتباطی، اطلاعات زیر را بررسی کنید. اطلاعات نمونه از بخش سفارشی‌سازی قابل تغییر هستند.', 'negar-shop' ), 'type' => 'textarea' ),
+				'form_title'      => array( 'label' => __( 'فرم پیام › عنوان', 'negar-shop' ), 'default' => __( 'ارسال پیام', 'negar-shop' ), 'type' => 'text' ),
+				'form_description'=> array( 'label' => __( 'فرم پیام › توضیح', 'negar-shop' ), 'default' => __( 'پیام شما پس از ثبت، به مدیریت سایت ارسال می‌شود.', 'negar-shop' ), 'type' => 'textarea' ),
+				'form_submit'     => array( 'label' => __( 'فرم پیام › برچسب دکمه', 'negar-shop' ), 'default' => __( 'ثبت و ارسال پیام', 'negar-shop' ), 'type' => 'text' ),
+				'map_title'       => array( 'label' => __( 'نقشه › عنوان', 'negar-shop' ), 'default' => __( 'موقعیت فروشگاه', 'negar-shop' ), 'type' => 'text' ),
+				'map_description' => array( 'label' => __( 'نقشه › توضیح', 'negar-shop' ), 'default' => __( 'نقشه پس از وارد کردن نشانی embed واقعی در سفارشی‌سازی نمایش داده می‌شود.', 'negar-shop' ), 'type' => 'textarea' ),
+			),
+		),
+		'about'     => array(
+			'label'       => __( 'صفحهٔ دربارهٔ ما', 'negar-shop' ),
+			'description' => __( 'محتوای اصلی برگه همچنان از ویرایشگر وردپرس خوانده می‌شود؛ اینجا فقط کپی‌های ثابت قالب مدیریت می‌شوند.', 'negar-shop' ),
+			'fields'      => array(
+				'hero_eyebrow'     => array( 'label' => __( 'سربرگ › برچسب', 'negar-shop' ), 'default' => __( 'دربارهٔ فروشگاه', 'negar-shop' ), 'type' => 'text' ),
+				'hero_description' => array( 'label' => __( 'سربرگ › توضیح', 'negar-shop' ), 'default' => __( 'داستان، ارزش‌ها و اطلاعات فروشگاه را از مدیریت این برگه تکمیل کنید تا مشتریان با شیوهٔ فعالیت شما آشنا شوند.', 'negar-shop' ), 'type' => 'textarea' ),
+				'intro_label'      => array( 'label' => __( 'معرفی › برچسب', 'negar-shop' ), 'default' => __( 'معرفی فروشگاه', 'negar-shop' ), 'type' => 'text' ),
+				'empty_content'    => array( 'label' => __( 'معرفی › متن هنگام خالی بودن برگه', 'negar-shop' ), 'default' => __( 'متن معرفی، داستان شکل‌گیری و اطلاعات واقعی فروشگاه را از ویرایشگر این برگه وارد کنید. این بخش عمداً هیچ ادعای نمونه‌ای دربارهٔ خدمات یا مجوزها ندارد.', 'negar-shop' ), 'type' => 'textarea' ),
+				'guide_title'      => array( 'label' => __( 'راهنما › عنوان', 'negar-shop' ), 'default' => __( 'صفحه‌ای قابل شخصی‌سازی', 'negar-shop' ), 'type' => 'text' ),
+				'guide_description'=> array( 'label' => __( 'راهنما › توضیح', 'negar-shop' ), 'default' => __( 'برای حفظ شفافیت، اطلاعات فروشگاه، مجوزها و تعهدات فقط پس از ثبت جزئیات واقعی نمایش داده شوند.', 'negar-shop' ), 'type' => 'textarea' ),
+			),
+		),
+		'not_found' => array(
+			'label'       => __( 'صفحهٔ ۴۰۴', 'negar-shop' ),
+			'description' => __( 'متن راهنمای بازیابی مسیر قابل ویرایش است؛ نام دسته‌های پیشنهادی از ووکامرس می‌آید.', 'negar-shop' ),
+			'fields'      => array(
+				'title'              => array( 'label' => __( 'عنوان', 'negar-shop' ), 'default' => __( 'متأسفانه صفحه مورد نظر یافت نشد!', 'negar-shop' ), 'type' => 'text' ),
+				'description'        => array( 'label' => __( 'توضیح', 'negar-shop' ), 'default' => __( 'صفحه‌ای که به دنبال آن بودید ممکن است حذف شده باشد، نام آن تغییر یافته باشد یا موقتاً در دسترس نباشد.', 'negar-shop' ), 'type' => 'textarea' ),
+				'search_placeholder' => array( 'label' => __( 'راهنمای جستجو', 'negar-shop' ), 'default' => __( 'جستجوی محصول یا مقاله مورد نظر...', 'negar-shop' ), 'type' => 'text' ),
+				'home_action'        => array( 'label' => __( 'برچسب بازگشت به خانه', 'negar-shop' ), 'default' => __( 'بازگشت به صفحه اصلی', 'negar-shop' ), 'type' => 'text' ),
+				'shop_action'        => array( 'label' => __( 'برچسب مشاهدهٔ محصولات', 'negar-shop' ), 'default' => __( 'مشاهده محصولات فروشگاه', 'negar-shop' ), 'type' => 'text' ),
+				'categories_prompt'  => array( 'label' => __( 'راهنمای دسته‌های پیشنهادی', 'negar-shop' ), 'default' => __( 'یا از دسته‌بندی‌های پرطرفدار زیر دیدن فرمایید:', 'negar-shop' ), 'type' => 'textarea' ),
+			),
+		),
+	);
+}
+
+/**
+ * Read a static, theme-owned text value while preserving an explicit empty value.
+ *
+ * @param string $component Registry component name.
+ * @param string $key Registry field key.
+ * @return string
+ */
+function negar_theme_text( $component, $key ) {
+	$registry = negar_theme_text_registry();
+
+	if ( ! isset( $registry[ $component ]['fields'][ $key ] ) ) {
+		return '';
+	}
+
+	$settings = negar_theme_settings_raw();
+	if ( isset( $settings['texts'][ $component ] ) && is_array( $settings['texts'][ $component ] ) && array_key_exists( $key, $settings['texts'][ $component ] ) ) {
+		return (string) $settings['texts'][ $component ][ $key ];
+	}
+
+	return (string) $registry[ $component ]['fields'][ $key ]['default'];
+}
+
+/**
  * Register the versioned option with the Settings API.
  */
 function negar_theme_register_settings() {
@@ -136,7 +246,7 @@ function negar_theme_sanitize_settings( $submitted ) {
 	$submitted = is_array( $submitted ) ? wp_unslash( $submitted ) : array();
 	$current   = negar_theme_settings_raw();
 	$tab       = isset( $_POST['negar_theme_settings_tab'] ) ? sanitize_key( wp_unslash( $_POST['negar_theme_settings_tab'] ) ) : '';
-	$allowed   = array( 'general', 'colors', 'header_footer' );
+	$allowed   = array( 'general', 'texts', 'colors', 'header_footer' );
 
 	if ( ! in_array( $tab, $allowed, true ) ) {
 		return $current;
@@ -146,6 +256,20 @@ function negar_theme_sanitize_settings( $submitted ) {
 
 	if ( 'general' === $tab ) {
 		$current['branding']['site_label'] = isset( $submitted['branding']['site_label'] ) ? sanitize_text_field( $submitted['branding']['site_label'] ) : '';
+	}
+
+	if ( 'texts' === $tab ) {
+		foreach ( negar_theme_text_registry() as $component => $section ) {
+			foreach ( $section['fields'] as $key => $field ) {
+				if ( ! isset( $submitted['texts'][ $component ] ) || ! is_array( $submitted['texts'][ $component ] ) || ! array_key_exists( $key, $submitted['texts'][ $component ] ) ) {
+					continue;
+				}
+
+				$value = $submitted['texts'][ $component ][ $key ];
+				$value = is_scalar( $value ) ? $value : '';
+				$current['texts'][ $component ][ $key ] = 'textarea' === $field['type'] ? sanitize_textarea_field( $value ) : sanitize_text_field( $value );
+			}
+		}
 	}
 
 	if ( 'colors' === $tab ) {
@@ -267,13 +391,20 @@ function negar_theme_render_settings_page() {
 			<?php endforeach; ?>
 		</nav>
 		<?php settings_errors( 'negar_theme_settings' ); ?>
-		<?php if ( in_array( $active_tab, array( 'general', 'colors', 'header_footer' ), true ) ) : ?>
+		<?php if ( in_array( $active_tab, array( 'general', 'texts', 'colors', 'header_footer' ), true ) ) : ?>
 			<form action="options.php" method="post">
 				<?php settings_fields( 'negar_theme_settings' ); ?>
 				<input type="hidden" name="negar_theme_settings_tab" value="<?php echo esc_attr( $active_tab ); ?>">
 				<table class="form-table" role="presentation">
 					<?php if ( 'general' === $active_tab ) : ?>
 						<?php negar_theme_settings_field( 'negar-site-label', __( 'نام نمایشی فروشگاه', 'negar-shop' ), NEGAR_THEME_SETTINGS_OPTION . '[branding][site_label]', negar_theme_brand_label(), 'text', __( 'در بخش‌های نمایشی قالب استفاده می‌شود و نام سایت وردپرس را تغییر نمی‌دهد.', 'negar-shop' ) ); ?>
+					<?php elseif ( 'texts' === $active_tab ) : ?>
+						<?php foreach ( negar_theme_text_registry() as $component => $section ) : ?>
+							<tr class="negar-theme-settings__section"><td colspan="2"><h2><?php echo esc_html( $section['label'] ); ?></h2><p class="description"><?php echo esc_html( $section['description'] ); ?></p></td></tr>
+							<?php foreach ( $section['fields'] as $key => $field ) : ?>
+								<?php negar_theme_settings_field( 'negar-text-' . $component . '-' . $key, $field['label'], NEGAR_THEME_SETTINGS_OPTION . '[texts][' . $component . '][' . $key . ']', negar_theme_text( $component, $key ), $field['type'] ); ?>
+							<?php endforeach; ?>
+						<?php endforeach; ?>
 					<?php elseif ( 'colors' === $active_tab ) : ?>
 						<?php negar_theme_settings_field( 'negar-primary-color', __( 'رنگ اصلی', 'negar-shop' ), NEGAR_THEME_SETTINGS_OPTION . '[colors][primary]', negar_theme_color( 'primary' ), 'color', __( 'برای دکمه‌ها، لینک‌ها و اجزای کلیدی قالب.', 'negar-shop' ) ); ?>
 						<?php negar_theme_settings_field( 'negar-secondary-color', __( 'رنگ ثانویه', 'negar-shop' ), NEGAR_THEME_SETTINGS_OPTION . '[colors][secondary]', negar_theme_color( 'secondary' ), 'color', __( 'برای پیشنهادها و اجزای مکمل قالب.', 'negar-shop' ) ); ?>

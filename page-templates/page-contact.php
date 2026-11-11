@@ -26,9 +26,9 @@ get_header();
 
 		<section class="negar-showcase-hero">
 			<div>
-				<span class="negar-showcase-hero__eyebrow"><i class="icon-comments-2" aria-hidden="true"></i><?php esc_html_e( 'ارتباط با فروشگاه', 'negar-shop' ); ?></span>
-				<h1><?php esc_html_e( 'از اینجا با ما در تماس باشید', 'negar-shop' ); ?></h1>
-				<p><?php esc_html_e( 'برای ارسال پیام یا مشاهدهٔ راه‌های ارتباطی، اطلاعات زیر را بررسی کنید. اطلاعات نمونه از بخش سفارشی‌سازی قابل تغییر هستند.', 'negar-shop' ); ?></p>
+				<span class="negar-showcase-hero__eyebrow"><i class="icon-comments-2" aria-hidden="true"></i><?php echo esc_html( negar_theme_text( 'contact', 'hero_eyebrow' ) ); ?></span>
+				<h1><?php echo esc_html( negar_theme_text( 'contact', 'hero_title' ) ); ?></h1>
+				<p><?php echo esc_html( negar_theme_text( 'contact', 'hero_description' ) ); ?></p>
 			</div>
 			<div class="negar-showcase-hero__mark" aria-hidden="true"><i class="icon-phone"></i></div>
 		</section>
@@ -50,7 +50,7 @@ get_header();
 
 		<section class="negar-contact-layout">
 			<div class="negar-contact-form-box">
-				<div class="negar-section-heading"><span><i class="icon-comments" aria-hidden="true"></i></span><div><h2><?php esc_html_e( 'ارسال پیام', 'negar-shop' ); ?></h2><p><?php esc_html_e( 'پیام شما پس از ثبت، به مدیریت سایت ارسال می‌شود.', 'negar-shop' ); ?></p></div></div>
+				<div class="negar-section-heading"><span><i class="icon-comments" aria-hidden="true"></i></span><div><h2><?php echo esc_html( negar_theme_text( 'contact', 'form_title' ) ); ?></h2><p><?php echo esc_html( negar_theme_text( 'contact', 'form_description' ) ); ?></p></div></div>
 				<form id="negar-contact-form" novalidate>
 					<p id="negar-contact-alert" class="hidden" role="status" aria-live="polite"></p>
 					<div class="negar-contact-form__fields">
@@ -59,12 +59,12 @@ get_header();
 						<p class="negar-contact-form__wide"><label for="contact-subject"><?php esc_html_e( 'موضوع پیام یا شمارهٔ سفارش', 'negar-shop' ); ?> <span aria-hidden="true">*</span></label><input type="text" id="contact-subject" name="subject" required></p>
 						<p class="negar-contact-form__wide"><label for="contact-message"><?php esc_html_e( 'متن پیام', 'negar-shop' ); ?> <span aria-hidden="true">*</span></label><textarea id="contact-message" name="message" rows="6" required></textarea></p>
 					</div>
-					<button type="submit" id="negar-contact-submit" class="negar-contact-btn"><span><?php esc_html_e( 'ثبت و ارسال پیام', 'negar-shop' ); ?></span><i class="icon-arrow-left" aria-hidden="true"></i><span class="contact-spinner hidden animate-spin" aria-hidden="true"></span></button>
+					<button type="submit" id="negar-contact-submit" class="negar-contact-btn"><span><?php echo esc_html( negar_theme_text( 'contact', 'form_submit' ) ); ?></span><i class="icon-arrow-left" aria-hidden="true"></i><span class="contact-spinner hidden animate-spin" aria-hidden="true"></span></button>
 				</form>
 			</div>
 
 			<aside class="negar-map-box">
-				<div class="negar-section-heading"><span><i class="icon-location" aria-hidden="true"></i></span><div><h2><?php esc_html_e( 'موقعیت فروشگاه', 'negar-shop' ); ?></h2><p><?php esc_html_e( 'نقشه پس از وارد کردن نشانی embed واقعی در سفارشی‌سازی نمایش داده می‌شود.', 'negar-shop' ); ?></p></div></div>
+				<div class="negar-section-heading"><span><i class="icon-location" aria-hidden="true"></i></span><div><h2><?php echo esc_html( negar_theme_text( 'contact', 'map_title' ) ); ?></h2><p><?php echo esc_html( negar_theme_text( 'contact', 'map_description' ) ); ?></p></div></div>
 				<div class="negar-map-frame">
 					<?php if ( $map_url ) : ?>
 						<iframe src="<?php echo esc_url( $map_url ); ?>" title="<?php esc_attr_e( 'نقشهٔ فروشگاه', 'negar-shop' ); ?>" loading="lazy" allowfullscreen></iframe>

@@ -1,6 +1,6 @@
 # Tasks: 012 Complete Theme Settings Project
 
-**Status:** Phase 1.1 complete; no Phase 2 implementation authorized.
+**Status:** Phase 2 text management complete; no Phase 3 implementation authorized.
 
 ## Completed foundation and hardening
 
@@ -15,19 +15,25 @@
 - [x] **T204** Synchronize the inventory/schema keys and create this dedicated
   complete-project Spec Kit set, separate from historical spec 009.
 
-## Planned only — do not implement in Phase 1.1
+## Text management
 
-- [ ] **T205** Approve and implement Texts and Layout schema groups with RTL and
-  keyboard regression coverage.
-- [ ] **T206** Approve and implement Product Sections controls backed solely by
+- [x] **T205** Implement the Texts schema for documented theme-owned header,
+  homepage, footer, contact, about and not-found copy. Verify access, persistence,
+  explicit empties, group isolation and real authenticated form submission; do not
+  expose WordPress- or WooCommerce-managed content.
+
+## Planned only — do not implement in Phase 2
+- [ ] **T206** Approve and implement the Layout schema with RTL and keyboard
+  regression coverage.
+- [ ] **T207** Approve and implement Product Sections controls backed solely by
   live WooCommerce objects and truthful inventory/pricing/review states.
-- [ ] **T207** Approve and implement validated Banner, Story and Brand media
+- [ ] **T208** Approve and implement validated Banner, Story and Brand media
   collections, using attachment IDs and safe URLs.
-- [ ] **T208** Approve Typography controls with safe font-loading and performance
+- [ ] **T209** Approve Typography controls with safe font-loading and performance
   limits.
-- [ ] **T209** Design an SMS-provider boundary with separately stored secrets;
+- [ ] **T210** Design an SMS-provider boundary with separately stored secrets;
   never export credentials or expose them to the browser.
-- [ ] **T210** Design backup/import/export validation, authorization, rollback and
+- [ ] **T211** Design backup/import/export validation, authorization, rollback and
   non-autoloaded storage for large settings.
-- [ ] **T211** Complete end-to-end, accessibility, RTL, migration and packaging
+- [ ] **T212** Complete end-to-end, accessibility, RTL, migration and packaging
   verification before declaring the full project complete.

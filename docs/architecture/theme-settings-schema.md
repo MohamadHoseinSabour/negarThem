@@ -11,6 +11,14 @@ Customizer fallback or code default”; a present key with an empty string means
 {
   "schema_version": 1,
   "branding": { "site_label": "" },
+  "texts": {
+    "header": { "desktop_search_placeholder": "" },
+    "home": { "hero_slide_one_title": "" },
+    "footer": { "quick_links_heading": "" },
+    "contact": { "hero_title": "" },
+    "about": { "hero_eyebrow": "" },
+    "not_found": { "title": "" }
+  },
   "colors": { "primary": "#e90544", "secondary": "#c40439" },
   "header": { "announcement": "" },
   "footer": { "about": "", "copyright": "" },
@@ -21,7 +29,9 @@ Customizer fallback or code default”; a present key with an empty string means
 
 The Settings API sanitizer merges the submitted group into the stored option, so
 one tab cannot remove values stored by another tab. It allows only the groups and
-keys listed above. Text is sanitized with the context-specific WordPress function;
+keys listed above. The Texts group is a whitelist registry: its documented header,
+home, footer, contact, about and not-found fields use `sanitize_text_field()` or
+`sanitize_textarea_field()` and preserve an explicitly submitted empty string.
 URLs use `esc_url_raw`, colors use `sanitize_hex_color`, and footer rich text uses
 `wp_kses_post`.
 
@@ -57,10 +67,18 @@ The screen is registered through `add_options_page()` and is available at:
 It requires `manage_options`. The Settings API nonce protects writes and the
 sanitizer repeats the capability check. Values are escaped in their output context.
 
+## Implemented text schema
+
+`negar_theme_text( $component, $key )` is the only frontend read path for the
+Texts registry. It returns a stored value when its key is present (including an
+empty value), otherwise the reviewed template default. The registry intentionally
+contains no rich HTML, WordPress `the_content()`, menu labels, taxonomy names or
+WooCommerce product/customer/order/review data.
+
 ## Planned schema additions
 
 The static tab registry deliberately reserves keys for the following phased
-additions: `texts`, `layout`, `products`, `banners`, `stories`, `brands`,
+additions: `layout`, `products`, `banners`, `stories`, `brands`,
 `typography`, `sms` and `backup`. Their field schemas must be
 documented before they are added; unknown keys must not be accepted by import or
 save handlers.

@@ -57,7 +57,7 @@ $social_links = array_filter(
 				<div class="w-1/2">
 					<div class="flex items-center gap-2 mb-4">
 						<svg width="28" height="7" viewBox="0 0 34 8" fill="none"><path d="M33.1839 0H0V8.0099H33.1839V0Z" fill="#E90544"></path></svg>
-						<h3 class="text-sm font-black text-[#212341] m-0"><?php esc_html_e( 'دسترسی سریع', 'negar-shop' ); ?></h3>
+						<h3 class="text-sm font-black text-[#212341] m-0"><?php echo esc_html( negar_theme_text( 'footer', 'quick_links_heading' ) ); ?></h3>
 					</div>
 					<ul class="space-y-2.5 text-xs text-slate-600 font-medium">
 						<li><a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="hover:text-rose-600 transition-colors"><?php esc_html_e( 'صفحه اصلی', 'negar-shop' ); ?></a></li>
@@ -72,7 +72,7 @@ $social_links = array_filter(
 				<div class="w-1/2">
 					<div class="flex items-center gap-2 mb-4">
 						<svg width="28" height="7" viewBox="0 0 34 8" fill="none"><path d="M33.1839 0H0V8.0099H33.1839V0Z" fill="#E90544"></path></svg>
-						<h3 class="text-sm font-black text-[#212341] m-0"><?php esc_html_e( 'خدمات مشتریان', 'negar-shop' ); ?></h3>
+						<h3 class="text-sm font-black text-[#212341] m-0"><?php echo esc_html( negar_theme_text( 'footer', 'customer_services_heading' ) ); ?></h3>
 					</div>
 					<ul class="space-y-2.5 text-xs text-slate-600 font-medium">
 						<li><a href="<?php echo esc_url( $account_url ); ?>" class="hover:text-rose-600 transition-colors"><?php esc_html_e( 'حساب کاربری', 'negar-shop' ); ?></a></li>
@@ -138,10 +138,10 @@ $social_links = array_filter(
 				<div>
 					<div class="flex items-center gap-2 mb-4">
 						<svg width="28" height="7" viewBox="0 0 34 8" fill="none"><path d="M33.1839 0H0V8.0099H33.1839V0Z" fill="#E90544"></path></svg>
-						<h3 class="text-sm font-black text-[#212341] m-0"><?php esc_html_e( 'ارتباط با فروشگاه', 'negar-shop' ); ?></h3>
+						<h3 class="text-sm font-black text-[#212341] m-0"><?php echo esc_html( negar_theme_text( 'footer', 'contact_heading' ) ); ?></h3>
 					</div>
 					<div class="rounded-2xl border border-slate-200/80 bg-slate-50 p-4 text-xs text-slate-600 leading-relaxed">
-						<?php esc_html_e( 'برای دریافت راهنمایی یا پیگیری درخواست‌ها، از صفحه تماس با ما استفاده کنید.', 'negar-shop' ); ?>
+						<?php echo esc_html( negar_theme_text( 'footer', 'contact_description' ) ); ?>
 					</div>
 				</div>
 
@@ -153,7 +153,7 @@ $social_links = array_filter(
 						</a>
 					<?php else : ?>
 						<a href="<?php echo esc_url( $contact_url ); ?>" class="bg-white p-2.5 rounded-2xl border border-slate-200/70 text-center shadow-2xs hover:border-rose-300 transition text-xs font-black text-rose-600">
-							<?php esc_html_e( 'ارسال پیام به پشتیبانی', 'negar-shop' ); ?>
+							<?php echo esc_html( negar_theme_text( 'footer', 'support_cta' ) ); ?>
 						</a>
 					<?php endif; ?>
 				</div>
@@ -215,7 +215,7 @@ $social_links = array_filter(
 
 			<?php if ( $social_links ) : ?>
 				<div class="flex items-center gap-3">
-					<span class="text-3xs text-slate-400 font-bold"><?php esc_html_e( 'در شبکه‌های اجتماعی همراه ما باشید', 'negar-shop' ); ?></span>
+					<span class="text-3xs text-slate-400 font-bold"><?php echo esc_html( negar_theme_text( 'footer', 'social_prompt' ) ); ?></span>
 					<div class="flex items-center gap-2">
 						<?php foreach ( $social_links as $network => $url ) : ?>
 							<a href="<?php echo esc_url( $url ); ?>" class="px-3 py-1.5 rounded-full bg-white border border-slate-200/70 text-slate-600 hover:text-rose-600 transition shadow-2xs" aria-label="<?php echo esc_attr( $network ); ?>"><?php echo esc_html( ucfirst( $network ) ); ?></a>

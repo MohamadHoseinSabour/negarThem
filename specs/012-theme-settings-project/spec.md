@@ -1,7 +1,7 @@
 # Feature Specification: 012 Complete Theme Settings Project
 
 **Feature code:** `SETTINGS-01`
-**Status:** Planned; Phase 1.1 hardened
+**Status:** Phase 2 text management complete; later phases planned
 **Supersedes for new work:** None. `009-featurename-theme-options` remains the
 historical Customizer-and-widgets specification and is not this project.
 
@@ -16,8 +16,10 @@ non-destructive compatibility source.
 
 Phase 1 provides the `negar_theme_options` v1 option, a Settings > Negar Theme
 Settings route protected by `manage_options`, and implemented General, Colors and
-Header/Footer/Contact tabs. Phase 1.1 hardens color tokens and persistence. This
-spec plans the complete project; it does not authorize the remaining phases yet.
+Header/Footer/Contact tabs. Phase 1.1 hardens color tokens and persistence. Phase
+2 adds a strict, component-owned Texts group for selected header, homepage, footer,
+contact, about and not-found copy. This spec plans the complete project; it does
+not authorize the remaining phases yet.
 
 ## Functional requirements
 
@@ -31,9 +33,12 @@ spec plans the complete project; it does not authorize the remaining phases yet.
 4. The Colors tab must render saved valid primary and secondary colors through the
    documented CSS tokens. The canonical no-override appearance is crimson:
    `#e90544` primary and `#c40439` secondary.
-5. Future text, layout, product-section, banner, story, brand, typography, SMS
-   and backup/import controls must have an approved schema and regression tests
-   before becoming writable.
+5. The Texts group may own only documented theme-generated labels, headings,
+   descriptions and calls to action. WordPress page content, menus and
+   WooCommerce product, review, customer and transactional data are excluded.
+6. Future layout, product-section, banner, story, brand, typography, SMS and
+   backup/import controls must have an approved schema and regression tests before
+   becoming writable.
 6. Product prices, stock, sale status, ratings, reviews, orders, customers and OTP
    states must remain live WordPress/WooCommerce or provider data. Settings may
    select presentation/query inputs, never invent transactional or commercial data.
@@ -41,7 +46,7 @@ spec plans the complete project; it does not authorize the remaining phases yet.
 ## Non-goals
 
 - Replacing or removing the legacy Customizer in this project phase.
-- Implementing any Phase 2 tab or frontend feature as part of Phase 1.1.
+- Implementing Phase 3 layout or later features as part of Phase 2.
 - Saving provider secrets in the exportable settings option or exposing them to
   JavaScript.
 
@@ -53,5 +58,8 @@ spec plans the complete project; it does not authorize the remaining phases yet.
   tested behavior.
 - Changing a valid color changes the computed frontend tokens after reload; the
   original values are restored after automated checks.
+- An authenticated administrator can submit the Texts form, reload it and observe
+  its component-owned values on representative frontend templates; test cleanup
+  restores the initial option and Customizer snapshots.
 - Documentation keys exactly match implementation and the dedicated spec, plan and
   task list remain separate from specification 009.

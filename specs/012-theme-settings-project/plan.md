@@ -1,6 +1,6 @@
 # Implementation Plan: 012 Complete Theme Settings Project
 
-**Status:** Phase 1.1 complete; later phases planned only.
+**Status:** Phase 2 text management complete; Phase 3 and later phases planned only.
 
 ## Architecture
 
@@ -18,15 +18,18 @@
    Header/Footer/Contact groups, frontend getters and Customizer fallback.
 2. **Hardening (complete):** canonical crimson defaults, reliable CSS token output,
    reversible persistence/browser regression coverage and synchronized docs.
-3. **Content and layout (planned):** define and implement the Texts and Layout
-   schemas only after per-template ownership and accessibility review.
-4. **Commerce presentation (planned):** add product-section and promotion controls
+3. **Text management (complete):** implement the documented `texts` registry and
+   getter for theme-owned copy only, with authenticated Settings API submission and
+   representative frontend regression coverage.
+4. **Layout (planned):** define layout schemas only after per-template ownership
+   and accessibility review.
+5. **Commerce presentation (planned):** add product-section and promotion controls
    that select/query real WooCommerce objects without duplicating commercial data.
-5. **Media collections (planned):** add banners, stories and brands using validated
+6. **Media collections (planned):** add banners, stories and brands using validated
    media IDs, safe links and non-autoloaded repeaters where appropriate.
-6. **Typography, SMS and backup (planned):** define separate security boundaries,
+7. **Typography, SMS and backup (planned):** define separate security boundaries,
    secret handling and import/export validation before UI implementation.
-7. **Release verification (planned):** expand regression coverage, run PHP lint and
+8. **Release verification (planned):** expand regression coverage, run PHP lint and
    Playwright checks against WAMP, review RTL/keyboard behavior and package only
    after data-integrity checks pass.
 
@@ -36,4 +39,7 @@
   empty values, group isolation and Customizer compatibility.
 - Playwright checks of the local WAMP frontend for computed design tokens after
   save/reload, always restoring the initial option and theme-mod snapshots.
+- A second Playwright path uses a temporary administrator session to submit the
+  actual Settings API Texts form, then reloads both the admin screen and selected
+  frontend components before restoring the snapshot.
 - `npm run test:lint` for PHP syntax and `npm test` for the user-visible suite.

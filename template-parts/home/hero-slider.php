@@ -89,13 +89,13 @@ $featured_rating        = $featured_product ? (float) $featured_product->get_ave
 											</div>
 											<div class="detail w-100">
 												<div class="sup-title overflow-hidden">
-													<div class="f-iran-yekan"><?php esc_html_e( 'خرید دسته‌های ایکس باکس', 'negar-shop' ); ?></div>
+													<div class="f-iran-yekan"><?php echo esc_html( negar_theme_text( 'home', 'hero_slide_one_eyebrow' ) ); ?></div>
 												</div>
 												<div class="title overflow-hidden">
-													<h2 class="f-iran-yekan mb-0"><?php esc_html_e( 'خرید برترین محصولاتــــــــ', 'negar-shop' ); ?></h2>
+													<h2 class="f-iran-yekan mb-0"><?php echo esc_html( negar_theme_text( 'home', 'hero_slide_one_title' ) ); ?></h2>
 												</div>
 												<a href="<?php echo esc_url( $shop_link ); ?>" class="btn d-flex align-items-center justify-content-center ms-auto">
-													<?php esc_html_e( 'مشاهده بیشتر', 'negar-shop' ); ?>
+													<?php echo esc_html( negar_theme_text( 'home', 'hero_slide_one_cta' ) ); ?>
 													<i class="icon-chevron-left-2 lh-1"></i>
 												</a>
 											</div>
@@ -121,13 +121,13 @@ $featured_rating        = $featured_product ? (float) $featured_product->get_ave
 											</div>
 											<div class="detail w-100">
 												<div class="sup-title overflow-hidden">
-													<div class="f-iran-yekan"><?php esc_html_e( 'کنسول‌های بازی نسل نهم', 'negar-shop' ); ?></div>
+													<div class="f-iran-yekan"><?php echo esc_html( negar_theme_text( 'home', 'hero_slide_two_eyebrow' ) ); ?></div>
 												</div>
 												<div class="title overflow-hidden">
-													<h2 class="f-iran-yekan mb-0"><?php esc_html_e( 'تجربه بی‌نظیر گیمینگ', 'negar-shop' ); ?></h2>
+													<h2 class="f-iran-yekan mb-0"><?php echo esc_html( negar_theme_text( 'home', 'hero_slide_two_title' ) ); ?></h2>
 												</div>
 												<a href="<?php echo esc_url( $shop_link ); ?>" class="btn d-flex align-items-center justify-content-center ms-auto">
-													<?php esc_html_e( 'مشاهده بیشتر', 'negar-shop' ); ?>
+													<?php echo esc_html( negar_theme_text( 'home', 'hero_slide_two_cta' ) ); ?>
 													<i class="icon-chevron-left-2 lh-1"></i>
 												</a>
 											</div>
@@ -159,8 +159,8 @@ $featured_rating        = $featured_product ? (float) $featured_product->get_ave
 								<div class="shape-b position-absolute bottom-0 end-50 d-none d-lg-block"></div>
 								<div class="offer position-absolute d-flex align-items-center">
 									<div class="offer__text">
-										<div class="sup-title f-iransans fw-light"><?php esc_html_e( 'تخــفیفـــــات', 'negar-shop' ); ?></div>
-										<div class="title f-iransans fw-semibold"><?php esc_html_e( 'لـــحظه ایــ', 'negar-shop' ); ?></div>
+										<div class="sup-title f-iransans fw-light"><?php echo esc_html( negar_theme_text( 'home', 'flash_deals_eyebrow' ) ); ?></div>
+										<div class="title f-iransans fw-semibold"><?php echo esc_html( negar_theme_text( 'home', 'flash_deals_title' ) ); ?></div>
 									</div>
 									<span class="offer__icon flex-shrink-0" aria-hidden="true"></span>
 								</div>

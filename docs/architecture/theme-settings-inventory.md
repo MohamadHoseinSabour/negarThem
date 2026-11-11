@@ -146,6 +146,21 @@ commercial data. “Controls” identifies the next phase that owns the work.
 | Contact | `page-templates/page-contact.php` | Contact data uses legacy mods; contact-form handler persists actual submissions | Contact hero/support text and present contact fields; do not export submissions. |
 | Account/checkout/shop | `woocommerce/`, `template-parts/auth/`, modals | WooCommerce owns product/order/customer state; theme contributes labels and UI | Only theme-generated labels/empty/help text. Do not configure product/order/customer data. |
 
+### Phase 2 implemented text registry
+
+The `texts` group now controls reviewed, plain-text theme copy only. All fields are
+listed by `negar_theme_text_registry()` in `inc/theme-settings.php`; the table is a
+component ownership index, not a second schema.
+
+| Component | Editable copy | Verified templates | Deliberate exclusions |
+| --- | --- | --- | --- |
+| Header | Desktop/mobile search placeholders, guest-login and cart labels | `template-parts/header/main-header.php`, `mobile-header.php` | Menus, categories and product names remain WordPress/WooCommerce data. |
+| Home | Static hero eyebrow/title/CTA and flash-deal heading copy | `template-parts/home/hero-slider.php` | The featured product, price, rating, stock and link remain live WooCommerce values. |
+| Footer | Column headings, contact description, support CTA and social prompt | `template-parts/footer/columns.php` | Registered sidebars, routes, social URLs and legacy contact values remain their existing sources. |
+| Contact | Hero, form and map headings/descriptions plus form submit label | `page-templates/page-contact.php` | Contact submissions and contact details are not text settings. |
+| About | Supporting hero/guide/empty-state copy | `page-templates/page-about.php` | `the_title()` and `the_content()` remain WordPress-managed. |
+| Not found | Empty-state heading, description, search/action/category prompts | `404.php` | Product category names remain live taxonomy terms. |
+
 ## OTP and SMS transport audit
 
 `negar_ajax_send_otp()` normalizes Iranian mobile numbers, checks an AJAX nonce,

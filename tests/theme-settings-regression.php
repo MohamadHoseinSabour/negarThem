@@ -31,6 +31,30 @@ function negar_theme_test_admin() {
 	}
 
 	wp_set_current_user( (int) $admins[0] );
+
+	return (int) $admins[0];
+}
+
+function negar_theme_test_auth_cookie() {
+	$user_id    = negar_theme_test_admin();
+	$expiration = time() + ( 5 * MINUTE_IN_SECONDS );
+	$token      = WP_Session_Tokens::get_instance( $user_id )->create( $expiration );
+	$scheme     = is_ssl() ? 'secure_auth' : 'auth';
+	$cookie     = wp_generate_auth_cookie( $user_id, $expiration, $scheme, $token );
+
+	return array(
+		'name'    => 'secure_auth' === $scheme ? SECURE_AUTH_COOKIE : AUTH_COOKIE,
+		'value'   => $cookie,
+		'expires' => $expiration,
+		'token'   => $token,
+		'user_id' => $user_id,
+	);
+}
+
+function negar_theme_test_destroy_auth_cookie( $user_id, $token ) {
+	if ( $user_id > 0 && '' !== $token ) {
+		WP_Session_Tokens::get_instance( $user_id )->destroy( $token );
+	}
 }
 
 function negar_theme_test_snapshot( $option, $mods ) {
@@ -89,6 +113,17 @@ try {
 
 	negar_theme_test_admin();
 
+	if ( 'auth-cookie' === $action ) {
+		echo wp_json_encode( negar_theme_test_auth_cookie() );
+		exit( 0 );
+	}
+
+	if ( 'destroy-auth-cookie' === $action ) {
+		negar_theme_test_destroy_auth_cookie( isset( $argv[2] ) ? (int) $argv[2] : 0, isset( $argv[3] ) ? $argv[3] : '' );
+		echo wp_json_encode( array( 'destroyed' => true ) );
+		exit( 0 );
+	}
+
 	if ( 'set-colors' === $action ) {
 		$primary   = isset( $argv[2] ) ? $argv[2] : '';
 		$secondary = isset( $argv[3] ) ? $argv[3] : '';
@@ -133,6 +168,20 @@ try {
 	);
 	$results['header_footer_saved'] = 'اطلاعیهٔ آزمایشی' === $header['header']['announcement'];
 	$results['groups_preserved'] = 'برند آزمایشی نگار' === $header['branding']['site_label'];
+
+	$texts = negar_theme_test_save_group(
+		'texts',
+		array(
+			'texts' => array(
+				'home'   => array( 'hero_slide_one_title' => 'عنوان آزمایشی صفحهٔ اصلی' ),
+				'footer' => array( 'quick_links_heading' => '' ),
+			),
+		)
+	);
+	$results['texts_saved']           = 'عنوان آزمایشی صفحهٔ اصلی' === $texts['texts']['home']['hero_slide_one_title'];
+	$results['texts_explicit_empty']  = '' === $texts['texts']['footer']['quick_links_heading'];
+	$results['texts_preserve_groups'] = 'اطلاعیهٔ آزمایشی' === $texts['header']['announcement'];
+	$results['text_getter']           = 'عنوان آزمایشی صفحهٔ اصلی' === negar_theme_text( 'home', 'hero_slide_one_title' );
 
 	$colors = negar_theme_test_save_group( 'colors', array( 'colors' => array( 'primary' => '#059669', 'secondary' => '#e11d48' ) ) );
 	$results['previous_defaults_valid'] = '#059669' === $colors['colors']['primary'] && '#e11d48' === $colors['colors']['secondary'];

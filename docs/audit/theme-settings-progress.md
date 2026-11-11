@@ -2,7 +2,7 @@
 
 ## Phase 0 — architecture and settings inventory
 
-**Status:** PASS  
+**Status:** PASS
 **Commit:** `9e9014c`
 
 - Added the source-backed inventory of the 35 homepage sections, existing
@@ -13,8 +13,8 @@
 
 ## Phase 1 — settings framework and admin UI
 
-**Status:** PASS  
-**Commit:** current phase commit (see Git history)
+**Status:** PASS
+**Commit:** `7cbec3b`
 
 - Added `inc/theme-settings.php`: a versioned Settings API option, typed getter,
   explicit-empty-value handling, group-preserving sanitization, Settings menu route
@@ -41,8 +41,29 @@
   title, 11 tabs, form nonce, general field and color sanitizer all rendered or
   validated as expected. This check does not persist any setting.
 
+## Phase 1.1 - color and persistence hardening
+
+**Status:** PASS
+**Commit:** `c1b2704`
+
+- Restored canonical crimson rendering when no override exists while allowing every
+  valid saved v1 or legacy Customizer color, including former Customizer defaults.
+- Added reversible persistence checks for access, group isolation, empty values,
+  Customizer compatibility and computed frontend CSS tokens.
+
+## Phase 2 - theme text management
+
+**Status:** PASS
+**Commit:** recorded with the Phase 2 delivery commit
+
+- Added the strict `texts` registry for documented theme-owned header, home,
+  footer, contact, about and not-found copy; WordPress page content and all
+  WooCommerce commercial/customer/transactional data remain out of scope.
+- Added an authenticated browser form-submission check that reloads the Settings
+  screen and representative homepage, footer and contact output, then restores its
+  initial settings snapshot and destroys its temporary administrator session.
+
 ## Next phase
 
-Phase 2 will add grouped theme-owned text controls and bind each one to a verified
-frontend location. It must not expose WooCommerce product, review, customer or
-order content as theme text fields.
+Phase 3 may define layout controls only after a separate ownership and accessibility
+review. It is not implemented by Phase 2.
