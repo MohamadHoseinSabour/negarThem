@@ -2,6 +2,27 @@
 
 Last updated: 2026-11-10 (Asia/Tehran)
 
+## Phased repair mission — 2026-11-11
+
+| Phase | Result | Commit / evidence |
+| --- | --- | --- |
+| 1. Featured Apple Watch deal | PASS | `ef19e64` — live WooCommerce product, image, price, rating and permalink; truthful empty fallback. |
+| 2. Gaming hotspots | PASS | `35a05cf` — real product IDs/permalinks only; unavailable hotspots remain empty instead of inventing products or prices. |
+| 3. Trust/service content | PASS | `49c98fa` — removed unsupported delivery, guarantee, Tipax, 24-hour support and card-network claims; added regression coverage. |
+| 4. Flash-deals fidelity | PASS | No source change required. Local sale carousel matches the reference interaction pattern and uses live sale products; external demo returned HTTP 200 for comparison. |
+| 5. Site-wide inventory | PASS | `24c51df` — added `docs/fidelity/site-wide-page-inventory.md` with route, template, HTTP and E2E evidence. |
+| 6. Core shopping flows | PASS | `5ff8969` — homepage product-destination regression plus real cart add/update/remove coverage. |
+
+### Final verification for this mission
+
+- `npm run test:lint` — PASS (112 PHP files).
+- `npm test` — PASS (112 PHP files, 36 E2E checks).
+- `node tests/security-otp-disclosure.test.js` — PASS (no OTP/code disclosure).
+- `npm run build:dist` — PASS (`dist/negar-shop.zip`, 1.72 MB; production exclusions applied).
+- The final push is intentionally performed only after this progress record and the rebuilt distribution archive are committed together.
+
+The codebase-memory transport was unavailable during this run, so structural checks used the documented direct-source fallback. The live WordPress/WooCommerce site and reference URL remained available for HTTP/browser verification.
+
 ## Completed in this repair group
 
 | Area | Result | Evidence |
