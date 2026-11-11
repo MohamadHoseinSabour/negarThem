@@ -332,6 +332,26 @@ async function runTests() {
     assert(!footerState.badgeImages.some((src) => /(?:enamad|samandehi)\.png/i.test(src)), 'Unverified demo trust-badge images must not be rendered');
   });
 
+  // 2E. Service guidance must describe only verifiable storefront behaviour.
+  await testStep('Service guidance avoids unsupported delivery, guarantee, and payment claims', async () => {
+    await page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded' });
+    const serviceState = await page.evaluate(() => ({
+      footerFeaturesFound: Boolean(document.querySelector('.footer-features-section')),
+      footerFeatures: document.querySelector('.footer-features-section')?.textContent.replace(/\s+/g, ' ').trim() || '',
+      trustMarquee: document.querySelector('.elementor-element-797893fc')?.textContent.replace(/\s+/g, ' ').trim() || '',
+      featureCards: document.querySelectorAll('.footer-features-section .feature-card').length,
+      trustItems: document.querySelectorAll('.elementor-element-797893fc .elementor-widget-icon-box').length,
+    }));
+
+    if (serviceState.footerFeaturesFound) {
+      assert(serviceState.featureCards >= 5, 'Rendered footer service guidance must include all five cards');
+    }
+    assert(serviceState.trustItems >= 5, 'Homepage service guidance must render all five items');
+    const unsupportedClaims = /تیپاکس|تیباکس|سراسری کشور|تحویل اکسپرس|۱۰۰٪|۲۴ ساعته|عضو شتاب/;
+    assert(!unsupportedClaims.test(serviceState.footerFeatures), 'Footer must not make unsupported service or payment claims');
+    assert(!unsupportedClaims.test(serviceState.trustMarquee), 'Homepage service guidance must not make unsupported delivery claims');
+  });
+
   // 3. Shop title, global catalogue, and normal pagination.
   await testStep('Shop uses the correct title and exposes every product through pagination', async () => {
     const catalogueResponse = await page.request.get(`${BASE_URL}/wp-json/wc/store/v1/products?per_page=100`);

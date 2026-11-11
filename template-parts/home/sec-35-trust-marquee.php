@@ -2,7 +2,7 @@
 /**
  * Section 35: Features & Trust Bar (HOME-35)
  * Reference: Demo 43 Section 34 (elementor-element-797893fc)
- * Static 5-column trust icons (Tipax Delivery & Quality Guarantees)
+ * Store information and service guidance icons.
  *
  * @package Negar_Shop
  * @version 2.0.0
@@ -26,11 +26,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 									<h3 class="elementor-icon-box-title">
 						<span>
-							تیباکس						</span>
+							ارسال سفارش						</span>
 					</h3>
 				
 									<p class="elementor-icon-box-description">
-						حمل نقل به روش					</p>
+						روش ارسال در زمان پرداخت نمایش داده می‌شود					</p>
 				
 			</div>
 			
@@ -48,11 +48,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 									<h3 class="elementor-icon-box-title">
 						<span>
-							تیباکس						</span>
+							اطلاعات محصول						</span>
 					</h3>
 				
 									<p class="elementor-icon-box-description">
-						حمل نقل به روش					</p>
+						قیمت و موجودی از ووکامرس خوانده می‌شود					</p>
 				
 			</div>
 			
@@ -70,11 +70,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 									<h3 class="elementor-icon-box-title">
 						<span>
-							تیباکس						</span>
+							پیگیری سفارش						</span>
 					</h3>
 				
 									<p class="elementor-icon-box-description">
-						حمل نقل به روش					</p>
+						وضعیت سفارش از حساب کاربری قابل مشاهده است					</p>
 				
 			</div>
 			
@@ -92,11 +92,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 									<h3 class="elementor-icon-box-title">
 						<span>
-							تیباکس						</span>
+							پشتیبانی فروشگاه						</span>
 					</h3>
 				
 									<p class="elementor-icon-box-description">
-						حمل نقل به روش					</p>
+						برای راهنمایی از صفحه تماس با ما پیام بفرستید					</p>
 				
 			</div>
 			
@@ -114,11 +114,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 									<h3 class="elementor-icon-box-title">
 						<span>
-							تیباکس						</span>
+							پرداخت سفارش						</span>
 					</h3>
 				
 									<p class="elementor-icon-box-description">
-						حمل نقل به روش					</p>
+						روش‌های فعال در مرحله پرداخت نمایش داده می‌شوند					</p>
 				
 			</div>
 			

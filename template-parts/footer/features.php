@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<div class="container">
 		<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
 
-			<!-- 1. Express Delivery -->
+			<!-- 1. Shipping options -->
 			<div class="feature-card flex items-center gap-3 p-3.5 rounded-xl bg-slate-50/70 border border-slate-100">
 				<div class="w-12 h-12 rounded-xl bg-rose-100/70 text-rose-700 flex items-center justify-center shrink-0">
 					<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -25,12 +25,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</svg>
 				</div>
 				<div>
-					<h4 class="text-xs font-bold text-slate-800 m-0"><?php esc_html_e( 'تحویل اکسپرس', 'negar-shop' ); ?></h4>
-					<p class="text-2xs text-slate-500 m-0"><?php esc_html_e( 'ارسال سریع به سراسر کشور', 'negar-shop' ); ?></p>
+					<h4 class="text-xs font-bold text-slate-800 m-0"><?php esc_html_e( 'گزینه‌های ارسال', 'negar-shop' ); ?></h4>
+					<p class="text-2xs text-slate-500 m-0"><?php esc_html_e( 'روش‌های ارسال هنگام ثبت سفارش نمایش داده می‌شوند.', 'negar-shop' ); ?></p>
 				</div>
 			</div>
 
-			<!-- 2. Authentic Guarantee -->
+			<!-- 2. Product information -->
 			<div class="feature-card flex items-center gap-3 p-3.5 rounded-xl bg-slate-50/70 border border-slate-100">
 				<div class="w-12 h-12 rounded-xl bg-rose-100/70 text-rose-700 flex items-center justify-center shrink-0">
 					<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -39,12 +39,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</svg>
 				</div>
 				<div>
-					<h4 class="text-xs font-bold text-slate-800 m-0"><?php esc_html_e( 'ضمانت اصالت', 'negar-shop' ); ?></h4>
-					<p class="text-2xs text-slate-500 m-0"><?php esc_html_e( '۱۰۰٪ تضمین اصل بودن کالا', 'negar-shop' ); ?></p>
+					<h4 class="text-xs font-bold text-slate-800 m-0"><?php esc_html_e( 'اطلاعات محصول', 'negar-shop' ); ?></h4>
+					<p class="text-2xs text-slate-500 m-0"><?php esc_html_e( 'جزئیات و شرایط هر کالا را در صفحه محصول بررسی کنید.', 'negar-shop' ); ?></p>
 				</div>
 			</div>
 
-			<!-- 3. Return Guarantee -->
+			<!-- 3. Returns -->
 			<div class="feature-card flex items-center gap-3 p-3.5 rounded-xl bg-slate-50/70 border border-slate-100">
 				<div class="w-12 h-12 rounded-xl bg-rose-100/70 text-rose-700 flex items-center justify-center shrink-0">
 					<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -53,12 +53,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</svg>
 				</div>
 				<div>
-					<h4 class="text-xs font-bold text-slate-800 m-0"><?php esc_html_e( '۷ روز ضمانت بازگشت', 'negar-shop' ); ?></h4>
-					<p class="text-2xs text-slate-500 m-0"><?php esc_html_e( 'امکان عودت بی‌قید و شرط', 'negar-shop' ); ?></p>
+					<h4 class="text-xs font-bold text-slate-800 m-0"><?php esc_html_e( 'شرایط بازگشت', 'negar-shop' ); ?></h4>
+					<p class="text-2xs text-slate-500 m-0"><?php esc_html_e( 'شرایط بازگشت در قوانین فروشگاه توضیح داده می‌شود.', 'negar-shop' ); ?></p>
 				</div>
 			</div>
 
-			<!-- 4. Support -->
+			<!-- 4. Store support -->
 			<div class="feature-card flex items-center gap-3 p-3.5 rounded-xl bg-slate-50/70 border border-slate-100">
 				<div class="w-12 h-12 rounded-xl bg-rose-100/70 text-rose-700 flex items-center justify-center shrink-0">
 					<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -66,12 +66,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</svg>
 				</div>
 				<div>
-					<h4 class="text-xs font-bold text-slate-800 m-0"><?php esc_html_e( 'پشتیبانی ۲۴ ساعته', 'negar-shop' ); ?></h4>
-					<p class="text-2xs text-slate-500 m-0"><?php esc_html_e( '۷ روز هفته پاسخگوی شما', 'negar-shop' ); ?></p>
+					<h4 class="text-xs font-bold text-slate-800 m-0"><?php esc_html_e( 'پاسخ‌گویی فروشگاه', 'negar-shop' ); ?></h4>
+					<p class="text-2xs text-slate-500 m-0"><?php esc_html_e( 'برای راهنمایی از صفحه تماس با ما پیام بفرستید.', 'negar-shop' ); ?></p>
 				</div>
 			</div>
 
-			<!-- 5. Secure Payment -->
+			<!-- 5. Payment methods -->
 			<div class="feature-card flex items-center gap-3 p-3.5 rounded-xl bg-slate-50/70 border border-slate-100 col-span-2 md:col-span-1">
 				<div class="w-12 h-12 rounded-xl bg-rose-100/70 text-rose-700 flex items-center justify-center shrink-0">
 					<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -80,8 +80,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</svg>
 				</div>
 				<div>
-					<h4 class="text-xs font-bold text-slate-800 m-0"><?php esc_html_e( 'پرداخت امن آنلاین', 'negar-shop' ); ?></h4>
-					<p class="text-2xs text-slate-500 m-0"><?php esc_html_e( 'با کلیه کارت‌های عضو شتاب', 'negar-shop' ); ?></p>
+					<h4 class="text-xs font-bold text-slate-800 m-0"><?php esc_html_e( 'پرداخت سفارش', 'negar-shop' ); ?></h4>
+					<p class="text-2xs text-slate-500 m-0"><?php esc_html_e( 'روش‌های پرداخت فعال در مرحله پرداخت نمایش داده می‌شوند.', 'negar-shop' ); ?></p>
 				</div>
 			</div>
 
