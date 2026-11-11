@@ -1,6 +1,6 @@
 # Tasks: 012 Complete Theme Settings Project
 
-**Status:** Phase 4.1 WooCommerce product-section hardening complete; later phases remain unimplemented.
+**Status:** Phase 5 banner, hero and product-pack management in progress.
 
 ## Completed foundation and hardening
 
@@ -39,8 +39,18 @@
   authenticated searchable selector, per-section custom/legacy state,
   catalog-visibility enforcement, truthful unrated cards and reversible
   authenticated persistence regressions.
-- [ ] **T209** Approve and implement validated Banner, Story and Brand media
-  collections, using attachment IDs and safe URLs.
+- [x] **T209.0** Audit every mounted Phase 5 hero, banner, pack and hotspot
+  template; record current assets, links, text ownership and stable controls.
+- [ ] **T209.1** Implement fixed hero/banner media records using image attachment
+  IDs, safe URLs, explicit alt/visibility values, non-autoloaded independent
+  storage and Media Library controls. Do not include stories or brands.
+- [ ] **T209.2** Bind each audited hero and promotional banner template without
+  changing its layout, Swiper behavior, Phase 2 text fields or demo fallback.
+- [ ] **T209.3** Implement fixed product-pack/hotspot product ID selectors and
+  resolve all displayed commerce from published, catalog-visible WooCommerce
+  products while retaining existing coordinates and interactions.
+- [ ] **T209.4** Add authenticated reversible persistence/frontend regression
+  coverage for media, pack and hotspot settings, then update architecture docs.
 - [ ] **T210** Approve Typography controls with safe font-loading and performance
   limits.
 - [ ] **T211** Design an SMS-provider boundary with separately stored secrets;

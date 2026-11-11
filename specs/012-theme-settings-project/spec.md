@@ -1,7 +1,7 @@
 # Feature Specification: 012 Complete Theme Settings Project
 
 **Feature code:** `SETTINGS-01`
-**Status:** Phase 4.1 WooCommerce product-section hardening complete; later phases planned
+**Status:** Phase 5 banner, hero and product-pack management in progress
 **Supersedes for new work:** None. `009-featurename-theme-options` remains the
 historical Customizer-and-widgets specification and is not this project.
 
@@ -49,9 +49,10 @@ sorting, selector and catalog-visibility hardening.
    template paths remain code-owned. It must preserve the legacy order by default,
    repair invalid/missing/duplicated IDs safely, keep the Elementor branch intact,
    and provide RTL drag-and-drop plus keyboard move controls.
-8. Future product-section, banner, story, brand, typography, SMS and backup/import
-   controls must have an approved schema and regression tests before becoming
-   writable.
+8. Fixed hero and banner records may use only code-owned stable IDs, a validated
+   WordPress image attachment ID, safe HTTP(S) destination URL, explicit alt text
+   and enabled state. Missing or invalid media must retain the present demo asset.
+   Hero editorial text remains in the Phase 2 registry and must not be duplicated.
 9. Product-section controls may select only published, catalog-visible WooCommerce products and
    existing `product_cat` terms. They may configure count, supported sorting,
    category include/exclude filters and manual product IDs, while prices, images,
@@ -59,6 +60,10 @@ sorting, selector and catalog-visibility hardening.
 8. Product prices, stock, sale status, ratings, reviews, orders, customers and OTP
    states must remain live WordPress/WooCommerce or provider data. Settings may
    select presentation/query inputs, never invent transactional or commercial data.
+9. Product-pack and hotspot settings may store only whitelisted slots and product
+   IDs. Every rendered commercial value must come from a published,
+   catalog-visible WooCommerce product; hotspot coordinates and approved layouts
+   remain template-owned.
 
 ## Non-goals
 
@@ -91,5 +96,9 @@ sorting, selector and catalog-visibility hardening.
   others, while disabling one restores only that section's legacy query. The full
   supported sort set uses live WooCommerce/WordPress values, and catalog-hidden or
   unrated products never gain invented storefront data.
+- An authenticated administrator can submit hero/banner and product-pack records,
+  reload them, and observe the configured image/link/visibility or resolved live
+  product on desktop and mobile. Invalid attachment IDs safely use the original
+  demo fallback and all test snapshots are restored.
 - Documentation keys exactly match implementation and the dedicated spec, plan and
   task list remain separate from specification 009.

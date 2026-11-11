@@ -1,6 +1,6 @@
 # Implementation Plan: 012 Complete Theme Settings Project
 
-**Status:** Phase 4.1 WooCommerce product-section hardening complete; later phases planned only.
+**Status:** Phase 5 banner, hero and product-pack management in progress.
 
 ## Architecture
 
@@ -33,8 +33,12 @@
    4.1 adds per-section custom/legacy state, catalog visibility filtering and a
    nonce-protected Ajax search selector that retains saved IDs without loading the
    catalog. Keep the exact legacy query path until that section is explicitly enabled.
-7. **Media collections (planned):** add banners, stories and brands using validated
-   media IDs, safe links and non-autoloaded repeaters where appropriate.
+7. **Banner, hero and product packs (in progress):** use fixed registry records,
+   validated image attachment IDs, safe links, individual visibility and separate
+   non-autoloaded options. Bind all mounted hero and promotional banner templates
+   without duplicating Phase 2 text fields. Add only the established product packs
+   and gaming hotspots with catalog-visible WooCommerce product IDs. Stories and
+   brands remain out of scope for Phases 6 and 7.
 8. **Typography, SMS and backup (planned):** define separate security boundaries,
    secret handling and import/export validation before UI implementation.
 9. **Release verification (planned):** expand regression coverage, run PHP lint and
@@ -56,4 +60,7 @@
 - The authenticated path submits a real manual product selection and verifies its
   live WooCommerce permalink in the existing accessories component at desktop and
   mobile widths. Bootstrap checks reject malformed, unknown and unpublished IDs.
+- The authenticated path submits a hero/banner image ID and link override, tests
+  an invalid media-ID fallback and one product-pack/hotspot assignment, then
+  verifies group isolation and desktop/mobile output before restoring snapshots.
 - `npm run test:lint` for PHP syntax and `npm test` for the user-visible suite.
