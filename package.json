@@ -7,7 +7,8 @@
     "doc": "docs"
   },
   "scripts": {
-    "test": "node tests/php-lint.js && node tests/e2e-test.js",
+    "test": "node tests/php-lint.js && node tests/theme-settings-regression.js && node tests/e2e-test.js",
+    "test:settings": "node tests/theme-settings-regression.js",
     "test:lint": "node tests/php-lint.js",
     "test:e2e": "node tests/e2e-test.js",
     "capture:screenshots": "node scripts/capture-genuine-screenshots.js",

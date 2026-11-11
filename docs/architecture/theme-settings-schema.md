@@ -11,7 +11,7 @@ Customizer fallback or code default”; a present key with an empty string means
 {
   "schema_version": 1,
   "branding": { "site_label": "" },
-  "colors": { "primary": "#059669", "secondary": "#e11d48" },
+  "colors": { "primary": "#e90544", "secondary": "#c40439" },
   "header": { "announcement": "" },
   "footer": { "about": "", "copyright": "" },
   "contact": { "phone": "", "email": "", "address": "", "hours": "", "map_url": "" },
@@ -30,6 +30,12 @@ frontend read path for this schema. It first respects an explicit v1 value, then
 reads the matching legacy `theme_mod`, then returns the supplied default. This is a
 non-destructive, reversible compatibility migration: saved Customizer settings
 continue rendering without a bulk copy or overwrite.
+
+Colors use `negar_theme_color( $key )` on top of that getter. Its canonical
+fallbacks are the existing storefront crimson `#e90544` (primary) and `#c40439`
+(secondary), while *any* valid saved value remains effective, including the former
+Customizer defaults `#059669` and `#e11d48`. An explicit empty color is preserved
+in storage and resolves to the canonical crimson fallback at render time.
 
 ## Storage boundaries
 
@@ -54,7 +60,7 @@ sanitizer repeats the capability check. Values are escaped in their output conte
 ## Planned schema additions
 
 The static tab registry deliberately reserves keys for the following phased
-additions: `texts`, `home_layout`, `product_sections`, `banners`, `stories`,
-`brands`, `typography`, `sms_public` and `backup`. Their field schemas must be
+additions: `texts`, `layout`, `products`, `banners`, `stories`, `brands`,
+`typography`, `sms` and `backup`. Their field schemas must be
 documented before they are added; unknown keys must not be accepted by import or
 save handlers.

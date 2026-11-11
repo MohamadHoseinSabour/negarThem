@@ -48,16 +48,16 @@ an unset future setting.
 
 | Legacy key | Default / sanitization | Current bindings | Future ownership |
 | --- | --- | --- | --- |
-| `negar_shop_primary_color` | `#059669`; `sanitize_hex_color` | `negar_shop_customizer_css()` | `colors.primary`; preserve legacy fallback. |
-| `negar_shop_accent_color` | `#e11d48`; `sanitize_hex_color` | `negar_shop_customizer_css()` | `colors.secondary`; preserve legacy fallback. |
-| `negar_shop_topbar_announcement` | Welcome text; plain text | `template-parts/header/top-bar.php` | `header.announcement.text`. |
+| `negar_shop_primary_color` | `#e90544`; `sanitize_hex_color` | `negar_shop_customizer_css()` | `colors.primary`; preserve legacy fallback. Earlier saved values such as `#059669` remain valid. |
+| `negar_shop_accent_color` | `#c40439`; `sanitize_hex_color` | `negar_shop_customizer_css()` | `colors.secondary`; preserve legacy fallback. Earlier saved values such as `#e11d48` remain valid. |
+| `negar_shop_topbar_announcement` | Welcome text; plain text | `template-parts/header/top-bar.php` | `header.announcement`. |
 | `negar_shop_phone_hotline` | Empty; plain text | top bar, mobile drawer, footer, contact page, SEO schema | `contact.phone`; one canonical setting shared by all bindings. |
 | `negar_shop_sticky_header` | `true`; checkbox | No direct template binding was found in this audit | Inventory as legacy-only until its live consumer is confirmed; do not expose a duplicate toggle in Phase 1. |
 | `negar_shop_instagram_url`, `negar_shop_telegram_url`, `negar_shop_whatsapp_url`, `negar_shop_linkedin_url` | Empty; `esc_url_raw` | Footer columns/copyright | `social.*`, with the saved `theme_mod` as fallback. |
 | `negar_shop_contact_email` | `contact@example.com`; `sanitize_email` | Contact page | `contact.email`. |
 | `negar_shop_contact_address` | Configurable placeholder; textarea sanitization | Contact page | `contact.address`. |
 | `negar_shop_contact_hours` | Configurable placeholder; plain text | Contact page | `contact.hours`. |
-| `negar_shop_contact_map_url` | Empty; `esc_url_raw` | Contact page map area | `contact.map_embed_url`; validation must restrict output to a safe embed use. |
+| `negar_shop_contact_map_url` | Empty; `esc_url_raw` | Contact page map area | `contact.map_url`; validation must restrict output to a safe embed use. |
 | `negar_shop_footer_about` | Footer description; `wp_kses_post` | Footer columns | `footer.about`; preserve allowed-HTML policy. |
 | `negar_shop_copyright_text` | Copyright text; plain text | Footer columns and copyright | `footer.copyright`. |
 | Core `custom_logo` / `site_icon` | WordPress core | SEO schema; theme logo currently remains template-owned | Reuse core site icon. Desktop/mobile logo controls must not replace `custom_logo` without an explicit compatibility decision. |

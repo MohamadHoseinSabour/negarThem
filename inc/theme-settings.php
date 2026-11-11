@@ -33,6 +33,21 @@ function negar_theme_settings_defaults() {
 }
 
 /**
+ * Return the storefront's canonical crimson defaults.
+ *
+ * These values match the existing visual design. They are deliberately not the
+ * historical Customizer defaults, which were never the storefront defaults.
+ *
+ * @return array<string, string>
+ */
+function negar_theme_color_defaults() {
+	return array(
+		'primary'   => '#e90544',
+		'secondary' => '#c40439',
+	);
+}
+
+/**
  * Read the stored settings without filling absent keys with defaults.
  *
  * @return array<string, mixed>
@@ -64,6 +79,21 @@ function negar_theme_setting( $group, $key, $default = '', $legacy_theme_mod = '
 	}
 
 	return $default;
+}
+
+/**
+ * Resolve and validate a storefront color, including a legacy Customizer value.
+ *
+ * @param string $key Color key: primary or secondary.
+ * @return string
+ */
+function negar_theme_color( $key ) {
+	$defaults = negar_theme_color_defaults();
+	$key      = array_key_exists( $key, $defaults ) ? $key : 'primary';
+	$legacy   = 'primary' === $key ? 'negar_shop_primary_color' : 'negar_shop_accent_color';
+	$value    = sanitize_hex_color( negar_theme_setting( 'colors', $key, $defaults[ $key ], $legacy ) );
+
+	return $value ? $value : $defaults[ $key ];
 }
 
 /**
@@ -245,8 +275,8 @@ function negar_theme_render_settings_page() {
 					<?php if ( 'general' === $active_tab ) : ?>
 						<?php negar_theme_settings_field( 'negar-site-label', __( 'نام نمایشی فروشگاه', 'negar-shop' ), NEGAR_THEME_SETTINGS_OPTION . '[branding][site_label]', negar_theme_brand_label(), 'text', __( 'در بخش‌های نمایشی قالب استفاده می‌شود و نام سایت وردپرس را تغییر نمی‌دهد.', 'negar-shop' ) ); ?>
 					<?php elseif ( 'colors' === $active_tab ) : ?>
-						<?php negar_theme_settings_field( 'negar-primary-color', __( 'رنگ اصلی', 'negar-shop' ), NEGAR_THEME_SETTINGS_OPTION . '[colors][primary]', negar_theme_setting( 'colors', 'primary', '#059669', 'negar_shop_primary_color' ), 'color', __( 'برای دکمه‌ها، لینک‌ها و اجزای کلیدی قالب.', 'negar-shop' ) ); ?>
-						<?php negar_theme_settings_field( 'negar-secondary-color', __( 'رنگ ثانویه', 'negar-shop' ), NEGAR_THEME_SETTINGS_OPTION . '[colors][secondary]', negar_theme_setting( 'colors', 'secondary', '#e11d48', 'negar_shop_accent_color' ), 'color', __( 'برای پیشنهادها و اجزای مکمل قالب.', 'negar-shop' ) ); ?>
+						<?php negar_theme_settings_field( 'negar-primary-color', __( 'رنگ اصلی', 'negar-shop' ), NEGAR_THEME_SETTINGS_OPTION . '[colors][primary]', negar_theme_color( 'primary' ), 'color', __( 'برای دکمه‌ها، لینک‌ها و اجزای کلیدی قالب.', 'negar-shop' ) ); ?>
+						<?php negar_theme_settings_field( 'negar-secondary-color', __( 'رنگ ثانویه', 'negar-shop' ), NEGAR_THEME_SETTINGS_OPTION . '[colors][secondary]', negar_theme_color( 'secondary' ), 'color', __( 'برای پیشنهادها و اجزای مکمل قالب.', 'negar-shop' ) ); ?>
 					<?php else : ?>
 						<?php
 						negar_theme_settings_field( 'negar-announcement', __( 'متن نوار بالا', 'negar-shop' ), NEGAR_THEME_SETTINGS_OPTION . '[header][announcement]', negar_theme_setting( 'header', 'announcement', __( 'به فروشگاه ما خوش آمدید', 'negar-shop' ), 'negar_shop_topbar_announcement' ) );

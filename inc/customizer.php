@@ -45,7 +45,7 @@ function negar_shop_customize_register( $wp_customize ) {
 	$wp_customize->add_setting(
 		'negar_shop_primary_color',
 		array(
-			'default'           => '#059669',
+			'default'           => '#e90544',
 			'sanitize_callback' => 'sanitize_hex_color',
 			'transport'         => 'refresh',
 		)
@@ -67,7 +67,7 @@ function negar_shop_customize_register( $wp_customize ) {
 	$wp_customize->add_setting(
 		'negar_shop_accent_color',
 		array(
-			'default'           => '#e11d48',
+			'default'           => '#c40439',
 			'sanitize_callback' => 'sanitize_hex_color',
 			'transport'         => 'refresh',
 		)
@@ -386,29 +386,21 @@ function negar_shop_sanitize_checkbox( $checked ) {
  * Output Custom CSS from Customizer settings into wp_head.
  */
 function negar_shop_customizer_css() {
-	$primary_color = negar_theme_setting( 'colors', 'primary', '#059669', 'negar_shop_primary_color' );
-	$accent_color  = negar_theme_setting( 'colors', 'secondary', '#e11d48', 'negar_shop_accent_color' );
+	$primary_color   = negar_theme_color( 'primary' );
+	$secondary_color = negar_theme_color( 'secondary' );
+	$css             = ':root {';
+	$css            .= '--color-primary: ' . esc_attr( $primary_color ) . ';';
+	$css            .= '--negar-primary: ' . esc_attr( $primary_color ) . ';';
+	$css            .= '--kaveh-primary-color: ' . esc_attr( $primary_color ) . ';';
+	$css            .= '--wp--preset--color--primary: ' . esc_attr( $primary_color ) . ';';
+	$css            .= '--color-primary-hover: ' . esc_attr( $secondary_color ) . ';';
+	$css            .= '--kaveh-primary-hover: ' . esc_attr( $secondary_color ) . ';';
+	$css            .= '--color-accent: ' . esc_attr( $secondary_color ) . ';';
+	$css            .= '--color-secondary: ' . esc_attr( $secondary_color ) . ';';
+	$css            .= '--wp--preset--color--secondary: ' . esc_attr( $secondary_color ) . ';';
+	$css            .= '}';
 
-	$css = '';
-	if ( '#059669' !== $primary_color || '#e11d48' !== $accent_color ) {
-		$css .= ':root {';
-		if ( '#059669' !== $primary_color ) {
-			$css .= '--color-primary: ' . esc_attr( $primary_color ) . ' !important;';
-			$css .= '--negar-primary: ' . esc_attr( $primary_color ) . ' !important;';
-			$css .= '--kaveh-primary-color: ' . esc_attr( $primary_color ) . ' !important;';
-			$css .= '--wp--preset--color--primary: ' . esc_attr( $primary_color ) . ' !important;';
-		}
-		if ( '#e11d48' !== $accent_color ) {
-			$css .= '--color-accent: ' . esc_attr( $accent_color ) . ' !important;';
-			$css .= '--color-secondary: ' . esc_attr( $accent_color ) . ' !important;';
-			$css .= '--wp--preset--color--secondary: ' . esc_attr( $accent_color ) . ' !important;';
-		}
-		$css .= '}';
-	}
-
-	if ( ! empty( $css ) ) {
-		echo "\n<!-- Negar Shop Customizer CSS -->\n";
-		echo '<style id="negar-shop-customizer-css">' . wp_strip_all_tags( $css ) . "</style>\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-	}
+	echo "\n<!-- Negar Shop theme colors -->\n";
+	echo '<style id="negar-shop-theme-colors">' . wp_strip_all_tags( $css ) . "</style>\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 }
 add_action( 'wp_head', 'negar_shop_customizer_css', 100 );
