@@ -220,6 +220,24 @@ async function runTests() {
     assert(carouselState.allSaleLink.includes('/shop/') && carouselState.allSaleLink.includes('on_sale=1'), 'Only the carousel “view all” link may target the sale catalogue');
   });
 
+  // 2AB. Every product card rendered by the homepage must open its own product page.
+  await testStep('Homepage product cards never fall back to the shop archive', async () => {
+    await page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded' });
+    const cards = await page.evaluate(() => Array.from(document.querySelectorAll('[data-product-id]'))
+      .filter((card) => card.matches('.product-nk, .product-card, [class*="product"]'))
+      .map((card) => ({
+        id: card.getAttribute('data-product-id'),
+        links: Array.from(card.querySelectorAll('a[href]')).map((link) => link.href),
+      })));
+
+    assert(cards.length > 0, 'Homepage must render at least one live product card');
+    cards.forEach((card, index) => {
+      const productLinks = card.links.filter((href) => /\/product\//.test(new URL(href).pathname));
+      assert(productLinks.length > 0, `Homepage product card ${index + 1} must link to its product page`);
+      assert(!card.links.some((href) => /\/shop\//.test(new URL(href).pathname)), `Homepage product card ${index + 1} must not route its product click to the shop archive`);
+    });
+  });
+
   await testStep('Recently viewed carousel reflects real customer product visits', async () => {
     const productResponse = await page.request.get(`${BASE_URL}/wp-json/wc/store/v1/products?per_page=1`);
     assert.strictEqual(productResponse.status(), 200, 'The Store API must expose a product for the view-history check');
@@ -649,8 +667,35 @@ async function runTests() {
     assert(totals, 'Cart totals area must exist');
   });
 
+  // 10B. Verify the real add, update, and remove path without inventing order state.
+  await testStep('Cart supports quantity updates and removing a live product', async () => {
+    await page.goto(`${BASE_URL}/?add-to-cart=131`, { waitUntil: 'domcontentloaded' });
+    await page.goto(`${BASE_URL}/cart/`, { waitUntil: 'domcontentloaded' });
+    const cartItem = await page.$('.woocommerce-cart-form__cart-item, .cart_item');
+    assert(cartItem, 'A seeded product must appear in the cart');
+
+    const quantityInput = await page.$('input.qty');
+    const updateButton = await page.$('button[name="update_cart"], input[name="update_cart"]');
+    if (quantityInput && updateButton) {
+      await quantityInput.fill('2');
+      await updateButton.click();
+      await page.waitForLoadState('domcontentloaded').catch(() => {});
+      const updatedQuantity = await page.$eval('input.qty', (input) => input.value);
+      assert.strictEqual(updatedQuantity, '2', 'Cart quantity must update through the visible control');
+    }
+
+    const removeButton = await page.$('a.remove, .negar-cart-remove');
+    assert(removeButton, 'Cart line items must expose a remove action');
+    await removeButton.click();
+    await page.waitForTimeout(500);
+    const emptyState = await page.$('.cart-empty, .cart-nk__empty');
+    const remainingItems = await page.$$('.woocommerce-cart-form__cart-item, .cart_item');
+    assert(emptyState || remainingItems.length === 0, 'Removing the line item must empty the cart');
+  });
+
   // 11. Checkout Continuity with Seeded Cart
   await testStep('Checkout page renders order review, billing fields, and step indicator without empty redirect', async () => {
+    await page.goto(`${BASE_URL}/?add-to-cart=131`, { waitUntil: 'domcontentloaded' });
     await page.goto(`${BASE_URL}/checkout/`, { waitUntil: 'domcontentloaded' });
     assert(page.url().includes('checkout'), 'Checkout route must not redirect away when cart is seeded');
 
