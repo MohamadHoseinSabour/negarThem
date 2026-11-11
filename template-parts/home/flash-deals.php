@@ -14,6 +14,25 @@ if ( ! function_exists( 'wc_get_products' ) ) {
 	return;
 }
 
+
+if ( negar_theme_product_section_is_configured( 'flash-deals' ) ) {
+	$sale_query = new WP_Query(
+		negar_theme_product_section_query_args(
+			'flash-deals',
+			array( 'post_type' => 'product', 'post_status' => 'publish' ),
+			wc_get_product_ids_on_sale()
+		)
+	);
+	$sale_products = array();
+	while ( $sale_query->have_posts() ) {
+		$sale_query->the_post();
+		$product = wc_get_product( get_the_ID() );
+		if ( $product && $product->is_visible() ) {
+			$sale_products[] = $product;
+		}
+	}
+	wp_reset_postdata();
+} else {
 $sale_products = wc_get_products(
 	array(
 		'status'  => 'publish',
@@ -24,6 +43,7 @@ $sale_products = wc_get_products(
 		'return'   => 'objects',
 	)
 );
+}
 
 if ( empty( $sale_products ) ) {
 	return;

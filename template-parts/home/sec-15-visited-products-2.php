@@ -10,14 +10,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$visited_products = new WP_Query( array(
-	'post_type'      => 'product',
-	'post_status'    => 'publish',
-	'posts_per_page' => 5,
-	'orderby'        => 'comment_count',
-	'order'          => 'DESC',
-) );
-if ( ! $visited_products->have_posts() ) {
+
+if ( negar_theme_product_section_is_configured( 'visited-products' ) ) {
+	$visited_products = new WP_Query( negar_theme_product_section_query_args( 'visited-products', array( 'post_type' => 'product', 'post_status' => 'publish' ) ) );
+} else {
+	$visited_products = new WP_Query( array(
+		'post_type'      => 'product',
+		'post_status'    => 'publish',
+		'posts_per_page' => 5,
+		'orderby'        => 'comment_count',
+		'order'          => 'DESC',
+	) );
+}
+if ( ! negar_theme_product_section_is_configured( 'visited-products' ) && ! $visited_products->have_posts() ) {
 	$visited_products = new WP_Query( array(
 		'post_type'      => 'product',
 		'post_status'    => 'publish',

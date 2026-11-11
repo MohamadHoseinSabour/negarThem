@@ -47,6 +47,7 @@ async function run() {
     assert(page.url().includes('wp-login.php'), 'Unauthenticated visitors must be redirected to WordPress sign-in');
 
     auth = JSON.parse(php('auth-cookie'));
+    const productFixture = JSON.parse(php('product-fixture'));
     await context.addCookies([{ name: auth.name, value: auth.value, url: BASE_URL, expires: auth.expires }]);
     await page.goto(BASE_URL + '/wp-admin/options-general.php?page=negar-theme-settings&tab=texts', { waitUntil: 'domcontentloaded' });
     assert(!page.url().includes('wp-login.php'), 'A generated administrator session must access the settings form');
@@ -98,12 +99,27 @@ async function run() {
     const layoutHtml = await page.locator('main.homepage-main').innerHTML();
     assert(layoutHtml.indexOf('<!-- negar-home-section:product-tabs -->') < layoutHtml.indexOf('<!-- negar-home-section:hero-slider -->'), 'Saved ordering must render on the frontend after reload');
     assert.strictEqual(layoutHtml.includes('<!-- negar-home-section:story-circles -->'), false, 'A disabled homepage section must not render on the frontend');
+
+    await page.goto(BASE_URL + '/wp-admin/options-general.php?page=negar-theme-settings&tab=products', { waitUntil: 'domcontentloaded' });
+    await page.locator('#negar-products-count-accessories').locator('xpath=ancestor::details').locator('summary').click();
+    await page.locator('#negar-products-count-accessories').fill('1');
+    await page.locator('#negar-products-sort-accessories').selectOption('title_asc');
+    await page.locator('#negar-products-manual-accessories').selectOption(String(productFixture.id));
+    await Promise.all([
+      page.waitForURL((url) => url.pathname.endsWith('/wp-admin/options-general.php') && url.searchParams.get('tab') === 'products'),
+      page.locator('form[action="options.php"] input[type="submit"]').click(),
+    ]);
+    assert.deepStrictEqual(await page.locator('#negar-products-manual-accessories').inputValue(), String(productFixture.id), 'Authenticated product-section form submission must persist a published manual product selection');
+    await page.goto(BASE_URL, { waitUntil: 'domcontentloaded' });
+    assert.strictEqual(await page.locator(`.buy-accessories-nk a[href="${productFixture.permalink}"]`).count() > 0, true, 'Saved product selection must render with the real WooCommerce permalink on desktop');
+
     mobileContext = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, locale: 'fa-IR' });
     const mobilePage = await mobileContext.newPage();
     await mobilePage.goto(BASE_URL, { waitUntil: 'domcontentloaded' });
     assert.strictEqual(await mobilePage.locator('#negar-home-hero-carousel').isVisible(), true, 'The reordered homepage must retain its existing hero component on mobile');
     const mobileLayoutHtml = await mobilePage.locator('main.homepage-main').innerHTML();
     assert(mobileLayoutHtml.indexOf('<!-- negar-home-section:product-tabs -->') < mobileLayoutHtml.indexOf('<!-- negar-home-section:hero-slider -->'), 'Saved ordering must also render on mobile');
+    assert.strictEqual(await mobilePage.locator(`.buy-accessories-nk a[href="${productFixture.permalink}"]`).count() > 0, true, 'Saved product selection must render with the real WooCommerce permalink on mobile');
 
     php('set-colors', '#123456', '#654321');
     await page.goto(BASE_URL, { waitUntil: 'domcontentloaded' });

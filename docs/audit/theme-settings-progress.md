@@ -96,5 +96,26 @@
 
 ## Next phase
 
-Phase 4 may add product-section presentation controls only after a separate live
-WooCommerce data and accessibility review. It is not implemented by Phase 3.
+## Phase 4 - WooCommerce product-section management
+
+**Status:** PASS
+**Commit:** recorded with the Phase 4 delivery commit
+
+- Added a whitelist for the existing live-product homepage queries only: sale
+  carousel, four product tabs, accessories, product grids and mobile supporting
+  cards. Banner, story, review, visitor-history and product-pack components remain
+  out of scope.
+- The Products tab stores bounded count/sort settings, actual category term IDs and
+  published manual product IDs. It cannot save arbitrary post IDs, draft/private
+  products, taxonomy strings or product data.
+- Existing query paths remain byte-for-byte behaviorally intact until an
+  administrator saves this tab. Once configured, cards continue deriving their
+  prices, images, ratings, stock state and permalinks from live WooCommerce.
+- Authenticated browser checks submit a manual product, reload admin persistence,
+  and verify its real permalink at desktop and mobile WAMP widths; all test
+  settings are restored.
+
+## Next phase
+
+Phase 5 may add validated banner, story and brand media collections. It is not
+implemented by Phase 4.

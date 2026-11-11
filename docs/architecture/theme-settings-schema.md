@@ -25,6 +25,17 @@ Customizer fallback or code default”; a present key with an empty string means
       { "id": "hero-slider", "enabled": true }
     ]
   },
+  "products": {
+    "sections": {
+      "accessories": {
+        "count": 9,
+        "sort": "date_desc",
+        "include_categories": [],
+        "exclude_categories": [],
+        "product_ids": []
+      }
+    }
+  },
   "colors": { "primary": "#e90544", "secondary": "#c40439" },
   "header": { "announcement": "" },
   "footer": { "about": "", "copyright": "" },
@@ -101,10 +112,25 @@ that registry. It runs solely in the existing non-Elementor branch, so an
 Elementor-built homepage remains untouched. Layout does not alter section queries,
 banners, stories, product data or Swiper initialization.
 
+## Implemented product-section schema
+
+`products.sections` is a whitelist keyed only by existing homepage product-query
+components. Each entry stores a bounded count (1–12), one supported sort token,
+existing `product_cat` include/exclude term IDs, and up to 12 published product
+IDs. The sanitizer verifies every ID against WordPress before storage, so it cannot
+create products or surface drafts/private products. Manual IDs and category filters
+only choose the query candidates; each template still resolves price, image,
+rating, stock and permalink from the live `WC_Product` object.
+
+No product configuration is read until the Products tab has been explicitly saved.
+This preserves every legacy query—including its fallbacks and sale-only behavior—by
+default. Product settings are deliberately excluded from stories, banners, review
+feeds, visitor-specific recently viewed products and demo/pack components.
+
 ## Planned schema additions
 
 The static tab registry deliberately reserves keys for the following phased
-additions: `products`, `banners`, `stories`, `brands`,
+additions: `banners`, `stories`, `brands`,
 `typography`, `sms` and `backup`. Their field schemas must be
 documented before they are added; unknown keys must not be accepted by import or
 save handlers.

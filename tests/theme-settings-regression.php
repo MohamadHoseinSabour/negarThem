@@ -124,6 +124,30 @@ try {
 		exit( 0 );
 	}
 
+	if ( 'product-fixture' === $action ) {
+		$product_ids = get_posts(
+			array(
+				'post_type'      => 'product',
+				'post_status'    => 'publish',
+				'posts_per_page' => 1,
+				'fields'         => 'ids',
+				'orderby'        => 'date',
+				'order'          => 'DESC',
+			)
+		);
+		if ( empty( $product_ids ) ) {
+			throw new RuntimeException( 'No published WooCommerce product is available for the settings regression test.' );
+		}
+		$product_id = (int) $product_ids[0];
+		echo wp_json_encode(
+			array(
+				'id'        => $product_id,
+				'permalink' => get_permalink( $product_id ),
+			)
+		);
+		exit( 0 );
+	}
+
 	if ( 'set-colors' === $action ) {
 		$primary   = isset( $argv[2] ) ? $argv[2] : '';
 		$secondary = isset( $argv[3] ) ? $argv[3] : '';
@@ -215,6 +239,65 @@ try {
 	$results['layout_preserves_groups'] = 'اطلاعیهٔ آزمایشی' === $layout['header']['announcement']
 		&& 'عنوان آزمایشی صفحهٔ اصلی' === $layout['texts']['home']['hero_slide_one_title'];
 	$results['layout_new_section_safe'] = 'sec-35-trust-marquee' === $normalized_layout[34]['id'] && true === $normalized_layout[34]['enabled'];
+	$results['products_default_queries_preserved'] = ! negar_theme_product_section_is_configured( 'accessories' );
+	$malformed_layout = negar_theme_test_save_group(
+		'layout',
+		array(
+			'layout' => array(
+				'order'   => array( array( 'not-a-scalar' ), 'story-circles', 'hero-slider' ),
+				'enabled' => array( 'story-circles' => array( 'not-a-scalar' ), 'hero-slider' => '1' ),
+			),
+		)
+	);
+	$results['layout_malformed_input_safe'] = 35 === count( $malformed_layout['layout']['sections'] )
+		&& 'story-circles' === $malformed_layout['layout']['sections'][0]['id']
+		&& false === $malformed_layout['layout']['sections'][0]['enabled'];
+	$normalized_layout = $malformed_layout['layout']['sections'];
+
+	$product_ids = get_posts(
+		array(
+			'post_type'      => 'product',
+			'post_status'    => 'publish',
+			'posts_per_page' => 1,
+			'fields'         => 'ids',
+		)
+	);
+	if ( empty( $product_ids ) ) {
+		throw new RuntimeException( 'No published WooCommerce product is available for the settings regression test.' );
+	}
+	$product_id = (int) $product_ids[0];
+	$category_ids = get_terms(
+		array(
+			'taxonomy'   => 'product_cat',
+			'hide_empty' => false,
+			'fields'     => 'ids',
+			'number'      => 1,
+		)
+	);
+	$category_id = ! is_wp_error( $category_ids ) && ! empty( $category_ids ) ? (int) $category_ids[0] : 0;
+	$products   = negar_theme_test_save_group(
+		'products',
+		array(
+			'products' => array(
+				'sections' => array(
+					'accessories' => array(
+						'count'              => '2',
+						'sort'               => 'title_asc',
+						'include_categories' => array( $category_id, 'invalid', array( 'invalid' ) ),
+						'exclude_categories' => array( '999999999' ),
+						'product_ids'        => array( (string) $product_id, '999999999', array( 'invalid' ) ),
+					),
+				),
+			),
+		)
+	);
+	$product_config = $products['products']['sections']['accessories'];
+	$product_args   = negar_theme_product_section_query_args( 'accessories', array( 'post_type' => 'product', 'post_status' => 'publish' ) );
+	$results['products_saved'] = 2 === $product_config['count'] && 'title_asc' === $product_config['sort'] && array( $product_id ) === $product_config['product_ids'];
+	$results['products_query_safe'] = 2 === $product_args['posts_per_page'] && 'title' === $product_args['orderby'] && 'ASC' === $product_args['order'] && array( $product_id ) === $product_args['post__in'];
+	$results['products_categories_safe'] = $category_id ? array( $category_id ) === $product_config['include_categories'] && isset( $product_args['tax_query'][0]['terms'] ) && array( $category_id ) === $product_args['tax_query'][0]['terms'] : empty( $product_config['include_categories'] );
+	$results['products_preserve_groups'] = $normalized_layout === $products['layout']['sections']
+		&& 'عنوان آزمایشی صفحهٔ اصلی' === $products['texts']['home']['hero_slide_one_title'];
 
 	$colors = negar_theme_test_save_group( 'colors', array( 'colors' => array( 'primary' => '#059669', 'secondary' => '#e11d48' ) ) );
 	$results['previous_defaults_valid'] = '#059669' === $colors['colors']['primary'] && '#e11d48' === $colors['colors']['secondary'];

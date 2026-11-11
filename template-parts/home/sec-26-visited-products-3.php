@@ -11,12 +11,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$visited3_products = new WP_Query( array(
-	'post_type'      => 'product',
-	'post_status'    => 'publish',
-	'posts_per_page' => 5,
-	'orderby'        => 'rand',
-) );
+$visited3_products = new WP_Query(
+	negar_theme_product_section_is_configured( 'multi-category-products' )
+		? negar_theme_product_section_query_args( 'multi-category-products', array( 'post_type' => 'product', 'post_status' => 'publish' ) )
+		: array(
+			'post_type'      => 'product',
+			'post_status'    => 'publish',
+			'posts_per_page' => 5,
+			'orderby'        => 'rand',
+		)
+);
 ?>
 
 <section class="negar-sec-26-visited-3 py-6" aria-label="<?php esc_attr_e( 'پربازدیدترین محصولات منتخب', 'negar-shop' ); ?>">

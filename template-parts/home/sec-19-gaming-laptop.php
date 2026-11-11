@@ -11,6 +11,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+if ( negar_theme_product_section_is_configured( 'gaming-laptops' ) ) {
+	$laptop_products = new WP_Query( negar_theme_product_section_query_args( 'gaming-laptops', array( 'post_type' => 'product', 'post_status' => 'publish' ) ) );
+} else {
 $laptop_products = new WP_Query( array(
 	'post_type'      => 'product',
 	'post_status'    => 'publish',
@@ -29,6 +32,7 @@ if ( ! $laptop_products->have_posts() ) {
 		'post_status'    => 'publish',
 		'posts_per_page' => 4,
 	) );
+}
 }
 ?>
 

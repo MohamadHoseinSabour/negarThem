@@ -70,6 +70,16 @@ path—and normalization drops unknown/duplicate IDs while appending missing cur
 IDs as enabled. `category-showcase.php` remains outside the registry because it is
 not mounted by the homepage.
 
+## Phase 4 product-query ownership
+
+Phase 4 controls only the existing real-product query inputs for the sale carousel,
+four Product Tabs panels, accessories, the two product grids, gaming laptops and
+the mobile spotlight's supporting cards. Their static copy remains covered by this
+matrix, while each displayed commercial field remains owned by the resolved
+WooCommerce product. Review feeds, visitor-specific recently viewed products,
+stories, banners and static product-pack/demo cards remain excluded from the
+Products settings tab.
+
 ## Header, footer and internal templates
 
 | Area/template | Handled in Phase 2.1 | Explicitly excluded or deferred |

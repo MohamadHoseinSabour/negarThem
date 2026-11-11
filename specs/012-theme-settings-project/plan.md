@@ -1,6 +1,6 @@
 # Implementation Plan: 012 Complete Theme Settings Project
 
-**Status:** Phase 3 homepage layout management complete; later phases planned only.
+**Status:** Phase 4 WooCommerce product-section management complete; later phases planned only.
 
 ## Architecture
 
@@ -27,8 +27,10 @@
 5. **Layout (complete):** implement a fixed 35-ID registry in the non-Elementor
    homepage path. Store only IDs and enabled states, normalize corrupt/missing
    layouts safely, and provide RTL drag/drop plus visible keyboard move controls.
-6. **Commerce presentation (planned):** add product-section and promotion controls
-   that select/query real WooCommerce objects without duplicating commercial data.
+6. **Commerce presentation (complete):** add independent query controls for the
+   existing real-product carousels/grids and product-tab sources: published manual
+   IDs, category include/exclude terms, count and a whitelist of sort modes. Keep
+   the exact legacy query path until this tab is explicitly saved.
 7. **Media collections (planned):** add banners, stories and brands using validated
    media IDs, safe links and non-autoloaded repeaters where appropriate.
 8. **Typography, SMS and backup (planned):** define separate security boundaries,
@@ -49,4 +51,7 @@
 - The same authenticated path submits the Layout form, exercises drag/drop and
   keyboard movement, confirms a hidden section and saved order on the frontend,
   then restores the initial option snapshot.
+- The authenticated path submits a real manual product selection and verifies its
+  live WooCommerce permalink in the existing accessories component at desktop and
+  mobile widths. Bootstrap checks reject malformed, unknown and unpublished IDs.
 - `npm run test:lint` for PHP syntax and `npm test` for the user-visible suite.

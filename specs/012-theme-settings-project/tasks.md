@@ -1,6 +1,6 @@
 # Tasks: 012 Complete Theme Settings Project
 
-**Status:** Phase 3 homepage layout management complete; later phases remain unimplemented.
+**Status:** Phase 4 WooCommerce product-section management complete; later phases remain unimplemented.
 
 ## Completed foundation and hardening
 
@@ -26,13 +26,15 @@
   Contact-card text coverage; publish the full homepage/internal coverage matrix
   and extend authenticated form/frontend regression checks with restoration.
 
-## Planned only — do not implement in Phase 3
+## Planned only — do not implement in Phase 4
 - [x] **T207** Implement the fixed 35-section Layout schema, safe ID-only
   normalization, RTL drag/drop and keyboard move controls, visibility toggles and
   authenticated frontend regression coverage without changing Elementor or section
   query behavior.
-- [ ] **T208** Approve and implement Product Sections controls backed solely by
-  live WooCommerce objects and truthful inventory/pricing/review states.
+- [x] **T208** Implement Product Sections controls backed solely by published,
+  live WooCommerce products and existing categories, with count, supported sort,
+  category include/exclude and manual-selection validation plus authenticated
+  desktop/mobile form regressions.
 - [ ] **T209** Approve and implement validated Banner, Story and Brand media
   collections, using attachment IDs and safe URLs.
 - [ ] **T210** Approve Typography controls with safe font-loading and performance

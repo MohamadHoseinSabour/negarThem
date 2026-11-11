@@ -17,13 +17,15 @@ $image_url  = $upload_dir['baseurl'] . '/kaveh-demo/image-01.png';
 $shop_url   = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/shop/' );
 
 // Query published products for accessories carousel
-$args = array(
-	'post_type'      => 'product',
-	'post_status'    => 'publish',
-	'posts_per_page' => 9,
-	'orderby'        => 'date',
-	'order'          => 'DESC',
-);
+$args = negar_theme_product_section_is_configured( 'accessories' )
+	? negar_theme_product_section_query_args( 'accessories', array( 'post_type' => 'product', 'post_status' => 'publish' ) )
+	: array(
+		'post_type'      => 'product',
+		'post_status'    => 'publish',
+		'posts_per_page' => 9,
+		'orderby'        => 'date',
+		'order'          => 'DESC',
+	);
 $products_query = new WP_Query( $args );
 ?>
 

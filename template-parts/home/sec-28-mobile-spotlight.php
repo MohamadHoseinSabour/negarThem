@@ -15,13 +15,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 $upload_dir = wp_upload_dir();
 $s25_img    = $upload_dir['baseurl'] . '/kaveh-demo/products/samsung-s25-fe.png';
 
-$adjacent_products = new WP_Query( array(
-	'post_type'      => 'product',
-	'post_status'    => 'publish',
-	'posts_per_page' => 3,
-	'orderby'        => 'date',
-	'order'          => 'DESC',
-) );
+$adjacent_products = new WP_Query(
+	negar_theme_product_section_is_configured( 'mobile-spotlight-products' )
+		? negar_theme_product_section_query_args( 'mobile-spotlight-products', array( 'post_type' => 'product', 'post_status' => 'publish' ) )
+		: array(
+			'post_type'      => 'product',
+			'post_status'    => 'publish',
+			'posts_per_page' => 3,
+			'orderby'        => 'date',
+			'order'          => 'DESC',
+		)
+);
 ?>
 
 <section class="negar-sec-28-s25-spotlight py-5" aria-label="<?php esc_attr_e( 'ویترین گلکسی S25 FE', 'negar-shop' ); ?>">

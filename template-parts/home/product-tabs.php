@@ -14,6 +14,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // 1. Laptops
+if ( negar_theme_product_section_is_configured( 'product-tabs-laptops' ) ) {
+	$laptops_query = new WP_Query( negar_theme_product_section_query_args( 'product-tabs-laptops', array( 'post_type' => 'product', 'post_status' => 'publish' ) ) );
+} else {
 $laptops_query = new WP_Query( array(
 	'post_type'      => 'product',
 	'post_status'    => 'publish',
@@ -29,8 +32,12 @@ $laptops_query = new WP_Query( array(
 if ( ! $laptops_query->have_posts() ) {
 	$laptops_query = new WP_Query( array( 'post_type' => 'product', 'post_status' => 'publish', 'posts_per_page' => 5 ) );
 }
+}
 
 // 2. Consoles
+if ( negar_theme_product_section_is_configured( 'product-tabs-consoles' ) ) {
+	$consoles_query = new WP_Query( negar_theme_product_section_query_args( 'product-tabs-consoles', array( 'post_type' => 'product', 'post_status' => 'publish' ) ) );
+} else {
 $consoles_query = new WP_Query( array(
 	'post_type'      => 'product',
 	'post_status'    => 'publish',
@@ -46,8 +53,12 @@ $consoles_query = new WP_Query( array(
 if ( ! $consoles_query->have_posts() ) {
 	$consoles_query = new WP_Query( array( 'post_type' => 'product', 'post_status' => 'publish', 'posts_per_page' => 5, 'orderby' => 'rand' ) );
 }
+}
 
 // 3. Mobile
+if ( negar_theme_product_section_is_configured( 'product-tabs-mobile' ) ) {
+	$mobile_query = new WP_Query( negar_theme_product_section_query_args( 'product-tabs-mobile', array( 'post_type' => 'product', 'post_status' => 'publish' ) ) );
+} else {
 $mobile_query = new WP_Query( array(
 	'post_type'      => 'product',
 	'post_status'    => 'publish',
@@ -63,8 +74,12 @@ $mobile_query = new WP_Query( array(
 if ( ! $mobile_query->have_posts() ) {
 	$mobile_query = new WP_Query( array( 'post_type' => 'product', 'post_status' => 'publish', 'posts_per_page' => 5, 'orderby' => 'date' ) );
 }
+}
 
 // 4. Smartwatches
+if ( negar_theme_product_section_is_configured( 'product-tabs-watches' ) ) {
+	$watches_query = new WP_Query( negar_theme_product_section_query_args( 'product-tabs-watches', array( 'post_type' => 'product', 'post_status' => 'publish' ) ) );
+} else {
 $watches_query = new WP_Query( array(
 	'post_type'      => 'product',
 	'post_status'    => 'publish',
@@ -79,6 +94,7 @@ $watches_query = new WP_Query( array(
 ) );
 if ( ! $watches_query->have_posts() ) {
 	$watches_query = new WP_Query( array( 'post_type' => 'product', 'post_status' => 'publish', 'posts_per_page' => 5, 'orderby' => 'comment_count' ) );
+}
 }
 ?>
 

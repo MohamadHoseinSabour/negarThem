@@ -1,7 +1,7 @@
 # Feature Specification: 012 Complete Theme Settings Project
 
 **Feature code:** `SETTINGS-01`
-**Status:** Phase 3 homepage layout management complete; later phases planned
+**Status:** Phase 4 WooCommerce product-section management complete; later phases planned
 **Supersedes for new work:** None. `009-featurename-theme-options` remains the
 historical Customizer-and-widgets specification and is not this project.
 
@@ -23,7 +23,8 @@ Menu, active footer, About-card and Contact-card coverage, and records all other
 template ownership in the coverage matrix. Phase 3 adds the fixed 35-section
 homepage registry, independent visibility/order controls and an RTL accessible
 admin interface. This spec plans the complete project; it does not authorize the
-remaining phases yet.
+remaining phases yet. Phase 4 adds tightly scoped query controls for existing
+real-product homepage sections only.
 
 ## Functional requirements
 
@@ -50,6 +51,10 @@ remaining phases yet.
 8. Future product-section, banner, story, brand, typography, SMS and backup/import
    controls must have an approved schema and regression tests before becoming
    writable.
+9. Product-section controls may select only published WooCommerce products and
+   existing `product_cat` terms. They may configure count, supported sorting,
+   category include/exclude filters and manual product IDs, while prices, images,
+   ratings, stock and permalinks remain properties of the resolved live products.
 8. Product prices, stock, sale status, ratings, reviews, orders, customers and OTP
    states must remain live WordPress/WooCommerce or provider data. Settings may
    select presentation/query inputs, never invent transactional or commercial data.
@@ -77,5 +82,9 @@ remaining phases yet.
 - The authenticated layout form renders 35 registered sections, supports drag and
   keyboard movement, persists order/visibility, and the non-Elementor homepage
   renders only the enabled fixed-registry templates in saved order.
+- An authenticated administrator can submit product-query settings, reload them,
+  and observe the selected real product and its permalink on desktop and mobile;
+  malformed IDs and non-published products are rejected and tests restore the
+  initial settings snapshot.
 - Documentation keys exactly match implementation and the dedicated spec, plan and
   task list remain separate from specification 009.
