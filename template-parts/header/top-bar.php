@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$announcement = get_theme_mod( 'negar_shop_topbar_announcement', 'هر چیزی که برای استایل کردن لازمه' );
+$announcement = negar_theme_setting( 'header', 'announcement', 'هر چیزی که برای استایل کردن لازمه', 'negar_shop_topbar_announcement' );
 $upload_dir   = wp_upload_dir();
 $banner_img   = $upload_dir['basedir'] . '/kaveh-demo/kaveh-demo/banners/header-banner-1.png';
 $banner_url   = $upload_dir['baseurl'] . '/kaveh-demo/kaveh-demo/banners/header-banner-1.png';

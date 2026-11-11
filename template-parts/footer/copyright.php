@@ -10,20 +10,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$copyright = get_theme_mod( 'negar_shop_copyright_text', '' );
+$copyright = negar_theme_setting( 'footer', 'copyright', '', 'negar_shop_copyright_text' );
 if ( empty( $copyright ) ) {
 	/* translators: 1: Current Year, 2: Site Name */
 	$copyright = sprintf(
 		__( 'تمامی حقوق مادی و معنوی این وب‌سایت متعلق به %2$s می‌باشد. © %1$s', 'negar-shop' ),
 		date_i18n( 'Y' ),
-		get_bloginfo( 'name' )
+		negar_theme_brand_label()
 	);
 }
 
-$instagram = get_theme_mod( 'negar_shop_instagram_url', 'https://instagram.com' );
-$telegram  = get_theme_mod( 'negar_shop_telegram_url', 'https://t.me' );
-$whatsapp  = get_theme_mod( 'negar_shop_whatsapp_url', 'https://wa.me' );
-$linkedin  = get_theme_mod( 'negar_shop_linkedin_url', 'https://linkedin.com' );
+$instagram = negar_theme_setting( 'social', 'instagram', 'https://instagram.com', 'negar_shop_instagram_url' );
+$telegram  = negar_theme_setting( 'social', 'telegram', 'https://t.me', 'negar_shop_telegram_url' );
+$whatsapp  = negar_theme_setting( 'social', 'whatsapp', 'https://wa.me', 'negar_shop_whatsapp_url' );
+$linkedin  = negar_theme_setting( 'social', 'linkedin', 'https://linkedin.com', 'negar_shop_linkedin_url' );
 ?>
 <div class="footer-copyright-bar py-5 bg-black text-slate-400 text-xs border-t border-slate-900">
 	<div class="container flex flex-col md:flex-row items-center justify-between gap-4">

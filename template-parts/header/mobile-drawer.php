@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$mobile_hotline      = trim( (string) get_theme_mod( 'negar_shop_phone_hotline', '' ) );
+$mobile_hotline      = trim( (string) negar_theme_setting( 'contact', 'phone', '', 'negar_shop_phone_hotline' ) );
 $mobile_hotline_href = function_exists( 'negar_shop_phone_href' ) ? negar_shop_phone_href( $mobile_hotline ) : preg_replace( '/[^0-9+]/', '', $mobile_hotline );
 ?>
 <div id="negar-mobile-drawer" class="negar-drawer offcanvas-drawer fixed top-0 bottom-0 right-0 w-4/5 max-w-sm bg-white shadow-2xl z-50 flex flex-col transition duration-300 transform translate-x-full" aria-hidden="true">
@@ -18,7 +18,7 @@ $mobile_hotline_href = function_exists( 'negar_shop_phone_href' ) ? negar_shop_p
 	<div class="drawer-header p-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
 		<span class="font-bold text-slate-800 text-sm flex items-center gap-2">
 			<span class="w-2.5 h-2.5 rounded-full bg-rose-600 inline-block"></span>
-			<?php bloginfo( 'name' ); ?>
+			<?php echo esc_html( negar_theme_brand_label() ); ?>
 		</span>
 		<button type="button" class="drawer-close-btn w-8 h-8 rounded-full bg-white hover:bg-slate-200 border border-slate-200 flex items-center justify-center text-slate-500" aria-label="<?php esc_attr_e( 'بستن منو', 'negar-shop' ); ?>">
 			<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">

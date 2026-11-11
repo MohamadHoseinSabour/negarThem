@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Output OpenGraph and Twitter Card Meta Tags in wp_head.
  */
 function negar_shop_opengraph_meta_tags() {
-	$site_name   = get_bloginfo( 'name' );
+	$site_name   = negar_theme_brand_label();
 	$title       = wp_get_document_title();
 	$url         = is_front_page() ? home_url( '/' ) : get_permalink();
 	$description = get_bloginfo( 'description' );
@@ -59,9 +59,9 @@ add_action( 'wp_head', 'negar_shop_opengraph_meta_tags', 2 );
  */
 function negar_shop_json_ld_schema() {
 	$home_url   = home_url( '/' );
-	$site_name  = get_bloginfo( 'name' );
+	$site_name  = negar_theme_brand_label();
 	$site_desc  = get_bloginfo( 'description' );
-	$phone      = get_theme_mod( 'negar_shop_phone_hotline', '۰۲۱-۱۲۳۴۵۶۷۸' );
+	$phone      = negar_theme_setting( 'contact', 'phone', '۰۲۱-۱۲۳۴۵۶۷۸', 'negar_shop_phone_hotline' );
 	$custom_logo_id = get_theme_mod( 'custom_logo' );
 	$logo_url   = $custom_logo_id ? wp_get_attachment_image_url( $custom_logo_id, 'full' ) : '';
 

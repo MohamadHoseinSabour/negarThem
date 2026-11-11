@@ -78,7 +78,7 @@ $render_category_children = static function ( $parent_id = 0, $depth = 0 ) use (
 		<!-- 1. Right: Logo & Branding -->
 		<div class="header-logo shrink-0 flex items-center">
 			<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="flex items-center">
-				<img src="<?php echo esc_url( $logo_url ); ?>" alt="<?php bloginfo( 'name' ); ?>" width="135" height="40" class="h-9 w-auto object-contain kavehlogost d-block" style="width: 135px !important; height: auto !important; max-height: 40px !important;">
+				<img src="<?php echo esc_url( $logo_url ); ?>" alt="<?php echo esc_attr( negar_theme_brand_label() ); ?>" width="135" height="40" class="h-9 w-auto object-contain kavehlogost d-block" style="width: 135px !important; height: auto !important; max-height: 40px !important;">
 			</a>
 		</div>
 

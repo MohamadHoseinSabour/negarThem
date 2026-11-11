@@ -20,18 +20,18 @@ $about_url   = home_url( '/about/' );
 $blog_page   = (int) get_option( 'page_for_posts' );
 $blog_url    = $blog_page ? get_permalink( $blog_page ) : home_url( '/' );
 $privacy_url = get_privacy_policy_url();
-$footer_about = trim( wp_strip_all_tags( (string) get_theme_mod( 'negar_shop_footer_about', '' ) ) );
+$footer_about = trim( wp_strip_all_tags( (string) negar_theme_setting( 'footer', 'about', '', 'negar_shop_footer_about' ) ) );
 $site_description = trim( (string) get_bloginfo( 'description' ) );
 $footer_about = $footer_about ? $footer_about : ( $site_description ? $site_description : __( 'برای مشاهده و مقایسه محصولات، از فروشگاه بازدید کنید.', 'negar-shop' ) );
-$phone_hotline = trim( (string) get_theme_mod( 'negar_shop_phone_hotline', '' ) );
+$phone_hotline = trim( (string) negar_theme_setting( 'contact', 'phone', '', 'negar_shop_phone_hotline' ) );
 $phone_hotline_href = function_exists( 'negar_shop_phone_href' ) ? negar_shop_phone_href( $phone_hotline ) : preg_replace( '/[^0-9+]/', '', $phone_hotline );
-$copyright_text = trim( (string) get_theme_mod( 'negar_shop_copyright_text', '' ) );
+$copyright_text = trim( (string) negar_theme_setting( 'footer', 'copyright', '', 'negar_shop_copyright_text' ) );
 $copyright_text = $copyright_text ? $copyright_text : __( 'تمامی حقوق این وب‌سایت محفوظ است.', 'negar-shop' );
 $social_links = array_filter(
 	array(
-		'telegram'  => esc_url_raw( get_theme_mod( 'negar_shop_telegram_url', '' ) ),
-		'instagram' => esc_url_raw( get_theme_mod( 'negar_shop_instagram_url', '' ) ),
-		'whatsapp'  => esc_url_raw( get_theme_mod( 'negar_shop_whatsapp_url', '' ) ),
+		'telegram'  => esc_url_raw( negar_theme_setting( 'social', 'telegram', '', 'negar_shop_telegram_url' ) ),
+		'instagram' => esc_url_raw( negar_theme_setting( 'social', 'instagram', '', 'negar_shop_instagram_url' ) ),
+		'whatsapp'  => esc_url_raw( negar_theme_setting( 'social', 'whatsapp', '', 'negar_shop_whatsapp_url' ) ),
 	),
 	static function ( $url ) {
 		return ! empty( $url ) && ! in_array( untrailingslashit( $url ), array( 'https://instagram.com', 'https://t.me', 'https://wa.me' ), true );

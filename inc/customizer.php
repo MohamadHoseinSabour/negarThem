@@ -386,22 +386,22 @@ function negar_shop_sanitize_checkbox( $checked ) {
  * Output Custom CSS from Customizer settings into wp_head.
  */
 function negar_shop_customizer_css() {
-	$primary_color = get_theme_mod( 'negar_shop_primary_color', '#059669' );
-	$accent_color  = get_theme_mod( 'negar_shop_accent_color', '#e11d48' );
+	$primary_color = negar_theme_setting( 'colors', 'primary', '#059669', 'negar_shop_primary_color' );
+	$accent_color  = negar_theme_setting( 'colors', 'secondary', '#e11d48', 'negar_shop_accent_color' );
 
 	$css = '';
 	if ( '#059669' !== $primary_color || '#e11d48' !== $accent_color ) {
 		$css .= ':root {';
 		if ( '#059669' !== $primary_color ) {
-			$css .= '--color-primary: ' . esc_attr( $primary_color ) . ';';
-			$css .= '--negar-primary: ' . esc_attr( $primary_color ) . ';';
-			$css .= '--kaveh-primary-color: ' . esc_attr( $primary_color ) . ';';
-			$css .= '--wp--preset--color--primary: ' . esc_attr( $primary_color ) . ';';
+			$css .= '--color-primary: ' . esc_attr( $primary_color ) . ' !important;';
+			$css .= '--negar-primary: ' . esc_attr( $primary_color ) . ' !important;';
+			$css .= '--kaveh-primary-color: ' . esc_attr( $primary_color ) . ' !important;';
+			$css .= '--wp--preset--color--primary: ' . esc_attr( $primary_color ) . ' !important;';
 		}
 		if ( '#e11d48' !== $accent_color ) {
-			$css .= '--color-accent: ' . esc_attr( $accent_color ) . ';';
-			$css .= '--color-secondary: ' . esc_attr( $accent_color ) . ';';
-			$css .= '--wp--preset--color--secondary: ' . esc_attr( $accent_color ) . ';';
+			$css .= '--color-accent: ' . esc_attr( $accent_color ) . ' !important;';
+			$css .= '--color-secondary: ' . esc_attr( $accent_color ) . ' !important;';
+			$css .= '--wp--preset--color--secondary: ' . esc_attr( $accent_color ) . ' !important;';
 		}
 		$css .= '}';
 	}

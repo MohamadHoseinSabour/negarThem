@@ -7,11 +7,11 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$phone       = trim( (string) get_theme_mod( 'negar_shop_phone_hotline', '' ) );
-$email       = trim( (string) get_theme_mod( 'negar_shop_contact_email', 'contact@example.com' ) );
-$address     = trim( (string) get_theme_mod( 'negar_shop_contact_address', __( 'نشانی فروشگاه شما؛ قابل ویرایش از سفارشی‌سازی', 'negar-shop' ) ) );
-$hours       = trim( (string) get_theme_mod( 'negar_shop_contact_hours', __( 'ساعت پاسخ‌گویی خود را اینجا وارد کنید', 'negar-shop' ) ) );
-$map_url     = trim( (string) get_theme_mod( 'negar_shop_contact_map_url', '' ) );
+$phone       = trim( (string) negar_theme_setting( 'contact', 'phone', '', 'negar_shop_phone_hotline' ) );
+$email       = trim( (string) negar_theme_setting( 'contact', 'email', 'contact@example.com', 'negar_shop_contact_email' ) );
+$address     = trim( (string) negar_theme_setting( 'contact', 'address', __( 'نشانی فروشگاه شما؛ قابل ویرایش از سفارشی‌سازی', 'negar-shop' ), 'negar_shop_contact_address' ) );
+$hours       = trim( (string) negar_theme_setting( 'contact', 'hours', __( 'ساعت پاسخ‌گویی خود را اینجا وارد کنید', 'negar-shop' ), 'negar_shop_contact_hours' ) );
+$map_url     = trim( (string) negar_theme_setting( 'contact', 'map_url', '', 'negar_shop_contact_map_url' ) );
 $phone_href  = function_exists( 'negar_shop_phone_href' ) ? negar_shop_phone_href( $phone ) : preg_replace( '/[^0-9+]/', '', $phone );
 $email_is_sample = 'contact@example.com' === strtolower( $email );
 

@@ -53,6 +53,11 @@ require_once NEGAR_SHOP_DIR . '/inc/elementor/class-elementor-init.php';
 require_once NEGAR_SHOP_DIR . '/inc/customizer.php';
 
 /**
+ * Versioned theme settings and Settings > Theme Settings admin screen.
+ */
+require_once NEGAR_SHOP_DIR . '/inc/theme-settings.php';
+
+/**
  * SEO, OpenGraph and JSON-LD Structured Data (HRD-02)
  */
 require_once NEGAR_SHOP_DIR . '/inc/seo-schema.php';
