@@ -67,7 +67,7 @@ $featured_rating        = $featured_product ? (float) $featured_product->get_ave
 							<div class="cir cir-1 position-absolute top-50 translate-middle-y"></div>
 							<div class="cir cir-2 position-absolute top-50 translate-middle-y"></div>
 
-							<div class="swiper swiper-landing-nk swiper-landing-nk-6b94d804 w-100">
+							<div id="negar-home-hero-carousel" class="swiper swiper-landing-nk swiper-landing-nk-6b94d804 w-100">
 								<div class="swiper-wrapper">
 
 									<!-- Slide 1 -->
@@ -137,12 +137,12 @@ $featured_rating        = $featured_product ? (float) $featured_product->get_ave
 								</div></div>
 
 							<!-- Slider navigation buttons centered directly inside the crescents -->
-							<div class="swiper-button-prev d-flex align-items-center justify-content-center" tabindex="0" role="button" aria-label="<?php esc_attr_e( 'اسلاید قبلی', 'negar-shop' ); ?>">
+							<button type="button" class="swiper-button-prev d-flex align-items-center justify-content-center" aria-label="<?php esc_attr_e( 'اسلاید قبلی', 'negar-shop' ); ?>" aria-controls="negar-home-hero-carousel">
 								<i class="icon-chevron-right lh-1"></i>
-							</div>
-							<div class="swiper-button-next d-flex align-items-center justify-content-center" tabindex="0" role="button" aria-label="<?php esc_attr_e( 'اسلاید بعدی', 'negar-shop' ); ?>">
+							</button>
+							<button type="button" class="swiper-button-next d-flex align-items-center justify-content-center" aria-label="<?php esc_attr_e( 'اسلاید بعدی', 'negar-shop' ); ?>" aria-controls="negar-home-hero-carousel">
 								<i class="icon-chevron-left lh-1"></i>
-							</div>
+							</button>
 						</div>
 
 						<!-- 2. Flash Deal Box (Left Box) -->
@@ -204,14 +204,11 @@ $featured_rating        = $featured_product ? (float) $featured_product->get_ave
 															</svg>
 														</div>
 														<?php endif; ?>
-													</div>
-													<div class="price d-flex align-items-center justify-content-between gap-2">
-														<?php if ( $featured_regular_price > $featured_sale_price && $featured_sale_price > 0 ) : ?>
-															<del class="off fw-normal f-iransans text-uppercase"><?php echo esc_html( number_format_i18n( $featured_regular_price ) ); ?></del>
-														<?php endif; ?>
-														<div class="price d-flex align-items-center f-iransans">
-															<?php echo $featured_product ? wp_kses_post( $featured_product->get_price_html() ) : esc_html__( 'قیمت در فروشگاه', 'negar-shop' ); ?>
-														</div>
+											</div>
+											<div class="price d-flex align-items-center justify-content-between gap-2">
+												<div class="price wc-price-html d-flex align-items-center f-iransans">
+													<?php echo $featured_product ? wp_kses_post( $featured_product->get_price_html() ) : esc_html__( 'قیمت در فروشگاه', 'negar-shop' ); ?>
+												</div>
 													</div>
 												</div>
 											</div>
@@ -221,10 +218,7 @@ $featured_rating        = $featured_product ? (float) $featured_product->get_ave
 								</div>
 
 								<div class="landing-nk__products__price price d-none d-lg-flex align-items-center justify-content-between gap-2 position-absolute">
-									<?php if ( $featured_regular_price > $featured_sale_price && $featured_sale_price > 0 ) : ?>
-										<del class="off fw-normal f-iransans text-uppercase"><?php echo esc_html( number_format_i18n( $featured_regular_price ) ); ?></del>
-									<?php endif; ?>
-									<div class="price d-flex align-items-center f-iransans">
+									<div class="price wc-price-html d-flex align-items-center f-iransans">
 										<?php echo $featured_product ? wp_kses_post( $featured_product->get_price_html() ) : esc_html__( 'قیمت در فروشگاه', 'negar-shop' ); ?>
 									</div>
 								</div>

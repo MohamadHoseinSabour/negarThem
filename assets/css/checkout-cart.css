@@ -635,16 +635,11 @@ ul.wc_payment_methods li .payment_box::before {
    8. My Account Layout
    ========================================================================== */
 .woocommerce-account .woocommerce {
-	display: grid;
-	grid-template-columns: 1fr;
-	gap: 2rem;
-	align-items: start;
-}
-
-@media (min-width: 1024px) {
-	.woocommerce-account .woocommerce {
-		grid-template-columns: 280px 1fr;
-	}
+	/* The account template owns its two-column grid. Applying a second grid here
+	 * puts the complete signed-in template into just one outer track. */
+	display: block;
+	width: 100%;
+	min-width: 0;
 }
 
 .woocommerce-MyAccount-content {
@@ -653,6 +648,106 @@ ul.wc_payment_methods li .payment_box::before {
 	border-radius: var(--negar-checkout-radius-lg);
 	padding: 1.5rem;
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+/* ===========================================================================
+   9. Account experience and password-free entry
+   ========================================================================== */
+.woocommerce-account .site-main.negar-account-page,
+.woocommerce-account .account-page-nk { background: #fff; }
+
+.account-page-nk { min-height: calc(100dvh - 12rem); padding: 1.5rem 0 3.5rem; }
+.account-page-nk > .container { width: 100%; min-width: 0; }
+
+.account-page-nk__header {
+	display: flex;
+	align-items: end;
+	justify-content: space-between;
+	gap: 1rem;
+	margin-bottom: 1.5rem;
+}
+
+.account-page-nk__header span,
+.negar-account-auth__eyebrow {
+	display: inline-flex;
+	border-radius: 999px;
+	background: #fff1f2;
+	padding: .28rem .7rem;
+	color: #e90544;
+	font-size: .75rem;
+	font-weight: 800;
+}
+
+.account-page-nk__header h1 { margin: .5rem 0 0; color: #0f172a; font-size: clamp(1.35rem, 2.4vw, 2rem); font-weight: 900; }
+.account-page-nk__header > a { flex: 0 0 auto; border: 1px solid #f9a8bd; border-radius: 12px; padding: .65rem .9rem; color: #be123c; font-size: .8125rem; font-weight: 800; text-decoration: none; }
+.account-page-nk__header > a:hover { background: #fff1f2; }
+.account-page-nk__layout { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.25rem; align-items: start; }
+.account-page-nk__sidebar .woocommerce-MyAccount-navigation { display: block; width: 100%; margin: 0; padding: 1rem; border: 0; border-radius: 20px; background: #fff; box-shadow: 0 12px 30px rgba(15,23,42,.06); }
+.account-page-nk__content { min-width: 0; }
+.account-page-nk__content .woocommerce-MyAccount-content { float: none; width: 100%; max-width: none; min-width: 0; border: 0; border-radius: 20px; box-shadow: 0 12px 30px rgba(15,23,42,.06); font-family: var(--font-primary); }
+.account-page-nk__sidebar .user-profile-header { display: flex; align-items: center; gap: .75rem; margin-bottom: .9rem; padding: .15rem .1rem .9rem; border-bottom: 1px solid #eef2f7; }
+.account-page-nk__sidebar .user-profile-header > div:first-child { display: grid; flex: 0 0 48px; width: 48px; height: 48px; overflow: hidden; place-items: center; border-radius: 50%; }
+.account-page-nk__sidebar .user-profile-header img { width: 48px; height: 48px; border-radius: 50%; }
+.account-page-nk__sidebar .user-profile-header span { font-family: var(--font-primary); letter-spacing: normal; }
+.account-page-nk__sidebar .woocommerce-MyAccount-navigation ul { display: flex; flex-direction: column; gap: .2rem; margin: 0; padding: 0; list-style: none; }
+.account-page-nk__sidebar .woocommerce-MyAccount-navigation li { margin: 0; padding: 0; }
+.account-page-nk__sidebar .woocommerce-MyAccount-navigation a { display: flex; align-items: center; gap: .7rem; min-height: 44px; padding: .65rem .75rem; border-radius: 12px; color: #334155; font-size: .9rem; font-weight: 700; line-height: 1.4; text-decoration: none; transition: background-color .2s ease, color .2s ease; }
+.account-page-nk__sidebar .woocommerce-MyAccount-navigation a:hover { background: #fff1f4; color: #e90544; }
+.account-page-nk__sidebar .woocommerce-MyAccount-navigation .is-active a { background: #fff0f3; color: #e90544; }
+.account-page-nk__sidebar .woocommerce-MyAccount-navigation .nav-icon { display: inline-flex; flex: 0 0 20px; align-items: center; justify-content: center; width: 20px; height: 20px; }
+.account-page-nk__sidebar .woocommerce-MyAccount-navigation .customer-logout { margin-top: .45rem; padding-top: .45rem; border-top: 1px solid #eef2f7; }
+.account-page-nk__sidebar .woocommerce-MyAccount-navigation .customer-logout a { color: #e11d48; }
+.negar-account-dashboard .welcome-card { display: block; width: 100%; margin: 0 0 1.5rem; padding: clamp(1.25rem, 2vw, 2rem); border-color: #fecdd3; background: linear-gradient(135deg, #fff1f2, #fff 72%); }
+.negar-account-dashboard .welcome-card h1, .negar-account-dashboard .welcome-card h2, .negar-account-dashboard .welcome-card h3 { margin: 0 0 .65rem; color: #0f172a; font-size: clamp(1.1rem, 1.5vw, 1.45rem); line-height: 1.7; }
+.negar-account-dashboard .welcome-card p { margin: 0; color: #475569; line-height: 2; }
+.negar-account-dashboard > .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; margin: 0; }
+.negar-account-dashboard .quick-card { display: flex; align-items: center; gap: 1rem; min-width: 0; min-height: 118px; padding: 1.25rem; background: #fff; border-color: #e2e8f0; border-radius: 16px; text-decoration: none; }
+.negar-account-dashboard .quick-card > div:first-child { display: inline-flex; flex: 0 0 48px; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 14px; background: #fff0f3; color: #e90544; }
+.negar-account-dashboard .quick-card > div:last-child { min-width: 0; }
+.negar-account-dashboard .quick-card h3, .negar-account-dashboard .quick-card h4 { margin: 0 0 .25rem; color: #1e293b; font-size: 1rem; line-height: 1.6; }
+.negar-account-dashboard .quick-card p, .negar-account-dashboard .quick-card span { margin: 0; color: #64748b; font-size: .84rem; line-height: 1.8; }
+.negar-account-dashboard .quick-card:focus-visible,
+.woocommerce-MyAccount-navigation a:focus-visible { outline: 3px solid rgba(233,5,68,.3); outline-offset: 2px; }
+
+.negar-account-auth { display: grid; width: 100%; min-height: min(720px, calc(100vh - 14rem)); place-items: center; padding: 2rem 1rem 4rem; background: radial-gradient(circle at top right, rgba(233,5,68,.12), transparent 28rem), #fff; }
+.woocommerce-account .woocommerce > .negar-account-auth { grid-column: 1 / -1; }
+.negar-account-auth__card { width: min(100%, 30rem); border: 1px solid #fecdd3; border-radius: 24px; background: #fff; padding: clamp(1.5rem, 5vw, 2.5rem); box-shadow: 0 20px 50px rgba(15,23,42,.09); }
+.negar-account-auth__card h1 { margin: .85rem 0 .65rem; color: #0f172a; font-size: clamp(1.45rem, 4vw, 2rem); font-weight: 900; }
+.negar-account-auth__card > p { margin: 0 0 1.6rem; color: #64748b; font-size: .9rem; line-height: 1.9; }
+
+.account-page-nk .woocommerce-MyAccount-content :is(p, a, address, label, input, select, textarea, button, th, td) { font-family: var(--font-primary); }
+.account-page-nk .negar-account-addresses__intro { margin: 0; color: #475569; font-size: .95rem; line-height: 2; }
+.account-page-nk .woocommerce-MyAccount-content .woocommerce-Addresses { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; margin: 1.5rem 0 0; }
+.account-page-nk .woocommerce-MyAccount-content .woocommerce-Address { float: none; width: auto; min-width: 0; margin: 0; padding: 1.5rem; border: 1px solid #e2e8f0; border-radius: 18px; background: #fff; }
+.account-page-nk .woocommerce-MyAccount-content .woocommerce-Address-title { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin: 0 0 1rem; padding: 0 0 1rem; border-bottom: 1px solid #eef2f7; }
+.account-page-nk .woocommerce-MyAccount-content .woocommerce-Address-title h2 { margin: 0; color: #0f172a; font-size: 1.12rem; font-weight: 800; }
+.account-page-nk .woocommerce-MyAccount-content .woocommerce-Address-title .edit { display: inline-flex; align-items: center; justify-content: center; min-height: 40px; padding: .45rem .85rem; border: 1px solid #f9a8bd; border-radius: 10px; color: #be123c; font-size: .84rem; font-weight: 700; text-decoration: none; }
+.account-page-nk .woocommerce-MyAccount-content .woocommerce-Address-title .edit:hover { border-color: #e90544; background: #fff1f4; color: #e90544; }
+.account-page-nk .woocommerce-MyAccount-content .woocommerce-Address address { min-height: 3.2rem; margin: 0; color: #475569; font-size: .92rem; font-style: normal; line-height: 2; }
+.account-page-nk .woocommerce-MyAccount-content .woocommerce-Address-title .edit:focus-visible { outline: 3px solid rgba(233,5,68,.3); outline-offset: 3px; }
+
+@media (min-width: 992px) {
+	.account-page-nk { padding-top: 2.25rem; }
+	.account-page-nk__layout { grid-template-columns: 17.5rem minmax(0, 1fr); gap: 1.75rem; }
+	.account-page-nk__sidebar .woocommerce-MyAccount-navigation { position: sticky; top: 1.25rem; }
+}
+
+@media (max-width: 575.98px) {
+	.account-page-nk { padding-bottom: 6rem; }
+	.account-page-nk__header { align-items: flex-start; flex-direction: column; }
+	.account-page-nk__header > a { width: 100%; text-align: center; }
+	.account-page-nk__content .woocommerce-MyAccount-content { padding: 1rem; }
+	.negar-account-auth { min-height: auto; padding: 1rem .75rem 5.5rem; }
+	.negar-account-auth__card { border-radius: 20px; }
+}
+
+@media (max-width: 767.98px) {
+	.negar-account-dashboard > .grid { grid-template-columns: 1fr; }
+	.account-page-nk .woocommerce-MyAccount-content .woocommerce-Addresses { grid-template-columns: 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.account-page-nk__sidebar .woocommerce-MyAccount-navigation a { transition: none; }
 }
 
 @media (min-width: 640px) {

@@ -11,6 +11,7 @@ defined( 'ABSPATH' ) || exit;
 do_action( 'woocommerce_before_account_navigation' );
 
 $current_user = wp_get_current_user();
+$account_phone = get_user_meta( $current_user->ID, 'billing_phone', true );
 
 $endpoint_icons = array(
 	'dashboard'       => '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>',
@@ -31,7 +32,7 @@ $endpoint_icons = array(
 		</div>
 		<div class="flex flex-col min-w-0">
 			<span class="text-sm font-bold text-dark truncate"><?php echo esc_html( $current_user->display_name ); ?></span>
-			<span class="text-xs text-muted font-mono truncate"><?php echo esc_html( $current_user->user_email ); ?></span>
+			<span class="text-xs text-muted font-mono truncate" dir="ltr"><?php echo esc_html( $account_phone ? $account_phone : __( 'حساب تأییدشده', 'negar-shop' ) ); ?></span>
 		</div>
 	</div>
 
@@ -39,7 +40,9 @@ $endpoint_icons = array(
 	<ul class="flex flex-col gap-1 text-xs sm:text-sm">
 		<?php foreach ( wc_get_account_menu_items() as $endpoint => $label ) : ?>
 			<?php
-			$is_active = wc_is_account_menu_item_active( $endpoint );
+			$is_active = function_exists( 'wc_is_current_account_menu_item' )
+				? wc_is_current_account_menu_item( $endpoint )
+				: ( 'dashboard' === $endpoint ? ! is_wc_endpoint_url() : is_wc_endpoint_url( $endpoint ) );
 			$icon      = isset( $endpoint_icons[ $endpoint ] ) ? $endpoint_icons[ $endpoint ] : '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>';
 			$is_logout = ( 'customer-logout' === $endpoint );
 			?>

@@ -38,8 +38,8 @@
       container.style.cssText = `
         position: fixed;
         bottom: 24px;
-        left: 24px;
-        z-index: 999999;
+        right: 24px;
+        z-index: 900;
         display: flex;
         flex-direction: column;
         gap: 10px;
@@ -52,13 +52,16 @@
     toast.className = `negar-toast toast-${type}`;
     const bgColor = type === 'success' ? '#059669' : type === 'error' ? '#dc2626' : '#ea580c';
     toast.style.cssText = `
-      background-color: ${bgColor};
-      color: #ffffff;
-      padding: 12px 20px;
-      border-radius: 10px;
+      background-color: #ffffff;
+      color: #1e293b;
+      padding: 14px 18px;
+      border: 1px solid ${bgColor};
+      border-right: 4px solid ${bgColor};
+      border-radius: 14px;
+      font-family: var(--font-primary, Vazirmatn, Tahoma, sans-serif);
       font-size: 14px;
-      font-weight: 500;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+      font-weight: 600;
+      box-shadow: 0 14px 32px rgba(15,23,42,0.14);
       direction: rtl;
       text-align: right;
       pointer-events: auto;

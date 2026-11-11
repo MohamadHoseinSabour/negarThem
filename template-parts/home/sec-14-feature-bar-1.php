@@ -18,7 +18,7 @@ $shop_url   = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink
 
 if ( ! function_exists( 'negar_get_buy_top_product_info' ) ) {
 	/**
-	 * Helper to find WooCommerce product ID and permalink if available
+	 * Only expose a card when its product still exists in WooCommerce.
 	 */
 	function negar_get_buy_top_product_info( $slug_fragment, $fallback_url ) {
 		$prods = get_posts( array(
@@ -35,7 +35,7 @@ if ( ! function_exists( 'negar_get_buy_top_product_info' ) ) {
 		}
 		return array(
 			'id'  => 0,
-			'url' => $fallback_url,
+			'url' => '',
 		);
 	}
 }
@@ -96,6 +96,9 @@ $top_products = array(
 								<div class="swiper-wrapper">
 									<?php foreach ( $top_products as $item ) :
 										$info = negar_get_buy_top_product_info( $item['keyword'], $shop_url );
+										if ( ! $info['id'] ) {
+											continue;
+										}
 										?>
 										<div class="swiper-slide">
 											<div class="buy-top-product-nk__item bg-white d-flex align-items-center">

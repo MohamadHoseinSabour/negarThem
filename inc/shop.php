@@ -11,6 +11,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
+ * Keep the main WooCommerce catalogue and its AJAX pagination in sync.
+ *
+ * @param int $per_page WooCommerce's requested page size.
+ * @return int
+ */
+function negar_shop_loop_products_per_page( $per_page ) {
+	return 6;
+}
+add_filter( 'loop_shop_per_page', 'negar_shop_loop_products_per_page', 20 );
+
+/**
  * Output semantic breadcrumbs for Shop and WooCommerce pages.
  */
 function negar_shop_breadcrumbs() {

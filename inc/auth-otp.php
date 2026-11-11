@@ -252,10 +252,16 @@ function negar_ajax_verify_otp() {
 
 	do_action( 'wp_login', $user->user_login, $user );
 
+	$redirect_to = home_url( '/' );
+	if ( isset( $_POST['redirect_to'] ) ) {
+		$requested_redirect = esc_url_raw( wp_unslash( $_POST['redirect_to'] ) );
+		$redirect_to        = wp_validate_redirect( $requested_redirect, $redirect_to );
+	}
+
 	wp_send_json_success( array(
 		'message'      => esc_html__( 'ورود شما با موفقیت انجام شد.', 'negar-shop' ),
 		'display_name' => $user->display_name,
-		'redirect_url' => home_url( '/' ),
+		'redirect_url' => $redirect_to,
 	) );
 }
 add_action( 'wp_ajax_negar_auth_verify_otp', 'negar_ajax_verify_otp' );

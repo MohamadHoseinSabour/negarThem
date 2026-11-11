@@ -14,6 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 $upload_dir = wp_upload_dir();
 $kaveh_base = $upload_dir['baseurl'] . '/kaveh-demo';
 $shop_link  = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/shop/' );
+$sale_link  = add_query_arg( 'on_sale', '1', $shop_link );
 
 if ( ! function_exists( 'negar_get_matching_product_info' ) ) {
 	function negar_get_matching_product_info( $slug_fragment, $fallback_url ) {
@@ -144,7 +145,7 @@ $products_sec22 = array(
 							<div class="sub-title f-iran-yekan fw-normal text-center">
 								<?php esc_html_e( 'تخفیفات روز', 'negar-shop' ); ?>
 							</div>
-							<a href="<?php echo esc_url( $shop_link ); ?>" class="btn btn-nk-white d-flex align-items-center justify-content-center fw-normal mx-auto" style="border-radius: 50rem;">
+							<a href="<?php echo esc_url( $sale_link ); ?>" class="btn btn-nk-white d-flex align-items-center justify-content-center fw-normal mx-auto" style="border-radius: 50rem;">
 								<span><?php esc_html_e( 'مشاهده بیشتر', 'negar-shop' ); ?></span>
 								<i class="icon icon-chevron-left-2 lh-1" aria-hidden="true"></i>
 							</a>
@@ -156,8 +157,11 @@ $products_sec22 = array(
 								<div class="swiper-wrapper">
 									<?php foreach ( $products_sec22 as $idx => $prod ) : 
 										$match = negar_get_matching_product_info( $prod['keyword'], $shop_link );
+										if ( ! $match['id'] ) {
+											continue;
+										}
 										$prod_url = $match['url'];
-										$prod_id  = $match['id'] ? $match['id'] : ( 500 + $idx );
+										$prod_id  = $match['id'];
 									?>
 									<div class="swiper-slide">
 										<div class="product-nk product-one-nk position-relative d-flex flex-column h-100">

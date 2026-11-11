@@ -9,17 +9,23 @@
 defined( 'ABSPATH' ) || exit;
 ?>
 
-<section class="account-page-nk py-4">
+<section class="account-page-nk">
 	<div class="container">
-		<div class="row g-4">
-			<!-- Account Sidebar Navigation -->
-			<div class="col-12 col-lg-3">
-				<?php do_action( 'woocommerce_account_navigation' ); ?>
+		<header class="account-page-nk__header">
+			<div>
+				<span><?php esc_html_e( 'حساب کاربری', 'negar-shop' ); ?></span>
+				<h1><?php esc_html_e( 'مدیریت حساب و سفارش‌ها', 'negar-shop' ); ?></h1>
 			</div>
+			<a href="<?php echo esc_url( wc_get_page_permalink( 'shop' ) ); ?>"><?php esc_html_e( 'ادامهٔ خرید', 'negar-shop' ); ?></a>
+		</header>
 
-			<!-- Account Main Content -->
-			<div class="col-12 col-lg-9">
-				<div class="woocommerce-MyAccount-content bg-white p-4 p-md-5 rounded-4 border border-light-subtle shadow-sm">
+		<div class="account-page-nk__layout">
+			<aside class="account-page-nk__sidebar">
+				<?php do_action( 'woocommerce_account_navigation' ); ?>
+			</aside>
+
+			<div class="account-page-nk__content">
+				<div class="woocommerce-MyAccount-content">
 					<?php do_action( 'woocommerce_account_content' ); ?>
 				</div>
 			</div>

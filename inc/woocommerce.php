@@ -98,6 +98,34 @@ function negar_shop_cart_fragments( $fragments ) {
 add_filter( 'woocommerce_add_to_cart_fragments', 'negar_shop_cart_fragments' );
 
 /**
+ * Keep a small first-party history of genuinely viewed products for the home page.
+ *
+ * @return void
+ */
+function negar_shop_track_recent_product_views() {
+	if ( ! function_exists( 'is_product' ) || ! is_product() || headers_sent() ) {
+		return;
+	}
+
+	$product_id = get_queried_object_id();
+	if ( ! $product_id || 'product' !== get_post_type( $product_id ) ) {
+		return;
+	}
+
+	$cookie_name = 'negar_recent_products';
+	$viewed_ids  = isset( $_COOKIE[ $cookie_name ] ) ? array_map( 'absint', explode( ',', wp_unslash( $_COOKIE[ $cookie_name ] ) ) ) : array();
+	$viewed_ids  = array_values( array_unique( array_filter( $viewed_ids ) ) );
+	$viewed_ids  = array_values( array_diff( $viewed_ids, array( $product_id ) ) );
+	array_unshift( $viewed_ids, $product_id );
+	$viewed_ids = array_slice( $viewed_ids, 0, 8 );
+	$cookie     = implode( ',', $viewed_ids );
+
+	setcookie( $cookie_name, $cookie, time() + MONTH_IN_SECONDS, COOKIEPATH ? COOKIEPATH : '/', COOKIE_DOMAIN, is_ssl(), true );
+	$_COOKIE[ $cookie_name ] = $cookie;
+}
+add_action( 'template_redirect', 'negar_shop_track_recent_product_views' );
+
+/**
  * Sitewide AJAX Add to Cart Handler (kaveh_ajax_add_to_cart)
  */
 function negar_shop_ajax_add_to_cart() {

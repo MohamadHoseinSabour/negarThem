@@ -239,7 +239,90 @@ function negar_shop_customize_register( $wp_customize ) {
 	);
 
 	// --------------------------------------------------------------------------
-	// Section 4: Footer & Copyright
+	// Section 4: Contact Page Details
+	// --------------------------------------------------------------------------
+	$wp_customize->add_section(
+		'negar_shop_section_contact',
+		array(
+			'title'       => __( 'اطلاعات صفحه تماس', 'negar-shop' ),
+			'description' => __( 'مقادیر نمونه هستند و باید پیش از انتشار با اطلاعات واقعی فروشگاه جایگزین شوند.', 'negar-shop' ),
+			'panel'       => 'negar_shop_panel',
+			'priority'    => 35,
+		)
+	);
+
+	$wp_customize->add_setting(
+		'negar_shop_contact_email',
+		array(
+			'default'           => 'contact@example.com',
+			'sanitize_callback' => 'sanitize_email',
+			'transport'         => 'refresh',
+		)
+	);
+	$wp_customize->add_control(
+		'negar_shop_contact_email',
+		array(
+			'label'       => __( 'ایمیل تماس', 'negar-shop' ),
+			'description' => __( 'نمونه: contact@example.com', 'negar-shop' ),
+			'section'     => 'negar_shop_section_contact',
+			'type'        => 'email',
+		)
+	);
+
+	$wp_customize->add_setting(
+		'negar_shop_contact_address',
+		array(
+			'default'           => __( 'نشانی فروشگاه شما؛ قابل ویرایش از سفارشی‌سازی', 'negar-shop' ),
+			'sanitize_callback' => 'sanitize_textarea_field',
+			'transport'         => 'refresh',
+		)
+	);
+	$wp_customize->add_control(
+		'negar_shop_contact_address',
+		array(
+			'label'   => __( 'نشانی فروشگاه', 'negar-shop' ),
+			'section' => 'negar_shop_section_contact',
+			'type'    => 'textarea',
+		)
+	);
+
+	$wp_customize->add_setting(
+		'negar_shop_contact_hours',
+		array(
+			'default'           => __( 'ساعت پاسخ‌گویی خود را اینجا وارد کنید', 'negar-shop' ),
+			'sanitize_callback' => 'sanitize_text_field',
+			'transport'         => 'refresh',
+		)
+	);
+	$wp_customize->add_control(
+		'negar_shop_contact_hours',
+		array(
+			'label'   => __( 'ساعات پاسخ‌گویی', 'negar-shop' ),
+			'section' => 'negar_shop_section_contact',
+			'type'    => 'text',
+		)
+	);
+
+	$wp_customize->add_setting(
+		'negar_shop_contact_map_url',
+		array(
+			'default'           => '',
+			'sanitize_callback' => 'esc_url_raw',
+			'transport'         => 'refresh',
+		)
+	);
+	$wp_customize->add_control(
+		'negar_shop_contact_map_url',
+		array(
+			'label'       => __( 'نشانی embed نقشه', 'negar-shop' ),
+			'description' => __( 'تا وقتی URL واقعی وارد نشود، کارت نمونهٔ نقشه نمایش داده می‌شود.', 'negar-shop' ),
+			'section'     => 'negar_shop_section_contact',
+			'type'        => 'url',
+		)
+	);
+
+	// --------------------------------------------------------------------------
+	// Section 5: Footer & Copyright
 	// --------------------------------------------------------------------------
 	$wp_customize->add_section(
 		'negar_shop_section_footer',

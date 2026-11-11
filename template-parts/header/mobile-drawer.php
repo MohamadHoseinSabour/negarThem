@@ -9,6 +9,9 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
+
+$mobile_hotline      = trim( (string) get_theme_mod( 'negar_shop_phone_hotline', '' ) );
+$mobile_hotline_href = function_exists( 'negar_shop_phone_href' ) ? negar_shop_phone_href( $mobile_hotline ) : preg_replace( '/[^0-9+]/', '', $mobile_hotline );
 ?>
 <div id="negar-mobile-drawer" class="negar-drawer offcanvas-drawer fixed top-0 bottom-0 right-0 w-4/5 max-w-sm bg-white shadow-2xl z-50 flex flex-col transition duration-300 transform translate-x-full" aria-hidden="true">
 	<!-- Drawer Header -->
@@ -80,21 +83,49 @@ if ( ! defined( 'ABSPATH' ) ) {
 					array(
 						'taxonomy'   => 'product_cat',
 						'hide_empty' => false,
-						'parent'     => 0,
+						'exclude'    => array( (int) get_option( 'default_product_cat' ) ),
+						'orderby'    => 'name',
+						'order'      => 'ASC',
 					)
 				);
 				if ( ! empty( $mobile_cats ) && ! is_wp_error( $mobile_cats ) ) :
+					$mobile_categories_by_parent = array();
+					foreach ( $mobile_cats as $mobile_cat ) {
+						$parent_id = (int) $mobile_cat->parent;
+						if ( ! isset( $mobile_categories_by_parent[ $parent_id ] ) ) {
+							$mobile_categories_by_parent[ $parent_id ] = array();
+						}
+						$mobile_categories_by_parent[ $parent_id ][] = $mobile_cat;
+					}
+
+					$render_mobile_categories = null;
+					$render_mobile_categories = static function ( $parent_id = 0, $depth = 0 ) use ( &$render_mobile_categories, $mobile_categories_by_parent ) {
+						if ( empty( $mobile_categories_by_parent[ $parent_id ] ) ) {
+							return;
+						}
+
+						$list_class = 0 === $depth ? 'mobile-cat-list list-none m-0 p-0 space-y-1 text-sm' : 'mobile-cat-list__children list-none m-0 space-y-1 text-sm';
+						echo '<ul class="' . esc_attr( $list_class ) . '">';
+
+						foreach ( $mobile_categories_by_parent[ $parent_id ] as $mobile_cat ) {
+							$term_link = get_term_link( $mobile_cat );
+							if ( is_wp_error( $term_link ) ) {
+								continue;
+							}
+
+							echo '<li class="mobile-cat-list__item mobile-cat-list__item--depth-' . esc_attr( $depth ) . '">';
+							echo '<a href="' . esc_url( $term_link ) . '" class="flex items-center justify-between py-2.5 px-3 rounded-lg text-slate-700 hover:bg-rose-50 hover:text-rose-700 transition">';
+							echo '<span>' . esc_html( $mobile_cat->name ) . '</span>';
+							echo '<span class="text-xs bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full">' . esc_html( $mobile_cat->count ) . '</span>';
+							echo '</a>';
+							$render_mobile_categories( (int) $mobile_cat->term_id, $depth + 1 );
+							echo '</li>';
+						}
+
+						echo '</ul>';
+					};
 					?>
-					<ul class="mobile-cat-list list-none m-0 p-0 space-y-1 text-sm">
-						<?php foreach ( $mobile_cats as $mcat ) : ?>
-							<li>
-								<a href="<?php echo esc_url( get_term_link( $mcat ) ); ?>" class="flex items-center justify-between py-2.5 px-3 rounded-lg text-slate-700 hover:bg-rose-50 hover:text-rose-700 transition">
-									<span><?php echo esc_html( $mcat->name ); ?></span>
-									<span class="text-xs bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full"><?php echo esc_html( $mcat->count ); ?></span>
-								</a>
-							</li>
-						<?php endforeach; ?>
-					</ul>
+					<?php $render_mobile_categories(); ?>
 					<?php
 				endif;
 			endif;
@@ -104,8 +135,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<!-- Drawer Footer: User & Support -->
 	<div class="drawer-footer p-4 border-t border-slate-100 bg-slate-50">
-		<a href="tel:02112345678" class="flex items-center justify-center gap-2 w-full py-2.5 rounded-lg bg-rose-600 text-white font-bold text-xs dir-ltr">
-			<span>۰۲۱-۱۲۳۴۵۶۷۸</span>
+		<a href="<?php echo esc_url( $mobile_hotline_href ? 'tel:' . $mobile_hotline_href : home_url( '/contact/' ) ); ?>" class="flex items-center justify-center gap-2 w-full py-2.5 rounded-lg bg-rose-600 text-white font-bold text-xs<?php echo $mobile_hotline ? ' dir-ltr' : ''; ?>">
+			<span><?php echo esc_html( $mobile_hotline ? $mobile_hotline : __( 'ارتباط با فروشگاه', 'negar-shop' ) ); ?></span>
 			<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 				<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
 			</svg>

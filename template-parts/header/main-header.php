@@ -16,12 +16,60 @@ $logo_svg       = $upload_dir['basedir'] . '/kaveh-demo/kaveh-demo/general/logo.
 $logo_url       = file_exists( $logo_svg ) ? $upload_dir['baseurl'] . '/kaveh-demo/kaveh-demo/general/logo.svg' : $theme_logo_url;
 $has_logo       = true;
 
-$product_cats = function_exists( 'get_terms' ) ? get_terms( array(
-	'taxonomy'   => 'product_cat',
-	'hide_empty' => false,
-	'parent'     => 0,
-	'exclude'    => array( (int) get_option( 'default_product_cat' ) ),
-) ) : array();
+$shop_link           = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/shop/' );
+$sale_link           = add_query_arg( 'on_sale', '1', $shop_link );
+$deal_banner_path    = trailingslashit( $upload_dir['basedir'] ) . 'kaveh-demo/deal/deal-banner-bg.png';
+$deal_banner_url     = file_exists( $deal_banner_path ) ? trailingslashit( $upload_dir['baseurl'] ) . 'kaveh-demo/deal/deal-banner-bg.png' : '';
+$product_categories  = function_exists( 'get_terms' ) ? get_terms(
+	array(
+		'taxonomy'   => 'product_cat',
+		'hide_empty' => false,
+		'exclude'    => array( (int) get_option( 'default_product_cat' ) ),
+		'orderby'    => 'name',
+		'order'      => 'ASC',
+	)
+) : array();
+$categories_by_parent = array();
+
+if ( ! is_wp_error( $product_categories ) ) {
+	foreach ( $product_categories as $product_category ) {
+		$parent_id = (int) $product_category->parent;
+		if ( ! isset( $categories_by_parent[ $parent_id ] ) ) {
+			$categories_by_parent[ $parent_id ] = array();
+		}
+		$categories_by_parent[ $parent_id ][] = $product_category;
+	}
+}
+
+$render_category_children = null;
+$render_category_children = static function ( $parent_id = 0, $depth = 0 ) use ( &$render_category_children, $categories_by_parent ) {
+	if ( empty( $categories_by_parent[ $parent_id ] ) ) {
+		return;
+	}
+
+	$children_class = 0 === $depth ? 'negar-category-mega__groups' : 'negar-category-mega__children';
+	echo '<ul class="' . esc_attr( $children_class ) . '">';
+
+	foreach ( $categories_by_parent[ $parent_id ] as $category ) {
+		$term_link = get_term_link( $category );
+		if ( is_wp_error( $term_link ) ) {
+			continue;
+		}
+
+		if ( 0 === $depth ) {
+			echo '<li class="negar-category-mega__group">';
+			echo '<a class="negar-category-mega__parent" href="' . esc_url( $term_link ) . '">' . esc_html( $category->name ) . '</a>';
+		} else {
+			echo '<li class="negar-category-mega__child">';
+			echo '<a href="' . esc_url( $term_link ) . '">' . esc_html( $category->name ) . '</a>';
+		}
+
+		$render_category_children( (int) $category->term_id, $depth + 1 );
+		echo '</li>';
+	}
+
+	echo '</ul>';
+};
 ?>
 
 <div class="negar-main-header py-3.5 bg-white border-b border-slate-100">
@@ -34,44 +82,9 @@ $product_cats = function_exists( 'get_terms' ) ? get_terms( array(
 			</a>
 		</div>
 
-		<!-- 2. Center: Search Bar with Nested Red Category Button -->
+		<!-- 2. Center: Product search and category navigation -->
 		<div class="header-search header-search-wrap flex-1 max-w-xl lg:max-w-2xl relative hidden md:block">
 			<form role="search" method="get" action="<?php echo esc_url( home_url( '/' ) ); ?>" class="negar-ajax-search-form relative flex items-center bg-slate-100/90 hover:bg-slate-100 focus-within:bg-white rounded-full border border-slate-200/70 focus-within:border-rose-500 focus-within:ring-2 focus-within:ring-rose-500/10 transition-all p-1">
-				
-				<!-- Nested Category Pill Button & Dropdown (Right side inside input in RTL) -->
-				<div class="relative shrink-0 category-select-wrapper">
-					<button type="button" class="category-menu-btn flex items-center gap-1.5 bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold px-3.5 py-2 rounded-full transition-all shadow-xs" id="negar-category-menu-btn" aria-haspopup="true" aria-expanded="false" aria-controls="negar-category-dropdown">
-						<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
-							<path d="M4 4h4v4H4zm6 0h4v4h-4zm6 0h4v4h-4zM4 10h4v4H4zm6 0h4v4h-4zm6 0h4v4h-4zM4 16h4v4H4zm6 0h4v4h-4zm6 0h4v4h-4z"/>
-						</svg>
-						<span class="category-btn-label"><?php esc_html_e( 'دسته‌بندی', 'negar-shop' ); ?></span>
-						<svg class="category-chevron transition-transform duration-200" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
-					</button>
-
-					<input type="hidden" name="product_cat" id="negar-search-cat-input" value="">
-
-					<!-- Category Dropdown Menu -->
-					<div id="negar-category-dropdown" class="negar-category-dropdown hidden absolute top-full right-0 mt-2 w-56 bg-white rounded-2xl shadow-xl border border-slate-100 py-2 z-50 overflow-hidden text-right" role="menu" aria-labelledby="negar-category-menu-btn">
-						<div class="px-3 py-1.5 text-[11px] font-bold text-slate-400 border-b border-slate-100">
-							<?php esc_html_e( 'انتخاب دسته‌بندی جستجو', 'negar-shop' ); ?>
-						</div>
-						<div class="max-h-60 overflow-y-auto py-1" role="none">
-							<button type="button" class="category-option w-full text-right px-3.5 py-2 text-xs font-medium text-slate-700 hover:bg-rose-50 hover:text-rose-600 transition flex items-center justify-between" data-cat-slug="" data-cat-name="<?php esc_attr_e( 'دسته‌بندی', 'negar-shop' ); ?>" role="menuitem">
-								<span><?php esc_html_e( 'همه دسته‌بندی‌ها', 'negar-shop' ); ?></span>
-								<span class="cat-check text-rose-600 font-bold">&#10003;</span>
-							</button>
-							<?php if ( ! empty( $product_cats ) && ! is_wp_error( $product_cats ) ) : ?>
-								<?php foreach ( $product_cats as $cat ) : ?>
-									<button type="button" class="category-option w-full text-right px-3.5 py-2 text-xs font-medium text-slate-700 hover:bg-rose-50 hover:text-rose-600 transition flex items-center justify-between" data-cat-slug="<?php echo esc_attr( $cat->slug ); ?>" data-cat-name="<?php echo esc_attr( $cat->name ); ?>" role="menuitem">
-										<span><?php echo esc_html( $cat->name ); ?></span>
-										<span class="cat-check text-rose-600 font-bold hidden">&#10003;</span>
-									</button>
-								<?php endforeach; ?>
-							<?php endif; ?>
-						</div>
-					</div>
-				</div>
-
 				<!-- Search Input -->
 				<input
 					type="search"
@@ -99,6 +112,51 @@ $product_cats = function_exists( 'get_terms' ) ? get_terms( array(
 
 			<!-- Live AJAX Results Dropdown -->
 			<div class="negar-ajax-search-results hidden absolute top-full right-0 left-0 mt-2 bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden z-50"></div>
+
+			<div class="category-mega-wrapper">
+				<button type="button" class="category-menu-btn flex items-center gap-1.5 bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold px-3.5 py-2 rounded-full transition-all shadow-xs" id="negar-category-menu-btn" aria-haspopup="true" aria-expanded="false" aria-controls="negar-category-mega">
+					<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+						<path d="M4 4h4v4H4zm6 0h4v4h-4zm6 0h4v4h-4zM4 10h4v4H4zm6 0h4v4h-4zm6 0h4v4h-4zM4 16h4v4h-4zm6 0h4v4h-4zm6 0h4v4h-4z"/>
+					</svg>
+					<span><?php esc_html_e( 'دسته‌بندی', 'negar-shop' ); ?></span>
+					<svg class="category-chevron transition-transform duration-200" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+				</button>
+
+				<div id="negar-category-mega" class="negar-category-mega hidden" role="region" aria-label="<?php esc_attr_e( 'دسته‌بندی محصولات', 'negar-shop' ); ?>" aria-labelledby="negar-category-menu-btn">
+					<div class="negar-category-mega__header">
+						<div>
+							<span class="negar-category-mega__eyebrow"><?php esc_html_e( 'دسته‌بندی محصولات', 'negar-shop' ); ?></span>
+							<a class="negar-category-mega__all" href="<?php echo esc_url( $shop_link ); ?>"><?php esc_html_e( 'همهٔ محصولات', 'negar-shop' ); ?></a>
+						</div>
+						<span class="negar-category-mega__hint"><?php esc_html_e( 'انتخاب هر دسته شما را به آرشیو آن می‌برد.', 'negar-shop' ); ?></span>
+					</div>
+					<div class="negar-category-mega__body">
+						<nav class="negar-category-mega__navigation" aria-label="<?php esc_attr_e( 'فهرست دسته‌های محصولات', 'negar-shop' ); ?>">
+							<?php $render_category_children(); ?>
+						</nav>
+						<aside class="negar-category-mega__sale-card<?php echo $deal_banner_url ? ' has-art' : ''; ?>">
+							<a href="<?php echo esc_url( $sale_link ); ?>" class="negar-category-mega__sale-link">
+								<span class="negar-category-mega__sale-kicker"><i class="icon-discount-4" aria-hidden="true"></i><?php esc_html_e( 'پیشنهاد روز', 'negar-shop' ); ?></span>
+								<?php if ( $deal_banner_url ) : ?>
+									<img class="negar-category-mega__sale-art" src="<?php echo esc_url( $deal_banner_url ); ?>" width="220" height="220" alt="" loading="lazy" decoding="async">
+								<?php endif; ?>
+								<strong class="negar-category-mega__sale-title"><?php esc_html_e( 'تخفیفات روز', 'negar-shop' ); ?></strong>
+								<span class="negar-category-mega__sale-copy"><?php esc_html_e( 'محصولات تخفیف‌دار فروشگاه را ببینید.', 'negar-shop' ); ?></span>
+								<span class="negar-category-mega__sale-action"><?php esc_html_e( 'مشاهدهٔ تخفیف‌ها', 'negar-shop' ); ?><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></span>
+							</a>
+						</aside>
+						<aside class="negar-category-mega__legacy-sale-card" hidden>
+							<span><?php esc_html_e( 'پیشنهادهای امروز', 'negar-shop' ); ?></span>
+							<strong><?php esc_html_e( 'فروش ویژه', 'negar-shop' ); ?></strong>
+							<p><?php esc_html_e( 'محصولات تخفیف‌دار واقعی فروشگاه را ببینید.', 'negar-shop' ); ?></p>
+							<a href="<?php echo esc_url( add_query_arg( 'on_sale', '1', $shop_link ) ); ?>">
+								<?php esc_html_e( 'مشاهده تخفیف‌ها', 'negar-shop' ); ?>
+								<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+							</a>
+						</aside>
+					</div>
+				</div>
+			</div>
 		</div>
 
 		<!-- 3. Left: User Account & Cart (Matching Demo Screenshot 1:1) -->

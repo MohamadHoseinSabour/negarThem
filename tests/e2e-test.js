@@ -1,7 +1,7 @@
 /**
  * Comprehensive End-to-End Test Suite for Negar Shop Theme (Master Prompt V2)
  *
- * Verifies core functionality, zero-overflow responsiveness, category search,
+ * Verifies core functionality, zero-overflow responsiveness, category navigation,
  * phone OTP login flow, cart/checkout continuity, truthful reviews/Q&A, and contact form.
  */
 
@@ -69,6 +69,28 @@ async function runTests() {
       };
     });
     assert.strictEqual(overflowInfo.scrollW, overflowInfo.clientW, 'Desktop viewport must have 0px overflow');
+
+    const nextButton = page.locator('.landing-nk__carousel .swiper-button-next');
+    await nextButton.focus();
+    await page.keyboard.press('Enter');
+    await page.waitForTimeout(350);
+    assert.strictEqual(await nextButton.evaluate((button) => button.tagName), 'BUTTON', 'Hero next control must be a keyboard-operable button');
+  });
+
+  await testStep('Desktop announcement bar is at least 60px high without widening its content', async () => {
+    const topbarMetrics = await page.evaluate(() => {
+      const topbar = document.querySelector('.negar-topbar');
+      const container = topbar?.querySelector('.container');
+      const topbarRect = topbar?.getBoundingClientRect();
+      const containerRect = container?.getBoundingClientRect();
+      return {
+        height: topbarRect?.height || 0,
+        topbarWidth: topbarRect?.width || 0,
+        containerWidth: containerRect?.width || 0,
+      };
+    });
+    assert(topbarMetrics.height >= 60, `Desktop topbar must be at least 60px high (got ${topbarMetrics.height}px)`);
+    assert(topbarMetrics.containerWidth <= topbarMetrics.topbarWidth, 'Topbar content must remain within the viewport width');
   });
 
   // 2A. The hero deal must not use demo-only product claims.
@@ -98,6 +120,75 @@ async function runTests() {
     if (Number(sourceProduct.review_count) === 0) {
       assert(heroDeal.rating.includes('بدون دیدگاه'), 'A product with no reviews must not display an invented review count or rating');
     }
+  });
+
+  // 2AA. Product carousel cards must always land on their own product page.
+  await testStep('Homepage sale carousel exposes only real product destinations', async () => {
+    const saleResponse = await page.request.get(`${BASE_URL}/wp-json/wc/store/v1/products?on_sale=true&per_page=100`);
+    assert.strictEqual(saleResponse.status(), 200, 'The Store API must expose the live sale catalogue');
+    const saleProducts = await saleResponse.json();
+    assert(saleProducts.length > 0, 'At least one real sale product is required for the homepage carousel');
+
+    const carouselState = await page.evaluate(() => {
+      const section = document.querySelector('.negar-home-sale-carousel');
+      const cards = Array.from(section?.querySelectorAll('.product-nk[data-product-id]') || []);
+      return {
+        sectionFound: Boolean(section),
+        cards: cards.map((card) => ({
+          id: card.dataset.productId || '',
+          imageLink: card.querySelector('.image a[href]')?.href || '',
+          titleLink: card.querySelector('h2 a[href]')?.href || '',
+          actionIds: Array.from(card.querySelectorAll('[data-id]')).map((button) => button.dataset.id || ''),
+        })),
+        allSaleLink: section?.querySelector('a[href*="on_sale=1"]')?.href || '',
+      };
+    });
+
+    assert(carouselState.sectionFound, 'Homepage sale carousel must be rendered');
+    assert(carouselState.cards.length > 0, 'Homepage sale carousel must render product cards');
+
+    const sourceById = new Map(saleProducts.map((product) => [String(product.id), product.permalink]));
+    carouselState.cards.forEach((card, index) => {
+      const expectedLink = sourceById.get(card.id);
+      assert(expectedLink, `Carousel card ${index + 1} must use a live sale-product ID`);
+      assert.strictEqual(card.imageLink, expectedLink, `Carousel card ${index + 1} image must link to its own product`);
+      assert.strictEqual(card.titleLink, expectedLink, `Carousel card ${index + 1} title must link to its own product`);
+      assert(card.actionIds.every((id) => id === card.id), `Carousel card ${index + 1} actions must retain the real product ID`);
+    });
+    assert(carouselState.allSaleLink.includes('/shop/') && carouselState.allSaleLink.includes('on_sale=1'), 'Only the carousel “view all” link may target the sale catalogue');
+  });
+
+  await testStep('Recently viewed carousel reflects real customer product visits', async () => {
+    const productResponse = await page.request.get(`${BASE_URL}/wp-json/wc/store/v1/products?per_page=1`);
+    assert.strictEqual(productResponse.status(), 200, 'The Store API must expose a product for the view-history check');
+    const [sourceProduct] = await productResponse.json();
+    assert(sourceProduct, 'A published product is required for the view-history check');
+
+    await page.goto(sourceProduct.permalink, { waitUntil: 'domcontentloaded' });
+    await page.goto(BASE_URL, { waitUntil: 'domcontentloaded' });
+
+    const viewedState = await page.evaluate(() => {
+      const section = document.querySelector('.negar-recently-viewed');
+      const card = section?.querySelector('.product-nk[data-product-id]');
+      return {
+        sectionFound: Boolean(section),
+        cardId: card?.dataset.productId || '',
+        imageLink: card?.querySelector('.image a[href]')?.href || '',
+        titleLink: card?.querySelector('h2 a[href]')?.href || '',
+      };
+    });
+
+    assert(viewedState.sectionFound, 'A visited product must create the recently viewed section');
+    assert.strictEqual(viewedState.cardId, String(sourceProduct.id), 'Recently viewed card must retain the visited product ID');
+    assert.strictEqual(viewedState.imageLink, sourceProduct.permalink, 'Recently viewed image must link to the visited product');
+    assert.strictEqual(viewedState.titleLink, sourceProduct.permalink, 'Recently viewed title must link to the visited product');
+  });
+
+  await testStep('Homepage category bubbles link to their category archives', async () => {
+    const categoryLinks = await page.evaluate(() => Array.from(document.querySelectorAll('.categories-nk__item a[href]'))
+      .map((link) => link.href));
+    assert(categoryLinks.length > 0, 'Homepage category bubbles must render navigation links');
+    assert(categoryLinks.every((url) => new URL(url).pathname.includes('/product-category/')), 'Every category bubble must point to its category archive');
   });
 
   // 2B. Homepage reviews must reflect the public WooCommerce review source.
@@ -179,65 +270,123 @@ async function runTests() {
     assert(!footerState.badgeImages.some((src) => /(?:enamad|samandehi)\.png/i.test(src)), 'Unverified demo trust-badge images must not be rendered');
   });
 
-  // 3. Category Search Dropdown
-  await testStep('Main search bar contains interactive category dropdown and hidden input', async () => {
-    const catBtn = await page.$('#negar-category-menu-btn, .category-menu-btn');
-    assert(catBtn, 'Category menu button must exist inside search form');
-    const catInput = await page.$('input[name="product_cat"]#negar-search-cat-input, input[name="product_cat"]');
-    assert(catInput, 'Hidden input product_cat must exist in search form');
-    const dropdown = await page.$('#negar-category-dropdown, .negar-category-dropdown');
-    assert(dropdown, 'Category dropdown menu container must exist');
+  // 3. Shop title, global catalogue, and normal pagination.
+  await testStep('Shop uses the correct title and exposes every product through pagination', async () => {
+    const catalogueResponse = await page.request.get(`${BASE_URL}/wp-json/wc/store/v1/products?per_page=100`);
+    assert.strictEqual(catalogueResponse.status(), 200, 'The Store API must expose the shop catalogue');
+    const sourceProducts = await catalogueResponse.json();
+    assert(sourceProducts.length > 6, 'The local catalogue must have multiple pages for this regression test');
 
-    // Click category button to open dropdown
-    await page.evaluate(el => el.click(), catBtn);
-    const isOpened = await page.evaluate(() => {
-      const dd = document.querySelector('#negar-category-dropdown, .negar-category-dropdown');
-      return dd && !dd.classList.contains('hidden');
-    });
-    assert(isOpened, 'Category dropdown must open when category button is clicked');
+    await page.goto(`${BASE_URL}/shop/`, { waitUntil: 'domcontentloaded' });
+    const shopTitle = await page.title();
+    assert(shopTitle.includes('فروشگاه'), 'The Shop page title must use فروشگاه');
+    assert(!shopTitle.includes('فروشگاه محصولات دیجیتال'), 'The old Shop page title must not remain');
+
+    const pageState = await page.evaluate(() => ({
+      breadcrumb: document.querySelector('.breadcrumb-nk__current')?.textContent.trim() || '',
+      productIds: Array.from(document.querySelectorAll('#woor .product-nk[data-product-id]')).map((card) => card.dataset.productId),
+      pageLinks: Array.from(document.querySelectorAll('.woocommerce-pagination a.page-numbers')).map((link) => link.href),
+      paginationControls: Array.from(document.querySelectorAll('.woocommerce-pagination .page-numbers li > *')).map((control) => {
+        const rect = control.getBoundingClientRect();
+        const style = getComputedStyle(control);
+        return {
+          width: Math.round(rect.width),
+          height: Math.round(rect.height),
+          borderRadius: style.borderRadius,
+        };
+      }),
+      categoryTree: {
+        parents: document.querySelectorAll('.category-filter-item--parent').length,
+        children: document.querySelectorAll('.category-filter-item--child').length,
+        parentLabels: Array.from(document.querySelectorAll('.category-filter-item--parent .category-filter-item__kind')).map((badge) => badge.textContent.trim()),
+      },
+    }));
+    assert.strictEqual(pageState.breadcrumb, 'فروشگاه', 'The Shop breadcrumb must use the current page title');
+    assert.strictEqual(pageState.productIds.length, 6, 'The Shop must keep its six-product page size');
+    assert(pageState.pageLinks.length > 0, 'The Shop must expose normal pagination links');
+    assert(pageState.paginationControls.length > 0, 'The Shop must render pagination controls');
+    assert(pageState.paginationControls.every((control) => control.width >= 40 && control.height >= 40 && control.borderRadius === '50%'), 'Pagination controls must remain circular and touch-friendly');
+    assert(pageState.categoryTree.parents > 0, 'The category filter must identify primary categories');
+    assert(pageState.categoryTree.children > 0, 'The category filter must expose subcategories separately from primary categories');
+    assert(pageState.categoryTree.parentLabels.every((label) => label === 'دسته اصلی'), 'Each primary category must carry a visible primary-category label');
+
+    const discoveredIds = new Set(pageState.productIds);
+    const uniquePageLinks = [...new Set(pageState.pageLinks.filter((url) => new URL(url).pathname !== new URL(`${BASE_URL}/shop/`).pathname || new URL(url).search))];
+    for (const pageUrl of uniquePageLinks) {
+      await page.goto(pageUrl, { waitUntil: 'domcontentloaded' });
+      const pageIds = await page.evaluate(() => Array.from(document.querySelectorAll('#woor .product-nk[data-product-id]')).map((card) => card.dataset.productId));
+      pageIds.forEach((id) => discoveredIds.add(id));
+    }
+    assert.strictEqual(discoveredIds.size, sourceProducts.length, 'Pagination must provide access to every published catalogue product');
   });
 
-  // 3A. Category selection must affect live results and retained search URLs.
-  await testStep('Category-filtered search returns matching products and preserves the category', async () => {
+  // 3A. Desktop categories must be navigation, not a search filter.
+  await testStep('Desktop category mega menu is accessible and links to category archives', async () => {
     await page.goto(BASE_URL, { waitUntil: 'domcontentloaded' });
 
-    const catalogueResponse = await page.request.get(`${BASE_URL}/wp-json/wc/store/v1/products?category=48&per_page=1`);
-    assert.strictEqual(catalogueResponse.status(), 200, 'The Store API must provide a product in the consoles category');
-    const catalogue = await catalogueResponse.json();
-    assert(catalogue.length > 0, 'The consoles category must contain a product for this local regression test');
-    const expectedProduct = catalogue[0];
-
     const categoryButton = await page.$('#negar-category-menu-btn');
-    const categoryOption = await page.$('.category-option[data-cat-slug="consoles"]');
-    const searchInput = await page.$('.negar-ajax-search-form .negar-search-input');
-    assert(categoryButton && categoryOption && searchInput, 'Search category controls must be available');
+    const megaMenu = await page.$('#negar-category-mega');
+    assert(categoryButton && megaMenu, 'The category button and mega menu must exist');
+    assert.strictEqual(await page.$('input[name="product_cat"], .category-option'), null, 'Search category filter controls must be removed');
 
-    await categoryButton.click();
-    await categoryOption.click();
+    await categoryButton.focus();
+    await page.keyboard.press('Enter');
+    await page.waitForFunction(() => document.getElementById('negar-category-mega')?.getAttribute('aria-hidden') !== 'true' && !document.getElementById('negar-category-mega')?.classList.contains('hidden'));
 
-    const selectedCategory = await page.$eval('#negar-search-cat-input', (input) => input.value);
-    assert.strictEqual(selectedCategory, 'consoles', 'Selecting a category must update the submitted hidden field');
-
-    await searchInput.fill(expectedProduct.name);
-    await page.waitForFunction(
-      (title) => Array.from(document.querySelectorAll('.negar-ajax-search-results .search-result-title'))
-        .some((element) => element.textContent.trim() === title),
-      expectedProduct.name,
-      { timeout: 10000 }
-    );
-
-    const resultState = await page.evaluate(() => {
-      const result = document.querySelector('.negar-ajax-search-results .search-result-item');
-      const viewAll = document.querySelector('.negar-ajax-search-results a:not(.search-result-item)');
+    const megaState = await page.evaluate(() => {
+      const menu = document.getElementById('negar-category-mega');
+      const button = document.getElementById('negar-category-menu-btn');
+      const links = Array.from(menu?.querySelectorAll('.negar-category-mega__navigation a') || []);
+      const saleLink = menu?.querySelector('.negar-category-mega__sale-card a');
+      const childLinks = menu?.querySelectorAll('.negar-category-mega__child a') || [];
+      const saleCard = menu?.querySelector('.negar-category-mega__sale-card');
       return {
-        resultTitle: result?.querySelector('.search-result-title')?.textContent.trim() || '',
-        viewAllUrl: viewAll?.href || '',
+        expanded: button?.getAttribute('aria-expanded'),
+        archiveLinks: links.map((link) => link.href),
+        childLinkCount: childLinks.length,
+        saleLink: saleLink?.href || '',
+        saleTitle: saleCard?.querySelector('.negar-category-mega__sale-title')?.textContent.trim() || '',
+        saleArt: saleCard?.querySelector('.negar-category-mega__sale-art')?.getAttribute('src') || '',
+        referencesProduct: Boolean(saleCard?.querySelector('.negar-category-mega__sale-product, .negar-category-mega__sale-price, .negar-category-mega__sale-discount')),
       };
     });
 
-    assert.strictEqual(resultState.resultTitle, expectedProduct.name, 'The live search result must belong to the selected category');
-    const decodedViewAllUrl = resultState.viewAllUrl.replace(/&#0*38;/g, '&');
-    assert.strictEqual(new URL(decodedViewAllUrl).searchParams.get('product_cat'), 'consoles', 'View-all searches must preserve the selected category');
+    assert.strictEqual(megaState.expanded, 'true', 'The category trigger must expose its expanded state');
+    assert(megaState.archiveLinks.length > 0, 'The mega menu must expose category archive links');
+    assert(megaState.archiveLinks.every((url) => new URL(url).pathname.includes('/product-category/')), 'Every menu category item must navigate to a category archive');
+    assert(megaState.childLinkCount > 0, 'The mega menu must include nested category links');
+    assert.strictEqual(new URL(megaState.saleLink).searchParams.get('on_sale'), '1', 'The daily-deals banner must link to the shop sale filter');
+    assert(megaState.saleTitle.includes('تخفیفات روز'), 'The sale card must be a general daily-deals banner');
+    assert(megaState.saleArt.length > 0, 'The daily-deals banner must display its decorative deal artwork');
+    assert.strictEqual(megaState.referencesProduct, false, 'The mega-menu banner must not promote an individual product or price');
+
+    await page.keyboard.press('Escape');
+    const closedState = await page.evaluate(() => ({
+      isHidden: document.getElementById('negar-category-mega')?.classList.contains('hidden'),
+      expanded: document.getElementById('negar-category-menu-btn')?.getAttribute('aria-expanded'),
+      focusedId: document.activeElement?.id,
+    }));
+    assert.strictEqual(closedState.isHidden, true, 'Escape must close the mega menu');
+    assert.strictEqual(closedState.expanded, 'false', 'Escape must reset aria-expanded');
+    assert.strictEqual(closedState.focusedId, 'negar-category-menu-btn', 'Escape must return focus to the trigger');
+  });
+
+  // 3B. Live search must remain global after category filtering is removed.
+  await testStep('Live search searches all products without category controls', async () => {
+    await page.goto(BASE_URL, { waitUntil: 'domcontentloaded' });
+    const catalogueResponse = await page.request.get(`${BASE_URL}/wp-json/wc/store/v1/products?per_page=1`);
+    const catalogue = await catalogueResponse.json();
+    assert(catalogue.length > 0, 'A live product must be available for search');
+
+    const searchInput = await page.$('.negar-ajax-search-form .negar-search-input');
+    assert(searchInput, 'The global search input must exist');
+    await searchInput.fill(catalogue[0].name);
+    await page.waitForFunction(
+      (title) => Array.from(document.querySelectorAll('.negar-ajax-search-results .search-result-title'))
+        .some((element) => element.textContent.trim() === title),
+      catalogue[0].name,
+      { timeout: 10000 }
+    );
   });
 
   // 4. Customer Phone OTP Authentication Modal Flow
@@ -250,26 +399,28 @@ async function runTests() {
       assert(modal, 'OTP login modal must be visible on click');
 
       // Enter valid Iranian mobile number
-      const phoneInput = await page.$('#negar-otp-phone-input');
+      const phoneInput = await page.$('#negar-login-otp-modal [data-otp-phone]');
       assert(phoneInput, 'Phone input must exist in Step 1');
       await phoneInput.fill('09121112233');
 
       // Submit Step 1
-      const submitStep1 = await page.$('#negar-otp-step1-submit');
+      const submitStep1 = await page.$('#negar-login-otp-modal [data-otp-submit="phone"]');
       await page.evaluate(el => el.click(), submitStep1);
       await page.waitForFunction(() => {
-        const step2 = document.getElementById('negar-otp-step2-form');
-        const error = document.getElementById('negar-otp-step1-error');
-        return !step2.classList.contains('hidden') || !error.classList.contains('hidden');
+        const modal = document.getElementById('negar-login-otp-modal');
+        const step2 = modal?.querySelector('[data-otp-step="code"]');
+        const error = modal?.querySelector('[data-otp-message="phone"]');
+        return (step2 && !step2.classList.contains('hidden')) || (error && !error.classList.contains('hidden'));
       }, { timeout: 10000 });
 
       const otpState = await page.evaluate(() => {
-        const step2 = document.getElementById('negar-otp-step2-form');
-        const error = document.getElementById('negar-otp-step1-error');
+        const modal = document.getElementById('negar-login-otp-modal');
+        const step2 = modal?.querySelector('[data-otp-step="code"]');
+        const error = modal?.querySelector('[data-otp-message="phone"]');
         return {
-          step2Visible: !step2.classList.contains('hidden'),
-          errorVisible: !error.classList.contains('hidden'),
-          errorText: error.textContent.trim(),
+          step2Visible: Boolean(step2 && !step2.classList.contains('hidden')),
+          errorVisible: Boolean(error && !error.classList.contains('hidden')),
+          errorText: error?.textContent.trim() || '',
         };
       });
       assert(otpState.step2Visible || otpState.errorVisible, 'OTP submission must produce either verification controls or an honest server response');
@@ -432,7 +583,7 @@ async function runTests() {
   });
 
   // 12. Contact Us: Real AJAX Submission (No Fake alert())
-  await testStep('Contact page renders contact cards, map, and form with real AJAX handler', async () => {
+  await testStep('Contact page uses customizable contact cards and an accessible real AJAX form', async () => {
     await page.goto(`${BASE_URL}/contact/`, { waitUntil: 'domcontentloaded' });
     const contactForm = await page.$('#negar-contact-form');
     assert(contactForm, 'Contact form with id #negar-contact-form must exist');
@@ -443,15 +594,66 @@ async function runTests() {
     assert(phoneInput, 'Phone input must exist');
     const messageInput = await page.$('#contact-message');
     assert(messageInput, 'Message textarea must exist');
+    const labels = await page.evaluate(() => ['contact-name', 'contact-phone', 'contact-subject', 'contact-message']
+      .every((id) => Boolean(document.querySelector(`label[for="${id}"]`))));
+    assert(labels, 'Every contact field must have a visible associated label');
+    assert(await page.$('.negar-map-placeholder, .negar-map-frame iframe'), 'The map area must have either configured media or an explicit editable placeholder');
+    const contactVisuals = await page.evaluate(() => ({
+      background: getComputedStyle(document.querySelector('.negar-contact-page')).backgroundColor,
+      icons: Array.from(document.querySelectorAll('.negar-contact-page i')).every((icon) => getComputedStyle(icon, '::before').content !== 'none'),
+    }));
+    assert.strictEqual(contactVisuals.background, 'rgb(255, 255, 255)', 'The contact page background must be white');
+    assert.strictEqual(contactVisuals.icons, true, 'Contact-page icon glyphs must be loaded');
   });
 
   // 13. About Us Page
-  await testStep('About Us page renders brand story, key metrics, and values', async () => {
+  await testStep('About Us page renders an editable brand story and truthful navigation topics', async () => {
     await page.goto(`${BASE_URL}/about/`, { waitUntil: 'domcontentloaded' });
     const aboutHeader = await page.$('h1');
     assert(aboutHeader, 'About page title must exist');
-    const cards = await page.$$('.card, .negar-pillar-card');
-    assert(cards.length >= 4, `About page should have metrics cards (found ${cards.length})`);
+    assert(await page.$('.negar-about-intro .entry-content'), 'About page must expose the editable story area');
+    const topics = await page.$$('.negar-about-topics article');
+    assert.strictEqual(topics.length, 3, 'About page must expose its product, support, and account route cards');
+    const aboutVisuals = await page.evaluate(() => ({
+      background: getComputedStyle(document.querySelector('.negar-about-page')).backgroundColor,
+      icons: Array.from(document.querySelectorAll('.negar-about-page i')).every((icon) => getComputedStyle(icon, '::before').content !== 'none'),
+    }));
+    assert.strictEqual(aboutVisuals.background, 'rgb(255, 255, 255)', 'The about page background must be white');
+    assert.strictEqual(aboutVisuals.icons, true, 'About-page icon glyphs must be loaded');
+  });
+
+  await testStep('My Account uses an inline OTP form and exposes no guest password or registration form', async () => {
+    await page.goto(`${BASE_URL}/my-account/`, { waitUntil: 'domcontentloaded' });
+    assert(await page.$('.negar-account-auth [data-negar-otp]'), 'Guest account page must render the inline OTP component');
+    assert(await page.$('.negar-account-auth [data-otp-phone]'), 'Guest account page must collect a mobile number');
+    assert.strictEqual(await page.$('.negar-account-auth input[type="password"], .negar-account-auth [name="username"], .negar-account-auth [name="email"]'), null, 'Guest account page must not expose password or registration inputs');
+    const destination = await page.$eval('.negar-account-auth [data-negar-otp]', (root) => root.dataset.redirectTo || '');
+    assert(destination.includes('/my-account'), 'OTP success must return the customer to My Account');
+  });
+
+  await testStep('FAQ, terms, and order tracking retain their existing content in the shared information layout', async () => {
+    for (const path of ['/faq/', '/terms/', '/track-order/']) {
+      const response = await page.goto(`${BASE_URL}${path}`, { waitUntil: 'domcontentloaded' });
+      assert.strictEqual(response.status(), 200, `${path} must respond successfully`);
+      assert(await page.$('.negar-information-page h1'), `${path} must have an information-page heading`);
+      const text = await page.$eval('.negar-information-page__content', (element) => element.textContent.trim());
+      assert(text.length > 0, `${path} must retain its existing page content`);
+    }
+  });
+
+  await testStep('Public routes remain responsive and free of horizontal overflow at key widths', async () => {
+    const routes = ['/', '/shop/', '/?p=131', '/cart/', '/checkout/', '/my-account/', '/blog/', '/about/', '/contact/', '/faq/', '/terms/', '/track-order/'];
+    for (const width of [375, 768, 1440]) {
+      const auditContext = await browser.newContext({ viewport: { width, height: 900 }, locale: 'fa-IR' });
+      const auditPage = await auditContext.newPage();
+      for (const path of routes) {
+        const response = await auditPage.goto(`${BASE_URL}${path}`, { waitUntil: 'domcontentloaded' });
+        assert(response && response.status() < 400, `${path} must remain available at ${width}px`);
+        const overflow = await auditPage.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+        assert.strictEqual(overflow, 0, `${path} must have no horizontal overflow at ${width}px`);
+      }
+      await auditContext.close();
+    }
   });
 
   // 14. V3 Header Logo Dimensions across WooCommerce Pages (Shop, Single Product)
@@ -474,7 +676,7 @@ async function runTests() {
   });
 
   // 15. V3 Mobile Hero Slider Dimensions & Visibility
-  await testStep('Mobile Hero Slider displays content with non-zero dimensions and 0px overflow', async () => {
+  await testStep('Mobile hero has one sale price, aligned deal geometry, no backdrop, and 0px overflow', async () => {
     const mCtx = await browser.newContext({ viewport: { width: 375, height: 812 }, isMobile: true });
     const mPage = await mCtx.newPage();
     await mPage.goto(BASE_URL, { waitUntil: 'domcontentloaded' });
@@ -485,14 +687,24 @@ async function runTests() {
       const img = document.querySelector('.landing-nk__carousel .swiper-slide-active .image img, .landing-nk__carousel .image img');
       const title = document.querySelector('.landing-nk__carousel .title');
       const cta = document.querySelector('.landing-nk__carousel .btn');
+      const wrapper = document.querySelector('.landing-nk__wrapper');
+      const dealBox = document.querySelector('.landing-nk__products__box');
+      const offer = document.querySelector('.landing-nk__products__box .offer');
       const iRect = img ? img.getBoundingClientRect() : null;
       const tRect = title ? title.getBoundingClientRect() : null;
       const cRect = cta ? cta.getBoundingClientRect() : null;
+      const dealBoxRect = dealBox ? dealBox.getBoundingClientRect() : null;
+      const offerRect = offer ? offer.getBoundingClientRect() : null;
 
       return {
         imgVisible: iRect && iRect.width > 50 && iRect.height > 50,
         titleVisible: tRect && tRect.width > 50,
         ctaVisible: cRect && cRect.width > 50,
+        strikePrices: document.querySelectorAll('.swiper-landing-product-nk .landing-nk__products__item .detail > .price del').length,
+        backdropContent: wrapper ? getComputedStyle(wrapper, '::before').content : '',
+        topbarHeight: document.querySelector('.negar-topbar')?.getBoundingClientRect().height || 0,
+        dealBoxRect: dealBoxRect && { left: dealBoxRect.left, right: dealBoxRect.right, top: dealBoxRect.top },
+        offerRect: offerRect && { left: offerRect.left, right: offerRect.right, top: offerRect.top },
         overflow: document.documentElement.scrollWidth > window.innerWidth,
       };
     });
@@ -500,8 +712,28 @@ async function runTests() {
     assert(heroMetrics.imgVisible, 'Mobile hero image must have visible rendered dimensions');
     assert(heroMetrics.titleVisible, 'Mobile hero title must be visible');
     assert(heroMetrics.ctaVisible, 'Mobile hero CTA button must be visible');
+    assert(heroMetrics.topbarHeight >= 52, `Mobile topbar must be at least 52px high (got ${heroMetrics.topbarHeight}px)`);
+    assert.strictEqual(heroMetrics.strikePrices, 1, 'The mobile flash deal must render exactly one regular (struck-through) price');
+    assert.strictEqual(heroMetrics.backdropContent, 'none', 'Mobile hero must not retain the detached grey backdrop');
+    assert(heroMetrics.dealBoxRect && heroMetrics.offerRect, 'Mobile flash-deal card and label must both render');
+    assert(heroMetrics.offerRect.left >= heroMetrics.dealBoxRect.left - 1, 'Flash-deal label must align with the card’s left edge');
+    assert(heroMetrics.offerRect.right <= heroMetrics.dealBoxRect.right + 1, 'Flash-deal label must remain within the card width');
+    assert(heroMetrics.offerRect.top <= heroMetrics.dealBoxRect.top + 1, 'Flash-deal label must align with the card’s top notch');
     assert.strictEqual(heroMetrics.overflow, false, 'Homepage must have zero horizontal overflow on mobile');
     await mCtx.close();
+  });
+
+  await testStep('Header and home content have zero horizontal overflow at tablet width', async () => {
+    const tabletContext = await browser.newContext({ viewport: { width: 768, height: 900 }, locale: 'fa-IR' });
+    const tabletPage = await tabletContext.newPage();
+    await tabletPage.goto(BASE_URL, { waitUntil: 'domcontentloaded' });
+    const metrics = await tabletPage.evaluate(() => ({
+      overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+      topbarHeight: document.querySelector('.negar-topbar')?.getBoundingClientRect().height || 0,
+    }));
+    assert.strictEqual(metrics.overflow, 0, '768px viewport must have zero horizontal overflow');
+    assert(metrics.topbarHeight >= 60, `Tablet topbar must preserve the desktop 60px height (got ${metrics.topbarHeight}px)`);
+    await tabletContext.close();
   });
 
   // 16. V3 Mobile Bottom Navigation Clean 3-Item Island

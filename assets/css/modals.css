@@ -115,9 +115,139 @@
    4. Notiflix Notifications & WC Notice Suppression
    ========================================================================== */
 #NXNotifyContainer .notiflix-notify {
-	box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.12), 0 8px 10px -6px rgba(0, 0, 0, 0.06) !important;
+	box-shadow: 0 14px 32px rgba(15, 23, 42, .14) !important;
 	border: 1px solid #e2e8f0 !important;
-	font-family: inherit !important;
+	border-right-width: 4px !important;
+	border-radius: 14px !important;
+	font-family: var(--font-primary, Vazirmatn, Tahoma, sans-serif) !important;
+	font-size: .875rem !important;
+	font-weight: 600 !important;
+}
+
+/* Persistent WooCommerce notices use the same surface and feedback hierarchy as toasts. */
+.woocommerce .woocommerce-notices-wrapper :is(.woocommerce-message, .woocommerce-info, .woocommerce-error),
+.woocommerce-page .woocommerce-notices-wrapper :is(.woocommerce-message, .woocommerce-info, .woocommerce-error),
+.woocommerce-MyAccount-content > :is(.woocommerce-message, .woocommerce-info, .woocommerce-error),
+.woocommerce > :is(.woocommerce-message, .woocommerce-info, .woocommerce-error) {
+	display: flex;
+	align-items: center;
+	gap: .85rem;
+	min-height: 68px;
+	margin: 0 0 1.25rem;
+	padding: .9rem 1rem;
+	border: 1px solid var(--notice-border, #e2e8f0);
+	border-right: 4px solid var(--notice-color, #0284c7);
+	border-radius: 16px;
+	background: var(--notice-surface, #f8fafc);
+	box-shadow: 0 8px 22px rgba(15, 23, 42, .05);
+	color: #334155;
+	font-family: var(--font-primary, Vazirmatn, Tahoma, sans-serif);
+	font-size: .9rem;
+	font-weight: 600;
+	line-height: 1.8;
+	list-style: none;
+}
+
+.woocommerce .woocommerce-notices-wrapper .woocommerce-message,
+.woocommerce-page .woocommerce-notices-wrapper .woocommerce-message,
+.woocommerce-MyAccount-content > .woocommerce-message,
+.woocommerce > .woocommerce-message {
+	--notice-color: #059669;
+	--notice-border: #a7f3d0;
+	--notice-surface: #ecfdf5;
+}
+
+.woocommerce .woocommerce-notices-wrapper .woocommerce-info,
+.woocommerce-page .woocommerce-notices-wrapper .woocommerce-info,
+.woocommerce-MyAccount-content > .woocommerce-info,
+.woocommerce > .woocommerce-info {
+	--notice-color: #0284c7;
+	--notice-border: #bae6fd;
+	--notice-surface: #f0f9ff;
+}
+
+.woocommerce .woocommerce-notices-wrapper .woocommerce-error,
+.woocommerce-page .woocommerce-notices-wrapper .woocommerce-error,
+.woocommerce-MyAccount-content > .woocommerce-error,
+.woocommerce > .woocommerce-error {
+	--notice-color: #e11d48;
+	--notice-border: #fecdd3;
+	--notice-surface: #fff1f2;
+}
+
+.woocommerce .woocommerce-notices-wrapper :is(.woocommerce-message, .woocommerce-info, .woocommerce-error)::before,
+.woocommerce-page .woocommerce-notices-wrapper :is(.woocommerce-message, .woocommerce-info, .woocommerce-error)::before,
+.woocommerce-MyAccount-content > :is(.woocommerce-message, .woocommerce-info, .woocommerce-error)::before,
+.woocommerce > :is(.woocommerce-message, .woocommerce-info, .woocommerce-error)::before {
+	position: static;
+	display: inline-grid;
+	flex: 0 0 34px;
+	place-items: center;
+	width: 34px;
+	height: 34px;
+	margin: 0;
+	border-radius: 50%;
+	background: #fff;
+	box-shadow: inset 0 0 0 1px var(--notice-border, #e2e8f0);
+	color: var(--notice-color, #0284c7);
+	content: 'i';
+	font-family: Arial, sans-serif;
+	font-size: 1rem;
+	font-weight: 800;
+	line-height: 1;
+}
+
+.woocommerce .woocommerce-notices-wrapper .woocommerce-message::before,
+.woocommerce-page .woocommerce-notices-wrapper .woocommerce-message::before,
+.woocommerce-MyAccount-content > .woocommerce-message::before,
+.woocommerce > .woocommerce-message::before { content: '✓'; }
+.woocommerce .woocommerce-notices-wrapper .woocommerce-error::before,
+.woocommerce-page .woocommerce-notices-wrapper .woocommerce-error::before,
+.woocommerce-MyAccount-content > .woocommerce-error::before,
+.woocommerce > .woocommerce-error::before { content: '!'; }
+
+.woocommerce .woocommerce-notices-wrapper :is(.woocommerce-message, .woocommerce-info, .woocommerce-error) .button,
+.woocommerce-page .woocommerce-notices-wrapper :is(.woocommerce-message, .woocommerce-info, .woocommerce-error) .button,
+.woocommerce-MyAccount-content > :is(.woocommerce-message, .woocommerce-info, .woocommerce-error) .button,
+.woocommerce > :is(.woocommerce-message, .woocommerce-info, .woocommerce-error) .button {
+	order: -1;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 40px;
+	margin: 0 0 0 auto;
+	padding: .45rem .85rem;
+	border: 1px solid currentColor;
+	border-radius: 10px;
+	background: #fff;
+	color: var(--notice-color, #0284c7);
+	font: inherit;
+	font-size: .82rem;
+	font-weight: 800;
+	text-decoration: none;
+}
+
+.woocommerce .woocommerce-notices-wrapper :is(.woocommerce-message, .woocommerce-info, .woocommerce-error) .button:hover,
+.woocommerce-page .woocommerce-notices-wrapper :is(.woocommerce-message, .woocommerce-info, .woocommerce-error) .button:hover,
+.woocommerce-MyAccount-content > :is(.woocommerce-message, .woocommerce-info, .woocommerce-error) .button:hover,
+.woocommerce > :is(.woocommerce-message, .woocommerce-info, .woocommerce-error) .button:hover { background: color-mix(in srgb, var(--notice-color, #0284c7) 10%, #fff); }
+
+.woocommerce .woocommerce-notices-wrapper :is(.woocommerce-message, .woocommerce-info, .woocommerce-error) .button:focus-visible,
+.woocommerce-page .woocommerce-notices-wrapper :is(.woocommerce-message, .woocommerce-info, .woocommerce-error) .button:focus-visible,
+.woocommerce-MyAccount-content > :is(.woocommerce-message, .woocommerce-info, .woocommerce-error) .button:focus-visible,
+.woocommerce > :is(.woocommerce-message, .woocommerce-info, .woocommerce-error) .button:focus-visible { outline: 3px solid color-mix(in srgb, var(--notice-color, #0284c7) 32%, transparent); outline-offset: 3px; }
+
+@media (max-width: 575.98px) {
+	.negar-toast-container { right: 12px !important; bottom: 82px !important; left: 12px !important; }
+	.negar-toast { max-width: none; }
+	.woocommerce .woocommerce-notices-wrapper :is(.woocommerce-message, .woocommerce-info, .woocommerce-error),
+	.woocommerce-page .woocommerce-notices-wrapper :is(.woocommerce-message, .woocommerce-info, .woocommerce-error),
+	.woocommerce-MyAccount-content > :is(.woocommerce-message, .woocommerce-info, .woocommerce-error),
+	.woocommerce > :is(.woocommerce-message, .woocommerce-info, .woocommerce-error) { align-items: flex-start; flex-wrap: wrap; }
+	.woocommerce .woocommerce-notices-wrapper :is(.woocommerce-message, .woocommerce-info, .woocommerce-error) .button,
+	.woocommerce-page .woocommerce-notices-wrapper :is(.woocommerce-message, .woocommerce-info, .woocommerce-error) .button,
+	.woocommerce-MyAccount-content > :is(.woocommerce-message, .woocommerce-info, .woocommerce-error) .button,
+	.woocommerce > :is(.woocommerce-message, .woocommerce-info, .woocommerce-error) .button { width: 100%; margin-inline-start: 0; }
 }
 
 /* Suppress unstyled default WC message banner on catalog/product pages only when toast is active */
@@ -135,4 +265,104 @@ body:not(.woocommerce-cart):not(.woocommerce-checkout):not(.woocommerce-account)
 .btn-compare-toggle.is-active {
 	color: #2563eb !important;
 }
+
+/* ===========================================================================
+   5. Shared OTP authentication form
+   ========================================================================== */
+.negar-otp {
+	color: #0f172a;
+}
+
+.negar-otp__form {
+	display: grid;
+	gap: 1rem;
+}
+
+.negar-otp__form.hidden { display: none; }
+
+.negar-otp__field label {
+	display: block;
+	margin-bottom: 0.45rem;
+	color: #334155;
+	font-size: 0.8125rem;
+	font-weight: 800;
+}
+
+.negar-otp__field input {
+	width: 100%;
+	height: 48px;
+	border: 1.5px solid #e2e8f0;
+	border-radius: 14px;
+	background: #f8fafc;
+	padding: 0 0.875rem;
+	color: #0f172a;
+	font: inherit;
+	font-weight: 700;
+	transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.negar-otp__field input:focus {
+	border-color: #e90544;
+	background: #ffffff;
+	outline: none;
+	box-shadow: 0 0 0 3px rgba(233, 5, 68, 0.14);
+}
+
+.negar-otp__field [data-otp-code] {
+	letter-spacing: 0.42em;
+	text-align: center;
+}
+
+.negar-otp__hint {
+	margin: 0.5rem 0 0;
+	color: #64748b;
+	font-size: 0.75rem;
+	line-height: 1.7;
+}
+
+.negar-otp__message {
+	margin: 0;
+	border: 1px solid #fecdd3;
+	border-radius: 12px;
+	background: #fff1f2;
+	padding: 0.7rem 0.8rem;
+	color: #be123c;
+	font-size: 0.8125rem;
+	font-weight: 650;
+	line-height: 1.7;
+}
+
+.negar-otp__submit {
+	display: inline-flex;
+	min-height: 48px;
+	align-items: center;
+	justify-content: center;
+	gap: 0.6rem;
+	border: 0;
+	border-radius: 14px;
+	background: linear-gradient(135deg, #e90544, #c40439);
+	padding: 0.75rem 1rem;
+	box-shadow: 0 10px 20px rgba(233, 5, 68, 0.2);
+	color: #ffffff;
+	font: inherit;
+	font-size: 0.9rem;
+	font-weight: 800;
+	cursor: pointer;
+}
+
+.negar-otp__submit:hover:not(:disabled) { background: #c40439; }
+.negar-otp__submit:focus-visible,
+.negar-otp__target button:focus-visible,
+.negar-otp__resend-row button:focus-visible { outline: 3px solid rgba(233, 5, 68, 0.28); outline-offset: 2px; }
+.negar-otp__submit:disabled { cursor: wait; opacity: 0.72; }
+.negar-otp__spinner { width: 1rem; height: 1rem; border: 2px solid rgba(255,255,255,.45); border-top-color: #fff; border-radius: 50%; animation: negar-otp-spin .75s linear infinite; }
+.negar-otp__target,
+.negar-otp__resend-row { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; }
+.negar-otp__target { border: 1px solid #e2e8f0; border-radius: 12px; background: #f8fafc; padding: 0.7rem 0.8rem; font-size: .8125rem; }
+.negar-otp__target span { font-weight: 800; }
+.negar-otp__target button,
+.negar-otp__resend-row button { border: 0; background: transparent; color: #e90544; font: inherit; font-size: .75rem; font-weight: 800; cursor: pointer; }
+.negar-otp__resend-row { color: #64748b; font-size: .75rem; }
+.negar-otp__resend-row b { color: #e90544; font-variant-numeric: tabular-nums; }
+@keyframes negar-otp-spin { to { transform: rotate(360deg); } }
 

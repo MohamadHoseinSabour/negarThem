@@ -309,18 +309,8 @@ function negar_shop_scripts() {
 		);
 	}
 
-	// My Account & Auth Dedicated CSS
-	if ( function_exists( 'is_account_page' ) && is_account_page() ) {
-		wp_enqueue_style(
-			'negar-shop-auth',
-			NEGAR_SHOP_URI . '/assets/css/auth.css',
-			array( 'bootstrap-rtl' ),
-			NEGAR_SHOP_VERSION
-		);
-	}
-
 	// Content Pages Dedicated CSS (Blog, Single Post, About, Contact, 404, Search)
-	if ( is_home() || is_singular( 'post' ) || ( is_archive() && ! is_shop() && ! is_product_taxonomy() ) || is_search() || is_404() || is_page_template( 'page-templates/page-about.php' ) || is_page_template( 'page-templates/page-contact.php' ) ) {
+	if ( is_home() || is_singular( 'post' ) || ( is_archive() && ! is_shop() && ! is_product_taxonomy() ) || is_search() || is_404() || is_page_template( 'page-templates/page-about.php' ) || is_page_template( 'page-templates/page-contact.php' ) || is_page_template( 'page-templates/page-information.php' ) || ( is_page() && ! ( function_exists( 'is_cart' ) && ( is_cart() || is_checkout() || is_account_page() ) ) ) ) {
 		wp_enqueue_style(
 			'kaveh-main-blog',
 			NEGAR_SHOP_URI . '/assets/css/vendor/main-blog.min.css',
@@ -446,6 +436,14 @@ function negar_shop_scripts() {
 		'negar-shop-header-footer',
 		NEGAR_SHOP_URI . '/assets/js/header-footer.js',
 		array( 'negar-shop-main', 'kaveh-megamenu-js', 'kaveh-ajax-cart-js' ),
+		NEGAR_SHOP_VERSION,
+		true
+	);
+
+	wp_enqueue_script(
+		'negar-shop-otp-auth',
+		NEGAR_SHOP_URI . '/assets/js/otp-auth.js',
+		array( 'negar-shop-main' ),
 		NEGAR_SHOP_VERSION,
 		true
 	);

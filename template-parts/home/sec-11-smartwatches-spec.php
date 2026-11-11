@@ -149,8 +149,11 @@ $carousel_products_sec11 = array(
 								<div class="swiper-wrapper">
 									<?php foreach ( $carousel_products_sec11 as $idx => $prod ) : 
 										$match = negar_get_matching_product_info( $prod['keyword'], $shop_url );
+										if ( ! $match['id'] ) {
+											continue;
+										}
 										$prod_url = $match['url'];
-										$prod_id  = $match['id'] ? $match['id'] : ( 200 + $idx );
+										$prod_id  = $match['id'];
 									?>
 									<div class="swiper-slide" role="group" aria-label="<?php echo esc_attr( ( $idx + 1 ) . ' / ' . count( $carousel_products_sec11 ) ); ?>">
 										<div class="product-cart-thirty-three-nk h-100">
@@ -224,8 +227,11 @@ $carousel_products_sec11 = array(
 							<div class="top-selling-products-two-nk__discount position-relative h-100">
 								<div class="swiper swiper-top-selling-products-two-nk__discount swiper-fade" data-swiper='{"autoHeight":true,"slidesPerView":1,"spaceBetween":0,"effect":"fade","fadeEffect":{"crossFade":true},"pagination":{"el":".elementor-element-ee3dc51 .top-selling-products-two-nk__discount .swiper-pagination","clickable":true}}' data-kaveh-swiper-mounted="1">
 									<div class="swiper-wrapper">
-										<?php foreach ( $discount_items_sec11 as $d_idx => $d_item ) : 
+									<?php foreach ( $discount_items_sec11 as $d_idx => $d_item ) :
 											$d_match = negar_get_matching_product_info( $d_item['keyword'], $shop_url );
+											if ( ! $d_match['id'] ) {
+												continue;
+											}
 											$d_url = $d_match['url'];
 										?>
 										<div class="swiper-slide" role="group" aria-label="<?php echo esc_attr( ( $d_idx + 1 ) . ' / ' . count( $discount_items_sec11 ) ); ?>">

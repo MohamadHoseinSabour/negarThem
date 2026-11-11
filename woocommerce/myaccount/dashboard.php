@@ -21,7 +21,7 @@ $current_user = wp_get_current_user();
 			<?php
 			printf(
 				/* translators: 1: user display name */
-				esc_html__( 'سلام %s عزیز، به حساب کاربری خود خوش آمدید! 👋', 'negar-shop' ),
+				esc_html__( 'سلام %s، خوش آمدید', 'negar-shop' ),
 				'<strong>' . esc_html( $current_user->display_name ) . '</strong>'
 			);
 			?>
@@ -30,7 +30,7 @@ $current_user = wp_get_current_user();
 			<?php
 			printf(
 				/* translators: 1: orders URL 2: addresses URL 3: account details URL */
-				wp_kses_post( __( 'از طریق پیشخوان کاربری خود می‌توانید <a href="%1$s" class="text-primary font-bold hover:underline">آخرین سفارش‌ها</a> را مشاهده کنید، <a href="%2$s" class="text-primary font-bold hover:underline">نشانی‌های ارسال و صورت‌حساب</a> را مدیریت نمایید و <a href="%3$s" class="text-primary font-bold hover:underline">مشخصات و رمز عبور</a> خود را ویرایش کنید.', 'negar-shop' ) ),
+				wp_kses_post( __( 'از طریق پیشخوان کاربری خود می‌توانید <a href="%1$s" class="text-primary font-bold hover:underline">آخرین سفارش‌ها</a> را مشاهده کنید، <a href="%2$s" class="text-primary font-bold hover:underline">نشانی‌های ارسال و صورت‌حساب</a> را مدیریت نمایید و <a href="%3$s" class="text-primary font-bold hover:underline">مشخصات حساب</a> خود را ویرایش کنید.', 'negar-shop' ) ),
 				esc_url( wc_get_endpoint_url( 'orders' ) ),
 				esc_url( wc_get_endpoint_url( 'edit-address' ) ),
 				esc_url( wc_get_endpoint_url( 'edit-account' ) )
@@ -71,7 +71,7 @@ $current_user = wp_get_current_user();
 			</div>
 			<div>
 				<h4 class="text-sm font-bold text-dark group-hover:text-primary transition-colors"><?php esc_html_e( 'جزئیات حساب کاربری', 'negar-shop' ); ?></h4>
-				<span class="text-xs text-muted"><?php esc_html_e( 'تغییر کلمه عبور و نام', 'negar-shop' ); ?></span>
+				<span class="text-xs text-muted"><?php esc_html_e( 'ویرایش نام و اطلاعات حساب', 'negar-shop' ); ?></span>
 			</div>
 		</a>
 

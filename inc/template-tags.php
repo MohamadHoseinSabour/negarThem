@@ -104,3 +104,25 @@ if ( ! function_exists( 'negar_shop_get_discount_badge' ) ) :
 		return '<span class="badge badge-discount bg-rose-600 text-white text-xs font-black py-1 px-2.5 rounded-full shadow-xs">٪' . esc_html( $discount ) . ' تخفیف</span>';
 	}
 endif;
+
+if ( ! function_exists( 'negar_shop_phone_href' ) ) :
+	/**
+	 * Normalize Persian and Arabic digits for a telephone URI.
+	 *
+	 * @param string $phone Phone number entered in the Customizer.
+	 * @return string
+	 */
+	function negar_shop_phone_href( $phone ) {
+		$phone = strtr(
+			(string) $phone,
+			array(
+				'۰' => '0', '۱' => '1', '۲' => '2', '۳' => '3', '۴' => '4',
+				'۵' => '5', '۶' => '6', '۷' => '7', '۸' => '8', '۹' => '9',
+				'٠' => '0', '١' => '1', '٢' => '2', '٣' => '3', '٤' => '4',
+				'٥' => '5', '٦' => '6', '٧' => '7', '٨' => '8', '٩' => '9',
+			)
+		);
+
+		return preg_replace( '/[^0-9+]/', '', $phone );
+	}
+endif;

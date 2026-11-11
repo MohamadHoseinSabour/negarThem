@@ -23,9 +23,54 @@ $on_sale   = isset( $_GET['on_sale'] ) && '1' === $_GET['on_sale'];
 $categories = get_terms(
 	array(
 		'taxonomy'   => 'product_cat',
-		'hide_empty' => true,
+		'hide_empty' => false,
+		'exclude'    => array( (int) get_option( 'default_product_cat' ) ),
+		'orderby'    => 'name',
+		'order'      => 'ASC',
 	)
 );
+
+$categories_by_parent = array();
+if ( ! is_wp_error( $categories ) ) {
+	foreach ( $categories as $category ) {
+		$parent_id = (int) $category->parent;
+		if ( ! isset( $categories_by_parent[ $parent_id ] ) ) {
+			$categories_by_parent[ $parent_id ] = array();
+		}
+		$categories_by_parent[ $parent_id ][] = $category;
+	}
+}
+
+$render_category_filter_items = null;
+$render_category_filter_items = static function ( $parent_id = 0, $depth = 0 ) use ( &$render_category_filter_items, $categories_by_parent ) {
+	if ( empty( $categories_by_parent[ $parent_id ] ) ) {
+		return;
+	}
+
+	foreach ( $categories_by_parent[ $parent_id ] as $category ) {
+		$has_children = ! empty( $categories_by_parent[ $category->term_id ] );
+		$item_classes = array(
+			'category-filter-item',
+			'category-filter-item--depth-' . $depth,
+			0 === $depth ? 'category-filter-item--parent' : 'category-filter-item--child',
+		);
+
+		if ( $has_children ) {
+			$item_classes[] = 'category-filter-item--has-children';
+		}
+
+		echo '<li class="' . esc_attr( implode( ' ', $item_classes ) ) . '" style="--category-depth: ' . esc_attr( min( $depth, 4 ) ) . ';">';
+		echo '<input type="checkbox" name="category" id="category-' . esc_attr( $category->term_id ) . '" myid="' . esc_attr( $category->term_id ) . '" hidden="" autocomplete="off">';
+		echo '<label for="category-' . esc_attr( $category->term_id ) . '" class="d-flex align-items-center gap-3 f-payda fw-normal">';
+		echo '<span class="category-filter-item__control" aria-hidden="true"></span>';
+		echo '<span class="category-filter-item__name">' . esc_html( $category->name ) . '</span>';
+		if ( 0 === $depth ) {
+			echo '<span class="category-filter-item__kind">دسته اصلی</span>';
+		}
+		echo '</label></li>';
+		$render_category_filter_items( (int) $category->term_id, $depth + 1 );
+	}
+};
 
 // Retrieve brands
 $brands = get_terms(
@@ -133,15 +178,7 @@ $brands = get_terms(
 						<div class="category-nk__filter__scroll">
 							<ul class="category-nk__filter__categories__items cathidden d-flex flex-column gap-3">
 								<input class="filterhiddeninput" type="hidden" id="filters-category" autocomplete="off" value="">
-								<?php foreach ( $categories as $cat ) : ?>
-									<li>
-										<input type="checkbox" name="category" id="category-<?php echo esc_attr( $cat->term_id ); ?>" myid="<?php echo esc_attr( $cat->term_id ); ?>" hidden="" autocomplete="off">
-										<label for="category-<?php echo esc_attr( $cat->term_id ); ?>" class="d-flex align-items-center gap-3 f-payda fw-normal">
-											<span class="position-relative rounded-circle flex-fill flex-grow-0 flex-shrink-0" aria-hidden="true"></span>
-											<?php echo esc_html( $cat->name ); ?>
-										</label>
-									</li>
-								<?php endforeach; ?>
+								<?php $render_category_filter_items(); ?>
 							</ul>
 						</div>
 					</div>

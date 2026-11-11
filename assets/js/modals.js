@@ -29,7 +29,7 @@
 	if (typeof Notiflix !== 'undefined' && Notiflix.Notify) {
 		Notiflix.Notify.init({
 			width: '320px',
-			position: 'right-top',
+			position: 'right-bottom',
 			distance: '24px',
 			opacity: 1,
 			borderRadius: '12px',
@@ -690,8 +690,8 @@
 			});
 		}
 
-		// Customer Phone OTP Authentication Modal Controller
-		initLoginOtpModal();
+		// OTP controls live in assets/js/otp-auth.js so the modal and account page
+		// can share one implementation without duplicate element IDs.
 	});
 
 	/**

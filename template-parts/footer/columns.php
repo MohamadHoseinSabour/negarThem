@@ -24,6 +24,7 @@ $footer_about = trim( wp_strip_all_tags( (string) get_theme_mod( 'negar_shop_foo
 $site_description = trim( (string) get_bloginfo( 'description' ) );
 $footer_about = $footer_about ? $footer_about : ( $site_description ? $site_description : __( 'برای مشاهده و مقایسه محصولات، از فروشگاه بازدید کنید.', 'negar-shop' ) );
 $phone_hotline = trim( (string) get_theme_mod( 'negar_shop_phone_hotline', '' ) );
+$phone_hotline_href = function_exists( 'negar_shop_phone_href' ) ? negar_shop_phone_href( $phone_hotline ) : preg_replace( '/[^0-9+]/', '', $phone_hotline );
 $copyright_text = trim( (string) get_theme_mod( 'negar_shop_copyright_text', '' ) );
 $copyright_text = $copyright_text ? $copyright_text : __( 'تمامی حقوق این وب‌سایت محفوظ است.', 'negar-shop' );
 $social_links = array_filter(
@@ -146,7 +147,7 @@ $social_links = array_filter(
 
 				<div class="grid grid-cols-1 gap-2">
 					<?php if ( $phone_hotline ) : ?>
-						<a href="tel:<?php echo esc_attr( preg_replace( '/[^0-9+]/', '', $phone_hotline ) ); ?>" class="bg-white p-2.5 rounded-2xl border border-slate-200/70 text-center shadow-2xs hover:border-rose-300 transition">
+						<a href="tel:<?php echo esc_attr( $phone_hotline_href ); ?>" class="bg-white p-2.5 rounded-2xl border border-slate-200/70 text-center shadow-2xs hover:border-rose-300 transition">
 							<span class="text-3xs text-slate-400 block mb-0.5 font-medium"><?php esc_html_e( 'پشتیبانی تلفنی', 'negar-shop' ); ?></span>
 							<span class="text-xs font-black text-rose-600 block dir-ltr"><?php echo esc_html( $phone_hotline ); ?></span>
 						</a>

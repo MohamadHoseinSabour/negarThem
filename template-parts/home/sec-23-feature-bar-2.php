@@ -93,6 +93,9 @@ $top_products = array(
 								<div class="swiper-wrapper">
 									<?php foreach ( $top_products as $item ) :
 										$info = negar_get_buy_top_product_info( $item['keyword'], $shop_url );
+										if ( ! $info['id'] ) {
+											continue;
+										}
 										?>
 										<div class="swiper-slide">
 											<div class="buy-top-product-nk__item bg-white d-flex align-items-center">

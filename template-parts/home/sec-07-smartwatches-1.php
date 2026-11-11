@@ -15,7 +15,8 @@ $upload_dir = wp_upload_dir();
 $kaveh_base = $upload_dir['baseurl'] . '/kaveh-demo';
 $shop_url   = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/shop/' );
 
-// Helper to find WooCommerce product ID and permalink if available
+// Only render cards for real WooCommerce products. Returning the shop URL for
+// an unmatched demo item sent customers to the wrong destination.
 function negar_get_matching_product_info( $slug_fragment, $fallback_url ) {
 	$prods = get_posts( array(
 		'post_type'      => 'product',
@@ -31,7 +32,7 @@ function negar_get_matching_product_info( $slug_fragment, $fallback_url ) {
 	}
 	return array(
 		'id'  => 0,
-		'url' => $fallback_url,
+		'url' => '',
 	);
 }
 
@@ -205,8 +206,11 @@ $carousel_products = array(
 								<div class="swiper-wrapper">
 									<?php foreach ( $carousel_products as $idx => $prod ) : 
 										$match = negar_get_matching_product_info( $prod['keyword'], $shop_url );
+										if ( ! $match['id'] ) {
+											continue;
+										}
 										$prod_url = $match['url'];
-										$prod_id  = $match['id'] ? $match['id'] : ( 100 + $idx );
+										$prod_id  = $match['id'];
 									?>
 									<div class="swiper-slide" role="group" aria-label="<?php echo esc_attr( ( $idx + 1 ) . ' / ' . count( $carousel_products ) ); ?>">
 										<div class="product-cart-thirty-three-nk h-100">
@@ -276,8 +280,11 @@ $carousel_products = array(
 							<div class="top-selling-products-two-nk__discount position-relative h-100">
 								<div class="swiper swiper-top-selling-products-two-nk__discount swiper-fade" data-swiper='{"autoHeight":true,"slidesPerView":1,"spaceBetween":0,"effect":"fade","fadeEffect":{"crossFade":true},"pagination":{"el":".elementor-element-6b1a7cb3 .top-selling-products-two-nk__discount .swiper-pagination","clickable":true}}' data-kaveh-swiper-mounted="1">
 									<div class="swiper-wrapper">
-										<?php foreach ( $discount_items as $d_idx => $d_item ) : 
+									<?php foreach ( $discount_items as $d_idx => $d_item ) :
 											$d_match = negar_get_matching_product_info( $d_item['keyword'], $shop_url );
+											if ( ! $d_match['id'] ) {
+												continue;
+											}
 											$d_url = $d_match['url'];
 										?>
 										<div class="swiper-slide" role="group" aria-label="<?php echo esc_attr( ( $d_idx + 1 ) . ' / ' . count( $discount_items ) ); ?>">
