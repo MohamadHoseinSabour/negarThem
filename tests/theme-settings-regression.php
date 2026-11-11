@@ -190,6 +190,32 @@ try {
 		&& 'تلفن آزمایشی نگار' === negar_theme_text( 'contact', 'phone_card_label' )
 		&& 'محصولات آزمایشی نگار' === negar_theme_text( 'about', 'products_card_title' );
 
+	$registry       = negar_theme_home_section_registry();
+	$default_layout = negar_theme_home_layout_default();
+	$default_ids    = wp_list_pluck( $default_layout, 'id' );
+	$results['layout_registry_complete'] = 35 === count( $registry ) && 35 === count( $default_layout ) && $default_ids === array_keys( $registry );
+	$results['layout_default_order'] = array( 'story-circles', 'hero-slider', 'category-bubbles' ) === array_slice( $default_ids, 0, 3 )
+		&& array( 'blog-posts', 'sec-34-feature-bar-3', 'sec-35-trust-marquee' ) === array_slice( $default_ids, -3 );
+
+	$layout = negar_theme_test_save_group(
+		'layout',
+		array(
+			'layout' => array(
+				'order'   => array( 'hero-slider', 'story-circles', 'hero-slider', 'not-a-template-path', 'category-bubbles' ),
+				'enabled' => array( 'hero-slider' => '1', 'story-circles' => '1' ),
+			),
+		)
+	);
+	$normalized_layout = $layout['layout']['sections'];
+	$normalized_ids    = wp_list_pluck( $normalized_layout, 'id' );
+	$results['layout_saved'] = array( 'hero-slider', 'story-circles', 'category-bubbles' ) === array_slice( $normalized_ids, 0, 3 )
+		&& 35 === count( $normalized_layout ) && ! in_array( 'not-a-template-path', $normalized_ids, true );
+	$results['layout_visibility_saved'] = false === $normalized_layout[2]['enabled'] && true === $normalized_layout[0]['enabled'];
+	$results['layout_reload'] = $normalized_layout === negar_theme_home_layout();
+	$results['layout_preserves_groups'] = 'اطلاعیهٔ آزمایشی' === $layout['header']['announcement']
+		&& 'عنوان آزمایشی صفحهٔ اصلی' === $layout['texts']['home']['hero_slide_one_title'];
+	$results['layout_new_section_safe'] = 'sec-35-trust-marquee' === $normalized_layout[34]['id'] && true === $normalized_layout[34]['enabled'];
+
 	$colors = negar_theme_test_save_group( 'colors', array( 'colors' => array( 'primary' => '#059669', 'secondary' => '#e11d48' ) ) );
 	$results['previous_defaults_valid'] = '#059669' === $colors['colors']['primary'] && '#e11d48' === $colors['colors']['secondary'];
 	$results['colors_preserve_groups']  = 'اطلاعیهٔ آزمایشی' === $colors['header']['announcement'];

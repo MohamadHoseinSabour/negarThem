@@ -34,7 +34,7 @@ updated when a template is materially refactored.
 | --- | --- | --- | --- |
 | Theme bootstrap | `functions.php` | Loads `inc/setup.php`, enqueue/template helpers, Customizer, contact form, then WooCommerce modules including OTP | Load the future settings service before templates, but keep Customizer loaded for legacy reads. |
 | Existing saved controls | `inc/customizer.php` | `get_theme_mod()` calls in header, footer, contact page, SEO and Customizer CSS | Read existing mods as fallbacks; never overwrite a saved mod merely because the new option is absent. |
-| Homepage composition | `front-page.php` | 35 ordered `get_template_part()` calls | Replace only the non-Elementor branch with a trusted fixed registry. |
+| Homepage composition | `front-page.php` | 35 ordered template parts through `negar_theme_home_section_registry()` | Phase 3 keeps only the non-Elementor branch registry-controlled; see [homepage layout registry](homepage-layout-registry.md). |
 | Product presentation | `template-parts/home/*`, WooCommerce templates | Some live WC objects and some demo arrays | Section settings select IDs/categories/query rules; WC remains the source for all commercial fields. |
 | Header and footer | `template-parts/header/*`, `template-parts/footer/*` | Customizer values plus template literals | New settings should fall back to the existing theme mods until an explicit override is saved. |
 | Contact page | `page-templates/page-contact.php`, `inc/contact-form.php` | Contact theme mods; submissions in non-autoloaded `negar_contact_submissions` | Reuse the present data values and contact form. Do not make submissions part of theme export. |

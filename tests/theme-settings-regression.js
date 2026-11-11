@@ -29,6 +29,7 @@ async function run() {
   let failure;
   let browser;
   let context;
+  let mobileContext;
   let auth;
 
   try {
@@ -77,6 +78,33 @@ async function run() {
     assert.strictEqual((await page.locator('.negar-showcase-hero h1').textContent()).trim(), 'تماس آزمایشی نگار', 'Saved internal-page text must render after reload');
     assert.strictEqual((await page.locator('.negar-contact-grid .negar-contact-card b').first().textContent()).trim(), 'تلفن آزمایشی نگار', 'Saved contact-card label must render after reload');
 
+    await page.goto(BASE_URL + '/wp-admin/options-general.php?page=negar-theme-settings&tab=layout', { waitUntil: 'domcontentloaded' });
+    assert.strictEqual(await page.locator('#negar-layout-sections .negar-layout-item').count(), 35, 'The authenticated layout form must list all 35 fixed homepage sections');
+    await page.locator('#negar-layout-enabled-story-circles').uncheck();
+    await page.locator('#negar-layout-enabled-category-bubbles').check();
+    await page.locator('.negar-layout-item[data-section-id="category-bubbles"] [data-direction="up"]').click();
+    await page.locator('.negar-layout-item[data-section-id="category-bubbles"] [data-direction="up"]').click();
+    assert.strictEqual(await page.locator('#negar-layout-sections .negar-layout-item').nth(0).getAttribute('data-section-id'), 'category-bubbles', 'Keyboard-accessible move controls must update the submitted order');
+    await page.locator('.negar-layout-item[data-section-id="product-tabs"]').dragTo(page.locator('.negar-layout-item[data-section-id="category-bubbles"]'), { targetPosition: { x: 20, y: 5 } });
+    assert.strictEqual(await page.locator('#negar-layout-sections .negar-layout-item').nth(0).getAttribute('data-section-id'), 'product-tabs', 'Drag-and-drop must update the submitted order');
+    await Promise.all([
+      page.waitForURL((url) => url.pathname.endsWith('/wp-admin/options-general.php') && url.searchParams.get('tab') === 'layout'),
+      page.locator('form[action="options.php"] input[type="submit"]').click(),
+    ]);
+    assert.strictEqual(await page.locator('#negar-layout-enabled-story-circles').isChecked(), false, 'A saved visibility checkbox must survive the Settings API redirect');
+    assert.strictEqual(await page.locator('#negar-layout-sections .negar-layout-item').nth(0).getAttribute('data-section-id'), 'product-tabs', 'A saved section order must survive the Settings API redirect');
+
+    await page.goto(BASE_URL, { waitUntil: 'domcontentloaded' });
+    const layoutHtml = await page.locator('main.homepage-main').innerHTML();
+    assert(layoutHtml.indexOf('<!-- negar-home-section:product-tabs -->') < layoutHtml.indexOf('<!-- negar-home-section:hero-slider -->'), 'Saved ordering must render on the frontend after reload');
+    assert.strictEqual(layoutHtml.includes('<!-- negar-home-section:story-circles -->'), false, 'A disabled homepage section must not render on the frontend');
+    mobileContext = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, locale: 'fa-IR' });
+    const mobilePage = await mobileContext.newPage();
+    await mobilePage.goto(BASE_URL, { waitUntil: 'domcontentloaded' });
+    assert.strictEqual(await mobilePage.locator('#negar-home-hero-carousel').isVisible(), true, 'The reordered homepage must retain its existing hero component on mobile');
+    const mobileLayoutHtml = await mobilePage.locator('main.homepage-main').innerHTML();
+    assert(mobileLayoutHtml.indexOf('<!-- negar-home-section:product-tabs -->') < mobileLayoutHtml.indexOf('<!-- negar-home-section:hero-slider -->'), 'Saved ordering must also render on mobile');
+
     php('set-colors', '#123456', '#654321');
     await page.goto(BASE_URL, { waitUntil: 'domcontentloaded' });
     assert.deepStrictEqual(await readColors(page), { primary: '#123456', secondary: '#654321' }, 'Saved color values must apply after a frontend reload');
@@ -92,6 +120,13 @@ async function run() {
     try {
       if (context) {
         await context.close();
+      }
+    } catch (closeError) {
+      failure = failure || closeError;
+    }
+    try {
+      if (mobileContext) {
+        await mobileContext.close();
       }
     } catch (closeError) {
       failure = failure || closeError;

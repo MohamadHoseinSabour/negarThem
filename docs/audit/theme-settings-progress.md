@@ -78,5 +78,23 @@
 
 ## Next phase
 
-Phase 3 may define layout controls only after a separate ownership and accessibility
-review. It is not implemented by Phase 2.
+## Phase 3 - homepage section layout management
+
+**Status:** PASS
+**Commit:** recorded with the Phase 3 delivery commit
+
+- Added a code-owned registry for the 35 existing homepage templates. Default
+  output remains their original order and only the non-Elementor homepage uses it.
+- The Layout tab saves only known stable IDs and boolean visibility. Invalid or
+  duplicate IDs are rejected, missing IDs are safely appended, and no saved value
+  can select a PHP template path.
+- Added Persian RTL drag/drop controls with visible move-up/move-down alternatives
+  for keyboard use. No product query, banner, story, media or Swiper code changed.
+- Extended reversible WordPress and authenticated browser tests for 35-row form
+  rendering, drag/drop, keyboard movement, visibility, persisted frontend output,
+  group isolation and setting restoration.
+
+## Next phase
+
+Phase 4 may add product-section presentation controls only after a separate live
+WooCommerce data and accessibility review. It is not implemented by Phase 3.

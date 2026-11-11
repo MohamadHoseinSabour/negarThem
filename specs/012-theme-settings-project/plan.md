@@ -1,6 +1,6 @@
 # Implementation Plan: 012 Complete Theme Settings Project
 
-**Status:** Phase 2.1 text coverage complete; Phase 3 and later phases planned only.
+**Status:** Phase 3 homepage layout management complete; later phases planned only.
 
 ## Architecture
 
@@ -24,8 +24,9 @@
 4. **Text coverage completion (complete):** finish the reviewed active header,
    footer, About and Contact copy; publish the homepage/internal ownership matrix
    and keep unmounted partials, navigation, system copy and managed data excluded.
-5. **Layout (planned):** define layout schemas only after per-template ownership
-   and accessibility review.
+5. **Layout (complete):** implement a fixed 35-ID registry in the non-Elementor
+   homepage path. Store only IDs and enabled states, normalize corrupt/missing
+   layouts safely, and provide RTL drag/drop plus visible keyboard move controls.
 6. **Commerce presentation (planned):** add product-section and promotion controls
    that select/query real WooCommerce objects without duplicating commercial data.
 7. **Media collections (planned):** add banners, stories and brands using validated
@@ -45,4 +46,7 @@
 - A second Playwright path uses a temporary administrator session to submit the
   actual Settings API Texts form, then reloads both the admin screen and selected
   frontend components before restoring the snapshot.
+- The same authenticated path submits the Layout form, exercises drag/drop and
+  keyboard movement, confirms a hidden section and saved order on the frontend,
+  then restores the initial option snapshot.
 - `npm run test:lint` for PHP syntax and `npm test` for the user-visible suite.

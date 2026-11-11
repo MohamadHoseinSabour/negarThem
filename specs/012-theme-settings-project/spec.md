@@ -1,7 +1,7 @@
 # Feature Specification: 012 Complete Theme Settings Project
 
 **Feature code:** `SETTINGS-01`
-**Status:** Phase 2.1 text coverage complete; later phases planned
+**Status:** Phase 3 homepage layout management complete; later phases planned
 **Supersedes for new work:** None. `009-featurename-theme-options` remains the
 historical Customizer-and-widgets specification and is not this project.
 
@@ -20,8 +20,10 @@ Header/Footer/Contact tabs. Phase 1.1 hardens color tokens and persistence. Phas
 2 adds a strict, component-owned Texts group for selected header, homepage, footer,
 contact, about and not-found copy. Phase 2.1 completes the reviewed header Mega
 Menu, active footer, About-card and Contact-card coverage, and records all other
-template ownership in the coverage matrix. This spec plans the complete project; it
-does not authorize the remaining phases yet.
+template ownership in the coverage matrix. Phase 3 adds the fixed 35-section
+homepage registry, independent visibility/order controls and an RTL accessible
+admin interface. This spec plans the complete project; it does not authorize the
+remaining phases yet.
 
 ## Functional requirements
 
@@ -41,9 +43,13 @@ does not authorize the remaining phases yet.
 6. A coverage matrix must identify every mounted homepage section and internal
    template as handled, deferred with its future owner, or WordPress/WooCommerce/
    system managed before a later phase adds writable controls.
-7. Future layout, product-section, banner, story, brand, typography, SMS and
-   backup/import controls must have an approved schema and regression tests before
-   becoming writable.
+7. The Layout group may save only registered homepage IDs and their visibility;
+   template paths remain code-owned. It must preserve the legacy order by default,
+   repair invalid/missing/duplicated IDs safely, keep the Elementor branch intact,
+   and provide RTL drag-and-drop plus keyboard move controls.
+8. Future product-section, banner, story, brand, typography, SMS and backup/import
+   controls must have an approved schema and regression tests before becoming
+   writable.
 8. Product prices, stock, sale status, ratings, reviews, orders, customers and OTP
    states must remain live WordPress/WooCommerce or provider data. Settings may
    select presentation/query inputs, never invent transactional or commercial data.
@@ -68,5 +74,8 @@ does not authorize the remaining phases yet.
   restores the initial option and Customizer snapshots.
 - The coverage matrix documents all 35 mounted homepage sections and each internal
   template boundary without exposing managed data or unapproved navigation.
+- The authenticated layout form renders 35 registered sections, supports drag and
+  keyboard movement, persists order/visibility, and the non-Elementor homepage
+  renders only the enabled fixed-registry templates in saved order.
 - Documentation keys exactly match implementation and the dedicated spec, plan and
   task list remain separate from specification 009.

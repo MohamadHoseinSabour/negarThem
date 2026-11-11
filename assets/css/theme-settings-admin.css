@@ -1,0 +1,78 @@
+.negar-theme-settings .negar-layout-manager {
+	max-width: 860px;
+	margin: 22px 0;
+	padding: 0;
+	border: 0;
+}
+
+.negar-layout-sections {
+	margin: 16px 0 0;
+	padding: 0;
+	list-style: none;
+}
+
+.negar-layout-item {
+	display: grid;
+	grid-template-columns: auto minmax(180px, 1fr) minmax(130px, auto) auto;
+	gap: 12px;
+	align-items: center;
+	margin: 0 0 8px;
+	padding: 12px 14px;
+	background: #fff;
+	border: 1px solid #dcdcde;
+	border-right: 4px solid #2271b1;
+	border-radius: 3px;
+	cursor: grab;
+}
+
+.negar-layout-item.is-dragging {
+	opacity: .55;
+	cursor: grabbing;
+}
+
+.negar-layout-item__handle {
+	font-size: 22px;
+	line-height: 1;
+	color: #646970;
+}
+
+.negar-layout-item__title {
+	display: inline-flex;
+	gap: 8px;
+	align-items: center;
+	font-weight: 600;
+}
+
+.negar-layout-item__id {
+	direction: ltr;
+	font-family: monospace;
+	font-size: 12px;
+	color: #646970;
+}
+
+.negar-layout-item__actions {
+	display: flex;
+	gap: 10px;
+}
+
+.negar-layout-item .button-link {
+	min-height: 28px;
+	padding: 2px 4px;
+}
+
+.negar-layout-item .button-link:focus-visible,
+.negar-layout-item__title input:focus-visible {
+	outline: 2px solid #2271b1;
+	outline-offset: 2px;
+}
+
+@media (max-width: 782px) {
+	.negar-layout-item {
+		grid-template-columns: auto 1fr;
+	}
+
+	.negar-layout-item__id,
+	.negar-layout-item__actions {
+		grid-column: 2;
+	}
+}

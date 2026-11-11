@@ -19,6 +19,12 @@ Customizer fallback or code default”; a present key with an empty string means
     "about": { "hero_eyebrow": "", "products_card_title": "" },
     "not_found": { "title": "" }
   },
+  "layout": {
+    "sections": [
+      { "id": "story-circles", "enabled": true },
+      { "id": "hero-slider", "enabled": true }
+    ]
+  },
   "colors": { "primary": "#e90544", "secondary": "#c40439" },
   "header": { "announcement": "" },
   "footer": { "about": "", "copyright": "" },
@@ -81,10 +87,24 @@ mounted homepage and internal-template ownership boundary. It prevents future
 phases from turning unmounted partials, approved navigation or managed data into
 dead or duplicate settings.
 
+## Implemented layout schema
+
+`layout.sections` is an ordered array of `{ id, enabled }` rows. IDs are matched
+only against `negar_theme_home_section_registry()`; the registry owns all 35
+template paths in their original `front-page.php` order. The option therefore
+never stores or supplies a PHP template path. Unknown and duplicate IDs are
+dropped, while missing current IDs are appended as enabled, allowing a future
+registered section to render safely before it is explicitly arranged.
+
+`negar_theme_render_home_sections()` renders only enabled entries and only from
+that registry. It runs solely in the existing non-Elementor branch, so an
+Elementor-built homepage remains untouched. Layout does not alter section queries,
+banners, stories, product data or Swiper initialization.
+
 ## Planned schema additions
 
 The static tab registry deliberately reserves keys for the following phased
-additions: `layout`, `products`, `banners`, `stories`, `brands`,
+additions: `products`, `banners`, `stories`, `brands`,
 `typography`, `sms` and `backup`. Their field schemas must be
 documented before they are added; unknown keys must not be accepted by import or
 save handlers.

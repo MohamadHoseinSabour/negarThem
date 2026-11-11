@@ -1,9 +1,9 @@
 # Theme text coverage matrix
 
 **Audit date:** 2026-11-11
-**Scope:** Phase 2.1 text coverage completion. This matrix records visible copy
-ownership; it does not authorize component reordering, new layouts, media
-collections or commerce controls.
+**Scope:** Phase 2.1 text coverage plus Phase 3 composition ownership. This matrix
+records visible-copy ownership and the single approved layout boundary; it does not
+authorize new media collections, product queries or commerce controls.
 
 ## Rules used for the audit
 
@@ -59,6 +59,16 @@ collections or commerce controls.
 `category-showcase.php` exists under the home folder but is not mounted by
 `front-page.php`; it has no writable setting and remains deferred until an approved
 homepage composition phase.
+
+## Phase 3 layout ownership
+
+All 35 mounted rows above are now independently orderable and hideable through the
+fixed `negar_theme_home_section_registry()` registry. This is a composition-only
+control: each row retains its existing template, query, media, copy ownership and
+Swiper behavior. The option saves a stable ID plus visibility only—never a template
+path—and normalization drops unknown/duplicate IDs while appending missing current
+IDs as enabled. `category-showcase.php` remains outside the registry because it is
+not mounted by the homepage.
 
 ## Header, footer and internal templates
 

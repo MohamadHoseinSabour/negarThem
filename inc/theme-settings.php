@@ -25,6 +25,7 @@ function negar_theme_settings_defaults() {
 		'schema_version' => NEGAR_THEME_SETTINGS_VERSION,
 		'branding'       => array(),
 		'texts'          => array(),
+		'layout'         => array(),
 		'colors'         => array(),
 		'header'         => array(),
 		'footer'         => array(),
@@ -104,6 +105,149 @@ function negar_theme_color( $key ) {
  */
 function negar_theme_brand_label() {
 	return (string) negar_theme_setting( 'branding', 'site_label', get_bloginfo( 'name' ) );
+}
+
+/**
+ * Return the fixed, theme-owned homepage-section registry.
+ *
+ * Template paths are deliberately defined here rather than being saved in the
+ * option, so an option value can never cause an arbitrary PHP file to load.
+ * The order of this registry is the pre-Phase 3 front-page order.
+ *
+ * @return array<string, array<string, string>>
+ */
+function negar_theme_home_section_registry() {
+	return array(
+		'story-circles'              => array( 'label' => __( 'استوری‌ها', 'negar-shop' ), 'template' => 'template-parts/home/story-circles' ),
+		'hero-slider'                => array( 'label' => __( 'اسلایدر آغازین', 'negar-shop' ), 'template' => 'template-parts/home/hero-slider' ),
+		'category-bubbles'           => array( 'label' => __( 'دسته‌بندی‌های سریع', 'negar-shop' ), 'template' => 'template-parts/home/category-bubbles' ),
+		'flash-deals'                => array( 'label' => __( 'پیشنهادهای شگفت‌انگیز', 'negar-shop' ), 'template' => 'template-parts/home/flash-deals' ),
+		'product-tabs'               => array( 'label' => __( 'تب‌های محصولات', 'negar-shop' ), 'template' => 'template-parts/home/product-tabs' ),
+		'banners-grid'               => array( 'label' => __( 'بنرهای دو ستونه ۱', 'negar-shop' ), 'template' => 'template-parts/home/banners-grid' ),
+		'sec-07-smartwatches-1'      => array( 'label' => __( 'ساعت‌های هوشمند ۱', 'negar-shop' ), 'template' => 'template-parts/home/sec-07-smartwatches-1' ),
+		'sec-08-banner-wide'         => array( 'label' => __( 'بنر عریض ۱', 'negar-shop' ), 'template' => 'template-parts/home/sec-08-banner-wide' ),
+		'sec-09-accessories'         => array( 'label' => __( 'لوازم جانبی', 'negar-shop' ), 'template' => 'template-parts/home/sec-09-accessories' ),
+		'sec-10-banners-2col'        => array( 'label' => __( 'بنرهای دو ستونه ۲', 'negar-shop' ), 'template' => 'template-parts/home/sec-10-banners-2col' ),
+		'sec-11-smartwatches-spec'   => array( 'label' => __( 'ساعت و صوت با مشخصات', 'negar-shop' ), 'template' => 'template-parts/home/sec-11-smartwatches-spec' ),
+		'sec-12-banners-compact'     => array( 'label' => __( 'بنرهای فشرده ۱', 'negar-shop' ), 'template' => 'template-parts/home/sec-12-banners-compact' ),
+		'sec-13-taste-grid'          => array( 'label' => __( 'شبکهٔ سلیقه‌ها', 'negar-shop' ), 'template' => 'template-parts/home/sec-13-taste-grid' ),
+		'sec-14-feature-bar-1'       => array( 'label' => __( 'نوار ویژگی ۱', 'negar-shop' ), 'template' => 'template-parts/home/sec-14-feature-bar-1' ),
+		'sec-15-visited-products-2'  => array( 'label' => __( 'محصولات پربازدید ۲', 'negar-shop' ), 'template' => 'template-parts/home/sec-15-visited-products-2' ),
+		'sec-16-apple-watch-deal'    => array( 'label' => __( 'پیشنهاد ساعت اپل', 'negar-shop' ), 'template' => 'template-parts/home/sec-16-apple-watch-deal' ),
+		'sec-17-flash-deals-2'       => array( 'label' => __( 'پیشنهادهای شگفت‌انگیز ۲', 'negar-shop' ), 'template' => 'template-parts/home/sec-17-flash-deals-2' ),
+		'sec-18-banners-2col'        => array( 'label' => __( 'بنرهای دو ستونه ۳', 'negar-shop' ), 'template' => 'template-parts/home/sec-18-banners-2col' ),
+		'sec-19-gaming-laptop'       => array( 'label' => __( 'لپ‌تاپ گیمینگ', 'negar-shop' ), 'template' => 'template-parts/home/sec-19-gaming-laptop' ),
+		'brands-slider'              => array( 'label' => __( 'برندهای محبوب', 'negar-shop' ), 'template' => 'template-parts/home/brands-slider' ),
+		'sec-21-testimonials'        => array( 'label' => __( 'دیدگاه‌های تأییدشده', 'negar-shop' ), 'template' => 'template-parts/home/sec-21-testimonials' ),
+		'sec-22-flash-deals-audio'   => array( 'label' => __( 'پیشنهادهای صوتی', 'negar-shop' ), 'template' => 'template-parts/home/sec-22-flash-deals-audio' ),
+		'sec-23-feature-bar-2'       => array( 'label' => __( 'نوار ویژگی ۲', 'negar-shop' ), 'template' => 'template-parts/home/sec-23-feature-bar-2' ),
+		'sec-24-smartwatches-2'      => array( 'label' => __( 'ساعت‌های هوشمند ۲', 'negar-shop' ), 'template' => 'template-parts/home/sec-24-smartwatches-2' ),
+		'sec-25-gaming-zone'         => array( 'label' => __( 'منطقهٔ گیمینگ', 'negar-shop' ), 'template' => 'template-parts/home/sec-25-gaming-zone' ),
+		'sec-26-visited-products-3'  => array( 'label' => __( 'محصولات پربازدید ۳', 'negar-shop' ), 'template' => 'template-parts/home/sec-26-visited-products-3' ),
+		'sec-27-banners-compact-2'   => array( 'label' => __( 'بنرهای فشرده ۲', 'negar-shop' ), 'template' => 'template-parts/home/sec-27-banners-compact-2' ),
+		'sec-28-mobile-spotlight'    => array( 'label' => __( 'ویترین موبایل', 'negar-shop' ), 'template' => 'template-parts/home/sec-28-mobile-spotlight' ),
+		'sec-29-banners-2col'        => array( 'label' => __( 'بنرهای دو ستونه ۴', 'negar-shop' ), 'template' => 'template-parts/home/sec-29-banners-2col' ),
+		'sec-30-recently-viewed'     => array( 'label' => __( 'محصولات اخیراً دیده‌شده', 'negar-shop' ), 'template' => 'template-parts/home/sec-30-recently-viewed' ),
+		'sec-31-video-reviews'       => array( 'label' => __( 'بررسی‌های ویدیویی', 'negar-shop' ), 'template' => 'template-parts/home/sec-31-video-reviews' ),
+		'sec-32-banners-2col'        => array( 'label' => __( 'بنرهای دو ستونه ۵', 'negar-shop' ), 'template' => 'template-parts/home/sec-32-banners-2col' ),
+		'blog-posts'                 => array( 'label' => __( 'مقالات وبلاگ', 'negar-shop' ), 'template' => 'template-parts/home/blog-posts' ),
+		'sec-34-feature-bar-3'       => array( 'label' => __( 'نوار ویژگی ۳', 'negar-shop' ), 'template' => 'template-parts/home/sec-34-feature-bar-3' ),
+		'sec-35-trust-marquee'       => array( 'label' => __( 'نوار اعتماد و ارسال', 'negar-shop' ), 'template' => 'template-parts/home/sec-35-trust-marquee' ),
+	);
+}
+
+/**
+ * Return the default visible layout in the original template order.
+ *
+ * @return array<int, array{id: string, enabled: bool}>
+ */
+function negar_theme_home_layout_default() {
+	$layout = array();
+
+	foreach ( array_keys( negar_theme_home_section_registry() ) as $id ) {
+		$layout[] = array(
+			'id'      => $id,
+			'enabled' => true,
+		);
+	}
+
+	return $layout;
+}
+
+/**
+ * Normalize stored or submitted layout rows against the fixed registry.
+ *
+ * Unknown and duplicate IDs are dropped. Missing known IDs are appended and
+ * enabled so that an update introducing a new section remains safe and visible.
+ *
+ * @param mixed $layout Candidate layout rows.
+ * @return array<int, array{id: string, enabled: bool}>
+ */
+function negar_theme_normalize_home_layout( $layout ) {
+	$registry = negar_theme_home_section_registry();
+	$clean    = array();
+	$seen     = array();
+
+	if ( is_array( $layout ) ) {
+		foreach ( $layout as $row ) {
+			if ( ! is_array( $row ) || ! isset( $row['id'] ) ) {
+				continue;
+			}
+
+			$id = sanitize_key( $row['id'] );
+			if ( ! isset( $registry[ $id ] ) || isset( $seen[ $id ] ) ) {
+				continue;
+			}
+
+			$seen[ $id ] = true;
+			$clean[]     = array(
+				'id'      => $id,
+				'enabled' => ! isset( $row['enabled'] ) || ! in_array( $row['enabled'], array( false, 0, '0', 'false' ), true ),
+			);
+		}
+	}
+
+	foreach ( array_keys( $registry ) as $id ) {
+		if ( ! isset( $seen[ $id ] ) ) {
+			$clean[] = array(
+				'id'      => $id,
+				'enabled' => true,
+			);
+		}
+	}
+
+	return $clean;
+}
+
+/**
+ * Return the safe homepage layout, falling back to the original order.
+ *
+ * @return array<int, array{id: string, enabled: bool}>
+ */
+function negar_theme_home_layout() {
+	$settings = negar_theme_settings_raw();
+	$layout   = isset( $settings['layout']['sections'] ) ? $settings['layout']['sections'] : array();
+
+	return negar_theme_normalize_home_layout( $layout );
+}
+
+/**
+ * Render enabled homepage sections from the fixed registry.
+ *
+ * @return void
+ */
+function negar_theme_render_home_sections() {
+	$registry = negar_theme_home_section_registry();
+
+	foreach ( negar_theme_home_layout() as $section ) {
+		if ( empty( $section['enabled'] ) || ! isset( $registry[ $section['id'] ] ) ) {
+			continue;
+		}
+
+		// The comment is a non-visual, stable verification marker; no wrapper changes layout or Swiper behavior.
+		echo "\n<!-- negar-home-section:" . esc_html( $section['id'] ) . " -->\n";
+		get_template_part( $registry[ $section['id'] ]['template'] );
+	}
 }
 
 /**
@@ -274,7 +418,7 @@ function negar_theme_sanitize_settings( $submitted ) {
 	$submitted = is_array( $submitted ) ? wp_unslash( $submitted ) : array();
 	$current   = negar_theme_settings_raw();
 	$tab       = isset( $_POST['negar_theme_settings_tab'] ) ? sanitize_key( wp_unslash( $_POST['negar_theme_settings_tab'] ) ) : '';
-	$allowed   = array( 'general', 'texts', 'colors', 'header_footer' );
+	$allowed   = array( 'general', 'texts', 'layout', 'colors', 'header_footer' );
 
 	if ( ! in_array( $tab, $allowed, true ) ) {
 		return $current;
@@ -298,6 +442,27 @@ function negar_theme_sanitize_settings( $submitted ) {
 				$current['texts'][ $component ][ $key ] = 'textarea' === $field['type'] ? sanitize_textarea_field( $value ) : sanitize_text_field( $value );
 			}
 		}
+	}
+
+	if ( 'layout' === $tab ) {
+		$registry = negar_theme_home_section_registry();
+		$order    = isset( $submitted['layout']['order'] ) && is_array( $submitted['layout']['order'] ) ? $submitted['layout']['order'] : array();
+		$enabled  = isset( $submitted['layout']['enabled'] ) && is_array( $submitted['layout']['enabled'] ) ? $submitted['layout']['enabled'] : array();
+		$rows     = array();
+
+		foreach ( $order as $id ) {
+			$id = sanitize_key( $id );
+			if ( ! isset( $registry[ $id ] ) ) {
+				continue;
+			}
+
+			$rows[] = array(
+				'id'      => $id,
+				'enabled' => isset( $enabled[ $id ] ) && '1' === (string) $enabled[ $id ],
+			);
+		}
+
+		$current['layout']['sections'] = negar_theme_normalize_home_layout( $rows );
 	}
 
 	if ( 'colors' === $tab ) {
@@ -340,6 +505,36 @@ function negar_theme_add_settings_page() {
 	);
 }
 add_action( 'admin_menu', 'negar_theme_add_settings_page' );
+
+/**
+ * Load layout-management assets only for this settings page.
+ *
+ * @param string $hook_suffix Current administration screen hook.
+ * @return void
+ */
+function negar_theme_enqueue_settings_assets( $hook_suffix ) {
+	if ( 'settings_page_negar-theme-settings' !== $hook_suffix ) {
+		return;
+	}
+
+	$style_path  = NEGAR_SHOP_DIR . '/assets/css/theme-settings-admin.css';
+	$script_path = NEGAR_SHOP_DIR . '/assets/js/theme-settings-layout.js';
+
+	wp_enqueue_style(
+		'negar-theme-settings-admin',
+		NEGAR_SHOP_URI . '/assets/css/theme-settings-admin.css',
+		array(),
+		file_exists( $style_path ) ? (string) filemtime( $style_path ) : NEGAR_SHOP_VERSION
+	);
+	wp_enqueue_script(
+		'negar-theme-settings-layout',
+		NEGAR_SHOP_URI . '/assets/js/theme-settings-layout.js',
+		array(),
+		file_exists( $script_path ) ? (string) filemtime( $script_path ) : NEGAR_SHOP_VERSION,
+		true
+	);
+}
+add_action( 'admin_enqueue_scripts', 'negar_theme_enqueue_settings_assets' );
 
 /**
  * Return the static tab registry. Later phases add tab content without changing URLs.
@@ -391,6 +586,41 @@ function negar_theme_settings_field( $id, $label, $name, $value, $type = 'text',
 }
 
 /**
+ * Render the fixed homepage-section layout controls.
+ *
+ * @return void
+ */
+function negar_theme_render_layout_fields() {
+	$registry = negar_theme_home_section_registry();
+	$layout   = negar_theme_home_layout();
+	?>
+	<fieldset class="negar-layout-manager" aria-describedby="negar-layout-help">
+		<legend class="screen-reader-text"><?php esc_html_e( 'چیدمان بخش‌های صفحهٔ اصلی', 'negar-shop' ); ?></legend>
+		<p id="negar-layout-help" class="description"><?php esc_html_e( 'برای جابه‌جایی با ماوس، هر ردیف را بکشید. برای استفاده با صفحه‌کلید، دکمه‌های «بالا» و «پایین» هر ردیف را انتخاب کنید. غیرفعال‌کردن یک ردیف، آن بخش را بدون تغییر داده‌هایش از صفحهٔ اصلی پنهان می‌کند.', 'negar-shop' ); ?></p>
+		<p id="negar-layout-status" class="screen-reader-text" aria-live="polite"></p>
+		<ol id="negar-layout-sections" class="negar-layout-sections" dir="rtl">
+			<?php foreach ( $layout as $index => $section ) : ?>
+				<?php $entry = $registry[ $section['id'] ]; ?>
+				<li class="negar-layout-item" data-section-id="<?php echo esc_attr( $section['id'] ); ?>" draggable="true">
+					<span class="negar-layout-item__handle" aria-hidden="true">☷</span>
+					<input type="hidden" name="<?php echo esc_attr( NEGAR_THEME_SETTINGS_OPTION ); ?>[layout][order][]" value="<?php echo esc_attr( $section['id'] ); ?>">
+					<label class="negar-layout-item__title" for="negar-layout-enabled-<?php echo esc_attr( $section['id'] ); ?>">
+						<input id="negar-layout-enabled-<?php echo esc_attr( $section['id'] ); ?>" name="<?php echo esc_attr( NEGAR_THEME_SETTINGS_OPTION ); ?>[layout][enabled][<?php echo esc_attr( $section['id'] ); ?>]" type="checkbox" value="1" <?php checked( ! empty( $section['enabled'] ) ); ?>>
+						<span><?php echo esc_html( $entry['label'] ); ?></span>
+					</label>
+					<span class="negar-layout-item__id" aria-hidden="true"><?php echo esc_html( $section['id'] ); ?></span>
+					<div class="negar-layout-item__actions">
+						<button class="button-link negar-layout-move" type="button" data-direction="up" aria-label="<?php echo esc_attr( sprintf( __( 'انتقال %s به بالا', 'negar-shop' ), $entry['label'] ) ); ?>" <?php disabled( 0 === $index ); ?>><?php esc_html_e( 'بالا', 'negar-shop' ); ?></button>
+						<button class="button-link negar-layout-move" type="button" data-direction="down" aria-label="<?php echo esc_attr( sprintf( __( 'انتقال %s به پایین', 'negar-shop' ), $entry['label'] ) ); ?>" <?php disabled( count( $layout ) - 1 === $index ); ?>><?php esc_html_e( 'پایین', 'negar-shop' ); ?></button>
+					</div>
+				</li>
+			<?php endforeach; ?>
+		</ol>
+	</fieldset>
+	<?php
+}
+
+/**
  * Render the settings admin page.
  */
 function negar_theme_render_settings_page() {
@@ -419,10 +649,13 @@ function negar_theme_render_settings_page() {
 			<?php endforeach; ?>
 		</nav>
 		<?php settings_errors( 'negar_theme_settings' ); ?>
-		<?php if ( in_array( $active_tab, array( 'general', 'texts', 'colors', 'header_footer' ), true ) ) : ?>
+		<?php if ( in_array( $active_tab, array( 'general', 'texts', 'layout', 'colors', 'header_footer' ), true ) ) : ?>
 			<form action="options.php" method="post">
 				<?php settings_fields( 'negar_theme_settings' ); ?>
 				<input type="hidden" name="negar_theme_settings_tab" value="<?php echo esc_attr( $active_tab ); ?>">
+				<?php if ( 'layout' === $active_tab ) : ?>
+					<?php negar_theme_render_layout_fields(); ?>
+				<?php else : ?>
 				<table class="form-table" role="presentation">
 					<?php if ( 'general' === $active_tab ) : ?>
 						<?php negar_theme_settings_field( 'negar-site-label', __( 'نام نمایشی فروشگاه', 'negar-shop' ), NEGAR_THEME_SETTINGS_OPTION . '[branding][site_label]', negar_theme_brand_label(), 'text', __( 'در بخش‌های نمایشی قالب استفاده می‌شود و نام سایت وردپرس را تغییر نمی‌دهد.', 'negar-shop' ) ); ?>
@@ -452,6 +685,7 @@ function negar_theme_render_settings_page() {
 						?>
 					<?php endif; ?>
 				</table>
+				<?php endif; ?>
 				<?php submit_button( __( 'ذخیرهٔ تنظیمات', 'negar-shop' ) ); ?>
 			</form>
 		<?php else : ?>
