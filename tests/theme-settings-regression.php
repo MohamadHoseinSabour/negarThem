@@ -173,8 +173,11 @@ try {
 		'texts',
 		array(
 			'texts' => array(
-				'home'   => array( 'hero_slide_one_title' => 'عنوان آزمایشی صفحهٔ اصلی' ),
-				'footer' => array( 'quick_links_heading' => '' ),
+				'header'  => array( 'mega_sale_title' => 'تخفیف آزمایشی مگامنو' ),
+				'home'    => array( 'hero_slide_one_title' => 'عنوان آزمایشی صفحهٔ اصلی' ),
+				'footer'  => array( 'quick_links_heading' => '', 'contact_card_description' => 'راهنمای آزمایشی فوتر' ),
+				'contact' => array( 'phone_card_label' => 'تلفن آزمایشی نگار' ),
+				'about'   => array( 'products_card_title' => 'محصولات آزمایشی نگار' ),
 			),
 		)
 	);
@@ -182,6 +185,10 @@ try {
 	$results['texts_explicit_empty']  = '' === $texts['texts']['footer']['quick_links_heading'];
 	$results['texts_preserve_groups'] = 'اطلاعیهٔ آزمایشی' === $texts['header']['announcement'];
 	$results['text_getter']           = 'عنوان آزمایشی صفحهٔ اصلی' === negar_theme_text( 'home', 'hero_slide_one_title' );
+	$results['texts_coverage_saved']  = 'تخفیف آزمایشی مگامنو' === negar_theme_text( 'header', 'mega_sale_title' )
+		&& 'راهنمای آزمایشی فوتر' === negar_theme_text( 'footer', 'contact_card_description' )
+		&& 'تلفن آزمایشی نگار' === negar_theme_text( 'contact', 'phone_card_label' )
+		&& 'محصولات آزمایشی نگار' === negar_theme_text( 'about', 'products_card_title' );
 
 	$colors = negar_theme_test_save_group( 'colors', array( 'colors' => array( 'primary' => '#059669', 'secondary' => '#e11d48' ) ) );
 	$results['previous_defaults_valid'] = '#059669' === $colors['colors']['primary'] && '#e11d48' === $colors['colors']['secondary'];

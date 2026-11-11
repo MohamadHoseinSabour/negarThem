@@ -125,10 +125,10 @@ $render_category_children = static function ( $parent_id = 0, $depth = 0 ) use (
 				<div id="negar-category-mega" class="negar-category-mega hidden" role="region" aria-label="<?php esc_attr_e( 'دسته‌بندی محصولات', 'negar-shop' ); ?>" aria-labelledby="negar-category-menu-btn">
 					<div class="negar-category-mega__header">
 						<div>
-							<span class="negar-category-mega__eyebrow"><?php esc_html_e( 'دسته‌بندی محصولات', 'negar-shop' ); ?></span>
-							<a class="negar-category-mega__all" href="<?php echo esc_url( $shop_link ); ?>"><?php esc_html_e( 'همهٔ محصولات', 'negar-shop' ); ?></a>
+							<span class="negar-category-mega__eyebrow"><?php echo esc_html( negar_theme_text( 'header', 'mega_heading' ) ); ?></span>
+							<a class="negar-category-mega__all" href="<?php echo esc_url( $shop_link ); ?>"><?php echo esc_html( negar_theme_text( 'header', 'mega_all_products_label' ) ); ?></a>
 						</div>
-						<span class="negar-category-mega__hint"><?php esc_html_e( 'انتخاب هر دسته شما را به آرشیو آن می‌برد.', 'negar-shop' ); ?></span>
+						<span class="negar-category-mega__hint"><?php echo esc_html( negar_theme_text( 'header', 'mega_hint' ) ); ?></span>
 					</div>
 					<div class="negar-category-mega__body">
 						<nav class="negar-category-mega__navigation" aria-label="<?php esc_attr_e( 'فهرست دسته‌های محصولات', 'negar-shop' ); ?>">
@@ -136,13 +136,13 @@ $render_category_children = static function ( $parent_id = 0, $depth = 0 ) use (
 						</nav>
 						<aside class="negar-category-mega__sale-card<?php echo $deal_banner_url ? ' has-art' : ''; ?>">
 							<a href="<?php echo esc_url( $sale_link ); ?>" class="negar-category-mega__sale-link">
-								<span class="negar-category-mega__sale-kicker"><i class="icon-discount-4" aria-hidden="true"></i><?php esc_html_e( 'پیشنهاد روز', 'negar-shop' ); ?></span>
+								<span class="negar-category-mega__sale-kicker"><i class="icon-discount-4" aria-hidden="true"></i><?php echo esc_html( negar_theme_text( 'header', 'mega_sale_kicker' ) ); ?></span>
 								<?php if ( $deal_banner_url ) : ?>
 									<img class="negar-category-mega__sale-art" src="<?php echo esc_url( $deal_banner_url ); ?>" width="220" height="220" alt="" loading="lazy" decoding="async">
 								<?php endif; ?>
-								<strong class="negar-category-mega__sale-title"><?php esc_html_e( 'تخفیفات روز', 'negar-shop' ); ?></strong>
-								<span class="negar-category-mega__sale-copy"><?php esc_html_e( 'محصولات تخفیف‌دار فروشگاه را ببینید.', 'negar-shop' ); ?></span>
-								<span class="negar-category-mega__sale-action"><?php esc_html_e( 'مشاهدهٔ تخفیف‌ها', 'negar-shop' ); ?><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></span>
+								<strong class="negar-category-mega__sale-title"><?php echo esc_html( negar_theme_text( 'header', 'mega_sale_title' ) ); ?></strong>
+								<span class="negar-category-mega__sale-copy"><?php echo esc_html( negar_theme_text( 'header', 'mega_sale_description' ) ); ?></span>
+								<span class="negar-category-mega__sale-action"><?php echo esc_html( negar_theme_text( 'header', 'mega_sale_action' ) ); ?><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></span>
 							</a>
 						</aside>
 						<aside class="negar-category-mega__legacy-sale-card" hidden>

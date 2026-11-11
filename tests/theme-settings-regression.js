@@ -53,7 +53,11 @@ async function run() {
     await page.locator('#negar-text-header-desktop_search_placeholder').fill('جستجوی آزمایشی نگار');
     await page.locator('#negar-text-home-hero_slide_one_title').fill('عنوان آزمایشی صفحهٔ اصلی');
     await page.locator('#negar-text-footer-quick_links_heading').fill('پیوندهای آزمایشی نگار');
+    await page.locator('#negar-text-footer-contact_card_description').fill('راهنمای تکمیلی فوتر نگار');
     await page.locator('#negar-text-contact-hero_title').fill('تماس آزمایشی نگار');
+    await page.locator('#negar-text-contact-phone_card_label').fill('تلفن آزمایشی نگار');
+    await page.locator('#negar-text-about-products_card_title').fill('محصولات آزمایشی نگار');
+    await page.locator('#negar-text-header-mega_sale_title').fill('تخفیف آزمایشی مگامنو');
     await Promise.all([
       page.waitForURL((url) => url.pathname.endsWith('/wp-admin/options-general.php') && url.searchParams.get('tab') === 'texts'),
       page.locator('form[action="options.php"] input[type="submit"]').click(),
@@ -64,8 +68,14 @@ async function run() {
     assert.strictEqual((await page.locator('#negar-home-hero-carousel h2').first().textContent()).trim(), 'عنوان آزمایشی صفحهٔ اصلی', 'Saved homepage text must render after reload');
     assert.strictEqual(await page.locator('.negar-main-header .negar-search-input').getAttribute('placeholder'), 'جستجوی آزمایشی نگار', 'Saved header text must render after reload');
     assert.strictEqual((await page.locator('.negar-footer-wrapper h3').first().textContent()).trim(), 'پیوندهای آزمایشی نگار', 'Saved footer text must render after reload');
+    assert.strictEqual((await page.getByText('راهنمای تکمیلی فوتر نگار', { exact: true }).textContent()).trim(), 'راهنمای تکمیلی فوتر نگار', 'Saved footer editorial copy must render after reload');
+    await page.locator('#negar-category-menu-btn').click();
+    assert.strictEqual((await page.locator('.negar-category-mega__sale-title').textContent()).trim(), 'تخفیف آزمایشی مگامنو', 'Saved mega-menu copy must render after interaction');
+    await page.goto(BASE_URL + '/about/', { waitUntil: 'domcontentloaded' });
+    assert.strictEqual((await page.locator('.negar-about-topics article').first().locator('h2').textContent()).trim(), 'محصولات آزمایشی نگار', 'Saved About-card copy must render after reload');
     await page.goto(BASE_URL + '/contact/', { waitUntil: 'domcontentloaded' });
     assert.strictEqual((await page.locator('.negar-showcase-hero h1').textContent()).trim(), 'تماس آزمایشی نگار', 'Saved internal-page text must render after reload');
+    assert.strictEqual((await page.locator('.negar-contact-grid .negar-contact-card b').first().textContent()).trim(), 'تلفن آزمایشی نگار', 'Saved contact-card label must render after reload');
 
     php('set-colors', '#123456', '#654321');
     await page.goto(BASE_URL, { waitUntil: 'domcontentloaded' });

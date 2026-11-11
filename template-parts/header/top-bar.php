@@ -28,7 +28,7 @@ $has_banner   = file_exists( $banner_img );
 
 			<!-- Center Pill: خوش‌پوش یلدا باش -->
 			<span class="inline-flex items-center justify-center bg-white/20 hover:bg-white/30 text-white text-xs sm:text-sm font-black px-5 py-1 rounded-full backdrop-blur-xs shadow-xs tracking-wide">
-				<?php esc_html_e( 'خوش‌پوش یلدا باش', 'negar-shop' ); ?>
+				<?php echo esc_html( negar_theme_text( 'header', 'topbar_tagline' ) ); ?>
 			</span>
 
 			<span class="text-white/60 font-light select-none">|</span>

@@ -63,6 +63,19 @@
   screen and representative homepage, footer and contact output, then restores its
   initial settings snapshot and destroys its temporary administrator session.
 
+## Phase 2.1 - text coverage completion
+
+**Status:** PASS
+**Commit:** recorded with the Phase 2.1 delivery commit
+
+- Completed reviewed active text coverage for the top-bar/Mega Menu, footer contact
+  cards, About information cards and Contact card labels/map empty state.
+- Added the ownership matrix for all 35 mounted homepage sections and internal
+  templates, so deferred product, media, navigation and managed-data work cannot
+  become an accidental text setting.
+- Extended the authenticated browser submission test to verify Mega Menu, footer,
+  About and Contact rendering, group isolation and snapshot restoration.
+
 ## Next phase
 
 Phase 3 may define layout controls only after a separate ownership and accessibility

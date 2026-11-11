@@ -154,12 +154,17 @@ component ownership index, not a second schema.
 
 | Component | Editable copy | Verified templates | Deliberate exclusions |
 | --- | --- | --- | --- |
-| Header | Desktop/mobile search placeholders, guest-login and cart labels | `template-parts/header/main-header.php`, `mobile-header.php` | Menus, categories and product names remain WordPress/WooCommerce data. |
+| Header | Desktop/mobile search placeholders, guest-login/cart labels, top-bar tagline and approved Mega Menu editorial copy | `top-bar.php`, `main-header.php`, `mobile-header.php` | Menus, categories, archive links, product names and user name remain their existing owners. |
 | Home | Static hero eyebrow/title/CTA and flash-deal heading copy | `template-parts/home/hero-slider.php` | The featured product, price, rating, stock and link remain live WooCommerce values. |
-| Footer | Column headings, contact description, support CTA and social prompt | `template-parts/footer/columns.php` | Registered sidebars, routes, social URLs and legacy contact values remain their existing sources. |
-| Contact | Hero, form and map headings/descriptions plus form submit label | `page-templates/page-contact.php` | Contact submissions and contact details are not text settings. |
-| About | Supporting hero/guide/empty-state copy | `page-templates/page-about.php` | `the_title()` and `the_content()` remain WordPress-managed. |
+| Footer | Column headings, phone label, contact descriptions/CTA, social prompt and social-empty copy | `template-parts/footer/columns.php` | Routes, social URLs, copyright and footer-about preserve their existing owners. |
+| Contact | Hero/form/map copy, form submit, card labels and map empty-state copy | `page-templates/page-contact.php` | Contact submissions, contact values, required labels and validation/system states are not text settings. |
+| About | Supporting hero/guide/empty-state copy and the three information cards | `page-templates/page-about.php` | `the_title()` and `the_content()` remain WordPress-managed; card destinations remain fixed. |
 | Not found | Empty-state heading, description, search/action/category prompts | `404.php` | Product category names remain live taxonomy terms. |
+
+The complete mounted homepage and internal-template ownership record is maintained
+in [the text coverage matrix](theme-text-coverage-matrix.md). It names every
+deferred phase and excludes inactive footer partials rather than creating unused
+settings.
 
 ## OTP and SMS transport audit
 

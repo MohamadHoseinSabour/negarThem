@@ -1,6 +1,6 @@
 # Tasks: 012 Complete Theme Settings Project
 
-**Status:** Phase 2 text management complete; no Phase 3 implementation authorized.
+**Status:** Phase 2.1 text coverage complete; no Phase 3 implementation authorized.
 
 ## Completed foundation and hardening
 
@@ -22,18 +22,22 @@
   explicit empties, group isolation and real authenticated form submission; do not
   expose WordPress- or WooCommerce-managed content.
 
+- [x] **T206** Complete the active header Mega Menu, footer, About-card and
+  Contact-card text coverage; publish the full homepage/internal coverage matrix
+  and extend authenticated form/frontend regression checks with restoration.
+
 ## Planned only — do not implement in Phase 2
-- [ ] **T206** Approve and implement the Layout schema with RTL and keyboard
+- [ ] **T207** Approve and implement the Layout schema with RTL and keyboard
   regression coverage.
-- [ ] **T207** Approve and implement Product Sections controls backed solely by
+- [ ] **T208** Approve and implement Product Sections controls backed solely by
   live WooCommerce objects and truthful inventory/pricing/review states.
-- [ ] **T208** Approve and implement validated Banner, Story and Brand media
+- [ ] **T209** Approve and implement validated Banner, Story and Brand media
   collections, using attachment IDs and safe URLs.
-- [ ] **T209** Approve Typography controls with safe font-loading and performance
+- [ ] **T210** Approve Typography controls with safe font-loading and performance
   limits.
-- [ ] **T210** Design an SMS-provider boundary with separately stored secrets;
+- [ ] **T211** Design an SMS-provider boundary with separately stored secrets;
   never export credentials or expose them to the browser.
-- [ ] **T211** Design backup/import/export validation, authorization, rollback and
+- [ ] **T212** Design backup/import/export validation, authorization, rollback and
   non-autoloaded storage for large settings.
-- [ ] **T212** Complete end-to-end, accessibility, RTL, migration and packaging
+- [ ] **T213** Complete end-to-end, accessibility, RTL, migration and packaging
   verification before declaring the full project complete.

@@ -1,6 +1,6 @@
 # Implementation Plan: 012 Complete Theme Settings Project
 
-**Status:** Phase 2 text management complete; Phase 3 and later phases planned only.
+**Status:** Phase 2.1 text coverage complete; Phase 3 and later phases planned only.
 
 ## Architecture
 
@@ -21,15 +21,18 @@
 3. **Text management (complete):** implement the documented `texts` registry and
    getter for theme-owned copy only, with authenticated Settings API submission and
    representative frontend regression coverage.
-4. **Layout (planned):** define layout schemas only after per-template ownership
+4. **Text coverage completion (complete):** finish the reviewed active header,
+   footer, About and Contact copy; publish the homepage/internal ownership matrix
+   and keep unmounted partials, navigation, system copy and managed data excluded.
+5. **Layout (planned):** define layout schemas only after per-template ownership
    and accessibility review.
-5. **Commerce presentation (planned):** add product-section and promotion controls
+6. **Commerce presentation (planned):** add product-section and promotion controls
    that select/query real WooCommerce objects without duplicating commercial data.
-6. **Media collections (planned):** add banners, stories and brands using validated
+7. **Media collections (planned):** add banners, stories and brands using validated
    media IDs, safe links and non-autoloaded repeaters where appropriate.
-7. **Typography, SMS and backup (planned):** define separate security boundaries,
+8. **Typography, SMS and backup (planned):** define separate security boundaries,
    secret handling and import/export validation before UI implementation.
-8. **Release verification (planned):** expand regression coverage, run PHP lint and
+9. **Release verification (planned):** expand regression coverage, run PHP lint and
    Playwright checks against WAMP, review RTL/keyboard behavior and package only
    after data-integrity checks pass.
 

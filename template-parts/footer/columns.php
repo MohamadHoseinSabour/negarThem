@@ -148,7 +148,7 @@ $social_links = array_filter(
 				<div class="grid grid-cols-1 gap-2">
 					<?php if ( $phone_hotline ) : ?>
 						<a href="tel:<?php echo esc_attr( $phone_hotline_href ); ?>" class="bg-white p-2.5 rounded-2xl border border-slate-200/70 text-center shadow-2xs hover:border-rose-300 transition">
-							<span class="text-3xs text-slate-400 block mb-0.5 font-medium"><?php esc_html_e( 'پشتیبانی تلفنی', 'negar-shop' ); ?></span>
+							<span class="text-3xs text-slate-400 block mb-0.5 font-medium"><?php echo esc_html( negar_theme_text( 'footer', 'phone_support_label' ) ); ?></span>
 							<span class="text-xs font-black text-rose-600 block dir-ltr"><?php echo esc_html( $phone_hotline ); ?></span>
 						</a>
 					<?php else : ?>
@@ -167,11 +167,11 @@ $social_links = array_filter(
 			<div class="lg:col-span-4">
 				<div class="flex items-center gap-2 mb-2">
 					<svg width="20" height="5" viewBox="0 0 34 8" fill="none"><path d="M33.1839 0H0V8.0099H33.1839V0Z" fill="#E90544"></path></svg>
-					<h4 class="text-sm font-black text-[#212341] m-0"><?php esc_html_e( 'تماس با ما', 'negar-shop' ); ?></h4>
+					<h4 class="text-sm font-black text-[#212341] m-0"><?php echo esc_html( negar_theme_text( 'footer', 'contact_card_heading' ) ); ?></h4>
 				</div>
-				<p class="text-2xs text-slate-500 leading-relaxed mb-3"><?php esc_html_e( 'برای ارسال پیام یا دریافت راهنمایی، از فرم تماس با فروشگاه استفاده کنید.', 'negar-shop' ); ?></p>
+				<p class="text-2xs text-slate-500 leading-relaxed mb-3"><?php echo esc_html( negar_theme_text( 'footer', 'contact_card_description' ) ); ?></p>
 				<a href="<?php echo esc_url( $contact_url ); ?>" class="inline-flex items-center gap-2 bg-slate-200/80 hover:bg-slate-300 text-slate-700 font-bold text-xs px-4 py-2 rounded-xl transition">
-					<span><?php esc_html_e( 'صفحه تماس با ما', 'negar-shop' ); ?></span>
+					<span><?php echo esc_html( negar_theme_text( 'footer', 'contact_card_action' ) ); ?></span>
 				</a>
 			</div>
 
@@ -184,7 +184,7 @@ $social_links = array_filter(
 						</a>
 					<?php endforeach; ?>
 				<?php else : ?>
-					<div class="sm:col-span-3 bg-white p-3 rounded-2xl border border-slate-200/60 shadow-2xs text-xs text-slate-500"><?php esc_html_e( 'نشانی شبکه‌های اجتماعی هنوز ثبت نشده است.', 'negar-shop' ); ?></div>
+					<div class="sm:col-span-3 bg-white p-3 rounded-2xl border border-slate-200/60 shadow-2xs text-xs text-slate-500"><?php echo esc_html( negar_theme_text( 'footer', 'social_empty_notice' ) ); ?></div>
 				<?php endif; ?>
 			</div>
 

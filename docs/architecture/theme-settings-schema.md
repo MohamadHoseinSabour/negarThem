@@ -12,11 +12,11 @@ Customizer fallback or code default”; a present key with an empty string means
   "schema_version": 1,
   "branding": { "site_label": "" },
   "texts": {
-    "header": { "desktop_search_placeholder": "" },
+    "header": { "desktop_search_placeholder": "", "mega_sale_title": "" },
     "home": { "hero_slide_one_title": "" },
-    "footer": { "quick_links_heading": "" },
-    "contact": { "hero_title": "" },
-    "about": { "hero_eyebrow": "" },
+    "footer": { "quick_links_heading": "", "contact_card_description": "" },
+    "contact": { "hero_title": "", "phone_card_label": "" },
+    "about": { "hero_eyebrow": "", "products_card_title": "" },
     "not_found": { "title": "" }
   },
   "colors": { "primary": "#e90544", "secondary": "#c40439" },
@@ -74,6 +74,12 @@ Texts registry. It returns a stored value when its key is present (including an
 empty value), otherwise the reviewed template default. The registry intentionally
 contains no rich HTML, WordPress `the_content()`, menu labels, taxonomy names or
 WooCommerce product/customer/order/review data.
+
+The authoritative component/field list is code, while
+[`theme-text-coverage-matrix.md`](theme-text-coverage-matrix.md) records every
+mounted homepage and internal-template ownership boundary. It prevents future
+phases from turning unmounted partials, approved navigation or managed data into
+dead or duplicate settings.
 
 ## Planned schema additions
 
