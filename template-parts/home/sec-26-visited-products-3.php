@@ -12,14 +12,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 $visited3_products = new WP_Query(
-	negar_theme_product_section_is_configured( 'multi-category-products' )
+	negar_theme_catalog_visibility_query_args( negar_theme_product_section_is_configured( 'multi-category-products' )
 		? negar_theme_product_section_query_args( 'multi-category-products', array( 'post_type' => 'product', 'post_status' => 'publish' ) )
 		: array(
 			'post_type'      => 'product',
 			'post_status'    => 'publish',
 			'posts_per_page' => 5,
 			'orderby'        => 'rand',
-		)
+		) )
 );
 ?>
 

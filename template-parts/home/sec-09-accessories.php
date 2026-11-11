@@ -26,7 +26,7 @@ $args = negar_theme_product_section_is_configured( 'accessories' )
 		'orderby'        => 'date',
 		'order'          => 'DESC',
 	);
-$products_query = new WP_Query( $args );
+$products_query = new WP_Query( negar_theme_catalog_visibility_query_args( $args ) );
 ?>
 
 <div class="elementor-element elementor-element-39e1b751 e-con-full e-flex e-con e-parent e-lazyloaded my-8 lg:my-12" data-id="39e1b751" data-element_type="container" data-e-type="container">
@@ -114,7 +114,7 @@ $products_query = new WP_Query( $args );
 											$prod_title     = $product->get_name();
 											$prod_link      = get_permalink( $prod_id );
 											$rating_raw     = (float) $product->get_average_rating();
-											$rating_display = $rating_raw > 0 ? number_format( $rating_raw, 1 ) : '5.0';
+											$rating_display = $rating_raw > 0 ? number_format( $rating_raw, 1 ) : '';
 											$regular_price  = (float) $product->get_regular_price();
 											$sale_price     = (float) $product->get_sale_price();
 											$is_on_sale     = $product->is_on_sale() && $regular_price > 0 && $sale_price > 0;
@@ -126,13 +126,15 @@ $products_query = new WP_Query( $args );
 													<div class="product-nk product-four-nk d-flex flex-column h-100 position-relative">
 
 														<!-- Star Rating -->
-														<div class="rate d-flex align-items-center justify-content-end gap-1 gap-md-2">
-															<span>5/<?php echo esc_html( $rating_display ); ?></span>
-															<svg xmlns="http://www.w3.org/2000/svg" width="18" height="19" fill="none" viewBox="0 0 18 19" aria-hidden="true">
+														<?php if ( '' !== $rating_display ) : ?>
+															<div class="rate d-flex align-items-center justify-content-end gap-1 gap-md-2">
+																<span>5/<?php echo esc_html( $rating_display ); ?></span>
+																<svg xmlns="http://www.w3.org/2000/svg" width="18" height="19" fill="none" viewBox="0 0 18 19" aria-hidden="true">
 																<path fill="#FFC700" stroke="#FFC700" stroke-linecap="round" stroke-linejoin="round" d="M11.543 4.407 12.6 6.522c.143.293.525.57.848.63l1.912.315c1.223.203 1.508 1.088.63 1.973l-1.492 1.492c-.248.248-.39.736-.308 1.088l.428 1.845c.337 1.455-.443 2.025-1.726 1.26L11.1 14.06c-.322-.195-.862-.195-1.185 0l-1.792 1.065c-1.283.758-2.063.195-1.725-1.26l.427-1.845c.083-.345-.06-.832-.307-1.088L5.025 9.44c-.877-.877-.592-1.763.63-1.973l1.913-.315c.322-.052.705-.337.847-.63l1.058-2.115c.562-1.147 1.492-1.147 2.07 0Z"></path>
 																<path stroke="#FFC700" stroke-linecap="round" stroke-linejoin="round" d="M6 4.25H1.5m2.25 10.5H1.5m.75-5.25H1.5" opacity=".4"></path>
-															</svg>
-														</div>
+																</svg>
+															</div>
+														<?php endif; ?>
 
 														<!-- Product Image -->
 														<div class="image position-relative mxw-fit mx-auto">

@@ -1,7 +1,7 @@
 # Feature Specification: 012 Complete Theme Settings Project
 
 **Feature code:** `SETTINGS-01`
-**Status:** Phase 4 WooCommerce product-section management complete; later phases planned
+**Status:** Phase 4.1 WooCommerce product-section hardening complete; later phases planned
 **Supersedes for new work:** None. `009-featurename-theme-options` remains the
 historical Customizer-and-widgets specification and is not this project.
 
@@ -24,7 +24,8 @@ template ownership in the coverage matrix. Phase 3 adds the fixed 35-section
 homepage registry, independent visibility/order controls and an RTL accessible
 admin interface. This spec plans the complete project; it does not authorize the
 remaining phases yet. Phase 4 adds tightly scoped query controls for existing
-real-product homepage sections only.
+real-product homepage sections only. Phase 4.1 completes their independent state,
+sorting, selector and catalog-visibility hardening.
 
 ## Functional requirements
 
@@ -51,7 +52,7 @@ real-product homepage sections only.
 8. Future product-section, banner, story, brand, typography, SMS and backup/import
    controls must have an approved schema and regression tests before becoming
    writable.
-9. Product-section controls may select only published WooCommerce products and
+9. Product-section controls may select only published, catalog-visible WooCommerce products and
    existing `product_cat` terms. They may configure count, supported sorting,
    category include/exclude filters and manual product IDs, while prices, images,
    ratings, stock and permalinks remain properties of the resolved live products.
@@ -86,5 +87,9 @@ real-product homepage sections only.
   and observe the selected real product and its permalink on desktop and mobile;
   malformed IDs and non-published products are rejected and tests restore the
   initial settings snapshot.
+- Product sections use an explicit custom/legacy state: saving one preserves the
+  others, while disabling one restores only that section's legacy query. The full
+  supported sort set uses live WooCommerce/WordPress values, and catalog-hidden or
+  unrated products never gain invented storefront data.
 - Documentation keys exactly match implementation and the dedicated spec, plan and
   task list remain separate from specification 009.

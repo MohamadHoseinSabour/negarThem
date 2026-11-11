@@ -102,16 +102,28 @@ async function run() {
 
     await page.goto(BASE_URL + '/wp-admin/options-general.php?page=negar-theme-settings&tab=products', { waitUntil: 'domcontentloaded' });
     await page.locator('#negar-products-count-accessories').locator('xpath=ancestor::details').locator('summary').click();
+    await page.locator('#negar-products-enabled-accessories').check();
     await page.locator('#negar-products-count-accessories').fill('1');
     await page.locator('#negar-products-sort-accessories').selectOption('title_asc');
-    await page.locator('#negar-products-manual-accessories').selectOption(String(productFixture.id));
+    const selectedFixture = productFixture.outside_first_hundred;
+    await page.locator('#negar-products-search-accessories').fill(selectedFixture.label);
+    await page.locator(`#negar-products-search-results-accessories button[data-product-id="${selectedFixture.id}"]`).click();
     await Promise.all([
       page.waitForURL((url) => url.pathname.endsWith('/wp-admin/options-general.php') && url.searchParams.get('tab') === 'products'),
-      page.locator('form[action="options.php"] input[type="submit"]').click(),
+      page.locator('button[name="negar_theme_product_section_action"][value="accessories"]').click(),
     ]);
-    assert.deepStrictEqual(await page.locator('#negar-products-manual-accessories').inputValue(), String(productFixture.id), 'Authenticated product-section form submission must persist a published manual product selection');
+    assert.strictEqual(await page.locator(`[data-product-selector][data-section-id="accessories"] .negar-product-selector__selected li[data-product-id="${selectedFixture.id}"]`).count(), 1, 'Authenticated product-section form submission must persist a searched manual product selection');
+    assert.strictEqual(await page.locator('#negar-products-enabled-accessories').isChecked(), true, 'Saving a section must persist its explicit custom-configuration state');
+
+    await page.reload({ waitUntil: 'domcontentloaded' });
+    assert.strictEqual(await page.locator(`[data-product-selector][data-section-id="accessories"] .negar-product-selector__selected li[data-product-id="${selectedFixture.id}"]`).count(), 1, 'A selected product must remain visible after reopening even though it was not preloaded into the form');
+    await page.locator('#negar-products-count-accessories').locator('xpath=ancestor::details').locator('summary').click();
+    await Promise.all([
+      page.waitForURL((url) => url.pathname.endsWith('/wp-admin/options-general.php') && url.searchParams.get('tab') === 'products'),
+      page.locator('button[name="negar_theme_product_section_action"][value="accessories"]').click(),
+    ]);
     await page.goto(BASE_URL, { waitUntil: 'domcontentloaded' });
-    assert.strictEqual(await page.locator(`.buy-accessories-nk a[href="${productFixture.permalink}"]`).count() > 0, true, 'Saved product selection must render with the real WooCommerce permalink on desktop');
+    assert.strictEqual(await page.locator(`.buy-accessories-nk a[href="${selectedFixture.permalink}"]`).count() > 0, true, 'Saved product selection must render with the real WooCommerce permalink on desktop');
 
     mobileContext = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, locale: 'fa-IR' });
     const mobilePage = await mobileContext.newPage();
@@ -119,7 +131,41 @@ async function run() {
     assert.strictEqual(await mobilePage.locator('#negar-home-hero-carousel').isVisible(), true, 'The reordered homepage must retain its existing hero component on mobile');
     const mobileLayoutHtml = await mobilePage.locator('main.homepage-main').innerHTML();
     assert(mobileLayoutHtml.indexOf('<!-- negar-home-section:product-tabs -->') < mobileLayoutHtml.indexOf('<!-- negar-home-section:hero-slider -->'), 'Saved ordering must also render on mobile');
-    assert.strictEqual(await mobilePage.locator(`.buy-accessories-nk a[href="${productFixture.permalink}"]`).count() > 0, true, 'Saved product selection must render with the real WooCommerce permalink on mobile');
+    assert.strictEqual(await mobilePage.locator(`.buy-accessories-nk a[href="${selectedFixture.permalink}"]`).count() > 0, true, 'Saved product selection must render with the real WooCommerce permalink on mobile');
+
+    await page.goto(BASE_URL + '/wp-admin/options-general.php?page=negar-theme-settings&tab=products', { waitUntil: 'domcontentloaded' });
+    await page.locator('#negar-products-count-multi-category-products').locator('xpath=ancestor::details').locator('summary').click();
+    await page.locator('#negar-products-enabled-multi-category-products').check();
+    await page.locator('#negar-products-count-multi-category-products').fill('2');
+    await page.locator('#negar-products-sort-multi-category-products').selectOption('price_desc');
+    await Promise.all([
+      page.waitForURL((url) => url.pathname.endsWith('/wp-admin/options-general.php') && url.searchParams.get('tab') === 'products'),
+      page.locator('button[name="negar_theme_product_section_action"][value="multi-category-products"]').click(),
+    ]);
+    assert.strictEqual(await page.locator(`[data-product-selector][data-section-id="accessories"] .negar-product-selector__selected li[data-product-id="${selectedFixture.id}"]`).count(), 1, 'Saving a second product section must not erase the first section selection');
+
+    if (productFixture.unrated.id) {
+      await page.locator('#negar-products-count-accessories').locator('xpath=ancestor::details').locator('summary').click();
+      await page.locator(`[data-product-selector][data-section-id="accessories"] .negar-product-selector__remove`).click();
+      await page.locator('#negar-products-search-accessories').fill(productFixture.unrated.label);
+      await page.locator(`#negar-products-search-results-accessories button[data-product-id="${productFixture.unrated.id}"]`).click();
+      await Promise.all([
+        page.waitForURL((url) => url.pathname.endsWith('/wp-admin/options-general.php') && url.searchParams.get('tab') === 'products'),
+        page.locator('button[name="negar_theme_product_section_action"][value="accessories"]').click(),
+      ]);
+      await page.goto(BASE_URL, { waitUntil: 'domcontentloaded' });
+      const unratedSlide = page.locator(`.buy-accessories-nk .swiper-slide:has(a[href="${productFixture.unrated.permalink}"])`);
+      assert.strictEqual(await unratedSlide.locator('.rate').count(), 0, 'A real product without reviews must not display an invented rating');
+    }
+
+    await page.goto(BASE_URL + '/wp-admin/options-general.php?page=negar-theme-settings&tab=products', { waitUntil: 'domcontentloaded' });
+    await page.locator('#negar-products-count-accessories').locator('xpath=ancestor::details').locator('summary').click();
+    await page.locator('#negar-products-enabled-accessories').uncheck();
+    await Promise.all([
+      page.waitForURL((url) => url.pathname.endsWith('/wp-admin/options-general.php') && url.searchParams.get('tab') === 'products'),
+      page.locator('button[name="negar_theme_product_section_action"][value="accessories"]').click(),
+    ]);
+    assert.strictEqual(await page.locator('#negar-products-enabled-accessories').isChecked(), false, 'Disabling and saving one section must restore its legacy query state');
 
     php('set-colors', '#123456', '#654321');
     await page.goto(BASE_URL, { waitUntil: 'domcontentloaded' });

@@ -286,6 +286,10 @@ function negar_theme_product_section_sort_options() {
 		'date_asc'           => __( 'قدیمی‌ترین', 'negar-shop' ),
 		'title_asc'          => __( 'نام محصول (الف تا ی)', 'negar-shop' ),
 		'title_desc'         => __( 'نام محصول (ی تا الف)', 'negar-shop' ),
+		'total_sales_desc'   => __( 'پرفروش‌ترین', 'negar-shop' ),
+		'rating_desc'        => __( 'بالاترین امتیاز', 'negar-shop' ),
+		'price_asc'          => __( 'ارزان‌ترین', 'negar-shop' ),
+		'price_desc'         => __( 'گران‌ترین', 'negar-shop' ),
 		'comment_count_desc' => __( 'بیشترین دیدگاه', 'negar-shop' ),
 		'random'             => __( 'تصادفی', 'negar-shop' ),
 	);
@@ -348,8 +352,15 @@ function negar_theme_product_section_defaults( $section_id ) {
  */
 function negar_theme_product_section_is_configured( $section_id ) {
 	$settings = negar_theme_settings_raw();
+	$saved    = isset( $settings['products']['sections'][ $section_id ] ) ? $settings['products']['sections'][ $section_id ] : null;
 
-	return isset( $settings['products']['sections'][ $section_id ] ) && is_array( $settings['products']['sections'][ $section_id ] );
+	if ( ! is_array( $saved ) ) {
+		return false;
+	}
+
+	// Phase 4 configurations did not have an explicit state. Keep each of
+	// those saved configurations active rather than changing their behaviour.
+	return ! isset( $saved['mode'] ) || 'custom' === $saved['mode'];
 }
 
 /**
@@ -367,10 +378,40 @@ function negar_theme_product_section_config( $section_id ) {
 }
 
 /**
+ * Add the WooCommerce catalog-visibility exclusion to a product query.
+ *
+ * @param array<string, mixed> $args Product query arguments.
+ * @return array<string, mixed>
+ */
+function negar_theme_catalog_visibility_query_args( $args ) {
+	$args      = is_array( $args ) ? $args : array();
+	$tax_query = isset( $args['tax_query'] ) && is_array( $args['tax_query'] ) ? $args['tax_query'] : array();
+
+	if ( function_exists( 'wc_get_product_visibility_term_ids' ) ) {
+		$visibility = wc_get_product_visibility_term_ids();
+		$hidden_id  = isset( $visibility['exclude-from-catalog'] ) ? absint( $visibility['exclude-from-catalog'] ) : 0;
+		if ( $hidden_id ) {
+			$tax_query[] = array(
+				'taxonomy' => 'product_visibility',
+				'field'    => 'term_id',
+				'terms'    => array( $hidden_id ),
+				'operator' => 'NOT IN',
+			);
+		}
+	}
+
+	if ( ! empty( $tax_query ) ) {
+		$args['tax_query'] = $tax_query;
+	}
+
+	return $args;
+}
+
+/**
  * Build a safe product query from a registered saved configuration.
  *
  * This is intentionally used only after a section is configured. Templates keep
- * their exact existing query path until an administrator explicitly saves this tab.
+ * their legacy query choices until that specific section is explicitly enabled.
  *
  * @param string               $section_id Product-section ID.
  * @param array<string, mixed> $default_args Existing query arguments.
@@ -387,12 +428,21 @@ function negar_theme_product_section_query_args( $section_id, $default_args, $re
 		'date_asc'           => array( 'orderby' => 'date', 'order' => 'ASC' ),
 		'title_asc'          => array( 'orderby' => 'title', 'order' => 'ASC' ),
 		'title_desc'         => array( 'orderby' => 'title', 'order' => 'DESC' ),
+		'total_sales_desc'   => array( 'meta_key' => 'total_sales', 'orderby' => 'meta_value_num', 'order' => 'DESC' ),
+		'rating_desc'        => array( 'meta_key' => '_wc_average_rating', 'orderby' => 'meta_value_num', 'order' => 'DESC' ),
+		'price_asc'          => array( 'meta_key' => '_price', 'orderby' => 'meta_value_num', 'order' => 'ASC' ),
+		'price_desc'         => array( 'meta_key' => '_price', 'orderby' => 'meta_value_num', 'order' => 'DESC' ),
 		'comment_count_desc' => array( 'orderby' => 'comment_count', 'order' => 'DESC' ),
 		'random'             => array( 'orderby' => 'rand' ),
 	);
 
 	$args['posts_per_page'] = max( 1, min( 12, (int) $config['count'] ) );
 	$args['orderby']        = $mapping[ $sort ]['orderby'];
+	if ( isset( $mapping[ $sort ]['meta_key'] ) ) {
+		$args['meta_key'] = $mapping[ $sort ]['meta_key'];
+	} else {
+		unset( $args['meta_key'] );
+	}
 	if ( isset( $mapping[ $sort ]['order'] ) ) {
 		$args['order'] = $mapping[ $sort ]['order'];
 	} else {
@@ -424,7 +474,7 @@ function negar_theme_product_section_query_args( $section_id, $default_args, $re
 		$args['tax_query'] = $tax_query;
 	}
 
-	return $args;
+	return negar_theme_catalog_visibility_query_args( $args );
 }
 
 /**
@@ -453,7 +503,7 @@ function negar_theme_sanitize_product_category_ids( $ids ) {
 }
 
 /**
- * Keep only published WooCommerce product IDs from submitted input.
+ * Keep only published catalog-visible WooCommerce product IDs from submitted input.
  *
  * @param mixed $ids Candidate product IDs.
  * @return array<int, int>
@@ -469,7 +519,8 @@ function negar_theme_sanitize_product_ids( $ids ) {
 			continue;
 		}
 		$id = absint( $id );
-		if ( $id && 'product' === get_post_type( $id ) && 'publish' === get_post_status( $id ) ) {
+		$product = function_exists( 'wc_get_product' ) ? wc_get_product( $id ) : false;
+		if ( $id && 'product' === get_post_type( $id ) && 'publish' === get_post_status( $id ) && $product && $product->is_visible() ) {
 			$clean[] = $id;
 		}
 	}
@@ -492,6 +543,7 @@ function negar_theme_sanitize_product_section_config( $submitted, $section_id ) 
 	$sort  = isset( $submitted['sort'] ) && is_scalar( $submitted['sort'] ) ? sanitize_key( $submitted['sort'] ) : $defaults['sort'];
 
 	return array(
+		'mode'               => 'custom',
 		'count'              => max( 1, min( 12, $count ) ),
 		'sort'               => isset( $sorts[ $sort ] ) ? $sort : $defaults['sort'],
 		'include_categories' => negar_theme_sanitize_product_category_ids( isset( $submitted['include_categories'] ) ? $submitted['include_categories'] : array() ),
@@ -721,10 +773,21 @@ function negar_theme_sanitize_settings( $submitted ) {
 	}
 
 	if ( 'products' === $tab ) {
-		$current['products']['sections'] = array();
+		$registry      = negar_theme_product_section_registry();
+		$raw_section   = isset( $_POST['negar_theme_product_section_action'] ) ? wp_unslash( $_POST['negar_theme_product_section_action'] ) : '';
+		$section_id    = is_scalar( $raw_section ) ? sanitize_key( $raw_section ) : '';
 		$submitted_sections = isset( $submitted['products']['sections'] ) && is_array( $submitted['products']['sections'] ) ? $submitted['products']['sections'] : array();
-		foreach ( negar_theme_product_section_registry() as $section_id => $section ) {
-			$current['products']['sections'][ $section_id ] = negar_theme_sanitize_product_section_config( isset( $submitted_sections[ $section_id ] ) ? $submitted_sections[ $section_id ] : array(), $section_id );
+
+		if ( isset( $registry[ $section_id ] ) ) {
+			$section_input = isset( $submitted_sections[ $section_id ] ) && is_array( $submitted_sections[ $section_id ] ) ? $submitted_sections[ $section_id ] : array();
+			$enabled       = isset( $section_input['enabled'] ) && is_scalar( $section_input['enabled'] ) && '1' === (string) $section_input['enabled'];
+
+			if ( $enabled ) {
+				$current['products']['sections'][ $section_id ] = negar_theme_sanitize_product_section_config( $section_input, $section_id );
+			} else {
+				// Removing only this section restores its exact legacy template query.
+				unset( $current['products']['sections'][ $section_id ] );
+			}
 		}
 	}
 
@@ -782,6 +845,7 @@ function negar_theme_enqueue_settings_assets( $hook_suffix ) {
 
 	$style_path  = NEGAR_SHOP_DIR . '/assets/css/theme-settings-admin.css';
 	$script_path = NEGAR_SHOP_DIR . '/assets/js/theme-settings-layout.js';
+	$product_script_path = NEGAR_SHOP_DIR . '/assets/js/theme-settings-products.js';
 
 	wp_enqueue_style(
 		'negar-theme-settings-admin',
@@ -796,8 +860,81 @@ function negar_theme_enqueue_settings_assets( $hook_suffix ) {
 		file_exists( $script_path ) ? (string) filemtime( $script_path ) : NEGAR_SHOP_VERSION,
 		true
 	);
+	wp_enqueue_script(
+		'negar-theme-settings-products',
+		NEGAR_SHOP_URI . '/assets/js/theme-settings-products.js',
+		array(),
+		file_exists( $product_script_path ) ? (string) filemtime( $product_script_path ) : NEGAR_SHOP_VERSION,
+		true
+	);
+	wp_localize_script(
+		'negar-theme-settings-products',
+		'NegarThemeProductSearch',
+		array(
+			'url'      => admin_url( 'admin-ajax.php' ),
+			'nonce'    => wp_create_nonce( 'negar_theme_product_search' ),
+			'option'   => NEGAR_THEME_SETTINGS_OPTION,
+			'messages' => array(
+				'loading' => __( 'در حال جست‌وجو…', 'negar-shop' ),
+				'empty'   => __( 'محصولی پیدا نشد. نام یا شناسهٔ دیگری را جست‌وجو کنید.', 'negar-shop' ),
+				'error'   => __( 'جست‌وجوی محصولات انجام نشد. دوباره تلاش کنید.', 'negar-shop' ),
+			),
+		)
+	);
 }
 add_action( 'admin_enqueue_scripts', 'negar_theme_enqueue_settings_assets' );
+
+/**
+ * Return a small authorized product-search result set for the settings page.
+ *
+ * @return void
+ */
+function negar_theme_ajax_search_products() {
+	check_ajax_referer( 'negar_theme_product_search', 'nonce' );
+
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( array( 'message' => __( 'اجازهٔ جست‌وجوی محصولات را ندارید.', 'negar-shop' ) ), 403 );
+	}
+
+	$raw_query = isset( $_POST['query'] ) ? wp_unslash( $_POST['query'] ) : '';
+	$query     = is_scalar( $raw_query ) ? sanitize_text_field( $raw_query ) : '';
+	if ( '' === $query ) {
+		wp_send_json_success( array( 'products' => array() ) );
+	}
+
+	$search_args = array(
+		'post_type'      => 'product',
+		'post_status'    => 'publish',
+		'posts_per_page' => 30,
+		'fields'         => 'ids',
+		'no_found_rows'  => true,
+	);
+	if ( ctype_digit( $query ) ) {
+		$search_args['post__in'] = array( absint( $query ) );
+	} else {
+		$search_args['orderby'] = 'relevance';
+		$search_args['s']       = $query;
+	}
+	$candidates = get_posts( negar_theme_catalog_visibility_query_args( $search_args ) );
+	$products = array();
+	foreach ( $candidates as $product_id ) {
+		$product = function_exists( 'wc_get_product' ) ? wc_get_product( $product_id ) : false;
+		if ( ! $product || ! $product->is_visible() ) {
+			continue;
+		}
+
+		$products[] = array(
+			'id'    => $product->get_id(),
+			'label' => sprintf( '%1$s (#%2$d)', $product->get_name(), $product->get_id() ),
+		);
+		if ( 20 === count( $products ) ) {
+			break;
+		}
+	}
+
+	wp_send_json_success( array( 'products' => $products ) );
+}
+add_action( 'wp_ajax_negar_theme_search_products', 'negar_theme_ajax_search_products' );
 
 /**
  * Return the static tab registry. Later phases add tab content without changing URLs.
@@ -884,6 +1021,29 @@ function negar_theme_render_layout_fields() {
 }
 
 /**
+ * Return the already selected real products for a lightweight admin selector.
+ *
+ * @param array<int, int> $product_ids Saved product IDs.
+ * @return array<int, array{id:int,label:string}>
+ */
+function negar_theme_selected_product_selector_items( $product_ids ) {
+	$items = array();
+	foreach ( array_values( array_unique( array_filter( array_map( 'absint', (array) $product_ids ) ) ) ) as $product_id ) {
+		$product = function_exists( 'wc_get_product' ) ? wc_get_product( $product_id ) : false;
+		if ( ! $product ) {
+			continue;
+		}
+
+		$items[] = array(
+			'id'    => $product->get_id(),
+			'label' => sprintf( '%1$s (#%2$d)', $product->get_name(), $product->get_id() ),
+		);
+	}
+
+	return $items;
+}
+
+/**
  * Render the Phase 4 product-query controls.
  *
  * @return void
@@ -895,25 +1055,28 @@ function negar_theme_render_product_fields() {
 			'hide_empty' => false,
 		)
 	);
-	$products   = get_posts(
-		array(
-			'post_type'      => 'product',
-			'post_status'    => 'publish',
-			'posts_per_page' => 100,
-			'orderby'        => 'title',
-			'order'          => 'ASC',
-		)
-	);
 	$sorts      = negar_theme_product_section_sort_options();
 	?>
 	<fieldset class="negar-product-manager" aria-describedby="negar-product-manager-help">
 		<legend class="screen-reader-text"><?php esc_html_e( 'مدیریت بخش‌های محصول صفحهٔ اصلی', 'negar-shop' ); ?></legend>
-		<p id="negar-product-manager-help" class="description"><?php esc_html_e( 'فقط محصولات منتشرشدهٔ WooCommerce قابل انتخاب‌اند. انتخاب دستی و دسته‌ها، محتوای محصول را نمی‌سازند یا تغییر نمی‌دهند؛ قیمت، تصویر، موجودی، امتیاز و پیوند همیشه از همان محصول واقعی خوانده می‌شود.', 'negar-shop' ); ?></p>
+		<p id="negar-product-manager-help" class="description"><?php esc_html_e( 'تنظیمات هر بخش مستقل است و تا فعال‌سازی آن، همان query قدیمی قالب حفظ می‌شود. فقط محصولات منتشرشده و قابل‌نمایش WooCommerce قابل انتخاب‌اند؛ انتخاب دستی و دسته‌ها، دادهٔ محصول را نمی‌سازند یا تغییر نمی‌دهند.', 'negar-shop' ); ?></p>
 		<?php foreach ( negar_theme_product_section_registry() as $section_id => $section ) : ?>
-			<?php $config = negar_theme_product_section_config( $section_id ); ?>
+			<?php
+			$config       = negar_theme_product_section_config( $section_id );
+			$is_configured = negar_theme_product_section_is_configured( $section_id );
+			$selected_items = negar_theme_selected_product_selector_items( $config['product_ids'] );
+			?>
 			<details class="negar-product-section" <?php echo 'flash-deals' === $section_id ? 'open' : ''; ?>>
 				<summary><?php echo esc_html( $section['label'] ); ?></summary>
 				<div class="negar-product-section__fields">
+					<p class="negar-product-section__state">
+						<input type="hidden" name="<?php echo esc_attr( NEGAR_THEME_SETTINGS_OPTION ); ?>[products][sections][<?php echo esc_attr( $section_id ); ?>][enabled]" value="0">
+						<label for="negar-products-enabled-<?php echo esc_attr( $section_id ); ?>">
+							<input id="negar-products-enabled-<?php echo esc_attr( $section_id ); ?>" name="<?php echo esc_attr( NEGAR_THEME_SETTINGS_OPTION ); ?>[products][sections][<?php echo esc_attr( $section_id ); ?>][enabled]" type="checkbox" value="1" <?php checked( $is_configured ); ?>>
+							<?php esc_html_e( 'استفاده از تنظیمات اختصاصی این بخش', 'negar-shop' ); ?>
+						</label>
+						<span class="description"><?php esc_html_e( 'خاموش‌کردن و ذخیرهٔ همین بخش، رفتار query قدیمی آن را برمی‌گرداند.', 'negar-shop' ); ?></span>
+					</p>
 					<p>
 						<label for="negar-products-count-<?php echo esc_attr( $section_id ); ?>"><?php esc_html_e( 'تعداد محصولات', 'negar-shop' ); ?></label>
 						<input id="negar-products-count-<?php echo esc_attr( $section_id ); ?>" name="<?php echo esc_attr( NEGAR_THEME_SETTINGS_OPTION ); ?>[products][sections][<?php echo esc_attr( $section_id ); ?>][count]" type="number" min="1" max="12" value="<?php echo esc_attr( $config['count'] ); ?>">
@@ -942,15 +1105,23 @@ function negar_theme_render_product_fields() {
 							<?php endforeach; ?>
 						</select>
 					</p>
-					<p class="negar-product-section__manual">
-						<label for="negar-products-manual-<?php echo esc_attr( $section_id ); ?>"><?php esc_html_e( 'محصولات انتخابی', 'negar-shop' ); ?></label>
-						<select id="negar-products-manual-<?php echo esc_attr( $section_id ); ?>" name="<?php echo esc_attr( NEGAR_THEME_SETTINGS_OPTION ); ?>[products][sections][<?php echo esc_attr( $section_id ); ?>][product_ids][]" multiple size="6">
-							<?php foreach ( $products as $product_post ) : ?>
-								<option value="<?php echo esc_attr( $product_post->ID ); ?>" <?php selected( in_array( (int) $product_post->ID, $config['product_ids'], true ) ); ?>><?php echo esc_html( $product_post->post_title . ' (#' . $product_post->ID . ')' ); ?></option>
+					<div class="negar-product-section__manual" data-product-selector data-section-id="<?php echo esc_attr( $section_id ); ?>">
+						<label for="negar-products-search-<?php echo esc_attr( $section_id ); ?>"><?php esc_html_e( 'محصولات انتخابی', 'negar-shop' ); ?></label>
+						<input id="negar-products-search-<?php echo esc_attr( $section_id ); ?>" class="regular-text" type="search" autocomplete="off" aria-describedby="negar-products-search-help-<?php echo esc_attr( $section_id ); ?> negar-products-search-status-<?php echo esc_attr( $section_id ); ?>" aria-controls="negar-products-search-results-<?php echo esc_attr( $section_id ); ?>" placeholder="<?php esc_attr_e( 'نام یا شناسهٔ محصول را جست‌وجو کنید', 'negar-shop' ); ?>">
+						<p id="negar-products-search-help-<?php echo esc_attr( $section_id ); ?>" class="description"><?php esc_html_e( 'نتایج جست‌وجو درخواستی و محدود هستند؛ محصولات انتخاب‌شده حتی اگر در نتایج فعلی نباشند حفظ می‌شوند.', 'negar-shop' ); ?></p>
+						<p id="negar-products-search-status-<?php echo esc_attr( $section_id ); ?>" class="description negar-product-selector__status" aria-live="polite"></p>
+						<div id="negar-products-search-results-<?php echo esc_attr( $section_id ); ?>" class="negar-product-selector__results" role="listbox" aria-label="<?php esc_attr_e( 'نتایج جست‌وجوی محصول', 'negar-shop' ); ?>"></div>
+						<ul class="negar-product-selector__selected" aria-label="<?php esc_attr_e( 'محصولات انتخاب‌شده', 'negar-shop' ); ?>">
+							<?php foreach ( $selected_items as $item ) : ?>
+								<li data-product-id="<?php echo esc_attr( $item['id'] ); ?>">
+									<span><?php echo esc_html( $item['label'] ); ?></span>
+									<input type="hidden" name="<?php echo esc_attr( NEGAR_THEME_SETTINGS_OPTION ); ?>[products][sections][<?php echo esc_attr( $section_id ); ?>][product_ids][]" value="<?php echo esc_attr( $item['id'] ); ?>">
+									<button type="button" class="button-link-delete negar-product-selector__remove" aria-label="<?php echo esc_attr( sprintf( __( 'حذف %s از انتخاب', 'negar-shop' ), $item['label'] ) ); ?>"><?php esc_html_e( 'حذف', 'negar-shop' ); ?></button>
+								</li>
 							<?php endforeach; ?>
-						</select>
-						<span class="description"><?php esc_html_e( 'انتخاب دستی، مجموعهٔ این بخش را به همان محصولات واقعی محدود می‌کند. دسته‌ها همچنان به‌عنوان فیلتر اعمال می‌شوند.', 'negar-shop' ); ?></span>
-					</p>
+						</ul>
+					</div>
+					<p class="negar-product-section__save"><button class="button button-primary" type="submit" name="negar_theme_product_section_action" value="<?php echo esc_attr( $section_id ); ?>"><?php esc_html_e( 'ذخیرهٔ همین بخش', 'negar-shop' ); ?></button></p>
 				</div>
 			</details>
 		<?php endforeach; ?>
@@ -1026,7 +1197,9 @@ function negar_theme_render_settings_page() {
 					<?php endif; ?>
 				</table>
 				<?php endif; ?>
-				<?php submit_button( __( 'ذخیرهٔ تنظیمات', 'negar-shop' ) ); ?>
+				<?php if ( 'products' !== $active_tab ) : ?>
+					<?php submit_button( __( 'ذخیرهٔ تنظیمات', 'negar-shop' ) ); ?>
+				<?php endif; ?>
 			</form>
 		<?php else : ?>
 			<div class="negar-not-ready" role="status">

@@ -33,7 +33,7 @@ if ( negar_theme_product_section_is_configured( 'flash-deals' ) ) {
 	}
 	wp_reset_postdata();
 } else {
-$sale_products = wc_get_products(
+$sale_products = array_filter( wc_get_products(
 	array(
 		'status'  => 'publish',
 		'limit'    => 8,
@@ -42,7 +42,9 @@ $sale_products = wc_get_products(
 		'order'    => 'DESC',
 		'return'   => 'objects',
 	)
-);
+), static function ( $product ) {
+	return $product && $product->is_visible();
+} );
 }
 
 if ( empty( $sale_products ) ) {

@@ -1,6 +1,6 @@
 # Tasks: 012 Complete Theme Settings Project
 
-**Status:** Phase 4 WooCommerce product-section management complete; later phases remain unimplemented.
+**Status:** Phase 4.1 WooCommerce product-section hardening complete; later phases remain unimplemented.
 
 ## Completed foundation and hardening
 
@@ -35,6 +35,10 @@
   live WooCommerce products and existing categories, with count, supported sort,
   category include/exclude and manual-selection validation plus authenticated
   desktop/mobile form regressions.
+- [x] **T208.1** Harden product sections with full live-data sorting, an
+  authenticated searchable selector, per-section custom/legacy state,
+  catalog-visibility enforcement, truthful unrated cards and reversible
+  authenticated persistence regressions.
 - [ ] **T209** Approve and implement validated Banner, Story and Brand media
   collections, using attachment IDs and safe URLs.
 - [ ] **T210** Approve Typography controls with safe font-loading and performance

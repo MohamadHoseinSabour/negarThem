@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 if ( negar_theme_product_section_is_configured( 'product-tabs-laptops' ) ) {
 	$laptops_query = new WP_Query( negar_theme_product_section_query_args( 'product-tabs-laptops', array( 'post_type' => 'product', 'post_status' => 'publish' ) ) );
 } else {
-$laptops_query = new WP_Query( array(
+$laptops_query = new WP_Query( negar_theme_catalog_visibility_query_args( array(
 	'post_type'      => 'product',
 	'post_status'    => 'publish',
 	'posts_per_page' => 5,
@@ -28,9 +28,9 @@ $laptops_query = new WP_Query( array(
 			'terms'    => array( 'laptop', 'لپ-تاپ', 'لپتاپ' ),
 		),
 	),
-) );
+) ) );
 if ( ! $laptops_query->have_posts() ) {
-	$laptops_query = new WP_Query( array( 'post_type' => 'product', 'post_status' => 'publish', 'posts_per_page' => 5 ) );
+	$laptops_query = new WP_Query( negar_theme_catalog_visibility_query_args( array( 'post_type' => 'product', 'post_status' => 'publish', 'posts_per_page' => 5 ) ) );
 }
 }
 
@@ -38,7 +38,7 @@ if ( ! $laptops_query->have_posts() ) {
 if ( negar_theme_product_section_is_configured( 'product-tabs-consoles' ) ) {
 	$consoles_query = new WP_Query( negar_theme_product_section_query_args( 'product-tabs-consoles', array( 'post_type' => 'product', 'post_status' => 'publish' ) ) );
 } else {
-$consoles_query = new WP_Query( array(
+$consoles_query = new WP_Query( negar_theme_catalog_visibility_query_args( array(
 	'post_type'      => 'product',
 	'post_status'    => 'publish',
 	'posts_per_page' => 5,
@@ -49,9 +49,9 @@ $consoles_query = new WP_Query( array(
 			'terms'    => array( 'console', 'کنسول-بازی', 'کنسول' ),
 		),
 	),
-) );
+) ) );
 if ( ! $consoles_query->have_posts() ) {
-	$consoles_query = new WP_Query( array( 'post_type' => 'product', 'post_status' => 'publish', 'posts_per_page' => 5, 'orderby' => 'rand' ) );
+	$consoles_query = new WP_Query( negar_theme_catalog_visibility_query_args( array( 'post_type' => 'product', 'post_status' => 'publish', 'posts_per_page' => 5, 'orderby' => 'rand' ) ) );
 }
 }
 
@@ -59,7 +59,7 @@ if ( ! $consoles_query->have_posts() ) {
 if ( negar_theme_product_section_is_configured( 'product-tabs-mobile' ) ) {
 	$mobile_query = new WP_Query( negar_theme_product_section_query_args( 'product-tabs-mobile', array( 'post_type' => 'product', 'post_status' => 'publish' ) ) );
 } else {
-$mobile_query = new WP_Query( array(
+$mobile_query = new WP_Query( negar_theme_catalog_visibility_query_args( array(
 	'post_type'      => 'product',
 	'post_status'    => 'publish',
 	'posts_per_page' => 5,
@@ -70,9 +70,9 @@ $mobile_query = new WP_Query( array(
 			'terms'    => array( 'mobile', 'گوشی-موبایل', 'موبایل' ),
 		),
 	),
-) );
+) ) );
 if ( ! $mobile_query->have_posts() ) {
-	$mobile_query = new WP_Query( array( 'post_type' => 'product', 'post_status' => 'publish', 'posts_per_page' => 5, 'orderby' => 'date' ) );
+	$mobile_query = new WP_Query( negar_theme_catalog_visibility_query_args( array( 'post_type' => 'product', 'post_status' => 'publish', 'posts_per_page' => 5, 'orderby' => 'date' ) ) );
 }
 }
 
@@ -80,7 +80,7 @@ if ( ! $mobile_query->have_posts() ) {
 if ( negar_theme_product_section_is_configured( 'product-tabs-watches' ) ) {
 	$watches_query = new WP_Query( negar_theme_product_section_query_args( 'product-tabs-watches', array( 'post_type' => 'product', 'post_status' => 'publish' ) ) );
 } else {
-$watches_query = new WP_Query( array(
+$watches_query = new WP_Query( negar_theme_catalog_visibility_query_args( array(
 	'post_type'      => 'product',
 	'post_status'    => 'publish',
 	'posts_per_page' => 5,
@@ -91,9 +91,9 @@ $watches_query = new WP_Query( array(
 			'terms'    => array( 'smartwatch', 'ساعت-هوشمند' ),
 		),
 	),
-) );
+) ) );
 if ( ! $watches_query->have_posts() ) {
-	$watches_query = new WP_Query( array( 'post_type' => 'product', 'post_status' => 'publish', 'posts_per_page' => 5, 'orderby' => 'comment_count' ) );
+	$watches_query = new WP_Query( negar_theme_catalog_visibility_query_args( array( 'post_type' => 'product', 'post_status' => 'publish', 'posts_per_page' => 5, 'orderby' => 'comment_count' ) ) );
 }
 }
 ?>

@@ -86,11 +86,15 @@ function negar_theme_test_restore( $option, $mods, $snapshot ) {
 	wp_cache_delete( $mods, 'options' );
 }
 
-function negar_theme_test_save_group( $tab, $input ) {
+function negar_theme_test_save_group( $tab, $input, $section_action = '' ) {
 	$_POST['negar_theme_settings_tab'] = $tab;
+	if ( 'products' === $tab && '' !== $section_action ) {
+		$_POST['negar_theme_product_section_action'] = $section_action;
+	}
 	$settings                          = negar_theme_sanitize_settings( $input );
 	update_option( NEGAR_THEME_SETTINGS_OPTION, $settings );
 	unset( $_POST['negar_theme_settings_tab'] );
+	unset( $_POST['negar_theme_product_section_action'] );
 
 	return $settings;
 }
@@ -126,6 +130,7 @@ try {
 
 	if ( 'product-fixture' === $action ) {
 		$product_ids = get_posts(
+			negar_theme_catalog_visibility_query_args(
 			array(
 				'post_type'      => 'product',
 				'post_status'    => 'publish',
@@ -134,15 +139,63 @@ try {
 				'orderby'        => 'date',
 				'order'          => 'DESC',
 			)
+			)
 		);
 		if ( empty( $product_ids ) ) {
 			throw new RuntimeException( 'No published WooCommerce product is available for the settings regression test.' );
 		}
 		$product_id = (int) $product_ids[0];
+		$product    = wc_get_product( $product_id );
+		$outside_ids = get_posts(
+			negar_theme_catalog_visibility_query_args(
+				array(
+					'post_type'      => 'product',
+					'post_status'    => 'publish',
+					'posts_per_page' => 1,
+					'offset'         => 100,
+					'fields'         => 'ids',
+					'orderby'        => 'title',
+					'order'          => 'ASC',
+				)
+			)
+		);
+		$outside_id = ! empty( $outside_ids ) ? (int) $outside_ids[0] : $product_id;
+		$outside    = wc_get_product( $outside_id );
+		$unrated_id = 0;
+		$unrated_ids = get_posts(
+			negar_theme_catalog_visibility_query_args(
+				array(
+					'post_type'      => 'product',
+					'post_status'    => 'publish',
+					'posts_per_page' => 30,
+					'fields'         => 'ids',
+				)
+			)
+		);
+		foreach ( $unrated_ids as $candidate_id ) {
+			$candidate = wc_get_product( $candidate_id );
+			if ( $candidate && 0.0 === (float) $candidate->get_average_rating() ) {
+				$unrated_id = (int) $candidate_id;
+				break;
+			}
+		}
+		$unrated = $unrated_id ? wc_get_product( $unrated_id ) : false;
 		echo wp_json_encode(
 			array(
 				'id'        => $product_id,
 				'permalink' => get_permalink( $product_id ),
+				'label'     => $product ? $product->get_name() : get_the_title( $product_id ),
+				'outside_first_hundred' => array(
+					'id'        => $outside_id,
+					'permalink' => get_permalink( $outside_id ),
+					'label'     => $outside ? $outside->get_name() : get_the_title( $outside_id ),
+					'is_distinct' => $outside_id !== $product_id,
+				),
+				'unrated' => array(
+					'id'        => $unrated_id,
+					'permalink' => $unrated_id ? get_permalink( $unrated_id ) : '',
+					'label'     => $unrated ? $unrated->get_name() : '',
+				),
 			)
 		);
 		exit( 0 );
@@ -281,6 +334,7 @@ try {
 			'products' => array(
 				'sections' => array(
 					'accessories' => array(
+						'enabled'            => '1',
 						'count'              => '2',
 						'sort'               => 'title_asc',
 						'include_categories' => array( $category_id, 'invalid', array( 'invalid' ) ),
@@ -289,15 +343,116 @@ try {
 					),
 				),
 			),
-		)
+		),
+		'accessories'
 	);
 	$product_config = $products['products']['sections']['accessories'];
 	$product_args   = negar_theme_product_section_query_args( 'accessories', array( 'post_type' => 'product', 'post_status' => 'publish' ) );
-	$results['products_saved'] = 2 === $product_config['count'] && 'title_asc' === $product_config['sort'] && array( $product_id ) === $product_config['product_ids'];
+	$results['products_saved'] = 'custom' === $product_config['mode'] && 2 === $product_config['count'] && 'title_asc' === $product_config['sort'] && array( $product_id ) === $product_config['product_ids'];
 	$results['products_query_safe'] = 2 === $product_args['posts_per_page'] && 'title' === $product_args['orderby'] && 'ASC' === $product_args['order'] && array( $product_id ) === $product_args['post__in'];
 	$results['products_categories_safe'] = $category_id ? array( $category_id ) === $product_config['include_categories'] && isset( $product_args['tax_query'][0]['terms'] ) && array( $category_id ) === $product_args['tax_query'][0]['terms'] : empty( $product_config['include_categories'] );
 	$results['products_preserve_groups'] = $normalized_layout === $products['layout']['sections']
 		&& 'عنوان آزمایشی صفحهٔ اصلی' === $products['texts']['home']['hero_slide_one_title'];
+
+	$second_section = negar_theme_test_save_group(
+		'products',
+		array(
+			'products' => array(
+				'sections' => array(
+					'multi-category-products' => array(
+						'enabled' => '1',
+						'count'   => '3',
+						'sort'    => 'price_desc',
+					),
+				),
+			),
+		),
+		'multi-category-products'
+	);
+	$results['products_sections_independent'] = isset( $second_section['products']['sections']['accessories'] )
+		&& array( $product_id ) === $second_section['products']['sections']['accessories']['product_ids']
+		&& 'price_desc' === $second_section['products']['sections']['multi-category-products']['sort'];
+
+	$visibility_ids = function_exists( 'wc_get_product_visibility_term_ids' ) ? wc_get_product_visibility_term_ids() : array();
+	$hidden_term_id = isset( $visibility_ids['exclude-from-catalog'] ) ? absint( $visibility_ids['exclude-from-catalog'] ) : 0;
+	$hidden_products = $hidden_term_id ? get_posts(
+		array(
+			'post_type'      => 'product',
+			'post_status'    => 'publish',
+			'posts_per_page' => 1,
+			'fields'         => 'ids',
+			'tax_query'      => array( array( 'taxonomy' => 'product_visibility', 'field' => 'term_id', 'terms' => array( $hidden_term_id ) ) ),
+		)
+	) : array();
+	$visibility_args = negar_theme_catalog_visibility_query_args( array( 'post_type' => 'product', 'post_status' => 'publish' ) );
+	$results['products_catalog_visibility_safe'] = $hidden_term_id && isset( $visibility_args['tax_query'][0]['terms'] ) && array( $hidden_term_id ) === $visibility_args['tax_query'][0]['terms'];
+	$results['products_hidden_manual_rejected'] = empty( $hidden_products ) || ! in_array( (int) $hidden_products[0], negar_theme_sanitize_product_ids( array( (string) $hidden_products[0] ) ), true );
+
+	$empty_categories = get_terms( array( 'taxonomy' => 'product_cat', 'hide_empty' => false, 'number' => 1, 'orderby' => 'count', 'order' => 'ASC' ) );
+	$empty_category = ! is_wp_error( $empty_categories ) && ! empty( $empty_categories ) && 0 === (int) $empty_categories[0]->count ? (int) $empty_categories[0]->term_id : 0;
+	$results['products_empty_category_safe'] = ! $empty_category || empty( get_posts( negar_theme_catalog_visibility_query_args( array( 'post_type' => 'product', 'post_status' => 'publish', 'posts_per_page' => 1, 'tax_query' => array( array( 'taxonomy' => 'product_cat', 'field' => 'term_id', 'terms' => array( $empty_category ) ) ) ) ) ) );
+	$excluded_safe = true;
+	if ( $category_id ) {
+		$settings = negar_theme_settings_raw();
+		$settings['products']['sections']['accessories'] = array( 'mode' => 'custom', 'count' => 12, 'sort' => 'date_desc', 'include_categories' => array(), 'exclude_categories' => array( $category_id ), 'product_ids' => array() );
+		update_option( NEGAR_THEME_SETTINGS_OPTION, $settings );
+		$excluded_query = new WP_Query( negar_theme_product_section_query_args( 'accessories', array( 'post_type' => 'product', 'post_status' => 'publish' ) ) );
+		foreach ( wp_list_pluck( $excluded_query->posts, 'ID' ) as $id ) {
+			$excluded_safe = $excluded_safe && ! has_term( $category_id, 'product_cat', $id );
+		}
+	}
+	$results['products_excluded_category_safe'] = $excluded_safe;
+
+	$sort_modes = array( 'date_desc', 'date_asc', 'title_asc', 'title_desc', 'total_sales_desc', 'rating_desc', 'price_asc', 'price_desc', 'comment_count_desc', 'random' );
+	$sorts_verified = true;
+	foreach ( $sort_modes as $sort_mode ) {
+		$settings = negar_theme_settings_raw();
+		$settings['products']['sections']['accessories'] = array( 'mode' => 'custom', 'count' => 12, 'sort' => $sort_mode, 'include_categories' => array(), 'exclude_categories' => array(), 'product_ids' => array() );
+		update_option( NEGAR_THEME_SETTINGS_OPTION, $settings );
+		$query = new WP_Query( negar_theme_product_section_query_args( 'accessories', array( 'post_type' => 'product', 'post_status' => 'publish' ) ) );
+		$ids   = wp_list_pluck( $query->posts, 'ID' );
+		$sorts_verified = $sorts_verified && ! empty( $ids );
+		foreach ( $ids as $id ) {
+			$product = wc_get_product( $id );
+			$sorts_verified = $sorts_verified && $product && $product->is_visible();
+		}
+		if ( count( $ids ) > 1 && in_array( $sort_mode, array( 'date_desc', 'date_asc', 'total_sales_desc', 'rating_desc', 'price_asc', 'price_desc', 'comment_count_desc' ), true ) ) {
+			$values = array();
+			foreach ( $ids as $id ) {
+				$product = wc_get_product( $id );
+				if ( 'date_desc' === $sort_mode || 'date_asc' === $sort_mode ) {
+					$values[] = (int) get_post_time( 'U', true, $id );
+				} elseif ( 'total_sales_desc' === $sort_mode ) {
+					$values[] = (float) $product->get_total_sales();
+				} elseif ( 'rating_desc' === $sort_mode ) {
+					$values[] = (float) $product->get_average_rating();
+				} elseif ( 'price_asc' === $sort_mode || 'price_desc' === $sort_mode ) {
+					$values[] = (float) $product->get_price();
+				} else {
+					$values[] = (int) get_comments_number( $id );
+				}
+			}
+			$ascending = in_array( $sort_mode, array( 'date_asc', 'price_asc' ), true );
+			for ( $index = 1; $index < count( $values ); $index++ ) {
+				$sorts_verified = $sorts_verified && ( $ascending ? $values[ $index - 1 ] <= $values[ $index ] : $values[ $index - 1 ] >= $values[ $index ] );
+			}
+		}
+	}
+	$results['products_all_sort_modes_return_real_products'] = $sorts_verified;
+
+	$settings = negar_theme_settings_raw();
+	$settings['products']['sections']['accessories'] = $product_config;
+	update_option( NEGAR_THEME_SETTINGS_OPTION, $settings );
+	$legacy_accessories = negar_theme_test_save_group(
+		'products',
+		array( 'products' => array( 'sections' => array( 'accessories' => array( 'enabled' => '0' ) ) ) ),
+		'accessories'
+	);
+	$results['products_restore_legacy'] = ! isset( $legacy_accessories['products']['sections']['accessories'] )
+		&& isset( $legacy_accessories['products']['sections']['multi-category-products'] )
+		&& ! negar_theme_product_section_is_configured( 'accessories' );
+	$accessories_template = file_get_contents( get_template_directory() . '/template-parts/home/sec-09-accessories.php' );
+	$results['products_unrated_not_fabricated'] = false === strpos( $accessories_template, ": '5.0'" );
 
 	$colors = negar_theme_test_save_group( 'colors', array( 'colors' => array( 'primary' => '#059669', 'secondary' => '#e11d48' ) ) );
 	$results['previous_defaults_valid'] = '#059669' === $colors['colors']['primary'] && '#e11d48' === $colors['colors']['secondary'];

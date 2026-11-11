@@ -28,6 +28,7 @@ Customizer fallback or code default”; a present key with an empty string means
   "products": {
     "sections": {
       "accessories": {
+        "mode": "custom",
         "count": 9,
         "sort": "date_desc",
         "include_categories": [],
@@ -114,11 +115,28 @@ banners, stories, product data or Swiper initialization.
 
 ## Implemented product-section schema
 
+Phase 4.1 stores an active configuration with `mode: "custom"`; no entry means
+that section uses its exact legacy query. Existing Phase 4 entries without a mode
+remain active for compatibility. Saving one section never writes another, and
+disabling that section's explicit custom-state control removes only its entry and
+restores its legacy behavior.
+
+The supported sort tokens are newest, oldest, name ascending/descending,
+best-selling (`total_sales`), highest-rated (`_wc_average_rating`), price
+ascending/descending (`_price`), most reviewed and random. Every managed query
+also excludes WooCommerce's `exclude-from-catalog` visibility term; manual IDs
+must resolve to published, catalog-visible `WC_Product` objects.
+
+The admin selector does not preload the catalog. It fetches at most 20 matching
+products through a nonce-protected `manage_options` Ajax request, while rendering
+the previously saved IDs separately so they remain visible after reopening.
+
 `products.sections` is a whitelist keyed only by existing homepage product-query
 components. Each entry stores a bounded count (1–12), one supported sort token,
-existing `product_cat` include/exclude term IDs, and up to 12 published product
-IDs. The sanitizer verifies every ID against WordPress before storage, so it cannot
-create products or surface drafts/private products. Manual IDs and category filters
+existing `product_cat` include/exclude term IDs, and up to 12 published,
+catalog-visible product IDs. The sanitizer verifies every ID against WordPress
+before storage, so it cannot create products or surface drafts/private/hidden
+products. Manual IDs and category filters
 only choose the query candidates; each template still resolves price, image,
 rating, stock and permalink from the live `WC_Product` object.
 

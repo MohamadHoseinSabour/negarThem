@@ -1,6 +1,6 @@
 # Implementation Plan: 012 Complete Theme Settings Project
 
-**Status:** Phase 4 WooCommerce product-section management complete; later phases planned only.
+**Status:** Phase 4.1 WooCommerce product-section hardening complete; later phases planned only.
 
 ## Architecture
 
@@ -27,10 +27,12 @@
 5. **Layout (complete):** implement a fixed 35-ID registry in the non-Elementor
    homepage path. Store only IDs and enabled states, normalize corrupt/missing
    layouts safely, and provide RTL drag/drop plus visible keyboard move controls.
-6. **Commerce presentation (complete):** add independent query controls for the
+6. **Commerce presentation (complete, hardened):** add independent query controls for the
    existing real-product carousels/grids and product-tab sources: published manual
-   IDs, category include/exclude terms, count and a whitelist of sort modes. Keep
-   the exact legacy query path until this tab is explicitly saved.
+   IDs, category include/exclude terms, count and a whitelist of sort modes. Phase
+   4.1 adds per-section custom/legacy state, catalog visibility filtering and a
+   nonce-protected Ajax search selector that retains saved IDs without loading the
+   catalog. Keep the exact legacy query path until that section is explicitly enabled.
 7. **Media collections (planned):** add banners, stories and brands using validated
    media IDs, safe links and non-autoloaded repeaters where appropriate.
 8. **Typography, SMS and backup (planned):** define separate security boundaries,

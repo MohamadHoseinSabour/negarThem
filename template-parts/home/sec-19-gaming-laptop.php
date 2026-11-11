@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 if ( negar_theme_product_section_is_configured( 'gaming-laptops' ) ) {
 	$laptop_products = new WP_Query( negar_theme_product_section_query_args( 'gaming-laptops', array( 'post_type' => 'product', 'post_status' => 'publish' ) ) );
 } else {
-$laptop_products = new WP_Query( array(
+$laptop_products = new WP_Query( negar_theme_catalog_visibility_query_args( array(
 	'post_type'      => 'product',
 	'post_status'    => 'publish',
 	'posts_per_page' => 4,
@@ -25,13 +25,13 @@ $laptop_products = new WP_Query( array(
 			'terms'    => array( 'laptop', 'لپ-تاپ', 'گیمینگ' ),
 		),
 	),
-) );
+) ) );
 if ( ! $laptop_products->have_posts() ) {
-	$laptop_products = new WP_Query( array(
+	$laptop_products = new WP_Query( negar_theme_catalog_visibility_query_args( array(
 		'post_type'      => 'product',
 		'post_status'    => 'publish',
 		'posts_per_page' => 4,
-	) );
+	) ) );
 }
 }
 ?>
