@@ -147,6 +147,43 @@ async function runTests() {
     assert(!dealState.text.includes('iphone-17-pro-max'), 'Featured deal must not retain the old mismatched image reference');
   });
 
+  await testStep('Gaming Zone exposes only real product hotspots and sidebar items', async () => {
+    const productResponse = await page.request.get(`${BASE_URL}/wp-json/wc/store/v1/products?per_page=100`);
+    assert.strictEqual(productResponse.status(), 200, 'The Store API must expose the gaming catalogue');
+    const sourceIds = new Set((await productResponse.json()).map((product) => String(product.id)));
+
+    const gamingState = await page.evaluate(() => {
+      const section = document.querySelector('.products-pack-nk');
+      return {
+        sectionFound: Boolean(section),
+        hotspots: Array.from(section?.querySelectorAll('.products-pack-nk__image__product') || []).map((hotspot) => ({
+          empty: hotspot.classList.contains('is-empty'),
+          links: Array.from(hotspot.querySelectorAll('a[href]')).map((link) => link.href),
+          prices: hotspot.querySelectorAll('.price').length,
+        })),
+        items: Array.from(section?.querySelectorAll('.products-pack-nk__products__item[data-product-id]') || []).map((item) => ({
+          id: item.dataset.productId || '',
+          links: Array.from(item.querySelectorAll('a[href]')).map((link) => link.href),
+        })),
+      };
+    });
+
+    assert(gamingState.sectionFound, 'Gaming Zone must render');
+    assert(gamingState.hotspots.length >= 3, 'Gaming Zone must preserve its hotspot layout');
+    gamingState.hotspots.forEach((hotspot, index) => {
+      if (hotspot.empty) {
+        assert.strictEqual(hotspot.links.length, 0, `Unavailable hotspot ${index + 1} must not expose a generic link`);
+        assert.strictEqual(hotspot.prices, 0, `Unavailable hotspot ${index + 1} must not expose a fabricated price`);
+      } else {
+        assert(hotspot.links.length > 0 && hotspot.links.every((url) => url.includes('/product/')), `Available hotspot ${index + 1} must link to its product`);
+      }
+    });
+    gamingState.items.forEach((item, index) => {
+      assert(sourceIds.has(item.id), `Gaming sidebar item ${index + 1} must use a published product ID`);
+      assert(item.links.length > 0 && item.links.every((url) => url.includes('/product/')), `Gaming sidebar item ${index + 1} must link to a product page`);
+    });
+  });
+
   // 2AA. Product carousel cards must always land on their own product page.
   await testStep('Homepage sale carousel exposes only real product destinations', async () => {
     const saleResponse = await page.request.get(`${BASE_URL}/wp-json/wc/store/v1/products?on_sale=true&per_page=100`);
