@@ -70,3 +70,20 @@ Both schemas whitelist code-owned stable record IDs. Missing, malformed, deleted
 or non-image attachment IDs fall back to the current demo asset. Unknown records
 are discarded. Saving either group cannot rewrite text, layout, product-query or
 legacy Customizer groups.
+
+## Server-side rendering & visibility parity
+
+All 17 audited `negar_theme_media_options` records (2 Hero slides plus 15
+promotional banners across 8 templates) render image URLs, `alt` attributes,
+safe destinations and supported editorial copy directly from PHP on the
+non-Elementor front page:
+
+- **Single wide banner (`wide-banner-one`):** omits the section wrapper and
+  `<img>` element when disabled.
+- **Two-column editorial & compact asymmetric pairs (`banners-grid`, `sec-10`,
+  `sec-12`, `sec-18`, `sec-27`, `sec-29`, `sec-32`):** omit disabled cards/images
+  cleanly, collapse single-active pairs to one responsive column without leaving
+  an empty track, and omit the outer group container when both slots are
+  disabled. Intentional empty editorial strings (`title`, `subtitle`) are
+  preserved without falling back to stale demo copy, while image-only banners
+  (`wide-banner-one`, `compact-12-*`, `compact-27-*`) render no text elements.

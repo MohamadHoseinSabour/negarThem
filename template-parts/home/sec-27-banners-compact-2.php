@@ -13,30 +13,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$upload_dir = wp_upload_dir();
-$banner_1   = $upload_dir['baseurl'] . '/kaveh-demo/banner-04.png';
-$banner_2   = $upload_dir['baseurl'] . '/kaveh-demo/banner-05.png';
-$shop_url   = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/shop/' );
-$banner_one = negar_theme_media_record( 'compact-27-one' );
-$banner_two = negar_theme_media_record( 'compact-27-two' );
-?>
-
-<div class="elementor-element elementor-element-3c70d07e e-flex e-con-boxed e-con e-parent e-lazyloaded negar-dual-banners-asymmetric my-6" data-id="3c70d07e" data-element_type="container" data-e-type="container">
-	<div class="e-con-inner container">
-		
-		<!-- Right Banner (Wider: 773px / 59%) -->
-		<div class="elementor-element elementor-element-6feae589 elementor-widget elementor-widget-image" data-id="6feae589" data-element_type="widget" data-e-type="widget" data-widget_type="image.default"<?php echo negar_theme_media_data_attributes( $banner_one ); ?>>
-			<a href="<?php echo esc_url( $shop_url ); ?>" class="d-block w-100 h-100 overflow-hidden rounded-3xl group shadow-xs hover:shadow-md transition-all duration-300">
-				<img loading="lazy" decoding="async" width="773" height="228" src="<?php echo esc_url( $banner_1 ); ?>" class="attachment-full size-full w-100 h-auto d-block group-hover:scale-102 transition-transform duration-300" alt="<?php esc_attr_e( 'تخفیف ویژه اول', 'negar-shop' ); ?>">
-			</a>
-		</div>
-
-		<!-- Left Banner (Narrower: 538px / 41%) -->
-		<div class="elementor-element elementor-element-2a90c2db elementor-widget elementor-widget-image" data-id="2a90c2db" data-element_type="widget" data-e-type="widget" data-widget_type="image.default"<?php echo negar_theme_media_data_attributes( $banner_two ); ?>>
-			<a href="<?php echo esc_url( $shop_url ); ?>" class="d-block w-100 h-100 overflow-hidden rounded-3xl group shadow-xs hover:shadow-md transition-all duration-300">
-				<img loading="lazy" decoding="async" width="538" height="227" src="<?php echo esc_url( $banner_2 ); ?>" class="attachment-full size-full w-100 h-auto d-block group-hover:scale-102 transition-transform duration-300" alt="<?php esc_attr_e( 'تخفیف ویژه دوم', 'negar-shop' ); ?>">
-			</a>
-		</div>
-
-	</div>
-</div>
+negar_theme_render_compact_banner_pair(
+	'3c70d07e',
+	array(
+		array(
+			'record_id' => 'compact-27-one',
+			'widget_id' => '6feae589',
+			'width'     => 773,
+			'height'    => 228,
+		),
+		array(
+			'record_id' => 'compact-27-two',
+			'widget_id' => '2a90c2db',
+			'width'     => 538,
+			'height'    => 227,
+		),
+	)
+);

@@ -41,10 +41,14 @@
    `mirage` hotspot alignment. Phase 5.1-B1 converts the Hero slider
    (`template-parts/home/hero-slider.php`) to pure PHP server-side rendering using
    `hero-slide-one` and `hero-slide-two`, removes redundant Hero client-side media
-   replacement, and stabilizes Swiper + layout handling across 2-, 1- and 0-slide
-   visibility states while keeping the adjacent featured-product box safe. Next
-   (Phase 5.1-B2), complete PHP SSR binding for all audited promotional banner
-   templates without duplicating Phase 2 text fields, and complete the remaining
+   replaced client-side Hero media replacement, and stabilized Swiper + layout
+   handling across 2-, 1- and 0-slide visibility states while keeping the adjacent
+   featured-product box safe. Phase 5.1-B2 converts all 15 audited promotional banner
+   records across the 8 mounted banner templates to PHP server-side rendering via
+   shared helpers, removes legacy client-side banner replacement (`applyBannerMediaRecords`
+   and data attributes), collapses single-active banner pairs to one column and
+   omits disabled banners/empty groups cleanly while preserving intentional empty
+   editorial text and image-only banner markup. Next, complete the remaining
    established product packs/hotspots with catalog-visible WooCommerce product IDs.
    Stories and brands remain out of scope for Phases 6 and 7.
 8. **Typography, SMS and backup (planned):** define separate security boundaries,

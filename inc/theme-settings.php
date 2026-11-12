@@ -769,26 +769,164 @@ function negar_theme_media_record( $record_id ) {
 }
 
 /**
- * Build escaped data attributes consumed by the existing home interaction script.
+ * Resolve server-side rendering data for a single promotional banner record.
  *
- * @param array<string, mixed> $record Resolved fixed media record.
- * @return string
+ * Returns null when the banner record is missing or disabled.
+ *
+ * @param string $record_id Fixed media record ID.
+ * @return array<string, mixed>|null
  */
-function negar_theme_media_data_attributes( $record ) {
-	if ( ! is_array( $record ) ) {
-		return '';
+function negar_theme_banner_item_data( $record_id ) {
+	$record = negar_theme_media_record( $record_id );
+	if ( empty( $record ) || empty( $record['enabled'] ) ) {
+		return null;
 	}
 
-	return sprintf(
-		' data-negar-banner data-negar-media-enabled="%1$s" data-negar-media-image="%2$s" data-negar-media-link="%3$s" data-negar-media-alt="%4$s" data-negar-media-title="%5$s" data-negar-media-subtitle="%6$s" data-negar-media-cta="%7$s"',
-		! empty( $record['enabled'] ) ? '1' : '0',
-		esc_attr( isset( $record['image_url'] ) ? $record['image_url'] : '' ),
-		esc_attr( isset( $record['link'] ) ? $record['link'] : '' ),
-		esc_attr( isset( $record['alt'] ) ? $record['alt'] : '' ),
-		esc_attr( isset( $record['title'] ) ? $record['title'] : '' ),
-		esc_attr( isset( $record['subtitle'] ) ? $record['subtitle'] : '' ),
-		esc_attr( isset( $record['cta_label'] ) ? $record['cta_label'] : '' )
+	$shop_link    = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) : '';
+	$default_url  = $shop_link ? $shop_link : home_url( '/shop/' );
+	$raw_link     = isset( $record['link'] ) ? (string) $record['link'] : '';
+	$safe_link    = negar_theme_sanitize_media_link( $raw_link );
+	$resolved_url = '' !== $safe_link ? $safe_link : $default_url;
+
+	$fallback_image = isset( $record['fallback_url'] ) ? (string) $record['fallback_url'] : '';
+	$image_url      = isset( $record['image_url'] ) && '' !== $record['image_url'] ? (string) $record['image_url'] : $fallback_image;
+	$alt_text       = array_key_exists( 'alt', $record ) ? (string) $record['alt'] : '';
+	$title          = array_key_exists( 'title', $record ) ? (string) $record['title'] : '';
+	$subtitle       = array_key_exists( 'subtitle', $record ) ? (string) $record['subtitle'] : '';
+	$cta_label      = array_key_exists( 'cta_label', $record ) ? (string) $record['cta_label'] : '';
+	$aria_label     = '' !== trim( $cta_label ) ? $cta_label : __( 'مشاهده بیشتر', 'negar-shop' );
+
+	return array(
+		'id'         => (string) $record_id,
+		'image_url'  => $image_url,
+		'link'       => $resolved_url,
+		'alt'        => $alt_text,
+		'title'      => $title,
+		'subtitle'   => $subtitle,
+		'cta_label'  => $cta_label,
+		'aria_label' => $aria_label,
 	);
+}
+
+/**
+ * Render an editorial two-column banner grid server-side.
+ *
+ * Omits disabled banners cleanly, collapses to one column when a single banner
+ * remains active, and omits the outer section when all banners are disabled.
+ *
+ * @param string                           $outer_classes Outer Elementor container CSS classes.
+ * @param string                           $outer_attrs   Extra attributes for the outer container.
+ * @param array<int, array<string, mixed>> $slots         Slot definitions (`record_id`, `widget_id`, optional `col_id`, `col_attrs`, `is_lazy`).
+ * @return void
+ */
+function negar_theme_render_editorial_banner_grid( $outer_classes, $outer_attrs, $slots ) {
+	$active_items = array();
+
+	foreach ( $slots as $slot ) {
+		$record_id = isset( $slot['record_id'] ) ? (string) $slot['record_id'] : '';
+		$item      = negar_theme_banner_item_data( $record_id );
+		if ( null === $item ) {
+			continue;
+		}
+		$active_items[] = array_merge( $slot, array( 'data' => $item ) );
+	}
+
+	if ( empty( $active_items ) ) {
+		return;
+	}
+
+	$grid_classes = 1 === count( $active_items )
+		? 'grid grid-cols-1 gap-4 md:gap-5 negar-banners-2col--single'
+		: 'grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5';
+
+	$outer_attr_suffix = '' !== trim( (string) $outer_attrs ) ? ' ' . trim( (string) $outer_attrs ) : '';
+	?>
+<div class="<?php echo esc_attr( $outer_classes ); ?>"<?php echo $outer_attr_suffix; ?>>
+	<div class="container max-w-[1320px] mx-auto px-3">
+		<div class="<?php echo esc_attr( $grid_classes ); ?>">
+			<?php foreach ( $active_items as $slot ) : ?>
+				<?php
+				$item        = $slot['data'];
+				$widget_id   = isset( $slot['widget_id'] ) ? (string) $slot['widget_id'] : '';
+				$col_id      = isset( $slot['col_id'] ) ? (string) $slot['col_id'] : '';
+				$col_classes = '' !== $col_id
+					? 'elementor-element elementor-element-' . $col_id . ' e-con-full e-flex e-con e-child'
+					: 'elementor-element e-con-full e-flex e-con e-child';
+				$col_attrs   = ! empty( $slot['col_attrs'] ) ? ' ' . trim( (string) $slot['col_attrs'] ) : '';
+				$loading_attr = ( ! array_key_exists( 'is_lazy', $slot ) || ! empty( $slot['is_lazy'] ) ) ? ' loading="lazy"' : '';
+				?>
+				<div class="<?php echo esc_attr( $col_classes ); ?>"<?php echo $col_attrs; ?>>
+					<div class="elementor-element elementor-element-<?php echo esc_attr( $widget_id ); ?> elementor-widget elementor-widget-bannernkkaveh w-full" data-id="<?php echo esc_attr( $widget_id ); ?>" data-element_type="widget" data-widget_type="bannernkkaveh.default">
+						<div class="elementor-widget-container">
+							<section class="banners-nk banners-nk-<?php echo esc_attr( $widget_id ); ?>" data-negar-banner-record="<?php echo esc_attr( $item['id'] ); ?>">
+								<div class="banners-nk__item position-relative">
+									<div class="detail">
+										<a href="<?php echo esc_url( $item['link'] ); ?>" class="more d-flex align-items-center justify-content-center rounded-pill" aria-label="<?php echo esc_attr( $item['aria_label'] ); ?>">
+											<i class="icon icon-chevron-left-2 lh-1" aria-hidden="true"></i>
+										</a>
+										<div class="title f-iran-yekan fw-bold"><?php echo esc_html( $item['title'] ); ?></div>
+										<div class="sub-title f-iran-yekan fw-normal"><?php echo esc_html( $item['subtitle'] ); ?></div>
+									</div>
+									<img src="<?php echo esc_url( $item['image_url'] ); ?>" alt="<?php echo esc_attr( $item['alt'] ); ?>" width="218" height="245" class="banner-image position-absolute bottom-0"<?php echo $loading_attr; ?>>
+								</div>
+							</section>
+						</div>
+					</div>
+				</div>
+			<?php endforeach; ?>
+		</div>
+	</div>
+</div>
+	<?php
+}
+
+/**
+ * Render an asymmetric compact two-column image-only banner group server-side.
+ *
+ * Omits disabled banners cleanly, switches to a single-column container modifier
+ * when one banner remains active, and omits the section when both are disabled.
+ *
+ * @param string                           $container_id Elementor container ID.
+ * @param array<int, array<string, mixed>> $slots        Slot definitions (`record_id`, `widget_id`, `width`, `height`).
+ * @return void
+ */
+function negar_theme_render_compact_banner_pair( $container_id, $slots ) {
+	$active_items = array();
+
+	foreach ( $slots as $slot ) {
+		$record_id = isset( $slot['record_id'] ) ? (string) $slot['record_id'] : '';
+		$item      = negar_theme_banner_item_data( $record_id );
+		if ( null === $item ) {
+			continue;
+		}
+		$active_items[] = array_merge( $slot, array( 'data' => $item ) );
+	}
+
+	if ( empty( $active_items ) ) {
+		return;
+	}
+
+	$is_single         = 1 === count( $active_items );
+	$container_classes = 'elementor-element elementor-element-' . $container_id . ' e-flex e-con-boxed e-con e-parent e-lazyloaded negar-dual-banners-asymmetric my-6' . ( $is_single ? ' negar-dual-banners-asymmetric--single' : '' );
+	?>
+<div class="<?php echo esc_attr( $container_classes ); ?>" data-id="<?php echo esc_attr( $container_id ); ?>" data-element_type="container" data-e-type="container">
+	<div class="e-con-inner container">
+		<?php foreach ( $active_items as $slot ) : ?>
+			<?php
+			$item      = $slot['data'];
+			$widget_id = isset( $slot['widget_id'] ) ? (string) $slot['widget_id'] : '';
+			$width     = isset( $slot['width'] ) ? absint( $slot['width'] ) : 773;
+			$height    = isset( $slot['height'] ) ? absint( $slot['height'] ) : 228;
+			?>
+			<div class="elementor-element elementor-element-<?php echo esc_attr( $widget_id ); ?> elementor-widget elementor-widget-image" data-id="<?php echo esc_attr( $widget_id ); ?>" data-element_type="widget" data-e-type="widget" data-widget_type="image.default" data-negar-banner-record="<?php echo esc_attr( $item['id'] ); ?>">
+				<a href="<?php echo esc_url( $item['link'] ); ?>" class="d-block w-100 h-100 overflow-hidden rounded-3xl group shadow-xs hover:shadow-md transition-all duration-300">
+					<img loading="lazy" decoding="async" width="<?php echo esc_attr( (string) $width ); ?>" height="<?php echo esc_attr( (string) $height ); ?>" src="<?php echo esc_url( $item['image_url'] ); ?>" class="attachment-full size-full w-100 h-auto d-block group-hover:scale-102 transition-transform duration-300" alt="<?php echo esc_attr( $item['alt'] ); ?>">
+				</a>
+			</div>
+		<?php endforeach; ?>
+	</div>
+</div>
+	<?php
 }
 
 /**

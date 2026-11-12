@@ -97,8 +97,10 @@ sorting, selector and catalog-visibility hardening.
   supported sort set uses live WooCommerce/WordPress values, and catalog-hidden or
   unrated products never gain invented storefront data.
 - An authenticated administrator can submit hero/banner and product-pack records,
-  reload them, and observe the configured image/link/visibility or resolved live
-  product on desktop and mobile. Invalid attachment IDs safely use the original
-  demo fallback and all test snapshots are restored.
+  reload them, and observe the server-rendered image/link/visibility (with clean
+  grid collapse or omission for disabled slots) or resolved live product on
+  desktop and mobile. Invalid attachment IDs safely use the original demo fallback,
+  intentional empty editorial text is preserved on editorial banners, image-only
+  banners gain no invented text, and all test snapshots are restored identically.
 - Documentation keys exactly match implementation and the dedicated spec, plan and
   task list remain separate from specification 009.

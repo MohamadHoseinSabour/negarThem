@@ -51,10 +51,16 @@
   disabled slides and single-slide loop/navigation, preserve the adjacent flash-deal
   product card when zero slides are active, and verify desktop/mobile SSR and
   Swiper stability.
-- [ ] **T209.1** Implement fixed hero/banner media records using image attachment
+- [x] **T209.0c** Convert all 15 audited promotional banner records across 8 home
+  templates to PHP server-side rendering via shared helpers, remove legacy
+  `applyBannerMediaRecords()` JS replacement and banner data attributes, omit
+  disabled banners/images cleanly, collapse single-active banner pairs to one
+  column and omit empty containers while preserving intentional empty editorial
+  text, image-only templates and snapshot restoration.
+- [x] **T209.1** Implement fixed hero/banner media records using image attachment
   IDs, safe URLs, explicit alt/visibility values, non-autoloaded independent
   storage and Media Library controls. Do not include stories or brands.
-- [ ] **T209.2** Bind each audited hero and promotional banner template without
+- [x] **T209.2** Bind each audited hero and promotional banner template without
   changing its layout, Swiper behavior, Phase 2 text fields or demo fallback.
 - [ ] **T209.3** Implement fixed product-pack/hotspot product ID selectors and
   resolve all displayed commerce from published, catalog-visible WooCommerce

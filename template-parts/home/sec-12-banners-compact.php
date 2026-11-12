@@ -13,30 +13,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$upload_dir = wp_upload_dir();
-$banner_1   = $upload_dir['baseurl'] . '/kaveh-demo/banner-04.png';
-$banner_2   = $upload_dir['baseurl'] . '/kaveh-demo/banner-05.png';
-$shop_url   = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/shop/' );
-$banner_one = negar_theme_media_record( 'compact-12-one' );
-$banner_two = negar_theme_media_record( 'compact-12-two' );
-?>
-
-<div class="elementor-element elementor-element-26635d31 e-flex e-con-boxed e-con e-parent e-lazyloaded negar-dual-banners-asymmetric my-6" data-id="26635d31" data-element_type="container" data-e-type="container">
-	<div class="e-con-inner container">
-		
-		<!-- Right Banner (Wider: 773px / 59%) -->
-		<div class="elementor-element elementor-element-57013a2f elementor-widget elementor-widget-image" data-id="57013a2f" data-element_type="widget" data-e-type="widget" data-widget_type="image.default"<?php echo negar_theme_media_data_attributes( $banner_one ); ?>>
-			<a href="<?php echo esc_url( $shop_url ); ?>" class="d-block w-100 h-100 overflow-hidden rounded-3xl group shadow-xs hover:shadow-md transition-all duration-300">
-				<img loading="lazy" decoding="async" width="773" height="228" src="<?php echo esc_url( $banner_1 ); ?>" class="attachment-full size-full w-100 h-auto d-block group-hover:scale-102 transition-transform duration-300" alt="<?php esc_attr_e( 'تخفیف ویژه کالای دیجیتال', 'negar-shop' ); ?>">
-			</a>
-		</div>
-
-		<!-- Left Banner (Narrower: 538px / 41%) -->
-		<div class="elementor-element elementor-element-2bf8a385 elementor-widget elementor-widget-image" data-id="2bf8a385" data-element_type="widget" data-e-type="widget" data-widget_type="image.default"<?php echo negar_theme_media_data_attributes( $banner_two ); ?>>
-			<a href="<?php echo esc_url( $shop_url ); ?>" class="d-block w-100 h-100 overflow-hidden rounded-3xl group shadow-xs hover:shadow-md transition-all duration-300">
-				<img loading="lazy" decoding="async" width="538" height="227" src="<?php echo esc_url( $banner_2 ); ?>" class="attachment-full size-full w-100 h-auto d-block group-hover:scale-102 transition-transform duration-300" alt="<?php esc_attr_e( 'پیشنهاد خرید لوازم جانبی', 'negar-shop' ); ?>">
-			</a>
-		</div>
-
-	</div>
-</div>
+negar_theme_render_compact_banner_pair(
+	'26635d31',
+	array(
+		array(
+			'record_id' => 'compact-12-one',
+			'widget_id' => '57013a2f',
+			'width'     => 773,
+			'height'    => 228,
+		),
+		array(
+			'record_id' => 'compact-12-two',
+			'widget_id' => '2bf8a385',
+			'width'     => 538,
+			'height'    => 227,
+		),
+	)
+);

@@ -100,6 +100,8 @@ function negar_theme_test_restore( $option, $media_option, $pack_option, $mods, 
 
 	wp_cache_delete( $option, 'options' );
 	wp_cache_delete( $mods, 'options' );
+	wp_cache_delete( $media_option, 'options' );
+	wp_cache_delete( $pack_option, 'options' );
 }
 
 function negar_theme_test_save_group( $tab, $input, $section_action = '' ) {
@@ -255,7 +257,8 @@ try {
 		throw new InvalidArgumentException( 'Unknown action.' );
 	}
 
-	$results = array();
+	$verify_snapshot = negar_theme_test_snapshot( $option, $media_option, $pack_option, $mods );
+	$results         = array();
 
 	wp_set_current_user( 0 );
 	$_POST['negar_theme_settings_tab'] = 'colors';
@@ -598,6 +601,224 @@ try {
 	$results['media_cleared_restores_fallback'] = 0 === (int) $cleared_hero_media['media_id']
 		&& $cleared_hero_media['fallback_url'] === $cleared_hero_media['image_url']
 		&& '/shop/' === $cleared_hero_media['link'];
+
+	$banner_templates = array(
+		'template-parts/home/banners-grid',
+		'template-parts/home/sec-08-banner-wide',
+		'template-parts/home/sec-10-banners-2col',
+		'template-parts/home/sec-12-banners-compact',
+		'template-parts/home/sec-18-banners-2col',
+		'template-parts/home/sec-27-banners-compact-2',
+		'template-parts/home/sec-29-banners-2col',
+		'template-parts/home/sec-32-banners-2col',
+	);
+	$render_banners = static function( $templates = null ) use ( $banner_templates ) {
+		$targets = null === $templates ? $banner_templates : (array) $templates;
+		ob_start();
+		foreach ( $targets as $template_slug ) {
+			get_template_part( $template_slug );
+		}
+		return ob_get_clean();
+	};
+
+	delete_option( $media_option );
+	$default_banners_html = $render_banners();
+	$expected_banner_ids  = array(
+		'banners-grid-one',
+		'banners-grid-two',
+		'wide-banner-one',
+		'banners-10-one',
+		'banners-10-two',
+		'compact-12-one',
+		'compact-12-two',
+		'banners-18-one',
+		'banners-18-two',
+		'compact-27-one',
+		'compact-27-two',
+		'banners-29-one',
+		'banners-29-two',
+		'banners-32-one',
+		'banners-32-two',
+	);
+	$all_15_rendered = true;
+	foreach ( $expected_banner_ids as $banner_id ) {
+		if ( false === strpos( $default_banners_html, 'data-negar-banner-record="' . $banner_id . '"' ) ) {
+			$all_15_rendered = false;
+		}
+	}
+	$home_js_contents = file_get_contents( get_template_directory() . '/assets/js/home.js' );
+	$results['banners_ssr_default_renders_all_15_without_js_attrs'] = $all_15_rendered
+		&& false !== strpos( $default_banners_html, '/kaveh-demo/banner-01.png' )
+		&& false !== strpos( $default_banners_html, '/kaveh-demo/banner-02-1.png' )
+		&& false !== strpos( $default_banners_html, '/kaveh-demo/banner-03.png' )
+		&& false !== strpos( $default_banners_html, '/kaveh-demo/banner-04.png' )
+		&& false !== strpos( $default_banners_html, '/kaveh-demo/banner-05.png' )
+		&& false === strpos( $default_banners_html, 'data-negar-media-image=' )
+		&& false === strpos( $default_banners_html, 'data-negar-media-enabled=' )
+		&& false === strpos( $home_js_contents, 'applyBannerMediaRecords' );
+
+	$build_media_payload = static function( $overrides ) {
+		$records = array();
+		foreach ( negar_theme_media_registry() as $id => $def ) {
+			$row = array( 'enabled' => ! empty( $def['enabled'] ) ? '1' : '0' );
+			foreach ( $def['fields'] as $field ) {
+				if ( 'enabled' === $field || 'media_id' === $field ) {
+					continue;
+				}
+				if ( isset( $def[ $field ] ) ) {
+					$row[ $field ] = (string) $def[ $field ];
+				}
+			}
+			$records[ $id ] = isset( $overrides[ $id ] ) ? array_merge( $row, $overrides[ $id ] ) : $row;
+		}
+		return array( 'records' => $records );
+	};
+
+	$banner_override_input = $build_media_payload(
+		array(
+			'banners-grid-one' => array(
+				'enabled'   => '1',
+				'media_id'  => (string) $image_id,
+				'link'      => '/shop/?banner-ssr=1',
+				'alt'       => 'Banner SSR One Alt',
+				'title'     => 'Banner SSR Title One',
+				'subtitle'  => 'Banner SSR Subtitle One',
+				'cta_label' => 'Banner SSR CTA One',
+			),
+			'banners-grid-two' => array(
+				'enabled'   => '1',
+				'media_id'  => '999999999',
+				'link'      => 'javascript:alert(1)',
+				'alt'       => '',
+				'title'     => '',
+				'subtitle'  => '',
+				'cta_label' => '',
+			),
+			'wide-banner-one'  => array(
+				'enabled'  => '1',
+				'media_id' => (string) $image_id,
+				'link'     => 'https://example.com/wide-ssr',
+				'alt'      => 'Wide SSR Alt',
+			),
+			'compact-12-one'   => array(
+				'enabled'  => '1',
+				'media_id' => '999999999',
+				'link'     => '/shop/?compact-ssr=12',
+				'alt'      => 'Compact 12 Alt',
+			),
+			'compact-27-two'   => array(
+				'enabled'  => '1',
+				'media_id' => (string) $image_id,
+				'link'     => 'https://example.com/compact-27',
+				'alt'      => 'Compact 27 Alt',
+			),
+		)
+	);
+	update_option( $media_option, negar_theme_sanitize_media_settings( $banner_override_input ) );
+	$banners_grid_html   = $render_banners( 'template-parts/home/banners-grid' );
+	$wide_banner_html    = $render_banners( 'template-parts/home/sec-08-banner-wide' );
+	$compact_12_html     = $render_banners( 'template-parts/home/sec-12-banners-compact' );
+	$compact_27_html     = $render_banners( 'template-parts/home/sec-27-banners-compact-2' );
+	$banners_10_html     = $render_banners( 'template-parts/home/sec-10-banners-2col' );
+	$shop_permalink      = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/shop/' );
+	$results['banners_ssr_overrides_and_fallbacks'] = ( ! $expected_image_url || false !== strpos( $banners_grid_html, esc_url( $expected_image_url ) ) )
+		&& false !== strpos( $banners_grid_html, 'href="/shop/?banner-ssr=1"' )
+		&& false !== strpos( $banners_grid_html, 'alt="Banner SSR One Alt"' )
+		&& false !== strpos( $banners_grid_html, 'Banner SSR Title One' )
+		&& false !== strpos( $banners_grid_html, 'Banner SSR Subtitle One' )
+		&& false !== strpos( $banners_grid_html, 'aria-label="Banner SSR CTA One"' )
+		&& false !== strpos( $banners_grid_html, '/kaveh-demo/banner-02-1.png' )
+		&& false !== strpos( $banners_grid_html, 'href="' . esc_url( $shop_permalink ) . '"' )
+		&& false === strpos( $banners_grid_html, 'javascript:alert' )
+		&& false !== strpos( $banners_grid_html, '<div class="title f-iran-yekan fw-bold"></div>' )
+		&& false !== strpos( $banners_grid_html, '<div class="sub-title f-iran-yekan fw-normal"></div>' )
+		&& false === strpos( $banners_grid_html, 'محل قرار گیری بنر' )
+		&& false === strpos( $banners_grid_html, 'همین الان با تخفیف خرید کنید' )
+		&& false !== strpos( $wide_banner_html, 'href="https://example.com/wide-ssr"' )
+		&& false !== strpos( $wide_banner_html, 'alt="Wide SSR Alt"' )
+		&& false === strpos( $wide_banner_html, 'class="title' )
+		&& false !== strpos( $compact_12_html, 'href="/shop/?compact-ssr=12"' )
+		&& false !== strpos( $compact_12_html, '/kaveh-demo/banner-04.png' )
+		&& false !== strpos( $compact_12_html, 'alt="Compact 12 Alt"' )
+		&& false === strpos( $compact_12_html, 'class="title' )
+		&& false !== strpos( $compact_27_html, 'href="https://example.com/compact-27"' )
+		&& false !== strpos( $compact_27_html, 'alt="Compact 27 Alt"' )
+		&& false === strpos( $compact_27_html, 'class="title' )
+		&& false !== strpos( $banners_10_html, 'محل قرار گیری بنر' );
+
+	// Test visibility states: single-column collapse + empty container omission.
+	update_option(
+		$media_option,
+		negar_theme_sanitize_media_settings(
+			array(
+				'records' => array(
+					'wide-banner-one'  => array( 'enabled' => '0', 'media_id' => '0', 'link' => '/shop/', 'alt' => 'Disabled Wide' ),
+					'banners-grid-one' => array( 'enabled' => '1', 'media_id' => '0', 'link' => '/shop/', 'alt' => 'Only Grid One' ),
+					'banners-grid-two' => array( 'enabled' => '0', 'media_id' => '0', 'link' => '/shop/', 'alt' => 'Disabled Grid Two' ),
+					'compact-12-one'   => array( 'enabled' => '1', 'media_id' => '0', 'link' => '/shop/', 'alt' => 'Only Compact One' ),
+					'compact-12-two'   => array( 'enabled' => '0', 'media_id' => '0', 'link' => '/shop/', 'alt' => 'Disabled Compact Two' ),
+				),
+			)
+		)
+	);
+	$wide_disabled_html     = $render_banners( 'template-parts/home/sec-08-banner-wide' );
+	$grid_only_one_html     = $render_banners( 'template-parts/home/banners-grid' );
+	$compact_only_one_html  = $render_banners( 'template-parts/home/sec-12-banners-compact' );
+	$visibility_one_ok = '' === trim( $wide_disabled_html )
+		&& false !== strpos( $grid_only_one_html, 'data-negar-banner-record="banners-grid-one"' )
+		&& false === strpos( $grid_only_one_html, 'data-negar-banner-record="banners-grid-two"' )
+		&& false === strpos( $grid_only_one_html, 'banner-02-1.png' )
+		&& false !== strpos( $grid_only_one_html, 'negar-banners-2col--single' )
+		&& false === strpos( $grid_only_one_html, 'md:grid-cols-2' )
+		&& false !== strpos( $compact_only_one_html, 'data-negar-banner-record="compact-12-one"' )
+		&& false === strpos( $compact_only_one_html, 'data-negar-banner-record="compact-12-two"' )
+		&& false === strpos( $compact_only_one_html, 'banner-05.png' )
+		&& false !== strpos( $compact_only_one_html, 'negar-dual-banners-asymmetric--single' );
+
+	update_option(
+		$media_option,
+		negar_theme_sanitize_media_settings(
+			array(
+				'records' => array(
+					'banners-grid-one' => array( 'enabled' => '0', 'media_id' => '0', 'link' => '/shop/', 'alt' => 'Disabled Grid One' ),
+					'banners-grid-two' => array( 'enabled' => '1', 'media_id' => '0', 'link' => '/shop/', 'alt' => 'Only Grid Two' ),
+					'compact-12-one'   => array( 'enabled' => '0', 'media_id' => '0', 'link' => '/shop/', 'alt' => 'Disabled Compact One' ),
+					'compact-12-two'   => array( 'enabled' => '1', 'media_id' => '0', 'link' => '/shop/', 'alt' => 'Only Compact Two' ),
+				),
+			)
+		)
+	);
+	$grid_only_two_html    = $render_banners( 'template-parts/home/banners-grid' );
+	$compact_only_two_html = $render_banners( 'template-parts/home/sec-12-banners-compact' );
+	$visibility_two_ok = false === strpos( $grid_only_two_html, 'data-negar-banner-record="banners-grid-one"' )
+		&& false === strpos( $grid_only_two_html, 'banner-01.png' )
+		&& false !== strpos( $grid_only_two_html, 'data-negar-banner-record="banners-grid-two"' )
+		&& false !== strpos( $grid_only_two_html, 'negar-banners-2col--single' )
+		&& false === strpos( $compact_only_two_html, 'data-negar-banner-record="compact-12-one"' )
+		&& false === strpos( $compact_only_two_html, 'banner-04.png' )
+		&& false !== strpos( $compact_only_two_html, 'data-negar-banner-record="compact-12-two"' )
+		&& false !== strpos( $compact_only_two_html, 'negar-dual-banners-asymmetric--single' );
+
+	update_option(
+		$media_option,
+		negar_theme_sanitize_media_settings(
+			array(
+				'records' => array(
+					'banners-grid-one' => array( 'enabled' => '0', 'media_id' => '0', 'link' => '/shop/', 'alt' => '' ),
+					'banners-grid-two' => array( 'enabled' => '0', 'media_id' => '0', 'link' => '/shop/', 'alt' => '' ),
+					'compact-12-one'   => array( 'enabled' => '0', 'media_id' => '0', 'link' => '/shop/', 'alt' => '' ),
+					'compact-12-two'   => array( 'enabled' => '0', 'media_id' => '0', 'link' => '/shop/', 'alt' => '' ),
+				),
+			)
+		)
+	);
+	$grid_none_html    = $render_banners( 'template-parts/home/banners-grid' );
+	$compact_none_html = $render_banners( 'template-parts/home/sec-12-banners-compact' );
+	$results['banners_ssr_visibility_states'] = $visibility_one_ok
+		&& $visibility_two_ok
+		&& '' === trim( $grid_none_html )
+		&& '' === trim( $compact_none_html );
+
 	update_option( $media_option, $media );
 	$results['media_group_isolated'] = $header_before_media === negar_theme_settings_raw()['header']['announcement'];
 	$pack = negar_theme_sanitize_product_pack_settings( array( 'packs' => array( 'gaming-zone' => array( 'fc' => (string) $product_id, 'mirage' => (string) $product_id, 'shadows' => '999999999' ) ) ) );
@@ -625,6 +846,8 @@ try {
 	negar_shop_customizer_css();
 	$css = ob_get_clean();
 	$results['frontend_tokens'] = false !== strpos( $css, '--color-primary: #059669;' ) && false !== strpos( $css, '--color-secondary: #e11d48;' );
+
+	negar_theme_test_restore( $option, $media_option, $pack_option, $mods, $verify_snapshot );
 
 	echo wp_json_encode( $results );
 	exit( in_array( false, $results, true ) ? 1 : 0 );

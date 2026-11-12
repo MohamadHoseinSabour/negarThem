@@ -219,6 +219,15 @@
   .negar-dual-banners-asymmetric .elementor-widget-image a:hover img {
     transform: scale(1.02);
   }
+
+  .negar-dual-banners-asymmetric.negar-dual-banners-asymmetric--single .e-con-inner {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .negar-dual-banners-asymmetric.negar-dual-banners-asymmetric--single .elementor-widget-image img {
+    max-height: 280px;
+    object-fit: cover;
+  }
 }
 
 

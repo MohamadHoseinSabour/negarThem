@@ -229,6 +229,139 @@ async function run() {
 	  await heroMobileCtx.close();
 	}
 
+	// Phase 5.1-B2: Live banner SSR, empty editorial text, image-only integrity, network suppression, and responsive visibility collapse.
+	const openMediaRecord = async (recordId) => {
+	  const details = page.locator(`#negar-media-id-${recordId}`).locator('xpath=ancestor::details[contains(@class, "negar-media-record")]');
+	  if ((await details.getAttribute('open')) === null) {
+	    await details.locator('summary').click();
+	  }
+	};
+
+	await page.goto(BASE_URL + '/wp-admin/options-general.php?page=negar-theme-settings&tab=banners', { waitUntil: 'load' });
+	await openMediaRecord('wide-banner-one');
+	await openMediaRecord('compact-12-one');
+	await openMediaRecord('banners-grid-two');
+	await page.locator('#negar-media-id-wide-banner-one').fill(String(imageFixture.id));
+	await page.locator('#negar-media-link-wide-banner-one').fill('https://example.com/wide-banner-e2e');
+	await page.locator('#negar-media-alt-wide-banner-one').fill('Wide Banner E2E Alt');
+	await page.locator('#negar-media-id-compact-12-one').fill(String(imageFixture.id));
+	await page.locator('#negar-media-link-compact-12-one').fill('/shop/?compact12=1');
+	await page.locator('#negar-media-alt-compact-12-one').fill('Compact 12 One Alt');
+	await page.locator('#negar-media-title-banners-grid-two').fill('');
+	await page.locator('#negar-media-subtitle-banners-grid-two').fill('');
+	await Promise.all([
+	  page.waitForURL((url) => url.pathname.endsWith('/wp-admin/options-general.php') && url.searchParams.get('tab') === 'banners'),
+	  page.locator('form[action="options.php"] input[type="submit"]').click(),
+	]);
+
+	const bannerSsrHtml = await (await page.request.get(BASE_URL)).text();
+	for (const bannerId of [
+	  'banners-grid-one', 'banners-grid-two', 'wide-banner-one',
+	  'banners-10-one', 'banners-10-two', 'compact-12-one', 'compact-12-two',
+	  'banners-18-one', 'banners-18-two', 'compact-27-one', 'compact-27-two',
+	  'banners-29-one', 'banners-29-two', 'banners-32-one', 'banners-32-two',
+	]) {
+	  assert(bannerSsrHtml.includes(`data-negar-banner-record="${bannerId}"`), `Homepage SSR HTML must include banner record ${bannerId}`);
+	}
+	assert(!bannerSsrHtml.includes('data-negar-media-image=') && !bannerSsrHtml.includes('data-negar-media-enabled=') && !/data-negar-banner[\s>]/.test(bannerSsrHtml), 'Homepage SSR HTML must not contain legacy client-side banner replacement attributes');
+	assert(bannerSsrHtml.includes('https://example.com/wide-banner-e2e') && bannerSsrHtml.includes('alt="Wide Banner E2E Alt"'), 'Wide banner SSR HTML must contain configured link and alt directly');
+	assert(bannerSsrHtml.includes('/shop/?compact12=1') && bannerSsrHtml.includes('alt="Compact 12 One Alt"'), 'Compact banner SSR HTML must contain configured link and alt directly');
+	assert(bannerSsrHtml.includes('<div class="title f-iran-yekan fw-bold"></div>') && bannerSsrHtml.includes('<div class="sub-title f-iran-yekan fw-normal"></div>'), 'Intentional empty editorial text must render empty without demo fallback text');
+
+	const bannerErrors = [];
+	const onBannerPageError = (err) => bannerErrors.push(err.message);
+	page.on('pageerror', onBannerPageError);
+	const bannerMobileCtx = await browser.newContext({ viewport: { width: 375, height: 812 }, isMobile: true, locale: 'fa-IR' });
+	const bannerMobilePage = await bannerMobileCtx.newPage();
+	bannerMobilePage.on('pageerror', onBannerPageError);
+
+	const submitBannerVis = async (states) => {
+	  await page.goto(BASE_URL + '/wp-admin/options-general.php?page=negar-theme-settings&tab=banners', { waitUntil: 'load' });
+	  for (const [id, enabled] of Object.entries(states)) {
+	    await openMediaRecord(id);
+	    const cb = page.locator(`input[type="checkbox"][name="negar_theme_media_options[records][${id}][enabled]"]`);
+	    if (enabled) await cb.check(); else await cb.uncheck();
+	  }
+	  await Promise.all([
+	    page.waitForURL((url) => url.pathname.endsWith('/wp-admin/options-general.php') && url.searchParams.get('tab') === 'banners'),
+	    page.locator('form[action="options.php"] input[type="submit"]').click(),
+	  ]);
+	};
+
+	const requestedUrls = [];
+	const onBannerRequest = (req) => requestedUrls.push(req.url());
+	page.on('request', onBannerRequest);
+	bannerMobilePage.on('request', onBannerRequest);
+
+	try {
+	  await page.goto(BASE_URL, { waitUntil: 'load' });
+	  assert.strictEqual(await page.locator('[data-negar-banner-record="wide-banner-one"] .title').count(), 0, 'Image-only wide banner must not render title text elements');
+	  assert.strictEqual(await page.locator('[data-negar-banner-record="compact-12-one"] .title').count(), 0, 'Image-only compact banner must not render title text elements');
+	  assert.strictEqual((await page.locator('[data-negar-banner-record="banners-grid-two"] .title').textContent()), '', 'Cleared banner title must render empty on frontend');
+
+	  // Single active card per pair + disabled wide banner
+	  await submitBannerVis({
+	    'wide-banner-one': false,
+	    'banners-grid-one': true,
+	    'banners-grid-two': false,
+	    'compact-12-one': false,
+	    'compact-12-two': true,
+	  });
+	  requestedUrls.length = 0;
+	  await page.goto(BASE_URL, { waitUntil: 'networkidle' });
+	  assert.strictEqual(await page.locator('[data-negar-banner-record="wide-banner-one"]').count(), 0, 'Disabled wide banner must not render in DOM');
+	  assert.strictEqual(await page.locator('[data-negar-banner-record="banners-grid-one"]').count(), 1, 'Enabled banner-grid-one must remain visible when sibling is disabled');
+	  assert.strictEqual(await page.locator('[data-negar-banner-record="banners-grid-two"]').count(), 0, 'Disabled banner-grid-two must not render in DOM');
+	  assert.strictEqual(await page.locator('[data-negar-banner-record="compact-12-one"]').count(), 0, 'Disabled compact-12-one must not render in DOM');
+	  assert.strictEqual(await page.locator('[data-negar-banner-record="compact-12-two"]').count(), 1, 'Enabled compact-12-two must remain visible when sibling is disabled');
+	  assert.strictEqual(await page.locator('[data-negar-banner-record="banners-10-one"]').count(), 1, 'Disabling one banner group must not affect unrelated banner groups');
+	  assert.strictEqual(await page.locator('#negar-home-hero-carousel .swiper-slide').count(), 2, 'Updating banners must not disturb Hero slider visibility');
+	  assert.strictEqual(requestedUrls.some((url) => url.includes('banner-03.png')), false, 'Disabled wide banner-03 image must not trigger network requests');
+	  const singleGridCols = await page.evaluate(() => {
+	    const editorial = document.querySelector('.elementor-element-4e969361 .negar-banners-2col--single');
+	    const compact = document.querySelector('.elementor-element-26635d31.negar-dual-banners-asymmetric--single .e-con-inner');
+	    return {
+	      editorialCols: editorial ? getComputedStyle(editorial).gridTemplateColumns.trim().split(/\s+/).length : 0,
+	      compactCols: compact ? getComputedStyle(compact).gridTemplateColumns.trim().split(/\s+/).length : 0,
+	    };
+	  });
+	  assert.strictEqual(singleGridCols.editorialCols, 1, 'Single-active editorial banner group must collapse to 1 column on desktop');
+	  assert.strictEqual(singleGridCols.compactCols, 1, 'Single-active asymmetric banner group must collapse to 1 column on desktop');
+	  assert.strictEqual(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), true, 'Single-active banners must have zero desktop overflow');
+	  await bannerMobilePage.goto(BASE_URL, { waitUntil: 'load' });
+	  assert.strictEqual(await bannerMobilePage.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), true, 'Single-active banners must have zero mobile overflow');
+
+	  // Both banners disabled in pair -> empty container omitted cleanly
+	  await submitBannerVis({
+	    'wide-banner-one': false,
+	    'banners-grid-one': false,
+	    'banners-grid-two': false,
+	    'compact-12-one': false,
+	    'compact-12-two': false,
+	  });
+	  await page.goto(BASE_URL, { waitUntil: 'load' });
+	  assert.strictEqual(await page.locator('.elementor-element-4e969361').count(), 0, 'Fully disabled editorial banner grid must omit its empty wrapper');
+	  assert.strictEqual(await page.locator('.elementor-element-26635d31').count(), 0, 'Fully disabled asymmetric banner pair must omit its empty wrapper');
+	  assert.strictEqual(await page.locator('#negar-home-hero-carousel .swiper-slide').count(), 2, 'Omitting disabled banner groups must keep Hero intact');
+	  assert.strictEqual(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), true, 'Omitted banner groups must have zero desktop overflow');
+	  await bannerMobilePage.goto(BASE_URL, { waitUntil: 'load' });
+	  assert.strictEqual(await bannerMobilePage.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), true, 'Omitted banner groups must have zero mobile overflow');
+	  assert.strictEqual(bannerErrors.length, 0, 'Banner SSR and visibility checks must produce zero JavaScript errors: ' + bannerErrors.join('; '));
+	} finally {
+	  await submitBannerVis({
+	    'wide-banner-one': true,
+	    'banners-grid-one': true,
+	    'banners-grid-two': true,
+	    'compact-12-one': true,
+	    'compact-12-two': true,
+	  });
+	  page.off('request', onBannerRequest);
+	  bannerMobilePage.off('request', onBannerRequest);
+	  page.off('pageerror', onBannerPageError);
+	  bannerMobilePage.off('pageerror', onBannerPageError);
+	  await bannerMobileCtx.close();
+	}
+
 	await page.goto(BASE_URL + '/wp-admin/options-general.php?page=negar-theme-settings&tab=banners', { waitUntil: 'domcontentloaded' });
 	await page.locator('#negar-pack-search-gaming-zone-fc').fill(productFixture.label);
 	await page.waitForTimeout(350);
@@ -380,6 +513,9 @@ async function run() {
     }
     try {
       php('restore', snapshot);
+      if (!failure) {
+        assert.strictEqual(php('snapshot'), snapshot, 'WordPress options must be restored identically to pre-test snapshot');
+      }
     } catch (restoreError) {
       failure = failure || restoreError;
     }
