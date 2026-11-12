@@ -792,21 +792,43 @@ function negar_theme_media_data_attributes( $record ) {
 }
 
 /**
- * Accept site-relative URLs and HTTP(S) links, never script/data protocols.
+ * Accept safe site-relative paths and explicit HTTP(S) URLs; reject unsafe schemes.
  *
  * @param mixed $value Raw submitted URL.
  * @return string
  */
 function negar_theme_sanitize_media_link( $value ) {
 	$value = is_scalar( $value ) ? trim( (string) $value ) : '';
-	if ( '' === $value ) {
+	if ( '' === $value || preg_match( '/[\x00-\x1F\x7F]/', $value ) ) {
 		return '';
 	}
-	if ( 0 === strpos( $value, '/' ) && 0 !== strpos( $value, '//' ) ) {
-		return $value;
+
+	if ( 0 === strpos( $value, '/' ) ) {
+		if ( 0 === strpos( $value, '//' ) || 0 === strpos( $value, '/\\' ) ) {
+			return '';
+		}
+		$sanitized = esc_url_raw( $value, array( 'http', 'https' ) );
+		if ( '' === $sanitized || 0 !== strpos( $sanitized, '/' ) || 0 === strpos( $sanitized, '//' ) ) {
+			return '';
+		}
+		return $sanitized;
 	}
 
-	return esc_url_raw( $value, array( 'http', 'https' ) );
+	$parsed = wp_parse_url( $value );
+	if ( ! is_array( $parsed ) || empty( $parsed['scheme'] ) || empty( $parsed['host'] ) ) {
+		return '';
+	}
+	if ( ! in_array( strtolower( (string) $parsed['scheme'] ), array( 'http', 'https' ), true ) ) {
+		return '';
+	}
+
+	$sanitized = esc_url_raw( $value, array( 'http', 'https' ) );
+	$re_parsed = wp_parse_url( $sanitized );
+	if ( ! is_array( $re_parsed ) || empty( $re_parsed['scheme'] ) || ! in_array( strtolower( (string) $re_parsed['scheme'] ), array( 'http', 'https' ), true ) ) {
+		return '';
+	}
+
+	return $sanitized;
 }
 
 /**
@@ -1403,11 +1425,11 @@ function negar_theme_render_media_fields() {
 					<p class="negar-media-control" data-media-control>
 						<label for="negar-media-id-<?php echo esc_attr( $record_id ); ?>"><?php esc_html_e( 'تصویر', 'negar-shop' ); ?></label><br>
 						<input id="negar-media-id-<?php echo esc_attr( $record_id ); ?>" class="small-text negar-media-control__id" name="<?php echo esc_attr( NEGAR_THEME_MEDIA_OPTION ); ?>[records][<?php echo esc_attr( $record_id ); ?>][media_id]" type="number" min="0" step="1" value="<?php echo esc_attr( absint( $record['media_id'] ) ); ?>" aria-label="<?php esc_attr_e( 'شناسهٔ تصویر', 'negar-shop' ); ?>">
-						<img class="negar-media-control__preview" src="<?php echo esc_url( $record['image_url'] ); ?>" alt="" width="120" height="80">
+						<img class="negar-media-control__preview" src="<?php echo esc_url( $record['image_url'] ); ?>" data-fallback-url="<?php echo esc_url( $record['fallback_url'] ); ?>" alt="" width="120" height="80">
 						<button type="button" class="button negar-media-control__select"><?php esc_html_e( 'انتخاب تصویر', 'negar-shop' ); ?></button>
 						<button type="button" class="button-link-delete negar-media-control__remove"><?php esc_html_e( 'بازگشت به تصویر پیش‌فرض', 'negar-shop' ); ?></button>
 					</p>
-					<p><label for="negar-media-link-<?php echo esc_attr( $record_id ); ?>"><?php esc_html_e( 'پیوند مقصد', 'negar-shop' ); ?></label><br><input id="negar-media-link-<?php echo esc_attr( $record_id ); ?>" class="regular-text code" name="<?php echo esc_attr( NEGAR_THEME_MEDIA_OPTION ); ?>[records][<?php echo esc_attr( $record_id ); ?>][link]" type="url" value="<?php echo esc_attr( $record['link'] ); ?>"></p>
+					<p><label for="negar-media-link-<?php echo esc_attr( $record_id ); ?>"><?php esc_html_e( 'پیوند مقصد', 'negar-shop' ); ?></label><br><input id="negar-media-link-<?php echo esc_attr( $record_id ); ?>" class="regular-text code" name="<?php echo esc_attr( NEGAR_THEME_MEDIA_OPTION ); ?>[records][<?php echo esc_attr( $record_id ); ?>][link]" type="text" dir="ltr" inputmode="url" value="<?php echo esc_attr( $record['link'] ); ?>"></p>
 					<p><label for="negar-media-alt-<?php echo esc_attr( $record_id ); ?>"><?php esc_html_e( 'متن جایگزین تصویر', 'negar-shop' ); ?></label><br><input id="negar-media-alt-<?php echo esc_attr( $record_id ); ?>" class="regular-text" name="<?php echo esc_attr( NEGAR_THEME_MEDIA_OPTION ); ?>[records][<?php echo esc_attr( $record_id ); ?>][alt]" type="text" value="<?php echo esc_attr( $record['alt'] ); ?>"></p>
 					<?php if ( in_array( 'title', $definition['fields'], true ) ) : ?>
 						<p><label for="negar-media-title-<?php echo esc_attr( $record_id ); ?>"><?php esc_html_e( 'عنوان', 'negar-shop' ); ?></label><br><input id="negar-media-title-<?php echo esc_attr( $record_id ); ?>" class="regular-text" name="<?php echo esc_attr( NEGAR_THEME_MEDIA_OPTION ); ?>[records][<?php echo esc_attr( $record_id ); ?>][title]" type="text" value="<?php echo esc_attr( $record['title'] ); ?>"></p>

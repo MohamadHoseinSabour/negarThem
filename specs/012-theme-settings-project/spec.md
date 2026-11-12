@@ -50,7 +50,7 @@ sorting, selector and catalog-visibility hardening.
    repair invalid/missing/duplicated IDs safely, keep the Elementor branch intact,
    and provide RTL drag-and-drop plus keyboard move controls.
 8. Fixed hero and banner records may use only code-owned stable IDs, a validated
-   WordPress image attachment ID, safe HTTP(S) destination URL, explicit alt text
+   WordPress image attachment ID, safe site-relative path or HTTP(S) destination URL, explicit alt text
    and enabled state. Missing or invalid media must retain the present demo asset.
    Hero editorial text remains in the Phase 2 registry and must not be duplicated.
 9. Product-section controls may select only published, catalog-visible WooCommerce products and

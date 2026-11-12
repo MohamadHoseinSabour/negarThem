@@ -488,6 +488,19 @@ try {
 	$accessories_template = file_get_contents( get_template_directory() . '/template-parts/home/sec-09-accessories.php' );
 	$results['products_unrated_not_fabricated'] = false === strpos( $accessories_template, ": '5.0'" );
 
+	$results['media_link_relative_valid'] = '/shop/' === negar_theme_sanitize_media_link( '/shop/' )
+		&& '/shop/?a=1#top' === negar_theme_sanitize_media_link( '  /shop/?a=1#top  ' );
+	$results['media_link_absolute_valid'] = 'https://example.com/offer' === negar_theme_sanitize_media_link( 'https://example.com/offer' )
+		&& 'http://localhost/wp4/shop/' === negar_theme_sanitize_media_link( 'http://localhost/wp4/shop/' );
+	$results['media_link_unsafe_rejected'] = '' === negar_theme_sanitize_media_link( 'javascript:alert(1)' )
+		&& '' === negar_theme_sanitize_media_link( 'JAVASCRIPT:alert(1)' )
+		&& '' === negar_theme_sanitize_media_link( 'data:text/html,<script>alert(1)</script>' )
+		&& '' === negar_theme_sanitize_media_link( 'vbscript:msgbox(1)' )
+		&& '' === negar_theme_sanitize_media_link( '//evil.example/path' )
+		&& '' === negar_theme_sanitize_media_link( '/\\evil.example' )
+		&& '' === negar_theme_sanitize_media_link( 'not-a-url' )
+		&& '' === negar_theme_sanitize_media_link( "java\nscript:alert(1)" );
+
 	$image_ids = get_posts( array( 'post_type' => 'attachment', 'post_mime_type' => 'image', 'post_status' => 'inherit', 'posts_per_page' => 1, 'fields' => 'ids' ) );
 	$image_id  = ! empty( $image_ids ) ? (int) $image_ids[0] : 0;
 	$header_before_media = negar_theme_settings_raw()['header']['announcement'];
@@ -503,11 +516,26 @@ try {
 	$hero_media = negar_theme_media_record( 'hero-slide-one' );
 	$invalid_banner_media = negar_theme_media_record( 'banners-grid-one' );
 	$results['media_valid_attachment_saved'] = $image_id ? $image_id === (int) $hero_media['media_id'] : 0 === (int) $hero_media['media_id'];
-	$results['media_invalid_attachment_fallback'] = 0 === (int) $invalid_banner_media['media_id'] && false === strpos( $invalid_banner_media['link'], 'javascript:' ) && false !== strpos( $invalid_banner_media['image_url'], '/kaveh-demo/banner-01.png' );
+	$results['media_invalid_attachment_fallback'] = 0 === (int) $invalid_banner_media['media_id'] && '' === $invalid_banner_media['link'] && false !== strpos( $invalid_banner_media['image_url'], '/kaveh-demo/banner-01.png' );
+	$cleared_media = negar_theme_sanitize_media_settings(
+		array(
+			'records' => array(
+				'hero-slide-one' => array( 'enabled' => '1', 'media_id' => '', 'link' => '/shop/', 'alt' => 'media-test' ),
+			),
+		)
+	);
+	update_option( $media_option, $cleared_media );
+	$cleared_hero_media = negar_theme_media_record( 'hero-slide-one' );
+	$results['media_cleared_restores_fallback'] = 0 === (int) $cleared_hero_media['media_id']
+		&& $cleared_hero_media['fallback_url'] === $cleared_hero_media['image_url']
+		&& '/shop/' === $cleared_hero_media['link'];
+	update_option( $media_option, $media );
 	$results['media_group_isolated'] = $header_before_media === negar_theme_settings_raw()['header']['announcement'];
-	$pack = negar_theme_sanitize_product_pack_settings( array( 'packs' => array( 'gaming-zone' => array( 'fc' => (string) $product_id, 'shadows' => '999999999' ) ) ) );
+	$pack = negar_theme_sanitize_product_pack_settings( array( 'packs' => array( 'gaming-zone' => array( 'fc' => (string) $product_id, 'mirage' => (string) $product_id, 'shadows' => '999999999' ) ) ) );
 	update_option( $pack_option, $pack );
-	$results['pack_visible_product_saved'] = $product_id === negar_theme_product_pack_product_id( 'gaming-zone', 'fc' ) && 0 === negar_theme_product_pack_product_id( 'gaming-zone', 'shadows' );
+	$results['pack_visible_product_saved'] = $product_id === negar_theme_product_pack_product_id( 'gaming-zone', 'fc' )
+		&& $product_id === negar_theme_product_pack_product_id( 'gaming-zone', 'mirage' )
+		&& 0 === negar_theme_product_pack_product_id( 'gaming-zone', 'shadows' );
 	$results['pack_group_isolated'] = $image_id ? $image_id === (int) negar_theme_media_record( 'hero-slide-one' )['media_id'] : true;
 
 	$colors = negar_theme_test_save_group( 'colors', array( 'colors' => array( 'primary' => '#059669', 'secondary' => '#e11d48' ) ) );

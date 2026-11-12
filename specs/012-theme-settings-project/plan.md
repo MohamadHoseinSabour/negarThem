@@ -34,11 +34,15 @@
    nonce-protected Ajax search selector that retains saved IDs without loading the
    catalog. Keep the exact legacy query path until that section is explicitly enabled.
 7. **Banner, hero and product packs (in progress):** use fixed registry records,
-   validated image attachment IDs, safe links, individual visibility and separate
-   non-autoloaded options. Bind all mounted hero and promotional banner templates
-   without duplicating Phase 2 text fields. Add only the established product packs
-   and gaming hotspots with catalog-visible WooCommerce product IDs. Stories and
-   brands remain out of scope for Phases 6 and 7.
+   validated image attachment IDs, safe links (site-relative paths and HTTP(S) URLs),
+   individual visibility and separate non-autoloaded options. Phase 5.1-A stabilizes
+   media link input validation (`type="text"` paired with protocol sanitization),
+   immediate Media Library preview reset to fallback URLs, and the Gaming Zone
+   `mirage` hotspot alignment. Next (Phase 5.1-B), complete PHP SSR binding for all
+   audited hero and promotional banner templates without duplicating Phase 2 text
+   fields, and complete the remaining established product packs/hotspots with
+   catalog-visible WooCommerce product IDs. Stories and brands remain out of scope
+   for Phases 6 and 7.
 8. **Typography, SMS and backup (planned):** define separate security boundaries,
    secret handling and import/export validation before UI implementation.
 9. **Release verification (planned):** expand regression coverage, run PHP lint and

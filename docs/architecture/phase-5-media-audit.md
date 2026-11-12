@@ -45,7 +45,7 @@ control.
 
 | Stable component | Template | Current association | Phase 5 control boundary |
 | --- | --- | --- | --- |
-| `gaming-zone` hotspots | `sec-25-gaming-zone.php` | Four visual hotspots (`fc`, `two`, `yotei`, `gta`) find a product by demo-name fragments. `product-pack.png` is the background and the coordinates/classes are authored CSS. | Four stable product-ID selectors; keep coordinates, background, popup design and mobile interaction intact. |
+| `gaming-zone` hotspots | `sec-25-gaming-zone.php` | Four visual hotspots (`shadows`, `mirage`, `fc`, `yotei`) find a product by demo-name fragments. `product-pack.png` is the background and the coordinates/classes are authored CSS. | Four stable product-ID selectors; keep coordinates, background, popup design and mobile interaction intact. |
 | `taste-grid` | `sec-13-taste-grid.php` | Four cards contain demo product arrays and attempt name matching. | Stable per-card product IDs; render every commercial field from WooCommerce. |
 | `feature-bar-one` | `sec-14-feature-bar-1.php` | Four demo cards attempt name matching. | Stable product-ID list; preserve local Swiper and visual art. |
 | `feature-bar-two` | `sec-23-feature-bar-2.php` | Four demo cards attempt name matching. | Stable product-ID list; preserve local Swiper and visual art. |

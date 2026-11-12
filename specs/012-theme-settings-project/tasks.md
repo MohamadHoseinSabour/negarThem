@@ -41,6 +41,11 @@
   authenticated persistence regressions.
 - [x] **T209.0** Audit every mounted Phase 5 hero, banner, pack and hotspot
   template; record current assets, links, text ownership and stable controls.
+- [x] **T209.0a** Stabilize Phase 5.1-A media controls and hotspot keys: accept
+  safe site-relative and HTTP(S) media links without browser `type="url"` blocking,
+  immediately restore fallback preview images when clearing an attachment, fix
+  the Gaming Zone `'mirage'` hotspot key mismatch, synchronize audit docs and
+  verify with reversible regression tests.
 - [ ] **T209.1** Implement fixed hero/banner media records using image attachment
   IDs, safe URLs, explicit alt/visibility values, non-autoloaded independent
   storage and Media Library controls. Do not include stories or brands.

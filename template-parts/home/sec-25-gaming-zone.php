@@ -101,10 +101,10 @@ $gaming_category_url = is_wp_error( $gaming_category_url ) ? $shop_url : $gaming
 							?>
 							<div class="products-pack-nk__image__product position-absolute <?php echo esc_attr( $hotspot['class'] . ( $product ? '' : ' is-empty' ) ); ?>" style="<?php echo esc_attr( $hotspot['style'] ); ?>">
 								<div class="line position-absolute top-0 start-0"></div>
-								<div class="circle-wrap position-absolute bottom-0 <?php echo 'two' === $hotspot['key'] ? 'start-0' : 'end-0'; ?>">
+								<div class="circle-wrap position-absolute bottom-0 <?php echo 'mirage' === $hotspot['key'] ? 'start-0' : 'end-0'; ?>">
 									<div class="circle rounded-circle"></div>
 									<?php if ( $product ) : ?>
-										<div class="products-pack-nk__image__product__box <?php echo in_array( $hotspot['key'], array( 'fc', 'yotei' ), true ) ? 'bottom' : 'top'; ?> bg-white d-flex align-items-center position-absolute <?php echo in_array( $hotspot['key'], array( 'fc', 'yotei' ), true ) ? 'top-100' : 'bottom-100'; ?> <?php echo 'two' === $hotspot['key'] ? 'start-0 box-align-start' : 'end-0 box-align-end'; ?>">
+										<div class="products-pack-nk__image__product__box <?php echo in_array( $hotspot['key'], array( 'fc', 'yotei' ), true ) ? 'bottom' : 'top'; ?> bg-white d-flex align-items-center position-absolute <?php echo in_array( $hotspot['key'], array( 'fc', 'yotei' ), true ) ? 'top-100' : 'bottom-100'; ?> <?php echo 'mirage' === $hotspot['key'] ? 'start-0 box-align-start' : 'end-0 box-align-end'; ?>">
 											<a href="<?php echo esc_url( get_permalink( $product->get_id() ) ); ?>" class="stretched-link position-absolute top-0 end-0 w-100 h-100" aria-label="<?php echo esc_attr( $product->get_name() ); ?>"></a>
 											<div class="image rounded-circle position-relative d-flex align-items-center justify-content-center flex-fill flex-grow-0 flex-shrink-0">
 												<div class="img rounded-circle d-flex align-items-center justify-content-center">

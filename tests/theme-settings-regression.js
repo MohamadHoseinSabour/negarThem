@@ -80,9 +80,43 @@ async function run() {
     assert.strictEqual((await page.locator('.negar-showcase-hero h1').textContent()).trim(), 'تماس آزمایشی نگار', 'Saved internal-page text must render after reload');
     assert.strictEqual((await page.locator('.negar-contact-grid .negar-contact-card b').first().textContent()).trim(), 'تلفن آزمایشی نگار', 'Saved contact-card label must render after reload');
 
-	await page.goto(BASE_URL + '/wp-admin/options-general.php?page=negar-theme-settings&tab=banners', { waitUntil: 'domcontentloaded' });
+	await page.goto(BASE_URL + '/wp-admin/options-general.php?page=negar-theme-settings&tab=banners', { waitUntil: 'load' });
+	assert.strictEqual(await page.locator('#negar-media-link-hero-slide-one').getAttribute('type'), 'text', 'Media destination input must allow site-relative paths without HTML type=url rejection');
+	const heroMediaControl = page.locator('#negar-media-id-hero-slide-one').locator('xpath=ancestor::*[@data-media-control]');
+	const heroPreview = heroMediaControl.locator('.negar-media-control__preview');
+	const heroFallbackUrl = await heroPreview.getAttribute('data-fallback-url');
+	assert(heroFallbackUrl && heroFallbackUrl.length > 0, 'Media preview must expose its default fallback URL');
+	await heroMediaControl.locator('.negar-media-control__select').click();
+	const mediaModal = page.locator('.media-modal:visible').last();
+	await mediaModal.locator('#menu-item-browse').click();
+	const firstAttachment = mediaModal.locator('.attachments-browser .attachment').first();
+	await firstAttachment.waitFor({ state: 'visible' });
+	await firstAttachment.click();
+	await mediaModal.locator('button.media-button-select').click();
+	const selectedAttachmentId = await page.locator('#negar-media-id-hero-slide-one').inputValue();
+	assert(Number(selectedAttachmentId) > 0, 'Selecting an image from Media Library must populate a positive attachment ID');
+	const selectedPreviewSrc = await heroPreview.getAttribute('src');
+	assert(selectedPreviewSrc && selectedPreviewSrc.length > 0, 'Selecting an image from Media Library must update the preview src');
+	await heroMediaControl.locator('.negar-media-control__remove').click();
+	assert.strictEqual(await page.locator('#negar-media-id-hero-slide-one').inputValue(), '', 'Clearing media must immediately clear the attachment ID');
+	assert.strictEqual(await heroPreview.getAttribute('src'), heroFallbackUrl, 'Clearing media must immediately restore the default preview image');
+	await Promise.all([
+	  page.waitForURL((url) => url.pathname.endsWith('/wp-admin/options-general.php') && url.searchParams.get('tab') === 'banners'),
+	  page.locator('form[action="options.php"] input[type="submit"]').click(),
+	]);
+	assert.strictEqual(await page.locator('#negar-media-id-hero-slide-one').inputValue(), '0', 'Saving cleared media must persist attachment ID 0');
+	assert.strictEqual(await heroPreview.getAttribute('src'), heroFallbackUrl, 'Reopening after clearing media must display the default preview image');
+	await heroMediaControl.locator('.negar-media-control__select').click();
+	const reselectModal = page.locator('.media-modal:visible').last();
+	await reselectModal.locator('#menu-item-browse').click();
+	const reselectAttachment = reselectModal.locator('.attachments-browser .attachment').first();
+	await reselectAttachment.waitFor({ state: 'visible' });
+	await reselectAttachment.click();
+	await reselectModal.locator('button.media-button-select').click();
+	assert(Number(await page.locator('#negar-media-id-hero-slide-one').inputValue()) > 0, 'Re-selecting an image from Media Library after clearing must populate a positive attachment ID');
+
 	await page.locator('#negar-media-id-hero-slide-one').fill(String(imageFixture.id));
-	await page.locator('#negar-media-link-hero-slide-one').fill(BASE_URL + '/shop/?phase5-media-test=1');
+	await page.locator('#negar-media-link-hero-slide-one').fill('/shop/?phase5-relative-test=1');
 	await page.locator('#negar-media-alt-hero-slide-one').fill('Phase 5 media test image');
 	await page.locator('#negar-media-title-banners-grid-one').fill('Phase 5 banner title');
 	await Promise.all([
@@ -90,6 +124,15 @@ async function run() {
 	  page.locator('form[action="options.php"] input[type="submit"]').click(),
 	]);
 	assert.strictEqual(await page.locator('#negar-media-id-hero-slide-one').inputValue(), String(imageFixture.id), 'Authenticated media form submission must preserve a valid attachment ID');
+	assert.strictEqual(await page.locator('#negar-media-link-hero-slide-one').inputValue(), '/shop/?phase5-relative-test=1', 'Authenticated media form submission must accept and preserve a site-relative link');
+
+	await page.locator('#negar-media-link-hero-slide-one').fill(BASE_URL + '/shop/?phase5-media-test=1');
+	await Promise.all([
+	  page.waitForURL((url) => url.pathname.endsWith('/wp-admin/options-general.php') && url.searchParams.get('tab') === 'banners'),
+	  page.locator('form[action="options.php"] input[type="submit"]').click(),
+	]);
+	assert.strictEqual(await page.locator('#negar-media-link-hero-slide-one').inputValue(), BASE_URL + '/shop/?phase5-media-test=1', 'Authenticated media form submission must preserve an HTTP(S) link');
+
 	await page.goto(BASE_URL, { waitUntil: 'domcontentloaded' });
 	await page.waitForTimeout(200);
 	assert.strictEqual(await page.locator('[data-negar-hero-media="one"] img').getAttribute('src'), imageFixture.url, 'Saved hero media must render after reload');
@@ -101,13 +144,21 @@ async function run() {
 	await page.waitForTimeout(350);
 	const packResult = page.locator('[data-input-name="negar_theme_product_pack_options[packs][gaming-zone][fc]"] button[data-product-id="' + productFixture.id + '"]');
 	await packResult.click();
+	await page.locator('#negar-pack-search-gaming-zone-mirage').fill(productFixture.label);
+	await page.waitForTimeout(350);
+	const mirageResult = page.locator('[data-input-name="negar_theme_product_pack_options[packs][gaming-zone][mirage]"] button[data-product-id="' + productFixture.id + '"]');
+	await mirageResult.click();
 	await Promise.all([
 	  page.waitForURL((url) => url.pathname.endsWith('/wp-admin/options-general.php') && url.searchParams.get('tab') === 'banners'),
 	  page.locator('form[action="options.php"] input[type="submit"]').click(),
 	]);
 	assert.strictEqual(await page.locator('[data-input-name="negar_theme_product_pack_options[packs][gaming-zone][fc]"] li[data-product-id="' + productFixture.id + '"]').count(), 1, 'Authenticated product-pack submission must retain the selected product');
+	assert.strictEqual(await page.locator('[data-input-name="negar_theme_product_pack_options[packs][gaming-zone][mirage]"] li[data-product-id="' + productFixture.id + '"]').count(), 1, 'Authenticated product-pack submission must retain the mirage hotspot product');
 	await page.goto(BASE_URL, { waitUntil: 'domcontentloaded' });
 	assert.strictEqual(await page.locator('.products-pack-nk a[href="' + productFixture.permalink + '"]').count() > 0, true, 'A saved hotspot must render the selected WooCommerce product permalink');
+	assert.strictEqual(await page.locator('.products-pack-nk__image__product.two .circle-wrap.start-0').count(), 1, 'The mirage hotspot circle-wrap must use the start-0 alignment class');
+	assert.strictEqual(await page.locator('.products-pack-nk__image__product.two .products-pack-nk__image__product__box.start-0.box-align-start').count(), 1, 'The mirage hotspot popup must use start-0 box-align-start classes');
+	assert.strictEqual(await page.locator('.products-pack-nk__image__product.three .products-pack-nk__image__product__box.end-0.box-align-end').count(), 1, 'Other hotspots must preserve end-0 box-align-end classes');
 
 	await page.goto(BASE_URL + '/wp-admin/options-general.php?page=negar-theme-settings&tab=layout', { waitUntil: 'domcontentloaded' });
     assert.strictEqual(await page.locator('#negar-layout-sections .negar-layout-item').count(), 35, 'The authenticated layout form must list all 35 fixed homepage sections');
