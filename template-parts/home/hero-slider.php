@@ -48,104 +48,113 @@ $featured_sale_price    = $featured_product ? (float) $featured_product->get_pri
 $featured_discount      = $featured_regular_price > $featured_sale_price && $featured_sale_price > 0 ? (int) round( 100 - ( $featured_sale_price / $featured_regular_price * 100 ) ) : 0;
 $featured_review_count  = $featured_product ? (int) $featured_product->get_review_count() : 0;
 $featured_rating        = $featured_product ? (float) $featured_product->get_average_rating() : 0;
-$hero_slide_one         = negar_theme_media_record( 'hero-slide-one' );
-$hero_slide_two         = negar_theme_media_record( 'hero-slide-two' );
+$hero_slides = array();
+$hero_slide_definitions = array(
+	array(
+		'key'         => 'one',
+		'record'      => negar_theme_media_record( 'hero-slide-one' ),
+		'eyebrow_key' => 'hero_slide_one_eyebrow',
+		'title_key'   => 'hero_slide_one_title',
+		'cta_key'     => 'hero_slide_one_cta',
+	),
+	array(
+		'key'         => 'two',
+		'record'      => negar_theme_media_record( 'hero-slide-two' ),
+		'eyebrow_key' => 'hero_slide_two_eyebrow',
+		'title_key'   => 'hero_slide_two_title',
+		'cta_key'     => 'hero_slide_two_cta',
+	),
+);
+
+foreach ( $hero_slide_definitions as $definition ) {
+	$record = is_array( $definition['record'] ) ? $definition['record'] : array();
+	if ( empty( $record['enabled'] ) ) {
+		continue;
+	}
+
+	$raw_link = isset( $record['link'] ) ? negar_theme_sanitize_media_link( $record['link'] ) : '';
+	$hero_slides[] = array(
+		'key'       => $definition['key'],
+		'image_url' => ! empty( $record['image_url'] ) ? $record['image_url'] : ( isset( $record['fallback_url'] ) ? $record['fallback_url'] : $kaveh_base . '/landing-01-300x261-1.png' ),
+		'alt'       => isset( $record['alt'] ) ? (string) $record['alt'] : '',
+		'link'      => '' !== $raw_link ? $raw_link : $shop_link,
+		'eyebrow'   => negar_theme_text( 'home', $definition['eyebrow_key'] ),
+		'title'     => negar_theme_text( 'home', $definition['title_key'] ),
+		'cta'       => negar_theme_text( 'home', $definition['cta_key'] ),
+	);
+}
+
+$hero_slide_count         = count( $hero_slides );
+$hero_has_multiple_slides = $hero_slide_count > 1;
+$hero_section_classes     = 'landing-nk landing-nk-6b94d804 is-first-slide my-8 lg:my-14' . ( 0 === $hero_slide_count ? ' landing-nk--no-slides' : '' );
 ?>
 <div class="elementor-element elementor-element-229ccc7d e-con-full e-flex e-con e-parent e-lazyloaded" data-id="229ccc7d" data-element_type="container" data-e-type="container">
 	<div class="elementor-element elementor-element-6b94d804 elementor-widget elementor-widget-landingnkkaveh" data-id="6b94d804" data-element_type="widget" data-e-type="widget" data-widget_type="landingnkkaveh.default">
 		<div class="elementor-widget-container">
-			<section class="landing-nk landing-nk-6b94d804 is-first-slide my-8 lg:my-14" data-landing-nk-id="6b94d804" data-landing-nk-carousel-loop="1" data-landing-nk-products-loop="0" data-landing-nk-btn-view-dynamic="1" data-landing-nk-ready="1">
+			<section class="<?php echo esc_attr( $hero_section_classes ); ?>" data-landing-nk-id="6b94d804" data-landing-nk-carousel-loop="<?php echo $hero_has_multiple_slides ? '1' : '0'; ?>" data-landing-nk-products-loop="0" data-landing-nk-btn-view-dynamic="1" data-landing-nk-ready="1">
 				<div class="container">
 					<div class="landing-nk__wrapper d-flex align-items-lg-center position-relative flex-column flex-lg-row">
 						
-						<!-- 1. Main Hero Carousel -->
-						<div class="landing-nk__carousel w-100 position-relative d-flex align-items-center">
-							<div class="sh sh-1 position-absolute top-50 translate-middle-y"></div>
-							<div class="sh sh-2 position-absolute top-50 translate-middle-y"></div>
-							<div class="sh sh-3 position-absolute top-50 translate-middle-y"></div>
-							<div class="sh sh-4 position-absolute top-50 translate-middle-y"></div>
-							<div class="sh sh-5 position-absolute top-50 translate-middle-y"></div>
-							<div class="sh sh-6 position-absolute top-50 translate-middle-y"></div>
-							<div class="cir cir-1 position-absolute top-50 translate-middle-y"></div>
-							<div class="cir cir-2 position-absolute top-50 translate-middle-y"></div>
+						<?php if ( $hero_slide_count > 0 ) : ?>
+							<!-- 1. Main Hero Carousel -->
+							<div class="landing-nk__carousel w-100 position-relative d-flex align-items-center">
+								<div class="sh sh-1 position-absolute top-50 translate-middle-y"></div>
+								<div class="sh sh-2 position-absolute top-50 translate-middle-y"></div>
+								<div class="sh sh-3 position-absolute top-50 translate-middle-y"></div>
+								<div class="sh sh-4 position-absolute top-50 translate-middle-y"></div>
+								<div class="sh sh-5 position-absolute top-50 translate-middle-y"></div>
+								<div class="sh sh-6 position-absolute top-50 translate-middle-y"></div>
+								<div class="cir cir-1 position-absolute top-50 translate-middle-y"></div>
+								<div class="cir cir-2 position-absolute top-50 translate-middle-y"></div>
 
-							<div id="negar-home-hero-carousel" class="swiper swiper-landing-nk swiper-landing-nk-6b94d804 w-100">
-								<div class="swiper-wrapper">
-
-									<!-- Slide 1 -->
-									<div class="swiper-slide" data-negar-hero-media="one" data-negar-media-image="<?php echo esc_url( $hero_slide_one['image_url'] ); ?>" data-negar-media-link="<?php echo esc_url( $hero_slide_one['link'] ); ?>" data-negar-media-alt="<?php echo esc_attr( $hero_slide_one['alt'] ); ?>" <?php echo $hero_slide_one['enabled'] ? '' : 'hidden'; ?>>
-										<div class="landing-nk__carousel__item d-flex align-items-center">
-											<div class="image position-relative flex-fill flex-grow-0 flex-shrink-0">
-												<span class="bg position-absolute top-50 start-50 translate-middle rounded-circle"></span>
-												<span class="circle circle-1 position-absolute top-50 start-50 translate-middle rounded-circle"></span>
-												<span class="circle circle-2 position-absolute top-50 start-50 translate-middle rounded-circle"></span>
-												<span class="circle circle-3 position-absolute top-50 start-50 translate-middle rounded-circle"></span>
-												<span class="circle circle-4 position-absolute top-50 start-50 translate-middle rounded-circle"></span>
-												<svg xmlns="http://www.w3.org/2000/svg" width="48" height="24" fill="none" viewBox="0 0 48 24" class="shape shape-1 position-absolute start-0" aria-hidden="true">
-													<path stroke="#fff" stroke-linecap="round" d="M11 18.5c1.737-5.368 11.368-16.284 36-17m-46 9C2.061 7.342 7.947.921 23 .5m-4 23c.675-2.21 4.421-6.705 14-7"></path>
-												</svg>
-												<svg xmlns="http://www.w3.org/2000/svg" width="48" height="25" fill="none" viewBox="0 0 48 25" class="shape shape-2 position-absolute start-100" aria-hidden="true">
-													<path stroke="#fff" stroke-linecap="round" d="M37 6c-1.737 5.368-11.368 16.284-36 17m46-9c-1.061 3.158-6.947 9.579-22 10m4-23c-.675 2.21-4.421 6.705-14 7"></path>
-												</svg>
-												<img loading="lazy" decoding="async" src="<?php echo esc_url( $kaveh_base . '/landing-01-300x261-1.png' ); ?>" alt="<?php esc_attr_e( 'خرید برترین محصولات', 'negar-shop' ); ?>" width="337" height="293" class="d-block">
-											</div>
-											<div class="detail w-100">
-												<div class="sup-title overflow-hidden">
-													<div class="f-iran-yekan"><?php echo esc_html( negar_theme_text( 'home', 'hero_slide_one_eyebrow' ) ); ?></div>
+								<div id="negar-home-hero-carousel" class="swiper swiper-landing-nk swiper-landing-nk-6b94d804 w-100">
+									<div class="swiper-wrapper">
+										<?php foreach ( $hero_slides as $slide ) : ?>
+											<div class="swiper-slide" data-negar-hero-media="<?php echo esc_attr( $slide['key'] ); ?>">
+												<div class="landing-nk__carousel__item d-flex align-items-center">
+													<div class="image position-relative flex-fill flex-grow-0 flex-shrink-0">
+														<span class="bg position-absolute top-50 start-50 translate-middle rounded-circle"></span>
+														<span class="circle circle-1 position-absolute top-50 start-50 translate-middle rounded-circle"></span>
+														<span class="circle circle-2 position-absolute top-50 start-50 translate-middle rounded-circle"></span>
+														<span class="circle circle-3 position-absolute top-50 start-50 translate-middle rounded-circle"></span>
+														<span class="circle circle-4 position-absolute top-50 start-50 translate-middle rounded-circle"></span>
+														<svg xmlns="http://www.w3.org/2000/svg" width="48" height="24" fill="none" viewBox="0 0 48 24" class="shape shape-1 position-absolute start-0" aria-hidden="true">
+															<path stroke="#fff" stroke-linecap="round" d="M11 18.5c1.737-5.368 11.368-16.284 36-17m-46 9C2.061 7.342 7.947.921 23 .5m-4 23c.675-2.21 4.421-6.705 14-7"></path>
+														</svg>
+														<svg xmlns="http://www.w3.org/2000/svg" width="48" height="25" fill="none" viewBox="0 0 48 25" class="shape shape-2 position-absolute start-100" aria-hidden="true">
+															<path stroke="#fff" stroke-linecap="round" d="M37 6c-1.737 5.368-11.368 16.284-36 17m46-9c-1.061 3.158-6.947 9.579-22 10m4-23c-.675 2.21-4.421 6.705-14 7"></path>
+														</svg>
+														<img loading="lazy" decoding="async" src="<?php echo esc_url( $slide['image_url'] ); ?>" alt="<?php echo esc_attr( $slide['alt'] ); ?>" width="337" height="293" class="d-block">
+													</div>
+													<div class="detail w-100">
+														<div class="sup-title overflow-hidden">
+															<div class="f-iran-yekan"><?php echo esc_html( $slide['eyebrow'] ); ?></div>
+														</div>
+														<div class="title overflow-hidden">
+															<h2 class="f-iran-yekan mb-0"><?php echo esc_html( $slide['title'] ); ?></h2>
+														</div>
+														<a href="<?php echo esc_url( $slide['link'] ); ?>" class="btn d-flex align-items-center justify-content-center ms-auto">
+															<?php echo esc_html( $slide['cta'] ); ?>
+															<i class="icon-chevron-left-2 lh-1"></i>
+														</a>
+													</div>
 												</div>
-												<div class="title overflow-hidden">
-													<h2 class="f-iran-yekan mb-0"><?php echo esc_html( negar_theme_text( 'home', 'hero_slide_one_title' ) ); ?></h2>
-												</div>
-												<a href="<?php echo esc_url( $shop_link ); ?>" class="btn d-flex align-items-center justify-content-center ms-auto">
-													<?php echo esc_html( negar_theme_text( 'home', 'hero_slide_one_cta' ) ); ?>
-													<i class="icon-chevron-left-2 lh-1"></i>
-												</a>
 											</div>
-										</div>
+										<?php endforeach; ?>
 									</div>
+								</div>
 
-									<!-- Slide 2 -->
-									<div class="swiper-slide" data-negar-hero-media="two" data-negar-media-image="<?php echo esc_url( $hero_slide_two['image_url'] ); ?>" data-negar-media-link="<?php echo esc_url( $hero_slide_two['link'] ); ?>" data-negar-media-alt="<?php echo esc_attr( $hero_slide_two['alt'] ); ?>" <?php echo $hero_slide_two['enabled'] ? '' : 'hidden'; ?>>
-										<div class="landing-nk__carousel__item d-flex align-items-center">
-											<div class="image position-relative flex-fill flex-grow-0 flex-shrink-0">
-												<span class="bg position-absolute top-50 start-50 translate-middle rounded-circle"></span>
-												<span class="circle circle-1 position-absolute top-50 start-50 translate-middle rounded-circle"></span>
-												<span class="circle circle-2 position-absolute top-50 start-50 translate-middle rounded-circle"></span>
-												<span class="circle circle-3 position-absolute top-50 start-50 translate-middle rounded-circle"></span>
-												<span class="circle circle-4 position-absolute top-50 start-50 translate-middle rounded-circle"></span>
-												<svg xmlns="http://www.w3.org/2000/svg" width="48" height="24" fill="none" viewBox="0 0 48 24" class="shape shape-1 position-absolute start-0" aria-hidden="true">
-													<path stroke="#fff" stroke-linecap="round" d="M11 18.5c1.737-5.368 11.368-16.284 36-17m-46 9C2.061 7.342 7.947.921 23 .5m-4 23c.675-2.21 4.421-6.705 14-7"></path>
-												</svg>
-												<svg xmlns="http://www.w3.org/2000/svg" width="48" height="25" fill="none" viewBox="0 0 48 25" class="shape shape-2 position-absolute start-100" aria-hidden="true">
-													<path stroke="#fff" stroke-linecap="round" d="M37 6c-1.737 5.368-11.368 16.284-36 17m46-9c-1.061 3.158-6.947 9.579-22 10m4-23c-.675 2.21-4.421 6.705-14 7"></path>
-												</svg>
-												<img loading="lazy" decoding="async" src="<?php echo esc_url( $kaveh_base . '/landing-01-300x261-1.png' ); ?>" alt="<?php esc_attr_e( 'کنسول‌های بازی نسل نهم', 'negar-shop' ); ?>" width="337" height="293" class="d-block">
-											</div>
-											<div class="detail w-100">
-												<div class="sup-title overflow-hidden">
-													<div class="f-iran-yekan"><?php echo esc_html( negar_theme_text( 'home', 'hero_slide_two_eyebrow' ) ); ?></div>
-												</div>
-												<div class="title overflow-hidden">
-													<h2 class="f-iran-yekan mb-0"><?php echo esc_html( negar_theme_text( 'home', 'hero_slide_two_title' ) ); ?></h2>
-												</div>
-												<a href="<?php echo esc_url( $shop_link ); ?>" class="btn d-flex align-items-center justify-content-center ms-auto">
-													<?php echo esc_html( negar_theme_text( 'home', 'hero_slide_two_cta' ) ); ?>
-													<i class="icon-chevron-left-2 lh-1"></i>
-												</a>
-											</div>
-										</div>
-									</div>
-
-								</div></div>
-
-							<!-- Slider navigation buttons centered directly inside the crescents -->
-							<button type="button" class="swiper-button-prev d-flex align-items-center justify-content-center" aria-label="<?php esc_attr_e( 'اسلاید قبلی', 'negar-shop' ); ?>" aria-controls="negar-home-hero-carousel">
-								<i class="icon-chevron-right lh-1"></i>
-							</button>
-							<button type="button" class="swiper-button-next d-flex align-items-center justify-content-center" aria-label="<?php esc_attr_e( 'اسلاید بعدی', 'negar-shop' ); ?>" aria-controls="negar-home-hero-carousel">
-								<i class="icon-chevron-left lh-1"></i>
-							</button>
-						</div>
+								<?php if ( $hero_has_multiple_slides ) : ?>
+									<!-- Slider navigation buttons centered directly inside the crescents -->
+									<button type="button" class="swiper-button-prev d-flex align-items-center justify-content-center" aria-label="<?php esc_attr_e( 'اسلاید قبلی', 'negar-shop' ); ?>" aria-controls="negar-home-hero-carousel">
+										<i class="icon-chevron-right lh-1"></i>
+									</button>
+									<button type="button" class="swiper-button-next d-flex align-items-center justify-content-center" aria-label="<?php esc_attr_e( 'اسلاید بعدی', 'negar-shop' ); ?>" aria-controls="negar-home-hero-carousel">
+										<i class="icon-chevron-left lh-1"></i>
+									</button>
+								<?php endif; ?>
+							</div>
+						<?php endif; ?>
 
 						<!-- 2. Flash Deal Box (Left Box) -->
 						<div class="landing-nk__products position-relative w-100">

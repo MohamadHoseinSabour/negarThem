@@ -501,13 +501,29 @@ try {
 		&& '' === negar_theme_sanitize_media_link( 'not-a-url' )
 		&& '' === negar_theme_sanitize_media_link( "java\nscript:alert(1)" );
 
+	$render_hero = static function() {
+		ob_start();
+		get_template_part( 'template-parts/home/hero-slider' );
+		return ob_get_clean();
+	};
+
+	delete_option( $media_option );
+	$hero_default_html = $render_hero();
+	$results['hero_ssr_default_renders_two_slides'] = false !== strpos( $hero_default_html, 'data-negar-hero-media="one"' )
+		&& false !== strpos( $hero_default_html, 'data-negar-hero-media="two"' )
+		&& false !== strpos( $hero_default_html, '/kaveh-demo/landing-01-300x261-1.png' )
+		&& false !== strpos( $hero_default_html, 'data-landing-nk-carousel-loop="1"' )
+		&& false === strpos( $hero_default_html, 'data-negar-media-image=' );
+
 	$image_ids = get_posts( array( 'post_type' => 'attachment', 'post_mime_type' => 'image', 'post_status' => 'inherit', 'posts_per_page' => 1, 'fields' => 'ids' ) );
 	$image_id  = ! empty( $image_ids ) ? (int) $image_ids[0] : 0;
+	$expected_image_url = $image_id ? wp_get_attachment_image_url( $image_id, 'full' ) : '';
 	$header_before_media = negar_theme_settings_raw()['header']['announcement'];
 	$media = negar_theme_sanitize_media_settings(
 		array(
 			'records' => array(
-				'hero-slide-one' => array( 'enabled' => '1', 'media_id' => (string) $image_id, 'link' => '/shop/', 'alt' => 'media-test' ),
+				'hero-slide-one' => array( 'enabled' => '1', 'media_id' => (string) $image_id, 'link' => '/shop/?hero-ssr=1', 'alt' => 'Hero SSR Alt' ),
+				'hero-slide-two' => array( 'enabled' => '1', 'media_id' => '999999999', 'link' => 'https://example.com/hero-two', 'alt' => 'Hero Two Fallback Alt' ),
 				'banners-grid-one' => array( 'enabled' => '1', 'media_id' => '999999999', 'link' => 'javascript:alert(1)', 'alt' => 'banner-test', 'title' => 'title-test', 'subtitle' => 'subtitle-test', 'cta_label' => 'cta-test' ),
 			),
 		)
@@ -517,6 +533,59 @@ try {
 	$invalid_banner_media = negar_theme_media_record( 'banners-grid-one' );
 	$results['media_valid_attachment_saved'] = $image_id ? $image_id === (int) $hero_media['media_id'] : 0 === (int) $hero_media['media_id'];
 	$results['media_invalid_attachment_fallback'] = 0 === (int) $invalid_banner_media['media_id'] && '' === $invalid_banner_media['link'] && false !== strpos( $invalid_banner_media['image_url'], '/kaveh-demo/banner-01.png' );
+	$hero_override_html = $render_hero();
+	$results['hero_ssr_renders_override_without_js'] = ( ! $expected_image_url || false !== strpos( $hero_override_html, esc_url( $expected_image_url ) ) )
+		&& false !== strpos( $hero_override_html, 'alt="Hero SSR Alt"' )
+		&& false !== strpos( $hero_override_html, 'href="/shop/?hero-ssr=1"' )
+		&& false !== strpos( $hero_override_html, 'alt="Hero Two Fallback Alt"' )
+		&& false !== strpos( $hero_override_html, '/kaveh-demo/landing-01-300x261-1.png' );
+
+	$only_one_media = negar_theme_sanitize_media_settings(
+		array(
+			'records' => array(
+				'hero-slide-one' => array( 'enabled' => '1', 'media_id' => (string) $image_id, 'link' => '/shop/', 'alt' => 'Only One' ),
+				'hero-slide-two' => array( 'enabled' => '0', 'media_id' => '0', 'link' => '/shop/', 'alt' => 'Hidden Two' ),
+			),
+		)
+	);
+	update_option( $media_option, $only_one_media );
+	$hero_only_one_html = $render_hero();
+	$results['hero_ssr_only_slide_one'] = false !== strpos( $hero_only_one_html, 'data-negar-hero-media="one"' )
+		&& false === strpos( $hero_only_one_html, 'data-negar-hero-media="two"' )
+		&& false !== strpos( $hero_only_one_html, 'data-landing-nk-carousel-loop="0"' )
+		&& false === strpos( $hero_only_one_html, 'swiper-button-next' );
+
+	$only_two_media = negar_theme_sanitize_media_settings(
+		array(
+			'records' => array(
+				'hero-slide-one' => array( 'enabled' => '0', 'media_id' => '0', 'link' => '/shop/', 'alt' => 'Hidden One' ),
+				'hero-slide-two' => array( 'enabled' => '1', 'media_id' => (string) $image_id, 'link' => '/shop/?slide=2', 'alt' => 'Only Two' ),
+			),
+		)
+	);
+	update_option( $media_option, $only_two_media );
+	$hero_only_two_html = $render_hero();
+	$results['hero_ssr_only_slide_two'] = false === strpos( $hero_only_two_html, 'data-negar-hero-media="one"' )
+		&& false !== strpos( $hero_only_two_html, 'data-negar-hero-media="two"' )
+		&& false !== strpos( $hero_only_two_html, 'href="/shop/?slide=2"' )
+		&& false !== strpos( $hero_only_two_html, 'data-landing-nk-carousel-loop="0"' )
+		&& false === strpos( $hero_only_two_html, 'swiper-button-next' );
+
+	$no_slides_media = negar_theme_sanitize_media_settings(
+		array(
+			'records' => array(
+				'hero-slide-one' => array( 'enabled' => '0', 'media_id' => '0', 'link' => '/shop/', 'alt' => '' ),
+				'hero-slide-two' => array( 'enabled' => '0', 'media_id' => '0', 'link' => '/shop/', 'alt' => '' ),
+			),
+		)
+	);
+	update_option( $media_option, $no_slides_media );
+	$hero_no_slides_html = $render_hero();
+	$results['hero_ssr_both_disabled_preserves_deal'] = false !== strpos( $hero_no_slides_html, 'landing-nk--no-slides' )
+		&& false === strpos( $hero_no_slides_html, 'landing-nk__carousel' )
+		&& false === strpos( $hero_no_slides_html, 'data-negar-hero-media=' )
+		&& false !== strpos( $hero_no_slides_html, 'landing-nk__products' );
+
 	$cleared_media = negar_theme_sanitize_media_settings(
 		array(
 			'records' => array(

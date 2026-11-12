@@ -135,9 +135,99 @@ async function run() {
 
 	await page.goto(BASE_URL, { waitUntil: 'domcontentloaded' });
 	await page.waitForTimeout(200);
+	const heroSsrResponse = await page.request.get(BASE_URL);
+	assert.strictEqual(heroSsrResponse.status(), 200, 'Homepage SSR response must return HTTP 200');
+	const heroSsrHtml = await heroSsrResponse.text();
+	const heroSectionMatch = heroSsrHtml.match(/<section class="landing-nk[\s\S]*?<\/section>/);
+	assert(heroSectionMatch, 'Server-rendered HTML must include the Hero section');
+	const heroSectionHtml = heroSectionMatch[0];
+	assert(heroSectionHtml.includes(imageFixture.url), 'Server-rendered Hero HTML must directly include the saved hero image URL without JS replacement');
+	assert(heroSectionHtml.includes('alt="Phase 5 media test image"'), 'Server-rendered Hero HTML must directly include the saved hero alt attribute');
+	assert(heroSectionHtml.includes(BASE_URL + '/shop/?phase5-media-test=1'), 'Server-rendered Hero HTML must directly include the saved hero destination URL');
+	assert(!heroSectionHtml.includes('data-negar-media-image='), 'Hero slides must no longer emit client-side image replacement attributes');
 	assert.strictEqual(await page.locator('[data-negar-hero-media="one"] img').getAttribute('src'), imageFixture.url, 'Saved hero media must render after reload');
+	assert.strictEqual(await page.locator('[data-negar-hero-media="one"] img').getAttribute('alt'), 'Phase 5 media test image', 'Saved hero alt must render after reload');
 	assert.strictEqual(await page.locator('[data-negar-hero-media="one"] .detail a.btn').getAttribute('href'), BASE_URL + '/shop/?phase5-media-test=1', 'Saved hero destination must render after reload');
 	assert.strictEqual((await page.locator('.banners-nk-60d1115b .title').textContent()).trim(), 'Phase 5 banner title', 'Saved banner editorial copy must render without changing the banner layout');
+
+	const heroErrors = [];
+	const onHeroPageError = (err) => heroErrors.push(err.message);
+	page.on('pageerror', onHeroPageError);
+
+	const submitHeroSlideVisibility = async (enableOne, enableTwo) => {
+	  await page.goto(BASE_URL + '/wp-admin/options-general.php?page=negar-theme-settings&tab=banners', { waitUntil: 'load' });
+	  const cbOne = page.locator('input[type="checkbox"][name="negar_theme_media_options[records][hero-slide-one][enabled]"]');
+	  const cbTwo = page.locator('input[type="checkbox"][name="negar_theme_media_options[records][hero-slide-two][enabled]"]');
+	  if (enableOne) await cbOne.check(); else await cbOne.uncheck();
+	  if (enableTwo) await cbTwo.check(); else await cbTwo.uncheck();
+	  await Promise.all([
+	    page.waitForURL((url) => url.pathname.endsWith('/wp-admin/options-general.php') && url.searchParams.get('tab') === 'banners'),
+	    page.locator('form[action="options.php"] input[type="submit"]').click(),
+	  ]);
+	};
+
+	const heroMobileCtx = await browser.newContext({ viewport: { width: 375, height: 812 }, isMobile: true, locale: 'fa-IR' });
+	const heroMobilePage = await heroMobileCtx.newPage();
+	heroMobilePage.on('pageerror', onHeroPageError);
+
+	try {
+	  // Scenario A: Both slides enabled (already saved above; verify two-slide Swiper + nav + mobile)
+	  await submitHeroSlideVisibility(true, true);
+	  await page.goto(BASE_URL, { waitUntil: 'load' });
+	  assert.strictEqual(await page.locator('#negar-home-hero-carousel .swiper-slide').count(), 2, 'Two enabled hero slides must render two Swiper slides');
+	  assert.strictEqual(await page.locator('#negar-home-hero-carousel.swiper-initialized').count(), 1, 'Hero Swiper must initialize with two slides');
+	  assert.strictEqual(await page.locator('.landing-nk__carousel .swiper-button-next').count(), 1, 'Two enabled slides must expose hero navigation buttons');
+	  assert.strictEqual(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), true, 'Two-slide hero must have zero desktop overflow');
+	  await heroMobilePage.goto(BASE_URL, { waitUntil: 'load' });
+	  assert.strictEqual(await heroMobilePage.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), true, 'Two-slide hero must have zero mobile overflow');
+
+	  // Scenario B: Only first slide enabled
+	  await submitHeroSlideVisibility(true, false);
+	  const ssrOneHtml = await (await page.request.get(BASE_URL)).text();
+	  assert(ssrOneHtml.includes('data-negar-hero-media="one"') && !ssrOneHtml.includes('data-negar-hero-media="two"'), 'Only-first-slide SSR HTML must include slide 1 and exclude slide 2');
+	  await page.goto(BASE_URL, { waitUntil: 'load' });
+	  assert.strictEqual(await page.locator('#negar-home-hero-carousel .swiper-slide').count(), 1, 'Only-first-slide mode must render exactly 1 Swiper slide');
+	  assert.strictEqual(await page.locator('.landing-nk__carousel .swiper-button-next').count(), 0, 'Single-slide hero must not render navigation buttons to hidden slides');
+	  assert.strictEqual(await page.evaluate(() => Boolean(document.querySelector('#negar-home-hero-carousel')?.swiper && !document.querySelector('#negar-home-hero-carousel').swiper.params.loop)), true, 'Single-slide hero must disable Swiper loop');
+	  assert.strictEqual(await page.locator('[data-negar-hero-media="one"] img').isVisible(), true, 'Only-first-slide hero image must remain visible on desktop');
+	  assert.strictEqual(await page.locator('.swiper-landing-product-nk.swiper-initialized').count(), 1, 'Single-slide hero must not disrupt adjacent product Swiper');
+	  assert.strictEqual(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), true, 'Only-first-slide hero must have zero desktop overflow');
+	  await heroMobilePage.goto(BASE_URL, { waitUntil: 'load' });
+	  assert.strictEqual(await heroMobilePage.locator('[data-negar-hero-media="one"] img').isVisible(), true, 'Only-first-slide hero image must remain visible on mobile');
+	  assert.strictEqual(await heroMobilePage.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), true, 'Only-first-slide hero must have zero mobile overflow');
+
+	  // Scenario C: Only second slide enabled
+	  await submitHeroSlideVisibility(false, true);
+	  const ssrTwoHtml = await (await page.request.get(BASE_URL)).text();
+	  assert(!ssrTwoHtml.includes('data-negar-hero-media="one"') && ssrTwoHtml.includes('data-negar-hero-media="two"'), 'Only-second-slide SSR HTML must exclude slide 1 and include slide 2');
+	  await page.goto(BASE_URL, { waitUntil: 'load' });
+	  assert.strictEqual(await page.locator('#negar-home-hero-carousel .swiper-slide').count(), 1, 'Only-second-slide mode must render exactly 1 Swiper slide');
+	  assert.strictEqual(await page.locator('.landing-nk__carousel .swiper-button-next').count(), 0, 'Only-second-slide hero must not render navigation buttons');
+	  assert.strictEqual(await page.locator('[data-negar-hero-media="two"] img').isVisible(), true, 'Only-second-slide hero image must remain visible on desktop');
+	  assert.strictEqual(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), true, 'Only-second-slide hero must have zero desktop overflow');
+	  await heroMobilePage.goto(BASE_URL, { waitUntil: 'load' });
+	  assert.strictEqual(await heroMobilePage.locator('[data-negar-hero-media="two"] img').isVisible(), true, 'Only-second-slide hero image must remain visible on mobile');
+	  assert.strictEqual(await heroMobilePage.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), true, 'Only-second-slide hero must have zero mobile overflow');
+
+	  // Scenario D: Both slides disabled
+	  await submitHeroSlideVisibility(false, false);
+	  const ssrNoneHtml = await (await page.request.get(BASE_URL)).text();
+	  assert(ssrNoneHtml.includes('landing-nk--no-slides') && !ssrNoneHtml.includes('landing-nk__carousel') && ssrNoneHtml.includes('landing-nk__products'), 'Zero-slide SSR HTML must omit blank carousel while keeping featured product box');
+	  await page.goto(BASE_URL, { waitUntil: 'load' });
+	  assert.strictEqual(await page.locator('.landing-nk__carousel').count(), 0, 'Zero-slide hero must not render an empty carousel box');
+	  assert.strictEqual(await page.locator('.landing-nk__products__box').isVisible(), true, 'Adjacent featured product box must remain visible when hero slides are disabled');
+	  assert.strictEqual(await page.locator('.swiper-landing-product-nk.swiper-initialized').count(), 1, 'Other Swipers must still initialize cleanly when hero slides are disabled');
+	  assert.strictEqual(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), true, 'Zero-slide hero must have zero desktop overflow');
+	  await heroMobilePage.goto(BASE_URL, { waitUntil: 'load' });
+	  assert.strictEqual(await heroMobilePage.locator('.landing-nk__products__box').isVisible(), true, 'Adjacent featured product box must remain visible on mobile when hero slides are disabled');
+	  assert.strictEqual(await heroMobilePage.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), true, 'Zero-slide hero must have zero mobile overflow');
+
+	  assert.strictEqual(heroErrors.length, 0, 'Hero visibility combinations must produce zero JavaScript errors: ' + heroErrors.join('; '));
+	} finally {
+	  await submitHeroSlideVisibility(true, true);
+	  page.off('pageerror', onHeroPageError);
+	  await heroMobileCtx.close();
+	}
 
 	await page.goto(BASE_URL + '/wp-admin/options-general.php?page=negar-theme-settings&tab=banners', { waitUntil: 'domcontentloaded' });
 	await page.locator('#negar-pack-search-gaming-zone-fc').fill(productFixture.label);

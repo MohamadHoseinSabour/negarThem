@@ -2016,3 +2016,19 @@ body.kaveh-full-product-titles .product h2, body.kaveh-full-product-titles .prod
     left: 8px !important;
   }
 }
+
+/* Hero state when all configured hero slides are disabled */
+.landing-nk--no-slides .landing-nk__wrapper::before {
+  content: none;
+}
+
+@media (min-width: 992px) {
+  .landing-nk--no-slides .landing-nk__wrapper {
+    justify-content: center;
+    padding-left: 0;
+  }
+  .landing-nk--no-slides .landing-nk__products .shape-tr,
+  .landing-nk--no-slides .landing-nk__products .shape-br {
+    display: none;
+  }
+}

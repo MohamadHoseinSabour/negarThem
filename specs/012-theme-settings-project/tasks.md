@@ -46,6 +46,11 @@
   immediately restore fallback preview images when clearing an attachment, fix
   the Gaming Zone `'mirage'` hotspot key mismatch, synchronize audit docs and
   verify with reversible regression tests.
+- [x] **T209.0b** Convert Hero slider (`hero-slide-one`, `hero-slide-two`) to PHP
+  server-side rendering, remove Hero-only JS media replacement, safely omit
+  disabled slides and single-slide loop/navigation, preserve the adjacent flash-deal
+  product card when zero slides are active, and verify desktop/mobile SSR and
+  Swiper stability.
 - [ ] **T209.1** Implement fixed hero/banner media records using image attachment
   IDs, safe URLs, explicit alt/visibility values, non-autoloaded independent
   storage and Media Library controls. Do not include stories or brands.

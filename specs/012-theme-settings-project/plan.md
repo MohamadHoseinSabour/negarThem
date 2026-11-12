@@ -38,11 +38,15 @@
    individual visibility and separate non-autoloaded options. Phase 5.1-A stabilizes
    media link input validation (`type="text"` paired with protocol sanitization),
    immediate Media Library preview reset to fallback URLs, and the Gaming Zone
-   `mirage` hotspot alignment. Next (Phase 5.1-B), complete PHP SSR binding for all
-   audited hero and promotional banner templates without duplicating Phase 2 text
-   fields, and complete the remaining established product packs/hotspots with
-   catalog-visible WooCommerce product IDs. Stories and brands remain out of scope
-   for Phases 6 and 7.
+   `mirage` hotspot alignment. Phase 5.1-B1 converts the Hero slider
+   (`template-parts/home/hero-slider.php`) to pure PHP server-side rendering using
+   `hero-slide-one` and `hero-slide-two`, removes redundant Hero client-side media
+   replacement, and stabilizes Swiper + layout handling across 2-, 1- and 0-slide
+   visibility states while keeping the adjacent featured-product box safe. Next
+   (Phase 5.1-B2), complete PHP SSR binding for all audited promotional banner
+   templates without duplicating Phase 2 text fields, and complete the remaining
+   established product packs/hotspots with catalog-visible WooCommerce product IDs.
+   Stories and brands remain out of scope for Phases 6 and 7.
 8. **Typography, SMS and backup (planned):** define separate security boundaries,
    secret handling and import/export validation before UI implementation.
 9. **Release verification (planned):** expand regression coverage, run PHP lint and

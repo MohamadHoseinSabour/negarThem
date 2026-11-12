@@ -8,20 +8,6 @@
 (function () {
   'use strict';
 
-  function applyHeroMediaRecords() {
-    document.querySelectorAll('[data-negar-hero-media]').forEach(function (slide) {
-      var image = slide.querySelector('img');
-      var link = slide.querySelector('.detail a.btn');
-      if (image && slide.dataset.negarMediaImage) {
-        image.src = slide.dataset.negarMediaImage;
-        image.alt = slide.dataset.negarMediaAlt || '';
-      }
-      if (link && slide.dataset.negarMediaLink) {
-        link.href = slide.dataset.negarMediaLink;
-      }
-    });
-  }
-
   function applyBannerMediaRecords() {
     document.querySelectorAll('[data-negar-banner]').forEach(function (banner) {
       var image = banner.querySelector('img');
@@ -249,23 +235,33 @@
     const landingContainer = document.querySelector('.landing-nk__carousel');
     const landingEl = landingContainer ? landingContainer.querySelector('.swiper-landing-nk') : document.querySelector('.swiper-landing-nk');
     if (landingEl && !landingEl.classList.contains('swiper-initialized')) {
-      const prevBtn = landingContainer ? landingContainer.querySelector('.swiper-button-prev') : landingEl.parentElement?.querySelector('.swiper-button-prev');
-      const nextBtn = landingContainer ? landingContainer.querySelector('.swiper-button-next') : landingEl.parentElement?.querySelector('.swiper-button-next');
-      new Swiper(landingEl, {
-        loop: true,
-        effect: 'fade',
-        fadeEffect: { crossFade: true },
-        speed: 600,
-        navigation: {
-          prevEl: prevBtn,
-          nextEl: nextBtn,
-        },
-        autoplay: {
-          delay: 5500,
-          disableOnInteraction: false,
-          pauseOnMouseEnter: true,
-        },
+      const heroSlides = Array.from(landingEl.querySelectorAll('.swiper-wrapper > .swiper-slide')).filter(function (slide) {
+        return !slide.hasAttribute('hidden');
       });
+      if (heroSlides.length) {
+        const hasMultipleSlides = heroSlides.length > 1;
+        const prevBtn = landingContainer ? landingContainer.querySelector('.swiper-button-prev') : landingEl.parentElement?.querySelector('.swiper-button-prev');
+        const nextBtn = landingContainer ? landingContainer.querySelector('.swiper-button-next') : landingEl.parentElement?.querySelector('.swiper-button-next');
+        const landingConfig = {
+          loop: hasMultipleSlides,
+          effect: 'fade',
+          fadeEffect: { crossFade: true },
+          speed: 600,
+          allowTouchMove: hasMultipleSlides,
+        };
+        if (hasMultipleSlides && prevBtn && nextBtn) {
+          landingConfig.navigation = {
+            prevEl: prevBtn,
+            nextEl: nextBtn,
+          };
+          landingConfig.autoplay = {
+            delay: 5500,
+            disableOnInteraction: false,
+            pauseOnMouseEnter: true,
+          };
+        }
+        new Swiper(landingEl, landingConfig);
+      }
     }
 
     // 2. Landing Flash Product (Left box in Hero)
@@ -394,7 +390,6 @@
    * DOM Ready Initializer
    */
   function init() {
-	applyHeroMediaRecords();
 	applyBannerMediaRecords();
     initHeroSlider();
     initCountdownTimer();
