@@ -20,6 +20,7 @@ $kala_pack_icon = $kaveh_base . '/kala-pack.png';
 $catalogue = function_exists( 'wc_get_products' ) ? wc_get_products(
 	array(
 		'status'  => 'publish',
+		'visibility' => 'catalog',
 		'limit'   => -1,
 		'return'  => 'objects',
 		'orderby' => 'date',
@@ -69,7 +70,9 @@ $hotspots = array(
 
 $matched_products = array();
 foreach ( $hotspots as &$hotspot ) {
-	$hotspot['product'] = $find_product( $hotspot['needles'] );
+	$selected_product_id = negar_theme_product_pack_product_id( 'gaming-zone', $hotspot['key'] );
+	$selected_product    = $selected_product_id && function_exists( 'wc_get_product' ) ? wc_get_product( $selected_product_id ) : false;
+	$hotspot['product']  = $selected_product && $selected_product->is_visible() ? $selected_product : $find_product( $hotspot['needles'] );
 	if ( $hotspot['product'] ) {
 		$matched_products[ $hotspot['product']->get_id() ] = $hotspot['product'];
 	}

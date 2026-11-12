@@ -14,6 +14,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 $upload_dir  = wp_upload_dir();
 $banner_base = $upload_dir['baseurl'] . '/kaveh-demo';
 $shop_link   = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/shop/' );
+$banner_one  = negar_theme_media_record( 'banners-32-one' );
+$banner_two  = negar_theme_media_record( 'banners-32-two' );
 ?>
 
 <div class="elementor-element elementor-element-sec32-banners e-flex e-con-boxed e-con e-parent e-lazyloaded my-6">
@@ -24,7 +26,7 @@ $shop_link   = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalin
 			<div class="elementor-element e-con-full e-flex e-con e-child">
 				<div class="elementor-element elementor-element-14f3363d elementor-widget elementor-widget-bannernkkaveh w-full" data-id="14f3363d" data-element_type="widget" data-widget_type="bannernkkaveh.default">
 					<div class="elementor-widget-container">
-						<section class="banners-nk banners-nk-14f3363d">
+						<section class="banners-nk banners-nk-14f3363d"<?php echo negar_theme_media_data_attributes( $banner_one ); ?>>
 							<div class="banners-nk__item position-relative">
 								<div class="detail">
 									<a href="<?php echo esc_url( $shop_link ); ?>" class="more d-flex align-items-center justify-content-center rounded-pill" aria-label="<?php esc_attr_e( 'مشاهده بیشتر', 'negar-shop' ); ?>">
@@ -48,7 +50,7 @@ $shop_link   = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalin
 			<div class="elementor-element e-con-full e-flex e-con e-child">
 				<div class="elementor-element elementor-element-3d836679 elementor-widget elementor-widget-bannernkkaveh w-full" data-id="3d836679" data-element_type="widget" data-widget_type="bannernkkaveh.default">
 					<div class="elementor-widget-container">
-						<section class="banners-nk banners-nk-3d836679">
+						<section class="banners-nk banners-nk-3d836679"<?php echo negar_theme_media_data_attributes( $banner_two ); ?>>
 							<div class="banners-nk__item position-relative">
 								<div class="detail">
 									<a href="<?php echo esc_url( $shop_link ); ?>" class="more d-flex align-items-center justify-content-center rounded-pill" aria-label="<?php esc_attr_e( 'مشاهده بیشتر', 'negar-shop' ); ?>">

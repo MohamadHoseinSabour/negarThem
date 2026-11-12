@@ -48,6 +48,7 @@ async function run() {
 
     auth = JSON.parse(php('auth-cookie'));
     const productFixture = JSON.parse(php('product-fixture'));
+	const imageFixture = JSON.parse(php('image-fixture'));
     await context.addCookies([{ name: auth.name, value: auth.value, url: BASE_URL, expires: auth.expires }]);
     await page.goto(BASE_URL + '/wp-admin/options-general.php?page=negar-theme-settings&tab=texts', { waitUntil: 'domcontentloaded' });
     assert(!page.url().includes('wp-login.php'), 'A generated administrator session must access the settings form');
@@ -79,7 +80,36 @@ async function run() {
     assert.strictEqual((await page.locator('.negar-showcase-hero h1').textContent()).trim(), 'تماس آزمایشی نگار', 'Saved internal-page text must render after reload');
     assert.strictEqual((await page.locator('.negar-contact-grid .negar-contact-card b').first().textContent()).trim(), 'تلفن آزمایشی نگار', 'Saved contact-card label must render after reload');
 
-    await page.goto(BASE_URL + '/wp-admin/options-general.php?page=negar-theme-settings&tab=layout', { waitUntil: 'domcontentloaded' });
+	await page.goto(BASE_URL + '/wp-admin/options-general.php?page=negar-theme-settings&tab=banners', { waitUntil: 'domcontentloaded' });
+	await page.locator('#negar-media-id-hero-slide-one').fill(String(imageFixture.id));
+	await page.locator('#negar-media-link-hero-slide-one').fill(BASE_URL + '/shop/?phase5-media-test=1');
+	await page.locator('#negar-media-alt-hero-slide-one').fill('Phase 5 media test image');
+	await page.locator('#negar-media-title-banners-grid-one').fill('Phase 5 banner title');
+	await Promise.all([
+	  page.waitForURL((url) => url.pathname.endsWith('/wp-admin/options-general.php') && url.searchParams.get('tab') === 'banners'),
+	  page.locator('form[action="options.php"] input[type="submit"]').click(),
+	]);
+	assert.strictEqual(await page.locator('#negar-media-id-hero-slide-one').inputValue(), String(imageFixture.id), 'Authenticated media form submission must preserve a valid attachment ID');
+	await page.goto(BASE_URL, { waitUntil: 'domcontentloaded' });
+	await page.waitForTimeout(200);
+	assert.strictEqual(await page.locator('[data-negar-hero-media="one"] img').getAttribute('src'), imageFixture.url, 'Saved hero media must render after reload');
+	assert.strictEqual(await page.locator('[data-negar-hero-media="one"] .detail a.btn').getAttribute('href'), BASE_URL + '/shop/?phase5-media-test=1', 'Saved hero destination must render after reload');
+	assert.strictEqual((await page.locator('.banners-nk-60d1115b .title').textContent()).trim(), 'Phase 5 banner title', 'Saved banner editorial copy must render without changing the banner layout');
+
+	await page.goto(BASE_URL + '/wp-admin/options-general.php?page=negar-theme-settings&tab=banners', { waitUntil: 'domcontentloaded' });
+	await page.locator('#negar-pack-search-gaming-zone-fc').fill(productFixture.label);
+	await page.waitForTimeout(350);
+	const packResult = page.locator('[data-input-name="negar_theme_product_pack_options[packs][gaming-zone][fc]"] button[data-product-id="' + productFixture.id + '"]');
+	await packResult.click();
+	await Promise.all([
+	  page.waitForURL((url) => url.pathname.endsWith('/wp-admin/options-general.php') && url.searchParams.get('tab') === 'banners'),
+	  page.locator('form[action="options.php"] input[type="submit"]').click(),
+	]);
+	assert.strictEqual(await page.locator('[data-input-name="negar_theme_product_pack_options[packs][gaming-zone][fc]"] li[data-product-id="' + productFixture.id + '"]').count(), 1, 'Authenticated product-pack submission must retain the selected product');
+	await page.goto(BASE_URL, { waitUntil: 'domcontentloaded' });
+	assert.strictEqual(await page.locator('.products-pack-nk a[href="' + productFixture.permalink + '"]').count() > 0, true, 'A saved hotspot must render the selected WooCommerce product permalink');
+
+	await page.goto(BASE_URL + '/wp-admin/options-general.php?page=negar-theme-settings&tab=layout', { waitUntil: 'domcontentloaded' });
     assert.strictEqual(await page.locator('#negar-layout-sections .negar-layout-item').count(), 35, 'The authenticated layout form must list all 35 fixed homepage sections');
     await page.locator('#negar-layout-enabled-story-circles').uncheck();
     await page.locator('#negar-layout-enabled-category-bubbles').check();

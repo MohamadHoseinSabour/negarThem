@@ -31,6 +31,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 $upload_dir  = wp_upload_dir();
 $banner_base = $upload_dir['baseurl'] . '/kaveh-demo';
 $shop_link   = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/shop/' );
+$banner_one  = negar_theme_media_record( 'banners-grid-one' );
+$banner_two  = negar_theme_media_record( 'banners-grid-two' );
 ?>
 
 <div class="elementor-element elementor-element-4e969361 e-flex e-con-boxed e-con e-parent e-lazyloaded my-6" data-id="4e969361" data-element_type="container" data-e-type="container">
@@ -41,7 +43,7 @@ $shop_link   = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalin
 			<div class="elementor-element elementor-element-1e016233 e-con-full e-flex e-con e-child" data-id="1e016233" data-element_type="container" data-e-type="container">
 				<div class="elementor-element elementor-element-60d1115b elementor-widget elementor-widget-bannernkkaveh w-full" data-id="60d1115b" data-element_type="widget" data-widget_type="bannernkkaveh.default">
 					<div class="elementor-widget-container">
-						<section class="banners-nk banners-nk-60d1115b">
+						<section class="banners-nk banners-nk-60d1115b"<?php echo negar_theme_media_data_attributes( $banner_one ); ?>>
 							<div class="banners-nk__item position-relative">
 								<div class="detail">
 									<a href="<?php echo esc_url( $shop_link ); ?>" class="more d-flex align-items-center justify-content-center rounded-pill" aria-label="<?php esc_attr_e( 'مشاهده بیشتر', 'negar-shop' ); ?>">
@@ -65,7 +67,7 @@ $shop_link   = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalin
 			<div class="elementor-element elementor-element-71ced218 e-con-full e-flex e-con e-child" data-id="71ced218" data-element_type="container" data-e-type="container">
 				<div class="elementor-element elementor-element-447c3bc1 elementor-widget elementor-widget-bannernkkaveh w-full" data-id="447c3bc1" data-element_type="widget" data-widget_type="bannernkkaveh.default">
 					<div class="elementor-widget-container">
-						<section class="banners-nk banners-nk-447c3bc1">
+						<section class="banners-nk banners-nk-447c3bc1"<?php echo negar_theme_media_data_attributes( $banner_two ); ?>>
 							<div class="banners-nk__item position-relative">
 								<div class="detail">
 									<a href="<?php echo esc_url( $shop_link ); ?>" class="more d-flex align-items-center justify-content-center rounded-pill" aria-label="<?php esc_attr_e( 'مشاهده بیشتر', 'negar-shop' ); ?>">

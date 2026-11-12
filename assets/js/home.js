@@ -8,6 +8,48 @@
 (function () {
   'use strict';
 
+  function applyHeroMediaRecords() {
+    document.querySelectorAll('[data-negar-hero-media]').forEach(function (slide) {
+      var image = slide.querySelector('img');
+      var link = slide.querySelector('.detail a.btn');
+      if (image && slide.dataset.negarMediaImage) {
+        image.src = slide.dataset.negarMediaImage;
+        image.alt = slide.dataset.negarMediaAlt || '';
+      }
+      if (link && slide.dataset.negarMediaLink) {
+        link.href = slide.dataset.negarMediaLink;
+      }
+    });
+  }
+
+  function applyBannerMediaRecords() {
+    document.querySelectorAll('[data-negar-banner]').forEach(function (banner) {
+      var image = banner.querySelector('img');
+      var link = banner.querySelector('a');
+      var title = banner.querySelector('.title');
+      var subtitle = banner.querySelector('.sub-title');
+
+      if (banner.dataset.negarMediaEnabled === '0') {
+        banner.hidden = true;
+        return;
+      }
+      if (image && banner.dataset.negarMediaImage) {
+        image.src = banner.dataset.negarMediaImage;
+        image.alt = banner.dataset.negarMediaAlt || '';
+      }
+      if (link && banner.dataset.negarMediaLink) {
+        link.href = banner.dataset.negarMediaLink;
+        link.setAttribute('aria-label', banner.dataset.negarMediaCta || link.getAttribute('aria-label') || '');
+      }
+      if (title && typeof banner.dataset.negarMediaTitle !== 'undefined') {
+        title.textContent = banner.dataset.negarMediaTitle;
+      }
+      if (subtitle && typeof banner.dataset.negarMediaSubtitle !== 'undefined') {
+        subtitle.textContent = banner.dataset.negarMediaSubtitle;
+      }
+    });
+  }
+
   /**
    * Utility: Convert Latin Numbers to Persian Digits
    */
@@ -352,6 +394,8 @@
    * DOM Ready Initializer
    */
   function init() {
+	applyHeroMediaRecords();
+	applyBannerMediaRecords();
     initHeroSlider();
     initCountdownTimer();
     initDealsCarousel();

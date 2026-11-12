@@ -12,9 +12,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $upload_dir = wp_upload_dir();
 $banner_url = $upload_dir['baseurl'] . '/kaveh-demo/banner-03.png';
+$banner     = negar_theme_media_record( 'wide-banner-one' );
 ?>
 
-<section class="negar-sec-08-wide-banner py-4" aria-label="<?php esc_attr_e( 'بنر ویژه تبلیغاتی', 'negar-shop' ); ?>">
+<section class="negar-sec-08-wide-banner py-4" aria-label="<?php esc_attr_e( 'بنر ویژه تبلیغاتی', 'negar-shop' ); ?>"<?php echo negar_theme_media_data_attributes( $banner ); ?>>
 	<div class="container max-w-[1320px] mx-auto px-3">
 		<a href="<?php echo esc_url( wc_get_page_permalink( 'shop' ) ); ?>" class="block rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300">
 			<img src="<?php echo esc_url( $banner_url ); ?>" alt="<?php esc_attr_e( 'پیشنهاد ویژه دیجیتال', 'negar-shop' ); ?>" class="w-full h-auto object-cover max-h-[280px]">

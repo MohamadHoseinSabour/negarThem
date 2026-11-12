@@ -17,7 +17,7 @@
     var hidden = document.createElement('input');
     hidden.type = 'hidden';
 
-    hidden.name = config.option + '[products][sections][' + selector.getAttribute('data-section-id') + '][product_ids][]';
+    hidden.name = selector.getAttribute('data-input-name') || ( config.option + '[products][sections][' + selector.getAttribute('data-section-id') + '][product_ids][]' );
     hidden.value = product.id;
     item.appendChild(hidden);
 
@@ -44,6 +44,9 @@
     result.textContent = product.label;
     result.addEventListener('click', function () {
       var selected = selector.querySelector('.negar-product-selector__selected');
+		if (selector.getAttribute('data-single') === '1') {
+			selected.textContent = '';
+		}
       if (!selected.querySelector('[data-product-id="' + String(product.id) + '"]')) {
         selected.appendChild(productItem(selector, product));
       }

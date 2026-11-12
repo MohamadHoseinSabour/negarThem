@@ -48,6 +48,8 @@ $featured_sale_price    = $featured_product ? (float) $featured_product->get_pri
 $featured_discount      = $featured_regular_price > $featured_sale_price && $featured_sale_price > 0 ? (int) round( 100 - ( $featured_sale_price / $featured_regular_price * 100 ) ) : 0;
 $featured_review_count  = $featured_product ? (int) $featured_product->get_review_count() : 0;
 $featured_rating        = $featured_product ? (float) $featured_product->get_average_rating() : 0;
+$hero_slide_one         = negar_theme_media_record( 'hero-slide-one' );
+$hero_slide_two         = negar_theme_media_record( 'hero-slide-two' );
 ?>
 <div class="elementor-element elementor-element-229ccc7d e-con-full e-flex e-con e-parent e-lazyloaded" data-id="229ccc7d" data-element_type="container" data-e-type="container">
 	<div class="elementor-element elementor-element-6b94d804 elementor-widget elementor-widget-landingnkkaveh" data-id="6b94d804" data-element_type="widget" data-e-type="widget" data-widget_type="landingnkkaveh.default">
@@ -71,7 +73,7 @@ $featured_rating        = $featured_product ? (float) $featured_product->get_ave
 								<div class="swiper-wrapper">
 
 									<!-- Slide 1 -->
-									<div class="swiper-slide">
+									<div class="swiper-slide" data-negar-hero-media="one" data-negar-media-image="<?php echo esc_url( $hero_slide_one['image_url'] ); ?>" data-negar-media-link="<?php echo esc_url( $hero_slide_one['link'] ); ?>" data-negar-media-alt="<?php echo esc_attr( $hero_slide_one['alt'] ); ?>" <?php echo $hero_slide_one['enabled'] ? '' : 'hidden'; ?>>
 										<div class="landing-nk__carousel__item d-flex align-items-center">
 											<div class="image position-relative flex-fill flex-grow-0 flex-shrink-0">
 												<span class="bg position-absolute top-50 start-50 translate-middle rounded-circle"></span>
@@ -103,7 +105,7 @@ $featured_rating        = $featured_product ? (float) $featured_product->get_ave
 									</div>
 
 									<!-- Slide 2 -->
-									<div class="swiper-slide">
+									<div class="swiper-slide" data-negar-hero-media="two" data-negar-media-image="<?php echo esc_url( $hero_slide_two['image_url'] ); ?>" data-negar-media-link="<?php echo esc_url( $hero_slide_two['link'] ); ?>" data-negar-media-alt="<?php echo esc_attr( $hero_slide_two['alt'] ); ?>" <?php echo $hero_slide_two['enabled'] ? '' : 'hidden'; ?>>
 										<div class="landing-nk__carousel__item d-flex align-items-center">
 											<div class="image position-relative flex-fill flex-grow-0 flex-shrink-0">
 												<span class="bg position-absolute top-50 start-50 translate-middle rounded-circle"></span>

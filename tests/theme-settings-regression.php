@@ -15,6 +15,8 @@ require_once ABSPATH . 'wp-admin/includes/template.php';
 
 $action = isset( $argv[1] ) ? $argv[1] : '';
 $option = NEGAR_THEME_SETTINGS_OPTION;
+$media_option = NEGAR_THEME_MEDIA_OPTION;
+$pack_option  = NEGAR_THEME_PRODUCT_PACK_OPTION;
 $mods   = 'theme_mods_' . get_option( 'stylesheet' );
 
 function negar_theme_test_admin() {
@@ -57,7 +59,7 @@ function negar_theme_test_destroy_auth_cookie( $user_id, $token ) {
 	}
 }
 
-function negar_theme_test_snapshot( $option, $mods ) {
+function negar_theme_test_snapshot( $option, $media_option, $pack_option, $mods ) {
 	$settings = get_option( $option, null );
 	$theme_mods = get_option( $mods, null );
 
@@ -66,10 +68,14 @@ function negar_theme_test_snapshot( $option, $mods ) {
 		'option'        => $settings,
 		'mods_exists'   => null !== $theme_mods,
 		'mods'          => $theme_mods,
+		'media_exists'  => null !== get_option( $media_option, null ),
+		'media'         => get_option( $media_option, null ),
+		'pack_exists'   => null !== get_option( $pack_option, null ),
+		'pack'          => get_option( $pack_option, null ),
 	);
 }
 
-function negar_theme_test_restore( $option, $mods, $snapshot ) {
+function negar_theme_test_restore( $option, $media_option, $pack_option, $mods, $snapshot ) {
 	if ( ! empty( $snapshot['option_exists'] ) ) {
 		update_option( $option, $snapshot['option'] );
 	} else {
@@ -80,6 +86,16 @@ function negar_theme_test_restore( $option, $mods, $snapshot ) {
 		update_option( $mods, $snapshot['mods'] );
 	} else {
 		delete_option( $mods );
+	}
+	if ( ! empty( $snapshot['media_exists'] ) ) {
+		update_option( $media_option, $snapshot['media'] );
+	} else {
+		delete_option( $media_option );
+	}
+	if ( ! empty( $snapshot['pack_exists'] ) ) {
+		update_option( $pack_option, $snapshot['pack'] );
+	} else {
+		delete_option( $pack_option );
 	}
 
 	wp_cache_delete( $option, 'options' );
@@ -101,7 +117,7 @@ function negar_theme_test_save_group( $tab, $input, $section_action = '' ) {
 
 try {
 	if ( 'snapshot' === $action ) {
-		echo base64_encode( wp_json_encode( negar_theme_test_snapshot( $option, $mods ) ) );
+		echo base64_encode( wp_json_encode( negar_theme_test_snapshot( $option, $media_option, $pack_option, $mods ) ) );
 		exit( 0 );
 	}
 
@@ -110,7 +126,7 @@ try {
 		if ( ! is_array( $snapshot ) ) {
 			throw new InvalidArgumentException( 'Invalid settings snapshot.' );
 		}
-		negar_theme_test_restore( $option, $mods, $snapshot );
+		negar_theme_test_restore( $option, $media_option, $pack_option, $mods, $snapshot );
 		echo wp_json_encode( array( 'restored' => true ) );
 		exit( 0 );
 	}
@@ -198,6 +214,24 @@ try {
 				),
 			)
 		);
+		exit( 0 );
+	}
+
+	if ( 'image-fixture' === $action ) {
+		$image_ids = get_posts(
+			array(
+				'post_type'      => 'attachment',
+				'post_mime_type' => 'image',
+				'post_status'    => 'inherit',
+				'posts_per_page' => 1,
+				'fields'         => 'ids',
+			)
+		);
+		if ( empty( $image_ids ) ) {
+			throw new RuntimeException( 'No WordPress image attachment is available for the media regression test.' );
+		}
+		$image_id = (int) $image_ids[0];
+		echo wp_json_encode( array( 'id' => $image_id, 'url' => wp_get_attachment_image_url( $image_id, 'full' ) ) );
 		exit( 0 );
 	}
 
@@ -453,6 +487,28 @@ try {
 		&& ! negar_theme_product_section_is_configured( 'accessories' );
 	$accessories_template = file_get_contents( get_template_directory() . '/template-parts/home/sec-09-accessories.php' );
 	$results['products_unrated_not_fabricated'] = false === strpos( $accessories_template, ": '5.0'" );
+
+	$image_ids = get_posts( array( 'post_type' => 'attachment', 'post_mime_type' => 'image', 'post_status' => 'inherit', 'posts_per_page' => 1, 'fields' => 'ids' ) );
+	$image_id  = ! empty( $image_ids ) ? (int) $image_ids[0] : 0;
+	$header_before_media = negar_theme_settings_raw()['header']['announcement'];
+	$media = negar_theme_sanitize_media_settings(
+		array(
+			'records' => array(
+				'hero-slide-one' => array( 'enabled' => '1', 'media_id' => (string) $image_id, 'link' => '/shop/', 'alt' => 'media-test' ),
+				'banners-grid-one' => array( 'enabled' => '1', 'media_id' => '999999999', 'link' => 'javascript:alert(1)', 'alt' => 'banner-test', 'title' => 'title-test', 'subtitle' => 'subtitle-test', 'cta_label' => 'cta-test' ),
+			),
+		)
+	);
+	update_option( $media_option, $media );
+	$hero_media = negar_theme_media_record( 'hero-slide-one' );
+	$invalid_banner_media = negar_theme_media_record( 'banners-grid-one' );
+	$results['media_valid_attachment_saved'] = $image_id ? $image_id === (int) $hero_media['media_id'] : 0 === (int) $hero_media['media_id'];
+	$results['media_invalid_attachment_fallback'] = 0 === (int) $invalid_banner_media['media_id'] && false === strpos( $invalid_banner_media['link'], 'javascript:' ) && false !== strpos( $invalid_banner_media['image_url'], '/kaveh-demo/banner-01.png' );
+	$results['media_group_isolated'] = $header_before_media === negar_theme_settings_raw()['header']['announcement'];
+	$pack = negar_theme_sanitize_product_pack_settings( array( 'packs' => array( 'gaming-zone' => array( 'fc' => (string) $product_id, 'shadows' => '999999999' ) ) ) );
+	update_option( $pack_option, $pack );
+	$results['pack_visible_product_saved'] = $product_id === negar_theme_product_pack_product_id( 'gaming-zone', 'fc' ) && 0 === negar_theme_product_pack_product_id( 'gaming-zone', 'shadows' );
+	$results['pack_group_isolated'] = $image_id ? $image_id === (int) negar_theme_media_record( 'hero-slide-one' )['media_id'] : true;
 
 	$colors = negar_theme_test_save_group( 'colors', array( 'colors' => array( 'primary' => '#059669', 'secondary' => '#e11d48' ) ) );
 	$results['previous_defaults_valid'] = '#059669' === $colors['colors']['primary'] && '#e11d48' === $colors['colors']['secondary'];

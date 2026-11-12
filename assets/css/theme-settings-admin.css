@@ -221,6 +221,32 @@
 	white-space: nowrap;
 }
 
+.negar-media-record {
+	margin: 12px 0;
+	border: 1px solid #dcdcde;
+	background: #fff;
+}
+
+.negar-media-record summary {
+	cursor: pointer;
+	padding: 12px 14px;
+	font-weight: 600;
+}
+
+.negar-media-record__fields {
+	padding: 0 14px 14px;
+}
+
+.negar-media-control__preview {
+	display: inline-block;
+	width: 120px;
+	height: 80px;
+	margin-inline-end: 10px;
+	border: 1px solid #dcdcde;
+	object-fit: contain;
+	vertical-align: middle;
+}
+
 @media (max-width: 782px) {
 	.negar-product-section__fields {
 		grid-template-columns: 1fr;

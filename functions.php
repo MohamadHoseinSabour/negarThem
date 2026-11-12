@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Define Theme Constants
  */
-define( 'NEGAR_SHOP_VERSION', '2.5.12' );
+define( 'NEGAR_SHOP_VERSION', '2.5.13' );
 define( 'NEGAR_SHOP_DIR', get_template_directory() );
 define( 'NEGAR_SHOP_URI', get_template_directory_uri() );
 

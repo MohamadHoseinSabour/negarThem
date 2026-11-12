@@ -11,6 +11,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 define( 'NEGAR_THEME_SETTINGS_OPTION', 'negar_theme_options' );
 define( 'NEGAR_THEME_SETTINGS_VERSION', 1 );
+define( 'NEGAR_THEME_MEDIA_OPTION', 'negar_theme_media_options' );
+define( 'NEGAR_THEME_MEDIA_VERSION', 1 );
+define( 'NEGAR_THEME_PRODUCT_PACK_OPTION', 'negar_theme_product_pack_options' );
 
 /**
  * Return the supported schema defaults.
@@ -690,6 +693,216 @@ function negar_theme_text( $component, $key ) {
 }
 
 /**
+ * Return the fixed Phase 5 hero and banner records.
+ *
+ * The record IDs are deliberately code-owned.  Saving a record can never choose a
+ * template or create an arbitrary collection.  Text fields exist only where the
+ * original template already rendered editorial text.
+ *
+ * @return array<string, array<string, mixed>>
+ */
+function negar_theme_media_registry() {
+	$upload_dir = wp_upload_dir();
+	$base       = $upload_dir['baseurl'] . '/kaveh-demo';
+	$shop_url   = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/shop/' );
+	$banner     = array(
+		'enabled'  => true,
+		'link'     => $shop_url,
+		'alt'      => __( 'محل قرار گیری بنر', 'negar-shop' ),
+		'title'    => __( 'محل قرار گیری بنر', 'negar-shop' ),
+		'subtitle' => __( 'همین الان با تخفیف خرید کنید', 'negar-shop' ),
+		'cta_label'=> __( 'مشاهده بیشتر', 'negar-shop' ),
+		'fields'   => array( 'media_id', 'link', 'alt', 'title', 'subtitle', 'cta_label', 'enabled' ),
+	);
+	$image_only = array(
+		'enabled' => true,
+		'link'    => $shop_url,
+		'fields'  => array( 'media_id', 'link', 'alt', 'enabled' ),
+	);
+
+	$registry = array(
+		'hero-slide-one' => array_merge( $image_only, array( 'label' => __( 'اسلاید نخست Hero', 'negar-shop' ), 'fallback_url' => $base . '/landing-01-300x261-1.png', 'alt' => __( 'خرید برترین محصولات', 'negar-shop' ) ) ),
+		'hero-slide-two' => array_merge( $image_only, array( 'label' => __( 'اسلاید دوم Hero', 'negar-shop' ), 'fallback_url' => $base . '/landing-01-300x261-1.png', 'alt' => __( 'کنسول‌های بازی نسل نهم', 'negar-shop' ) ) ),
+		'banners-grid-one' => array_merge( $banner, array( 'label' => __( 'بنر دو ستونه ۱ › راست', 'negar-shop' ), 'fallback_url' => $base . '/banner-01.png' ) ),
+		'banners-grid-two' => array_merge( $banner, array( 'label' => __( 'بنر دو ستونه ۱ › چپ', 'negar-shop' ), 'fallback_url' => $base . '/banner-02-1.png' ) ),
+		'wide-banner-one' => array_merge( $image_only, array( 'label' => __( 'بنر عریض', 'negar-shop' ), 'fallback_url' => $base . '/banner-03.png', 'alt' => __( 'پیشنهاد ویژه دیجیتال', 'negar-shop' ) ) ),
+	);
+
+	foreach ( array( '10', '18', '29', '32' ) as $section ) {
+		$registry[ 'banners-' . $section . '-one' ] = array_merge( $banner, array( 'label' => sprintf( __( 'بنر دو ستونه %s › راست', 'negar-shop' ), $section ), 'fallback_url' => $base . '/banner-01.png' ) );
+		$registry[ 'banners-' . $section . '-two' ] = array_merge( $banner, array( 'label' => sprintf( __( 'بنر دو ستونه %s › چپ', 'negar-shop' ), $section ), 'fallback_url' => $base . '/banner-02-1.png' ) );
+	}
+	foreach ( array( '12', '27' ) as $section ) {
+		$registry[ 'compact-' . $section . '-one' ] = array_merge( $image_only, array( 'label' => sprintf( __( 'بنر فشرده %s › راست', 'negar-shop' ), $section ), 'fallback_url' => $base . '/banner-04.png', 'alt' => __( 'تخفیف ویژه کالای دیجیتال', 'negar-shop' ) ) );
+		$registry[ 'compact-' . $section . '-two' ] = array_merge( $image_only, array( 'label' => sprintf( __( 'بنر فشرده %s › چپ', 'negar-shop' ), $section ), 'fallback_url' => $base . '/banner-05.png', 'alt' => __( 'پیشنهاد خرید لوازم جانبی', 'negar-shop' ) ) );
+	}
+
+	return $registry;
+}
+
+/**
+ * Read a schema-validated media record with its immutable demo fallback.
+ *
+ * @param string $record_id Stable record ID.
+ * @return array<string, mixed>
+ */
+function negar_theme_media_record( $record_id ) {
+	$registry = negar_theme_media_registry();
+	if ( ! isset( $registry[ $record_id ] ) ) {
+		return array();
+	}
+
+	$record          = $registry[ $record_id ];
+	$record['media_id'] = 0;
+	$stored          = get_option( NEGAR_THEME_MEDIA_OPTION, array() );
+	$stored_record   = is_array( $stored ) && isset( $stored['records'][ $record_id ] ) && is_array( $stored['records'][ $record_id ] ) ? $stored['records'][ $record_id ] : array();
+	foreach ( $record['fields'] as $field ) {
+		if ( array_key_exists( $field, $stored_record ) ) {
+			$record[ $field ] = $stored_record[ $field ];
+		}
+	}
+
+	$attachment_url = ! empty( $record['media_id'] ) ? wp_get_attachment_image_url( absint( $record['media_id'] ), 'full' ) : false;
+	$record['image_url'] = $attachment_url ? $attachment_url : $record['fallback_url'];
+
+	return $record;
+}
+
+/**
+ * Build escaped data attributes consumed by the existing home interaction script.
+ *
+ * @param array<string, mixed> $record Resolved fixed media record.
+ * @return string
+ */
+function negar_theme_media_data_attributes( $record ) {
+	if ( ! is_array( $record ) ) {
+		return '';
+	}
+
+	return sprintf(
+		' data-negar-banner data-negar-media-enabled="%1$s" data-negar-media-image="%2$s" data-negar-media-link="%3$s" data-negar-media-alt="%4$s" data-negar-media-title="%5$s" data-negar-media-subtitle="%6$s" data-negar-media-cta="%7$s"',
+		! empty( $record['enabled'] ) ? '1' : '0',
+		esc_attr( isset( $record['image_url'] ) ? $record['image_url'] : '' ),
+		esc_attr( isset( $record['link'] ) ? $record['link'] : '' ),
+		esc_attr( isset( $record['alt'] ) ? $record['alt'] : '' ),
+		esc_attr( isset( $record['title'] ) ? $record['title'] : '' ),
+		esc_attr( isset( $record['subtitle'] ) ? $record['subtitle'] : '' ),
+		esc_attr( isset( $record['cta_label'] ) ? $record['cta_label'] : '' )
+	);
+}
+
+/**
+ * Accept site-relative URLs and HTTP(S) links, never script/data protocols.
+ *
+ * @param mixed $value Raw submitted URL.
+ * @return string
+ */
+function negar_theme_sanitize_media_link( $value ) {
+	$value = is_scalar( $value ) ? trim( (string) $value ) : '';
+	if ( '' === $value ) {
+		return '';
+	}
+	if ( 0 === strpos( $value, '/' ) && 0 !== strpos( $value, '//' ) ) {
+		return $value;
+	}
+
+	return esc_url_raw( $value, array( 'http', 'https' ) );
+}
+
+/**
+ * Sanitize fixed media records without touching any other settings group.
+ *
+ * @param mixed $submitted Raw Settings API value.
+ * @return array<string, mixed>
+ */
+function negar_theme_sanitize_media_settings( $submitted ) {
+	$current = get_option( NEGAR_THEME_MEDIA_OPTION, array() );
+	$current = is_array( $current ) ? $current : array();
+	if ( ! current_user_can( 'manage_options' ) ) {
+		add_settings_error( 'negar_theme_media_settings', 'negar_theme_media_forbidden', __( 'اجازهٔ ذخیرهٔ رسانه را ندارید.', 'negar-shop' ), 'error' );
+		return $current;
+	}
+
+	$submitted = is_array( $submitted ) ? wp_unslash( $submitted ) : array();
+	$records   = isset( $submitted['records'] ) && is_array( $submitted['records'] ) ? $submitted['records'] : array();
+	$clean     = array( 'schema_version' => NEGAR_THEME_MEDIA_VERSION, 'records' => array() );
+	foreach ( negar_theme_media_registry() as $record_id => $definition ) {
+		$input = isset( $records[ $record_id ] ) && is_array( $records[ $record_id ] ) ? $records[ $record_id ] : array();
+		foreach ( $definition['fields'] as $field ) {
+			if ( 'media_id' === $field ) {
+				$media_id = isset( $input[ $field ] ) && is_scalar( $input[ $field ] ) ? absint( $input[ $field ] ) : 0;
+				$clean['records'][ $record_id ][ $field ] = $media_id && wp_attachment_is_image( $media_id ) ? $media_id : 0;
+			} elseif ( 'enabled' === $field ) {
+				$clean['records'][ $record_id ][ $field ] = isset( $input[ $field ] ) && is_scalar( $input[ $field ] ) && '1' === (string) $input[ $field ];
+			} elseif ( 'link' === $field ) {
+				$clean['records'][ $record_id ][ $field ] = negar_theme_sanitize_media_link( isset( $input[ $field ] ) ? $input[ $field ] : '' );
+			} else {
+				$clean['records'][ $record_id ][ $field ] = isset( $input[ $field ] ) && is_scalar( $input[ $field ] ) ? sanitize_text_field( $input[ $field ] ) : '';
+			}
+		}
+	}
+
+	add_settings_error( 'negar_theme_media_settings', 'negar_theme_media_saved', __( 'تنظیمات رسانه با موفقیت ذخیره شد.', 'negar-shop' ), 'updated' );
+	return $clean;
+}
+
+/**
+ * Return the fixed product-pack/hotspot assignment registry.
+ *
+ * @return array<string, array<string, mixed>>
+ */
+function negar_theme_product_pack_registry() {
+	return array(
+		'gaming-zone' => array(
+			'label' => __( 'پک گیمینگ و نقاط داغ', 'negar-shop' ),
+			'slots' => array(
+				'shadows' => __( 'نقطهٔ داغ ۱', 'negar-shop' ),
+				'mirage'  => __( 'نقطهٔ داغ ۲', 'negar-shop' ),
+				'fc'      => __( 'نقطهٔ داغ ۳', 'negar-shop' ),
+				'yotei'   => __( 'نقطهٔ داغ ۴', 'negar-shop' ),
+			),
+		),
+	);
+}
+
+/**
+ * Return an explicitly assigned visible product ID, or zero for legacy fallback.
+ *
+ * @param string $pack_id Fixed pack ID.
+ * @param string $slot_id Fixed slot ID.
+ * @return int
+ */
+function negar_theme_product_pack_product_id( $pack_id, $slot_id ) {
+	$stored = get_option( NEGAR_THEME_PRODUCT_PACK_OPTION, array() );
+	$id     = is_array( $stored ) && isset( $stored['packs'][ $pack_id ][ $slot_id ] ) ? absint( $stored['packs'][ $pack_id ][ $slot_id ] ) : 0;
+	return in_array( $id, negar_theme_sanitize_product_ids( array( $id ) ), true ) ? $id : 0;
+}
+
+/**
+ * Sanitize fixed product-pack product IDs without accepting arbitrary slots.
+ *
+ * @param mixed $submitted Raw Settings API value.
+ * @return array<string, mixed>
+ */
+function negar_theme_sanitize_product_pack_settings( $submitted ) {
+	$current = get_option( NEGAR_THEME_PRODUCT_PACK_OPTION, array() );
+	$current = is_array( $current ) ? $current : array();
+	if ( ! current_user_can( 'manage_options' ) ) {
+		return $current;
+	}
+	$submitted = is_array( $submitted ) ? wp_unslash( $submitted ) : array();
+	$packs     = isset( $submitted['packs'] ) && is_array( $submitted['packs'] ) ? $submitted['packs'] : array();
+	$clean     = array( 'schema_version' => 1, 'packs' => array() );
+	foreach ( negar_theme_product_pack_registry() as $pack_id => $pack ) {
+		foreach ( $pack['slots'] as $slot_id => $label ) {
+			$value = isset( $packs[ $pack_id ][ $slot_id ] ) && is_scalar( $packs[ $pack_id ][ $slot_id ] ) ? absint( $packs[ $pack_id ][ $slot_id ] ) : 0;
+			$clean['packs'][ $pack_id ][ $slot_id ] = in_array( $value, negar_theme_sanitize_product_ids( array( $value ) ), true ) ? $value : 0;
+		}
+	}
+	return $clean;
+}
+
+/**
  * Register the versioned option with the Settings API.
  */
 function negar_theme_register_settings() {
@@ -702,8 +915,41 @@ function negar_theme_register_settings() {
 			'default'           => negar_theme_settings_defaults(),
 		)
 	);
+	register_setting(
+		'negar_theme_media_settings',
+		NEGAR_THEME_MEDIA_OPTION,
+		array(
+			'type'              => 'array',
+			'sanitize_callback' => 'negar_theme_sanitize_media_settings',
+			'default'           => array(),
+		)
+	);
+	register_setting(
+		'negar_theme_media_settings',
+		NEGAR_THEME_PRODUCT_PACK_OPTION,
+		array(
+			'type'              => 'array',
+			'sanitize_callback' => 'negar_theme_sanitize_product_pack_settings',
+			'default'           => array(),
+		)
+	);
 }
 add_action( 'admin_init', 'negar_theme_register_settings' );
+
+/**
+ * Create the media option only on the admin path and keep it out of autoload.
+ *
+ * @return void
+ */
+function negar_theme_ensure_media_option() {
+	if ( false === get_option( NEGAR_THEME_MEDIA_OPTION, false ) ) {
+		add_option( NEGAR_THEME_MEDIA_OPTION, array(), '', false );
+	}
+	if ( false === get_option( NEGAR_THEME_PRODUCT_PACK_OPTION, false ) ) {
+		add_option( NEGAR_THEME_PRODUCT_PACK_OPTION, array(), '', false );
+	}
+}
+add_action( 'admin_init', 'negar_theme_ensure_media_option', 20 );
 
 /**
  * Sanitize only the submitted group, preserving all other saved groups.
@@ -846,6 +1092,7 @@ function negar_theme_enqueue_settings_assets( $hook_suffix ) {
 	$style_path  = NEGAR_SHOP_DIR . '/assets/css/theme-settings-admin.css';
 	$script_path = NEGAR_SHOP_DIR . '/assets/js/theme-settings-layout.js';
 	$product_script_path = NEGAR_SHOP_DIR . '/assets/js/theme-settings-products.js';
+	$media_script_path   = NEGAR_SHOP_DIR . '/assets/js/theme-settings-media.js';
 
 	wp_enqueue_style(
 		'negar-theme-settings-admin',
@@ -858,6 +1105,14 @@ function negar_theme_enqueue_settings_assets( $hook_suffix ) {
 		NEGAR_SHOP_URI . '/assets/js/theme-settings-layout.js',
 		array(),
 		file_exists( $script_path ) ? (string) filemtime( $script_path ) : NEGAR_SHOP_VERSION,
+		true
+	);
+	wp_enqueue_media();
+	wp_enqueue_script(
+		'negar-theme-settings-media',
+		NEGAR_SHOP_URI . '/assets/js/theme-settings-media.js',
+		array( 'jquery' ),
+		file_exists( $media_script_path ) ? (string) filemtime( $media_script_path ) : NEGAR_SHOP_VERSION,
 		true
 	);
 	wp_enqueue_script(
@@ -1130,6 +1385,79 @@ function negar_theme_render_product_fields() {
 }
 
 /**
+ * Render the fixed Phase 5 media records.
+ *
+ * @return void
+ */
+function negar_theme_render_media_fields() {
+	?>
+	<p class="description"><?php esc_html_e( 'هر رکورد مستقل است. تا زمانی که یک تصویر معتبر از کتابخانهٔ رسانه انتخاب نشود، تصویر فعلی دمو روی سایت می‌ماند. متن اسلایدهای Hero در زبانهٔ متن‌ها مدیریت می‌شود.', 'negar-shop' ); ?></p>
+	<div class="negar-media-manager">
+		<?php foreach ( negar_theme_media_registry() as $record_id => $definition ) : ?>
+			<?php $record = negar_theme_media_record( $record_id ); ?>
+			<details class="negar-media-record" <?php echo in_array( $record_id, array( 'hero-slide-one', 'hero-slide-two', 'banners-grid-one' ), true ) ? 'open' : ''; ?>>
+				<summary><?php echo esc_html( $definition['label'] ); ?></summary>
+				<div class="negar-media-record__fields">
+					<input type="hidden" name="<?php echo esc_attr( NEGAR_THEME_MEDIA_OPTION ); ?>[records][<?php echo esc_attr( $record_id ); ?>][enabled]" value="0">
+					<p><label><input type="checkbox" name="<?php echo esc_attr( NEGAR_THEME_MEDIA_OPTION ); ?>[records][<?php echo esc_attr( $record_id ); ?>][enabled]" value="1" <?php checked( ! empty( $record['enabled'] ) ); ?>> <?php esc_html_e( 'نمایش این رکورد', 'negar-shop' ); ?></label></p>
+					<p class="negar-media-control" data-media-control>
+						<label for="negar-media-id-<?php echo esc_attr( $record_id ); ?>"><?php esc_html_e( 'تصویر', 'negar-shop' ); ?></label><br>
+						<input id="negar-media-id-<?php echo esc_attr( $record_id ); ?>" class="small-text negar-media-control__id" name="<?php echo esc_attr( NEGAR_THEME_MEDIA_OPTION ); ?>[records][<?php echo esc_attr( $record_id ); ?>][media_id]" type="number" min="0" step="1" value="<?php echo esc_attr( absint( $record['media_id'] ) ); ?>" aria-label="<?php esc_attr_e( 'شناسهٔ تصویر', 'negar-shop' ); ?>">
+						<img class="negar-media-control__preview" src="<?php echo esc_url( $record['image_url'] ); ?>" alt="" width="120" height="80">
+						<button type="button" class="button negar-media-control__select"><?php esc_html_e( 'انتخاب تصویر', 'negar-shop' ); ?></button>
+						<button type="button" class="button-link-delete negar-media-control__remove"><?php esc_html_e( 'بازگشت به تصویر پیش‌فرض', 'negar-shop' ); ?></button>
+					</p>
+					<p><label for="negar-media-link-<?php echo esc_attr( $record_id ); ?>"><?php esc_html_e( 'پیوند مقصد', 'negar-shop' ); ?></label><br><input id="negar-media-link-<?php echo esc_attr( $record_id ); ?>" class="regular-text code" name="<?php echo esc_attr( NEGAR_THEME_MEDIA_OPTION ); ?>[records][<?php echo esc_attr( $record_id ); ?>][link]" type="url" value="<?php echo esc_attr( $record['link'] ); ?>"></p>
+					<p><label for="negar-media-alt-<?php echo esc_attr( $record_id ); ?>"><?php esc_html_e( 'متن جایگزین تصویر', 'negar-shop' ); ?></label><br><input id="negar-media-alt-<?php echo esc_attr( $record_id ); ?>" class="regular-text" name="<?php echo esc_attr( NEGAR_THEME_MEDIA_OPTION ); ?>[records][<?php echo esc_attr( $record_id ); ?>][alt]" type="text" value="<?php echo esc_attr( $record['alt'] ); ?>"></p>
+					<?php if ( in_array( 'title', $definition['fields'], true ) ) : ?>
+						<p><label for="negar-media-title-<?php echo esc_attr( $record_id ); ?>"><?php esc_html_e( 'عنوان', 'negar-shop' ); ?></label><br><input id="negar-media-title-<?php echo esc_attr( $record_id ); ?>" class="regular-text" name="<?php echo esc_attr( NEGAR_THEME_MEDIA_OPTION ); ?>[records][<?php echo esc_attr( $record_id ); ?>][title]" type="text" value="<?php echo esc_attr( $record['title'] ); ?>"></p>
+						<p><label for="negar-media-subtitle-<?php echo esc_attr( $record_id ); ?>"><?php esc_html_e( 'زیرعنوان', 'negar-shop' ); ?></label><br><input id="negar-media-subtitle-<?php echo esc_attr( $record_id ); ?>" class="regular-text" name="<?php echo esc_attr( NEGAR_THEME_MEDIA_OPTION ); ?>[records][<?php echo esc_attr( $record_id ); ?>][subtitle]" type="text" value="<?php echo esc_attr( $record['subtitle'] ); ?>"></p>
+						<p><label for="negar-media-cta-<?php echo esc_attr( $record_id ); ?>"><?php esc_html_e( 'برچسب CTA', 'negar-shop' ); ?></label><br><input id="negar-media-cta-<?php echo esc_attr( $record_id ); ?>" class="regular-text" name="<?php echo esc_attr( NEGAR_THEME_MEDIA_OPTION ); ?>[records][<?php echo esc_attr( $record_id ); ?>][cta_label]" type="text" value="<?php echo esc_attr( $record['cta_label'] ); ?>"></p>
+					<?php endif; ?>
+				</div>
+			</details>
+		<?php endforeach; ?>
+	</div>
+	<?php
+}
+
+/**
+ * Render fixed product-pack and hotspot product selectors.
+ *
+ * @return void
+ */
+function negar_theme_render_product_pack_fields() {
+	?>
+	<hr>
+	<h2><?php esc_html_e( 'پک‌های محصول و نقاط داغ', 'negar-shop' ); ?></h2>
+	<p class="description"><?php esc_html_e( 'فقط شناسهٔ محصول منتشرشده و قابل‌نمایش WooCommerce پذیرفته می‌شود. خالی‌کردن یک شناسه، همان انتخاب پیش‌فرض قالب را برمی‌گرداند و مختصات نقاط داغ را تغییر نمی‌دهد.', 'negar-shop' ); ?></p>
+	<?php foreach ( negar_theme_product_pack_registry() as $pack_id => $pack ) : ?>
+		<fieldset class="negar-product-section">
+			<legend><?php echo esc_html( $pack['label'] ); ?></legend>
+			<div class="negar-product-section__fields">
+				<?php foreach ( $pack['slots'] as $slot_id => $label ) : ?>
+					<?php
+					$value   = negar_theme_product_pack_product_id( $pack_id, $slot_id );
+					$product = $value && function_exists( 'wc_get_product' ) ? wc_get_product( $value ) : false;
+					$field_name = NEGAR_THEME_PRODUCT_PACK_OPTION . '[packs][' . $pack_id . '][' . $slot_id . ']';
+					?>
+					<div class="negar-product-section__manual" data-product-selector data-single="1" data-input-name="<?php echo esc_attr( $field_name ); ?>">
+						<label for="negar-pack-search-<?php echo esc_attr( $pack_id . '-' . $slot_id ); ?>"><?php echo esc_html( $label ); ?></label>
+						<input id="negar-pack-search-<?php echo esc_attr( $pack_id . '-' . $slot_id ); ?>" class="regular-text" type="search" autocomplete="off" placeholder="<?php esc_attr_e( 'نام یا شناسهٔ محصول را جست‌وجو کنید', 'negar-shop' ); ?>">
+						<p class="description negar-product-selector__status" aria-live="polite"></p>
+						<div class="negar-product-selector__results" role="listbox"></div>
+						<ul class="negar-product-selector__selected" aria-label="<?php echo esc_attr( $label ); ?>">
+							<?php if ( $product ) : ?><li data-product-id="<?php echo esc_attr( $product->get_id() ); ?>"><span><?php echo esc_html( sprintf( '%1$s (#%2$d)', $product->get_name(), $product->get_id() ) ); ?></span><input type="hidden" name="<?php echo esc_attr( $field_name ); ?>" value="<?php echo esc_attr( $product->get_id() ); ?>"><button type="button" class="button-link-delete negar-product-selector__remove"><?php esc_html_e( 'حذف', 'negar-shop' ); ?></button></li><?php endif; ?>
+						</ul>
+					</div>
+				<?php endforeach; ?>
+			</div>
+		</fieldset>
+	<?php endforeach; ?>
+	<?php
+}
+
+/**
  * Render the settings admin page.
  */
 function negar_theme_render_settings_page() {
@@ -1157,15 +1485,17 @@ function negar_theme_render_settings_page() {
 				<a class="nav-tab <?php echo $active_tab === $tab_id ? 'nav-tab-active' : ''; ?>" href="<?php echo esc_url( add_query_arg( array( 'page' => 'negar-theme-settings', 'tab' => $tab_id ), admin_url( 'options-general.php' ) ) ); ?>" <?php echo $active_tab === $tab_id ? 'aria-current="page"' : ''; ?>><?php echo esc_html( $tab_label ); ?></a>
 			<?php endforeach; ?>
 		</nav>
-		<?php settings_errors( 'negar_theme_settings' ); ?>
-		<?php if ( in_array( $active_tab, array( 'general', 'texts', 'layout', 'products', 'colors', 'header_footer' ), true ) ) : ?>
+		<?php settings_errors( 'negar_theme_settings' ); settings_errors( 'negar_theme_media_settings' ); ?>
+		<?php if ( in_array( $active_tab, array( 'general', 'texts', 'layout', 'products', 'colors', 'header_footer', 'banners' ), true ) ) : ?>
 			<form action="options.php" method="post">
-				<?php settings_fields( 'negar_theme_settings' ); ?>
+				<?php settings_fields( 'banners' === $active_tab ? 'negar_theme_media_settings' : 'negar_theme_settings' ); ?>
 				<input type="hidden" name="negar_theme_settings_tab" value="<?php echo esc_attr( $active_tab ); ?>">
 				<?php if ( 'layout' === $active_tab ) : ?>
 					<?php negar_theme_render_layout_fields(); ?>
 				<?php elseif ( 'products' === $active_tab ) : ?>
 					<?php negar_theme_render_product_fields(); ?>
+				<?php elseif ( 'banners' === $active_tab ) : ?>
+					<?php negar_theme_render_media_fields(); negar_theme_render_product_pack_fields(); ?>
 				<?php else : ?>
 				<table class="form-table" role="presentation">
 					<?php if ( 'general' === $active_tab ) : ?>
