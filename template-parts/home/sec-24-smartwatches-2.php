@@ -39,6 +39,7 @@ if ( ! function_exists( 'negar_get_matching_product_info' ) ) {
 // 1. Discount Showcase Items (Left Column Red Card - Smartwatch/Wearables)
 $discount_items_sec24 = array(
 	array(
+		'slot'          => 'promo-1',
 		'title'         => 'ساعت هوشمند سامسونگ مدل Galaxy Watch Ultra 47mm',
 		'short_title'   => 'ساعت هوشمند سامسونگ مدل Galaxy Watch Ultra...',
 		'image'         => $kaveh_base . '/3c0f8ff8a12c67f061136e8fafd65eb6f6c56d2e_1786985097-300x300-removebg-preview-1.png',
@@ -47,9 +48,10 @@ $discount_items_sec24 = array(
 		'comments'      => '11',
 		'regular_price' => '32,500,000',
 		'sale_price'    => '30,875,000',
-		'keyword'       => 'Galaxy Watch',
+		'needles'       => array( 'Galaxy Watch Ultra', 'Galaxy Watch' ),
 	),
 	array(
+		'slot'          => 'promo-2',
 		'title'         => 'ساعت هوشمند اپل مدل Apple Watch Series 9 آلومینیوم 45mm',
 		'short_title'   => 'ساعت هوشمند اپل مدل Watch Series 9...',
 		'image'         => $kaveh_base . '/3c0f8ff8a12c67f061136e8fafd65eb6f6c56d2e_1787055103-300x300-removebg-preview-1.png',
@@ -58,61 +60,66 @@ $discount_items_sec24 = array(
 		'comments'      => '7',
 		'regular_price' => '24,000,000',
 		'sale_price'    => '23,280,000',
-		'keyword'       => 'Series 9',
+		'needles'       => array( 'Watch Series 9', 'Series 9' ),
 	),
 );
 
 // 2. Carousel Products (Right Column)
 $carousel_products_sec24 = array(
 	array(
-		'title'       => 'ساعت هوشمند امیزفیت مدل Balance با سنسور بیومتریک BioTracker',
-		'image'       => $kaveh_base . '/3eef521897412a152c5b42551b623c91c41d90c0_1786388224-300x300-removebg-preview-1.png',
-		'rating'      => '5/4.5',
-		'price'       => '11,400,000',
+		'slot'         => 'carousel-1',
+		'title'        => 'ساعت هوشمند امیزفیت مدل Balance با سنسور بیومتریک BioTracker',
+		'image'        => $kaveh_base . '/3eef521897412a152c5b42551b623c91c41d90c0_1786388224-300x300-removebg-preview-1.png',
+		'rating'       => '5/4.5',
+		'price'        => '11,400,000',
 		'regular_price'=> '12,200,000',
-		'offer'       => '٪ 6',
-		'colors'      => array( '#212529', '#6c757d' ),
-		'keyword'     => 'Amazfit',
+		'offer'        => '٪ 6',
+		'colors'       => array( '#212529', '#6c757d' ),
+		'needles'      => array( 'Balance', 'Amazfit' ),
 	),
 	array(
-		'title'       => 'مچ‌بند هوشمند شیائومی مدل Smart Band 8 Active',
-		'image'       => $kaveh_base . '/26eb5a74fbf76467080d4a69a6a0dd6f9c5f1008_1786454574-300x300-removebg-preview-1.png',
-		'rating'      => '5/4.6',
-		'price'       => '1,290,000',
+		'slot'         => 'carousel-2',
+		'title'        => 'مچ‌بند هوشمند شیائومی مدل Smart Band 8 Active',
+		'image'        => $kaveh_base . '/26eb5a74fbf76467080d4a69a6a0dd6f9c5f1008_1786454574-300x300-removebg-preview-1.png',
+		'rating'       => '5/4.6',
+		'price'        => '1,290,000',
 		'regular_price'=> '',
-		'offer'       => '',
-		'colors'      => array( '#000000', '#f8f9fa' ),
-		'keyword'     => 'Band 8',
+		'offer'        => '',
+		'colors'       => array( '#000000', '#f8f9fa' ),
+		'needles'      => array( 'Smart Band 8', 'Band 8' ),
 	),
 	array(
-		'title'       => 'ساعت هوشمند گارمین مدل Forerunner 265 نسخه مخصوص دوندگان',
-		'image'       => $kaveh_base . '/6276e4189055b9e96d2779c652b748384f11a3a2_1786388736-300x300-removebg-preview-1.png',
-		'rating'      => '5/4.9',
-		'price'       => '29,800,000',
+		'slot'         => 'carousel-3',
+		'title'        => 'ساعت هوشمند گارمین مدل Forerunner 265 نسخه مخصوص دوندگان',
+		'image'        => $kaveh_base . '/6276e4189055b9e96d2779c652b748384f11a3a2_1786388736-300x300-removebg-preview-1.png',
+		'rating'       => '5/4.9',
+		'price'        => '29,800,000',
 		'regular_price'=> '31,500,000',
-		'offer'       => '٪ 5',
-		'colors'      => array( '#0f172a', '#e11d48' ),
-		'keyword'     => 'Garmin',
+		'offer'        => '٪ 5',
+		'colors'       => array( '#0f172a', '#e11d48' ),
+		'needles'      => array( 'Forerunner 265', 'Garmin' ),
 	),
 	array(
-		'title'       => 'ساعت هوشمند هایلو مدل Solar Plus RT3 با قابلیت مکالمه',
-		'image'       => $kaveh_base . '/1149308650aa177c213e4175a23076419198dabf_1786296597-300x300-removebg-preview-1.png',
-		'rating'      => '5/4.2',
-		'price'       => '1,890,000',
+		'slot'         => 'carousel-4',
+		'title'        => 'ساعت هوشمند هایلو مدل Solar Plus RT3 با قابلیت مکالمه',
+		'image'        => $kaveh_base . '/1149308650aa177c213e4175a23076419198dabf_1786296597-300x300-removebg-preview-1.png',
+		'rating'       => '5/4.2',
+		'price'        => '1,890,000',
 		'regular_price'=> '',
-		'offer'       => '',
-		'colors'      => array( '#18181b', '#71717a' ),
-		'keyword'     => 'Haylou',
+		'offer'        => '',
+		'colors'       => array( '#18181b', '#71717a' ),
+		'needles'      => array( 'Solar Plus RT3', 'Haylou' ),
 	),
 	array(
-		'title'       => 'ساعت هوشمند کیسلکت مدل Kr Pro نسخه مجهز به صفحه نمایش Ultra AMOLED',
-		'image'       => $kaveh_base . '/128bfd71ad4017050659832b191c846cd050c5c1_1763052371-300x300-removebg-preview-1.png',
-		'rating'      => '5/4.3',
-		'price'       => '2,950,000',
+		'slot'         => 'carousel-5',
+		'title'        => 'ساعت هوشمند کیسلکت مدل Kr Pro نسخه مجهز به صفحه نمایش Ultra AMOLED',
+		'image'        => $kaveh_base . '/128bfd71ad4017050659832b191c846cd050c5c1_1763052371-300x300-removebg-preview-1.png',
+		'rating'       => '5/4.3',
+		'price'        => '2,950,000',
 		'regular_price'=> '3,200,000',
-		'offer'       => '٪ 8',
-		'colors'      => array( '#0284c7', '#334155' ),
-		'keyword'     => 'Kieslect',
+		'offer'        => '٪ 8',
+		'colors'       => array( '#0284c7', '#334155' ),
+		'needles'      => array( 'Kr Pro', 'Kieslect' ),
 	),
 );
 ?>
@@ -148,36 +155,83 @@ $carousel_products_sec24 = array(
 							<div class="swiper swiper-top-selling-products-two-nk overflow-hidden w-100 h-100" data-swiper='{"autoHeight":false,"watchSlidesProgress":true,"breakpoints":{"320":{"slidesPerView":1,"spaceBetween":16},"576":{"slidesPerView":2,"spaceBetween":12},"992":{"slidesPerView":2.7,"spaceBetween":16},"1200":{"slidesPerView":3,"spaceBetween":24}}}' data-kaveh-swiper-mounted="1">
 								<div class="swiper-wrapper">
 									<?php foreach ( $carousel_products_sec24 as $idx => $prod ) : 
-										$match = negar_get_matching_product_info( $prod['keyword'], $shop_url );
-										if ( ! $match['id'] ) {
-											continue;
+										$product = function_exists( 'negar_theme_product_pack_product' )
+											? negar_theme_product_pack_product( 'smartwatches-2', $prod['slot'], $prod['needles'] )
+											: false;
+
+										if ( $product ) {
+											$prod_title       = $product->get_name();
+											$prod_short_title = wp_trim_words( $prod_title, 8, '...' );
+											$prod_url         = get_permalink( $product->get_id() );
+											$prod_id          = $product->get_id();
+											$img_id           = $product->get_image_id();
+											$prod_img         = $img_id ? wp_get_attachment_image_url( $img_id, 'woocommerce_thumbnail' ) : $prod['image'];
+											$rating           = (float) $product->get_average_rating();
+											$prod_rating      = $rating > 0 ? '5/' . number_format_i18n( $rating, 1 ) : '';
+
+											$is_on_sale       = $product->is_on_sale();
+											$price            = (float) $product->get_price();
+											$regular_price    = (float) $product->get_regular_price();
+											$sale_price       = (float) $product->get_sale_price();
+
+											$prod_price         = $price > 0 ? number_format_i18n( $price ) : '';
+											$prod_regular_price = ( $is_on_sale && $regular_price > $price ) ? number_format_i18n( $regular_price ) : '';
+											$prod_offer         = ( $is_on_sale && $regular_price > $sale_price && $regular_price > 0 )
+												? '٪ ' . (string) round( ( ( $regular_price - $sale_price ) / $regular_price ) * 100 )
+												: '';
+
+											$prod_colors = array();
+											$color_attr  = $product->get_attribute( 'pa_color' );
+											if ( ! empty( $color_attr ) && function_exists( 'wc_get_product_terms' ) ) {
+												$color_terms = wc_get_product_terms( $product->get_id(), 'pa_color', array( 'fields' => 'all' ) );
+												if ( ! empty( $color_terms ) && ! is_wp_error( $color_terms ) ) {
+													foreach ( $color_terms as $cterm ) {
+														$hex           = get_term_meta( $cterm->term_id, 'product_attribute_color', true );
+														$prod_colors[] = array(
+															'color' => $hex ? $hex : '#808080',
+															'name'  => $cterm->name,
+														);
+													}
+												}
+											}
+										} else {
+											$prod_title         = $prod['title'];
+											$prod_short_title   = ! empty( $prod['short_title'] ) ? $prod['short_title'] : $prod['title'];
+											$prod_url           = $shop_url;
+											$prod_id            = 0;
+											$prod_img           = $prod['image'];
+											$prod_rating        = $prod['rating'];
+											$prod_price         = $prod['price'];
+											$prod_regular_price = $prod['regular_price'];
+											$prod_offer         = $prod['offer'];
+											$prod_colors        = $prod['colors'];
 										}
-										$prod_url = $match['url'];
-										$prod_id  = $match['id'];
 									?>
 									<div class="swiper-slide" role="group" aria-label="<?php echo esc_attr( ( $idx + 1 ) . ' / ' . count( $carousel_products_sec24 ) ); ?>">
 										<div class="product-cart-thirty-three-nk h-100">
 											<div class="product-nk product-six-nk d-flex flex-column h-100 position-relative">
 												
-												<?php if ( ! empty( $prod['offer'] ) ) : ?>
+												<?php if ( ! empty( $prod_offer ) ) : ?>
 												<div class="offer position-absolute top-0 d-flex align-items-center justify-content-center f-iran-yekan text-white gap-1 gap-md-2">
-													<?php echo esc_html( $prod['offer'] ); ?>
+													<?php echo esc_html( $prod_offer ); ?>
 													<i class="icon-discount-4 lh-1" aria-hidden="true"></i>
 												</div>
 												<?php endif; ?>
 
+												<?php if ( ! empty( $prod_rating ) ) : ?>
 												<div class="rate d-flex align-items-center gap-1 gap-md-2 position-absolute">
-													<?php echo esc_html( $prod['rating'] ); ?>
+													<?php echo esc_html( $prod_rating ); ?>
 													<svg xmlns="http://www.w3.org/2000/svg" width="18" height="19" fill="none" viewBox="0 0 18 19" aria-hidden="true">
 														<path fill="#FFC700" stroke="#FFC700" stroke-linecap="round" stroke-linejoin="round" d="M11.543 4.407 12.6 6.522c.143.293.525.57.848.63l1.912.315c1.223.203 1.508 1.088.63 1.973l-1.492 1.492c-.248.248-.39.736-.308 1.088l.428 1.845c.337 1.455-.443 2.025-1.726 1.26L11.1 14.06c-.322-.195-.862-.195-1.185 0l-1.792 1.065c-1.283.758-2.063.195-1.725-1.26l.427-1.845c.083-.345-.06-.832-.307-1.088L5.025 9.44c-.877-.877-.592-1.763.63-1.973l1.913-.315c.322-.052.705-.337.847-.63l1.058-2.115c.562-1.147 1.492-1.147 2.07 0Z"></path>
 														<path stroke="#FFC700" stroke-linecap="round" stroke-linejoin="round" d="M6 4.25H1.5m2.25 10.5H1.5m.75-5.25H1.5" opacity=".4"></path>
 													</svg>
 												</div>
+												<?php endif; ?>
 
 												<div class="image position-relative">
-													<?php if ( ! empty( $prod['colors'] ) ) : ?>
+													<?php if ( ! empty( $prod_colors ) ) : ?>
 													<ul class="colors d-flex flex-column position-absolute">
-														<?php foreach ( $prod['colors'] as $c ) : 
+														<?php foreach ( $prod_colors as $c ) : 
 															$c_val = is_array( $c ) ? $c['color'] : $c;
 															$c_name = is_array( $c ) ? $c['name'] : '';
 														?>
@@ -186,12 +240,12 @@ $carousel_products_sec24 = array(
 													</ul>
 													<?php endif; ?>
 													<a href="<?php echo esc_url( $prod_url ); ?>" class="d-block">
-														<img loading="lazy" decoding="async" src="<?php echo esc_url( $prod['image'] ); ?>" alt="<?php echo esc_attr( $prod['title'] ); ?>" width="143" height="156" class="d-block w-auto mx-auto">
+														<img loading="lazy" decoding="async" src="<?php echo esc_url( $prod_img ); ?>" alt="<?php echo esc_attr( $prod_title ); ?>" width="143" height="156" class="d-block w-auto mx-auto">
 													</a>
 												</div>
 
 												<h2 class="title f-iran-yekan line-clamp-2">
-													<a href="<?php echo esc_url( $prod_url ); ?>"><?php echo esc_html( ! empty( $prod['short_title'] ) ? $prod['short_title'] : $prod['title'] ); ?></a>
+													<a href="<?php echo esc_url( $prod_url ); ?>"><?php echo esc_html( $prod_short_title ); ?></a>
 												</h2>
 
 												<div class="product-six-nk__footer d-flex align-items-end justify-content-between gap-2">
@@ -201,15 +255,17 @@ $carousel_products_sec24 = array(
 														</button>
 													</div>
 													<div class="price">
-														<?php if ( ! empty( $prod['regular_price'] ) ) : ?>
+														<?php if ( ! empty( $prod_regular_price ) ) : ?>
 														<div class="off">
-															<del class="fw-light f-iransans"><?php echo esc_html( $prod['regular_price'] ); ?></del>
+															<del class="fw-light f-iransans"><?php echo esc_html( $prod_regular_price ); ?></del>
 														</div>
 														<?php endif; ?>
+														<?php if ( ! empty( $prod_price ) ) : ?>
 														<div class="price d-flex align-items-center gap-1">
-															<?php echo esc_html( $prod['price'] ); ?>
+															<?php echo esc_html( $prod_price ); ?>
 															<span class="toman-symbol toman-symbol--modern lh-1"><svg width="19.5" height="18" viewBox="0 0 13 12" fill="#0a0a0a" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><use href="#kaveh-toman-mark"></use></svg></span>
 														</div>
+														<?php endif; ?>
 													</div>
 												</div>
 
@@ -228,47 +284,82 @@ $carousel_products_sec24 = array(
 								<div class="swiper swiper-top-selling-products-two-nk__discount swiper-fade" data-swiper='{"autoHeight":true,"slidesPerView":1,"spaceBetween":0,"effect":"fade","fadeEffect":{"crossFade":true},"pagination":{"el":".elementor-element-17ea5448 .top-selling-products-two-nk__discount .swiper-pagination","clickable":true}}' data-kaveh-swiper-mounted="1">
 									<div class="swiper-wrapper">
 									<?php foreach ( $discount_items_sec24 as $d_idx => $d_item ) :
-											$d_match = negar_get_matching_product_info( $d_item['keyword'], $shop_url );
-											if ( ! $d_match['id'] ) {
-												continue;
+											$d_product = function_exists( 'negar_theme_product_pack_product' )
+												? negar_theme_product_pack_product( 'smartwatches-2', $d_item['slot'], $d_item['needles'] )
+												: false;
+
+											if ( $d_product ) {
+												$d_title         = $d_product->get_name();
+												$d_short_title   = wp_trim_words( $d_title, 7, '...' );
+												$d_url           = get_permalink( $d_product->get_id() );
+												$d_img_id        = $d_product->get_image_id();
+												$d_img           = $d_img_id ? wp_get_attachment_image_url( $d_img_id, 'woocommerce_thumbnail' ) : $d_item['image'];
+												$d_is_on_sale    = $d_product->is_on_sale();
+												$d_price         = (float) $d_product->get_price();
+												$d_reg_price     = (float) $d_product->get_regular_price();
+												$d_sale_price_val = (float) $d_product->get_sale_price();
+
+												$d_discount      = ( $d_is_on_sale && $d_reg_price > $d_sale_price_val && $d_reg_price > 0 )
+													? (string) round( ( ( $d_reg_price - $d_sale_price_val ) / $d_reg_price ) * 100 )
+													: '';
+												$d_regular_price = ( $d_is_on_sale && $d_reg_price > $d_price ) ? number_format_i18n( $d_reg_price ) : '';
+												$d_sale_price    = $d_price > 0 ? number_format_i18n( $d_price ) : '';
+												$d_rating_val    = (float) $d_product->get_average_rating();
+												$d_rating        = $d_rating_val > 0 ? '5/' . number_format_i18n( $d_rating_val, 1 ) : '';
+												$d_comments      = number_format_i18n( $d_product->get_review_count() );
+											} else {
+												$d_title         = $d_item['title'];
+												$d_short_title   = $d_item['short_title'];
+												$d_url           = $shop_url;
+												$d_img           = $d_item['image'];
+												$d_discount      = $d_item['discount'];
+												$d_rating        = $d_item['rating'];
+												$d_comments      = $d_item['comments'];
+												$d_regular_price = $d_item['regular_price'];
+												$d_sale_price    = $d_item['sale_price'];
 											}
-											$d_url = $d_match['url'];
 										?>
 										<div class="swiper-slide" role="group" aria-label="<?php echo esc_attr( ( $d_idx + 1 ) . ' / ' . count( $discount_items_sec24 ) ); ?>">
 											<div class="top-selling-products-two-nk__discount__item position-relative">
-												<div class="off f-iran-yekan position-absolute">٪ <?php echo esc_html( $d_item['discount'] ); ?></div>
+												<?php if ( ! empty( $d_discount ) ) : ?>
+												<div class="off f-iran-yekan position-absolute">٪ <?php echo esc_html( $d_discount ); ?></div>
+												<?php endif; ?>
 												<div class="image position-relative mxw-fit mx-auto">
 													<div class="cir cir-1 position-absolute top-50 start-50 translate-middle rounded-circle"></div>
 													<div class="cir cir-2 position-absolute top-50 start-50 translate-middle rounded-circle"></div>
 													<div class="cir cir-3 position-absolute top-50 start-50 translate-middle rounded-circle"></div>
 													<a href="<?php echo esc_url( $d_url ); ?>" class="d-block">
-														<img loading="lazy" decoding="async" src="<?php echo esc_url( $d_item['image'] ); ?>" alt="<?php echo esc_attr( $d_item['title'] ); ?>" width="147" height="147" class="d-block w-auto">
+														<img loading="lazy" decoding="async" src="<?php echo esc_url( $d_img ); ?>" alt="<?php echo esc_attr( $d_title ); ?>" width="147" height="147" class="d-block w-auto">
 													</a>
 												</div>
 												<h2 class="title f-iran-yekan fw-semibold text-truncate">
-													<a href="<?php echo esc_url( $d_url ); ?>"><?php echo esc_html( $d_item['short_title'] ); ?></a>
+													<a href="<?php echo esc_url( $d_url ); ?>"><?php echo esc_html( $d_short_title ); ?></a>
 												</h2>
 												<div class="comments-rate d-none d-md-flex align-items-center">
 													<div class="comments f-iransans">
-														<?php echo esc_html( $d_item['comments'] ); ?> نظر
+														<?php echo esc_html( $d_comments ); ?> نظر
 													</div>
 													<div class="line flex-grow-1"></div>
+													<?php if ( ! empty( $d_rating ) ) : ?>
 													<div class="rate d-flex align-items-center justify-content-end gap-1 gap-md-2">
-														<?php echo esc_html( $d_item['rating'] ); ?>
+														<?php echo esc_html( $d_rating ); ?>
 														<svg xmlns="http://www.w3.org/2000/svg" width="18" height="19" fill="none" viewBox="0 0 18 19" aria-hidden="true">
 															<path fill="#FFC700" stroke="#FFC700" stroke-linecap="round" stroke-linejoin="round" d="M11.543 4.407 12.6 6.522c.143.293.525.57.848.63l1.912.315c1.223.203 1.508 1.088.63 1.973l-1.492 1.492c-.248.248-.39.736-.308 1.088l.428 1.845c.337 1.455-.443 2.025-1.726 1.26L11.1 14.06c-.322-.195-.862-.195-1.185 0l-1.792 1.065c-1.283.758-2.063.195-1.725-1.26l.427-1.845c.083-.345-.06-.832-.307-1.088L5.025 9.44c-.877-.877-.592-1.763.63-1.973l1.913-.315c.322-.052.705-.337.847-.63l1.058-2.115c.562-1.147 1.492-1.147 2.07 0Z"></path>
 															<path stroke="#FFC700" stroke-linecap="round" stroke-linejoin="round" d="M6 4.25H1.5m2.25 10.5H1.5m.75-5.25H1.5" opacity=".4"></path>
 														</svg>
 													</div>
+													<?php endif; ?>
 												</div>
 												<div class="price d-flex align-items-center gap-2">
-													<?php if ( ! empty( $d_item['regular_price'] ) ) : ?>
-													<del class="f-iransans fw-normal"><?php echo esc_html( $d_item['regular_price'] ); ?></del>
+													<?php if ( ! empty( $d_regular_price ) ) : ?>
+													<del class="f-iransans fw-normal"><?php echo esc_html( $d_regular_price ); ?></del>
 													<?php endif; ?>
+													<?php if ( ! empty( $d_sale_price ) ) : ?>
 													<div class="price ms-auto f-iransans fw-semibold d-flex align-items-center gap-1">
-														<span><?php echo esc_html( $d_item['sale_price'] ); ?></span>
+														<span><?php echo esc_html( $d_sale_price ); ?></span>
 														<span class="toman-symbol toman-symbol--modern lh-1"><svg width="19.5" height="18" viewBox="0 0 13 12" fill="#0a0a0a" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><use href="#kaveh-toman-mark"></use></svg></span>
 													</div>
+													<?php endif; ?>
 												</div>
 												<a href="<?php echo esc_url( $d_url ); ?>" class="btn-more d-flex align-items-center justify-content-center position-absolute bottom-0 end-50" aria-label="مشاهده محصول">
 													<i class="icon icon-chevron-left-2 lh-1" aria-hidden="true"></i>
