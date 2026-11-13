@@ -119,3 +119,28 @@ non-Elementor front page:
   uses SQL `LIKE '%needle%'`. For stores with extensive catalogs, explicitly
   assigning products via Theme Settings › Banners & Packs completely bypasses
   fallback queries and executes in O(1) post lookup time.
+
+## Product pack management & truthful data hardening (Phase 5.4)
+
+- **Managed packs:** All seven code-owned product showcase components are connected
+  to the Settings API (`negar_theme_product_pack_options`):
+  1. `gaming-zone`: 4 interactive hotspots.
+  2. `taste-grid`: 16 slots across 4 curated categories (2x2 layout per category).
+  3. `feature-bar-1`: 4 numbered items in fade carousel.
+  4. `feature-bar-2`: 4 numbered items in fade carousel.
+  5. `smartwatches-2`: 2 promo showcase items + 5 carousel items.
+  6. `mobile-spotlight`: 1 focal showcase product (adjacent to 3 dynamic query cards).
+  7. `feature-bar-3`: 4 numbered items in fade carousel.
+- **Truthful non-commercial empty states:**
+  - When manual selection is unassigned and bounded fallback needle matching yields
+    no published catalog-visible product, templates render a clean, non-commercial
+    empty state with `.is-empty`.
+  - Suppresses all commercial metrics: zero fabricated prices, no strike-through prices,
+    no fake discount tags, no fabricated star ratings, and no invented review counts.
+  - Image slots fallback strictly to `wc_placeholder_img_src()` rather than unrelated demo assets.
+  - Action controls are safe: add-to-cart buttons are suppressed on empty slots; variable
+    products link to single product pages for option selection; simple in-stock products
+    pass verified WooCommerce product IDs.
+- **Query robustness:**
+  - `negar_theme_find_product_by_title_needles()` wraps the temporary `posts_where` filter
+    in `try ... finally` to guarantee filter detachment even upon database or memory faults.

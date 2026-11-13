@@ -194,9 +194,26 @@ whitelists seven code-owned components and their fixed slot identifiers:
 - **Resolution priority:** `negar_theme_product_pack_product( $pack_id, $slot_id, $needles )`
   resolves explicitly assigned products with $O(1)$ efficiency. If unassigned or invalid,
   it falls back to bounded needle lookups via `negar_theme_find_product_by_title_needles()`.
-- **Authentic commerce:** When matched, each template renders real titles, images,
-  prices, discounts, ratings and review counts directly from the `WC_Product` object.
-  No fake customer, review, or pricing data is ever fabricated.
+  The `posts_where` filter in `negar_theme_find_product_by_title_needles()` is safely enclosed
+  in a `try ... finally` block, ensuring filter detachment even upon unexpected failures.
+- **Authentic commerce & truthful empty states:** When matched, each template renders real
+  titles, images, prices, discounts, ratings, review counts, and attribute swatches directly
+  from the `WC_Product` object.
+  - *Missing products:* When a product cannot be resolved, templates render a truthful,
+    non-commercial empty state (`.is-empty`, standard WooCommerce placeholder image via
+    `wc_placeholder_img_src()`, localized neutral labels `محصولی برای نمایش موجود نیست` and `ناموجود`).
+    No fabricated prices, strike-through amounts, fake discounts, star ratings, review counts,
+    or invalid add-to-cart controls are ever rendered.
+  - *Image fidelity:* Real products lacking a featured image display the standard WooCommerce
+    placeholder rather than unrelated demonstration photos.
+  - *Description neutrality:* In `sec-28-mobile-spotlight`, real products lacking a short
+    description render neutral store copy rather than hardcoded Samsung Galaxy S25 FE specifications.
+  - *Color swatch validation:* Color attributes (`pa_color`) strictly validate term hex metadata
+    (`preg_match('/^#([a-f0-9]{3}){1,2}$/i', $hex)`); invalid or missing values never fall back to
+    an invented `#808080` swatch.
+  - *Action safety:* In `sec-24-smartwatches-2`, variable products link directly to the product permalink
+    for variation selection; purchasable simple products emit verified product IDs; empty slots suppress
+    all add-to-cart buttons.
 
 ## Planned schema additions
 
