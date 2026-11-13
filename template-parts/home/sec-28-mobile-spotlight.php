@@ -15,6 +15,35 @@ if ( ! defined( 'ABSPATH' ) ) {
 $upload_dir = wp_upload_dir();
 $s25_img    = $upload_dir['baseurl'] . '/kaveh-demo/products/samsung-s25-fe.png';
 
+$focal_product = function_exists( 'negar_theme_product_pack_product' )
+	? negar_theme_product_pack_product( 'mobile-spotlight', 'focal', array( 'Galaxy S25 FE', 'S25 FE', 'Galaxy S25' ) )
+	: false;
+
+if ( $focal_product ) {
+	$focal_title     = $focal_product->get_name();
+	$focal_short_desc = wp_strip_all_tags( $focal_product->get_short_description() );
+	$focal_desc      = ! empty( $focal_short_desc ) ? $focal_short_desc : __( 'صفحه نمایش Dynamic AMOLED 2X با پردازنده قدرتمند و هوش مصنوعی Galaxy AI.', 'negar-shop' );
+	$focal_url       = get_permalink( $focal_product->get_id() );
+	$focal_img_id    = $focal_product->get_image_id();
+	$focal_image     = $focal_img_id ? wp_get_attachment_image_url( $focal_img_id, 'large' ) : $s25_img;
+	$focal_rating_val = (float) $focal_product->get_average_rating();
+	$focal_rating    = $focal_rating_val > 0 ? '★ ' . number_format_i18n( $focal_rating_val, 1 ) : '';
+
+	$focal_is_sale   = $focal_product->is_on_sale();
+	$focal_cur_price = (float) $focal_product->get_price();
+	$focal_reg_price = (float) $focal_product->get_regular_price();
+	$focal_price_txt = $focal_cur_price > 0 ? number_format_i18n( $focal_cur_price ) . ' ' . __( 'تومان', 'negar-shop' ) : '';
+	$focal_del_txt   = ( $focal_is_sale && $focal_reg_price > $focal_cur_price ) ? number_format_i18n( $focal_reg_price ) . ' ' . __( 'تومان', 'negar-shop' ) : '';
+} else {
+	$focal_title     = __( 'گوشی موبایل سامسونگ مدل Galaxy S25 FE دو سیم‌کارت ظرفیت ۲۵۶ گیگابایت', 'negar-shop' );
+	$focal_desc      = __( 'صفحه نمایش Dynamic AMOLED 2X با پردازنده قدرتمند و هوش مصنوعی Galaxy AI.', 'negar-shop' );
+	$focal_url       = wc_get_page_permalink( 'shop' );
+	$focal_image     = $s25_img;
+	$focal_rating    = '★ ۴.۹';
+	$focal_price_txt = '۴۴,۵۰۰,۰۰۰ تومان';
+	$focal_del_txt   = '۴۹,۸۰۰,۰۰۰ تومان';
+}
+
 $adjacent_products = new WP_Query(
 	negar_theme_catalog_visibility_query_args( negar_theme_product_section_is_configured( 'mobile-spotlight-products' )
 		? negar_theme_product_section_query_args( 'mobile-spotlight-products', array( 'post_type' => 'product', 'post_status' => 'publish' ) )
@@ -57,26 +86,34 @@ $adjacent_products = new WP_Query(
 					<span class="text-3xs font-bold text-blue-600 bg-blue-100/70 px-2.5 py-0.5 rounded-full">
 						<?php esc_html_e( 'پیشنهاد ویژه هواداران سامسونگ', 'negar-shop' ); ?>
 					</span>
-					<span class="text-amber-500 font-bold text-xs flex items-center gap-1">★ ۴.۹</span>
+					<?php if ( ! empty( $focal_rating ) ) : ?>
+						<span class="text-amber-500 font-bold text-xs flex items-center gap-1"><?php echo esc_html( $focal_rating ); ?></span>
+					<?php endif; ?>
 				</div>
 				
 				<div class="h-[200px] flex items-center justify-center p-2 my-1">
-					<img src="<?php echo esc_url( $s25_img ); ?>" alt="<?php esc_attr_e( 'گوشی سامسونگ Galaxy S25 FE', 'negar-shop' ); ?>" class="max-h-full max-w-full object-contain hover:scale-105 transition-transform duration-500">
+					<a href="<?php echo esc_url( $focal_url ); ?>" class="d-flex align-items-center justify-content-center h-full w-full">
+						<img src="<?php echo esc_url( $focal_image ); ?>" alt="<?php echo esc_attr( $focal_title ); ?>" class="max-h-full max-w-full object-contain hover:scale-105 transition-transform duration-500">
+					</a>
 				</div>
 
 				<div>
 					<h3 class="text-sm md:text-base font-black text-[#212341] mb-1 line-clamp-2">
-						<?php esc_html_e( 'گوشی موبایل سامسونگ مدل Galaxy S25 FE دو سیم‌کارت ظرفیت ۲۵۶ گیگابایت', 'negar-shop' ); ?>
+						<a href="<?php echo esc_url( $focal_url ); ?>" class="text-reset text-decoration-none"><?php echo esc_html( $focal_title ); ?></a>
 					</h3>
 					<p class="text-2xs text-slate-500 line-clamp-2 leading-relaxed mb-3">
-						<?php esc_html_e( 'صفحه نمایش Dynamic AMOLED 2X با پردازنده قدرتمند و هوش مصنوعی Galaxy AI.', 'negar-shop' ); ?>
+						<?php echo esc_html( $focal_desc ); ?>
 					</p>
 					<div class="flex items-center justify-between pt-2.5 border-t border-slate-100">
 						<div>
-							<span class="text-3xs text-slate-400 block line-through">۴۹,۸۰۰,۰۰۰ تومان</span>
-							<span class="text-sm font-black text-rose-600">۴۴,۵۰۰,۰۰۰ تومان</span>
+							<?php if ( ! empty( $focal_del_txt ) ) : ?>
+								<span class="text-3xs text-slate-400 block line-through"><?php echo esc_html( $focal_del_txt ); ?></span>
+							<?php endif; ?>
+							<?php if ( ! empty( $focal_price_txt ) ) : ?>
+								<span class="text-sm font-black text-rose-600"><?php echo esc_html( $focal_price_txt ); ?></span>
+							<?php endif; ?>
 						</div>
-						<a href="<?php echo esc_url( wc_get_page_permalink( 'shop' ) ); ?>" class="bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs px-4 py-2 rounded-full transition shadow-xs">
+						<a href="<?php echo esc_url( $focal_url ); ?>" class="bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs px-4 py-2 rounded-full transition shadow-xs">
 							<?php esc_html_e( 'خرید آنی', 'negar-shop' ); ?>
 						</a>
 					</div>
