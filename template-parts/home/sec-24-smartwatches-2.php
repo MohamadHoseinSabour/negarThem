@@ -165,7 +165,7 @@ $carousel_products_sec24 = array(
 											$prod_url         = get_permalink( $product->get_id() );
 											$prod_id          = $product->get_id();
 											$img_id           = $product->get_image_id();
-											$prod_img         = $img_id ? wp_get_attachment_image_url( $img_id, 'woocommerce_thumbnail' ) : $prod['image'];
+											$prod_img         = $img_id ? wp_get_attachment_image_url( $img_id, 'woocommerce_thumbnail' ) : ( function_exists( 'wc_placeholder_img_src' ) ? wc_placeholder_img_src( 'woocommerce_thumbnail' ) : '' );
 											$rating           = (float) $product->get_average_rating();
 											$prod_rating      = $rating > 0 ? '5/' . number_format_i18n( $rating, 1 ) : '';
 
@@ -175,7 +175,7 @@ $carousel_products_sec24 = array(
 											$sale_price       = (float) $product->get_sale_price();
 
 											$prod_price         = $price > 0 ? number_format_i18n( $price ) : '';
-											$prod_regular_price = ( $is_on_sale && $regular_price > $price ) ? number_format_i18n( $regular_price ) : '';
+											$prod_regular_price = ( $is_on_sale && $regular_price > $price && $regular_price > 0 ) ? number_format_i18n( $regular_price ) : '';
 											$prod_offer         = ( $is_on_sale && $regular_price > $sale_price && $regular_price > 0 )
 												? '٪ ' . (string) round( ( ( $regular_price - $sale_price ) / $regular_price ) * 100 )
 												: '';
@@ -186,30 +186,32 @@ $carousel_products_sec24 = array(
 												$color_terms = wc_get_product_terms( $product->get_id(), 'pa_color', array( 'fields' => 'all' ) );
 												if ( ! empty( $color_terms ) && ! is_wp_error( $color_terms ) ) {
 													foreach ( $color_terms as $cterm ) {
-														$hex           = get_term_meta( $cterm->term_id, 'product_attribute_color', true );
-														$prod_colors[] = array(
-															'color' => $hex ? $hex : '#808080',
-															'name'  => $cterm->name,
-														);
+														$hex = get_term_meta( $cterm->term_id, 'product_attribute_color', true );
+														if ( $hex && preg_match( '/^#([a-f0-9]{3}){1,2}$/i', $hex ) ) {
+															$prod_colors[] = array(
+																'color' => $hex,
+																'name'  => $cterm->name,
+															);
+														}
 													}
 												}
 											}
 										} else {
-											$prod_title         = $prod['title'];
-											$prod_short_title   = ! empty( $prod['short_title'] ) ? $prod['short_title'] : $prod['title'];
-											$prod_url           = $shop_url;
+											$prod_title         = __( 'محصولی برای نمایش موجود نیست', 'negar-shop' );
+											$prod_short_title   = $prod_title;
+											$prod_url           = '';
 											$prod_id            = 0;
-											$prod_img           = $prod['image'];
-											$prod_rating        = $prod['rating'];
-											$prod_price         = $prod['price'];
-											$prod_regular_price = $prod['regular_price'];
-											$prod_offer         = $prod['offer'];
-											$prod_colors        = $prod['colors'];
+											$prod_img           = function_exists( 'wc_placeholder_img_src' ) ? wc_placeholder_img_src( 'woocommerce_thumbnail' ) : '';
+											$prod_rating        = '';
+											$prod_price         = '';
+											$prod_regular_price = '';
+											$prod_offer         = '';
+											$prod_colors        = array();
 										}
 									?>
 									<div class="swiper-slide" role="group" aria-label="<?php echo esc_attr( ( $idx + 1 ) . ' / ' . count( $carousel_products_sec24 ) ); ?>">
 										<div class="product-cart-thirty-three-nk h-100">
-											<div class="product-nk product-six-nk d-flex flex-column h-100 position-relative">
+											<div class="product-nk product-six-nk d-flex flex-column h-100 position-relative<?php echo ! $product ? ' is-empty' : ''; ?>">
 												
 												<?php if ( ! empty( $prod_offer ) ) : ?>
 												<div class="offer position-absolute top-0 d-flex align-items-center justify-content-center f-iran-yekan text-white gap-1 gap-md-2">
@@ -228,7 +230,7 @@ $carousel_products_sec24 = array(
 												</div>
 												<?php endif; ?>
 
-												<div class="image position-relative">
+												<div class="image position-relative<?php echo ! $product ? ' opacity-50' : ''; ?>">
 													<?php if ( ! empty( $prod_colors ) ) : ?>
 													<ul class="colors d-flex flex-column position-absolute">
 														<?php foreach ( $prod_colors as $c ) : 
@@ -239,34 +241,60 @@ $carousel_products_sec24 = array(
 														<?php endforeach; ?>
 													</ul>
 													<?php endif; ?>
-													<a href="<?php echo esc_url( $prod_url ); ?>" class="d-block">
-														<img loading="lazy" decoding="async" src="<?php echo esc_url( $prod_img ); ?>" alt="<?php echo esc_attr( $prod_title ); ?>" width="143" height="156" class="d-block w-auto mx-auto">
-													</a>
+													<?php if ( $product && $prod_url ) : ?>
+														<a href="<?php echo esc_url( $prod_url ); ?>" class="d-block">
+															<img loading="lazy" decoding="async" src="<?php echo esc_url( $prod_img ); ?>" alt="<?php echo esc_attr( $prod_title ); ?>" width="143" height="156" class="d-block w-auto mx-auto">
+														</a>
+													<?php else : ?>
+														<div class="d-block">
+															<img loading="lazy" decoding="async" src="<?php echo esc_url( $prod_img ); ?>" alt="<?php echo esc_attr( $prod_title ); ?>" width="143" height="156" class="d-block w-auto mx-auto">
+														</div>
+													<?php endif; ?>
 												</div>
 
-												<h2 class="title f-iran-yekan line-clamp-2">
-													<a href="<?php echo esc_url( $prod_url ); ?>"><?php echo esc_html( $prod_short_title ); ?></a>
+												<h2 class="title f-iran-yekan line-clamp-2<?php echo ! $product ? ' text-muted' : ''; ?>">
+													<?php if ( $product && $prod_url ) : ?>
+														<a href="<?php echo esc_url( $prod_url ); ?>"><?php echo esc_html( $prod_short_title ); ?></a>
+													<?php else : ?>
+														<span><?php echo esc_html( $prod_short_title ); ?></span>
+													<?php endif; ?>
 												</h2>
 
 												<div class="product-six-nk__footer d-flex align-items-end justify-content-between gap-2">
-													<div class="add-to-cart buy-now d-flex align-items-center align-self-center">
-														<button type="button" class="kaveh-variation-modal-trigger buy-now__btn d-flex align-items-center justify-content-center rounded-circle flex-fill flex-grow-0 flex-shrink-0" data-product_id="<?php echo esc_attr( $prod_id ); ?>" aria-label="افزودن به سبد خرید">
-															<i class="icon icon-bag-6 lh-1" aria-hidden="true"></i>
-														</button>
-													</div>
-													<div class="price">
-														<?php if ( ! empty( $prod_regular_price ) ) : ?>
-														<div class="off">
-															<del class="fw-light f-iransans"><?php echo esc_html( $prod_regular_price ); ?></del>
+													<?php if ( $product ) : ?>
+														<div class="add-to-cart buy-now d-flex align-items-center align-self-center">
+															<?php if ( $product->is_type( 'variable' ) ) : ?>
+																<a href="<?php echo esc_url( $prod_url ); ?>" class="buy-now__btn d-flex align-items-center justify-content-center rounded-circle flex-fill flex-grow-0 flex-shrink-0" aria-label="<?php echo esc_attr__( 'مشاهده و انتخاب گزینه‌ها', 'negar-shop' ); ?>">
+																	<i class="icon icon-chevron-left-2 lh-1" aria-hidden="true"></i>
+																</a>
+															<?php elseif ( $product->is_purchasable() && $product->is_in_stock() ) : ?>
+																<button type="button" class="kaveh-variation-modal-trigger buy-now__btn d-flex align-items-center justify-content-center rounded-circle flex-fill flex-grow-0 flex-shrink-0" data-product_id="<?php echo esc_attr( $prod_id ); ?>" aria-label="<?php echo esc_attr__( 'افزودن به سبد خرید', 'negar-shop' ); ?>">
+																	<i class="icon icon-bag-6 lh-1" aria-hidden="true"></i>
+																</button>
+															<?php else : ?>
+																<button type="button" class="buy-now__btn d-flex align-items-center justify-content-center rounded-circle flex-fill flex-grow-0 flex-shrink-0 disabled" disabled aria-label="<?php echo esc_attr__( 'ناموجود', 'negar-shop' ); ?>">
+																	<i class="icon icon-bag-6 lh-1 opacity-50" aria-hidden="true"></i>
+																</button>
+															<?php endif; ?>
 														</div>
-														<?php endif; ?>
-														<?php if ( ! empty( $prod_price ) ) : ?>
-														<div class="price d-flex align-items-center gap-1">
-															<?php echo esc_html( $prod_price ); ?>
-															<span class="toman-symbol toman-symbol--modern lh-1"><svg width="19.5" height="18" viewBox="0 0 13 12" fill="#0a0a0a" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><use href="#kaveh-toman-mark"></use></svg></span>
+														<div class="price">
+															<?php if ( ! empty( $prod_regular_price ) ) : ?>
+															<div class="off">
+																<del class="fw-light f-iransans"><?php echo esc_html( $prod_regular_price ); ?></del>
+															</div>
+															<?php endif; ?>
+															<?php if ( ! empty( $prod_price ) ) : ?>
+															<div class="price d-flex align-items-center gap-1">
+																<?php echo esc_html( $prod_price ); ?>
+																<span class="toman-symbol toman-symbol--modern lh-1"><svg width="19.5" height="18" viewBox="0 0 13 12" fill="#0a0a0a" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><use href="#kaveh-toman-mark"></use></svg></span>
+															</div>
+															<?php endif; ?>
 														</div>
-														<?php endif; ?>
-													</div>
+													<?php else : ?>
+														<div class="price ms-auto">
+															<span class="text-muted small f-iran-yekan"><?php esc_html_e( 'ناموجود', 'negar-shop' ); ?></span>
+														</div>
+													<?php endif; ?>
 												</div>
 
 											</div>
@@ -289,81 +317,100 @@ $carousel_products_sec24 = array(
 												: false;
 
 											if ( $d_product ) {
-												$d_title         = $d_product->get_name();
-												$d_short_title   = wp_trim_words( $d_title, 7, '...' );
-												$d_url           = get_permalink( $d_product->get_id() );
-												$d_img_id        = $d_product->get_image_id();
-												$d_img           = $d_img_id ? wp_get_attachment_image_url( $d_img_id, 'woocommerce_thumbnail' ) : $d_item['image'];
-												$d_is_on_sale    = $d_product->is_on_sale();
-												$d_price         = (float) $d_product->get_price();
-												$d_reg_price     = (float) $d_product->get_regular_price();
+												$d_title          = $d_product->get_name();
+												$d_short_title    = wp_trim_words( $d_title, 7, '...' );
+												$d_url            = get_permalink( $d_product->get_id() );
+												$d_img_id         = $d_product->get_image_id();
+												$d_img            = $d_img_id ? wp_get_attachment_image_url( $d_img_id, 'woocommerce_thumbnail' ) : ( function_exists( 'wc_placeholder_img_src' ) ? wc_placeholder_img_src( 'woocommerce_thumbnail' ) : '' );
+												$d_is_on_sale     = $d_product->is_on_sale();
+												$d_price          = (float) $d_product->get_price();
+												$d_reg_price      = (float) $d_product->get_regular_price();
 												$d_sale_price_val = (float) $d_product->get_sale_price();
 
 												$d_discount      = ( $d_is_on_sale && $d_reg_price > $d_sale_price_val && $d_reg_price > 0 )
 													? (string) round( ( ( $d_reg_price - $d_sale_price_val ) / $d_reg_price ) * 100 )
 													: '';
-												$d_regular_price = ( $d_is_on_sale && $d_reg_price > $d_price ) ? number_format_i18n( $d_reg_price ) : '';
+												$d_regular_price = ( $d_is_on_sale && $d_reg_price > $d_price && $d_reg_price > 0 ) ? number_format_i18n( $d_reg_price ) : '';
 												$d_sale_price    = $d_price > 0 ? number_format_i18n( $d_price ) : '';
 												$d_rating_val    = (float) $d_product->get_average_rating();
 												$d_rating        = $d_rating_val > 0 ? '5/' . number_format_i18n( $d_rating_val, 1 ) : '';
-												$d_comments      = number_format_i18n( $d_product->get_review_count() );
+												$d_comments_cnt  = $d_product->get_review_count();
+												$d_comments      = $d_comments_cnt > 0 ? number_format_i18n( $d_comments_cnt ) : '';
 											} else {
-												$d_title         = $d_item['title'];
-												$d_short_title   = $d_item['short_title'];
-												$d_url           = $shop_url;
-												$d_img           = $d_item['image'];
-												$d_discount      = $d_item['discount'];
-												$d_rating        = $d_item['rating'];
-												$d_comments      = $d_item['comments'];
-												$d_regular_price = $d_item['regular_price'];
-												$d_sale_price    = $d_item['sale_price'];
+												$d_title         = __( 'محصولی برای نمایش موجود نیست', 'negar-shop' );
+												$d_short_title   = $d_title;
+												$d_url           = '';
+												$d_img           = function_exists( 'wc_placeholder_img_src' ) ? wc_placeholder_img_src( 'woocommerce_thumbnail' ) : '';
+												$d_discount      = '';
+												$d_rating        = '';
+												$d_comments      = '';
+												$d_regular_price = '';
+												$d_sale_price    = '';
 											}
 										?>
 										<div class="swiper-slide" role="group" aria-label="<?php echo esc_attr( ( $d_idx + 1 ) . ' / ' . count( $discount_items_sec24 ) ); ?>">
-											<div class="top-selling-products-two-nk__discount__item position-relative">
+											<div class="top-selling-products-two-nk__discount__item position-relative<?php echo ! $d_product ? ' is-empty' : ''; ?>">
 												<?php if ( ! empty( $d_discount ) ) : ?>
 												<div class="off f-iran-yekan position-absolute">٪ <?php echo esc_html( $d_discount ); ?></div>
 												<?php endif; ?>
-												<div class="image position-relative mxw-fit mx-auto">
+												<div class="image position-relative mxw-fit mx-auto<?php echo ! $d_product ? ' opacity-50' : ''; ?>">
 													<div class="cir cir-1 position-absolute top-50 start-50 translate-middle rounded-circle"></div>
 													<div class="cir cir-2 position-absolute top-50 start-50 translate-middle rounded-circle"></div>
 													<div class="cir cir-3 position-absolute top-50 start-50 translate-middle rounded-circle"></div>
-													<a href="<?php echo esc_url( $d_url ); ?>" class="d-block">
-														<img loading="lazy" decoding="async" src="<?php echo esc_url( $d_img ); ?>" alt="<?php echo esc_attr( $d_title ); ?>" width="147" height="147" class="d-block w-auto">
-													</a>
+													<?php if ( $d_product && $d_url ) : ?>
+														<a href="<?php echo esc_url( $d_url ); ?>" class="d-block">
+															<img loading="lazy" decoding="async" src="<?php echo esc_url( $d_img ); ?>" alt="<?php echo esc_attr( $d_title ); ?>" width="147" height="147" class="d-block w-auto">
+														</a>
+													<?php else : ?>
+														<div class="d-block">
+															<img loading="lazy" decoding="async" src="<?php echo esc_url( $d_img ); ?>" alt="<?php echo esc_attr( $d_title ); ?>" width="147" height="147" class="d-block w-auto">
+														</div>
+													<?php endif; ?>
 												</div>
-												<h2 class="title f-iran-yekan fw-semibold text-truncate">
-													<a href="<?php echo esc_url( $d_url ); ?>"><?php echo esc_html( $d_short_title ); ?></a>
+												<h2 class="title f-iran-yekan fw-semibold text-truncate<?php echo ! $d_product ? ' text-muted' : ''; ?>">
+													<?php if ( $d_product && $d_url ) : ?>
+														<a href="<?php echo esc_url( $d_url ); ?>"><?php echo esc_html( $d_short_title ); ?></a>
+													<?php else : ?>
+														<span><?php echo esc_html( $d_short_title ); ?></span>
+													<?php endif; ?>
 												</h2>
-												<div class="comments-rate d-none d-md-flex align-items-center">
-													<div class="comments f-iransans">
-														<?php echo esc_html( $d_comments ); ?> نظر
+												<?php if ( $d_product ) : ?>
+													<div class="comments-rate d-none d-md-flex align-items-center">
+														<?php if ( ! empty( $d_comments ) ) : ?>
+															<div class="comments f-iransans">
+																<?php echo esc_html( $d_comments ); ?> نظر
+															</div>
+														<?php endif; ?>
+														<div class="line flex-grow-1"></div>
+														<?php if ( ! empty( $d_rating ) ) : ?>
+														<div class="rate d-flex align-items-center justify-content-end gap-1 gap-md-2">
+															<?php echo esc_html( $d_rating ); ?>
+															<svg xmlns="http://www.w3.org/2000/svg" width="18" height="19" fill="none" viewBox="0 0 18 19" aria-hidden="true">
+																<path fill="#FFC700" stroke="#FFC700" stroke-linecap="round" stroke-linejoin="round" d="M11.543 4.407 12.6 6.522c.143.293.525.57.848.63l1.912.315c1.223.203 1.508 1.088.63 1.973l-1.492 1.492c-.248.248-.39.736-.308 1.088l.428 1.845c.337 1.455-.443 2.025-1.726 1.26L11.1 14.06c-.322-.195-.862-.195-1.185 0l-1.792 1.065c-1.283.758-2.063.195-1.725-1.26l.427-1.845c.083-.345-.06-.832-.307-1.088L5.025 9.44c-.877-.877-.592-1.763.63-1.973l1.913-.315c.322-.052.705-.337.847-.63l1.058-2.115c.562-1.147 1.492-1.147 2.07 0Z"></path>
+																<path stroke="#FFC700" stroke-linecap="round" stroke-linejoin="round" d="M6 4.25H1.5m2.25 10.5H1.5m.75-5.25H1.5" opacity=".4"></path>
+															</svg>
+														</div>
+														<?php endif; ?>
 													</div>
-													<div class="line flex-grow-1"></div>
-													<?php if ( ! empty( $d_rating ) ) : ?>
-													<div class="rate d-flex align-items-center justify-content-end gap-1 gap-md-2">
-														<?php echo esc_html( $d_rating ); ?>
-														<svg xmlns="http://www.w3.org/2000/svg" width="18" height="19" fill="none" viewBox="0 0 18 19" aria-hidden="true">
-															<path fill="#FFC700" stroke="#FFC700" stroke-linecap="round" stroke-linejoin="round" d="M11.543 4.407 12.6 6.522c.143.293.525.57.848.63l1.912.315c1.223.203 1.508 1.088.63 1.973l-1.492 1.492c-.248.248-.39.736-.308 1.088l.428 1.845c.337 1.455-.443 2.025-1.726 1.26L11.1 14.06c-.322-.195-.862-.195-1.185 0l-1.792 1.065c-1.283.758-2.063.195-1.725-1.26l.427-1.845c.083-.345-.06-.832-.307-1.088L5.025 9.44c-.877-.877-.592-1.763.63-1.973l1.913-.315c.322-.052.705-.337.847-.63l1.058-2.115c.562-1.147 1.492-1.147 2.07 0Z"></path>
-															<path stroke="#FFC700" stroke-linecap="round" stroke-linejoin="round" d="M6 4.25H1.5m2.25 10.5H1.5m.75-5.25H1.5" opacity=".4"></path>
-														</svg>
+													<div class="price d-flex align-items-center gap-2">
+														<?php if ( ! empty( $d_regular_price ) ) : ?>
+														<del class="f-iransans fw-normal"><?php echo esc_html( $d_regular_price ); ?></del>
+														<?php endif; ?>
+														<?php if ( ! empty( $d_sale_price ) ) : ?>
+														<div class="price ms-auto f-iransans fw-semibold d-flex align-items-center gap-1">
+															<span><?php echo esc_html( $d_sale_price ); ?></span>
+															<span class="toman-symbol toman-symbol--modern lh-1"><svg width="19.5" height="18" viewBox="0 0 13 12" fill="#0a0a0a" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><use href="#kaveh-toman-mark"></use></svg></span>
+														</div>
+														<?php endif; ?>
 													</div>
-													<?php endif; ?>
-												</div>
-												<div class="price d-flex align-items-center gap-2">
-													<?php if ( ! empty( $d_regular_price ) ) : ?>
-													<del class="f-iransans fw-normal"><?php echo esc_html( $d_regular_price ); ?></del>
-													<?php endif; ?>
-													<?php if ( ! empty( $d_sale_price ) ) : ?>
-													<div class="price ms-auto f-iransans fw-semibold d-flex align-items-center gap-1">
-														<span><?php echo esc_html( $d_sale_price ); ?></span>
-														<span class="toman-symbol toman-symbol--modern lh-1"><svg width="19.5" height="18" viewBox="0 0 13 12" fill="#0a0a0a" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><use href="#kaveh-toman-mark"></use></svg></span>
+													<a href="<?php echo esc_url( $d_url ); ?>" class="btn-more d-flex align-items-center justify-content-center position-absolute bottom-0 end-50" aria-label="مشاهده محصول">
+														<i class="icon icon-chevron-left-2 lh-1" aria-hidden="true"></i>
+													</a>
+												<?php else : ?>
+													<div class="price d-flex align-items-center justify-content-center my-3">
+														<span class="text-muted small f-iran-yekan"><?php esc_html_e( 'ناموجود', 'negar-shop' ); ?></span>
 													</div>
-													<?php endif; ?>
-												</div>
-												<a href="<?php echo esc_url( $d_url ); ?>" class="btn-more d-flex align-items-center justify-content-center position-absolute bottom-0 end-50" aria-label="مشاهده محصول">
-													<i class="icon icon-chevron-left-2 lh-1" aria-hidden="true"></i>
-												</a>
+												<?php endif; ?>
 											</div>
 										</div>
 										<?php endforeach; ?>

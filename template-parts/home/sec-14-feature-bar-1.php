@@ -107,21 +107,21 @@ $top_products = array(
 											$item_title = $product->get_name();
 											$item_url   = get_permalink( $product->get_id() );
 											$img_id     = $product->get_image_id();
-											$item_img   = $img_id ? wp_get_attachment_image_url( $img_id, 'woocommerce_thumbnail' ) : $item['img'];
+											$item_img   = $img_id ? wp_get_attachment_image_url( $img_id, 'woocommerce_thumbnail' ) : ( function_exists( 'wc_placeholder_img_src' ) ? wc_placeholder_img_src( 'woocommerce_thumbnail' ) : '' );
 											$price      = (float) $product->get_price();
 											$item_price = $price > 0 ? number_format_i18n( $price ) : '';
 											$rating     = (float) $product->get_average_rating();
 											$item_rate  = $rating > 0 ? '5/' . number_format_i18n( $rating, 1 ) : '';
 										} else {
-											$item_title = $item['title'];
-											$item_url   = $shop_url;
-											$item_img   = $item['img'];
-											$item_price = $item['price'];
-											$item_rate  = $item['rate'];
+											$item_title = __( 'محصولی برای نمایش موجود نیست', 'negar-shop' );
+											$item_url   = '';
+											$item_img   = function_exists( 'wc_placeholder_img_src' ) ? wc_placeholder_img_src( 'woocommerce_thumbnail' ) : '';
+											$item_price = '';
+											$item_rate  = '';
 										}
 										?>
 										<div class="swiper-slide">
-											<div class="buy-top-product-nk__item bg-white d-flex align-items-center">
+											<div class="buy-top-product-nk__item bg-white d-flex align-items-center<?php echo ! $product ? ' is-empty' : ''; ?>">
 												<div class="number f-iran-yekan fw-bold"><?php echo esc_html( $item['number'] ); ?></div>
 												<div class="image d-flex align-items-center justify-content-center rounded-circle position-relative flex-fill flex-grow-0 flex-shrink-0">
 													<div class="img d-flex align-items-center justify-content-center rounded-circle">
@@ -129,31 +129,39 @@ $top_products = array(
 													</div>
 												</div>
 												<div class="detail w-100">
-													<h2 class="title f-iran-yekan line-clamp-2">
-														<a href="<?php echo esc_url( $item_url ); ?>"><?php echo esc_html( $item_title ); ?></a>
+													<h2 class="title f-iran-yekan line-clamp-2<?php echo ! $product ? ' text-muted' : ''; ?>">
+														<?php if ( $product && $item_url ) : ?>
+															<a href="<?php echo esc_url( $item_url ); ?>"><?php echo esc_html( $item_title ); ?></a>
+														<?php else : ?>
+															<span><?php echo esc_html( $item_title ); ?></span>
+														<?php endif; ?>
 													</h2>
 													<div class="price-rate d-flex align-items-center justify-content-between gap-2">
-														<div class="price d-flex align-items-center f-iransans fw-bold gap-2">
-															<?php if ( ! empty( $item_price ) ) : ?>
-																<span class="price__current d-inline-flex align-items-center gap-2">
-																	<span class="price__amount"><?php echo esc_html( $item_price ); ?></span>
-																	<span class="toman-symbol toman-symbol--modern currency-symbol lh-1">
-																		<svg width="19.5" height="18" viewBox="0 0 13 12" fill="#0a0a0a" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-																			<use href="#kaveh-toman-mark"></use>
-																		</svg>
+														<?php if ( ! $product ) : ?>
+															<span class="text-muted small f-iran-yekan"><?php esc_html_e( 'ناموجود', 'negar-shop' ); ?></span>
+														<?php else : ?>
+															<div class="price d-flex align-items-center f-iransans fw-bold gap-2">
+																<?php if ( ! empty( $item_price ) ) : ?>
+																	<span class="price__current d-inline-flex align-items-center gap-2">
+																		<span class="price__amount"><?php echo esc_html( $item_price ); ?></span>
+																		<span class="toman-symbol toman-symbol--modern currency-symbol lh-1">
+																			<svg width="19.5" height="18" viewBox="0 0 13 12" fill="#0a0a0a" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+																				<use href="#kaveh-toman-mark"></use>
+																			</svg>
+																		</span>
 																	</span>
-																</span>
-															<?php endif; ?>
-														</div>
-														<div class="line flex-grow-1"></div>
-														<?php if ( ! empty( $item_rate ) ) : ?>
-															<div class="rate d-flex align-items-center f-iransans">
-																<?php echo esc_html( $item_rate ); ?>
-																<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 18 18" aria-hidden="true">
-																	<path fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M11.543 3.908 12.6 6.023c.143.292.525.57.848.63l1.912.314c1.223.203 1.508 1.088.63 1.973l-1.492 1.492c-.248.248-.39.736-.308 1.088l.428 1.845c.337 1.455-.443 2.025-1.726 1.26L11.1 13.56c-.322-.195-.862-.195-1.185 0l-1.792 1.065c-1.283.758-2.063.195-1.725-1.26l.427-1.845c.083-.345-.06-.832-.307-1.088L5.025 8.94c-.877-.877-.592-1.763.63-1.973l1.913-.315c.322-.052.705-.337.847-.63l1.058-2.115c.562-1.147 1.492-1.147 2.07 0Z"></path>
-																	<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M6 3.75H1.5m2.25 10.5H1.5M2.25 9H1.5" opacity=".4"></path>
-																</svg>
+																<?php endif; ?>
 															</div>
+															<div class="line flex-grow-1"></div>
+															<?php if ( ! empty( $item_rate ) ) : ?>
+																<div class="rate d-flex align-items-center f-iransans">
+																	<?php echo esc_html( $item_rate ); ?>
+																	<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 18 18" aria-hidden="true">
+																		<path fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M11.543 3.908 12.6 6.023c.143.292.525.57.848.63l1.912.314c1.223.203 1.508 1.088.63 1.973l-1.492 1.492c-.248.248-.39.736-.308 1.088l.428 1.845c.337 1.455-.443 2.025-1.726 1.26L11.1 13.56c-.322-.195-.862-.195-1.185 0l-1.792 1.065c-1.283.758-2.063.195-1.725-1.26l.427-1.845c.083-.345-.06-.832-.307-1.088L5.025 8.94c-.877-.877-.592-1.763.63-1.973l1.913-.315c.322-.052.705-.337.847-.63l1.058-2.115c.562-1.147 1.492-1.147 2.07 0Z"></path>
+																		<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M6 3.75H1.5m2.25 10.5H1.5M2.25 9H1.5" opacity=".4"></path>
+																	</svg>
+																</div>
+															<?php endif; ?>
 														<?php endif; ?>
 													</div>
 												</div>

@@ -1194,8 +1194,11 @@ function negar_theme_find_product_by_title_needles( $needles, $force_refresh = f
 			'suppress_filters' => false,
 		)
 	);
-	$product_ids = get_posts( $query_args );
-	remove_filter( 'posts_where', $where_filter );
+	try {
+		$product_ids = get_posts( $query_args );
+	} finally {
+		remove_filter( 'posts_where', $where_filter );
+	}
 
 	$matched_product = false;
 	if ( ! empty( $product_ids ) ) {

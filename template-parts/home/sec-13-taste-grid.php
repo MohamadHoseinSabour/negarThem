@@ -335,7 +335,7 @@ $taste_categories = array(
 													$item_title = $product->get_name();
 													$item_url   = get_permalink( $product->get_id() );
 													$img_id     = $product->get_image_id();
-													$item_img   = $img_id ? wp_get_attachment_image_url( $img_id, 'woocommerce_thumbnail' ) : $item['img'];
+													$item_img   = $img_id ? wp_get_attachment_image_url( $img_id, 'woocommerce_thumbnail' ) : ( function_exists( 'wc_placeholder_img_src' ) ? wc_placeholder_img_src( 'woocommerce_thumbnail' ) : '' );
 													$rating     = (float) $product->get_average_rating();
 													$item_rate  = $rating > 0 ? number_format_i18n( $rating, 1 ) : '';
 
@@ -345,7 +345,7 @@ $taste_categories = array(
 													$sale_price    = (float) $product->get_sale_price();
 
 													$item_price         = $price > 0 ? number_format_i18n( $price ) : '';
-													$item_regular_price = ( $is_on_sale && $regular_price > $price ) ? number_format_i18n( $regular_price ) : '';
+													$item_regular_price = ( $is_on_sale && $regular_price > $price && $regular_price > 0 ) ? number_format_i18n( $regular_price ) : '';
 													$item_discount      = ( $is_on_sale && $regular_price > $sale_price && $regular_price > 0 )
 														? (string) round( ( ( $regular_price - $sale_price ) / $regular_price ) * 100 )
 														: '';
@@ -357,24 +357,25 @@ $taste_categories = array(
 														if ( ! empty( $color_terms ) && ! is_wp_error( $color_terms ) ) {
 															foreach ( $color_terms as $cterm ) {
 																$hex = get_term_meta( $cterm->term_id, 'product_attribute_color', true );
-																$hex = $hex ? $hex : '#808080';
-																$item_colors[] = array( 'bg' => $hex, 'title' => $cterm->name );
+																if ( $hex && preg_match( '/^#([a-f0-9]{3}){1,2}$/i', $hex ) ) {
+																	$item_colors[] = array( 'bg' => $hex, 'title' => $cterm->name );
+																}
 															}
 														}
 													}
 												} else {
-													$item_title         = $item['title'];
-													$item_url           = $cat['link'];
-													$item_img           = $item['img'];
-													$item_rate          = $item['rate'];
-													$item_price         = $item['price'];
-													$item_regular_price = $item['regular_price'];
-													$item_discount      = $item['discount'];
-													$item_colors        = $item['colors'];
+													$item_title         = __( 'محصولی برای نمایش موجود نیست', 'negar-shop' );
+													$item_url           = '';
+													$item_img           = function_exists( 'wc_placeholder_img_src' ) ? wc_placeholder_img_src( 'woocommerce_thumbnail' ) : '';
+													$item_rate          = '';
+													$item_price         = '';
+													$item_regular_price = '';
+													$item_discount      = '';
+													$item_colors        = array();
 												}
 												?>
 												<div class="your-taste-box-nk__box__products__col w-100 flex-grow-0 flex-shrink-0 flex-fill">
-													<div class="your-taste-box-nk__box__products__item position-relative d-flex flex-column h-100">
+													<div class="your-taste-box-nk__box__products__item position-relative d-flex flex-column h-100<?php echo ! $product ? ' is-empty' : ''; ?>">
 														
 														<?php if ( ! empty( $item_colors ) ) : ?>
 															<ul class="colors d-flex flex-wrap position-absolute start-0">
@@ -384,16 +385,30 @@ $taste_categories = array(
 															</ul>
 														<?php endif; ?>
 
-														<a href="<?php echo esc_url( $item_url ); ?>" class="image d-block mxw-fit mx-auto" aria-label="<?php echo esc_attr( $item_title ); ?>">
-															<img loading="lazy" decoding="async" src="<?php echo esc_url( $item_img ); ?>" alt="<?php echo esc_attr( $item_title ); ?>" width="84" height="92" class="d-block w-auto">
-														</a>
+														<?php if ( $product && $item_url ) : ?>
+															<a href="<?php echo esc_url( $item_url ); ?>" class="image d-block mxw-fit mx-auto" aria-label="<?php echo esc_attr( $item_title ); ?>">
+																<img loading="lazy" decoding="async" src="<?php echo esc_url( $item_img ); ?>" alt="<?php echo esc_attr( $item_title ); ?>" width="84" height="92" class="d-block w-auto">
+															</a>
+														<?php else : ?>
+															<div class="image d-block mxw-fit mx-auto opacity-50">
+																<img loading="lazy" decoding="async" src="<?php echo esc_url( $item_img ); ?>" alt="<?php echo esc_attr( $item_title ); ?>" width="84" height="92" class="d-block w-auto">
+															</div>
+														<?php endif; ?>
 
-														<h2 class="title text-truncate f-iran-yekan fw-normal">
-															<a href="<?php echo esc_url( $item_url ); ?>" class="text-reset text-decoration-none d-block text-truncate"><?php echo esc_html( $item_title ); ?></a>
+														<h2 class="title text-truncate f-iran-yekan fw-normal<?php echo ! $product ? ' text-muted' : ''; ?>">
+															<?php if ( $product && $item_url ) : ?>
+																<a href="<?php echo esc_url( $item_url ); ?>" class="text-reset text-decoration-none d-block text-truncate"><?php echo esc_html( $item_title ); ?></a>
+															<?php else : ?>
+																<span class="d-block text-truncate"><?php echo esc_html( $item_title ); ?></span>
+															<?php endif; ?>
 														</h2>
 
 														<div class="rate-price d-flex align-items-center justify-content-between gap-2 mt-auto">
-															<?php if ( ! empty( $item_discount ) ) : ?>
+															<?php if ( ! $product ) : ?>
+																<div class="empty-product-notice text-muted small f-iran-yekan w-100 text-center">
+																	<?php esc_html_e( 'ناموجود', 'negar-shop' ); ?>
+																</div>
+															<?php elseif ( ! empty( $item_discount ) ) : ?>
 																<div class="off d-flex align-items-center justify-content-center text-white f-iran-yekan">
 																	<?php echo esc_html( $item_discount ); ?>
 																	<i class="icon-discount-4 lh-1" aria-hidden="true"></i>
@@ -405,14 +420,16 @@ $taste_categories = array(
 																			<span></span>
 																		</div>
 																	<?php endif; ?>
-																	<div class="price d-flex align-items-center f-iransans gap-1">
-																		<?php echo esc_html( $item_price ); ?>
-																		<span class="toman-symbol toman-symbol--modern lh-1">
-																			<svg width="19.5" height="18" viewBox="0 0 13 12" fill="#0a0a0a" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-																				<use href="#kaveh-toman-mark"></use>
-																			</svg>
-																		</span>
-																	</div>
+																	<?php if ( ! empty( $item_price ) ) : ?>
+																		<div class="price d-flex align-items-center f-iransans gap-1">
+																			<?php echo esc_html( $item_price ); ?>
+																			<span class="toman-symbol toman-symbol--modern lh-1">
+																				<svg width="19.5" height="18" viewBox="0 0 13 12" fill="#0a0a0a" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+																					<use href="#kaveh-toman-mark"></use>
+																				</svg>
+																			</span>
+																		</div>
+																	<?php endif; ?>
 																</div>
 															<?php else : ?>
 																<div class="rate d-flex align-items-center f-iransans">
@@ -425,14 +442,16 @@ $taste_categories = array(
 																	<?php endif; ?>
 																</div>
 																<div class="price">
-																	<div class="price d-flex align-items-center f-iransans">
-																		<?php echo esc_html( $item_price ); ?>
-																		<span class="toman-symbol toman-symbol--modern lh-1">
-																			<svg width="19.5" height="18" viewBox="0 0 13 12" fill="#0a0a0a" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-																				<use href="#kaveh-toman-mark"></use>
-																			</svg>
-																		</span>
-																	</div>
+																	<?php if ( ! empty( $item_price ) ) : ?>
+																		<div class="price d-flex align-items-center f-iransans">
+																			<?php echo esc_html( $item_price ); ?>
+																			<span class="toman-symbol toman-symbol--modern lh-1">
+																				<svg width="19.5" height="18" viewBox="0 0 13 12" fill="#0a0a0a" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+																					<use href="#kaveh-toman-mark"></use>
+																				</svg>
+																			</span>
+																		</div>
+																	<?php endif; ?>
 																</div>
 															<?php endif; ?>
 														</div>
