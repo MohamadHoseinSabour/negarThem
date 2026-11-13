@@ -48,6 +48,7 @@ $taste_categories = array(
 		'link'     => $shop_url,
 		'products' => array(
 			array(
+				'slot'          => 'box-1-1',
 				'title'         => 'لپ تاپ 16 اینچی ایسوس مدل TUF Gaming A16 FA608PP-Ryzen',
 				'img'           => $kaveh_base . '/230ce545eaa1028a10622044bde2cbfdf2969235_1785675702-removebg-preview-300x300.png',
 				'rate'          => '4.0',
@@ -57,9 +58,10 @@ $taste_categories = array(
 				'colors'        => array(
 					array( 'bg' => '#808080', 'title' => 'خاکستری' ),
 				),
-				'keyword'       => 'TUF Gaming',
+				'needles'       => array( 'TUF Gaming' ),
 			),
 			array(
+				'slot'          => 'box-1-2',
 				'title'         => 'لپ تاپ 15.3 اینچی لنوو مدل Legion 5 15IRX10-i7',
 				'img'           => $kaveh_base . '/203a083f03f1506a710c1e6a88c71e1919e20a76_1786268142-300x300-removebg-preview-1-1.png',
 				'rate'          => '4.0',
@@ -69,9 +71,10 @@ $taste_categories = array(
 				'colors'        => array(
 					array( 'bg' => '#000000', 'title' => 'مشکی' ),
 				),
-				'keyword'       => 'Legion 5',
+				'needles'       => array( 'Legion 5' ),
 			),
 			array(
+				'slot'          => 'box-1-3',
 				'title'         => 'لپ تاپ 16 اینچی ایسوس مدل WQXGA 240Hz',
 				'img'           => $kaveh_base . '/3c0f8ff8a12c67f061136e8fafd65eb6f6c56d2e_1786985097-300x300-removebg-preview-1.png',
 				'rate'          => '5.0',
@@ -81,9 +84,10 @@ $taste_categories = array(
 				'colors'        => array(
 					array( 'bg' => '#808080', 'title' => 'خاکستری' ),
 				),
-				'keyword'       => 'ROG Strix',
+				'needles'       => array( 'ROG Strix', 'WQXGA' ),
 			),
 			array(
+				'slot'          => 'box-1-4',
 				'title'         => 'لپ‌تاپ 17 اینچی ام اس آی مدل Vector 17 HX AI A2XWJG-Core',
 				'img'           => $kaveh_base . '/04124d815f3ee9d9adb91f219ad4b45d298b8408_1779002328-300x300-removebg-preview-1.png',
 				'rate'          => '4.0',
@@ -93,7 +97,7 @@ $taste_categories = array(
 				'colors'        => array(
 					array( 'bg' => '#808080', 'title' => 'خاکستری' ),
 				),
-				'keyword'       => 'Vector',
+				'needles'       => array( 'Vector' ),
 			),
 		),
 	),
@@ -105,6 +109,7 @@ $taste_categories = array(
 		'link'     => $shop_url,
 		'products' => array(
 			array(
+				'slot'          => 'box-2-1',
 				'title'         => 'گوشی موبایل اپل مدل iPhone 17 Pro Max ZAA',
 				'img'           => $kaveh_base . '/ec57ce03f2a92834058f502174b1a2aeffc9a580_1759666637-300x300-removebg-preview-1.png',
 				'rate'          => '4.0',
@@ -116,9 +121,10 @@ $taste_categories = array(
 					array( 'bg' => '#00008b', 'title' => 'آبی تیره' ),
 					array( 'bg' => '#ffa500', 'title' => 'نارنجی' ),
 				),
-				'keyword'       => 'iPhone 17',
+				'needles'       => array( 'iPhone 17' ),
 			),
 			array(
+				'slot'          => 'box-2-2',
 				'title'         => 'گوشی موبایل اپل مدل iPhone 15 Ch',
 				'img'           => $kaveh_base . '/f4c0e5f4199abda603494b54e0655cbd0447405f_1765624240-300x300-removebg-preview-1.png',
 				'rate'          => '3.5',
@@ -128,9 +134,10 @@ $taste_categories = array(
 				'colors'        => array(
 					array( 'bg' => '#1e73be', 'title' => 'آبی' ),
 				),
-				'keyword'       => 'iPhone 15',
+				'needles'       => array( 'iPhone 15' ),
 			),
 			array(
+				'slot'          => 'box-2-3',
 				'title'         => 'گوشی موبایل اپل مدل iPhone 16 CH دو سیم کارت ظرفیت 128 گیگابایت',
 				'img'           => $kaveh_base . '/5af568b4909435c6a215ad5e728e902db234b673_1736597759-300x300-removebg-preview-1.png',
 				'rate'          => '4.5',
@@ -142,9 +149,10 @@ $taste_categories = array(
 					array( 'bg' => '#000000', 'title' => 'مشکی' ),
 					array( 'bg' => '#1e73be', 'title' => 'آبی' ),
 				),
-				'keyword'       => 'iPhone 16',
+				'needles'       => array( 'iPhone 16' ),
 			),
 			array(
+				'slot'          => 'box-2-4',
 				'title'         => 'گوشی موبایل سامسونگ مدل Galaxy S25 FE دو سیم کارت',
 				'img'           => $kaveh_base . '/89c0e7b3f400348a3add26684b7ece5084e4361f_1777115891-300x300-removebg-preview-1.png',
 				'rate'          => '4.0',
@@ -154,7 +162,7 @@ $taste_categories = array(
 				'colors'        => array(
 					array( 'bg' => '#000000', 'title' => 'مشکی' ),
 				),
-				'keyword'       => 'Galaxy S25',
+				'needles'       => array( 'Galaxy S25' ),
 			),
 		),
 	),
@@ -166,6 +174,7 @@ $taste_categories = array(
 		'link'     => $shop_url,
 		'products' => array(
 			array(
+				'slot'          => 'box-3-1',
 				'title'         => 'بازی Gran Turismo 7 مخصوص PS5',
 				'img'           => $kaveh_base . '/e2a1ec7e564e1d9555bdf7a48e62cc138ff24cd0_1786388718-removebg-preview-300x300-1.png',
 				'rate'          => '4.3',
@@ -173,9 +182,10 @@ $taste_categories = array(
 				'regular_price' => '',
 				'discount'      => '',
 				'colors'        => array(),
-				'keyword'       => 'Gran Turismo',
+				'needles'       => array( 'Gran Turismo' ),
 			),
 			array(
+				'slot'          => 'box-3-2',
 				'title'         => 'بازی Horizon Forbidden West نسخه کامل مخصوص PS5',
 				'img'           => $kaveh_base . '/86f41915edf5a7e926e2ae0bbd19a2d0ba9c5d06_1786388241-300x300-removebg-preview-1.png',
 				'rate'          => '4.0',
@@ -183,9 +193,10 @@ $taste_categories = array(
 				'regular_price' => '',
 				'discount'      => '',
 				'colors'        => array(),
-				'keyword'       => 'Horizon Forbidden',
+				'needles'       => array( 'Horizon Forbidden' ),
 			),
 			array(
+				'slot'          => 'box-3-3',
 				'title'         => 'بازی Ghostrunner 2 مخصوص PS5',
 				'img'           => $kaveh_base . '/3eef521897412a152c5b42551b623c91c41d90c0_1786388224-300x300-removebg-preview-1.png',
 				'rate'          => '2.0',
@@ -193,9 +204,10 @@ $taste_categories = array(
 				'regular_price' => '',
 				'discount'      => '',
 				'colors'        => array(),
-				'keyword'       => 'Ghostrunner',
+				'needles'       => array( 'Ghostrunner' ),
 			),
 			array(
+				'slot'          => 'box-3-4',
 				'title'         => 'بازی مدل بازی Mortal Kombat 1 مخصوص PS5',
 				'img'           => $kaveh_base . '/92d9b95b55d4cf336cee4cf408c8908caf74c7af_1786388232-300x300-removebg-preview-1.png',
 				'rate'          => '5.0',
@@ -203,7 +215,7 @@ $taste_categories = array(
 				'regular_price' => '',
 				'discount'      => '',
 				'colors'        => array(),
-				'keyword'       => 'Mortal Kombat',
+				'needles'       => array( 'Mortal Kombat' ),
 			),
 		),
 	),
@@ -215,6 +227,7 @@ $taste_categories = array(
 		'link'     => $shop_url,
 		'products' => array(
 			array(
+				'slot'          => 'box-4-1',
 				'title'         => 'گوشی موبایل اپل مدل iPhone 17 Pro Max ZAA',
 				'img'           => $kaveh_base . '/ec57ce03f2a92834058f502174b1a2aeffc9a580_1759666637-300x300-removebg-preview-1.png',
 				'rate'          => '4.0',
@@ -226,9 +239,10 @@ $taste_categories = array(
 					array( 'bg' => '#00008b', 'title' => 'آبی تیره' ),
 					array( 'bg' => '#ffa500', 'title' => 'نارنجی' ),
 				),
-				'keyword'       => 'iPhone 17',
+				'needles'       => array( 'iPhone 17' ),
 			),
 			array(
+				'slot'          => 'box-4-2',
 				'title'         => 'گوشی موبایل اپل مدل iPhone 15 Ch',
 				'img'           => $kaveh_base . '/f4c0e5f4199abda603494b54e0655cbd0447405f_1765624240-300x300-removebg-preview-1.png',
 				'rate'          => '3.5',
@@ -238,9 +252,10 @@ $taste_categories = array(
 				'colors'        => array(
 					array( 'bg' => '#1e73be', 'title' => 'آبی' ),
 				),
-				'keyword'       => 'iPhone 15',
+				'needles'       => array( 'iPhone 15' ),
 			),
 			array(
+				'slot'          => 'box-4-3',
 				'title'         => 'گوشی موبایل اپل مدل iPhone 16 CH دو سیم کارت ظرفیت 128 گیگابایت',
 				'img'           => $kaveh_base . '/5af568b4909435c6a215ad5e728e902db234b673_1736597759-300x300-removebg-preview-1.png',
 				'rate'          => '4.5',
@@ -252,9 +267,10 @@ $taste_categories = array(
 					array( 'bg' => '#000000', 'title' => 'مشکی' ),
 					array( 'bg' => '#1e73be', 'title' => 'آبی' ),
 				),
-				'keyword'       => 'iPhone 16',
+				'needles'       => array( 'iPhone 16' ),
 			),
 			array(
+				'slot'          => 'box-4-4',
 				'title'         => 'گوشی موبایل سامسونگ مدل Galaxy S25 FE دو سیم کارت',
 				'img'           => $kaveh_base . '/89c0e7b3f400348a3add26684b7ece5084e4361f_1777115891-300x300-removebg-preview-1.png',
 				'rate'          => '4.0',
@@ -264,7 +280,7 @@ $taste_categories = array(
 				'colors'        => array(
 					array( 'bg' => '#000000', 'title' => 'مشکی' ),
 				),
-				'keyword'       => 'Galaxy S25',
+				'needles'       => array( 'Galaxy S25' ),
 			),
 		),
 	),
@@ -311,42 +327,86 @@ $taste_categories = array(
 										<div class="your-taste-box-nk__box__products d-flex flex-wrap">
 											<?php
 											foreach ( $cat['products'] as $item ) :
-												$info = negar_get_taste_product_info( $item['keyword'], $cat['link'] );
+												$product = function_exists( 'negar_theme_product_pack_product' )
+													? negar_theme_product_pack_product( 'taste-grid', $item['slot'], $item['needles'] )
+													: false;
+
+												if ( $product ) {
+													$item_title = $product->get_name();
+													$item_url   = get_permalink( $product->get_id() );
+													$img_id     = $product->get_image_id();
+													$item_img   = $img_id ? wp_get_attachment_image_url( $img_id, 'woocommerce_thumbnail' ) : $item['img'];
+													$rating     = (float) $product->get_average_rating();
+													$item_rate  = $rating > 0 ? number_format_i18n( $rating, 1 ) : '';
+
+													$is_on_sale    = $product->is_on_sale();
+													$price         = (float) $product->get_price();
+													$regular_price = (float) $product->get_regular_price();
+													$sale_price    = (float) $product->get_sale_price();
+
+													$item_price         = $price > 0 ? number_format_i18n( $price ) : '';
+													$item_regular_price = ( $is_on_sale && $regular_price > $price ) ? number_format_i18n( $regular_price ) : '';
+													$item_discount      = ( $is_on_sale && $regular_price > $sale_price && $regular_price > 0 )
+														? (string) round( ( ( $regular_price - $sale_price ) / $regular_price ) * 100 )
+														: '';
+
+													$item_colors = array();
+													$color_attr  = $product->get_attribute( 'pa_color' );
+													if ( ! empty( $color_attr ) && function_exists( 'wc_get_product_terms' ) ) {
+														$color_terms = wc_get_product_terms( $product->get_id(), 'pa_color', array( 'fields' => 'all' ) );
+														if ( ! empty( $color_terms ) && ! is_wp_error( $color_terms ) ) {
+															foreach ( $color_terms as $cterm ) {
+																$hex = get_term_meta( $cterm->term_id, 'product_attribute_color', true );
+																$hex = $hex ? $hex : '#808080';
+																$item_colors[] = array( 'bg' => $hex, 'title' => $cterm->name );
+															}
+														}
+													}
+												} else {
+													$item_title         = $item['title'];
+													$item_url           = $cat['link'];
+													$item_img           = $item['img'];
+													$item_rate          = $item['rate'];
+													$item_price         = $item['price'];
+													$item_regular_price = $item['regular_price'];
+													$item_discount      = $item['discount'];
+													$item_colors        = $item['colors'];
+												}
 												?>
 												<div class="your-taste-box-nk__box__products__col w-100 flex-grow-0 flex-shrink-0 flex-fill">
 													<div class="your-taste-box-nk__box__products__item position-relative d-flex flex-column h-100">
 														
-														<?php if ( ! empty( $item['colors'] ) ) : ?>
+														<?php if ( ! empty( $item_colors ) ) : ?>
 															<ul class="colors d-flex flex-wrap position-absolute start-0">
-																<?php foreach ( $item['colors'] as $col ) : ?>
+																<?php foreach ( $item_colors as $col ) : ?>
 																	<li class="rounded-circle" style="background-color: <?php echo esc_attr( $col['bg'] ); ?>;" title="<?php echo esc_attr( $col['title'] ); ?>"></li>
 																<?php endforeach; ?>
 															</ul>
 														<?php endif; ?>
 
-														<a href="<?php echo esc_url( $info['url'] ); ?>" class="image d-block mxw-fit mx-auto" aria-label="<?php echo esc_attr( $item['title'] ); ?>">
-															<img loading="lazy" decoding="async" src="<?php echo esc_url( $item['img'] ); ?>" alt="<?php echo esc_attr( $item['title'] ); ?>" width="84" height="92" class="d-block w-auto">
+														<a href="<?php echo esc_url( $item_url ); ?>" class="image d-block mxw-fit mx-auto" aria-label="<?php echo esc_attr( $item_title ); ?>">
+															<img loading="lazy" decoding="async" src="<?php echo esc_url( $item_img ); ?>" alt="<?php echo esc_attr( $item_title ); ?>" width="84" height="92" class="d-block w-auto">
 														</a>
 
 														<h2 class="title text-truncate f-iran-yekan fw-normal">
-															<a href="<?php echo esc_url( $info['url'] ); ?>" class="text-reset text-decoration-none d-block text-truncate"><?php echo esc_html( $item['title'] ); ?></a>
+															<a href="<?php echo esc_url( $item_url ); ?>" class="text-reset text-decoration-none d-block text-truncate"><?php echo esc_html( $item_title ); ?></a>
 														</h2>
 
 														<div class="rate-price d-flex align-items-center justify-content-between gap-2 mt-auto">
-															<?php if ( ! empty( $item['discount'] ) ) : ?>
+															<?php if ( ! empty( $item_discount ) ) : ?>
 																<div class="off d-flex align-items-center justify-content-center text-white f-iran-yekan">
-																	<?php echo esc_html( $item['discount'] ); ?>
+																	<?php echo esc_html( $item_discount ); ?>
 																	<i class="icon-discount-4 lh-1" aria-hidden="true"></i>
 																</div>
 																<div class="price">
-																	<?php if ( ! empty( $item['regular_price'] ) ) : ?>
+																	<?php if ( ! empty( $item_regular_price ) ) : ?>
 																		<div class="offer d-flex align-items-center justify-content-end">
-																			<del class="f-iransans fw-light"><?php echo esc_html( $item['regular_price'] ); ?></del>
+																			<del class="f-iransans fw-light"><?php echo esc_html( $item_regular_price ); ?></del>
 																			<span></span>
 																		</div>
 																	<?php endif; ?>
 																	<div class="price d-flex align-items-center f-iransans gap-1">
-																		<?php echo esc_html( $item['price'] ); ?>
+																		<?php echo esc_html( $item_price ); ?>
 																		<span class="toman-symbol toman-symbol--modern lh-1">
 																			<svg width="19.5" height="18" viewBox="0 0 13 12" fill="#0a0a0a" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
 																				<use href="#kaveh-toman-mark"></use>
@@ -356,15 +416,17 @@ $taste_categories = array(
 																</div>
 															<?php else : ?>
 																<div class="rate d-flex align-items-center f-iransans">
-																	<?php echo esc_html( $item['rate'] ); ?>
-																	<svg xmlns="http://www.w3.org/2000/svg" width="16" height="17" fill="none" viewBox="0 0 16 17" aria-hidden="true">
-																		<path fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="m10.205 3.727.935 1.87c.126.259.464.504.75.557l1.69.279c1.08.179 1.333.961.557 1.743l-1.32 1.32c-.218.219-.344.65-.271.961l.378 1.632c.298 1.286-.392 1.79-1.526 1.114l-1.584-.942c-.286-.172-.763-.172-1.048 0l-1.585.942c-1.134.67-1.823.172-1.525-1.114l.378-1.632c.073-.305-.053-.736-.272-.961l-1.32-1.32C3.668 7.401 3.92 6.618 5 6.433l1.69-.279c.286-.046.624-.298.75-.557l.935-1.87c.497-1.014 1.32-1.014 1.83 0Z"></path>
-																		<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M5.305 3.588H1.326m1.989 9.283H1.326M1.99 8.23h-.664" opacity=".4"></path>
-																	</svg>
+																	<?php if ( ! empty( $item_rate ) ) : ?>
+																		<?php echo esc_html( $item_rate ); ?>
+																		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="17" fill="none" viewBox="0 0 16 17" aria-hidden="true">
+																			<path fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="m10.205 3.727.935 1.87c.126.259.464.504.75.557l1.69.279c1.08.179 1.333.961.557 1.743l-1.32 1.32c-.218.219-.344.65-.271.961l.378 1.632c.298 1.286-.392 1.79-1.526 1.114l-1.584-.942c-.286-.172-.763-.172-1.048 0l-1.585.942c-1.134.67-1.823.172-1.525-1.114l.378-1.632c.073-.305-.053-.736-.272-.961l-1.32-1.32C3.668 7.401 3.92 6.618 5 6.433l1.69-.279c.286-.046.624-.298.75-.557l.935-1.87c.497-1.014 1.32-1.014 1.83 0Z"></path>
+																			<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M5.305 3.588H1.326m1.989 9.283H1.326M1.99 8.23h-.664" opacity=".4"></path>
+																		</svg>
+																	<?php endif; ?>
 																</div>
 																<div class="price">
 																	<div class="price d-flex align-items-center f-iransans">
-																		<?php echo esc_html( $item['price'] ); ?>
+																		<?php echo esc_html( $item_price ); ?>
 																		<span class="toman-symbol toman-symbol--modern lh-1">
 																			<svg width="19.5" height="18" viewBox="0 0 13 12" fill="#0a0a0a" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
 																				<use href="#kaveh-toman-mark"></use>

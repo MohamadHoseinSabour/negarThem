@@ -1013,13 +1013,79 @@ function negar_theme_sanitize_media_settings( $submitted ) {
  */
 function negar_theme_product_pack_registry() {
 	return array(
-		'gaming-zone' => array(
+		'gaming-zone'      => array(
 			'label' => __( 'پک گیمینگ و نقاط داغ', 'negar-shop' ),
 			'slots' => array(
 				'shadows' => __( 'نقطهٔ داغ ۱', 'negar-shop' ),
 				'mirage'  => __( 'نقطهٔ داغ ۲', 'negar-shop' ),
 				'fc'      => __( 'نقطهٔ داغ ۳', 'negar-shop' ),
 				'yotei'   => __( 'نقطهٔ داغ ۴', 'negar-shop' ),
+			),
+		),
+		'taste-grid'       => array(
+			'label' => __( 'باکس سلیقه شما (چهار دسته)', 'negar-shop' ),
+			'slots' => array(
+				'box-1-1' => __( 'کالای دیجیتال - محصول ۱', 'negar-shop' ),
+				'box-1-2' => __( 'کالای دیجیتال - محصول ۲', 'negar-shop' ),
+				'box-1-3' => __( 'کالای دیجیتال - محصول ۳', 'negar-shop' ),
+				'box-1-4' => __( 'کالای دیجیتال - محصول ۴', 'negar-shop' ),
+				'box-2-1' => __( 'موبایل - محصول ۱', 'negar-shop' ),
+				'box-2-2' => __( 'موبایل - محصول ۲', 'negar-shop' ),
+				'box-2-3' => __( 'موبایل - محصول ۳', 'negar-shop' ),
+				'box-2-4' => __( 'موبایل - محصول ۴', 'negar-shop' ),
+				'box-3-1' => __( 'بازی‌های کنسول - محصول ۱', 'negar-shop' ),
+				'box-3-2' => __( 'بازی‌های کنسول - محصول ۲', 'negar-shop' ),
+				'box-3-3' => __( 'بازی‌های کنسول - محصول ۳', 'negar-shop' ),
+				'box-3-4' => __( 'بازی‌های کنسول - محصول ۴', 'negar-shop' ),
+				'box-4-1' => __( 'گوشی موبایل - محصول ۱', 'negar-shop' ),
+				'box-4-2' => __( 'گوشی موبایل - محصول ۲', 'negar-shop' ),
+				'box-4-3' => __( 'گوشی موبایل - محصول ۳', 'negar-shop' ),
+				'box-4-4' => __( 'گوشی موبایل - محصول ۴', 'negar-shop' ),
+			),
+		),
+		'feature-bar-1'    => array(
+			'label' => __( 'نوار برترین‌ها ۱ (ساعت و گجت)', 'negar-shop' ),
+			'slots' => array(
+				'slot-1' => __( 'کالای ۱', 'negar-shop' ),
+				'slot-2' => __( 'کالای ۲', 'negar-shop' ),
+				'slot-3' => __( 'کالای ۳', 'negar-shop' ),
+				'slot-4' => __( 'کالای ۴', 'negar-shop' ),
+			),
+		),
+		'feature-bar-2'    => array(
+			'label' => __( 'نوار برترین‌ها ۲ (کنسول و بازی)', 'negar-shop' ),
+			'slots' => array(
+				'slot-1' => __( 'کالای ۱', 'negar-shop' ),
+				'slot-2' => __( 'کالای ۲', 'negar-shop' ),
+				'slot-3' => __( 'کالای ۳', 'negar-shop' ),
+				'slot-4' => __( 'کالای ۴', 'negar-shop' ),
+			),
+		),
+		'smartwatches-2'   => array(
+			'label' => __( 'ویترین ساعت‌های پرفروش و گجت پوشیدنی', 'negar-shop' ),
+			'slots' => array(
+				'promo-1'    => __( 'کارت تبلیغاتی سرخ ۱', 'negar-shop' ),
+				'promo-2'    => __( 'کارت تبلیغاتی سرخ ۲', 'negar-shop' ),
+				'carousel-1' => __( 'اسلایدر کالا ۱', 'negar-shop' ),
+				'carousel-2' => __( 'اسلایدر کالا ۲', 'negar-shop' ),
+				'carousel-3' => __( 'اسلایدر کالا ۳', 'negar-shop' ),
+				'carousel-4' => __( 'اسلایدر کالا ۴', 'negar-shop' ),
+				'carousel-5' => __( 'اسلایدر کالا ۵', 'negar-shop' ),
+			),
+		),
+		'mobile-spotlight' => array(
+			'label' => __( 'ویترین کانون موبایل (محصول ویژه)', 'negar-shop' ),
+			'slots' => array(
+				'focal' => __( 'محصول کانونی ویژه', 'negar-shop' ),
+			),
+		),
+		'feature-bar-3'    => array(
+			'label' => __( 'نوار برترین‌ها ۳ (بازی و سرگرمی)', 'negar-shop' ),
+			'slots' => array(
+				'slot-1' => __( 'کالای ۱', 'negar-shop' ),
+				'slot-2' => __( 'کالای ۲', 'negar-shop' ),
+				'slot-3' => __( 'کالای ۳', 'negar-shop' ),
+				'slot-4' => __( 'کالای ۴', 'negar-shop' ),
 			),
 		),
 	);
@@ -1054,9 +1120,14 @@ function negar_theme_sanitize_product_pack_settings( $submitted ) {
 	$packs     = isset( $submitted['packs'] ) && is_array( $submitted['packs'] ) ? $submitted['packs'] : array();
 	$clean     = array( 'schema_version' => 1, 'packs' => array() );
 	foreach ( negar_theme_product_pack_registry() as $pack_id => $pack ) {
+		$pack_is_submitted = array_key_exists( $pack_id, $packs ) && is_array( $packs[ $pack_id ] );
 		foreach ( $pack['slots'] as $slot_id => $label ) {
-			$value = isset( $packs[ $pack_id ][ $slot_id ] ) && is_scalar( $packs[ $pack_id ][ $slot_id ] ) ? absint( $packs[ $pack_id ][ $slot_id ] ) : 0;
-			$clean['packs'][ $pack_id ][ $slot_id ] = in_array( $value, negar_theme_sanitize_product_ids( array( $value ) ), true ) ? $value : 0;
+			if ( $pack_is_submitted ) {
+				$value = isset( $packs[ $pack_id ][ $slot_id ] ) && is_scalar( $packs[ $pack_id ][ $slot_id ] ) ? absint( $packs[ $pack_id ][ $slot_id ] ) : 0;
+				$clean['packs'][ $pack_id ][ $slot_id ] = in_array( $value, negar_theme_sanitize_product_ids( array( $value ) ), true ) ? $value : 0;
+			} else {
+				$clean['packs'][ $pack_id ][ $slot_id ] = isset( $current['packs'][ $pack_id ][ $slot_id ] ) ? absint( $current['packs'][ $pack_id ][ $slot_id ] ) : 0;
+			}
 		}
 	}
 	return $clean;
@@ -1139,18 +1210,19 @@ function negar_theme_find_product_by_title_needles( $needles, $force_refresh = f
 }
 
 /**
- * Resolve a Gaming Zone hotspot product with manual selection priority and bounded fallback.
+ * Resolve a product pack product with manual selection priority and bounded fallback.
  *
- * 1. Checks manual assignment via `negar_theme_product_pack_product_id('gaming-zone', $slot_key)`.
+ * 1. Checks manual assignment via `negar_theme_product_pack_product_id( $pack_id, $slot_id )`.
  * 2. If valid and catalog-visible, returns that product immediately (zero fallback search).
  * 3. Otherwise, searches for a published, catalog-visible product using the provided needles.
  *
- * @param string             $slot_key Hotspot key ('shadows', 'mirage', 'fc', 'yotei').
- * @param array<int, string> $needles  Fallback search title fragments.
+ * @param string             $pack_id Pack identifier.
+ * @param string             $slot_id Slot identifier.
+ * @param array<int, string> $needles Fallback search title fragments.
  * @return WC_Product|false
  */
-function negar_theme_gaming_zone_product( $slot_key, $needles = array() ) {
-	$selected_id = negar_theme_product_pack_product_id( 'gaming-zone', $slot_key );
+function negar_theme_product_pack_product( $pack_id, $slot_id, $needles = array() ) {
+	$selected_id = negar_theme_product_pack_product_id( $pack_id, $slot_id );
 	if ( $selected_id && function_exists( 'wc_get_product' ) ) {
 		$product = wc_get_product( $selected_id );
 		if ( $product && 'publish' === get_post_status( $product->get_id() ) && $product->is_visible() ) {
@@ -1158,7 +1230,18 @@ function negar_theme_gaming_zone_product( $slot_key, $needles = array() ) {
 		}
 	}
 
-	return negar_theme_find_product_by_title_needles( $needles );
+	return ! empty( $needles ) ? negar_theme_find_product_by_title_needles( $needles ) : false;
+}
+
+/**
+ * Resolve a Gaming Zone hotspot product with manual selection priority and bounded fallback.
+ *
+ * @param string             $slot_key Hotspot key ('shadows', 'mirage', 'fc', 'yotei').
+ * @param array<int, string> $needles  Fallback search title fragments.
+ * @return WC_Product|false
+ */
+function negar_theme_gaming_zone_product( $slot_key, $needles = array() ) {
+	return negar_theme_product_pack_product( 'gaming-zone', $slot_key, $needles );
 }
 
 /**
@@ -1701,6 +1784,7 @@ function negar_theme_render_product_pack_fields() {
 					$field_name = NEGAR_THEME_PRODUCT_PACK_OPTION . '[packs][' . $pack_id . '][' . $slot_id . ']';
 					?>
 					<div class="negar-product-section__manual" data-product-selector data-single="1" data-input-name="<?php echo esc_attr( $field_name ); ?>">
+						<input type="hidden" name="<?php echo esc_attr( $field_name ); ?>" value="0">
 						<label for="negar-pack-search-<?php echo esc_attr( $pack_id . '-' . $slot_id ); ?>"><?php echo esc_html( $label ); ?></label>
 						<input id="negar-pack-search-<?php echo esc_attr( $pack_id . '-' . $slot_id ); ?>" class="regular-text" type="search" autocomplete="off" placeholder="<?php esc_attr_e( 'نام یا شناسهٔ محصول را جست‌وجو کنید', 'negar-shop' ); ?>">
 						<p class="description negar-product-selector__status" aria-live="polite"></p>
