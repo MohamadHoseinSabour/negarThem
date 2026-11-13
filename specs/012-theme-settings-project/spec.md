@@ -102,5 +102,10 @@ sorting, selector and catalog-visibility hardening.
   desktop and mobile. Invalid attachment IDs safely use the original demo fallback,
   intentional empty editorial text is preserved on editorial banners, image-only
   banners gain no invented text, and all test snapshots are restored identically.
+- Gaming Zone product lookup is bounded and efficient: manual assignments resolve
+  directly by product ID without running fallback queries, unassigned slots use
+  targeted `LIMIT 1` search queries with catalog-visibility filtering, missing
+  matches render safe empty hotspot states without fake links or prices, and
+  unbounded `wc_get_products( ['limit' => -1] )` catalog iterations are eliminated.
 - Documentation keys exactly match implementation and the dedicated spec, plan and
   task list remain separate from specification 009.

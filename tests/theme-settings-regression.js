@@ -382,6 +382,8 @@ async function run() {
 	assert.strictEqual(await page.locator('.products-pack-nk__image__product.two .circle-wrap.start-0').count(), 1, 'The mirage hotspot circle-wrap must use the start-0 alignment class');
 	assert.strictEqual(await page.locator('.products-pack-nk__image__product.two .products-pack-nk__image__product__box.start-0.box-align-start').count(), 1, 'The mirage hotspot popup must use start-0 box-align-start classes');
 	assert.strictEqual(await page.locator('.products-pack-nk__image__product.three .products-pack-nk__image__product__box.end-0.box-align-end').count(), 1, 'Other hotspots must preserve end-0 box-align-end classes');
+	assert.strictEqual(await page.locator('.products-pack-nk__image__product.four.is-empty').count(), 1, 'Unassigned hotspot with no matching product must render the is-empty state');
+	assert.strictEqual(await page.locator('.products-pack-nk__image__product.four a').count(), 0, 'Empty hotspot must not render a purchase link');
 
 	await page.goto(BASE_URL + '/wp-admin/options-general.php?page=negar-theme-settings&tab=layout', { waitUntil: 'domcontentloaded' });
     assert.strictEqual(await page.locator('#negar-layout-sections .negar-layout-item').count(), 35, 'The authenticated layout form must list all 35 fixed homepage sections');

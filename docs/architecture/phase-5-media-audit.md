@@ -87,3 +87,33 @@ non-Elementor front page:
   disabled. Intentional empty editorial strings (`title`, `subtitle`) are
   preserved without falling back to stale demo copy, while image-only banners
   (`wide-banner-one`, `compact-12-*`, `compact-27-*`) render no text elements.
+
+## Gaming Zone product lookup optimization (Phase 5.1-C)
+
+- **Previous query behavior:** `sec-25-gaming-zone.php` previously invoked
+  `wc_get_products( array( 'limit' => -1, 'status' => 'publish', 'visibility' => 'catalog', 'return' => 'objects' ) )`,
+  loading the entire WooCommerce catalog into memory on every homepage load,
+  then iterating in PHP to match title fragments.
+- **New bounded lookup strategy:**
+  1. *Direct ID resolution:* `negar_theme_gaming_zone_product()` first checks
+     `negar_theme_product_pack_product_id( 'gaming-zone', $slot_key )`. If a valid,
+     published and catalog-visible product is assigned, it resolves directly via
+     `wc_get_product( $id )` with zero fallback database queries.
+  2. *Bounded fallback search:* Only unassigned or invalid/hidden slots execute
+     `negar_theme_find_product_by_title_needles()`, which issues a single targeted
+     query (`posts_per_page => 1`, `fields => 'ids'`, `no_found_rows => true`,
+     `orderby => 'date'`, `order => 'DESC'`) with a `post_title LIKE` filter and
+     the standard `negar_theme_catalog_visibility_query_args()` exclusion.
+  3. *Legacy intent preservation:* The 4 stable hotspot IDs (`shadows`, `mirage`,
+     `fc`, `yotei`) and their needle sets (`['Assassin', 'Shadows']`,
+     `['Assassin', 'Mirage']`, `['EA Sports FC']`, `['Ghost of Yotei', 'Yotei']`)
+     are preserved. The newest published, visible product matching any needle
+     is selected.
+  4. *Safe empty state:* Unmatched slots return `false`, rendering `.is-empty` on
+     the hotspot and suppressing popup boxes, purchase links and prices.
+  5. *Request memoization:* Repeated lookups for the same needle sets within a
+     single request are memoized in memory.
+- **Known limitations:** While bounded to `LIMIT 1`, fallback title searching
+  uses SQL `LIKE '%needle%'`. For stores with extensive catalogs, explicitly
+  assigning products via Theme Settings › Banners & Packs completely bypasses
+  fallback queries and executes in O(1) post lookup time.

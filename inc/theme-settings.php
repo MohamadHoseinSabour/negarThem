@@ -1063,6 +1063,105 @@ function negar_theme_sanitize_product_pack_settings( $submitted ) {
 }
 
 /**
+ * Find the latest published, catalog-visible WooCommerce product matching any given title needle.
+ *
+ * Uses a single bounded query with catalog-visibility filtering, avoiding
+ * unbounded catalog iteration. Results are memoized per request.
+ *
+ * @param array<int, string> $needles       Substrings to search in product titles.
+ * @param bool               $force_refresh Optional. Reset the request-level memo cache.
+ * @return WC_Product|false
+ */
+function negar_theme_find_product_by_title_needles( $needles, $force_refresh = false ) {
+	static $memo = array();
+
+	if ( $force_refresh ) {
+		$memo = array();
+	}
+
+	$clean_needles = array();
+	foreach ( (array) $needles as $needle ) {
+		$trimmed = trim( (string) $needle );
+		if ( '' !== $trimmed ) {
+			$clean_needles[] = $trimmed;
+		}
+	}
+	if ( empty( $clean_needles ) || ! function_exists( 'wc_get_product' ) ) {
+		return false;
+	}
+
+	$cache_key = md5( wp_json_encode( $clean_needles ) );
+	if ( array_key_exists( $cache_key, $memo ) ) {
+		return $memo[ $cache_key ];
+	}
+
+	global $wpdb;
+	$where_filter = static function ( $where ) use ( $clean_needles, $wpdb ) {
+		$likes = array();
+		foreach ( $clean_needles as $needle ) {
+			$likes[] = $wpdb->prepare(
+				"{$wpdb->posts}.post_title LIKE %s",
+				'%' . $wpdb->esc_like( $needle ) . '%'
+			);
+		}
+		if ( ! empty( $likes ) ) {
+			$where .= ' AND (' . implode( ' OR ', $likes ) . ')';
+		}
+		return $where;
+	};
+
+	add_filter( 'posts_where', $where_filter );
+	$query_args = negar_theme_catalog_visibility_query_args(
+		array(
+			'post_type'        => 'product',
+			'post_status'      => 'publish',
+			'posts_per_page'   => 1,
+			'fields'           => 'ids',
+			'orderby'          => 'date',
+			'order'            => 'DESC',
+			'no_found_rows'    => true,
+			'suppress_filters' => false,
+		)
+	);
+	$product_ids = get_posts( $query_args );
+	remove_filter( 'posts_where', $where_filter );
+
+	$matched_product = false;
+	if ( ! empty( $product_ids ) ) {
+		$product = wc_get_product( absint( $product_ids[0] ) );
+		if ( $product && $product->is_visible() ) {
+			$matched_product = $product;
+		}
+	}
+
+	$memo[ $cache_key ] = $matched_product;
+	return $matched_product;
+}
+
+/**
+ * Resolve a Gaming Zone hotspot product with manual selection priority and bounded fallback.
+ *
+ * 1. Checks manual assignment via `negar_theme_product_pack_product_id('gaming-zone', $slot_key)`.
+ * 2. If valid and catalog-visible, returns that product immediately (zero fallback search).
+ * 3. Otherwise, searches for a published, catalog-visible product using the provided needles.
+ *
+ * @param string             $slot_key Hotspot key ('shadows', 'mirage', 'fc', 'yotei').
+ * @param array<int, string> $needles  Fallback search title fragments.
+ * @return WC_Product|false
+ */
+function negar_theme_gaming_zone_product( $slot_key, $needles = array() ) {
+	$selected_id = negar_theme_product_pack_product_id( 'gaming-zone', $slot_key );
+	if ( $selected_id && function_exists( 'wc_get_product' ) ) {
+		$product = wc_get_product( $selected_id );
+		if ( $product && 'publish' === get_post_status( $product->get_id() ) && $product->is_visible() ) {
+			return $product;
+		}
+	}
+
+	return negar_theme_find_product_by_title_needles( $needles );
+}
+
+/**
  * Register the versioned option with the Settings API.
  */
 function negar_theme_register_settings() {

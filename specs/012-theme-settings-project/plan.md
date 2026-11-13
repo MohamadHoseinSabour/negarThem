@@ -48,7 +48,11 @@
    shared helpers, removes legacy client-side banner replacement (`applyBannerMediaRecords`
    and data attributes), collapses single-active banner pairs to one column and
    omits disabled banners/empty groups cleanly while preserving intentional empty
-   editorial text and image-only banner markup. Next, complete the remaining
+   editorial text and image-only banner markup. Phase 5.1-C optimizes the Gaming Zone
+   component (`template-parts/home/sec-25-gaming-zone.php`) to eliminate the unbounded
+   `wc_get_products( ['limit' => -1] )` query, resolving assigned products directly by ID,
+   executing bounded single-result (`posts_per_page => 1`) fallback searches only for
+   unassigned slots, and preserving safe empty states. Next, complete the remaining
    established product packs/hotspots with catalog-visible WooCommerce product IDs.
    Stories and brands remain out of scope for Phases 6 and 7.
 8. **Typography, SMS and backup (planned):** define separate security boundaries,

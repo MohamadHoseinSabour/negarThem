@@ -828,6 +828,35 @@ try {
 		&& 0 === negar_theme_product_pack_product_id( 'gaming-zone', 'shadows' );
 	$results['pack_group_isolated'] = $image_id ? $image_id === (int) negar_theme_media_record( 'hero-slide-one' )['media_id'] : true;
 
+	$gz_file = file_get_contents( get_template_directory() . '/template-parts/home/sec-25-gaming-zone.php' );
+	$results['gaming_zone_unbounded_query_eliminated'] = false === strpos( $gz_file, 'wc_get_products' ) && false === strpos( $gz_file, 'limit' );
+
+	$fallback_called = false;
+	$check_where = static function ( $where ) use ( &$fallback_called ) {
+		$fallback_called = true;
+		return $where;
+	};
+	add_filter( 'posts_where', $check_where );
+	$resolved_manual = negar_theme_gaming_zone_product( 'fc', array( 'EA Sports FC' ) );
+	remove_filter( 'posts_where', $check_where );
+	$results['gaming_zone_manual_resolved_without_fallback'] = $resolved_manual && $resolved_manual->get_id() === $product_id && ! $fallback_called;
+
+	negar_theme_find_product_by_title_needles( array(), true );
+	$fallback_search = negar_theme_gaming_zone_product( 'shadows', array( 'EA Sports FC' ) );
+	$results['gaming_zone_unassigned_slot_uses_fallback'] = $fallback_search && false !== stripos( $fallback_search->get_name(), 'EA Sports FC' );
+
+	$fallback_none = negar_theme_gaming_zone_product( 'shadows', array( 'NonExistentNeedleXYZ987' ) );
+	$results['gaming_zone_missing_needle_returns_false'] = false === $fallback_none;
+
+	ob_start();
+	get_template_part( 'template-parts/home/sec-25-gaming-zone' );
+	$gz_html = ob_get_clean();
+	$results['gaming_zone_rendered_hotspots'] = false !== strpos( $gz_html, 'ppnk-hs-61f16945-0' )
+		&& false !== strpos( $gz_html, 'ppnk-hs-61f16945-1' )
+		&& false !== strpos( $gz_html, 'ppnk-hs-61f16945-2' )
+		&& false !== strpos( $gz_html, 'ppnk-hs-61f16945-3' )
+		&& false !== strpos( $gz_html, 'is-empty' );
+
 	$colors = negar_theme_test_save_group( 'colors', array( 'colors' => array( 'primary' => '#059669', 'secondary' => '#e11d48' ) ) );
 	$results['previous_defaults_valid'] = '#059669' === $colors['colors']['primary'] && '#e11d48' === $colors['colors']['secondary'];
 	$results['colors_preserve_groups']  = 'اطلاعیهٔ آزمایشی' === $colors['header']['announcement'];

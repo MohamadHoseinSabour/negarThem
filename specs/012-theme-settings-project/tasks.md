@@ -57,6 +57,11 @@
   disabled banners/images cleanly, collapse single-active banner pairs to one
   column and omit empty containers while preserving intentional empty editorial
   text, image-only templates and snapshot restoration.
+- [x] **T209.0d** Optimize `template-parts/home/sec-25-gaming-zone.php` product lookup:
+  eliminate unbounded `wc_get_products( ['limit' => -1] )`, resolve manually
+  assigned products directly by ID without fallback queries, execute bounded
+  `LIMIT 1` searches with catalog-visibility filtering only for unassigned slots,
+  preserve the 4 hotspot keys/needles, and render truthful empty states.
 - [x] **T209.1** Implement fixed hero/banner media records using image attachment
   IDs, safe URLs, explicit alt/visibility values, non-autoloaded independent
   storage and Media Library controls. Do not include stories or brands.

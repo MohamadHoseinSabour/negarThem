@@ -17,30 +17,6 @@ $shop_url   = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink
 $pack_banner = $kaveh_base . '/product-pack.png';
 $kala_pack_icon = $kaveh_base . '/kala-pack.png';
 
-$catalogue = function_exists( 'wc_get_products' ) ? wc_get_products(
-	array(
-		'status'  => 'publish',
-		'visibility' => 'catalog',
-		'limit'   => -1,
-		'return'  => 'objects',
-		'orderby' => 'date',
-		'order'   => 'DESC',
-	)
-) : array();
-
-$find_product = static function ( $needles ) use ( $catalogue ) {
-	foreach ( $catalogue as $product ) {
-		$name = $product->get_name();
-		foreach ( $needles as $needle ) {
-			if ( false !== stripos( $name, $needle ) ) {
-				return $product;
-			}
-		}
-	}
-
-	return false;
-};
-
 $hotspots = array(
 	array(
 		'key'   => 'shadows',
@@ -70,9 +46,9 @@ $hotspots = array(
 
 $matched_products = array();
 foreach ( $hotspots as &$hotspot ) {
-	$selected_product_id = negar_theme_product_pack_product_id( 'gaming-zone', $hotspot['key'] );
-	$selected_product    = $selected_product_id && function_exists( 'wc_get_product' ) ? wc_get_product( $selected_product_id ) : false;
-	$hotspot['product']  = $selected_product && $selected_product->is_visible() ? $selected_product : $find_product( $hotspot['needles'] );
+	$hotspot['product'] = function_exists( 'negar_theme_gaming_zone_product' )
+		? negar_theme_gaming_zone_product( $hotspot['key'], $hotspot['needles'] )
+		: false;
 	if ( $hotspot['product'] ) {
 		$matched_products[ $hotspot['product']->get_id() ] = $hotspot['product'];
 	}
