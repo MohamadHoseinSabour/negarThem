@@ -169,16 +169,45 @@ $carousel_products_sec24 = array(
 											$rating           = (float) $product->get_average_rating();
 											$prod_rating      = $rating > 0 ? '5/' . number_format_i18n( $rating, 1 ) : '';
 
-											$is_on_sale       = $product->is_on_sale();
-											$price            = (float) $product->get_price();
-											$regular_price    = (float) $product->get_regular_price();
-											$sale_price       = (float) $product->get_sale_price();
+											$is_on_sale         = $product->is_on_sale();
+											$prod_price_raw     = $product->get_price();
+											$regular_price      = (float) $product->get_regular_price();
+											$sale_price         = (float) $product->get_sale_price();
+											$prod_is_free       = false;
+											$prod_price         = '';
+											$prod_regular_price = '';
+											$prod_offer         = '';
 
-											$prod_price         = $price > 0 ? number_format_i18n( $price ) : '';
-											$prod_regular_price = ( $is_on_sale && $regular_price > $price && $regular_price > 0 ) ? number_format_i18n( $regular_price ) : '';
-											$prod_offer         = ( $is_on_sale && $regular_price > $sale_price && $regular_price > 0 )
-												? '٪ ' . (string) round( ( ( $regular_price - $sale_price ) / $regular_price ) * 100 )
-												: '';
+											if ( $product->is_type( 'variable' ) ) {
+												$min_price = $product->get_variation_price( 'min', true );
+												$max_price = $product->get_variation_price( 'max', true );
+												if ( '' !== $min_price && false !== $min_price ) {
+													if ( (float) $min_price === 0.0 && (float) $max_price === 0.0 ) {
+														$prod_price   = __( 'رایگان', 'negar-shop' );
+														$prod_is_free = true;
+													} elseif ( $min_price === $max_price ) {
+														$prod_price = number_format_i18n( (float) $min_price );
+													} else {
+														$prod_price = sprintf( __( 'از %s', 'negar-shop' ), number_format_i18n( (float) $min_price ) );
+													}
+												}
+											} elseif ( '' !== $prod_price_raw ) {
+												$price_val = (float) $prod_price_raw;
+												if ( $price_val > 0 ) {
+													$prod_price = number_format_i18n( $price_val );
+												} else {
+													$prod_price   = __( 'رایگان', 'negar-shop' );
+													$prod_is_free = true;
+												}
+											}
+
+											$is_real_sale = $is_on_sale && ! $prod_is_free && ! $product->is_type( 'variable' )
+												&& $regular_price > 0 && '' !== $product->get_sale_price() && $regular_price > $sale_price;
+
+											if ( $is_real_sale ) {
+												$prod_regular_price = number_format_i18n( $regular_price );
+												$prod_offer         = '٪ ' . (string) round( ( ( $regular_price - $sale_price ) / $regular_price ) * 100 );
+											}
 
 											$prod_colors = array();
 											$color_attr  = $product->get_attribute( 'pa_color' );
@@ -267,13 +296,21 @@ $carousel_products_sec24 = array(
 																<a href="<?php echo esc_url( $prod_url ); ?>" class="buy-now__btn d-flex align-items-center justify-content-center rounded-circle flex-fill flex-grow-0 flex-shrink-0" aria-label="<?php echo esc_attr__( 'مشاهده و انتخاب گزینه‌ها', 'negar-shop' ); ?>">
 																	<i class="icon icon-chevron-left-2 lh-1" aria-hidden="true"></i>
 																</a>
-															<?php elseif ( $product->is_purchasable() && $product->is_in_stock() ) : ?>
-																<button type="button" class="kaveh-variation-modal-trigger buy-now__btn d-flex align-items-center justify-content-center rounded-circle flex-fill flex-grow-0 flex-shrink-0" data-product_id="<?php echo esc_attr( $prod_id ); ?>" aria-label="<?php echo esc_attr__( 'افزودن به سبد خرید', 'negar-shop' ); ?>">
-																	<i class="icon icon-bag-6 lh-1" aria-hidden="true"></i>
-																</button>
-															<?php else : ?>
+															<?php elseif ( $product->is_type( 'grouped' ) ) : ?>
+																<a href="<?php echo esc_url( $prod_url ); ?>" class="buy-now__btn d-flex align-items-center justify-content-center rounded-circle flex-fill flex-grow-0 flex-shrink-0" aria-label="<?php echo esc_attr__( 'مشاهده محصولات', 'negar-shop' ); ?>">
+																	<i class="icon icon-chevron-left-2 lh-1" aria-hidden="true"></i>
+																</a>
+															<?php elseif ( $product->is_type( 'external' ) ) : ?>
+																<a href="<?php echo esc_url( $prod_url ); ?>" class="buy-now__btn d-flex align-items-center justify-content-center rounded-circle flex-fill flex-grow-0 flex-shrink-0" aria-label="<?php echo esc_attr__( 'مشاهده محصول', 'negar-shop' ); ?>">
+																	<i class="icon icon-chevron-left-2 lh-1" aria-hidden="true"></i>
+																</a>
+															<?php elseif ( ! $product->is_in_stock() || ! $product->is_purchasable() ) : ?>
 																<button type="button" class="buy-now__btn d-flex align-items-center justify-content-center rounded-circle flex-fill flex-grow-0 flex-shrink-0 disabled" disabled aria-label="<?php echo esc_attr__( 'ناموجود', 'negar-shop' ); ?>">
 																	<i class="icon icon-bag-6 lh-1 opacity-50" aria-hidden="true"></i>
+																</button>
+															<?php else : ?>
+																<button type="button" class="kaveh-variation-modal-trigger buy-now__btn d-flex align-items-center justify-content-center rounded-circle flex-fill flex-grow-0 flex-shrink-0" data-product_id="<?php echo esc_attr( $prod_id ); ?>" aria-label="<?php echo esc_attr__( 'افزودن به سبد خرید', 'negar-shop' ); ?>">
+																	<i class="icon icon-bag-6 lh-1" aria-hidden="true"></i>
 																</button>
 															<?php endif; ?>
 														</div>
@@ -286,7 +323,9 @@ $carousel_products_sec24 = array(
 															<?php if ( ! empty( $prod_price ) ) : ?>
 															<div class="price d-flex align-items-center gap-1">
 																<?php echo esc_html( $prod_price ); ?>
-																<span class="toman-symbol toman-symbol--modern lh-1"><svg width="19.5" height="18" viewBox="0 0 13 12" fill="#0a0a0a" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><use href="#kaveh-toman-mark"></use></svg></span>
+																<?php if ( ! $prod_is_free ) : ?>
+																	<span class="toman-symbol toman-symbol--modern lh-1"><svg width="19.5" height="18" viewBox="0 0 13 12" fill="#0a0a0a" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><use href="#kaveh-toman-mark"></use></svg></span>
+																<?php endif; ?>
 															</div>
 															<?php endif; ?>
 														</div>
@@ -323,15 +362,44 @@ $carousel_products_sec24 = array(
 												$d_img_id         = $d_product->get_image_id();
 												$d_img            = $d_img_id ? wp_get_attachment_image_url( $d_img_id, 'woocommerce_thumbnail' ) : ( function_exists( 'wc_placeholder_img_src' ) ? wc_placeholder_img_src( 'woocommerce_thumbnail' ) : '' );
 												$d_is_on_sale     = $d_product->is_on_sale();
-												$d_price          = (float) $d_product->get_price();
+												$d_price_raw      = $d_product->get_price();
 												$d_reg_price      = (float) $d_product->get_regular_price();
 												$d_sale_price_val = (float) $d_product->get_sale_price();
+												$d_is_free        = false;
+												$d_sale_price     = '';
+												$d_regular_price  = '';
+												$d_discount       = '';
 
-												$d_discount      = ( $d_is_on_sale && $d_reg_price > $d_sale_price_val && $d_reg_price > 0 )
-													? (string) round( ( ( $d_reg_price - $d_sale_price_val ) / $d_reg_price ) * 100 )
-													: '';
-												$d_regular_price = ( $d_is_on_sale && $d_reg_price > $d_price && $d_reg_price > 0 ) ? number_format_i18n( $d_reg_price ) : '';
-												$d_sale_price    = $d_price > 0 ? number_format_i18n( $d_price ) : '';
+												if ( $d_product->is_type( 'variable' ) ) {
+													$d_min_price = $d_product->get_variation_price( 'min', true );
+													$d_max_price = $d_product->get_variation_price( 'max', true );
+													if ( '' !== $d_min_price && false !== $d_min_price ) {
+														if ( (float) $d_min_price === 0.0 && (float) $d_max_price === 0.0 ) {
+															$d_sale_price = __( 'رایگان', 'negar-shop' );
+															$d_is_free    = true;
+														} elseif ( $d_min_price === $d_max_price ) {
+															$d_sale_price = number_format_i18n( (float) $d_min_price );
+														} else {
+															$d_sale_price = sprintf( __( 'از %s', 'negar-shop' ), number_format_i18n( (float) $d_min_price ) );
+														}
+													}
+												} elseif ( '' !== $d_price_raw ) {
+													$price_val = (float) $d_price_raw;
+													if ( $price_val > 0 ) {
+														$d_sale_price = number_format_i18n( $price_val );
+													} else {
+														$d_sale_price = __( 'رایگان', 'negar-shop' );
+														$d_is_free    = true;
+													}
+												}
+
+												$d_is_real_sale = $d_is_on_sale && ! $d_is_free && ! $d_product->is_type( 'variable' )
+													&& $d_reg_price > 0 && '' !== $d_product->get_sale_price() && $d_reg_price > $d_sale_price_val;
+
+												if ( $d_is_real_sale ) {
+													$d_regular_price = number_format_i18n( $d_reg_price );
+													$d_discount      = (string) round( ( ( $d_reg_price - $d_sale_price_val ) / $d_reg_price ) * 100 );
+												}
 												$d_rating_val    = (float) $d_product->get_average_rating();
 												$d_rating        = $d_rating_val > 0 ? '5/' . number_format_i18n( $d_rating_val, 1 ) : '';
 												$d_comments_cnt  = $d_product->get_review_count();
@@ -399,11 +467,13 @@ $carousel_products_sec24 = array(
 														<?php if ( ! empty( $d_sale_price ) ) : ?>
 														<div class="price ms-auto f-iransans fw-semibold d-flex align-items-center gap-1">
 															<span><?php echo esc_html( $d_sale_price ); ?></span>
-															<span class="toman-symbol toman-symbol--modern lh-1"><svg width="19.5" height="18" viewBox="0 0 13 12" fill="#0a0a0a" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><use href="#kaveh-toman-mark"></use></svg></span>
+															<?php if ( ! $d_is_free ) : ?>
+																<span class="toman-symbol toman-symbol--modern lh-1"><svg width="19.5" height="18" viewBox="0 0 13 12" fill="#0a0a0a" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><use href="#kaveh-toman-mark"></use></svg></span>
+															<?php endif; ?>
 														</div>
 														<?php endif; ?>
 													</div>
-													<a href="<?php echo esc_url( $d_url ); ?>" class="btn-more d-flex align-items-center justify-content-center position-absolute bottom-0 end-50" aria-label="مشاهده محصول">
+													<a href="<?php echo esc_url( $d_url ); ?>" class="btn-more d-flex align-items-center justify-content-center position-absolute bottom-0 end-50" aria-label="<?php esc_attr_e( 'مشاهده محصول', 'negar-shop' ); ?>">
 														<i class="icon icon-chevron-left-2 lh-1" aria-hidden="true"></i>
 													</a>
 												<?php else : ?>

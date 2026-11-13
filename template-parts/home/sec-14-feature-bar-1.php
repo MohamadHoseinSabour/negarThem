@@ -104,20 +104,45 @@ $top_products = array(
 											: false;
 
 										if ( $product ) {
-											$item_title = $product->get_name();
-											$item_url   = get_permalink( $product->get_id() );
-											$img_id     = $product->get_image_id();
-											$item_img   = $img_id ? wp_get_attachment_image_url( $img_id, 'woocommerce_thumbnail' ) : ( function_exists( 'wc_placeholder_img_src' ) ? wc_placeholder_img_src( 'woocommerce_thumbnail' ) : '' );
-											$price      = (float) $product->get_price();
-											$item_price = $price > 0 ? number_format_i18n( $price ) : '';
-											$rating     = (float) $product->get_average_rating();
-											$item_rate  = $rating > 0 ? '5/' . number_format_i18n( $rating, 1 ) : '';
+											$item_title   = $product->get_name();
+											$item_url     = get_permalink( $product->get_id() );
+											$img_id       = $product->get_image_id();
+											$item_img     = $img_id ? wp_get_attachment_image_url( $img_id, 'woocommerce_thumbnail' ) : ( function_exists( 'wc_placeholder_img_src' ) ? wc_placeholder_img_src( 'woocommerce_thumbnail' ) : '' );
+											$rating       = (float) $product->get_average_rating();
+											$item_rate    = $rating > 0 ? '5/' . number_format_i18n( $rating, 1 ) : '';
+											$price_raw    = $product->get_price();
+											$item_price   = '';
+											$item_is_free = false;
+
+											if ( $product->is_type( 'variable' ) ) {
+												$min_price = $product->get_variation_price( 'min', true );
+												$max_price = $product->get_variation_price( 'max', true );
+												if ( '' !== $min_price && false !== $min_price ) {
+													if ( (float) $min_price === 0.0 && (float) $max_price === 0.0 ) {
+														$item_price   = __( 'رایگان', 'negar-shop' );
+														$item_is_free = true;
+													} elseif ( $min_price === $max_price ) {
+														$item_price = number_format_i18n( (float) $min_price );
+													} else {
+														$item_price = sprintf( __( 'از %s', 'negar-shop' ), number_format_i18n( (float) $min_price ) );
+													}
+												}
+											} elseif ( '' !== $price_raw ) {
+												$price_val = (float) $price_raw;
+												if ( $price_val > 0 ) {
+													$item_price = number_format_i18n( $price_val );
+												} else {
+													$item_price   = __( 'رایگان', 'negar-shop' );
+													$item_is_free = true;
+												}
+											}
 										} else {
-											$item_title = __( 'محصولی برای نمایش موجود نیست', 'negar-shop' );
-											$item_url   = '';
-											$item_img   = function_exists( 'wc_placeholder_img_src' ) ? wc_placeholder_img_src( 'woocommerce_thumbnail' ) : '';
-											$item_price = '';
-											$item_rate  = '';
+											$item_title   = __( 'محصولی برای نمایش موجود نیست', 'negar-shop' );
+											$item_url     = '';
+											$item_img     = function_exists( 'wc_placeholder_img_src' ) ? wc_placeholder_img_src( 'woocommerce_thumbnail' ) : '';
+											$item_price   = '';
+											$item_rate    = '';
+											$item_is_free = false;
 										}
 										?>
 										<div class="swiper-slide">
@@ -144,11 +169,13 @@ $top_products = array(
 																<?php if ( ! empty( $item_price ) ) : ?>
 																	<span class="price__current d-inline-flex align-items-center gap-2">
 																		<span class="price__amount"><?php echo esc_html( $item_price ); ?></span>
-																		<span class="toman-symbol toman-symbol--modern currency-symbol lh-1">
-																			<svg width="19.5" height="18" viewBox="0 0 13 12" fill="#0a0a0a" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-																				<use href="#kaveh-toman-mark"></use>
-																			</svg>
-																		</span>
+																		<?php if ( ! $item_is_free ) : ?>
+																			<span class="toman-symbol toman-symbol--modern currency-symbol lh-1">
+																				<svg width="19.5" height="18" viewBox="0 0 13 12" fill="#0a0a0a" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+																					<use href="#kaveh-toman-mark"></use>
+																				</svg>
+																			</span>
+																		<?php endif; ?>
 																	</span>
 																<?php endif; ?>
 															</div>

@@ -339,16 +339,45 @@ $taste_categories = array(
 													$rating     = (float) $product->get_average_rating();
 													$item_rate  = $rating > 0 ? number_format_i18n( $rating, 1 ) : '';
 
-													$is_on_sale    = $product->is_on_sale();
-													$price         = (float) $product->get_price();
-													$regular_price = (float) $product->get_regular_price();
-													$sale_price    = (float) $product->get_sale_price();
+													$is_on_sale         = $product->is_on_sale();
+													$price_raw          = $product->get_price();
+													$regular_price      = (float) $product->get_regular_price();
+													$sale_price         = (float) $product->get_sale_price();
+													$item_is_free       = false;
+													$item_price         = '';
+													$item_regular_price = '';
+													$item_discount      = '';
 
-													$item_price         = $price > 0 ? number_format_i18n( $price ) : '';
-													$item_regular_price = ( $is_on_sale && $regular_price > $price && $regular_price > 0 ) ? number_format_i18n( $regular_price ) : '';
-													$item_discount      = ( $is_on_sale && $regular_price > $sale_price && $regular_price > 0 )
-														? (string) round( ( ( $regular_price - $sale_price ) / $regular_price ) * 100 )
-														: '';
+													if ( $product->is_type( 'variable' ) ) {
+														$min_price = $product->get_variation_price( 'min', true );
+														$max_price = $product->get_variation_price( 'max', true );
+														if ( '' !== $min_price && false !== $min_price ) {
+															if ( (float) $min_price === 0.0 && (float) $max_price === 0.0 ) {
+																$item_price   = __( 'رایگان', 'negar-shop' );
+																$item_is_free = true;
+															} elseif ( $min_price === $max_price ) {
+																$item_price = number_format_i18n( (float) $min_price );
+															} else {
+																$item_price = sprintf( __( 'از %s', 'negar-shop' ), number_format_i18n( (float) $min_price ) );
+															}
+														}
+													} elseif ( '' !== $price_raw ) {
+														$price_val = (float) $price_raw;
+														if ( $price_val > 0 ) {
+															$item_price = number_format_i18n( $price_val );
+														} else {
+															$item_price   = __( 'رایگان', 'negar-shop' );
+															$item_is_free = true;
+														}
+													}
+
+													$is_real_sale = $is_on_sale && ! $item_is_free && ! $product->is_type( 'variable' )
+														&& $regular_price > 0 && '' !== $product->get_sale_price() && $regular_price > $sale_price;
+
+													if ( $is_real_sale ) {
+														$item_regular_price = number_format_i18n( $regular_price );
+														$item_discount      = (string) round( ( ( $regular_price - $sale_price ) / $regular_price ) * 100 );
+													}
 
 													$item_colors = array();
 													$color_attr  = $product->get_attribute( 'pa_color' );
@@ -423,11 +452,13 @@ $taste_categories = array(
 																	<?php if ( ! empty( $item_price ) ) : ?>
 																		<div class="price d-flex align-items-center f-iransans gap-1">
 																			<?php echo esc_html( $item_price ); ?>
-																			<span class="toman-symbol toman-symbol--modern lh-1">
-																				<svg width="19.5" height="18" viewBox="0 0 13 12" fill="#0a0a0a" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-																					<use href="#kaveh-toman-mark"></use>
-																				</svg>
-																			</span>
+																			<?php if ( ! $item_is_free ) : ?>
+																				<span class="toman-symbol toman-symbol--modern lh-1">
+																					<svg width="19.5" height="18" viewBox="0 0 13 12" fill="#0a0a0a" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+																						<use href="#kaveh-toman-mark"></use>
+																					</svg>
+																				</span>
+																			<?php endif; ?>
 																		</div>
 																	<?php endif; ?>
 																</div>
@@ -443,13 +474,15 @@ $taste_categories = array(
 																</div>
 																<div class="price">
 																	<?php if ( ! empty( $item_price ) ) : ?>
-																		<div class="price d-flex align-items-center f-iransans">
+																		<div class="price d-flex align-items-center f-iransans gap-1">
 																			<?php echo esc_html( $item_price ); ?>
-																			<span class="toman-symbol toman-symbol--modern lh-1">
-																				<svg width="19.5" height="18" viewBox="0 0 13 12" fill="#0a0a0a" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-																					<use href="#kaveh-toman-mark"></use>
-																				</svg>
-																			</span>
+																			<?php if ( ! $item_is_free ) : ?>
+																				<span class="toman-symbol toman-symbol--modern lh-1">
+																					<svg width="19.5" height="18" viewBox="0 0 13 12" fill="#0a0a0a" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+																						<use href="#kaveh-toman-mark"></use>
+																					</svg>
+																				</span>
+																			<?php endif; ?>
 																		</div>
 																	<?php endif; ?>
 																</div>

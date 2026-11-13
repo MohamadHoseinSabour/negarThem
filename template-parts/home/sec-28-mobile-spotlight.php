@@ -22,21 +22,45 @@ $focal_product = function_exists( 'negar_theme_product_pack_product' )
 if ( $focal_product ) {
 	$focal_title      = $focal_product->get_name();
 	$focal_short_desc = wp_strip_all_tags( $focal_product->get_short_description() );
-	$focal_desc       = ! empty( $focal_short_desc ) ? $focal_short_desc : __( 'محصول ویژه و منتخب فروشگاه با ضمانت اصالت و کیفیت کالا.', 'negar-shop' );
+	$focal_desc       = ! empty( $focal_short_desc ) ? $focal_short_desc : __( 'محصول منتخب و معرفی‌شده در صفحهٔ اصلی فروشگاه.', 'negar-shop' );
 	$focal_url        = get_permalink( $focal_product->get_id() );
 	$focal_img_id     = $focal_product->get_image_id();
 	$focal_image      = $focal_img_id ? wp_get_attachment_image_url( $focal_img_id, 'large' ) : ( function_exists( 'wc_placeholder_img_src' ) ? wc_placeholder_img_src( 'woocommerce_single' ) : '' );
 	$focal_rating_val = (float) $focal_product->get_average_rating();
 	$focal_rating     = $focal_rating_val > 0 ? '★ ' . number_format_i18n( $focal_rating_val, 1 ) : '';
 
-	$focal_is_sale   = $focal_product->is_on_sale();
-	$focal_cur_price = (float) $focal_product->get_price();
-	$focal_reg_price = (float) $focal_product->get_regular_price();
-	$focal_price_txt = $focal_cur_price > 0 ? number_format_i18n( $focal_cur_price ) . ' ' . __( 'تومان', 'negar-shop' ) : '';
-	$focal_del_txt   = ( $focal_is_sale && $focal_reg_price > $focal_cur_price && $focal_reg_price > 0 ) ? number_format_i18n( $focal_reg_price ) . ' ' . __( 'تومان', 'negar-shop' ) : '';
+	if ( $focal_product->is_type( 'variable' ) ) {
+		$focal_min_price = $focal_product->get_variation_price( 'min', true );
+		$focal_max_price = $focal_product->get_variation_price( 'max', true );
+		if ( '' !== $focal_min_price && false !== $focal_min_price ) {
+			if ( (float) $focal_min_price === 0.0 && (float) $focal_max_price === 0.0 ) {
+				$focal_price_txt = __( 'رایگان', 'negar-shop' );
+			} elseif ( $focal_min_price === $focal_max_price ) {
+				$focal_price_txt = number_format_i18n( (float) $focal_min_price ) . ' ' . __( 'تومان', 'negar-shop' );
+			} else {
+				$focal_price_txt = sprintf( __( 'از %s تومان', 'negar-shop' ), number_format_i18n( (float) $focal_min_price ) );
+			}
+		} else {
+			$focal_price_txt = '';
+		}
+		$focal_del_txt = '';
+	} else {
+		$focal_price_raw = $focal_product->get_price();
+		$focal_price_txt = '';
+		if ( '' !== $focal_price_raw ) {
+			$focal_val       = (float) $focal_price_raw;
+			$focal_price_txt = $focal_val > 0 ? number_format_i18n( $focal_val ) . ' ' . __( 'تومان', 'negar-shop' ) : __( 'رایگان', 'negar-shop' );
+		}
+
+		$focal_is_sale      = $focal_product->is_on_sale();
+		$focal_reg_price    = (float) $focal_product->get_regular_price();
+		$focal_sale_val     = (float) $focal_product->get_sale_price();
+		$focal_is_real_sale = $focal_is_sale && $focal_reg_price > 0 && '' !== $focal_product->get_sale_price() && $focal_reg_price > $focal_sale_val;
+		$focal_del_txt      = $focal_is_real_sale ? number_format_i18n( $focal_reg_price ) . ' ' . __( 'تومان', 'negar-shop' ) : '';
+	}
 } else {
 	$focal_title     = __( 'محصولی برای نمایش موجود نیست', 'negar-shop' );
-	$focal_desc      = __( 'در حال حاضر محصول ویژه‌ای در این جایگاه انتخاب نشده است.', 'negar-shop' );
+	$focal_desc      = __( 'در حال حاضر محصولی در این جایگاه انتخاب نشده است.', 'negar-shop' );
 	$focal_url       = '';
 	$focal_image     = function_exists( 'wc_placeholder_img_src' ) ? wc_placeholder_img_src( 'woocommerce_single' ) : '';
 	$focal_rating    = '';
@@ -57,7 +81,7 @@ $adjacent_products = new WP_Query(
 );
 ?>
 
-<section class="negar-sec-28-s25-spotlight py-5" aria-label="<?php esc_attr_e( 'ویترین گلکسی S25 FE', 'negar-shop' ); ?>">
+<section class="negar-sec-28-s25-spotlight py-5" aria-label="<?php esc_attr_e( 'ویترین محصول ویژه', 'negar-shop' ); ?>">
 	<div class="container max-w-[1320px] mx-auto px-3">
 		
 		<!-- Signature Section Header & Divider -->
@@ -124,9 +148,27 @@ $adjacent_products = new WP_Query(
 									<span class="text-sm font-black text-rose-600"><?php echo esc_html( $focal_price_txt ); ?></span>
 								<?php endif; ?>
 							</div>
-							<a href="<?php echo esc_url( $focal_url ); ?>" class="bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs px-4 py-2 rounded-full transition shadow-xs">
-								<?php esc_html_e( 'خرید آنی', 'negar-shop' ); ?>
-							</a>
+							<?php
+							$focal_in_stock    = $focal_product->is_in_stock();
+							$focal_purchasable = $focal_product->is_purchasable();
+							if ( ! $focal_in_stock || ! $focal_purchasable ) :
+							?>
+								<span class="bg-slate-200 text-slate-500 font-bold text-xs px-4 py-2 rounded-full cursor-not-allowed">
+									<?php esc_html_e( 'ناموجود', 'negar-shop' ); ?>
+								</span>
+							<?php elseif ( $focal_product->is_type( 'variable' ) || $focal_product->is_type( 'grouped' ) ) : ?>
+								<a href="<?php echo esc_url( $focal_url ); ?>" class="bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs px-4 py-2 rounded-full transition shadow-xs">
+									<?php esc_html_e( 'مشاهده و انتخاب گزینه‌ها', 'negar-shop' ); ?>
+								</a>
+							<?php elseif ( $focal_product->is_type( 'external' ) ) : ?>
+								<a href="<?php echo esc_url( $focal_url ); ?>" class="bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs px-4 py-2 rounded-full transition shadow-xs">
+									<?php esc_html_e( 'مشاهده محصول', 'negar-shop' ); ?>
+								</a>
+							<?php else : ?>
+								<a href="<?php echo esc_url( $focal_url ); ?>" class="bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs px-4 py-2 rounded-full transition shadow-xs">
+									<?php esc_html_e( 'خرید آنی', 'negar-shop' ); ?>
+								</a>
+							<?php endif; ?>
 						<?php else : ?>
 							<div class="w-full text-center py-1">
 								<span class="text-xs text-slate-400"><?php esc_html_e( 'ناموجود', 'negar-shop' ); ?></span>
