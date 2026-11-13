@@ -206,14 +206,22 @@ whitelists seven code-owned components and their fixed slot identifiers:
     or invalid add-to-cart controls are ever rendered.
   - *Image fidelity:* Real products lacking a featured image display the standard WooCommerce
     placeholder rather than unrelated demonstration photos.
-  - *Description neutrality:* In `sec-28-mobile-spotlight`, real products lacking a short
-    description render neutral store copy rather than hardcoded Samsung Galaxy S25 FE specifications.
+  - *Description & accessibility neutrality:* In `sec-28-mobile-spotlight`, the section aria-label
+    uses neutral `ویترین محصول ویژه` rather than hardcoded Samsung Galaxy S25 FE specifications,
+    and real products lacking a short description render neutral store copy rather than commercial
+    guarantee claims.
+  - *Zero-price semantics:* Across all product-pack templates (`sec-13`, `sec-14`, `sec-23`, `sec-24`,
+    `sec-28`, `sec-34`), missing prices (`'' === $product->get_price()`) suppress price output, while
+    genuine zero-price items render `رایگان` without the Toman currency mark. Variable products format
+    variation ranges (`از X تومان`) or `رایگان`. Real sales require `regular_price > sale_price > 0`.
   - *Color swatch validation:* Color attributes (`pa_color`) strictly validate term hex metadata
     (`preg_match('/^#([a-f0-9]{3}){1,2}$/i', $hex)`); invalid or missing values never fall back to
     an invented `#808080` swatch.
-  - *Action safety:* In `sec-24-smartwatches-2`, variable products link directly to the product permalink
-    for variation selection; purchasable simple products emit verified product IDs; empty slots suppress
-    all add-to-cart buttons.
+  - *Action safety:* In `sec-24-smartwatches-2` and `sec-28-mobile-spotlight`, variable and grouped
+    products link directly to the product permalink (`مشاهده و انتخاب گزینه‌ها`); external products link
+    with `مشاهده محصول`; purchasable simple products emit verified product IDs / `خرید آنی`; out-of-stock
+    or unpurchasable products display disabled `ناموجود` controls; empty slots suppress action buttons
+    completely.
 
 ## Planned schema additions
 

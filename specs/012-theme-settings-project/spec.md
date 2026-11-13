@@ -1,7 +1,7 @@
 # Feature Specification: 012 Complete Theme Settings Project
 
 **Feature code:** `SETTINGS-01`
-**Status:** Phase 5 banner, hero and product-pack management in progress
+**Status:** Phase 5 complete and verified. Phase 6 (T210-T213) planned.
 **Supersedes for new work:** None. `009-featurename-theme-options` remains the
 historical Customizer-and-widgets specification and is not this project.
 

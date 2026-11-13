@@ -1,6 +1,6 @@
 # Tasks: 012 Complete Theme Settings Project
 
-**Status:** Phase 5 banner, hero and product-pack management in progress.
+**Status:** Phase 5 complete and verified. Phase 6 (T210-T213) planned.
 
 ## Completed foundation and hardening
 

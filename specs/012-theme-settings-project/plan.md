@@ -1,6 +1,6 @@
 # Implementation Plan: 012 Complete Theme Settings Project
 
-**Status:** Phase 5 banner, hero and product-pack management in progress.
+**Status:** Phase 5 complete and verified. Phase 6 (T210-T213) planned.
 
 ## Architecture
 
@@ -57,7 +57,11 @@
    `feature-bar-1` [4 slots], `feature-bar-2` [4 slots], `smartwatches-2` [7 slots],
    `mobile-spotlight` [1 focal slot, adjacent Phase 4 untouched], and `feature-bar-3` [4 slots])
    with catalog-visible WooCommerce product IDs, manual assignment priority, bounded fallback
-   searches and authentic commerce rendering.
+   searches and authentic commerce rendering. Phase 5.5 finalizes audit, hardening,
+   and formal closure: neutral accessibility labeling and descriptions (`sec-28`), genuine zero-price
+   distinction (`رایگان` without Toman symbol), purchase action compatibility by product type
+   (`variable`, `grouped`, `external`, `simple`, out-of-stock), query filter reliability with
+   `try ... finally`, and full regression test suite pass.
    Stories and brands remain out of scope for Phases 6 and 7.
 8. **Typography, SMS and backup (planned):** define separate security boundaries,
    secret handling and import/export validation before UI implementation.

@@ -144,3 +144,11 @@ non-Elementor front page:
 - **Query robustness:**
   - `negar_theme_find_product_by_title_needles()` wraps the temporary `posts_where` filter
     in `try ... finally` to guarantee filter detachment even upon database or memory faults.
+
+## Phase 5.5 Final Audit, Hardening & Closure
+
+- **Mobile Spotlight naming & copy:** Section `aria-label` updated to neutral `ویترین محصول ویژه` (removing hardcoded Galaxy S25 FE brand names). Default and empty descriptions replaced with neutral storefront copy (removing commercial guarantee claims).
+- **Price semantics & zero-price distinction:** Templates distinguish unpriced items (`'' === $product->get_price()`), genuine zero-price items (`(float)$price === 0.0` -> `رایگان` without Toman symbol), positive formatted prices, and variable product price ranges. Real sales require `regular_price > sale_price > 0`.
+- **Purchase action safety:** Supports `simple`, `variable`, `grouped`, and `external` WooCommerce product types safely. Out-of-stock items display disabled `ناموجود` controls; empty slots suppress action buttons completely.
+- **Query filter cleanup:** Wrapped `posts_where` query filters in `try ... finally` blocks across regression tests and helpers to ensure filter detachment even upon exceptions.
+- **Phase 5 closure status:** COMPLETE. All 17 media records and 40 product-pack slots across 7 components render authentic server-side WooCommerce data with 100% truthful empty states.

@@ -115,7 +115,29 @@
   and verify its real permalink at desktop and mobile WAMP widths; all test
   settings are restored.
 
+## Phase 5 — Hero, banner and complete product-pack management
+
+**Status:** PASS (COMPLETE & CLOSED)
+**Baseline:** `10917faf6e549e23cf95ff58a802495bc4bfeaed`
+**Closure Commits:**
+- `2edb5c0` `fix(settings): harden product pack price and purchase semantics`
+- `35ef2ea` `test(settings): add try-finally query cleanup and zero-price regression coverage`
+
+### Summary of Accomplishments:
+- **Phase 5.1-A (Bug Fixes):** Media link validation accepts safe relative paths (`/shop/`) and HTTP(S) URLs while rejecting unsafe protocols; Media Library removal immediately restores default fallback image; Gaming Zone `'mirage'` hotspot key aligned.
+- **Phase 5.1-B1 (Hero SSR):** Converted Hero slider (`hero-slide-one`, `hero-slide-two`) to pure PHP server-side rendering, removed client-side JS media replacement, handled 2-, 1- and 0-slide visibility states cleanly with Swiper stability.
+- **Phase 5.1-B2 (Banner SSR):** Converted all 15 audited promotional banner records across 8 templates to PHP server-side rendering; removed `applyBannerMediaRecords()` and client-side data attributes; collapsed single-active pairs; omitted empty containers cleanly.
+- **Phase 5.1-C (Gaming Zone Query Optimization):** Replaced unbounded `wc_get_products( ['limit' => -1] )` with direct ID resolution ($O(1)$) and bounded `LIMIT 1` fallback search with catalog-visibility filtering.
+- **Phase 5.4 & Hardening (Complete Product Pack Management):** Connected all 7 code-owned product showcase components (40 slots total) to `negar_theme_product_pack_options`; eliminated fabricated commercial demonstration data; enforced 100% truthful empty states (`.is-empty`, standard WooCommerce placeholder, localized neutral empty notices).
+- **Phase 5.5 (Final Audit & Closure):**
+  - Section accessibility label neutrality: `sec-28-mobile-spotlight` uses `ویترین محصول ویژه` (no hardcoded Galaxy S25 FE).
+  - Commercial copy neutrality: Replaced commercial guarantee claims with neutral store descriptions.
+  - Price semantics: Proper distinction between unpriced items (`'' === $product->get_price()`), genuine zero-price items (`(float)$price === 0.0` -> `رایگان` without Toman symbol), positive formatted prices, and variable product price ranges. Real sales require `regular_price > sale_price > 0`.
+  - Action safety: Supports `simple`, `variable`, `grouped`, and `external` WooCommerce product types safely. Out-of-stock items display disabled `ناموجود` controls; empty slots suppress action buttons completely.
+  - Query filter reliability: Wrapped temporary `posts_where` filters in `try ... finally` blocks to ensure filter detachment even upon exceptions.
+  - Snapshot restoration: All tests restore option snapshots identically in `finally` blocks.
+  - Test Suite: 114 PHP files passed linting; theme settings persistence & rendered-token suite passed; 37 E2E tests passed with 0 failures.
+
 ## Next phase
 
-Phase 5 may add validated banner, story and brand media collections. It is not
-implemented by Phase 4.
+Phase 6 (T210-T213: Typography, SMS boundaries, Backup/Export, Release Packaging) is planned. It is not implemented by Phase 5.
