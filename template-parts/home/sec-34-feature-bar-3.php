@@ -39,36 +39,40 @@ if ( ! function_exists( 'negar_get_buy_top_product_info' ) ) {
 
 $top_products = array(
 	array(
+		'slot'    => 'slot-1',
 		'number'  => '۱',
 		'title'   => 'بازی Gran Turismo 7 مخصوص PS5',
 		'img'     => $kaveh_base . '/e2a1ec7e564e1d9555bdf7a48e62cc138ff24cd0_1786388718-removebg-preview-300x300-1.png',
 		'price'   => '6.374.200',
 		'rate'    => '5/4.3',
-		'keyword' => 'Gran Turismo',
+		'needles' => array( 'Gran Turismo 7', 'Gran Turismo' ),
 	),
 	array(
+		'slot'    => 'slot-2',
 		'number'  => '۲',
 		'title'   => 'بازی Horizon Forbidden West نسخه کامل مخصوص PS5',
 		'img'     => $kaveh_base . '/86f41915edf5a7e926e2ae0bbd19a2d0ba9c5d06_1786388241-300x300-removebg-preview-1.png',
 		'price'   => '7.700.000',
 		'rate'    => '5/4.0',
-		'keyword' => 'Horizon Forbidden',
+		'needles' => array( 'Horizon Forbidden West', 'Horizon Forbidden' ),
 	),
 	array(
+		'slot'    => 'slot-3',
 		'number'  => '۳',
 		'title'   => 'بازی Ghostrunner 2 مخصوص PS5',
 		'img'     => $kaveh_base . '/3eef521897412a152c5b42551b623c91c41d90c0_1786388224-300x300-removebg-preview-1.png',
 		'price'   => '3.990.000',
 		'rate'    => '5/2.0',
-		'keyword' => 'Ghostrunner',
+		'needles' => array( 'Ghostrunner 2', 'Ghostrunner' ),
 	),
 	array(
+		'slot'    => 'slot-4',
 		'number'  => '۴',
 		'title'   => 'بازی مدل بازی Mortal Kombat 1 مخصوص PS5',
 		'img'     => $kaveh_base . '/92d9b95b55d4cf336cee4cf408c8908caf74c7af_1786388232-300x300-removebg-preview-1.png',
 		'price'   => '4.700.000',
 		'rate'    => '5/5.0',
-		'keyword' => 'Mortal Kombat',
+		'needles' => array( 'Mortal Kombat 1', 'Mortal Kombat' ),
 	),
 );
 ?>
@@ -92,9 +96,25 @@ $top_products = array(
 							<div class="swiper swiper-buy-top-product-nk m-0" data-swiper='{"effect":"fade","fadeEffect":{"crossFade":true},"autoHeight":true,"slidesPerView":1,"spaceBetween":0,"speed":600,"loop":true,"pagination":{"el":".elementor-element-46ce8511 .swiper-buy-top-product-nk .swiper-pagination","type":"bullets","clickable":true}}'>
 								<div class="swiper-wrapper">
 									<?php foreach ( $top_products as $item ) :
-										$info = negar_get_buy_top_product_info( $item['keyword'], $shop_url );
-										if ( ! $info['id'] ) {
-											continue;
+										$product = function_exists( 'negar_theme_product_pack_product' )
+											? negar_theme_product_pack_product( 'feature-bar-3', $item['slot'], $item['needles'] )
+											: false;
+
+										if ( $product ) {
+											$item_title = $product->get_name();
+											$item_url   = get_permalink( $product->get_id() );
+											$img_id     = $product->get_image_id();
+											$item_img   = $img_id ? wp_get_attachment_image_url( $img_id, 'woocommerce_thumbnail' ) : $item['img'];
+											$price      = (float) $product->get_price();
+											$item_price = $price > 0 ? number_format_i18n( $price ) : '';
+											$rating     = (float) $product->get_average_rating();
+											$item_rate  = $rating > 0 ? '5/' . number_format_i18n( $rating, 1 ) : '';
+										} else {
+											$item_title = $item['title'];
+											$item_url   = $shop_url;
+											$item_img   = $item['img'];
+											$item_price = $item['price'];
+											$item_rate  = $item['rate'];
 										}
 										?>
 										<div class="swiper-slide">
@@ -102,32 +122,36 @@ $top_products = array(
 												<div class="number f-iran-yekan fw-bold"><?php echo esc_html( $item['number'] ); ?></div>
 												<div class="image d-flex align-items-center justify-content-center rounded-circle position-relative flex-fill flex-grow-0 flex-shrink-0">
 													<div class="img d-flex align-items-center justify-content-center rounded-circle">
-														<img loading="lazy" decoding="async" src="<?php echo esc_url( $item['img'] ); ?>" alt="<?php echo esc_attr( $item['title'] ); ?>" width="39" height="43">
+														<img loading="lazy" decoding="async" src="<?php echo esc_url( $item_img ); ?>" alt="<?php echo esc_attr( $item_title ); ?>" width="39" height="43">
 													</div>
 												</div>
 												<div class="detail w-100">
 													<h2 class="title f-iran-yekan line-clamp-2">
-														<a href="<?php echo esc_url( $info['url'] ); ?>"><?php echo esc_html( $item['title'] ); ?></a>
+														<a href="<?php echo esc_url( $item_url ); ?>"><?php echo esc_html( $item_title ); ?></a>
 													</h2>
 													<div class="price-rate d-flex align-items-center justify-content-between gap-2">
 														<div class="price d-flex align-items-center f-iransans fw-bold gap-2">
-															<span class="price__current d-inline-flex align-items-center gap-2">
-																<span class="price__amount"><?php echo esc_html( $item['price'] ); ?></span>
-																<span class="toman-symbol toman-symbol--modern currency-symbol lh-1">
-																	<svg width="19.5" height="18" viewBox="0 0 13 12" fill="#0a0a0a" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-																		<use href="#kaveh-toman-mark"></use>
-																	</svg>
+															<?php if ( ! empty( $item_price ) ) : ?>
+																<span class="price__current d-inline-flex align-items-center gap-2">
+																	<span class="price__amount"><?php echo esc_html( $item_price ); ?></span>
+																	<span class="toman-symbol toman-symbol--modern currency-symbol lh-1">
+																		<svg width="19.5" height="18" viewBox="0 0 13 12" fill="#0a0a0a" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+																			<use href="#kaveh-toman-mark"></use>
+																		</svg>
+																	</span>
 																</span>
-															</span>
+															<?php endif; ?>
 														</div>
 														<div class="line flex-grow-1"></div>
-														<div class="rate d-flex align-items-center f-iransans">
-															<?php echo esc_html( $item['rate'] ); ?>
-															<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 18 18" aria-hidden="true">
-																<path fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M11.543 3.908 12.6 6.023c.143.292.525.57.848.63l1.912.314c1.223.203 1.508 1.088.63 1.973l-1.492 1.492c-.248.248-.39.736-.308 1.088l.428 1.845c.337 1.455-.443 2.025-1.726 1.26L11.1 13.56c-.322-.195-.862-.195-1.185 0l-1.792 1.065c-1.283.758-2.063.195-1.725-1.26l.427-1.845c.083-.345-.06-.832-.307-1.088L5.025 8.94c-.877-.877-.592-1.763.63-1.973l1.913-.315c.322-.052.705-.337.847-.63l1.058-2.115c.562-1.147 1.492-1.147 2.07 0Z"></path>
-																<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M6 3.75H1.5m2.25 10.5H1.5M2.25 9H1.5" opacity=".4"></path>
-															</svg>
-														</div>
+														<?php if ( ! empty( $item_rate ) ) : ?>
+															<div class="rate d-flex align-items-center f-iransans">
+																<?php echo esc_html( $item_rate ); ?>
+																<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 18 18" aria-hidden="true">
+																	<path fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M11.543 3.908 12.6 6.023c.143.292.525.57.848.63l1.912.314c1.223.203 1.508 1.088.63 1.973l-1.492 1.492c-.248.248-.39.736-.308 1.088l.428 1.845c.337 1.455-.443 2.025-1.726 1.26L11.1 13.56c-.322-.195-.862-.195-1.185 0l-1.792 1.065c-1.283.758-2.063.195-1.725-1.26l.427-1.845c.083-.345-.06-.832-.307-1.088L5.025 8.94c-.877-.877-.592-1.763.63-1.973l1.913-.315c.322-.052.705-.337.847-.63l1.058-2.115c.562-1.147 1.492-1.147 2.07 0Z"></path>
+																	<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M6 3.75H1.5m2.25 10.5H1.5M2.25 9H1.5" opacity=".4"></path>
+																</svg>
+															</div>
+														<?php endif; ?>
 													</div>
 												</div>
 											</div>
