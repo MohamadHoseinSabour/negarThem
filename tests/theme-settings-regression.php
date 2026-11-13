@@ -884,8 +884,11 @@ try {
 		return $where;
 	};
 	add_filter( 'posts_where', $check_where );
-	$resolved_manual = negar_theme_gaming_zone_product( 'fc', array( 'EA Sports FC' ) );
-	remove_filter( 'posts_where', $check_where );
+	try {
+		$resolved_manual = negar_theme_gaming_zone_product( 'fc', array( 'EA Sports FC' ) );
+	} finally {
+		remove_filter( 'posts_where', $check_where );
+	}
 	$results['gaming_zone_manual_resolved_without_fallback'] = $resolved_manual && $resolved_manual->get_id() === $product_id && ! $fallback_called;
 
 	negar_theme_find_product_by_title_needles( array(), true );
@@ -910,67 +913,72 @@ try {
 	};
 	update_option( $pack_option, array( 'packs' => array() ) );
 	add_filter( 'posts_where', $block_product_resolution );
-	negar_theme_find_product_by_title_needles( array(), true );
+	try {
+		negar_theme_find_product_by_title_needles( array(), true );
 
-	ob_start();
-	get_template_part( 'template-parts/home/sec-13-taste-grid' );
-	$sec13_html = ob_get_clean();
-	$results['taste_grid_empty_slot_truthful'] = false !== strpos( $sec13_html, 'محصولی برای نمایش موجود نیست' )
-		&& false !== strpos( $sec13_html, 'is-empty' )
-		&& false === strpos( $sec13_html, '580,000,000' )
-		&& false === strpos( $sec13_html, '839,000,000' )
-		&& false === strpos( $sec13_html, '409,999,000' );
+		ob_start();
+		get_template_part( 'template-parts/home/sec-13-taste-grid' );
+		$sec13_html = ob_get_clean();
+		$results['taste_grid_empty_slot_truthful'] = false !== strpos( $sec13_html, 'محصولی برای نمایش موجود نیست' )
+			&& false !== strpos( $sec13_html, 'is-empty' )
+			&& false === strpos( $sec13_html, '580,000,000' )
+			&& false === strpos( $sec13_html, '839,000,000' )
+			&& false === strpos( $sec13_html, '409,999,000' );
 
-	ob_start();
-	get_template_part( 'template-parts/home/sec-14-feature-bar-1' );
-	$sec14_html = ob_get_clean();
-	$results['feature_bar_1_empty_slot_truthful'] = false !== strpos( $sec14_html, 'محصولی برای نمایش موجود نیست' )
-		&& false !== strpos( $sec14_html, 'is-empty' )
-		&& false === strpos( $sec14_html, '169.300.000' )
-		&& false === strpos( $sec14_html, '5/4.5' );
+		ob_start();
+		get_template_part( 'template-parts/home/sec-14-feature-bar-1' );
+		$sec14_html = ob_get_clean();
+		$results['feature_bar_1_empty_slot_truthful'] = false !== strpos( $sec14_html, 'محصولی برای نمایش موجود نیست' )
+			&& false !== strpos( $sec14_html, 'is-empty' )
+			&& false === strpos( $sec14_html, '169.300.000' )
+			&& false === strpos( $sec14_html, '5/4.5' );
 
-	ob_start();
-	get_template_part( 'template-parts/home/sec-23-feature-bar-2' );
-	$sec23_html = ob_get_clean();
-	$results['feature_bar_2_empty_slot_truthful'] = false !== strpos( $sec23_html, 'محصولی برای نمایش موجود نیست' )
-		&& false !== strpos( $sec23_html, 'is-empty' )
-		&& false === strpos( $sec23_html, '169.300.000' )
-		&& false === strpos( $sec23_html, '5/4.5' );
+		ob_start();
+		get_template_part( 'template-parts/home/sec-23-feature-bar-2' );
+		$sec23_html = ob_get_clean();
+		$results['feature_bar_2_empty_slot_truthful'] = false !== strpos( $sec23_html, 'محصولی برای نمایش موجود نیست' )
+			&& false !== strpos( $sec23_html, 'is-empty' )
+			&& false === strpos( $sec23_html, '169.300.000' )
+			&& false === strpos( $sec23_html, '5/4.5' );
 
-	ob_start();
-	get_template_part( 'template-parts/home/sec-24-smartwatches-2' );
-	$sec24_html = ob_get_clean();
-	$results['smartwatches_2_empty_slot_truthful'] = false !== strpos( $sec24_html, 'محصولی برای نمایش موجود نیست' )
-		&& false !== strpos( $sec24_html, 'is-empty' )
-		&& false === strpos( $sec24_html, '30,875,000' )
-		&& false === strpos( $sec24_html, '32,500,000' )
-		&& false === strpos( $sec24_html, '11 نظر' )
-		&& false === strpos( $sec24_html, '11,400,000' )
-		&& false === strpos( $sec24_html, 'data-product_id="0"' )
-		&& false === strpos( $sec24_html, 'kaveh-variation-modal-trigger' );
+		ob_start();
+		get_template_part( 'template-parts/home/sec-24-smartwatches-2' );
+		$sec24_html = ob_get_clean();
+		$results['smartwatches_2_empty_slot_truthful'] = false !== strpos( $sec24_html, 'محصولی برای نمایش موجود نیست' )
+			&& false !== strpos( $sec24_html, 'is-empty' )
+			&& false === strpos( $sec24_html, '30,875,000' )
+			&& false === strpos( $sec24_html, '32,500,000' )
+			&& false === strpos( $sec24_html, '11 نظر' )
+			&& false === strpos( $sec24_html, '11,400,000' )
+			&& false === strpos( $sec24_html, 'data-product_id="0"' )
+			&& false === strpos( $sec24_html, 'kaveh-variation-modal-trigger' );
 
-	ob_start();
-	get_template_part( 'template-parts/home/sec-28-mobile-spotlight' );
-	$sec28_html = ob_get_clean();
-	$results['mobile_spotlight_empty_slot_truthful'] = false !== strpos( $sec28_html, 'محصولی برای نمایش موجود نیست' )
-		&& false !== strpos( $sec28_html, 'is-empty' )
-		&& false === strpos( $sec28_html, '۴۴,۵۰۰,۰۰۰ تومان' )
-		&& false === strpos( $sec28_html, '۴۹,۸۰۰,۰۰۰ تومان' )
-		&& false === strpos( $sec28_html, '★ ۴.۹' )
-		&& false === strpos( $sec28_html, 'Dynamic AMOLED 2X با پردازنده قدرتمند و هوش مصنوعی Galaxy AI' )
-		&& false === strpos( $sec28_html, 'خرید آنی' );
+		ob_start();
+		get_template_part( 'template-parts/home/sec-28-mobile-spotlight' );
+		$sec28_html = ob_get_clean();
+		$results['mobile_spotlight_empty_slot_truthful'] = false !== strpos( $sec28_html, 'محصولی برای نمایش موجود نیست' )
+			&& false !== strpos( $sec28_html, 'is-empty' )
+			&& false === strpos( $sec28_html, '۴۴,۵۰۰,۰۰۰ تومان' )
+			&& false === strpos( $sec28_html, '۴۹,۸۰۰,۰۰۰ تومان' )
+			&& false === strpos( $sec28_html, '★ ۴.۹' )
+			&& false === strpos( $sec28_html, 'Dynamic AMOLED 2X با پردازنده قدرتمند و هوش مصنوعی Galaxy AI' )
+			&& false === strpos( $sec28_html, 'خرید آنی' )
+			&& false === strpos( $sec28_html, 'ویترین گلکسی S25 FE' )
+			&& false !== strpos( $sec28_html, 'ویترین محصول ویژه' )
+			&& false === strpos( $sec28_html, 'ضمانت اصالت' );
 
-	ob_start();
-	get_template_part( 'template-parts/home/sec-34-feature-bar-3' );
-	$sec34_html = ob_get_clean();
-	$results['feature_bar_3_empty_slot_truthful'] = false !== strpos( $sec34_html, 'محصولی برای نمایش موجود نیست' )
-		&& false !== strpos( $sec34_html, 'is-empty' )
-		&& false === strpos( $sec34_html, '169.300.000' )
-		&& false === strpos( $sec34_html, '5/4.5' );
-
-	remove_filter( 'posts_where', $block_product_resolution );
-	negar_theme_find_product_by_title_needles( array(), true );
-	update_option( $pack_option, $pack );
+		ob_start();
+		get_template_part( 'template-parts/home/sec-34-feature-bar-3' );
+		$sec34_html = ob_get_clean();
+		$results['feature_bar_3_empty_slot_truthful'] = false !== strpos( $sec34_html, 'محصولی برای نمایش موجود نیست' )
+			&& false !== strpos( $sec34_html, 'is-empty' )
+			&& false === strpos( $sec34_html, '169.300.000' )
+			&& false === strpos( $sec34_html, '5/4.5' );
+	} finally {
+		remove_filter( 'posts_where', $block_product_resolution );
+		negar_theme_find_product_by_title_needles( array(), true );
+		update_option( $pack_option, $pack );
+	}
 
 	// Assigned product truthful rendering and action safety
 	update_option( $pack_option, array( 'packs' => array( 'mobile-spotlight' => array( 'focal' => (string) $product_id ) ) ) );
@@ -979,7 +987,10 @@ try {
 	$assigned_spotlight = ob_get_clean();
 	$results['mobile_spotlight_assigned_product_renders_truthfully'] = false !== strpos( $assigned_spotlight, esc_html( $product->get_name() ) )
 		&& false !== strpos( $assigned_spotlight, 'خرید آنی' )
-		&& false === strpos( $assigned_spotlight, 'Dynamic AMOLED 2X با پردازنده قدرتمند و هوش مصنوعی Galaxy AI' );
+		&& false === strpos( $assigned_spotlight, 'Dynamic AMOLED 2X با پردازنده قدرتمند و هوش مصنوعی Galaxy AI' )
+		&& false === strpos( $assigned_spotlight, 'ویترین گلکسی S25 FE' )
+		&& false !== strpos( $assigned_spotlight, 'ویترین محصول ویژه' )
+		&& false === strpos( $assigned_spotlight, 'ضمانت اصالت' );
 
 	update_option( $pack_option, array( 'packs' => array( 'smartwatches-2' => array( 'carousel-1' => (string) $product_id ) ) ) );
 	ob_start();
@@ -987,6 +998,21 @@ try {
 	$assigned_sw2 = ob_get_clean();
 	$results['smartwatches_2_assigned_product_action_safe'] = ( false !== strpos( $assigned_sw2, 'data-product_id="' . $product_id . '"' ) || false !== strpos( $assigned_sw2, 'مشاهده و انتخاب گزینه‌ها' ) )
 		&& false === strpos( $assigned_sw2, 'data-product_id="0"' );
+
+	// Zero-price rendering verification: genuine zero price displays 'رایگان' without Toman symbol.
+	$zero_price_override = static function() {
+		return '0';
+	};
+	add_filter( 'woocommerce_product_get_price', $zero_price_override );
+	try {
+		ob_start();
+		get_template_part( 'template-parts/home/sec-28-mobile-spotlight' );
+		$zero_spotlight = ob_get_clean();
+		$results['product_pack_zero_price_handled_truthfully'] = false !== strpos( $zero_spotlight, 'رایگان' )
+			&& false === strpos( $zero_spotlight, '۰ تومان' );
+	} finally {
+		remove_filter( 'woocommerce_product_get_price', $zero_price_override );
+	}
 
 	update_option( $pack_option, $pack );
 
@@ -1014,6 +1040,9 @@ try {
 	echo wp_json_encode( $results );
 	exit( in_array( false, $results, true ) ? 1 : 0 );
 } catch ( Throwable $error ) {
+	if ( isset( $option, $media_option, $pack_option, $mods, $verify_snapshot ) ) {
+		negar_theme_test_restore( $option, $media_option, $pack_option, $mods, $verify_snapshot );
+	}
 	fwrite( STDERR, $error->getMessage() . PHP_EOL );
 	exit( 1 );
 }
