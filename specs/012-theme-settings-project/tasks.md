@@ -67,10 +67,10 @@
   storage and Media Library controls. Do not include stories or brands.
 - [x] **T209.2** Bind each audited hero and promotional banner template without
   changing its layout, Swiper behavior, Phase 2 text fields or demo fallback.
-- [ ] **T209.3** Implement fixed product-pack/hotspot product ID selectors and
+- [x] **T209.3** Implement fixed product-pack/hotspot product ID selectors and
   resolve all displayed commerce from published, catalog-visible WooCommerce
   products while retaining existing coordinates and interactions.
-- [ ] **T209.4** Add authenticated reversible persistence/frontend regression
+- [x] **T209.4** Add authenticated reversible persistence/frontend regression
   coverage for media, pack and hotspot settings, then update architecture docs.
 - [ ] **T210** Approve Typography controls with safe font-loading and performance
   limits.

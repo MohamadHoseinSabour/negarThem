@@ -52,8 +52,12 @@
    component (`template-parts/home/sec-25-gaming-zone.php`) to eliminate the unbounded
    `wc_get_products( ['limit' => -1] )` query, resolving assigned products directly by ID,
    executing bounded single-result (`posts_per_page => 1`) fallback searches only for
-   unassigned slots, and preserving safe empty states. Next, complete the remaining
-   established product packs/hotspots with catalog-visible WooCommerce product IDs.
+   unassigned slots, and preserving safe empty states. Phase 5.4 connects all remaining
+   established product packs and hotspots across 6 components (`taste-grid` [16 slots],
+   `feature-bar-1` [4 slots], `feature-bar-2` [4 slots], `smartwatches-2` [7 slots],
+   `mobile-spotlight` [1 focal slot, adjacent Phase 4 untouched], and `feature-bar-3` [4 slots])
+   with catalog-visible WooCommerce product IDs, manual assignment priority, bounded fallback
+   searches and authentic commerce rendering.
    Stories and brands remain out of scope for Phases 6 and 7.
 8. **Typography, SMS and backup (planned):** define separate security boundaries,
    secret handling and import/export validation before UI implementation.

@@ -821,12 +821,59 @@ try {
 
 	update_option( $media_option, $media );
 	$results['media_group_isolated'] = $header_before_media === negar_theme_settings_raw()['header']['announcement'];
-	$pack = negar_theme_sanitize_product_pack_settings( array( 'packs' => array( 'gaming-zone' => array( 'fc' => (string) $product_id, 'mirage' => (string) $product_id, 'shadows' => '999999999' ) ) ) );
+
+	$pack_registry = negar_theme_product_pack_registry();
+	$total_pack_slots = 0;
+	foreach ( $pack_registry as $preg_pack ) {
+		$total_pack_slots += count( $preg_pack['slots'] );
+	}
+	$results['pack_registry_all_seven_packs_present'] = 7 === count( $pack_registry )
+		&& 40 === $total_pack_slots
+		&& isset( $pack_registry['gaming-zone'], $pack_registry['taste-grid'], $pack_registry['feature-bar-1'], $pack_registry['feature-bar-2'], $pack_registry['smartwatches-2'], $pack_registry['mobile-spotlight'], $pack_registry['feature-bar-3'] );
+
+	$pack = negar_theme_sanitize_product_pack_settings(
+		array(
+			'packs' => array(
+				'gaming-zone'      => array( 'fc' => (string) $product_id, 'mirage' => (string) $product_id, 'shadows' => '999999999' ),
+				'taste-grid'       => array( 'box-1-1' => (string) $product_id, 'box-2-1' => '999999999' ),
+				'feature-bar-1'    => array( 'slot-1' => (string) $product_id ),
+				'feature-bar-2'    => array( 'slot-2' => (string) $product_id ),
+				'smartwatches-2'   => array( 'promo-1' => (string) $product_id, 'carousel-1' => (string) $product_id ),
+				'mobile-spotlight' => array( 'focal' => (string) $product_id ),
+				'feature-bar-3'    => array( 'slot-4' => (string) $product_id ),
+			),
+		)
+	);
 	update_option( $pack_option, $pack );
 	$results['pack_visible_product_saved'] = $product_id === negar_theme_product_pack_product_id( 'gaming-zone', 'fc' )
 		&& $product_id === negar_theme_product_pack_product_id( 'gaming-zone', 'mirage' )
-		&& 0 === negar_theme_product_pack_product_id( 'gaming-zone', 'shadows' );
+		&& 0 === negar_theme_product_pack_product_id( 'gaming-zone', 'shadows' )
+		&& $product_id === negar_theme_product_pack_product_id( 'taste-grid', 'box-1-1' )
+		&& 0 === negar_theme_product_pack_product_id( 'taste-grid', 'box-2-1' )
+		&& $product_id === negar_theme_product_pack_product_id( 'feature-bar-1', 'slot-1' )
+		&& $product_id === negar_theme_product_pack_product_id( 'feature-bar-2', 'slot-2' )
+		&& $product_id === negar_theme_product_pack_product_id( 'smartwatches-2', 'promo-1' )
+		&& $product_id === negar_theme_product_pack_product_id( 'smartwatches-2', 'carousel-1' )
+		&& $product_id === negar_theme_product_pack_product_id( 'mobile-spotlight', 'focal' )
+		&& $product_id === negar_theme_product_pack_product_id( 'feature-bar-3', 'slot-4' );
 	$results['pack_group_isolated'] = $image_id ? $image_id === (int) negar_theme_media_record( 'hero-slide-one' )['media_id'] : true;
+
+	$partial_pack = negar_theme_sanitize_product_pack_settings(
+		array(
+			'packs' => array(
+				'taste-grid' => array( 'box-1-1' => '0' ),
+			),
+		)
+	);
+	update_option( $pack_option, $partial_pack );
+	$results['pack_partial_update_preserves_other_packs'] = 0 === negar_theme_product_pack_product_id( 'taste-grid', 'box-1-1' )
+		&& $product_id === negar_theme_product_pack_product_id( 'feature-bar-1', 'slot-1' )
+		&& $product_id === negar_theme_product_pack_product_id( 'mobile-spotlight', 'focal' );
+
+	$resolved_fb1 = negar_theme_product_pack_product( 'feature-bar-1', 'slot-1', array( 'NonExistent' ) );
+	$results['pack_product_helper_resolves_assigned'] = $resolved_fb1 && $resolved_fb1->get_id() === $product_id;
+	$resolved_fb1_none = negar_theme_product_pack_product( 'feature-bar-1', 'slot-2', array( 'NonExistentXYZ9999' ) );
+	$results['pack_product_helper_unassigned_returns_false_on_miss'] = false === $resolved_fb1_none;
 
 	$gz_file = file_get_contents( get_template_directory() . '/template-parts/home/sec-25-gaming-zone.php' );
 	$results['gaming_zone_unbounded_query_eliminated'] = false === strpos( $gz_file, 'wc_get_products' ) && false === strpos( $gz_file, 'limit' );

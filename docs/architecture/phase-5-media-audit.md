@@ -43,15 +43,17 @@ control.
 
 ## Mounted product packs and hotspot showcase
 
-| Stable component | Template | Current association | Phase 5 control boundary |
-| --- | --- | --- | --- |
-| `gaming-zone` hotspots | `sec-25-gaming-zone.php` | Four visual hotspots (`shadows`, `mirage`, `fc`, `yotei`) find a product by demo-name fragments. `product-pack.png` is the background and the coordinates/classes are authored CSS. | Four stable product-ID selectors; keep coordinates, background, popup design and mobile interaction intact. |
-| `taste-grid` | `sec-13-taste-grid.php` | Four cards contain demo product arrays and attempt name matching. | Stable per-card product IDs; render every commercial field from WooCommerce. |
-| `feature-bar-one` | `sec-14-feature-bar-1.php` | Four demo cards attempt name matching. | Stable product-ID list; preserve local Swiper and visual art. |
-| `feature-bar-two` | `sec-23-feature-bar-2.php` | Four demo cards attempt name matching. | Stable product-ID list; preserve local Swiper and visual art. |
-| `smartwatches-two` | `sec-24-smartwatches-2.php` | Demo primary/discount arrays attempt name matching and retain demo commerce values. | Stable product-ID lists; resolve commerce only from WooCommerce. |
-| `mobile-spotlight` | `sec-28-mobile-spotlight.php` | Focus panel is a static Galaxy S25 FE promotion; only adjacent cards were Phase 4 queries. | One focal-product selector; associated product image/link/commerce becomes live, while its approved existing visual copy/layout stays intact. |
-| `feature-bar-three` | `sec-34-feature-bar-3.php` | Four demo cards attempt name matching. | Stable product-ID list; preserve local Swiper and visual art. |
+| Stable component | Pack ID | Template | Slot IDs | Implemented Status |
+| --- | --- | --- | --- | --- |
+| `gaming-zone` hotspots | `gaming-zone` | `sec-25-gaming-zone.php` | `shadows`, `mirage`, `fc`, `yotei` (4 slots) | Connected to `negar_theme_product_pack_product()`; bounded lookup; coordinates, background and popups intact. |
+| `taste-grid` | `taste-grid` | `sec-13-taste-grid.php` | `box-1-1` .. `box-1-4`, `box-2-1` .. `box-2-4`, `box-3-1` .. `box-3-4`, `box-4-1` .. `box-4-4` (16 slots) | Connected to `negar_theme_product_pack_product()`; live WC prices, discounts, ratings, permalinks; real swatches when `pa_color` exists. |
+| `feature-bar-one` | `feature-bar-1` | `sec-14-feature-bar-1.php` | `slot-1` .. `slot-4` (4 slots) | Connected to `negar_theme_product_pack_product()`; live WC data; local Swiper preserved. |
+| `feature-bar-two` | `feature-bar-2` | `sec-23-feature-bar-2.php` | `slot-1` .. `slot-4` (4 slots) | Connected to `negar_theme_product_pack_product()`; live WC data; runs independently of Bar 1. |
+| `smartwatches-two` | `smartwatches-2` | `sec-24-smartwatches-2.php` | `promo-1`, `promo-2`, `carousel-1` .. `carousel-5` (7 slots) | Connected to `negar_theme_product_pack_product()`; live WC prices, review counts, ratings, and cart button data. |
+| `mobile-spotlight` | `mobile-spotlight` | `sec-28-mobile-spotlight.php` | `focal` (1 slot) | Connected to `negar_theme_product_pack_product()`; focal card live commerce; 3 adjacent Phase 4 cards untouched. |
+| `feature-bar-three` | `feature-bar-3` | `sec-34-feature-bar-3.php` | `slot-1` .. `slot-4` (4 slots) | Connected to `negar_theme_product_pack_product()`; live WC data; local Swiper preserved. |
+
+Total product pack positions: **40 slots across 7 components**.
 
 `sec-11-smartwatches-spec.php` and `sec-16-apple-watch-deal.php` remain outside
 this pack assignment boundary: they are product-query/section-specific work, not

@@ -145,10 +145,62 @@ This preserves every legacy query—including its fallbacks and sale-only behavi
 default. Product settings are deliberately excluded from stories, banners, review
 feeds, visitor-specific recently viewed products and demo/pack components.
 
+## Implemented product-pack schema (Phase 5)
+
+Fixed product packs and hotspot showcases are stored under the non-autoloaded option
+`negar_theme_product_pack_options` (`NEGAR_THEME_PRODUCT_PACK_OPTION`). The schema
+whitelists seven code-owned components and their fixed slot identifiers:
+
+```json
+{
+  "schema_version": 1,
+  "packs": {
+    "gaming-zone": {
+      "shadows": 0,
+      "mirage": 0,
+      "fc": 0,
+      "yotei": 0
+    },
+    "taste-grid": {
+      "box-1-1": 0, "box-1-2": 0, "box-1-3": 0, "box-1-4": 0,
+      "box-2-1": 0, "box-2-2": 0, "box-2-3": 0, "box-2-4": 0,
+      "box-3-1": 0, "box-3-2": 0, "box-3-3": 0, "box-3-4": 0,
+      "box-4-1": 0, "box-4-2": 0, "box-4-3": 0, "box-4-4": 0
+    },
+    "feature-bar-1": {
+      "slot-1": 0, "slot-2": 0, "slot-3": 0, "slot-4": 0
+    },
+    "feature-bar-2": {
+      "slot-1": 0, "slot-2": 0, "slot-3": 0, "slot-4": 0
+    },
+    "smartwatches-2": {
+      "promo-1": 0, "promo-2": 0,
+      "carousel-1": 0, "carousel-2": 0, "carousel-3": 0, "carousel-4": 0, "carousel-5": 0
+    },
+    "mobile-spotlight": {
+      "focal": 0
+    },
+    "feature-bar-3": {
+      "slot-1": 0, "slot-2": 0, "slot-3": 0, "slot-4": 0
+    }
+  }
+}
+```
+
+- **Validation & isolation:** Only registered pack and slot IDs are accepted. Product
+  IDs are validated via `negar_theme_sanitize_product_ids()`, requiring published and
+  catalog-visible WooCommerce products. Unassigned or cleared slots store `0`. Saving
+  one pack preserves other packs.
+- **Resolution priority:** `negar_theme_product_pack_product( $pack_id, $slot_id, $needles )`
+  resolves explicitly assigned products with $O(1)$ efficiency. If unassigned or invalid,
+  it falls back to bounded needle lookups via `negar_theme_find_product_by_title_needles()`.
+- **Authentic commerce:** When matched, each template renders real titles, images,
+  prices, discounts, ratings and review counts directly from the `WC_Product` object.
+  No fake customer, review, or pricing data is ever fabricated.
+
 ## Planned schema additions
 
 The static tab registry deliberately reserves keys for the following phased
-additions: `banners`, `stories`, `brands`,
-`typography`, `sms` and `backup`. Their field schemas must be
+additions: `stories`, `brands`, `sms` and `backup`. Their field schemas must be
 documented before they are added; unknown keys must not be accepted by import or
 save handlers.
