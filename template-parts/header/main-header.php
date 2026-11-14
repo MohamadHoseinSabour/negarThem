@@ -10,11 +10,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$theme_logo_url = get_template_directory_uri() . '/assets/images/logo.svg';
+$logo_url       = function_exists( 'negar_theme_logo_url' ) ? negar_theme_logo_url() : get_template_directory_uri() . '/assets/images/logo.svg';
+$has_logo       = ! empty( $logo_url );
 $upload_dir     = wp_upload_dir();
-$logo_svg       = $upload_dir['basedir'] . '/kaveh-demo/kaveh-demo/general/logo.svg';
-$logo_url       = file_exists( $logo_svg ) ? $upload_dir['baseurl'] . '/kaveh-demo/kaveh-demo/general/logo.svg' : $theme_logo_url;
-$has_logo       = true;
 
 $shop_link           = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/shop/' );
 $sale_link           = add_query_arg( 'on_sale', '1', $shop_link );

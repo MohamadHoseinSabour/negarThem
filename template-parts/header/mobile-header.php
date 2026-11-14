@@ -10,10 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$theme_logo_url = get_template_directory_uri() . '/assets/images/logo.svg';
-$upload_dir     = wp_upload_dir();
-$logo_svg       = $upload_dir['basedir'] . '/kaveh-demo/kaveh-demo/general/logo.svg';
-$logo_url       = file_exists( $logo_svg ) ? $upload_dir['baseurl'] . '/kaveh-demo/kaveh-demo/general/logo.svg' : $theme_logo_url;
+$logo_url       = function_exists( 'negar_theme_logo_url' ) ? negar_theme_logo_url() : get_template_directory_uri() . '/assets/images/logo.svg';
 ?>
 <div class="negar-mobile-header md:hidden bg-white border-b border-slate-200 sticky top-0 z-30" style="padding-top: max(0.5rem, env(safe-area-inset-top, 0px));">
 	<!-- Top Bar in Mobile -->

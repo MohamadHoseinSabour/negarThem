@@ -19,13 +19,18 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function negar_shop_resource_hints( $urls, $relation_type ) {
 	if ( 'preconnect' === $relation_type ) {
-		$urls[] = array(
-			'href' => 'https://fonts.googleapis.com',
-		);
-		$urls[] = array(
-			'href'        => 'https://fonts.gstatic.com',
-			'crossorigin' => 'anonymous',
-		);
+		$body_font    = function_exists( 'negar_theme_typography' ) ? negar_theme_typography( 'font_family' ) : 'vazirmatn';
+		$heading_font = function_exists( 'negar_theme_typography' ) ? negar_theme_typography( 'heading_font_family' ) : 'vazirmatn';
+
+		if ( 'vazirmatn' === $body_font || 'vazirmatn' === $heading_font ) {
+			$urls[] = array(
+				'href' => 'https://fonts.googleapis.com',
+			);
+			$urls[] = array(
+				'href'        => 'https://fonts.gstatic.com',
+				'crossorigin' => 'anonymous',
+			);
+		}
 	}
 	return $urls;
 }
@@ -36,12 +41,17 @@ add_filter( 'wp_resource_hints', 'negar_shop_resource_hints', 10, 2 );
  */
 function negar_shop_scripts() {
 	// Google Fonts - Vazirmatn with weights 300, 400, 500, 600, 700, 800
-	wp_enqueue_style(
-		'negar-shop-fonts',
-		'https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800&display=swap',
-		array(),
-		null
-	);
+	$body_font    = function_exists( 'negar_theme_typography' ) ? negar_theme_typography( 'font_family' ) : 'vazirmatn';
+	$heading_font = function_exists( 'negar_theme_typography' ) ? negar_theme_typography( 'heading_font_family' ) : 'vazirmatn';
+
+	if ( 'vazirmatn' === $body_font || 'vazirmatn' === $heading_font ) {
+		wp_enqueue_style(
+			'negar-shop-fonts',
+			'https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800&display=swap',
+			array(),
+			null
+		);
+	}
 
 	// Main Stylesheet
 	wp_enqueue_style(
@@ -421,7 +431,7 @@ function negar_shop_scripts() {
 			'product_remove_error'                => __( 'خطا در حذف محصول از سبد خرید.', 'negar-shop' ),
 			'filter_error'                        => __( 'خطایی در انجام عملیات رخ داد.', 'negar-shop' ),
 			'invalid_response'                    => __( 'پاسخ دریافتی از سرور نامعتبر است.', 'negar-shop' ),
-			'fontFamily'                          => 'Vazirmatn',
+			'fontFamily'                          => function_exists( 'negar_theme_typography' ) ? ( 'tahoma' === negar_theme_typography( 'font_family' ) ? 'Tahoma' : ( 'system' === negar_theme_typography( 'font_family' ) ? 'System' : 'Vazirmatn' ) ) : 'Vazirmatn',
 		)
 	);
 

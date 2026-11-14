@@ -388,6 +388,11 @@ function negar_shop_sanitize_checkbox( $checked ) {
 function negar_shop_customizer_css() {
 	$primary_color   = negar_theme_color( 'primary' );
 	$secondary_color = negar_theme_color( 'secondary' );
+	$font_primary    = function_exists( 'negar_theme_font_stack' ) ? negar_theme_font_stack( 'font_family' ) : "'Vazirmatn', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif";
+	$font_heading    = function_exists( 'negar_theme_font_stack' ) ? negar_theme_font_stack( 'heading_font_family' ) : "'Vazirmatn', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif";
+	$base_size       = function_exists( 'negar_theme_base_font_size' ) ? negar_theme_base_font_size() : 16;
+	$heading_scale   = function_exists( 'negar_theme_heading_scale' ) ? negar_theme_heading_scale() : 'normal';
+
 	$css             = ':root {';
 	$css            .= '--color-primary: ' . esc_attr( $primary_color ) . ';';
 	$css            .= '--negar-primary: ' . esc_attr( $primary_color ) . ';';
@@ -398,9 +403,28 @@ function negar_shop_customizer_css() {
 	$css            .= '--color-accent: ' . esc_attr( $secondary_color ) . ';';
 	$css            .= '--color-secondary: ' . esc_attr( $secondary_color ) . ';';
 	$css            .= '--wp--preset--color--secondary: ' . esc_attr( $secondary_color ) . ';';
+	$css            .= '--font-primary: ' . $font_primary . ';';
+	$css            .= '--font-heading: ' . $font_heading . ';';
 	$css            .= '}';
+	$css            .= 'body { font-size: ' . absint( $base_size ) . 'px; }';
 
-	echo "\n<!-- Negar Shop theme colors -->\n";
+	if ( 'compact' === $heading_scale ) {
+		$css .= 'h1, .h1 { font-size: 1.6875rem; }';
+		$css .= 'h2, .h2 { font-size: 1.35rem; }';
+		$css .= 'h3, .h3 { font-size: 1.125rem; }';
+		$css .= 'h4, .h4 { font-size: 1rem; }';
+		$css .= 'h5, .h5 { font-size: 0.9rem; }';
+		$css .= 'h6, .h6 { font-size: 0.8rem; }';
+	} elseif ( 'large' === $heading_scale ) {
+		$css .= 'h1, .h1 { font-size: 2.0625rem; }';
+		$css .= 'h2, .h2 { font-size: 1.65rem; }';
+		$css .= 'h3, .h3 { font-size: 1.375rem; }';
+		$css .= 'h4, .h4 { font-size: 1.2375rem; }';
+		$css .= 'h5, .h5 { font-size: 1.1rem; }';
+		$css .= 'h6, .h6 { font-size: 0.9625rem; }';
+	}
+
+	echo "\n<!-- Negar Shop theme design tokens -->\n";
 	echo '<style id="negar-shop-theme-colors">' . wp_strip_all_tags( $css ) . "</style>\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 }
 add_action( 'wp_head', 'negar_shop_customizer_css', 100 );
