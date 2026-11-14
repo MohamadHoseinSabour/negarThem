@@ -32,6 +32,8 @@ async function run() {
   let mobileContext;
   let auth;
   let videoFixture;
+  let brandFixture1;
+  let brandFixture2;
 
   try {
     const checks = JSON.parse(php('verify'));
@@ -649,6 +651,71 @@ async function run() {
     assert.strictEqual(await mobileCircles.first().isVisible(), true, 'Mobile story circle must be visible');
     await storyMobilePage.close();
 
+    // Phase 7: Brands Admin Persistence & Real Carousel Rendering Tests
+    brandFixture1 = JSON.parse(php('brand-fixture', 'browser-brand-1-'));
+    brandFixture2 = JSON.parse(php('brand-fixture', 'browser-brand-2-'));
+    assert(brandFixture1 && brandFixture1.term_id > 0, 'Brand fixture 1 must be created');
+    assert(brandFixture2 && brandFixture2.term_id > 0, 'Brand fixture 2 must be created');
+
+    // 1. Navigate to Brands settings tab
+    await page.goto(BASE_URL + '/wp-admin/options-general.php?page=negar-theme-settings&tab=brands', { waitUntil: 'domcontentloaded' });
+    assert.strictEqual(await page.locator('#negar-brand-search-input').isVisible(), true, 'Brands tab must display search input');
+    assert.strictEqual(await page.locator('#negar-brands-list').count(), 1, 'Brands tab must display brands list container');
+
+    // 2. Search and add Brand 1
+    await page.locator('#negar-brand-search-input').fill(brandFixture1.name);
+    await page.waitForSelector('#negar-brand-search-results .negar-brand-search-item button:not([disabled])', { timeout: 10000 });
+    await page.locator('#negar-brand-search-results .negar-brand-search-item button:not([disabled])').first().click();
+
+    const brandCard1 = page.locator(`.negar-brand-card[data-term-id="${brandFixture1.term_id}"]`);
+    assert.strictEqual(await brandCard1.count(), 1, 'Brand 1 card must appear in managed list');
+
+    // 3. Search and add Brand 2
+    await page.locator('#negar-brand-search-input').fill(brandFixture2.name);
+    await page.waitForSelector('#negar-brand-search-results .negar-brand-search-item button:not([disabled])', { timeout: 10000 });
+    await page.locator('#negar-brand-search-results .negar-brand-search-item button:not([disabled])').first().click();
+
+    const brandCard2 = page.locator(`.negar-brand-card[data-term-id="${brandFixture2.term_id}"]`);
+    assert.strictEqual(await brandCard2.count(), 1, 'Brand 2 card must appear in managed list');
+
+    // 4. Test reordering: move Brand 2 up
+    await brandCard2.locator('.negar-brand-btn-up').click();
+    const firstCardTermId = await page.locator('#negar-brands-list .negar-brand-card').first().getAttribute('data-term-id');
+    assert.strictEqual(firstCardTermId, String(brandFixture2.term_id), 'Moving Brand 2 up must place it first in the DOM');
+
+    // 5. Save settings via Settings API
+    await Promise.all([
+      page.waitForURL((url) => url.pathname.endsWith('/wp-admin/options-general.php') && url.searchParams.get('tab') === 'brands'),
+      page.locator('form[action="options.php"] input[type="submit"]').click(),
+    ]);
+
+    // 6. Verify order persisted after reload
+    const reloadedFirstTermId = await page.locator('#negar-brands-list .negar-brand-card').first().getAttribute('data-term-id');
+    const reloadedSecondTermId = await page.locator('#negar-brands-list .negar-brand-card').nth(1).getAttribute('data-term-id');
+    assert.strictEqual(reloadedFirstTermId, String(brandFixture2.term_id), 'Brand 2 must remain first after save and reload');
+    assert.strictEqual(reloadedSecondTermId, String(brandFixture1.term_id), 'Brand 1 must remain second after save and reload');
+
+    // 7. Verify frontend carousel rendering with genuine data
+    await page.goto(BASE_URL, { waitUntil: 'domcontentloaded' });
+    const brandsCarousel = page.locator('.brands-nk');
+    assert.strictEqual(await brandsCarousel.isVisible(), true, 'Brands carousel must render on the homepage');
+    assert.strictEqual(await brandsCarousel.locator(`.name-brand .title:has-text("${brandFixture1.name}")`).count() > 0, true, 'Brand 1 real name must appear in frontend carousel');
+    assert.strictEqual(await brandsCarousel.locator(`.name-brand .title:has-text("${brandFixture2.name}")`).count() > 0, true, 'Brand 2 real name must appear in frontend carousel');
+
+    // Commercial integrity: no fake ratings, fake counts, or demo names
+    assert.strictEqual(await brandsCarousel.locator('.rate').count(), 0, 'Fabricated ratings must be omitted');
+    assert.strictEqual(await brandsCarousel.locator('.products').count(), 0, 'Fabricated product counts must be omitted');
+    assert.strictEqual(await brandsCarousel.locator(':has-text("گرادور")').count(), 0, 'Demonstration brand name must not appear');
+
+    // 8. Mobile viewport verification
+    const brandMobilePage = await context.newPage();
+    await brandMobilePage.setViewportSize({ width: 375, height: 667 });
+    await brandMobilePage.goto(BASE_URL, { waitUntil: 'domcontentloaded' });
+    const mobileBrandSlides = brandMobilePage.locator('.brands-nk .swiper-slide');
+    assert.strictEqual(await mobileBrandSlides.count() >= 2, true, 'Brands carousel must render slides on mobile viewport');
+    assert.strictEqual(await mobileBrandSlides.first().isVisible(), true, 'First brand slide must be visible on mobile');
+    await brandMobilePage.close();
+
     console.log('[PASS] Theme settings persistence and rendered-token regression checks passed.');
   } catch (error) {
     failure = error;
@@ -687,6 +754,20 @@ async function run() {
         assert.strictEqual(cleanRes.cleaned, true, `Owned video fixture cleanup must succeed: ${cleanRes.error || ''}`);
       } catch (cleanVideoError) {
         failure = failure || cleanVideoError;
+      }
+    }
+    if (brandFixture1 && brandFixture1.term_id && brandFixture1.token) {
+      try {
+        php('cleanup-brand-fixture', String(brandFixture1.term_id), brandFixture1.token);
+      } catch (cleanBrand1Error) {
+        failure = failure || cleanBrand1Error;
+      }
+    }
+    if (brandFixture2 && brandFixture2.term_id && brandFixture2.token) {
+      try {
+        php('cleanup-brand-fixture', String(brandFixture2.term_id), brandFixture2.token);
+      } catch (cleanBrand2Error) {
+        failure = failure || cleanBrand2Error;
       }
     }
     try {

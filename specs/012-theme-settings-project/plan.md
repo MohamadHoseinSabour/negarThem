@@ -62,12 +62,19 @@
    distinction (`رایگان` without Toman symbol), purchase action compatibility by product type
    (`variable`, `grouped`, `external`, `simple`, out-of-stock), query filter reliability with
    `try ... finally`, and full regression test suite pass.
-8. **Story management (Phase 6, in progress):** implement `negar_theme_story_options`
+8. **Story management (Phase 6, complete):** implement `negar_theme_story_options`
    separate non-autoloaded option, admin story manager (CRUD, reordering with keyboard buttons,
    separate thumbnail and image/video media, WooCommerce product binding, duration),
    frontend `story-circles.php` rendering, native HTML5 video playback driven by actual media duration,
    image timing, accessible dialog with keyboard/touch navigation and focus management.
-9. **Brands (Phase 7, planned):** brand carousel/grid management.
+9. **Brand management (Phase 7, complete):** implement `negar_theme_brand_options`
+   separate non-autoloaded option (version 1), admin brands manager (genuine WooCommerce
+   `product_brand` taxonomy search with debounced AJAX, selection of up to 20 terms,
+   keyboard Move Up / Down reordering, enable/disable toggle, removal, optional WordPress
+   Media Library logo override with native taxonomy fallback), frontend `brands-slider.php`
+   rendering of genuine brand names, logos, and taxonomy archives, single-brand navigation
+   arrow suppression, complete removal of fake ratings and product counts, and clean section
+   omission when empty or unconfigured.
 10. **Branding, typography and colors (Phase 8, planned):** typography controls with safe font-loading.
 11. **SMS and OTP provider integration (Phase 9, planned):** provider boundary with separately stored secrets.
 12. **Settings backup/import/export (Phase 10, planned):** validation, authorization, rollback and storage.

@@ -1,7 +1,7 @@
 # Feature Specification: 012 Complete Theme Settings Project
 
 **Feature code:** `SETTINGS-01`
-**Status:** Phase 6 Story Management in progress.
+**Status:** Phase 7 Brand Management complete.
 **Supersedes for new work:** None. `009-featurename-theme-options` remains the
 historical Customizer-and-widgets specification and is not this project.
 
@@ -64,6 +64,12 @@ sorting, selector and catalog-visibility hardening.
    IDs. Every rendered commercial value must come from a published,
    catalog-visible WooCommerce product; hotspot coordinates and approved layouts
    remain template-owned.
+10. Brand settings use a dedicated non-autoloaded option `negar_theme_brand_options`
+    (`NEGAR_THEME_BRAND_OPTION`, version 1). The administrator can select genuine
+    WooCommerce brands from the taxonomy `product_brand`, reorder them with
+    keyboard-accessible Move Up / Move Down buttons, enable/disable them, and optionally
+    override their logo with a WordPress Media Library image. Missing or empty selection
+    cleanly omits the section without fabricated ratings, product counts, or demo names.
 
 ## Non-goals
 
@@ -107,5 +113,11 @@ sorting, selector and catalog-visibility hardening.
   targeted `LIMIT 1` search queries with catalog-visibility filtering, missing
   matches render safe empty hotspot states without fake links or prices, and
   unbounded `wc_get_products( ['limit' => -1] )` catalog iterations are eliminated.
+- Brand management operates on real WooCommerce `product_brand` taxonomy terms:
+  an authenticated administrator can search brands via debounced AJAX, select up to
+  20 terms, reorder them, toggle visibility, and optionally override their logos.
+  The homepage carousel displays genuine brand names, logos and archive links,
+  hides arrows when single, and omits the entire section when empty. Fabricated ratings,
+  counts, and demo brand names are completely removed.
 - Documentation keys exactly match implementation and the dedicated spec, plan and
   task list remain separate from specification 009.

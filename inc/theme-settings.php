@@ -988,6 +988,9 @@ function negar_theme_sanitize_media_settings( $submitted ) {
 	}
 
 	$submitted = is_array( $submitted ) ? wp_unslash( $submitted ) : array();
+	if ( empty( $submitted ) ) {
+		return array();
+	}
 	$records   = isset( $submitted['records'] ) && is_array( $submitted['records'] ) ? $submitted['records'] : array();
 	$clean     = array( 'schema_version' => NEGAR_THEME_MEDIA_VERSION, 'records' => array() );
 	foreach ( negar_theme_media_registry() as $record_id => $definition ) {

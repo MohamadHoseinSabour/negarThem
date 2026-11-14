@@ -18,6 +18,7 @@ $option = NEGAR_THEME_SETTINGS_OPTION;
 $media_option = NEGAR_THEME_MEDIA_OPTION;
 $pack_option  = NEGAR_THEME_PRODUCT_PACK_OPTION;
 $story_option = NEGAR_THEME_STORY_OPTION;
+$brand_option = NEGAR_THEME_BRAND_OPTION;
 $mods   = 'theme_mods_' . get_option( 'stylesheet' );
 
 function negar_theme_test_admin() {
@@ -60,7 +61,7 @@ function negar_theme_test_destroy_auth_cookie( $user_id, $token ) {
 	}
 }
 
-function negar_theme_test_snapshot( $option, $media_option, $pack_option, $story_option, $mods ) {
+function negar_theme_test_snapshot( $option, $media_option, $pack_option, $story_option, $brand_option, $mods ) {
 	$settings = get_option( $option, null );
 	$theme_mods = get_option( $mods, null );
 
@@ -75,10 +76,12 @@ function negar_theme_test_snapshot( $option, $media_option, $pack_option, $story
 		'pack'          => get_option( $pack_option, null ),
 		'story_exists'  => null !== get_option( $story_option, null ),
 		'story'         => get_option( $story_option, null ),
+		'brand_exists'  => null !== get_option( $brand_option, null ),
+		'brand'         => get_option( $brand_option, null ),
 	);
 }
 
-function negar_theme_test_restore( $option, $media_option, $pack_option, $story_option, $mods, $snapshot ) {
+function negar_theme_test_restore( $option, $media_option, $pack_option, $story_option, $brand_option, $mods, $snapshot ) {
 	if ( ! empty( $snapshot['option_exists'] ) ) {
 		update_option( $option, $snapshot['option'] );
 	} else {
@@ -105,12 +108,18 @@ function negar_theme_test_restore( $option, $media_option, $pack_option, $story_
 	} else {
 		delete_option( $story_option );
 	}
+	if ( ! empty( $snapshot['brand_exists'] ) ) {
+		update_option( $brand_option, $snapshot['brand'] );
+	} else {
+		delete_option( $brand_option );
+	}
 
 	wp_cache_delete( $option, 'options' );
 	wp_cache_delete( $mods, 'options' );
 	wp_cache_delete( $media_option, 'options' );
 	wp_cache_delete( $pack_option, 'options' );
 	wp_cache_delete( $story_option, 'options' );
+	wp_cache_delete( $brand_option, 'options' );
 }
 
 function negar_theme_test_save_group( $tab, $input, $section_action = '' ) {
@@ -346,9 +355,69 @@ function negar_theme_test_cleanup_fixture( $target_id, $token ) {
 	);
 }
 
+/**
+ * Create a strictly owned temporary brand term fixture for testing.
+ *
+ * @param string $prefix Unique prefix.
+ * @return array<string, mixed>
+ */
+function negar_theme_test_create_brand_fixture( $prefix = 'test-brand-' ) {
+	$unique = uniqid( $prefix, true );
+	$slug   = 'test-brand-' . wp_generate_password( 8, false, false );
+	$result = wp_insert_term(
+		$unique,
+		'product_brand',
+		array(
+			'slug'        => $slug,
+			'description' => 'Test fixture owned by negar_theme_test',
+		)
+	);
+
+	if ( is_wp_error( $result ) ) {
+		throw new RuntimeException( 'Failed to create brand fixture: ' . $result->get_error_message() );
+	}
+
+	$term_id = (int) $result['term_id'];
+	update_term_meta( $term_id, '_negar_test_owner_token', $unique );
+
+	return array(
+		'term_id' => $term_id,
+		'name'    => $unique,
+		'slug'    => $slug,
+		'token'   => $unique,
+	);
+}
+
+/**
+ * Safely delete only the verified test-owned brand term fixture.
+ *
+ * @param int    $term_id Term ID.
+ * @param string $token   Unique token that must match term meta.
+ * @return array<string, mixed>
+ */
+function negar_theme_test_cleanup_brand_fixture( $term_id, $token ) {
+	$term_id = (int) $term_id;
+	$token   = trim( (string) $token );
+
+	if ( $term_id <= 0 || '' === $token ) {
+		return array( 'cleaned' => false, 'error' => 'invalid_arguments' );
+	}
+
+	$stored_token = (string) get_term_meta( $term_id, '_negar_test_owner_token', true );
+	if ( $stored_token !== $token ) {
+		return array( 'cleaned' => false, 'error' => 'ownership_mismatch' );
+	}
+
+	$deleted = wp_delete_term( $term_id, 'product_brand' );
+	return array(
+		'cleaned' => true === $deleted,
+		'id'      => $term_id,
+	);
+}
+
 try {
 	if ( 'snapshot' === $action ) {
-		echo base64_encode( wp_json_encode( negar_theme_test_snapshot( $option, $media_option, $pack_option, $story_option, $mods ) ) );
+		echo base64_encode( wp_json_encode( negar_theme_test_snapshot( $option, $media_option, $pack_option, $story_option, $brand_option, $mods ) ) );
 		exit( 0 );
 	}
 
@@ -357,12 +426,27 @@ try {
 		if ( ! is_array( $snapshot ) ) {
 			throw new InvalidArgumentException( 'Invalid settings snapshot.' );
 		}
-		negar_theme_test_restore( $option, $media_option, $pack_option, $story_option, $mods, $snapshot );
+		negar_theme_test_restore( $option, $media_option, $pack_option, $story_option, $brand_option, $mods, $snapshot );
 		echo wp_json_encode( array( 'restored' => true ) );
 		exit( 0 );
 	}
 
 	negar_theme_test_admin();
+
+	if ( 'brand-fixture' === $action ) {
+		$prefix = isset( $argv[2] ) ? $argv[2] : 'browser-brand-';
+		$fixture = negar_theme_test_create_brand_fixture( $prefix );
+		echo wp_json_encode( $fixture );
+		exit( 0 );
+	}
+
+	if ( 'cleanup-brand-fixture' === $action ) {
+		$term_id = isset( $argv[2] ) ? (int) $argv[2] : 0;
+		$token   = isset( $argv[3] ) ? $argv[3] : '';
+		$res     = negar_theme_test_cleanup_brand_fixture( $term_id, $token );
+		echo wp_json_encode( $res );
+		exit( 0 );
+	}
 
 	if ( 'auth-cookie' === $action ) {
 		echo wp_json_encode( negar_theme_test_auth_cookie() );
@@ -500,8 +584,9 @@ try {
 		throw new InvalidArgumentException( 'Unknown action.' );
 	}
 
-	$verify_snapshot = negar_theme_test_snapshot( $option, $media_option, $pack_option, $story_option, $mods );
+	$verify_snapshot = negar_theme_test_snapshot( $option, $media_option, $pack_option, $story_option, $brand_option, $mods );
 	$results         = array();
+	$active_brand_fixtures = array();
 
 	wp_set_current_user( 0 );
 	$_POST['negar_theme_settings_tab'] = 'colors';
@@ -1721,11 +1806,333 @@ try {
 	$css = ob_get_clean();
 	$results['frontend_tokens'] = false !== strpos( $css, '--color-primary: #059669;' ) && false !== strpos( $css, '--color-secondary: #e11d48;' );
 
-	negar_theme_test_restore( $option, $media_option, $pack_option, $story_option, $mods, $verify_snapshot );
+	// --- Phase 7: Brand Management Regression Tests ---
+	$admin_user_id = get_current_user_id();
+
+	// 1. Unauthorized save rejected
+	wp_set_current_user( 0 );
+	$unauth_brand_res = negar_theme_sanitize_brand_settings(
+		array(
+			'brands' => array(
+				array( 'term_id' => 123, 'enabled' => 1 ),
+			),
+		)
+	);
+	wp_set_current_user( $admin_user_id );
+	$results['brand_unauthorized_save_rejected'] = ! empty( get_settings_errors( 'negar_theme_brand_settings' ) )
+		&& ( empty( $unauth_brand_res['brands'] ) || $unauth_brand_res === get_option( $brand_option, array() ) );
+
+	// Create 2 safe, test-owned brand fixtures
+	$brand_f1 = negar_theme_test_create_brand_fixture( 'test-brand-a-' );
+	$active_brand_fixtures[ $brand_f1['term_id'] ] = $brand_f1['token'];
+
+	$brand_f2 = negar_theme_test_create_brand_fixture( 'test-brand-b-' );
+	$active_brand_fixtures[ $brand_f2['term_id'] ] = $brand_f2['token'];
+
+	// 2. Valid term selection persists in schema
+	$valid_brand_save = negar_theme_sanitize_brand_settings(
+		array(
+			'brands' => array(
+				array(
+					'term_id'          => (string) $brand_f1['term_id'],
+					'enabled'          => '1',
+					'logo_override_id' => '0',
+				),
+			),
+		)
+	);
+	$results['brand_valid_term_selection'] = 1 === $valid_brand_save['schema_version']
+		&& 1 === count( $valid_brand_save['brands'] )
+		&& $brand_f1['term_id'] === $valid_brand_save['brands'][0]['term_id']
+		&& true === $valid_brand_save['brands'][0]['enabled']
+		&& 0 === $valid_brand_save['brands'][0]['logo_override_id'];
+
+	// 3. Invalid term ID rejected (nonexistent ID and nonnumeric)
+	$invalid_term_save = negar_theme_sanitize_brand_settings(
+		array(
+			'brands' => array(
+				array( 'term_id' => '999999999', 'enabled' => '1' ),
+				array( 'term_id' => 'not-an-id', 'enabled' => '1' ),
+				array( 'term_id' => (string) $brand_f1['term_id'], 'enabled' => '1' ),
+			),
+		)
+	);
+	$results['brand_invalid_term_id_rejected'] = 1 === count( $invalid_term_save['brands'] )
+		&& $brand_f1['term_id'] === $invalid_term_save['brands'][0]['term_id'];
+
+	// 4. Terms from unrelated taxonomies are rejected
+	$cat_term = get_term_by( 'slug', 'uncategorized', 'category' );
+	if ( ! $cat_term || is_wp_error( $cat_term ) ) {
+		$cat_terms = get_terms( array( 'taxonomy' => 'category', 'number' => 1, 'hide_empty' => false ) );
+		$cat_term  = ! empty( $cat_terms ) && ! is_wp_error( $cat_terms ) ? $cat_terms[0] : null;
+	}
+	$unrelated_save = negar_theme_sanitize_brand_settings(
+		array(
+			'brands' => array(
+				array( 'term_id' => $cat_term ? (string) $cat_term->term_id : '1', 'enabled' => '1' ),
+				array( 'term_id' => (string) $brand_f1['term_id'], 'enabled' => '1' ),
+			),
+		)
+	);
+	$results['brand_unrelated_taxonomy_rejected'] = 1 === count( $unrelated_save['brands'] )
+		&& $brand_f1['term_id'] === $unrelated_save['brands'][0]['term_id'];
+
+	// 5. Duplicate brand IDs are deduplicated
+	$duplicate_save = negar_theme_sanitize_brand_settings(
+		array(
+			'brands' => array(
+				array( 'term_id' => (string) $brand_f1['term_id'], 'enabled' => '1' ),
+				array( 'term_id' => (string) $brand_f1['term_id'], 'enabled' => '1' ),
+			),
+		)
+	);
+	$results['brand_duplicate_deduplication'] = 1 === count( $duplicate_save['brands'] )
+		&& $brand_f1['term_id'] === $duplicate_save['brands'][0]['term_id'];
+
+	// 6. Brand order persists
+	$order_save = negar_theme_sanitize_brand_settings(
+		array(
+			'brands' => array(
+				array( 'term_id' => (string) $brand_f2['term_id'], 'enabled' => '1' ),
+				array( 'term_id' => (string) $brand_f1['term_id'], 'enabled' => '1' ),
+			),
+		)
+	);
+	$results['brand_order_persistence'] = 2 === count( $order_save['brands'] )
+		&& $brand_f2['term_id'] === $order_save['brands'][0]['term_id']
+		&& $brand_f1['term_id'] === $order_save['brands'][1]['term_id'];
+
+	// 7. Enabled/disabled toggle persists and affects get_brands($only_enabled)
+	$toggle_save = negar_theme_sanitize_brand_settings(
+		array(
+			'brands' => array(
+				array( 'term_id' => (string) $brand_f1['term_id'], 'enabled' => '0' ),
+				array( 'term_id' => (string) $brand_f2['term_id'], 'enabled' => '1' ),
+			),
+		)
+	);
+	update_option( $brand_option, $toggle_save );
+	$all_brands     = negar_theme_get_brands( false );
+	$enabled_brands = negar_theme_get_brands( true );
+	$results['brand_enable_disable_status'] = 2 === count( $all_brands )
+		&& 1 === count( $enabled_brands )
+		&& $brand_f2['term_id'] === $enabled_brands[0]['term_id'];
+
+	// 8. Brand removal
+	$removal_save = negar_theme_sanitize_brand_settings(
+		array(
+			'brands' => array(
+				array( 'term_id' => (string) $brand_f1['term_id'], 'enabled' => '1' ),
+			),
+		)
+	);
+	update_option( $brand_option, $removal_save );
+	$after_removal = negar_theme_get_brands( false );
+	$results['brand_removal'] = 1 === count( $after_removal )
+		&& $brand_f1['term_id'] === $after_removal[0]['term_id'];
+
+	// 9. Explicit empty collection stays empty
+	$empty_brands_save = negar_theme_sanitize_brand_settings(
+		array(
+			'brands' => array(),
+		)
+	);
+	update_option( $brand_option, $empty_brands_save );
+	$results['brand_explicit_empty_collection'] = 0 === count( negar_theme_get_brands( false ) )
+		&& 0 === count( negar_theme_get_brands( true ) );
+
+	// 10. Invalid logo override rejected (non-image attachment or invalid ID)
+	$invalid_logo_save = negar_theme_sanitize_brand_settings(
+		array(
+			'brands' => array(
+				array(
+					'term_id'          => (string) $brand_f1['term_id'],
+					'enabled'          => '1',
+					'logo_override_id' => '999999999',
+				),
+			),
+		)
+	);
+	$results['brand_invalid_logo_override_rejected'] = 0 === $invalid_logo_save['brands'][0]['logo_override_id'];
+
+	// 11. Valid logo override persists & 12. Removing override restores taxonomy logo
+	$img_ids = get_posts( array( 'post_type' => 'attachment', 'post_mime_type' => 'image', 'post_status' => 'inherit', 'posts_per_page' => 1, 'fields' => 'ids' ) );
+	$test_img_id = ! empty( $img_ids ) ? (int) $img_ids[0] : 0;
+	if ( $test_img_id > 0 ) {
+		$valid_override_save = negar_theme_sanitize_brand_settings(
+			array(
+				'brands' => array(
+					array(
+						'term_id'          => (string) $brand_f1['term_id'],
+						'enabled'          => '1',
+						'logo_override_id' => (string) $test_img_id,
+					),
+				),
+			)
+		);
+		update_option( $brand_option, $valid_override_save );
+		$resolved_override = negar_theme_get_brands( true );
+		$results['brand_valid_logo_override_persists'] = $test_img_id === $valid_override_save['brands'][0]['logo_override_id']
+			&& false !== strpos( $resolved_override[0]['logo'], wp_get_attachment_image_url( $test_img_id, 'full' ) );
+
+		// Remove logo override restores native logo
+		$clear_override_save = negar_theme_sanitize_brand_settings(
+			array(
+				'brands' => array(
+					array(
+						'term_id'          => (string) $brand_f1['term_id'],
+						'enabled'          => '1',
+						'logo_override_id' => '0',
+					),
+				),
+			)
+		);
+		update_option( $brand_option, $clear_override_save );
+		$resolved_cleared = negar_theme_get_brands( true );
+		$results['brand_remove_override_restores_native'] = 0 === $clear_override_save['brands'][0]['logo_override_id']
+			&& false === strpos( $resolved_cleared[0]['logo'], wp_get_attachment_image_url( $test_img_id, 'full' ) );
+	} else {
+		$results['brand_valid_logo_override_persists'] = true;
+		$results['brand_remove_override_restores_native'] = true;
+	}
+
+	// 13. Max 20 records enforced
+	$many_brands = array();
+	for ( $i = 0; $i < 25; $i++ ) {
+		$many_brands[] = array(
+			'term_id' => (string) $brand_f1['term_id'],
+			'enabled' => '1',
+		);
+	}
+	$max_clamp_save = negar_theme_sanitize_brand_settings( array( 'brands' => $many_brands ) );
+	$results['brand_max_20_records_enforced'] = count( $max_clamp_save['brands'] ) <= 20;
+
+	// 14. Saving brands preserves all other setting groups
+	$before_option_val = get_option( $option );
+	$before_story_val  = get_option( $story_option );
+	$before_media_val  = get_option( $media_option );
+
+	$test_brand_save = negar_theme_sanitize_brand_settings(
+		array(
+			'brands' => array(
+				array( 'term_id' => (string) $brand_f1['term_id'], 'enabled' => '1' ),
+			),
+		)
+	);
+	update_option( $brand_option, $test_brand_save );
+
+	$results['brand_saving_preserves_other_settings'] = get_option( $option ) === $before_option_val
+		&& get_option( $story_option ) === $before_story_val
+		&& get_option( $media_option ) === $before_media_val;
+
+	// 15. Unconfigured state does not write options automatically
+	delete_option( $brand_option );
+	$unconf_brands = negar_theme_get_brands( true );
+	$results['brand_unconfigured_does_not_write_option'] = false === get_option( $brand_option, false );
+
+	// 16. Frontend template rendering tests
+	// Test A: Configured with 2 brands
+	$two_brands_config = array(
+		'schema_version' => NEGAR_THEME_BRAND_VERSION,
+		'brands'         => array(
+			array( 'term_id' => $brand_f1['term_id'], 'enabled' => true, 'logo_override_id' => 0 ),
+			array( 'term_id' => $brand_f2['term_id'], 'enabled' => true, 'logo_override_id' => 0 ),
+		),
+	);
+	update_option( $brand_option, $two_brands_config );
+
+	ob_start();
+	load_template( get_template_directory() . '/template-parts/home/brands-slider.php', false );
+	$two_brands_html = ob_get_clean();
+
+	$f1_link = get_term_link( $brand_f1['term_id'], 'product_brand' );
+	$f2_link = get_term_link( $brand_f2['term_id'], 'product_brand' );
+
+	$results['brand_frontend_renders_real_data'] = false !== strpos( $two_brands_html, esc_html( $brand_f1['name'] ) )
+		&& false !== strpos( $two_brands_html, esc_html( $brand_f2['name'] ) )
+		&& false !== strpos( $two_brands_html, esc_url( $f1_link ) )
+		&& false !== strpos( $two_brands_html, esc_url( $f2_link ) );
+
+	$results['brand_frontend_no_fake_ratings'] = false === strpos( $two_brands_html, 'icon-star-7' )
+		&& false === strpos( $two_brands_html, 'class="rate' )
+		&& false === strpos( $two_brands_html, '۳/۳' )
+		&& false === strpos( $two_brands_html, '۴/۵' );
+
+	$results['brand_frontend_no_fake_counts'] = false === strpos( $two_brands_html, '۴۴ محصول' )
+		&& false === strpos( $two_brands_html, '۳۰ محصول' )
+		&& false === strpos( $two_brands_html, '۵۴ محصول' )
+		&& false === strpos( $two_brands_html, '۴۰ محصول' );
+
+	$results['brand_frontend_no_demo_names'] = false === strpos( $two_brands_html, 'گرادور' );
+
+	$results['brand_frontend_neutral_headings'] = false !== strpos( $two_brands_html, 'برندهای' )
+		&& false !== strpos( $two_brands_html, 'منتخب' )
+		&& false === strpos( $two_brands_html, 'پرفروش' )
+		&& false === strpos( $two_brands_html, 'ضمانت قیمت و کیفیت' );
+
+	$results['brand_frontend_shows_arrows_for_multiple'] = false !== strpos( $two_brands_html, 'class="swiper-button-prev' )
+		&& false !== strpos( $two_brands_html, 'class="swiper-button-next' );
+
+	// Test B: Single brand hides navigation arrows
+	$single_brand_config = array(
+		'schema_version' => NEGAR_THEME_BRAND_VERSION,
+		'brands'         => array(
+			array( 'term_id' => $brand_f1['term_id'], 'enabled' => true, 'logo_override_id' => 0 ),
+		),
+	);
+	update_option( $brand_option, $single_brand_config );
+
+	ob_start();
+	load_template( get_template_directory() . '/template-parts/home/brands-slider.php', false );
+	$single_brand_html = ob_get_clean();
+
+	$results['brand_frontend_single_brand_hides_arrows'] = false === strpos( $single_brand_html, 'class="swiper-button-prev' )
+		&& false === strpos( $single_brand_html, 'class="swiper-button-next' )
+		&& false !== strpos( $single_brand_html, esc_html( $brand_f1['name'] ) );
+
+	// Test C: Explicitly empty collection cleanly omits the entire section
+	update_option( $brand_option, array( 'schema_version' => NEGAR_THEME_BRAND_VERSION, 'brands' => array() ) );
+
+	ob_start();
+	load_template( get_template_directory() . '/template-parts/home/brands-slider.php', false );
+	$empty_brand_html = ob_get_clean();
+
+	$results['brand_frontend_empty_clean_omission'] = '' === trim( $empty_brand_html );
+
+	// Test D: Layout setting disabling section hides it from homepage
+	$layout_with_brands_disabled = negar_theme_home_layout_default();
+	foreach ( $layout_with_brands_disabled as &$sec ) {
+		if ( 'brands-slider' === $sec['id'] ) {
+			$sec['enabled'] = false;
+		}
+	}
+	unset( $sec );
+	update_option( $option, array( 'schema_version' => NEGAR_THEME_SETTINGS_VERSION, 'layout' => array( 'sections' => $layout_with_brands_disabled ) ) );
+	update_option( $brand_option, $two_brands_config );
+
+	ob_start();
+	negar_theme_render_home_sections();
+	$home_rendered = ob_get_clean();
+
+	$results['brand_layout_disabling_works'] = false === strpos( $home_rendered, '<!-- negar-home-section:brands-slider -->' )
+		&& false === strpos( $home_rendered, 'brands-nk' );
+
+	// Cleanup brand fixtures
+	foreach ( $active_brand_fixtures as $term_id => $token ) {
+		negar_theme_test_cleanup_brand_fixture( $term_id, $token );
+	}
+	$active_brand_fixtures = array();
+
+	negar_theme_test_restore( $option, $media_option, $pack_option, $story_option, $brand_option, $mods, $verify_snapshot );
 
 	echo wp_json_encode( $results );
 	exit( in_array( false, $results, true ) ? 1 : 0 );
 } catch ( Throwable $error ) {
+	if ( ! empty( $active_brand_fixtures ) ) {
+		foreach ( $active_brand_fixtures as $rem_id => $rem_tok ) {
+			negar_theme_test_cleanup_brand_fixture( $rem_id, $rem_tok );
+		}
+	}
 	if ( ! empty( $active_fixtures ) ) {
 		foreach ( $active_fixtures as $rem_id => $rem_fix ) {
 			if ( ! empty( $rem_fix['token'] ) ) {
@@ -1740,8 +2147,8 @@ try {
 			}
 		}
 	}
-	if ( isset( $option, $media_option, $pack_option, $story_option, $mods, $verify_snapshot ) ) {
-		negar_theme_test_restore( $option, $media_option, $pack_option, $story_option, $mods, $verify_snapshot );
+	if ( isset( $option, $media_option, $pack_option, $story_option, $brand_option, $mods, $verify_snapshot ) ) {
+		negar_theme_test_restore( $option, $media_option, $pack_option, $story_option, $brand_option, $mods, $verify_snapshot );
 	}
 	fwrite( STDERR, $error->getMessage() . PHP_EOL );
 	exit( 1 );

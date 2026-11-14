@@ -178,7 +178,37 @@
   - Clean snapshot restoration: Database and media fixtures are restored identically to pre-test baseline in `finally` blocks.
   - `npm test`: Linting (114 PHP files) + Settings Regression + E2E Suite (37 tests) all passed with exit code 0.
 
+## Phase 7 — Complete WooCommerce Brand Management
+
+**Status:** PASS (COMPLETE & VERIFIED)
+**Baseline:** `69f04dfe5af8aa1ede3675864c4c25b36d0a4ec6`
+**Commits:**
+- `8eb3f0f` `feat(settings): add WooCommerce brand management`
+- `b85b710` `feat(home): render real WooCommerce brands`
+- `92a3c77` `test(settings): verify brand management and carousel`
+
+### Summary of Accomplishments:
+- **Brand Schema & Storage Boundary:** Registered `negar_theme_brand_options` (`NEGAR_THEME_BRAND_OPTION`, schema version 1) under `negar_theme_brand_settings`, marked strictly non-autoloaded (`wp_set_option_autoload( ..., 'no' )`), maintaining complete isolation from other settings groups.
+- **Genuine WooCommerce Brand Integration:** Integrated with native WooCommerce `product_brand` taxonomy terms. Admin search uses debounced AJAX (`negar_theme_search_brands` with nonce `negar_theme_brand_search`) capped to 20 results with published product counts.
+- **Admin Brand Management:**
+  - Dedicated Brands tab under Settings → تنظیمات قالب نگار → برندها.
+  - Adding, removing, and enabling/disabling managed brands.
+  - Keyboard-accessible Move Up / Move Down buttons for reordering.
+  - Enforcement of max 20 records and deduplication of term IDs.
+  - Optional WordPress Media Library logo override per brand, falling back to taxonomy logo (`wc_get_brand_thumbnail_url()` or `get_brand_thumbnail_url()`), then `wc_placeholder_img_src()`.
+- **Frontend Carousel Rendering (`brands-slider.php`):**
+  - Displays genuine brand names, logos (native or override), and taxonomy archive links.
+  - Neutral section headings (`برندهای منتخب` and `اصالت و تنوع برندها`).
+  - Single-brand safety: hides Swiper next/prev navigation buttons when only 1 brand is displayed.
+  - Section omission: cleanly omits `.elementor-element-7a921bf6` when 0 brands are enabled or store has no brands.
+  - Commercial integrity: completely removed hardcoded ratings (`۳/۳`, `۴/۵`, etc.), star icons (`icon-star-7`), and fake product counts (`+۲۴۰ محصول`).
+- **Comprehensive Regression Coverage:**
+  - `tests/theme-settings-regression.php`: 20+ Phase 7 assertions verifying unauthorized rejection, sanitization, term validation, deduplication, keyboard ordering, enable/disable, removal, Media Library override, empty omission, layout disabling, and isolation.
+  - Safe test fixtures: `negar_theme_test_create_brand_fixture()` and `negar_theme_test_cleanup_brand_fixture()` with unique tokens, fully cleaned up in `finally`.
+  - `tests/theme-settings-regression.js`: Browser tests verifying AJAX brand search, adding, keyboard reordering, form persistence, frontend DOM rendering of real brand names and archive links, absence of fake ratings/counts, and 375px mobile viewport responsiveness.
+  - Test suites: `npm run test:lint` (114 PHP files passed), `npm run test:settings` (100% passed), `npm run test:e2e` (37 passed, 0 failed), `npm test` (all green, exit code 0).
+
 ## Next phase
 
-Phase 7: Brands Management.
-Following approved roadmap: Phase 7 (Brands), Phase 8 (Typography & Colors), Phase 9 (SMS/OTP), Phase 10 (Backup/Export), Phase 11 (Release QA & Packaging).
+Phase 8: Branding, typography and colors.
+Following approved roadmap: Phase 8 (Typography & Colors), Phase 9 (SMS/OTP), Phase 10 (Backup/Export), Phase 11 (Release QA & Packaging).

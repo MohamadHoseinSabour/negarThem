@@ -86,9 +86,17 @@
 - [x] **STORY-6.9** Harden video player and modal accessibility: use `preload="none"`, bind progress to finite positive duration, advance strictly on `ended`, provide user-recoverable play/error overlays, lock/restore body scroll, enforce focus trap, and restore focus to activating button.
 - [x] **STORY-6.10** Upgrade regression coverage with real WebM test fixture, Playwright real playback/pause/ended tests, and database snapshot/cleanup restoration.
 
+## Phase 7: Brand Management
+
+- [x] **BRAND-7.1** Define `negar_theme_brand_options` schema (version 1), validation rules, non-autoloaded option registration under `negar_theme_brand_settings`, and integration with genuine WooCommerce `product_brand` taxonomy.
+- [x] **BRAND-7.2** Implement admin Brand Management UI under Settings → تنظیمات قالب نگار → برندها (debounced AJAX search for genuine WooCommerce brands, selection of up to 20 terms, keyboard accessible Move Up / Move Down buttons, enable/disable toggle, removal, and optional WordPress Media Library logo override with native taxonomy fallback).
+- [x] **BRAND-7.3** Implement frontend brand rendering in `template-parts/home/brands-slider.php` with genuine WooCommerce brands, real brand names, native or overridden logos, and archive links.
+- [x] **BRAND-7.4** Cleanly omit fake demonstration commercial data: remove hardcoded ratings (`۳/۳`, `۴/۵`, etc.), star icons (`icon-star-7`), and fake product counts (`+۲۴۰ محصول`) from the carousel.
+- [x] **BRAND-7.5** Implement layout safety: suppress Swiper navigation arrows when only 1 brand is rendered, cleanly omit the section container when 0 brands are enabled or store has no brands, and support homepage layout toggle disabling.
+- [x] **BRAND-7.6** Add comprehensive reversible regression coverage in `tests/theme-settings-regression.php` and `tests/theme-settings-regression.js` verifying unauthorized rejection, sanitization, keyboard ordering, Media Library override, empty omission, and full fixture cleanup.
+
 ## Future Phases Roadmap
 
-- **Phase 7:** Brands
 - **Phase 8:** Branding, typography and colors
 - **Phase 9:** SMS and OTP provider integration
 - **Phase 10:** Settings backup/import/export

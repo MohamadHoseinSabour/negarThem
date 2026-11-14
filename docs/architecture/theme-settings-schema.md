@@ -290,9 +290,50 @@ The option name is `negar_theme_story_options` (`NEGAR_THEME_STORY_OPTION`). It 
   - *Controls & accessibility:* Press/hold pauses progress and playback; release resumes. Tap duration is measured so holding to pause never accidentally triggers next/previous navigation. Navigation zones and arrow keys preserve correct RTL semantics (Left = Next, Right = Previous).
   - *Focus trap & dialog lifecycle:* Story circles are keyboard-accessible `<button>` elements with `aria-haspopup="dialog"`. Opening traps focus within visible dialog controls and locks body scroll while recording the prior overflow style. Closing restores the original body scroll, unloads active media, and returns focus to the activating circle button. Visibility changes (`document.hidden`) automatically pause playback.
 
+## Brand management schema (Phase 7)
+
+Brand settings are stored independently in the non-autoloaded option `negar_theme_brand_options` (`NEGAR_THEME_BRAND_OPTION`, version 1).
+
+```json
+{
+  "schema_version": 1,
+  "brands": [
+    {
+      "term_id": 14,
+      "enabled": true,
+      "override_logo_id": 105
+    },
+    {
+      "term_id": 22,
+      "enabled": true,
+      "override_logo_id": 0
+    }
+  ]
+}
+```
+
+- **Storage boundaries & non-autoloading:**
+  - Handled by Settings API under option group `negar_theme_brand_settings`.
+  - Marked non-autoloaded via `added_option` hook with `wp_set_option_autoload( NEGAR_THEME_BRAND_OPTION, 'no' )`.
+  - Isolated from `negar_theme_options`, `negar_theme_media_options`, `negar_theme_product_pack_options`, and `negar_theme_story_options`.
+- **Validation & deduplication:**
+  - Sanitizer `negar_theme_sanitize_brand_settings()` enforces at most 20 records.
+  - Term IDs must exist in the native WooCommerce `product_brand` taxonomy; non-existent or invalid terms are rejected.
+  - Duplicate term IDs are filtered out during sanitization, preserving the first occurrence.
+  - Enabled status is strictly boolean.
+  - Logo overrides must be valid image attachments verified by `wp_attachment_is_image()`. Invalid attachment IDs sanitize to 0.
+- **Unconfigured vs explicit empty semantics:**
+  - *Unconfigured (`null === get_option( NEGAR_THEME_BRAND_OPTION )`):* Dynamically discovers up to 6 real `product_brand` terms with non-empty counts. If no brands exist in the store, cleanly returns an empty collection without writing options.
+  - *Explicit empty collection (`array( 'brands' => array() )`):* When the administrator saves an empty list or disables all brands, `template-parts/home/brands-slider.php` cleanly omits `.elementor-element-7a921bf6` from the DOM.
+- **Frontend rendering & commercial truth:**
+  - Renders genuine brand names, archive permalinks (`get_term_link()`), and native logos (`wc_get_brand_thumbnail_url()` or `get_brand_thumbnail_url()`) with fallback to `wc_placeholder_img_src()`.
+  - Overridden logos take precedence over taxonomy logos.
+  - Swiper navigation buttons (`.swiper-button-next`, `.swiper-button-prev`) are conditionally omitted when only 1 brand is rendered (`$has_multiple_brands` is false).
+  - Fabricated commercial claims are completely removed: hardcoded ratings (`۳/۳`, `۴/۵`, etc.), star icons (`icon-star-7`), and fake product counts (`+۲۴۰ محصول`) are purged. Headings are made neutral (`برندهای منتخب`).
+
 ## Planned schema additions
 
 The static tab registry deliberately reserves keys for the following phased
-additions: `brands`, `sms` and `backup`. Their field schemas must be
+additions: `sms` and `backup`. Their field schemas must be
 documented before they are added; unknown keys must not be accepted by import or
 save handlers.

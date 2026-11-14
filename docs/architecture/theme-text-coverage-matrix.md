@@ -21,7 +21,7 @@ authorize new media collections, product queries or commerce controls.
 
 | # | Section/template | Text ownership outcome | Status / future owner |
 | --- | --- | --- | --- |
-| 01 | `story-circles.php` | Story titles, CTA and media are collection records. | Deferred — Phase 6 stories. |
+| 01 | `story-circles.php` | Story titles, CTA and media are collection records with live WooCommerce product binding. | Handled — Phase 6 stories (`negar_theme_story_options`). |
 | 02 | `hero-slider.php` | Static slide eyebrow/title/CTA and flash-heading copy are registry fields; featured product facts remain live. | Handled for static copy; product selection Phase 4 and slide media Phase 5. |
 | 03 | `category-bubbles.php` | Category names and links are WooCommerce terms. | Managed; visual/order controls Phase 4. |
 | 04 | `flash-deals.php` | Heading/query presentation is coupled to a live sale-product query. | Deferred — Phase 4 product sections. |
@@ -40,7 +40,7 @@ authorize new media collections, product queries or commerce controls.
 | 17 | `sec-17-flash-deals-2.php` | Flash-deal component couples copy to product data. | Deferred — Phase 4 product sections. |
 | 18 | `sec-18-banners-2col.php` | Two-banner copy and media are fixed records. | Phase 5 hero/banner records. |
 | 19 | `sec-19-gaming-laptop.php` | Product presentation and query are coupled. | Deferred — Phase 4 product sections. |
-| 20 | `brands-slider.php` | Brand identity/media needs a verified taxonomy or collection model. | Deferred — Phase 7 brands. |
+| 20 | `brands-slider.php` | Neutral section headings; genuine brand names, logos and archives. Fake ratings and counts eliminated. | Handled — Phase 7 brand management (`negar_theme_brand_options`). |
 | 21 | `sec-21-testimonials.php` | Reviews are real WooCommerce reviews or a truthful empty state. | Managed reviews; Phase 4 presentation only. |
 | 22 | `sec-22-flash-deals-audio.php` | Product carousel copy is coupled to live objects. | Deferred — Phase 4 product sections. |
 | 23 | `sec-23-feature-bar-2.php` | Spotlight cards need live product assignments. | Deferred — Phase 4 product sections. |

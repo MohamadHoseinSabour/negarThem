@@ -17,23 +17,25 @@ $shop_url   = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink
 
 // Only render cards for real WooCommerce products. Returning the shop URL for
 // an unmatched demo item sent customers to the wrong destination.
-function negar_get_matching_product_info( $slug_fragment, $fallback_url ) {
-	$prods = get_posts( array(
-		'post_type'      => 'product',
-		'posts_per_page' => 1,
-		'post_status'    => 'publish',
-		's'              => $slug_fragment,
-	) );
-	if ( ! empty( $prods ) ) {
+if ( ! function_exists( 'negar_get_matching_product_info' ) ) {
+	function negar_get_matching_product_info( $slug_fragment, $fallback_url ) {
+		$prods = get_posts( array(
+			'post_type'      => 'product',
+			'posts_per_page' => 1,
+			'post_status'    => 'publish',
+			's'              => $slug_fragment,
+		) );
+		if ( ! empty( $prods ) ) {
+			return array(
+				'id'  => $prods[0]->ID,
+				'url' => get_permalink( $prods[0]->ID ),
+			);
+		}
 		return array(
-			'id'  => $prods[0]->ID,
-			'url' => get_permalink( $prods[0]->ID ),
+			'id'  => 0,
+			'url' => '',
 		);
 	}
-	return array(
-		'id'  => 0,
-		'url' => '',
-	);
 }
 
 // 1. Discount Showcase Items (Left Column Red Card)
