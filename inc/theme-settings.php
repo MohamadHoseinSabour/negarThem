@@ -14,6 +14,8 @@ define( 'NEGAR_THEME_SETTINGS_VERSION', 1 );
 define( 'NEGAR_THEME_MEDIA_OPTION', 'negar_theme_media_options' );
 define( 'NEGAR_THEME_MEDIA_VERSION', 1 );
 define( 'NEGAR_THEME_PRODUCT_PACK_OPTION', 'negar_theme_product_pack_options' );
+define( 'NEGAR_THEME_STORY_OPTION', 'negar_theme_story_options' );
+define( 'NEGAR_THEME_STORY_VERSION', 1 );
 
 /**
  * Return the supported schema defaults.
@@ -1248,6 +1250,625 @@ function negar_theme_gaming_zone_product( $slot_key, $needles = array() ) {
 }
 
 /**
+ * Return default demonstration stories for backward compatibility.
+ *
+ * @return array<int, array<string, mixed>>
+ */
+function negar_theme_story_defaults() {
+	$upload_dir = wp_upload_dir();
+	$story_base = $upload_dir['baseurl'] . '/kaveh-demo/stories';
+
+	return array(
+		array(
+			'id'           => 'story-demo-1',
+			'enabled'      => true,
+			'type'         => 'image',
+			'title'        => 'پیشنهاد داغ',
+			'badge'        => '',
+			'thumbnail_id' => 0,
+			'image_id'     => 0,
+			'video_id'     => 0,
+			'poster_id'    => 0,
+			'duration'     => 5,
+			'product_id'   => 0,
+			'cta_label'    => 'مشاهده و خرید',
+			'cta_url'      => '',
+			'fallback_img' => $story_base . '/story-demo-1.jpg',
+			'prod_title'   => 'گوشی موبایل اپل مدل iPhone 16 Pro Max',
+		),
+		array(
+			'id'           => 'story-demo-2',
+			'enabled'      => true,
+			'type'         => 'image',
+			'title'        => 'شروعی متفاوت',
+			'badge'        => 'ویژه ما',
+			'thumbnail_id' => 0,
+			'image_id'     => 0,
+			'video_id'     => 0,
+			'poster_id'    => 0,
+			'duration'     => 5,
+			'product_id'   => 0,
+			'cta_label'    => 'مشاهده و خرید',
+			'cta_url'      => '',
+			'fallback_img' => $story_base . '/story-demo-2.jpg',
+			'prod_title'   => 'هدفون بلوتوثی سامسونگ مدل Galaxy Buds3 Pro',
+		),
+		array(
+			'id'           => 'story-demo-3',
+			'enabled'      => true,
+			'type'         => 'image',
+			'title'        => 'ویژه تو',
+			'badge'        => '',
+			'thumbnail_id' => 0,
+			'image_id'     => 0,
+			'video_id'     => 0,
+			'poster_id'    => 0,
+			'duration'     => 5,
+			'product_id'   => 0,
+			'cta_label'    => 'مشاهده و خرید',
+			'cta_url'      => '',
+			'fallback_img' => $story_base . '/story-demo-3.jpg',
+			'prod_title'   => 'ساعت هوشمند اپل مدل Apple Watch Ultra 2',
+		),
+		array(
+			'id'           => 'story-demo-4',
+			'enabled'      => true,
+			'type'         => 'image',
+			'title'        => 'شانس با توست',
+			'badge'        => 'محصول ویژه',
+			'thumbnail_id' => 0,
+			'image_id'     => 0,
+			'video_id'     => 0,
+			'poster_id'    => 0,
+			'duration'     => 5,
+			'product_id'   => 0,
+			'cta_label'    => 'مشاهده و خرید',
+			'cta_url'      => '',
+			'fallback_img' => $story_base . '/story-demo-4.jpg',
+			'prod_title'   => 'کنسول بازی سونی مدل PlayStation 5 Slim',
+		),
+		array(
+			'id'           => 'story-demo-5',
+			'enabled'      => true,
+			'type'         => 'image',
+			'title'        => 'تخفیف رویایی',
+			'badge'        => '',
+			'thumbnail_id' => 0,
+			'image_id'     => 0,
+			'video_id'     => 0,
+			'poster_id'    => 0,
+			'duration'     => 5,
+			'product_id'   => 0,
+			'cta_label'    => 'مشاهده و خرید',
+			'cta_url'      => '',
+			'fallback_img' => $story_base . '/story-demo-5.jpg',
+			'prod_title'   => 'لپ تاپ اپل مدل MacBook Pro M3',
+		),
+		array(
+			'id'           => 'story-demo-6',
+			'enabled'      => true,
+			'type'         => 'image',
+			'title'        => 'تکرار نمیشه',
+			'badge'        => '',
+			'thumbnail_id' => 0,
+			'image_id'     => 0,
+			'video_id'     => 0,
+			'poster_id'    => 0,
+			'duration'     => 5,
+			'product_id'   => 0,
+			'cta_label'    => 'مشاهده و خرید',
+			'cta_url'      => '',
+			'fallback_img' => $story_base . '/story-demo-6.jpg',
+			'prod_title'   => 'پک هدیه لوازم جانبی دیجیتال پرو',
+		),
+		array(
+			'id'           => 'story-demo-7',
+			'enabled'      => true,
+			'type'         => 'image',
+			'title'        => 'باورنکردنی',
+			'badge'        => '',
+			'thumbnail_id' => 0,
+			'image_id'     => 0,
+			'video_id'     => 0,
+			'poster_id'    => 0,
+			'duration'     => 5,
+			'product_id'   => 0,
+			'cta_label'    => 'مشاهده و خرید',
+			'cta_url'      => '',
+			'fallback_img' => $story_base . '/story-demo-7.jpg',
+			'prod_title'   => 'اسپیکر قابل حمل جی بی ال مدل Boombox 3',
+		),
+		array(
+			'id'           => 'story-demo-8',
+			'enabled'      => true,
+			'type'         => 'image',
+			'title'        => 'انتخاب خاص',
+			'badge'        => '',
+			'thumbnail_id' => 0,
+			'image_id'     => 0,
+			'video_id'     => 0,
+			'poster_id'    => 0,
+			'duration'     => 5,
+			'product_id'   => 0,
+			'cta_label'    => 'مشاهده و خرید',
+			'cta_url'      => '',
+			'fallback_img' => $story_base . '/story-demo-8.jpg',
+			'prod_title'   => 'دسته بی سیم ایکس باکس مدل اختصاصی',
+		),
+		array(
+			'id'           => 'story-demo-9',
+			'enabled'      => true,
+			'type'         => 'image',
+			'title'        => 'یک خرید خاص',
+			'badge'        => 'ویژه',
+			'thumbnail_id' => 0,
+			'image_id'     => 0,
+			'video_id'     => 0,
+			'poster_id'    => 0,
+			'duration'     => 5,
+			'product_id'   => 0,
+			'cta_label'    => 'مشاهده و خرید',
+			'cta_url'      => '',
+			'fallback_img' => $story_base . '/story-demo-9.jpg',
+			'prod_title'   => 'تبلت مایکروسافت مدل Surface Pro 9',
+		),
+		array(
+			'id'           => 'story-demo-10',
+			'enabled'      => true,
+			'type'         => 'image',
+			'title'        => 'برای تو',
+			'badge'        => 'تخفیف ويژه',
+			'thumbnail_id' => 0,
+			'image_id'     => 0,
+			'video_id'     => 0,
+			'poster_id'    => 0,
+			'duration'     => 5,
+			'product_id'   => 0,
+			'cta_label'    => 'مشاهده و خرید',
+			'cta_url'      => '',
+			'fallback_img' => $story_base . '/story-demo-10.jpg',
+			'prod_title'   => 'شارژر دیواری انکر ۴۵ وات دو پورت سریع',
+		),
+	);
+}
+
+/**
+ * Return raw stored story options without defaults.
+ *
+ * @return mixed
+ */
+function negar_theme_story_options_raw() {
+	return get_option( NEGAR_THEME_STORY_OPTION, null );
+}
+
+/**
+ * Return resolved stories for storefront rendering.
+ *
+ * Falls back to demo defaults when the option has never been saved. Returns an
+ * empty array when explicitly configured with zero stories.
+ *
+ * @param bool $only_enabled Whether to include only enabled stories.
+ * @return array<int, array<string, mixed>>
+ */
+function negar_theme_get_stories( $only_enabled = true ) {
+	$option = get_option( NEGAR_THEME_STORY_OPTION, null );
+	if ( null === $option ) {
+		$raw_stories = negar_theme_story_defaults();
+	} else {
+		$raw_stories = isset( $option['stories'] ) && is_array( $option['stories'] ) ? $option['stories'] : array();
+	}
+
+	$resolved = array();
+	foreach ( $raw_stories as $s ) {
+		if ( ! is_array( $s ) ) {
+			continue;
+		}
+
+		$enabled = isset( $s['enabled'] ) && ! in_array( $s['enabled'], array( false, 0, '0', 'false' ), true );
+		if ( $only_enabled && ! $enabled ) {
+			continue;
+		}
+
+		$id        = isset( $s['id'] ) && is_scalar( $s['id'] ) ? sanitize_key( $s['id'] ) : uniqid( 'story_' );
+		$type      = isset( $s['type'] ) && 'video' === $s['type'] ? 'video' : 'image';
+		$title     = isset( $s['title'] ) && is_scalar( $s['title'] ) ? sanitize_text_field( $s['title'] ) : '';
+		$badge     = isset( $s['badge'] ) && is_scalar( $s['badge'] ) ? sanitize_text_field( $s['badge'] ) : '';
+		$duration  = isset( $s['duration'] ) && is_scalar( $s['duration'] ) ? max( 3, min( 30, absint( $s['duration'] ) ) ) : 5;
+		$cta_label = isset( $s['cta_label'] ) && is_scalar( $s['cta_label'] ) && '' !== trim( (string) $s['cta_label'] )
+			? sanitize_text_field( $s['cta_label'] )
+			: __( 'مشاهده و خرید', 'negar-shop' );
+		$cta_url   = isset( $s['cta_url'] ) && is_scalar( $s['cta_url'] ) ? negar_theme_sanitize_media_link( $s['cta_url'] ) : '';
+
+		// Media IDs.
+		$thumb_id  = isset( $s['thumbnail_id'] ) && is_scalar( $s['thumbnail_id'] ) ? absint( $s['thumbnail_id'] ) : 0;
+		$image_id  = isset( $s['image_id'] ) && is_scalar( $s['image_id'] ) ? absint( $s['image_id'] ) : 0;
+		$video_id  = isset( $s['video_id'] ) && is_scalar( $s['video_id'] ) ? absint( $s['video_id'] ) : 0;
+		$poster_id = isset( $s['poster_id'] ) && is_scalar( $s['poster_id'] ) ? absint( $s['poster_id'] ) : 0;
+
+		$fallback_img = isset( $s['fallback_img'] ) && is_string( $s['fallback_img'] ) ? $s['fallback_img'] : '';
+
+		// Resolve thumbnail URL.
+		$thumb_url = '';
+		if ( $thumb_id && wp_attachment_is_image( $thumb_id ) ) {
+			$thumb_url = (string) wp_get_attachment_image_url( $thumb_id, 'thumbnail' );
+		}
+		if ( '' === $thumb_url && $image_id && wp_attachment_is_image( $image_id ) ) {
+			$thumb_url = (string) wp_get_attachment_image_url( $image_id, 'thumbnail' );
+		}
+		if ( '' === $thumb_url && $poster_id && wp_attachment_is_image( $poster_id ) ) {
+			$thumb_url = (string) wp_get_attachment_image_url( $poster_id, 'thumbnail' );
+		}
+		if ( '' === $thumb_url && '' !== $fallback_img ) {
+			$thumb_url = $fallback_img;
+		}
+
+		// Resolve image URL for image stories.
+		$image_url = '';
+		if ( $image_id && wp_attachment_is_image( $image_id ) ) {
+			$image_url = (string) wp_get_attachment_image_url( $image_id, 'full' );
+		}
+		if ( '' === $image_url && '' !== $fallback_img ) {
+			$image_url = $fallback_img;
+		}
+
+		// Resolve video URL for video stories.
+		$video_url = '';
+		if ( $video_id ) {
+			$mime = (string) get_post_mime_type( $video_id );
+			if ( str_starts_with( $mime, 'video/' ) ) {
+				$video_url = (string) wp_get_attachment_url( $video_id );
+			}
+		}
+
+		// Resolve poster URL.
+		$poster_url = '';
+		if ( $poster_id && wp_attachment_is_image( $poster_id ) ) {
+			$poster_url = (string) wp_get_attachment_image_url( $poster_id, 'full' );
+		}
+
+		// Resolve Product & CTA.
+		$product_id    = isset( $s['product_id'] ) && is_scalar( $s['product_id'] ) ? absint( $s['product_id'] ) : 0;
+		$product       = $product_id && function_exists( 'wc_get_product' ) ? wc_get_product( $product_id ) : false;
+		$has_product   = false;
+		$product_title = '';
+		$product_link  = '';
+		$product_price = '';
+
+		if ( $product && $product->is_visible() ) {
+			$has_product   = true;
+			$product_title = $product->get_name();
+			$product_link  = $product->get_permalink();
+			$product_price = $product->get_price_html();
+		} elseif ( isset( $s['prod_title'] ) && null === $option ) {
+			// Demo mode legacy fallback.
+			$has_product   = true;
+			$product_title = (string) $s['prod_title'];
+			$product_link  = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/shop/' );
+		}
+
+		$resolved[] = array(
+			'id'            => $id,
+			'enabled'       => $enabled,
+			'type'          => $type,
+			'title'         => $title,
+			'badge'         => $badge,
+			'duration'      => $duration,
+			'cta_label'     => $cta_label,
+			'cta_url'       => $cta_url,
+			'thumbnail_id'  => $thumb_id,
+			'thumbnail_url' => $thumb_url,
+			'image_id'      => $image_id,
+			'image_url'     => $image_url,
+			'video_id'      => $video_id,
+			'video_url'     => $video_url,
+			'poster_id'     => $poster_id,
+			'poster_url'    => $poster_url,
+			'has_product'   => $has_product,
+			'product_id'    => $has_product && $product ? $product->get_id() : 0,
+			'product_title' => $product_title,
+			'product_link'  => $product_link,
+			'product_price' => $product_price,
+		);
+	}
+
+	return $resolved;
+}
+
+/**
+ * Sanitize submitted story collection.
+ *
+ * @param mixed $submitted Raw Settings API value.
+ * @return array<string, mixed>
+ */
+function negar_theme_sanitize_story_settings( $submitted ) {
+	$current = get_option( NEGAR_THEME_STORY_OPTION, array() );
+	$current = is_array( $current ) ? $current : array();
+
+	if ( ! current_user_can( 'manage_options' ) ) {
+		add_settings_error( 'negar_theme_story_settings', 'negar_theme_story_forbidden', __( 'اجازهٔ ذخیرهٔ استوری‌ها را ندارید.', 'negar-shop' ), 'error' );
+		return $current;
+	}
+
+	$submitted   = is_array( $submitted ) ? wp_unslash( $submitted ) : array();
+	$raw_stories = isset( $submitted['stories'] ) && is_array( $submitted['stories'] ) ? array_values( $submitted['stories'] ) : array();
+	$raw_stories = array_slice( $raw_stories, 0, 30 );
+
+	$clean_stories = array();
+	foreach ( $raw_stories as $item ) {
+		if ( ! is_array( $item ) ) {
+			continue;
+		}
+
+		$id      = isset( $item['id'] ) && is_scalar( $item['id'] ) && '' !== trim( (string) $item['id'] )
+			? sanitize_key( $item['id'] )
+			: uniqid( 'story_' );
+		$enabled = isset( $item['enabled'] ) && ! in_array( $item['enabled'], array( false, 0, '0', 'false' ), true );
+		$type    = isset( $item['type'] ) && 'video' === $item['type'] ? 'video' : 'image';
+		$title   = isset( $item['title'] ) && is_scalar( $item['title'] ) ? sanitize_text_field( $item['title'] ) : '';
+		$badge   = isset( $item['badge'] ) && is_scalar( $item['badge'] ) ? sanitize_text_field( $item['badge'] ) : '';
+
+		// Media attachment validation.
+		$thumb_id = isset( $item['thumbnail_id'] ) && is_scalar( $item['thumbnail_id'] ) ? absint( $item['thumbnail_id'] ) : 0;
+		$thumb_id = ( $thumb_id && wp_attachment_is_image( $thumb_id ) ) ? $thumb_id : 0;
+
+		$image_id = isset( $item['image_id'] ) && is_scalar( $item['image_id'] ) ? absint( $item['image_id'] ) : 0;
+		$image_id = ( $image_id && wp_attachment_is_image( $image_id ) ) ? $image_id : 0;
+
+		$video_id = isset( $item['video_id'] ) && is_scalar( $item['video_id'] ) ? absint( $item['video_id'] ) : 0;
+		if ( $video_id ) {
+			$mime = (string) get_post_mime_type( $video_id );
+			if ( ! str_starts_with( $mime, 'video/' ) ) {
+				$video_id = 0;
+			}
+		}
+
+		$poster_id = isset( $item['poster_id'] ) && is_scalar( $item['poster_id'] ) ? absint( $item['poster_id'] ) : 0;
+		$poster_id = ( $poster_id && wp_attachment_is_image( $poster_id ) ) ? $poster_id : 0;
+
+		$duration = isset( $item['duration'] ) && is_scalar( $item['duration'] ) ? absint( $item['duration'] ) : 5;
+		$duration = max( 3, min( 30, $duration ? $duration : 5 ) );
+
+		// Product validation against published catalog-visible items.
+		$prod_id = isset( $item['product_id'] ) && is_scalar( $item['product_id'] ) ? absint( $item['product_id'] ) : 0;
+		$prod_id = in_array( $prod_id, negar_theme_sanitize_product_ids( array( $prod_id ) ), true ) ? $prod_id : 0;
+
+		$cta_label = isset( $item['cta_label'] ) && is_scalar( $item['cta_label'] ) ? sanitize_text_field( $item['cta_label'] ) : '';
+		$cta_url   = isset( $item['cta_url'] ) && is_scalar( $item['cta_url'] ) ? negar_theme_sanitize_media_link( $item['cta_url'] ) : '';
+
+		$clean_stories[] = array(
+			'id'           => $id,
+			'enabled'      => $enabled,
+			'type'         => $type,
+			'title'        => $title,
+			'badge'        => $badge,
+			'thumbnail_id' => $thumb_id,
+			'image_id'     => $image_id,
+			'video_id'     => $video_id,
+			'poster_id'    => $poster_id,
+			'duration'     => $duration,
+			'product_id'   => $prod_id,
+			'cta_label'    => $cta_label,
+			'cta_url'      => $cta_url,
+		);
+	}
+
+	add_settings_error( 'negar_theme_story_settings', 'negar_theme_story_saved', __( 'تنظیمات استوری‌ها با موفقیت ذخیره شد.', 'negar-shop' ), 'updated' );
+
+	return array(
+		'schema_version' => NEGAR_THEME_STORY_VERSION,
+		'stories'        => $clean_stories,
+	);
+}
+
+/**
+ * Render one story card in the admin manager (or as a template for JS cloning).
+ *
+ * @param string|int           $index       Card identifier or __INDEX__ placeholder.
+ * @param array<string, mixed> $story       Story data.
+ * @param bool                 $is_template Whether this is the JS clone template.
+ * @return void
+ */
+function negar_theme_render_single_story_card( $index, $story = array(), $is_template = false ) {
+	$story     = is_array( $story ) ? $story : array();
+	$id        = isset( $story['id'] ) && is_scalar( $story['id'] ) && '' !== trim( (string) $story['id'] )
+		? (string) $story['id']
+		: ( $is_template ? '__INDEX__' : uniqid( 'story_' ) );
+	$title     = isset( $story['title'] ) && is_scalar( $story['title'] ) ? (string) $story['title'] : '';
+	$badge     = isset( $story['badge'] ) && is_scalar( $story['badge'] ) ? (string) $story['badge'] : '';
+	$type      = isset( $story['type'] ) && 'video' === $story['type'] ? 'video' : 'image';
+	$enabled   = ! isset( $story['enabled'] ) || ! in_array( $story['enabled'], array( false, 0, '0', 'false' ), true );
+	$duration  = isset( $story['duration'] ) && is_scalar( $story['duration'] ) ? max( 3, min( 30, absint( $story['duration'] ) ) ) : 5;
+	$cta_label = isset( $story['cta_label'] ) && is_scalar( $story['cta_label'] ) ? (string) $story['cta_label'] : '';
+	$cta_url   = isset( $story['cta_url'] ) && is_scalar( $story['cta_url'] ) ? (string) $story['cta_url'] : '';
+
+	$thumb_id   = isset( $story['thumbnail_id'] ) && is_scalar( $story['thumbnail_id'] ) ? absint( $story['thumbnail_id'] ) : 0;
+	$image_id   = isset( $story['image_id'] ) && is_scalar( $story['image_id'] ) ? absint( $story['image_id'] ) : 0;
+	$video_id   = isset( $story['video_id'] ) && is_scalar( $story['video_id'] ) ? absint( $story['video_id'] ) : 0;
+	$poster_id  = isset( $story['poster_id'] ) && is_scalar( $story['poster_id'] ) ? absint( $story['poster_id'] ) : 0;
+	$product_id = isset( $story['product_id'] ) && is_scalar( $story['product_id'] ) ? absint( $story['product_id'] ) : 0;
+
+	$fallback_img = isset( $story['fallback_img'] ) && is_string( $story['fallback_img'] ) ? $story['fallback_img'] : '';
+
+	// Previews
+	$thumb_preview = '';
+	if ( $thumb_id && wp_attachment_is_image( $thumb_id ) ) {
+		$thumb_preview = (string) wp_get_attachment_image_url( $thumb_id, 'thumbnail' );
+	} elseif ( '' !== $fallback_img ) {
+		$thumb_preview = $fallback_img;
+	}
+
+	$image_preview = '';
+	if ( $image_id && wp_attachment_is_image( $image_id ) ) {
+		$image_preview = (string) wp_get_attachment_image_url( $image_id, 'thumbnail' );
+	} elseif ( '' !== $fallback_img ) {
+		$image_preview = $fallback_img;
+	}
+
+	$poster_preview = '';
+	if ( $poster_id && wp_attachment_is_image( $poster_id ) ) {
+		$poster_preview = (string) wp_get_attachment_image_url( $poster_id, 'thumbnail' );
+	}
+
+	$video_filename = '';
+	if ( $video_id ) {
+		$attached = get_attached_file( $video_id );
+		$video_filename = $attached ? basename( $attached ) : sprintf( '#%d', $video_id );
+	}
+
+	$product = $product_id && function_exists( 'wc_get_product' ) ? wc_get_product( $product_id ) : false;
+	$field_prefix = NEGAR_THEME_STORY_OPTION . '[stories][' . $index . ']';
+	?>
+	<details class="negar-story-card" data-story-index="<?php echo esc_attr( (string) $index ); ?>">
+		<summary class="negar-story-summary">
+			<span class="negar-layout-item__handle" aria-hidden="true">☷</span>
+			<span class="negar-story-title-preview"><?php echo esc_html( '' !== $title ? $title : __( 'استوری بدون عنوان', 'negar-shop' ) ); ?></span>
+			<span class="negar-story-type-badge <?php echo 'video' === $type ? 'negar-badge-video' : 'negar-badge-image'; ?>">
+				<?php echo 'video' === $type ? esc_html__( 'ویدیو', 'negar-shop' ) : esc_html__( 'تصویر', 'negar-shop' ); ?>
+			</span>
+			<label class="negar-story-enabled-label" onclick="event.stopPropagation();">
+				<input type="checkbox" name="<?php echo esc_attr( $field_prefix ); ?>[enabled]" value="1" <?php checked( $enabled ); ?>>
+				<span><?php esc_html_e( 'نمایش', 'negar-shop' ); ?></span>
+			</label>
+			<div class="negar-story-actions" onclick="event.stopPropagation();">
+				<button type="button" class="button-link negar-story-move-up" aria-label="<?php esc_attr_e( 'انتقال به بالا', 'negar-shop' ); ?>"><?php esc_html_e( 'بالا', 'negar-shop' ); ?></button>
+				<button type="button" class="button-link negar-story-move-down" aria-label="<?php esc_attr_e( 'انتقال به پایین', 'negar-shop' ); ?>"><?php esc_html_e( 'پایین', 'negar-shop' ); ?></button>
+				<button type="button" class="button-link-delete negar-story-delete" aria-label="<?php esc_attr_e( 'حذف استوری', 'negar-shop' ); ?>"><?php esc_html_e( 'حذف', 'negar-shop' ); ?></button>
+			</div>
+		</summary>
+		<div class="negar-story-fields">
+			<input type="hidden" class="negar-story-id" name="<?php echo esc_attr( $field_prefix ); ?>[id]" value="<?php echo esc_attr( $id ); ?>">
+
+			<div class="negar-story-grid">
+				<p>
+					<label for="negar-story-title-<?php echo esc_attr( (string) $index ); ?>"><strong><?php esc_html_e( 'عنوان استوری (ضروری)', 'negar-shop' ); ?></strong></label><br>
+					<input id="negar-story-title-<?php echo esc_attr( (string) $index ); ?>" type="text" class="regular-text negar-story-title-input" name="<?php echo esc_attr( $field_prefix ); ?>[title]" value="<?php echo esc_attr( $title ); ?>" required>
+				</p>
+				<p>
+					<label for="negar-story-badge-<?php echo esc_attr( (string) $index ); ?>"><?php esc_html_e( 'متن نشان (اختیاری، مثلاً «ویژه» یا «تخفیف»)', 'negar-shop' ); ?></label><br>
+					<input id="negar-story-badge-<?php echo esc_attr( (string) $index ); ?>" type="text" class="regular-text" name="<?php echo esc_attr( $field_prefix ); ?>[badge]" value="<?php echo esc_attr( $badge ); ?>">
+				</p>
+			</div>
+
+			<div class="negar-media-control" data-media-control style="margin: 12px 0;">
+				<label><strong><?php esc_html_e( 'تصویر شاخص / دایرهٔ استوری (آیکن روی صفحهٔ اصلی)', 'negar-shop' ); ?></strong></label><br>
+				<input type="number" min="0" step="1" class="small-text negar-media-control__id" name="<?php echo esc_attr( $field_prefix ); ?>[thumbnail_id]" value="<?php echo esc_attr( (string) $thumb_id ); ?>">
+				<img class="negar-media-control__preview" src="<?php echo esc_url( $thumb_preview ); ?>" data-fallback-url="<?php echo esc_url( $fallback_img ); ?>" width="70" height="70" alt="" style="width:70px;height:70px;border-radius:50%;object-fit:cover;vertical-align:middle;margin:0 8px;">
+				<button type="button" class="button button-secondary negar-media-control__select"><?php esc_html_e( 'انتخاب تصویر', 'negar-shop' ); ?></button>
+				<button type="button" class="button-link-delete negar-media-control__remove"><?php esc_html_e( 'حذف تصویر', 'negar-shop' ); ?></button>
+				<p class="description"><?php esc_html_e( 'در صورت خالی بودن، از تصویر اصلی استوری یا تصویر پیش‌فرض دمو استفاده می‌شود.', 'negar-shop' ); ?></p>
+			</div>
+
+			<p>
+				<label><strong><?php esc_html_e( 'نوع محتوای استوری', 'negar-shop' ); ?></strong></label><br>
+				<select class="negar-story-media-type-select" name="<?php echo esc_attr( $field_prefix ); ?>[type]">
+					<option value="image" <?php selected( 'image' === $type ); ?>><?php esc_html_e( 'تصویر (Image)', 'negar-shop' ); ?></option>
+					<option value="video" <?php selected( 'video' === $type ); ?>><?php esc_html_e( 'ویدیو (Video)', 'negar-shop' ); ?></option>
+				</select>
+			</p>
+
+			<div class="negar-story-image-fields" <?php echo 'video' === $type ? 'style="display:none;"' : ''; ?>>
+				<div class="negar-media-control" data-media-control style="margin: 12px 0;">
+					<label><strong><?php esc_html_e( 'تصویر تمام‌صفحهٔ استوری', 'negar-shop' ); ?></strong></label><br>
+					<input type="number" min="0" step="1" class="small-text negar-media-control__id" name="<?php echo esc_attr( $field_prefix ); ?>[image_id]" value="<?php echo esc_attr( (string) $image_id ); ?>">
+					<img class="negar-media-control__preview" src="<?php echo esc_url( $image_preview ); ?>" data-fallback-url="<?php echo esc_url( $fallback_img ); ?>" width="80" height="120" alt="" style="width:80px;height:120px;border-radius:8px;object-fit:cover;vertical-align:middle;margin:0 8px;">
+					<button type="button" class="button button-secondary negar-media-control__select"><?php esc_html_e( 'انتخاب تصویر', 'negar-shop' ); ?></button>
+					<button type="button" class="button-link-delete negar-media-control__remove"><?php esc_html_e( 'حذف تصویر', 'negar-shop' ); ?></button>
+				</div>
+				<p>
+					<label><?php esc_html_e( 'مدت‌زمان نمایش تصویر (ثانیه، بین ۳ تا ۳۰)', 'negar-shop' ); ?></label><br>
+					<input type="number" min="3" max="30" class="small-text" name="<?php echo esc_attr( $field_prefix ); ?>[duration]" value="<?php echo esc_attr( (string) $duration ); ?>">
+				</p>
+			</div>
+
+			<div class="negar-story-video-fields" <?php echo 'video' !== $type ? 'style="display:none;"' : ''; ?>>
+				<div class="negar-video-control" data-video-control style="margin: 12px 0; padding: 10px; background: #f6f7f7; border: 1px solid #dcdcde; border-radius: 4px;">
+					<label><strong><?php esc_html_e( 'فایل ویدیوی استوری (از کتابخانهٔ رسانه)', 'negar-shop' ); ?></strong></label><br>
+					<input type="hidden" class="negar-video-control__id" name="<?php echo esc_attr( $field_prefix ); ?>[video_id]" value="<?php echo esc_attr( (string) $video_id ); ?>">
+					<button type="button" class="button button-secondary negar-video-control__select"><?php esc_html_e( 'انتخاب فایل ویدیو', 'negar-shop' ); ?></button>
+					<span class="negar-video-control__filename" style="margin: 0 8px; font-family: monospace; font-weight: bold;"><?php echo esc_html( $video_filename ); ?></span>
+					<button type="button" class="button-link-delete negar-video-control__remove" <?php echo $video_id ? '' : 'style="display:none;"'; ?>><?php esc_html_e( 'حذف ویدیو', 'negar-shop' ); ?></button>
+					<p class="description"><?php esc_html_e( 'مدت‌زمان پیشرفت استوری ویدیو به‌طور خودکار و دقیقاً برابر با طول فایل ویدیویی خواهد بود.', 'negar-shop' ); ?></p>
+				</div>
+				<div class="negar-media-control" data-media-control style="margin: 12px 0;">
+					<label><?php esc_html_e( 'تصویر پوستر ویدیو (اختیاری)', 'negar-shop' ); ?></label><br>
+					<input type="number" min="0" step="1" class="small-text negar-media-control__id" name="<?php echo esc_attr( $field_prefix ); ?>[poster_id]" value="<?php echo esc_attr( (string) $poster_id ); ?>">
+					<img class="negar-media-control__preview" src="<?php echo esc_url( $poster_preview ); ?>" data-fallback-url="" width="80" height="120" alt="" style="width:80px;height:120px;border-radius:8px;object-fit:cover;vertical-align:middle;margin:0 8px;">
+					<button type="button" class="button button-secondary negar-media-control__select"><?php esc_html_e( 'انتخاب پوستر', 'negar-shop' ); ?></button>
+					<button type="button" class="button-link-delete negar-media-control__remove"><?php esc_html_e( 'حذف پوستر', 'negar-shop' ); ?></button>
+				</div>
+			</div>
+
+			<div class="negar-product-section__manual" data-product-selector data-single="1" data-input-name="<?php echo esc_attr( $field_prefix ); ?>[product_id]" style="margin: 14px 0;">
+				<input type="hidden" name="<?php echo esc_attr( $field_prefix ); ?>[product_id]" value="<?php echo esc_attr( (string) ( $product ? $product->get_id() : 0 ) ); ?>">
+				<label><strong><?php esc_html_e( 'محصول مرتبط WooCommerce (اختیاری)', 'negar-shop' ); ?></strong></label><br>
+				<input class="regular-text" type="search" autocomplete="off" placeholder="<?php esc_attr_e( 'نام یا شناسهٔ محصول را جست‌وجو کنید', 'negar-shop' ); ?>">
+				<p class="description negar-product-selector__status" aria-live="polite"></p>
+				<div class="negar-product-selector__results" role="listbox"></div>
+				<ul class="negar-product-selector__selected" aria-label="<?php esc_attr_e( 'محصول انتخاب‌شده', 'negar-shop' ); ?>">
+					<?php if ( $product && $product->is_visible() ) : ?>
+						<li data-product-id="<?php echo esc_attr( (string) $product->get_id() ); ?>">
+							<span><?php echo esc_html( sprintf( '%1$s (#%2$d)', $product->get_name(), $product->get_id() ) ); ?></span>
+							<input type="hidden" name="<?php echo esc_attr( $field_prefix ); ?>[product_id]" value="<?php echo esc_attr( (string) $product->get_id() ); ?>">
+							<button type="button" class="button-link-delete negar-product-selector__remove"><?php esc_html_e( 'حذف', 'negar-shop' ); ?></button>
+						</li>
+					<?php endif; ?>
+				</ul>
+				<p class="description"><?php esc_html_e( 'در صورت انتخاب محصول، نام و لینک واقعی آن در پایین استوری نمایش داده می‌شود.', 'negar-shop' ); ?></p>
+			</div>
+
+			<div class="negar-story-grid">
+				<p>
+					<label><?php esc_html_e( 'متن دکمهٔ فراخوان (CTA)', 'negar-shop' ); ?></label><br>
+					<input type="text" class="regular-text" name="<?php echo esc_attr( $field_prefix ); ?>[cta_label]" value="<?php echo esc_attr( $cta_label ); ?>" placeholder="<?php esc_attr_e( 'مشاهده و خرید', 'negar-shop' ); ?>">
+				</p>
+				<p>
+					<label><?php esc_html_e( 'لینک مقصد دکمه (در صورت نبود محصول، یا برای لینک اختصاصی)', 'negar-shop' ); ?></label><br>
+					<input type="text" dir="ltr" inputmode="url" class="regular-text code" name="<?php echo esc_attr( $field_prefix ); ?>[cta_url]" value="<?php echo esc_attr( $cta_url ); ?>" placeholder="/shop/">
+				</p>
+			</div>
+		</div>
+	</details>
+	<?php
+}
+
+/**
+ * Render the story collection admin controls.
+ *
+ * @return void
+ */
+function negar_theme_render_story_fields() {
+	$option = get_option( NEGAR_THEME_STORY_OPTION, null );
+	if ( null === $option ) {
+		$stories = negar_theme_story_defaults();
+	} else {
+		$stories = isset( $option['stories'] ) && is_array( $option['stories'] ) ? $option['stories'] : array();
+	}
+	?>
+	<div class="negar-stories-manager-wrapper" style="max-width: 960px; margin: 20px 0;">
+		<h2><?php esc_html_e( 'مدیریت استوری‌های صفحهٔ اصلی', 'negar-shop' ); ?></h2>
+		<p class="description">
+			<?php esc_html_e( 'استوری‌ها را اضافه، ویرایش یا مرتب کنید. برای تغییر ترتیب می‌توانید کارت‌ها را با دکمه‌های «بالا» و «پایین» جابه‌جا کنید. هر استوری می‌تواند تصویر (با مدت‌زمان دلخواه ۳ تا ۳۰ ثانیه) یا ویدیو (با مدت‌زمان واقعی فایل ویدیویی) باشد.', 'negar-shop' ); ?>
+		</p>
+		<p style="margin: 16px 0;">
+			<button type="button" class="button button-primary" id="negar-add-story-btn">
+				<?php esc_html_e( '+ افزودن استوری جدید', 'negar-shop' ); ?>
+			</button>
+		</p>
+
+		<div id="negar-stories-list" class="negar-stories-list">
+			<?php foreach ( $stories as $index => $story ) : ?>
+				<?php negar_theme_render_single_story_card( $index, $story ); ?>
+			<?php endforeach; ?>
+		</div>
+
+		<template id="negar-story-template">
+			<?php negar_theme_render_single_story_card( '__INDEX__', array(), true ); ?>
+		</template>
+	</div>
+	<?php
+}
+
+/**
  * Register the versioned option with the Settings API.
  */
 function negar_theme_register_settings() {
@@ -1275,6 +1896,15 @@ function negar_theme_register_settings() {
 		array(
 			'type'              => 'array',
 			'sanitize_callback' => 'negar_theme_sanitize_product_pack_settings',
+			'default'           => array(),
+		)
+	);
+	register_setting(
+		'negar_theme_story_settings',
+		NEGAR_THEME_STORY_OPTION,
+		array(
+			'type'              => 'array',
+			'sanitize_callback' => 'negar_theme_sanitize_story_settings',
 			'default'           => array(),
 		)
 	);
@@ -1478,6 +2108,25 @@ function negar_theme_enqueue_settings_assets( $hook_suffix ) {
 				'loading' => __( 'در حال جست‌وجو…', 'negar-shop' ),
 				'empty'   => __( 'محصولی پیدا نشد. نام یا شناسهٔ دیگری را جست‌وجو کنید.', 'negar-shop' ),
 				'error'   => __( 'جست‌وجوی محصولات انجام نشد. دوباره تلاش کنید.', 'negar-shop' ),
+			),
+		)
+	);
+
+	$story_script_path = NEGAR_SHOP_DIR . '/assets/js/theme-settings-stories.js';
+	wp_enqueue_script(
+		'negar-theme-settings-stories',
+		NEGAR_SHOP_URI . '/assets/js/theme-settings-stories.js',
+		array( 'jquery', 'negar-theme-settings-products', 'negar-theme-settings-media' ),
+		file_exists( $story_script_path ) ? (string) filemtime( $story_script_path ) : NEGAR_SHOP_VERSION,
+		true
+	);
+	wp_localize_script(
+		'negar-theme-settings-stories',
+		'NegarThemeStoriesConfig',
+		array(
+			'messages' => array(
+				'selectVideo' => __( 'انتخاب ویدیو برای استوری', 'negar-shop' ),
+				'useVideo'    => __( 'استفاده از این ویدیو', 'negar-shop' ),
 			),
 		)
 	);
@@ -1831,10 +2480,18 @@ function negar_theme_render_settings_page() {
 				<a class="nav-tab <?php echo $active_tab === $tab_id ? 'nav-tab-active' : ''; ?>" href="<?php echo esc_url( add_query_arg( array( 'page' => 'negar-theme-settings', 'tab' => $tab_id ), admin_url( 'options-general.php' ) ) ); ?>" <?php echo $active_tab === $tab_id ? 'aria-current="page"' : ''; ?>><?php echo esc_html( $tab_label ); ?></a>
 			<?php endforeach; ?>
 		</nav>
-		<?php settings_errors( 'negar_theme_settings' ); settings_errors( 'negar_theme_media_settings' ); ?>
-		<?php if ( in_array( $active_tab, array( 'general', 'texts', 'layout', 'products', 'colors', 'header_footer', 'banners' ), true ) ) : ?>
+		<?php settings_errors( 'negar_theme_settings' ); settings_errors( 'negar_theme_media_settings' ); settings_errors( 'negar_theme_story_settings' ); ?>
+		<?php if ( in_array( $active_tab, array( 'general', 'texts', 'layout', 'products', 'colors', 'header_footer', 'banners', 'stories' ), true ) ) : ?>
 			<form action="options.php" method="post">
-				<?php settings_fields( 'banners' === $active_tab ? 'negar_theme_media_settings' : 'negar_theme_settings' ); ?>
+				<?php
+				if ( 'banners' === $active_tab ) {
+					settings_fields( 'negar_theme_media_settings' );
+				} elseif ( 'stories' === $active_tab ) {
+					settings_fields( 'negar_theme_story_settings' );
+				} else {
+					settings_fields( 'negar_theme_settings' );
+				}
+				?>
 				<input type="hidden" name="negar_theme_settings_tab" value="<?php echo esc_attr( $active_tab ); ?>">
 				<?php if ( 'layout' === $active_tab ) : ?>
 					<?php negar_theme_render_layout_fields(); ?>
@@ -1842,6 +2499,8 @@ function negar_theme_render_settings_page() {
 					<?php negar_theme_render_product_fields(); ?>
 				<?php elseif ( 'banners' === $active_tab ) : ?>
 					<?php negar_theme_render_media_fields(); negar_theme_render_product_pack_fields(); ?>
+				<?php elseif ( 'stories' === $active_tab ) : ?>
+					<?php negar_theme_render_story_fields(); ?>
 				<?php else : ?>
 				<table class="form-table" role="presentation">
 					<?php if ( 'general' === $active_tab ) : ?>

@@ -55,7 +55,12 @@
     results.appendChild(result);
   }
 
-  Array.prototype.forEach.call(document.querySelectorAll('[data-product-selector]'), function (selector) {
+  function initSelector(selector) {
+    if (selector.dataset.productSelectorInitialized) {
+      return;
+    }
+    selector.dataset.productSelectorInitialized = 'true';
+
     var input = selector.querySelector('input[type="search"]');
     var results = selector.querySelector('.negar-product-selector__results');
     var status = selector.querySelector('[aria-live]');
@@ -71,6 +76,10 @@
         }
       }
     });
+
+    if (!input) {
+      return;
+    }
 
     input.addEventListener('input', function () {
       var query = input.value.trim();
@@ -122,5 +131,18 @@
         });
       }, 250);
     });
-  });
+  }
+
+  function initAll(scope) {
+    var root = scope || document;
+    if (root.nodeType === 1 && root.hasAttribute('data-product-selector')) {
+      initSelector(root);
+    }
+    if (root.querySelectorAll) {
+      Array.prototype.forEach.call(root.querySelectorAll('[data-product-selector]'), initSelector);
+    }
+  }
+
+  initAll();
+  window.NegarThemeInitProductSelectors = initAll;
 }());
