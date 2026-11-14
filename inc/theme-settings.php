@@ -1271,10 +1271,9 @@ function negar_theme_story_defaults() {
 			'poster_id'    => 0,
 			'duration'     => 5,
 			'product_id'   => 0,
-			'cta_label'    => 'مشاهده و خرید',
+			'cta_label'    => '',
 			'cta_url'      => '',
 			'fallback_img' => $story_base . '/story-demo-1.jpg',
-			'prod_title'   => 'گوشی موبایل اپل مدل iPhone 16 Pro Max',
 		),
 		array(
 			'id'           => 'story-demo-2',
@@ -1288,10 +1287,9 @@ function negar_theme_story_defaults() {
 			'poster_id'    => 0,
 			'duration'     => 5,
 			'product_id'   => 0,
-			'cta_label'    => 'مشاهده و خرید',
+			'cta_label'    => '',
 			'cta_url'      => '',
 			'fallback_img' => $story_base . '/story-demo-2.jpg',
-			'prod_title'   => 'هدفون بلوتوثی سامسونگ مدل Galaxy Buds3 Pro',
 		),
 		array(
 			'id'           => 'story-demo-3',
@@ -1305,10 +1303,9 @@ function negar_theme_story_defaults() {
 			'poster_id'    => 0,
 			'duration'     => 5,
 			'product_id'   => 0,
-			'cta_label'    => 'مشاهده و خرید',
+			'cta_label'    => '',
 			'cta_url'      => '',
 			'fallback_img' => $story_base . '/story-demo-3.jpg',
-			'prod_title'   => 'ساعت هوشمند اپل مدل Apple Watch Ultra 2',
 		),
 		array(
 			'id'           => 'story-demo-4',
@@ -1322,10 +1319,9 @@ function negar_theme_story_defaults() {
 			'poster_id'    => 0,
 			'duration'     => 5,
 			'product_id'   => 0,
-			'cta_label'    => 'مشاهده و خرید',
+			'cta_label'    => '',
 			'cta_url'      => '',
 			'fallback_img' => $story_base . '/story-demo-4.jpg',
-			'prod_title'   => 'کنسول بازی سونی مدل PlayStation 5 Slim',
 		),
 		array(
 			'id'           => 'story-demo-5',
@@ -1339,10 +1335,9 @@ function negar_theme_story_defaults() {
 			'poster_id'    => 0,
 			'duration'     => 5,
 			'product_id'   => 0,
-			'cta_label'    => 'مشاهده و خرید',
+			'cta_label'    => '',
 			'cta_url'      => '',
 			'fallback_img' => $story_base . '/story-demo-5.jpg',
-			'prod_title'   => 'لپ تاپ اپل مدل MacBook Pro M3',
 		),
 		array(
 			'id'           => 'story-demo-6',
@@ -1356,10 +1351,9 @@ function negar_theme_story_defaults() {
 			'poster_id'    => 0,
 			'duration'     => 5,
 			'product_id'   => 0,
-			'cta_label'    => 'مشاهده و خرید',
+			'cta_label'    => '',
 			'cta_url'      => '',
 			'fallback_img' => $story_base . '/story-demo-6.jpg',
-			'prod_title'   => 'پک هدیه لوازم جانبی دیجیتال پرو',
 		),
 		array(
 			'id'           => 'story-demo-7',
@@ -1373,10 +1367,9 @@ function negar_theme_story_defaults() {
 			'poster_id'    => 0,
 			'duration'     => 5,
 			'product_id'   => 0,
-			'cta_label'    => 'مشاهده و خرید',
+			'cta_label'    => '',
 			'cta_url'      => '',
 			'fallback_img' => $story_base . '/story-demo-7.jpg',
-			'prod_title'   => 'اسپیکر قابل حمل جی بی ال مدل Boombox 3',
 		),
 		array(
 			'id'           => 'story-demo-8',
@@ -1390,10 +1383,9 @@ function negar_theme_story_defaults() {
 			'poster_id'    => 0,
 			'duration'     => 5,
 			'product_id'   => 0,
-			'cta_label'    => 'مشاهده و خرید',
+			'cta_label'    => '',
 			'cta_url'      => '',
 			'fallback_img' => $story_base . '/story-demo-8.jpg',
-			'prod_title'   => 'دسته بی سیم ایکس باکس مدل اختصاصی',
 		),
 		array(
 			'id'           => 'story-demo-9',
@@ -1407,10 +1399,9 @@ function negar_theme_story_defaults() {
 			'poster_id'    => 0,
 			'duration'     => 5,
 			'product_id'   => 0,
-			'cta_label'    => 'مشاهده و خرید',
+			'cta_label'    => '',
 			'cta_url'      => '',
 			'fallback_img' => $story_base . '/story-demo-9.jpg',
-			'prod_title'   => 'تبلت مایکروسافت مدل Surface Pro 9',
 		),
 		array(
 			'id'           => 'story-demo-10',
@@ -1424,10 +1415,9 @@ function negar_theme_story_defaults() {
 			'poster_id'    => 0,
 			'duration'     => 5,
 			'product_id'   => 0,
-			'cta_label'    => 'مشاهده و خرید',
+			'cta_label'    => '',
 			'cta_url'      => '',
 			'fallback_img' => $story_base . '/story-demo-10.jpg',
-			'prod_title'   => 'شارژر دیواری انکر ۴۵ وات دو پورت سریع',
 		),
 	);
 }
@@ -1534,16 +1524,37 @@ function negar_theme_get_stories( $only_enabled = true ) {
 		$product_link  = '';
 		$product_price = '';
 
+		// Priority 1: Valid published, catalog-visible WooCommerce product.
 		if ( $product && $product->is_visible() ) {
 			$has_product   = true;
 			$product_title = $product->get_name();
 			$product_link  = $product->get_permalink();
 			$product_price = $product->get_price_html();
-		} elseif ( isset( $s['prod_title'] ) && null === $option ) {
-			// Demo mode legacy fallback.
-			$has_product   = true;
-			$product_title = (string) $s['prod_title'];
-			$product_link  = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/shop/' );
+		} elseif ( '' !== $cta_url ) {
+			// Priority 2: Safe custom CTA URL (editorial story, never invent a product name).
+			$has_product   = false;
+			$product_title = '';
+			$product_link  = $cta_url;
+			$product_price = '';
+		} else {
+			// Priority 3: No product and no custom CTA link.
+			$has_product   = false;
+			$product_title = '';
+			$product_link  = '';
+			$product_price = '';
+		}
+
+		// STEP 3: Reject or safely omit unusable story media from public storefront collection.
+		if ( $only_enabled ) {
+			if ( 'video' === $type && '' === $video_url ) {
+				continue;
+			}
+			if ( 'image' === $type && '' === $image_url ) {
+				continue;
+			}
+			if ( '' === $thumb_url ) {
+				continue;
+			}
 		}
 
 		$resolved[] = array(
@@ -1593,19 +1604,25 @@ function negar_theme_sanitize_story_settings( $submitted ) {
 	$raw_stories = isset( $submitted['stories'] ) && is_array( $submitted['stories'] ) ? array_values( $submitted['stories'] ) : array();
 	$raw_stories = array_slice( $raw_stories, 0, 30 );
 
+	$seen_ids      = array();
 	$clean_stories = array();
-	foreach ( $raw_stories as $item ) {
+	foreach ( $raw_stories as $idx => $item ) {
 		if ( ! is_array( $item ) ) {
 			continue;
 		}
 
-		$id      = isset( $item['id'] ) && is_scalar( $item['id'] ) && '' !== trim( (string) $item['id'] )
+		$id = isset( $item['id'] ) && is_scalar( $item['id'] ) && '' !== trim( (string) $item['id'] )
 			? sanitize_key( $item['id'] )
-			: uniqid( 'story_' );
+			: '';
+		if ( '' === $id || in_array( $id, $seen_ids, true ) ) {
+			$id = uniqid( 'story_' );
+		}
+		$seen_ids[] = $id;
+
 		$enabled = isset( $item['enabled'] ) && ! in_array( $item['enabled'], array( false, 0, '0', 'false' ), true );
 		$type    = isset( $item['type'] ) && 'video' === $item['type'] ? 'video' : 'image';
-		$title   = isset( $item['title'] ) && is_scalar( $item['title'] ) ? sanitize_text_field( $item['title'] ) : '';
-		$badge   = isset( $item['badge'] ) && is_scalar( $item['badge'] ) ? sanitize_text_field( $item['badge'] ) : '';
+		$title   = isset( $item['title'] ) && is_scalar( $item['title'] ) ? mb_substr( sanitize_text_field( $item['title'] ), 0, 100 ) : '';
+		$badge   = isset( $item['badge'] ) && is_scalar( $item['badge'] ) ? mb_substr( sanitize_text_field( $item['badge'] ), 0, 40 ) : '';
 
 		// Media attachment validation.
 		$thumb_id = isset( $item['thumbnail_id'] ) && is_scalar( $item['thumbnail_id'] ) ? absint( $item['thumbnail_id'] ) : 0;
@@ -1632,8 +1649,35 @@ function negar_theme_sanitize_story_settings( $submitted ) {
 		$prod_id = isset( $item['product_id'] ) && is_scalar( $item['product_id'] ) ? absint( $item['product_id'] ) : 0;
 		$prod_id = in_array( $prod_id, negar_theme_sanitize_product_ids( array( $prod_id ) ), true ) ? $prod_id : 0;
 
-		$cta_label = isset( $item['cta_label'] ) && is_scalar( $item['cta_label'] ) ? sanitize_text_field( $item['cta_label'] ) : '';
+		$cta_label = isset( $item['cta_label'] ) && is_scalar( $item['cta_label'] ) ? mb_substr( sanitize_text_field( $item['cta_label'] ), 0, 50 ) : '';
 		$cta_url   = isset( $item['cta_url'] ) && is_scalar( $item['cta_url'] ) ? negar_theme_sanitize_media_link( $item['cta_url'] ) : '';
+
+		// Inform administrator of missing or incomplete media on enabled stories.
+		if ( $enabled ) {
+			if ( 'video' === $type && 0 === $video_id ) {
+				add_settings_error(
+					'negar_theme_story_settings',
+					'negar_story_missing_video_' . $idx,
+					sprintf(
+						/* translators: %s: story title or index */
+						__( 'استوری «%s» از نوع ویدیو است اما فایل ویدیویی معتبری برای آن انتخاب نشده است. این استوری تا زمان انتخاب ویدیو در سایت نمایش داده نخواهد شد.', 'negar-shop' ),
+						esc_html( '' !== $title ? $title : '#' . ( $idx + 1 ) )
+					),
+					'warning'
+				);
+			} elseif ( 'image' === $type && 0 === $image_id ) {
+				add_settings_error(
+					'negar_theme_story_settings',
+					'negar_story_missing_image_' . $idx,
+					sprintf(
+						/* translators: %s: story title or index */
+						__( 'استوری «%s» فاقد تصویر تمام‌صفحه است و تا زمان انتخاب تصویر در سایت نمایش داده نخواهد شد.', 'negar-shop' ),
+						esc_html( '' !== $title ? $title : '#' . ( $idx + 1 ) )
+					),
+					'warning'
+				);
+			}
+		}
 
 		$clean_stories[] = array(
 			'id'           => $id,
@@ -1738,6 +1782,18 @@ function negar_theme_render_single_story_card( $index, $story = array(), $is_tem
 		<div class="negar-story-fields">
 			<input type="hidden" class="negar-story-id" name="<?php echo esc_attr( $field_prefix ); ?>[id]" value="<?php echo esc_attr( $id ); ?>">
 
+			<?php if ( ! $is_template && $enabled ) : ?>
+				<?php if ( 'video' === $type && ! $video_id ) : ?>
+					<p class="negar-story-media-warning description" style="color: #b32d2e; font-weight: 500; margin: 8px 0; padding: 6px 10px; background: #fcf0f1; border-right: 3px solid #d63638;">
+						⚠ <?php esc_html_e( 'فایل ویدیویی انتخاب نشده است. این استوری تا زمان انتخاب ویدیو در سایت نمایش داده نمی‌شود.', 'negar-shop' ); ?>
+					</p>
+				<?php elseif ( 'image' === $type && ! $image_id && empty( $fallback_img ) ) : ?>
+					<p class="negar-story-media-warning description" style="color: #b32d2e; font-weight: 500; margin: 8px 0; padding: 6px 10px; background: #fcf0f1; border-right: 3px solid #d63638;">
+						⚠ <?php esc_html_e( 'تصویر تمام‌صفحه انتخاب نشده است. این استوری تا زمان انتخاب تصویر در سایت نمایش داده نمی‌شود.', 'negar-shop' ); ?>
+					</p>
+				<?php endif; ?>
+			<?php endif; ?>
+
 			<div class="negar-story-grid">
 				<p>
 					<label for="negar-story-title-<?php echo esc_attr( (string) $index ); ?>"><strong><?php esc_html_e( 'عنوان استوری (ضروری)', 'negar-shop' ); ?></strong></label><br>
@@ -1837,18 +1893,25 @@ function negar_theme_render_single_story_card( $index, $story = array(), $is_tem
  * @return void
  */
 function negar_theme_render_story_fields() {
-	$option = get_option( NEGAR_THEME_STORY_OPTION, null );
-	if ( null === $option ) {
-		$stories = negar_theme_story_defaults();
-	} else {
-		$stories = isset( $option['stories'] ) && is_array( $option['stories'] ) ? $option['stories'] : array();
-	}
+	$option          = get_option( NEGAR_THEME_STORY_OPTION, null );
+	$is_unconfigured = ( null === $option );
+	$stories         = ( ! $is_unconfigured && isset( $option['stories'] ) && is_array( $option['stories'] ) ) ? $option['stories'] : array();
 	?>
 	<div class="negar-stories-manager-wrapper" style="max-width: 960px; margin: 20px 0;">
 		<h2><?php esc_html_e( 'مدیریت استوری‌های صفحهٔ اصلی', 'negar-shop' ); ?></h2>
 		<p class="description">
 			<?php esc_html_e( 'استوری‌ها را اضافه، ویرایش یا مرتب کنید. برای تغییر ترتیب می‌توانید کارت‌ها را با دکمه‌های «بالا» و «پایین» جابه‌جا کنید. هر استوری می‌تواند تصویر (با مدت‌زمان دلخواه ۳ تا ۳۰ ثانیه) یا ویدیو (با مدت‌زمان واقعی فایل ویدیویی) باشد.', 'negar-shop' ); ?>
 		</p>
+
+		<?php if ( $is_unconfigured ) : ?>
+			<div class="notice notice-info inline" style="margin: 14px 0; padding: 12px; border-right: 4px solid #72aee6; background: #f0f6fc;">
+				<p style="margin: 0;">
+					<strong><?php esc_html_e( 'حالت پیش‌نمایش دمو:', 'negar-shop' ); ?></strong>
+					<?php esc_html_e( 'در حال حاضر استوری‌های پیش‌فرض دمو در صفحهٔ اصلی نمایش داده می‌شوند. برای مدیریت استوری‌های واقعی فروشگاه، دکمهٔ «+ افزودن استوری جدید» را بزنید و استوری‌های خود را ذخیره کنید.', 'negar-shop' ); ?>
+				</p>
+			</div>
+		<?php endif; ?>
+
 		<p style="margin: 16px 0;">
 			<button type="button" class="button button-primary" id="negar-add-story-btn">
 				<?php esc_html_e( '+ افزودن استوری جدید', 'negar-shop' ); ?>
