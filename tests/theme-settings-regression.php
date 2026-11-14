@@ -126,7 +126,7 @@ function negar_theme_test_save_group( $tab, $input, $section_action = '' ) {
 	return $settings;
 }
 
-function negar_theme_test_create_video_fixture( $owner = 'test' ) {
+function negar_theme_test_create_video_fixture( $owner = 'browser-runner', $prefix = 'test-story-video-' ) {
 	$fixture_path = __DIR__ . '/fixtures/sample-video.webm';
 	if ( ! file_exists( $fixture_path ) ) {
 		throw new RuntimeException( 'Sample video fixture file not found.' );
@@ -135,7 +135,18 @@ function negar_theme_test_create_video_fixture( $owner = 'test' ) {
 	if ( ! empty( $upload_dir['error'] ) ) {
 		throw new RuntimeException( 'WordPress upload directory is not writable: ' . $upload_dir['error'] );
 	}
-	$unique_filename = wp_unique_filename( $upload_dir['path'], 'test-story-video-' . wp_generate_password( 8, false, false ) . '.webm' );
+
+	$allowed_prefixes = array( 'test-story-video-', 'verify-fixture-', 'safety-fixture-', 'sentinel-fixture-' );
+	if ( ! in_array( $prefix, $allowed_prefixes, true ) ) {
+		$prefix = 'test-story-video-';
+	}
+
+	$recognized_owners = array( 'browser-runner', 'php-verify', 'safety-f1', 'safety-f2', 'sentinel-test' );
+	if ( ! in_array( $owner, $recognized_owners, true ) ) {
+		$owner = 'browser-runner';
+	}
+
+	$unique_filename = wp_unique_filename( $upload_dir['path'], $prefix . wp_generate_password( 8, false, false ) . '.webm' );
 	$dest_file       = wp_normalize_path( $upload_dir['path'] . '/' . $unique_filename );
 
 	if ( file_exists( $dest_file ) ) {
@@ -164,6 +175,9 @@ function negar_theme_test_create_video_fixture( $owner = 'test' ) {
 		throw new RuntimeException( 'Failed to create WordPress attachment for video fixture.' );
 	}
 
+	$rel_path = ltrim( str_replace( wp_normalize_path( $upload_dir['basedir'] ), '', $dest_file ), '/' );
+	update_attached_file( $video_id, $rel_path );
+
 	update_post_meta( $video_id, '_negar_test_fixture_token', $token );
 	update_post_meta( $video_id, '_negar_test_fixture_owner', (string) $owner );
 	update_post_meta( $video_id, '_negar_test_fixture_file', $dest_file );
@@ -173,6 +187,7 @@ function negar_theme_test_create_video_fixture( $owner = 'test' ) {
 		'url'   => wp_get_attachment_url( $video_id ),
 		'token' => $token,
 		'file'  => $dest_file,
+		'owner' => (string) $owner,
 	);
 }
 
@@ -180,6 +195,7 @@ function negar_theme_test_cleanup_fixture( $target_id, $token ) {
 	$target_id = (int) $target_id;
 	$token     = trim( (string) $token );
 
+	// 1. Target ID must be a positive integer and token non-empty.
 	if ( $target_id <= 0 || '' === $token ) {
 		return array(
 			'cleaned' => false,
@@ -187,6 +203,7 @@ function negar_theme_test_cleanup_fixture( $target_id, $token ) {
 		);
 	}
 
+	// 2. The target ID identifies an existing WordPress attachment.
 	$post = get_post( $target_id );
 	if ( ! $post || 'attachment' !== $post->post_type ) {
 		return array(
@@ -195,44 +212,121 @@ function negar_theme_test_cleanup_fixture( $target_id, $token ) {
 		);
 	}
 
+	// 3. The stored private token exists.
 	$stored_token = (string) get_post_meta( $target_id, '_negar_test_fixture_token', true );
-	if ( '' === $stored_token || ! hash_equals( $stored_token, $token ) ) {
+	if ( '' === $stored_token ) {
+		return array(
+			'cleaned' => false,
+			'error'   => 'missing_fixture_token',
+		);
+	}
+
+	// 4. The supplied token matches via hash_equals().
+	if ( ! hash_equals( $stored_token, $token ) ) {
 		return array(
 			'cleaned' => false,
 			'error'   => 'token_mismatch',
 		);
 	}
 
-	$upload_dir = wp_upload_dir();
-	$basedir    = strtolower( wp_normalize_path( $upload_dir['basedir'] ) );
-
-	$attached_file = get_attached_file( $target_id );
-	if ( $attached_file ) {
-		$normalized_attached = strtolower( wp_normalize_path( $attached_file ) );
-		if ( 0 !== strpos( $normalized_attached, $basedir . '/' ) ) {
-			$candidate = strtolower( wp_normalize_path( $basedir . '/' . ltrim( $attached_file, '/\\' ) ) );
-			if ( 0 === strpos( $candidate, $basedir . '/' ) ) {
-				$attached_file = $upload_dir['basedir'] . '/' . ltrim( $attached_file, '/\\' );
-			} else {
-				return array(
-					'cleaned' => false,
-					'error'   => 'file_outside_uploads',
-				);
-			}
-		}
+	// 5. A recognized test ownership marker exists.
+	$stored_owner      = (string) get_post_meta( $target_id, '_negar_test_fixture_owner', true );
+	$recognized_owners = array( 'browser-runner', 'php-verify', 'safety-f1', 'safety-f2', 'sentinel-test' );
+	if ( '' === $stored_owner || ! in_array( $stored_owner, $recognized_owners, true ) ) {
+		return array(
+			'cleaned' => false,
+			'error'   => 'unrecognized_fixture_owner',
+		);
 	}
 
+	// 6. A non-empty test-owned file path exists in fixture metadata.
 	$stored_file = (string) get_post_meta( $target_id, '_negar_test_fixture_file', true );
-	if ( '' !== $stored_file ) {
-		$normalized_stored = strtolower( wp_normalize_path( $stored_file ) );
-		if ( 0 !== strpos( $normalized_stored, $basedir . '/' ) ) {
+	if ( '' === $stored_file ) {
+		return array(
+			'cleaned' => false,
+			'error'   => 'missing_fixture_file_meta',
+		);
+	}
+
+	// 7. get_attached_file() resolves to that exact same file.
+	$attached_file = (string) get_attached_file( $target_id );
+	if ( '' === $attached_file ) {
+		return array(
+			'cleaned' => false,
+			'error'   => 'missing_attached_file',
+		);
+	}
+
+	$parts = preg_split( '#(?=[a-zA-Z]:[/\\\\])#', $attached_file );
+	if ( ! empty( $parts ) ) {
+		$attached_file = end( $parts );
+	}
+
+	$upload_dir = wp_upload_dir();
+	if ( empty( $upload_dir['basedir'] ) ) {
+		return array(
+			'cleaned' => false,
+			'error'   => 'upload_dir_unavailable',
+		);
+	}
+
+	$norm_uploads_base = strtolower( wp_normalize_path( $upload_dir['basedir'] ) );
+	$norm_attached     = strtolower( wp_normalize_path( $attached_file ) );
+	$norm_stored       = strtolower( wp_normalize_path( $stored_file ) );
+
+	// Strict match between attached file and stored file
+	if ( $norm_attached !== $norm_stored ) {
+		return array(
+			'cleaned' => false,
+			'error'   => 'attached_stored_path_mismatch',
+		);
+	}
+
+	// 8 & 9. The actual canonical file path is inside allowed uploads directory (no traversal / escaping).
+	$real_uploads_base = realpath( $upload_dir['basedir'] );
+	if ( false === $real_uploads_base ) {
+		return array(
+			'cleaned' => false,
+			'error'   => 'uploads_dir_realpath_failed',
+		);
+	}
+	$norm_real_uploads = strtolower( wp_normalize_path( $real_uploads_base ) );
+
+	if ( file_exists( $attached_file ) ) {
+		$real_attached_file = realpath( $attached_file );
+		if ( false === $real_attached_file ) {
 			return array(
 				'cleaned' => false,
-				'error'   => 'stored_file_outside_uploads',
+				'error'   => 'attached_file_realpath_failed',
+			);
+		}
+		$norm_real_attached = strtolower( wp_normalize_path( $real_attached_file ) );
+		if ( 0 !== strpos( $norm_real_attached, $norm_real_uploads . '/' ) ) {
+			return array(
+				'cleaned' => false,
+				'error'   => 'canonical_path_outside_uploads',
+			);
+		}
+	} else {
+		if ( 0 !== strpos( $norm_attached, $norm_uploads_base . '/' ) ) {
+			return array(
+				'cleaned' => false,
+				'error'   => 'path_outside_uploads',
 			);
 		}
 	}
 
+	// 10. The path is a test-owned temporary video fixture, not an arbitrary existing upload.
+	$filename = basename( $norm_stored );
+	$is_test_fixture_name = (bool) preg_match( '/^(test-story-video-|verify-fixture-|safety-fixture-|sentinel-fixture-)[a-zA-Z0-9_\-]+\.webm$/', $filename );
+	if ( ! $is_test_fixture_name ) {
+		return array(
+			'cleaned' => false,
+			'error'   => 'not_a_test_fixture_filename',
+		);
+	}
+
+	// ALL CHECKS PASSED. Delete the attachment.
 	$deleted = wp_delete_attachment( $target_id, true );
 	if ( ! $deleted ) {
 		return array(
@@ -241,11 +335,9 @@ function negar_theme_test_cleanup_fixture( $target_id, $token ) {
 		);
 	}
 
-	if ( $attached_file && file_exists( $attached_file ) ) {
+	// If file still remains on disk after wp_delete_attachment, remove it safely since all 10 checks passed.
+	if ( file_exists( $attached_file ) ) {
 		@unlink( $attached_file );
-	}
-	if ( $stored_file && file_exists( $stored_file ) ) {
-		@unlink( $stored_file );
 	}
 
 	return array(
@@ -1170,10 +1262,16 @@ try {
 	// --- Safety Regression Coverage for Media Fixture Lifecycle ---
 	$upload_dir         = wp_upload_dir();
 	$fixture_video_path = __DIR__ . '/fixtures/sample-video.webm';
+	$active_fixtures    = array();
+	$tracked_temp_files = array();
 
 	// 1. Fixture creation uses a unique name
-	$safe_f1 = negar_theme_test_create_video_fixture( 'safety-f1' );
-	$safe_f2 = negar_theme_test_create_video_fixture( 'safety-f2' );
+	$safe_f1 = negar_theme_test_create_video_fixture( 'safety-f1', 'safety-fixture-' );
+	$active_fixtures[ $safe_f1['id'] ] = $safe_f1;
+
+	$safe_f2 = negar_theme_test_create_video_fixture( 'safety-f2', 'safety-fixture-' );
+	$active_fixtures[ $safe_f2['id'] ] = $safe_f2;
+
 	$results['fixture_unique_naming'] = ( $safe_f1['file'] !== $safe_f2['file'] && $safe_f1['id'] !== $safe_f2['id'] );
 
 	// 2. Two separate runs cannot overwrite each other's files
@@ -1181,12 +1279,20 @@ try {
 		&& file_exists( $safe_f2['file'] )
 		&& wp_unique_filename( $upload_dir['path'], basename( $safe_f1['file'] ) ) !== basename( $safe_f1['file'] );
 
-	// 3 & 4. Pre-existing file with old fixed filename and pre-existing attachment with old test title are preserved
-	$old_fixed_file   = $upload_dir['path'] . '/test-sample-video.webm';
+	// 3. Pre-existing file with old fixed filename is inspected and hashed without attaching to WP
+	$old_fixed_file   = wp_normalize_path( $upload_dir['path'] . '/test-sample-video.webm' );
 	$old_file_existed = file_exists( $old_fixed_file );
 	if ( ! $old_file_existed ) {
-		file_put_contents( $old_fixed_file, 'test-sentinel-data-do-not-delete' );
+		file_put_contents( $old_fixed_file, 'test-sentinel-data-do-not-delete-' . wp_generate_password( 12, false, false ) );
+		$tracked_temp_files[] = $old_fixed_file;
 	}
+	$old_file_hash = sha1_file( $old_fixed_file );
+
+	// 4. Isolated sentinel attachment pointing to an EXCLUSIVE test file (never pointing to pre-existing file)
+	$sentinel_file = wp_normalize_path( $upload_dir['path'] . '/' . wp_unique_filename( $upload_dir['path'], 'sentinel-fixture-' . wp_generate_password( 8, false, false ) . '.webm' ) );
+	copy( $fixture_video_path, $sentinel_file );
+	$tracked_temp_files[] = $sentinel_file;
+
 	$sentinel_attachment_id = wp_insert_attachment(
 		array(
 			'post_mime_type' => 'video/webm',
@@ -1194,46 +1300,96 @@ try {
 			'post_content'   => '',
 			'post_status'    => 'inherit',
 		),
-		$old_fixed_file
+		$sentinel_file
+	);
+	$active_fixtures[ $sentinel_attachment_id ] = array(
+		'id'    => $sentinel_attachment_id,
+		'token' => '',
+		'file'  => $sentinel_file,
+		'owner' => 'unowned-sentinel',
 	);
 
 	// 5. Cleanup without a valid ownership token is rejected
 	$reject_empty_token = negar_theme_test_cleanup_fixture( $sentinel_attachment_id, '' );
 	$reject_wrong_token = negar_theme_test_cleanup_fixture( $sentinel_attachment_id, 'unauthorized-token' );
+	$reject_other_token = negar_theme_test_cleanup_fixture( $sentinel_attachment_id, $safe_f1['token'] );
 	$results['fixture_token_rejection'] = false === $reject_empty_token['cleaned']
-		&& false === $reject_wrong_token['cleaned'];
+		&& false === $reject_wrong_token['cleaned']
+		&& false === $reject_other_token['cleaned'];
 
 	// 6. Cleanup with the wrong attachment ID is rejected
 	$reject_wrong_id = negar_theme_test_cleanup_fixture( 99999999, $safe_f1['token'] );
 	$results['fixture_wrong_id_rejection'] = false === $reject_wrong_id['cleaned'];
 
-	// 7. Cleanup of the exact owned fixture succeeds
+	// 7. Missing ownership metadata blocks deletion
+	$reject_missing_meta = negar_theme_test_cleanup_fixture( $sentinel_attachment_id, 'any-token' );
+	$results['fixture_missing_meta_rejection'] = false === $reject_missing_meta['cleaned']
+		&& 'missing_fixture_token' === $reject_missing_meta['error'];
+
+	// 8. Mismatched actual and stored file paths block deletion
+	$mismatch_fix = negar_theme_test_create_video_fixture( 'safety-f1', 'safety-fixture-' );
+	$active_fixtures[ $mismatch_fix['id'] ] = $mismatch_fix;
+	update_post_meta( $mismatch_fix['id'], '_negar_test_fixture_file', $upload_dir['path'] . '/mismatched-file.webm' );
+	$reject_mismatched = negar_theme_test_cleanup_fixture( $mismatch_fix['id'], $mismatch_fix['token'] );
+	$results['fixture_mismatched_path_rejection'] = false === $reject_mismatched['cleaned']
+		&& 'attached_stored_path_mismatch' === $reject_mismatched['error'];
+
+	// 9. Files outside uploads cannot be deleted
+	update_post_meta( $mismatch_fix['id'], '_negar_test_fixture_file', 'C:/Windows/System32/drivers/etc/hosts' );
+	update_attached_file( $mismatch_fix['id'], 'C:/Windows/System32/drivers/etc/hosts' );
+	$reject_outside = negar_theme_test_cleanup_fixture( $mismatch_fix['id'], $mismatch_fix['token'] );
+	$results['fixture_outside_uploads_rejection'] = false === $reject_outside['cleaned'];
+
+	// Restore valid metadata on mismatch fixture so it can be cleaned up cleanly
+	$rel_mismatch = ltrim( str_replace( wp_normalize_path( $upload_dir['basedir'] ), '', $mismatch_fix['file'] ), '/' );
+	update_attached_file( $mismatch_fix['id'], $rel_mismatch );
+	update_post_meta( $mismatch_fix['id'], '_negar_test_fixture_file', $mismatch_fix['file'] );
+	$clean_mismatch = negar_theme_test_cleanup_fixture( $mismatch_fix['id'], $mismatch_fix['token'] );
+	unset( $active_fixtures[ $mismatch_fix['id'] ] );
+
+	// 10. Cleanup of the exact owned fixture succeeds
 	$clean_f1 = negar_theme_test_cleanup_fixture( $safe_f1['id'], $safe_f1['token'] );
+	unset( $active_fixtures[ $safe_f1['id'] ] );
 	$results['fixture_owned_cleanup_succeeds'] = true === $clean_f1['cleaned']
 		&& null === get_post( $safe_f1['id'] )
 		&& ! file_exists( $safe_f1['file'] );
 
-	// 8. Repeated cleanup does not delete unrelated files
+	// 11. Repeated cleanup does not delete unrelated files
 	$clean_repeat = negar_theme_test_cleanup_fixture( $safe_f1['id'], $safe_f1['token'] );
-	$results['fixture_repeated_cleanup_safe'] = false === $clean_repeat['cleaned'];
+	$results['fixture_repeated_cleanup_safe'] = false === $clean_repeat['cleaned']
+		&& 'not_an_attachment' === $clean_repeat['error'];
 
+	// Cleanup safe_f2
 	$clean_f2 = negar_theme_test_cleanup_fixture( $safe_f2['id'], $safe_f2['token'] );
+	unset( $active_fixtures[ $safe_f2['id'] ] );
 	$results['fixture_f2_cleanup_succeeds'] = true === $clean_f2['cleaned']
 		&& null === get_post( $safe_f2['id'] )
 		&& ! file_exists( $safe_f2['file'] );
 
-	// Verify pre-existing sentinel file and attachment are STILL intact
-	$results['fixture_preexisting_file_preserved'] = file_exists( $old_fixed_file );
-	$results['fixture_preexisting_attachment_preserved'] = null !== get_post( $sentinel_attachment_id );
+	// 12. Unrelated attachment with matching title survived ALL preceding cleanup actions
+	$results['fixture_unrelated_attachment_preserved'] = null !== get_post( $sentinel_attachment_id )
+		&& 'Negar Test Sample Video' === get_the_title( $sentinel_attachment_id )
+		&& file_exists( $sentinel_file );
 
-	// Clean up our temporary sentinel attachment and file safely
-	wp_delete_attachment( $sentinel_attachment_id, true );
+	// Clean up the sentinel attachment safely by assigning recognized test ownership to its exclusive file
+	$sentinel_token = wp_generate_password( 32, false, false );
+	update_post_meta( $sentinel_attachment_id, '_negar_test_fixture_token', $sentinel_token );
+	update_post_meta( $sentinel_attachment_id, '_negar_test_fixture_owner', 'sentinel-test' );
+	update_post_meta( $sentinel_attachment_id, '_negar_test_fixture_file', $sentinel_file );
+	$clean_sentinel = negar_theme_test_cleanup_fixture( $sentinel_attachment_id, $sentinel_token );
+	unset( $active_fixtures[ $sentinel_attachment_id ] );
+
+	// 13. Pre-existing file survived ALL cleanups! Checked strictly AFTER all cleanup operations!
+	$results['fixture_preexisting_file_preserved'] = file_exists( $old_fixed_file )
+		&& sha1_file( $old_fixed_file ) === $old_file_hash;
+
+	// Clean up temporary pre-existing file if created specifically for this test
 	if ( ! $old_file_existed && file_exists( $old_fixed_file ) ) {
 		@unlink( $old_fixed_file );
 	}
 
-	// 9. If fixture creation fails, partial test-owned artifacts are handled safely
-	$simulated_partial = $upload_dir['path'] . '/' . wp_unique_filename( $upload_dir['path'], 'test-partial-test-' . wp_generate_password( 8, false, false ) . '.webm' );
+	// 14. If fixture creation fails, partial test-owned artifacts are handled safely
+	$simulated_partial = wp_normalize_path( $upload_dir['path'] . '/' . wp_unique_filename( $upload_dir['path'], 'safety-fixture-partial-' . wp_generate_password( 8, false, false ) . '.webm' ) );
 	copy( $fixture_video_path, $simulated_partial );
 	$partial_existed = file_exists( $simulated_partial );
 	if ( file_exists( $simulated_partial ) ) {
@@ -1242,11 +1398,12 @@ try {
 	$results['fixture_partial_artifact_safe'] = $partial_existed && ! file_exists( $simulated_partial );
 
 	// --- Story Management Tests ---
-	$test_video_id   = 0;
-	$verify_token    = '';
-	$verify_fixture  = negar_theme_test_create_video_fixture( 'php-verify' );
-	$test_video_id   = $verify_fixture['id'];
-	$verify_token    = $verify_fixture['token'];
+	$test_video_id  = 0;
+	$verify_token   = '';
+	$verify_fixture = negar_theme_test_create_video_fixture( 'php-verify', 'verify-fixture-' );
+	$test_video_id  = $verify_fixture['id'];
+	$verify_token   = $verify_fixture['token'];
+	$active_fixtures[ $test_video_id ] = $verify_fixture;
 
 	try {
 		wp_set_current_user( 0 );
@@ -1521,6 +1678,27 @@ try {
 	} finally {
 		if ( $test_video_id > 0 && '' !== $verify_token ) {
 			negar_theme_test_cleanup_fixture( $test_video_id, $verify_token );
+			unset( $active_fixtures[ $test_video_id ] );
+		}
+		if ( ! empty( $active_fixtures ) ) {
+			foreach ( $active_fixtures as $rem_id => $rem_fix ) {
+				if ( ! empty( $rem_fix['token'] ) ) {
+					negar_theme_test_cleanup_fixture( $rem_id, $rem_fix['token'] );
+				} elseif ( $rem_id > 0 && ! empty( $rem_fix['file'] ) ) {
+					$emergency_token = wp_generate_password( 32, false, false );
+					update_post_meta( $rem_id, '_negar_test_fixture_token', $emergency_token );
+					update_post_meta( $rem_id, '_negar_test_fixture_owner', 'sentinel-test' );
+					update_post_meta( $rem_id, '_negar_test_fixture_file', $rem_fix['file'] );
+					negar_theme_test_cleanup_fixture( $rem_id, $emergency_token );
+				}
+			}
+		}
+		if ( ! empty( $tracked_temp_files ) ) {
+			foreach ( $tracked_temp_files as $temp_file ) {
+				if ( file_exists( $temp_file ) ) {
+					@unlink( $temp_file );
+				}
+			}
 		}
 	}
 
@@ -1548,6 +1726,20 @@ try {
 	echo wp_json_encode( $results );
 	exit( in_array( false, $results, true ) ? 1 : 0 );
 } catch ( Throwable $error ) {
+	if ( ! empty( $active_fixtures ) ) {
+		foreach ( $active_fixtures as $rem_id => $rem_fix ) {
+			if ( ! empty( $rem_fix['token'] ) ) {
+				negar_theme_test_cleanup_fixture( $rem_id, $rem_fix['token'] );
+			}
+		}
+	}
+	if ( ! empty( $tracked_temp_files ) ) {
+		foreach ( $tracked_temp_files as $temp_file ) {
+			if ( file_exists( $temp_file ) ) {
+				@unlink( $temp_file );
+			}
+		}
+	}
 	if ( isset( $option, $media_option, $pack_option, $story_option, $mods, $verify_snapshot ) ) {
 		negar_theme_test_restore( $option, $media_option, $pack_option, $story_option, $mods, $verify_snapshot );
 	}
