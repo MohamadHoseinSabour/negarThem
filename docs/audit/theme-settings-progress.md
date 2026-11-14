@@ -145,7 +145,7 @@
 **Commits:**
 - `83b334c` `fix(stories): correct media validation and editorial cta`
 - `a3ae3e1` `fix(stories): harden viewer playback and accessibility`
-- `391ce69` `test(stories): verify persistence and real media playback`
+- `d0ef6c2` `test(stories): verify persistence and real media playback`
 
 ### Summary of Accomplishments & Hardening:
 - **Story Schema & Storage Boundary:** Registered `negar_theme_story_options` (`NEGAR_THEME_STORY_OPTION`, schema version 1) under `negar_theme_story_settings`, keeping it strictly out of `wp_load_alloptions()`.

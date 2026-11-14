@@ -31,6 +31,7 @@ async function run() {
   let context;
   let mobileContext;
   let auth;
+  let videoFixture;
 
   try {
     const checks = JSON.parse(php('verify'));
@@ -482,7 +483,9 @@ async function run() {
     assert.deepStrictEqual(await readColors(page), { primary: '#059669', secondary: '#e11d48' }, 'Former Customizer default values must remain valid saved colors');
 
     // Phase 6: Stories Admin Persistence, Real Media Playback & Interaction Tests
-    const videoFixture = JSON.parse(php('video-fixture'));
+    videoFixture = JSON.parse(php('video-fixture'));
+    assert(videoFixture && videoFixture.id > 0, 'Video fixture ID must be positive');
+    assert(videoFixture.token && videoFixture.token.length > 0, 'Video fixture token must be present');
 
     // 1. Unconfigured State & Add Story Button
     await page.goto(BASE_URL + '/wp-admin/options-general.php?page=negar-theme-settings&tab=stories', { waitUntil: 'domcontentloaded' });
@@ -678,10 +681,13 @@ async function run() {
         failure = failure || destroyError;
       }
     }
-    try {
-      php('cleanup-video-fixture');
-    } catch (cleanVideoError) {
-      failure = failure || cleanVideoError;
+    if (videoFixture && videoFixture.id && videoFixture.token) {
+      try {
+        const cleanRes = JSON.parse(php('cleanup-video-fixture', String(videoFixture.id), videoFixture.token));
+        assert.strictEqual(cleanRes.cleaned, true, `Owned video fixture cleanup must succeed: ${cleanRes.error || ''}`);
+      } catch (cleanVideoError) {
+        failure = failure || cleanVideoError;
+      }
     }
     try {
       php('restore', snapshot);
