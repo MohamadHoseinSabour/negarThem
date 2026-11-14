@@ -3259,8 +3259,8 @@ function negar_theme_render_settings_page() {
 				<a class="nav-tab <?php echo $active_tab === $tab_id ? 'nav-tab-active' : ''; ?>" href="<?php echo esc_url( add_query_arg( array( 'page' => 'negar-theme-settings', 'tab' => $tab_id ), admin_url( 'options-general.php' ) ) ); ?>" <?php echo $active_tab === $tab_id ? 'aria-current="page"' : ''; ?>><?php echo esc_html( $tab_label ); ?></a>
 			<?php endforeach; ?>
 		</nav>
-		<?php settings_errors( 'negar_theme_settings' ); settings_errors( 'negar_theme_media_settings' ); settings_errors( 'negar_theme_story_settings' ); settings_errors( 'negar_theme_brand_settings' ); ?>
-		<?php if ( in_array( $active_tab, array( 'general', 'texts', 'layout', 'products', 'colors', 'typography', 'header_footer', 'banners', 'stories', 'brands' ), true ) ) : ?>
+		<?php settings_errors( 'negar_theme_settings' ); settings_errors( 'negar_theme_media_settings' ); settings_errors( 'negar_theme_story_settings' ); settings_errors( 'negar_theme_brand_settings' ); settings_errors( 'negar_theme_sms_settings' ); ?>
+		<?php if ( in_array( $active_tab, array( 'general', 'texts', 'layout', 'products', 'colors', 'typography', 'header_footer', 'banners', 'stories', 'brands', 'sms' ), true ) ) : ?>
 			<form action="options.php" method="post">
 				<?php
 				if ( 'banners' === $active_tab ) {
@@ -3269,6 +3269,8 @@ function negar_theme_render_settings_page() {
 					settings_fields( 'negar_theme_story_settings' );
 				} elseif ( 'brands' === $active_tab ) {
 					settings_fields( 'negar_theme_brand_settings' );
+				} elseif ( 'sms' === $active_tab ) {
+					settings_fields( 'negar_theme_sms_settings' );
 				} else {
 					settings_fields( 'negar_theme_settings' );
 				}
@@ -3284,6 +3286,12 @@ function negar_theme_render_settings_page() {
 					<?php negar_theme_render_story_fields(); ?>
 				<?php elseif ( 'brands' === $active_tab ) : ?>
 					<?php negar_theme_render_brand_fields(); ?>
+				<?php elseif ( 'sms' === $active_tab ) : ?>
+					<?php
+					if ( function_exists( 'negar_theme_render_sms_fields' ) ) {
+						negar_theme_render_sms_fields();
+					}
+					?>
 				<?php else : ?>
 				<table class="form-table" role="presentation">
 					<?php if ( 'general' === $active_tab ) : ?>

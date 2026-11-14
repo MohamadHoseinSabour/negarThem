@@ -58,6 +58,11 @@ require_once NEGAR_SHOP_DIR . '/inc/customizer.php';
 require_once NEGAR_SHOP_DIR . '/inc/theme-settings.php';
 
 /**
+ * SMS provider and secure OTP integration.
+ */
+require_once NEGAR_SHOP_DIR . '/inc/sms-provider.php';
+
+/**
  * SEO, OpenGraph and JSON-LD Structured Data (HRD-02)
  */
 require_once NEGAR_SHOP_DIR . '/inc/seo-schema.php';
