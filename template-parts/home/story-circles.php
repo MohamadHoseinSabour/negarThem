@@ -117,7 +117,25 @@ if ( empty( $stories ) ) {
 		<!-- Story Slide Main Body -->
 		<div class="story-modal-content" id="story-modal-body">
 			<!-- HTML5 Video Element for Video Stories -->
-			<video class="story-video" id="story-modal-video" playsinline webkit-playsinline preload="metadata" style="display:none; width:100%; height:100%; object-fit:cover; position:absolute; inset:0; z-index:1;"></video>
+			<video class="story-video" id="story-modal-video" playsinline webkit-playsinline preload="none" style="display:none; width:100%; height:100%; object-fit:cover; position:absolute; inset:0; z-index:1;"></video>
+
+			<!-- Autoplay Blocked / Play Recovery Overlay -->
+			<div id="story-modal-play-overlay" style="display:none; position:absolute; inset:0; z-index:25; align-items:center; justify-content:center; background:rgba(0,0,0,0.6);">
+				<button type="button" id="story-modal-play-btn" style="background:#e11d48; color:#fff; border:none; padding:10px 24px; border-radius:9999px; font-weight:bold; cursor:pointer; font-size:14px; box-shadow:0 4px 14px rgba(0,0,0,0.4); display:flex; align-items:center; gap:8px;">
+					<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+					<span><?php esc_html_e( 'پخش ویدیو', 'negar-shop' ); ?></span>
+				</button>
+			</div>
+
+			<!-- Media Error Fallback Overlay -->
+			<div id="story-modal-error-overlay" style="display:none; position:absolute; inset:0; z-index:25; align-items:center; justify-content:center; flex-direction:column; background:rgba(0,0,0,0.75); padding:20px; text-align:center;">
+				<p style="color:#fff; font-size:14px; margin-bottom:12px; font-weight:bold;">
+					<?php esc_html_e( 'بارگذاری ویدیو با مشکل مواجه شد.', 'negar-shop' ); ?>
+				</p>
+				<button type="button" id="story-error-next-btn" style="background:#374151; color:#fff; border:none; padding:8px 18px; border-radius:8px; cursor:pointer; font-size:13px;">
+					<?php esc_html_e( 'استوری بعدی', 'negar-shop' ); ?>
+				</button>
+			</div>
 
 			<!-- Invisible touch tap areas for Left/Right navigation -->
 			<div class="absolute inset-y-0 right-0 w-1/3 z-20 cursor-pointer" id="story-prev-zone" role="button" aria-label="<?php esc_attr_e( 'استوری قبلی', 'negar-shop' ); ?>" title="<?php esc_attr_e( 'استوری قبلی', 'negar-shop' ); ?>"></div>
@@ -150,6 +168,10 @@ document.addEventListener('DOMContentLoaded', function() {
 	const badgeEl = document.getElementById('story-modal-badge');
 	const bodyEl = document.getElementById('story-modal-body');
 	const videoEl = document.getElementById('story-modal-video');
+	const playOverlay = document.getElementById('story-modal-play-overlay');
+	const playBtn = document.getElementById('story-modal-play-btn');
+	const errorOverlay = document.getElementById('story-modal-error-overlay');
+	const errorNextBtn = document.getElementById('story-error-next-btn');
 	const footerEl = document.getElementById('story-modal-footer');
 	const prodEl = document.getElementById('story-modal-prod');
 	const ctaEl = document.getElementById('story-modal-cta');
@@ -179,14 +201,18 @@ document.addEventListener('DOMContentLoaded', function() {
 	let progressInterval = null;
 	let progressElapsed = 0;
 	let isPaused = false;
-	let lastActiveElement = null;
+	let previousBodyOverflow = '';
+	let activatingTrigger = null;
+	let pressStartTime = 0;
+	let isHolding = false;
 
-	function openStory(index) {
-		lastActiveElement = document.activeElement;
+	function openStory(index, trigger) {
+		activatingTrigger = trigger || document.activeElement;
 		currentIndex = index;
+		previousBodyOverflow = document.body.style.overflow;
+		document.body.style.overflow = 'hidden';
 		modal.classList.add('active');
 		modal.setAttribute('aria-hidden', 'false');
-		document.body.style.overflow = 'hidden';
 		if (modalDialog) modalDialog.focus();
 		loadStory(currentIndex);
 	}
@@ -195,10 +221,10 @@ document.addEventListener('DOMContentLoaded', function() {
 		stopCurrentMedia();
 		modal.classList.remove('active');
 		modal.setAttribute('aria-hidden', 'true');
-		document.body.style.overflow = '';
+		document.body.style.overflow = previousBodyOverflow || '';
 		resetAllProgress();
-		if (lastActiveElement && typeof lastActiveElement.focus === 'function') {
-			lastActiveElement.focus();
+		if (activatingTrigger && typeof activatingTrigger.focus === 'function') {
+			activatingTrigger.focus();
 		}
 	}
 
@@ -214,10 +240,13 @@ document.addEventListener('DOMContentLoaded', function() {
 			clearInterval(progressInterval);
 			progressInterval = null;
 		}
+		if (playOverlay) playOverlay.style.display = 'none';
+		if (errorOverlay) errorOverlay.style.display = 'none';
 		if (videoEl) {
 			videoEl.pause();
 			videoEl.onended = null;
 			videoEl.ontimeupdate = null;
+			videoEl.onerror = null;
 			videoEl.removeAttribute('src');
 			videoEl.load();
 			videoEl.style.display = 'none';
@@ -249,33 +278,40 @@ document.addEventListener('DOMContentLoaded', function() {
 		titleEl.textContent = s.title;
 		badgeEl.textContent = s.badge || '';
 
-		// Footer / Product Card
+		// Footer / Product & CTA (STEP 1 priority)
 		if (s.hasProduct && s.prod) {
 			footerEl.style.display = '';
 			prodEl.textContent = s.prod;
 			prodEl.style.display = '';
 			ctaEl.href = s.link || '#';
-			ctaEl.textContent = s.ctaLabel;
+			ctaEl.textContent = s.ctaLabel || 'مشاهده و خرید';
 			ctaEl.style.display = '';
 		} else if (s.link) {
 			footerEl.style.display = '';
 			prodEl.textContent = '';
 			prodEl.style.display = 'none';
 			ctaEl.href = s.link;
-			ctaEl.textContent = s.ctaLabel;
+			ctaEl.textContent = s.ctaLabel || 'مشاهده و خرید';
 			ctaEl.style.display = '';
 		} else {
 			footerEl.style.display = 'none';
 		}
 
-		if ('video' === s.type && s.video) {
+		if ('video' === s.type) {
+			// Video Story
+			if (!s.video) {
+				// STEP 3: NEVER fall through to 5s image playback!
+				if (errorOverlay) errorOverlay.style.display = 'flex';
+				return;
+			}
+
 			bodyEl.style.backgroundImage = s.poster ? 'url(' + s.poster + ')' : (s.thumb ? 'url(' + s.thumb + ')' : 'none');
 			videoEl.style.display = 'block';
 			videoEl.src = s.video;
 			videoEl.currentTime = 0;
 
 			videoEl.ontimeupdate = function() {
-				if (videoEl.duration && !isNaN(videoEl.duration) && videoEl.duration > 0) {
+				if (videoEl.duration && isFinite(videoEl.duration) && videoEl.duration > 0) {
 					const pct = Math.min(100, (videoEl.currentTime / videoEl.duration) * 100);
 					if (currentBar) currentBar.style.width = pct + '%';
 				}
@@ -286,12 +322,18 @@ document.addEventListener('DOMContentLoaded', function() {
 				nextStory();
 			};
 
+			videoEl.onerror = function() {
+				if (errorOverlay) errorOverlay.style.display = 'flex';
+			};
+
 			var playPromise = videoEl.play();
 			if (playPromise !== undefined) {
 				playPromise.catch(function() {
 					// Fallback to muted playback if browser autoplay policy blocks unmuted audio
 					videoEl.muted = true;
-					videoEl.play().catch(function() {});
+					videoEl.play().catch(function() {
+						if (playOverlay) playOverlay.style.display = 'flex';
+					});
 				});
 			}
 		} else {
@@ -337,7 +379,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	storyItems.forEach(function(item, idx) {
 		item.addEventListener('click', function(e) {
 			e.preventDefault();
-			openStory(idx);
+			openStory(idx, item);
 		});
 	});
 
@@ -351,10 +393,31 @@ document.addEventListener('DOMContentLoaded', function() {
 		}
 	});
 
-	if (nextZone) nextZone.addEventListener('click', nextStory);
-	if (prevZone) prevZone.addEventListener('click', prevStory);
+	// Play button overlay
+	if (playBtn) {
+		playBtn.addEventListener('click', function(e) {
+			e.preventDefault();
+			e.stopPropagation();
+			if (playOverlay) playOverlay.style.display = 'none';
+			if (videoEl) {
+				videoEl.muted = false;
+				videoEl.play().catch(function() {
+					videoEl.muted = true;
+					videoEl.play().catch(function() {});
+				});
+			}
+		});
+	}
 
-	// Press / Hold to pause
+	if (errorNextBtn) {
+		errorNextBtn.addEventListener('click', function(e) {
+			e.preventDefault();
+			e.stopPropagation();
+			nextStory();
+		});
+	}
+
+	// Press / Hold to pause vs Tap to navigate
 	function pauseStory() {
 		isPaused = true;
 		if (videoEl && videoEl.src && !videoEl.paused) {
@@ -369,10 +432,46 @@ document.addEventListener('DOMContentLoaded', function() {
 		}
 	}
 
-	modal.addEventListener('mousedown', pauseStory);
-	modal.addEventListener('mouseup', resumeStory);
-	modal.addEventListener('touchstart', pauseStory, { passive: true });
-	modal.addEventListener('touchend', resumeStory, { passive: true });
+	function onPointerDown(e) {
+		if (e.button !== undefined && e.button !== 0) return;
+		if (e.target.closest('#story-modal-close, #story-modal-cta, #story-modal-play-btn, #story-error-next-btn')) {
+			return;
+		}
+		pressStartTime = Date.now();
+		isHolding = true;
+		pauseStory();
+	}
+
+	function onPointerUp() {
+		if (!isHolding) return;
+		isHolding = false;
+		resumeStory();
+	}
+
+	modal.addEventListener('pointerdown', onPointerDown);
+	window.addEventListener('pointerup', onPointerUp);
+	window.addEventListener('pointercancel', onPointerUp);
+	window.addEventListener('touchcancel', onPointerUp);
+
+	function handleZoneClick(action) {
+		return function(e) {
+			e.preventDefault();
+			if (Date.now() - pressStartTime > 300) {
+				return; // Held to pause gesture, ignore navigation
+			}
+			action();
+		};
+	}
+
+	if (nextZone) nextZone.addEventListener('click', handleZoneClick(nextStory));
+	if (prevZone) prevZone.addEventListener('click', handleZoneClick(prevStory));
+
+	// Pause on page visibility loss
+	document.addEventListener('visibilitychange', function() {
+		if (document.hidden) {
+			pauseStory();
+		}
+	});
 
 	// Keyboard ESC and arrow keys, focus trap
 	document.addEventListener('keydown', function(e) {
@@ -398,10 +497,30 @@ document.addEventListener('DOMContentLoaded', function() {
 
 		// Focus trap
 		if (e.key === 'Tab') {
-			const focusable = modal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
-			if (focusable.length === 0) return;
+			const focusable = Array.from(modal.querySelectorAll(
+				'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+			)).filter(function(el) {
+				return el.offsetWidth > 0 || el.offsetHeight > 0 || el.getClientRects().length > 0;
+			});
+
+			if (focusable.length === 0) {
+				e.preventDefault();
+				return;
+			}
+
 			const first = focusable[0];
 			const last = focusable[focusable.length - 1];
+
+			if (document.activeElement === modalDialog || !modal.contains(document.activeElement)) {
+				e.preventDefault();
+				if (e.shiftKey) {
+					last.focus();
+				} else {
+					first.focus();
+				}
+				return;
+			}
+
 			if (e.shiftKey) {
 				if (document.activeElement === first) {
 					e.preventDefault();
