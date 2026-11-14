@@ -140,31 +140,43 @@
 
 ## Phase 6 — Complete Homepage Story Management
 
-**Status:** PASS (COMPLETE & VERIFIED)
+**Status:** PASS (COMPLETE, HARDENED & VERIFIED)
+**Baseline:** `cf3265ec1af50029e103634e6f724477ea5eaa55`
 **Commits:**
-- `ff7f615` `feat(settings): add managed story collection and admin controls`
-- `51e3fd0` `feat(home): render managed image and video stories`
+- `83b334c` `fix(stories): correct media validation and editorial cta`
+- `a3ae3e1` `fix(stories): harden viewer playback and accessibility`
+- `391ce69` `test(stories): verify persistence and real media playback`
 
-### Summary of Accomplishments:
-- **Story Schema & Storage Boundary:** Registered `negar_theme_story_options` (`NEGAR_THEME_STORY_OPTION`, schema version 1) under `negar_theme_story_settings`, keeping it strictly out of `wp_load_alloptions()`. Distinguishes unconfigured fallback (`null === get_option(...)` -> 10 reviewed demo stories) from explicit empty state (`'stories' => array()` -> completely omits `.story-shop` and `#modal-story-shop` from the DOM).
-- **Admin Story Manager:** Added management screen under **Settings → تنظیمات قالب نگار → استوری‌ها**:
-  - Add, edit, remove, enable/disable, and reorder stories with keyboard move controls (Move Up / Down).
-  - Separate circle thumbnail image (`thumbnail_id`) from fullscreen story media (`image_id` / `video_id`).
-  - Supported Image stories with duration control (3–30s, default 5s) and Video stories with media mime validation (`str_starts_with(mime, 'video/')`).
-  - Associated optional real WooCommerce products via searchable selector (`negar-product-selector`), verifying catalog visibility and published status.
-  - Configurable custom CTA label and safe destination URL (`negar_theme_sanitize_media_link()`).
-- **Server-Side Rendered Frontend Story Component (`template-parts/home/story-circles.php`):**
-  - Story circles rendered as accessible `<button type="button" aria-haspopup="dialog">` elements with truthful badges and titles.
-  - Native HTML5 `<video playsinline webkit-playsinline preload="metadata">` playback driven by actual media duration (`currentTime / duration`) on `timeupdate`, advancing strictly on authoritative `ended` event.
-  - Image stories driven by configured duration timer (3–30s).
-  - Press and hold pause/resume interaction on touch and mouse.
-  - Escape key closes modal, ArrowLeft/ArrowRight navigates stories.
-  - Focus trap inside active modal, and focus restoration to activating story button upon close.
-  - Footer product card renders genuine WooCommerce product title and permalink, or custom CTA URL, and cleanly hides when unconfigured.
-- **Verification & Regression Testing:**
-  - `npm run test:lint` — 114 PHP files passed syntax linting.
-  - `npm run test:settings` — Passed all story checks: unauthorized save rejection, mime type validation, clamped duration, unsafe URL rejection, product association, reordering ID stability, disabled story omission, clean omission when empty, demo fallback, and admin/modal Playwright interactions.
-  - `npm run test:e2e` & `npm test` — 37 passed, 0 failed across desktop, tablet, and mobile (375px/390px) viewports.
+### Summary of Accomplishments & Hardening:
+- **Story Schema & Storage Boundary:** Registered `negar_theme_story_options` (`NEGAR_THEME_STORY_OPTION`, schema version 1) under `negar_theme_story_settings`, keeping it strictly out of `wp_load_alloptions()`.
+- **Demo Fallback & First-Save Safety:**
+  - Removed all fabricated demonstration product titles, cards, and fake links from fallback data (`has_product = false`, `product_title = ''`, `product_link = ''`).
+  - Unconfigured admin settings tab displays an informational banner explaining demo preview mode and starts the editable collection empty (`0` cards). Saving the form never silently copies demo fallbacks or creates broken managed records.
+  - Explicit empty collection (`stories => []`) cleanly omits both `.story-shop` and `#modal-story-shop` from the frontend DOM.
+- **CTA & Commercial Priority (3 Tiers):**
+  1. *Priority 1 (WooCommerce Product):* If an associated product is published and catalog-visible, the card displays its real product title, live price, and direct permalink.
+  2. *Priority 2 (Editorial CTA):* If no product is associated but a safe custom CTA URL is configured, the footer displays an editorial CTA with that URL without fabricating a product title.
+  3. *Priority 3 (Hidden Footer):* If neither a product nor a safe custom CTA exists, the footer card is completely hidden.
+- **Media Validation, Sanitization & Omission:**
+  - Attachment IDs for thumbnails, images, and posters require verified image attachments (`wp_attachment_is_image`).
+  - Video attachment IDs require verified video mime types (`str_starts_with( get_post_mime_type( $id ), 'video/' )`). Invalid non-video attachments are sanitized to `0`.
+  - Durations are clamped between 3 and 30 seconds (default 5).
+  - Unusable media omission: Enabled stories lacking usable main media (video story with `video_id = 0`, image story with `image_id = 0`, or any story without a valid thumbnail) are automatically excluded from public storefront rendering (`negar_theme_get_stories( true )`) while remaining preserved and editable in the admin interface (`$only_enabled = false`) alongside warning notices.
+- **HTML5 Video Player Lifecycle & Accessibility Hardening:**
+  - Native HTML5 `<video playsinline webkit-playsinline preload="none">` ensures videos are not downloaded when the homepage loads.
+  - Progress bar bound strictly to `currentTime / duration` when duration is a finite positive number. Stories advance strictly upon the authoritative `ended` event. Video stories never fall through to a fixed 5-second image timer.
+  - User-recoverable Play overlay if autoplay policy blocks unmuted audio; user-recoverable Error overlay if media fails.
+  - Holding down pointer pauses and freezes progress without triggering navigation upon release; short tap (< 300ms) navigates.
+  - Navigation zones and arrow keys preserve correct RTL semantics (Left = Next, Right = Previous).
+  - Body scroll lock (`document.body.style.overflow`) is preserved and restored to original value upon closing.
+  - Strict Focus Trap handling Tab / Shift+Tab cycling among visible modal controls. Focus restored to activating trigger upon closing.
+  - Pausing on page visibility loss (`visibilitychange`).
+- **Comprehensive Regression Coverage:**
+  - Added standalone `tests/fixtures/sample-video.webm` fixture and dynamic WordPress attachment helpers (`video-fixture`, `cleanup-video-fixture`).
+  - `theme-settings-regression.php`: 100% assertions green covering defaults fallback, unconfigured admin safe view, explicit empty omission, 3-tier CTA priority, media validation/omission, ID deduplication, duration clamping, reordering stability, and SSR template rendering.
+  - `theme-settings-regression.js`: Full Playwright browser coverage verifying Settings API persistence (add, edit, reorder, delete), real Chromium video metadata loading, real progress advancement, press/hold pause, resume, ended advancement, editorial CTA rendering, scroll-lock restoration, focus trap, and 375px mobile responsiveness.
+  - Clean snapshot restoration: Database and media fixtures are restored identically to pre-test baseline in `finally` blocks.
+  - `npm test`: Linting (114 PHP files) + Settings Regression + E2E Suite (37 tests) all passed with exit code 0.
 
 ## Next phase
 

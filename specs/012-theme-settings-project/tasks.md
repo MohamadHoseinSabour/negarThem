@@ -80,6 +80,11 @@
 - [x] **STORY-6.3** Implement frontend story rendering in `template-parts/home/story-circles.php` with real WordPress media, truthful WooCommerce product binding, clean omission when empty, and safe fallback.
 - [x] **STORY-6.4** Implement image and native HTML5 video story modal playback with actual video duration progress, pause/resume, and accessible keyboard/touch navigation.
 - [x] **STORY-6.5** Add comprehensive reversible regression tests for story persistence, validation, video/image playback, and frontend tokens.
+- [x] **STORY-6.6** Implement 3-tier CTA priority: real WooCommerce product > safe custom CTA URL without fake product names > hide footer completely.
+- [x] **STORY-6.7** Protect demo fallback and first-save: remove fabricated product names from demo stories; display explanatory notice in unconfigured admin state starting with empty list so first save cannot pollute managed records.
+- [x] **STORY-6.8** Reject and omit unusable media: omit video stories without valid videos, image stories without images, and stories without thumbnails from public frontend collection while preserving in admin settings with warning notices.
+- [x] **STORY-6.9** Harden video player and modal accessibility: use `preload="none"`, bind progress to finite positive duration, advance strictly on `ended`, provide user-recoverable play/error overlays, lock/restore body scroll, enforce focus trap, and restore focus to activating button.
+- [x] **STORY-6.10** Upgrade regression coverage with real WebM test fixture, Playwright real playback/pause/ended tests, and database snapshot/cleanup restoration.
 
 ## Future Phases Roadmap
 

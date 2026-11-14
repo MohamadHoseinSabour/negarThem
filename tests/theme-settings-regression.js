@@ -481,26 +481,60 @@ async function run() {
     await page.reload({ waitUntil: 'domcontentloaded' });
     assert.deepStrictEqual(await readColors(page), { primary: '#059669', secondary: '#e11d48' }, 'Former Customizer default values must remain valid saved colors');
 
-    // Phase 6: Stories Admin & Frontend Interactive Tests
+    // Phase 6: Stories Admin Persistence, Real Media Playback & Interaction Tests
+    const videoFixture = JSON.parse(php('video-fixture'));
+
+    // 1. Unconfigured State & Add Story Button
     await page.goto(BASE_URL + '/wp-admin/options-general.php?page=negar-theme-settings&tab=stories', { waitUntil: 'domcontentloaded' });
     assert.strictEqual(await page.locator('#negar-add-story-btn').isVisible(), true, 'Stories admin tab must display the Add Story button');
-    const initialStoryCardsCount = await page.locator('.negar-story-card').count();
-    assert(initialStoryCardsCount > 0, 'Stories admin must render story cards');
 
-    // Test adding a new card dynamically
+    // 2. Add an Image Story
     await page.locator('#negar-add-story-btn').click();
-    const newCount = await page.locator('.negar-story-card').count();
-    assert.strictEqual(newCount, initialStoryCardsCount + 1, 'Clicking Add Story must append a new card to the list');
-    const lastCard = page.locator('.negar-story-card').last();
-    await lastCard.locator('.negar-story-title-input').fill('استوری موقت آزمایشی');
-    assert.strictEqual(await lastCard.locator('.negar-story-title-preview').textContent(), 'استوری موقت آزمایشی', 'Title input must update summary preview in real time');
+    const card1 = page.locator('.negar-story-card').last();
+    await card1.locator('.negar-story-title-input').fill('استوری تصویری ادیتوریال');
+    await card1.locator('input[name*="[badge]"]').fill('فروش ویژه');
+    await card1.locator('input[name*="[thumbnail_id]"]').fill(String(imageFixture.id));
+    await card1.locator('input[name*="[image_id]"]').fill(String(imageFixture.id));
+    await card1.locator('input[name*="[duration]"]').fill('4');
+    await card1.locator('input[name*="[cta_label]"]').fill('مشاهده پیشنهاد');
+    await card1.locator('input[name*="[cta_url]"]').fill('/shop/sale/');
 
-    // Test delete card
-    await lastCard.locator('.negar-story-delete').click();
-    await page.waitForTimeout(300);
-    assert.strictEqual(await page.locator('.negar-story-card').count(), initialStoryCardsCount, 'Deleting card must remove it from the list');
+    // 3. Add a Video Story
+    await page.locator('#negar-add-story-btn').click();
+    const card2 = page.locator('.negar-story-card').last();
+    await card2.locator('.negar-story-title-input').fill('استوری ویدیویی محصول');
+    await card2.locator('.negar-story-media-type-select').selectOption('video');
+    await card2.locator('input[name*="[video_id]"]').evaluate((el, val) => { el.value = val; }, String(videoFixture.id));
+    await card2.locator('input[name*="[thumbnail_id]"]').fill(String(imageFixture.id));
+    await card2.locator('input[name*="[poster_id]"]').fill(String(imageFixture.id));
+    await card2.locator('input[name*="[product_id]"]').first().evaluate((el, val) => { el.value = val; }, String(productFixture.id));
 
-    // Re-enable story-circles section in layout for frontend test
+    // 4. Save through Settings API
+    await Promise.all([
+      page.waitForURL((url) => url.pathname.endsWith('/wp-admin/options-general.php') && url.searchParams.get('tab') === 'stories'),
+      page.locator('form[action="options.php"] input[type="submit"]').click(),
+    ]);
+
+    // Verify persistence after reload
+    const cardsAfterSave = page.locator('.negar-story-card');
+    assert.strictEqual(await cardsAfterSave.count(), 2, 'Exactly 2 stories must be persisted');
+    const firstSavedTitle = await cardsAfterSave.first().locator('.negar-story-title-preview').textContent();
+    assert.strictEqual(firstSavedTitle.trim(), 'استوری تصویری ادیتوریال', 'First saved story title must match');
+
+    // 5. Test Reordering: Move second card (Video) Up before first card
+    const videoCard = cardsAfterSave.last();
+    await videoCard.locator('.negar-story-move-up').click();
+    await Promise.all([
+      page.waitForURL((url) => url.pathname.endsWith('/wp-admin/options-general.php') && url.searchParams.get('tab') === 'stories'),
+      page.locator('form[action="options.php"] input[type="submit"]').click(),
+    ]);
+
+    // Verify reordering persisted
+    const cardsAfterReorder = page.locator('.negar-story-card');
+    const newFirstTitle = await cardsAfterReorder.first().locator('.negar-story-title-preview').textContent();
+    assert.strictEqual(newFirstTitle.trim(), 'استوری ویدیویی محصول', 'Reordered video story must now be first in the list');
+
+    // 6. Re-enable story-circles in layout if needed
     await page.goto(BASE_URL + '/wp-admin/options-general.php?page=negar-theme-settings&tab=layout', { waitUntil: 'domcontentloaded' });
     await page.locator('#negar-layout-enabled-story-circles').check();
     await Promise.all([
@@ -508,30 +542,107 @@ async function run() {
       page.locator('form[action="options.php"] input[type="submit"]').click(),
     ]);
 
-    // Test frontend story circles & modal viewer
+    // 7. Frontend Real Playback and Interaction Tests
     await page.goto(BASE_URL, { waitUntil: 'domcontentloaded' });
     const storyShopSection = page.locator('.story-shop');
     assert.strictEqual(await storyShopSection.isVisible(), true, 'Homepage must render the story circles section');
-    const firstCircle = page.locator('.story-shop__item').first();
-    assert.strictEqual(await firstCircle.isVisible(), true, 'Story circles must be rendered and visible');
 
-    // Open story modal
+    const circles = page.locator('.story-shop__item');
+    assert.strictEqual(await circles.count(), 2, 'Homepage must render exactly 2 story circles');
+
+    // 8. Open First Story (Video Story)
+    const firstCircle = circles.first();
     await firstCircle.click();
+
     const storyModal = page.locator('#modal-story-shop');
-    assert.strictEqual(await storyModal.getAttribute('aria-hidden'), 'false', 'Clicking a story circle must open the modal with aria-hidden=false');
-    assert.strictEqual(await storyModal.evaluate((el) => el.classList.contains('active')), true, 'Modal must have active class when open');
+    assert.strictEqual(await storyModal.getAttribute('aria-hidden'), 'false', 'Modal must be open with aria-hidden=false');
+    assert.strictEqual(await storyModal.evaluate((el) => el.classList.contains('active')), true, 'Modal must have active class');
+    assert.strictEqual(await page.evaluate(() => document.body.style.overflow), 'hidden', 'Body scroll must be locked when modal is open');
+
+    // Product Card on Video Story
+    const footerCard = page.locator('#story-modal-footer');
+    assert.strictEqual(await footerCard.isVisible(), true, 'Footer product card must be visible when product is associated');
+    const prodTitle = await page.locator('#story-modal-prod').textContent();
+    assert(prodTitle.includes(productFixture.label), 'Product title must display real WooCommerce product name');
+
+    // Real HTML5 Video Playback Verification
+    await page.waitForFunction(() => {
+      const v = document.getElementById('story-modal-video');
+      return v && v.duration && isFinite(v.duration) && v.duration > 0;
+    }, { timeout: 10000 });
+
+    const videoDuration = await page.evaluate(() => {
+      const v = document.getElementById('story-modal-video');
+      return v.duration;
+    });
+    assert(videoDuration > 0 && isFinite(videoDuration), 'Video duration must be a real finite positive number');
+
+    // Wait for currentTime to advance
+    await page.waitForFunction(() => {
+      const v = document.getElementById('story-modal-video');
+      return v && v.currentTime > 0.05;
+    }, { timeout: 8000 });
+
+    const currentTime1 = await page.evaluate(() => document.getElementById('story-modal-video').currentTime);
+    assert(currentTime1 > 0, 'Real video playback must advance currentTime');
+
+    // Test Pause (Press & Hold)
+    await page.evaluate(() => {
+      const modal = document.getElementById('modal-story-shop');
+      modal.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, cancelable: true, button: 0 }));
+    });
+    await page.waitForTimeout(200);
+
+    const isVideoPaused = await page.evaluate(() => document.getElementById('story-modal-video').paused);
+    assert.strictEqual(isVideoPaused, true, 'Holding down pointer must pause video playback');
+
+    const pausedTime = await page.evaluate(() => document.getElementById('story-modal-video').currentTime);
+    await page.waitForTimeout(200);
+    const pausedTime2 = await page.evaluate(() => document.getElementById('story-modal-video').currentTime);
+    assert.strictEqual(pausedTime, pausedTime2, 'Video currentTime must remain frozen while paused');
+
+    // Test Resume (Release)
+    await page.evaluate(() => {
+      window.dispatchEvent(new PointerEvent('pointerup', { bubbles: true, cancelable: true }));
+    });
+    await page.waitForTimeout(300);
+
+    const resumedTime = await page.evaluate(() => document.getElementById('story-modal-video').currentTime);
+    assert(resumedTime >= pausedTime, 'Releasing pointer must resume video playback');
+
+    // Wait for video to end and automatically advance to next story (Story 2: Image story)
+    await page.waitForFunction(() => {
+      const title = document.getElementById('story-modal-title');
+      return title && title.textContent === 'استوری تصویری ادیتوریال';
+    }, { timeout: 12000 });
+
+    // Verify Image Story details
+    const imageStoryTitle = await page.locator('#story-modal-title').textContent();
+    assert.strictEqual(imageStoryTitle, 'استوری تصویری ادیتوریال', 'Must advance to image story upon video completion');
+
+    // Verify Editorial CTA (no product name, custom URL)
+    assert.strictEqual(await page.locator('#story-modal-prod').isVisible(), false, 'Product title must be hidden for editorial story without product');
+    const ctaLink = await page.locator('#story-modal-cta').getAttribute('href');
+    assert.strictEqual(ctaLink, '/shop/sale/', 'Editorial story CTA must link to configured custom URL');
+    const ctaText = await page.locator('#story-modal-cta').textContent();
+    assert.strictEqual(ctaText.trim(), 'مشاهده پیشنهاد', 'Editorial story CTA label must match configured text');
 
     // Keyboard ESC to close
     await page.keyboard.press('Escape');
     await page.waitForTimeout(200);
-    assert.strictEqual(await storyModal.getAttribute('aria-hidden'), 'true', 'Pressing Escape must close the story modal and set aria-hidden=true');
+    assert.strictEqual(await storyModal.getAttribute('aria-hidden'), 'true', 'Pressing Escape must close story modal');
+    assert.strictEqual(await page.evaluate(() => document.body.style.overflow), '', 'Body scroll lock must be restored upon closing modal');
+
+    // Focus restoration to opening circle button
+    const activeElementTag = await page.evaluate(() => document.activeElement ? document.activeElement.tagName.toLowerCase() : '');
+    assert.strictEqual(activeElementTag, 'button', 'Focus must be restored to activating story button upon close');
 
     // Responsive mobile viewport test
     const storyMobilePage = await context.newPage();
     await storyMobilePage.setViewportSize({ width: 375, height: 667 });
     await storyMobilePage.goto(BASE_URL, { waitUntil: 'domcontentloaded' });
     const mobileCircles = storyMobilePage.locator('.story-shop__item');
-    assert(await mobileCircles.count() > 0, 'Mobile viewport must render story items');
+    assert.strictEqual(await mobileCircles.count(), 2, 'Mobile viewport must render story items');
     assert.strictEqual(await mobileCircles.first().isVisible(), true, 'Mobile story circle must be visible');
     await storyMobilePage.close();
 
@@ -566,6 +677,11 @@ async function run() {
       } catch (destroyError) {
         failure = failure || destroyError;
       }
+    }
+    try {
+      php('cleanup-video-fixture');
+    } catch (cleanVideoError) {
+      failure = failure || cleanVideoError;
     }
     try {
       php('restore', snapshot);

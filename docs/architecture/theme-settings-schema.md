@@ -266,19 +266,29 @@ The option name is `negar_theme_story_options` (`NEGAR_THEME_STORY_OPTION`). It 
 ```
 
 - **Storage boundaries & empty state semantics:** Stored independently in `negar_theme_story_options` and kept out of `wp_load_alloptions()`.
-  - If the option has never been saved (`null === get_option(...)`), `negar_theme_get_stories()` returns the 10 reviewed backward-compatible demonstration stories.
-  - If the option exists and `stories` is empty (`0` stories), it represents an explicit administrative decision to disable stories: `template-parts/home/story-circles.php` omits both the `.story-shop` section and `#modal-story-shop` dialog completely from the DOM.
-- **Validation & isolation:**
+  - *Demo fallback:* If the option has never been saved (`null === get_option(...)`), `negar_theme_get_stories()` returns the 10 reviewed backward-compatible demonstration stories. Demo stories strictly present visual placeholder media without fabricated product names, cards, or fake links (`has_product = false`, `product_title = ''`, `product_link = ''`).
+  - *First-save safety:* Opening the admin settings tab in the unconfigured state displays an informational banner explaining demo preview mode and starts the editable collection empty (`0` cards). Saving the form never silently copies demo fallbacks or creates broken managed records.
+  - *Explicit empty collection:* If the option exists and `stories` is empty (`0` stories), it represents an explicit administrative decision to disable stories: `template-parts/home/story-circles.php` omits both the `.story-shop` section and `#modal-story-shop` dialog completely from the DOM.
+- **Validation, deduplication & omission:**
   - Clamped to at most 30 stories.
+  - Story IDs are sanitized with `sanitize_key()`, deduplicated, and kept stable across legitimate reordering.
+  - Titles and badges enforce length bounds (100 characters for title, 40 for badge, 50 for CTA label).
   - Attachment IDs for thumbnails, images, and posters require verified image attachments (`wp_attachment_is_image`).
-  - Video attachment IDs require verified video mime types (`str_starts_with( get_post_mime_type( $id ), 'video/' )`).
+  - Video attachment IDs require verified video mime types (`str_starts_with( get_post_mime_type( $id ), 'video/' )`). Invalid non-video attachments are sanitized to `0`.
   - Durations are clamped between 3 and 30 seconds (default 5).
   - Associated products require published, catalog-visible WooCommerce products (`negar_theme_sanitize_product_ids()`). Unmatched or missing products resolve safely to 0 and suppress commercial claims.
   - Destination URLs enforce safe site-relative paths or HTTP(S) schemes (`negar_theme_sanitize_media_link()`), rejecting `javascript:`, `data:`, or malformed URLs.
+  - *Unusable media omission:* Enabled stories lacking usable main media (a video story with `video_id = 0`, an image story with `image_id = 0`, or any story without a valid thumbnail) are automatically excluded from the public storefront collection (`negar_theme_get_stories( true )`) to prevent broken public slides, while remaining preserved and editable in the admin interface (`$only_enabled = false`) alongside warning notices.
+- **CTA and commerce priority:**
+  1. *Priority 1 (WooCommerce Product):* If an associated product is published and catalog-visible, the card displays its real product title, live price, and direct permalink.
+  2. *Priority 2 (Editorial CTA):* If no product is associated but a safe custom CTA URL is configured, the footer displays an editorial CTA with that URL without fabricating a product title.
+  3. *Priority 3 (Hidden Footer):* If neither a product nor a safe custom CTA exists, the footer card is completely hidden.
 - **Story playback & interactions:**
-  - *Video stories:* Native HTML5 `<video playsinline webkit-playsinline preload="metadata">` playback is driven by actual media duration (`currentTime / duration`). Stories advance upon the authoritative `ended` event. Video stories never use a fixed 5-second timer.
+  - *Video stories:* Native HTML5 `<video playsinline webkit-playsinline preload="none">` playback ensures videos are not downloaded when the homepage loads. Playback is driven by actual media duration (`currentTime / duration`) when finite and positive. Stories advance strictly upon the authoritative `ended` event. Video stories never fall through to a fixed 5-second image timer.
+  - *Autoplay & error handling:* Autoplay policies blocking unmuted audio fall back to muted playback; if muted autoplay is also blocked or media fails, accessible user-recoverable Play and Next-Story buttons are presented inside `#story-modal-body`.
   - *Image stories:* Driven by the configured story duration (3–30s).
-  - *Controls & accessibility:* Press/hold pauses progress and playback; release resumes. Story circles are keyboard-accessible `<button>` elements with `aria-haspopup="dialog"`. Opening traps focus within the `#modal-story-shop` dialog. Pressing `Escape` or the close button unloads active media, resets progress, and restores focus to the activating circle button.
+  - *Controls & accessibility:* Press/hold pauses progress and playback; release resumes. Tap duration is measured so holding to pause never accidentally triggers next/previous navigation. Navigation zones and arrow keys preserve correct RTL semantics (Left = Next, Right = Previous).
+  - *Focus trap & dialog lifecycle:* Story circles are keyboard-accessible `<button>` elements with `aria-haspopup="dialog"`. Opening traps focus within visible dialog controls and locks body scroll while recording the prior overflow style. Closing restores the original body scroll, unloads active media, and returns focus to the activating circle button. Visibility changes (`document.hidden`) automatically pause playback.
 
 ## Planned schema additions
 
