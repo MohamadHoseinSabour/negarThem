@@ -580,6 +580,26 @@ try {
 		exit( 0 );
 	}
 
+	if ( 'set-typography' === $action ) {
+		$font_family         = isset( $argv[2] ) ? $argv[2] : 'vazirmatn';
+		$heading_font_family = isset( $argv[3] ) ? $argv[3] : 'vazirmatn';
+		$base_font_size      = isset( $argv[4] ) ? (int) $argv[4] : 16;
+		$heading_scale       = isset( $argv[5] ) ? $argv[5] : 'normal';
+		$settings            = negar_theme_test_save_group(
+			'typography',
+			array(
+				'typography' => array(
+					'font_family'         => $font_family,
+					'heading_font_family' => $heading_font_family,
+					'base_font_size'      => $base_font_size,
+					'heading_scale'       => $heading_scale,
+				),
+			)
+		);
+		echo wp_json_encode( $settings['typography'] );
+		exit( 0 );
+	}
+
 	if ( 'verify' !== $action ) {
 		throw new InvalidArgumentException( 'Unknown action.' );
 	}
@@ -2122,6 +2142,127 @@ try {
 		negar_theme_test_cleanup_brand_fixture( $term_id, $token );
 	}
 	$active_brand_fixtures = array();
+
+	// --- Phase 8: Branding, Typography & Colors Regression Tests ---
+
+	// 1. Unauthorized settings writes to typography rejected
+	wp_set_current_user( 0 );
+	$_POST['negar_theme_settings_tab'] = 'typography';
+	$unauth_typo = negar_theme_sanitize_settings(
+		array(
+			'typography' => array(
+				'font_family' => 'tahoma',
+			),
+		)
+	);
+	wp_set_current_user( $admin_user_id );
+	$results['typography_unauthorized_rejected'] = ! empty( get_settings_errors( 'negar_theme_settings' ) );
+
+	// 2. Selected font family persists and group isolation is maintained
+	$saved_typo = negar_theme_test_save_group(
+		'typography',
+		array(
+			'typography' => array(
+				'font_family'         => 'tahoma',
+				'heading_font_family' => 'system',
+				'base_font_size'      => 17,
+				'heading_scale'       => 'compact',
+			),
+		)
+	);
+	$results['typography_persistence']     = 'tahoma' === $saved_typo['typography']['font_family']
+		&& 'system' === $saved_typo['typography']['heading_font_family']
+		&& 17 === $saved_typo['typography']['base_font_size']
+		&& 'compact' === $saved_typo['typography']['heading_scale'];
+	$results['typography_group_isolation'] = isset( $saved_typo['schema_version'] );
+
+	// 3. Typography getters reflect saved settings
+	$results['typography_getters'] = 'tahoma' === negar_theme_typography( 'font_family' )
+		&& 'system' === negar_theme_typography( 'heading_font_family' )
+		&& 17 === negar_theme_base_font_size()
+		&& 'compact' === negar_theme_heading_scale()
+		&& false !== strpos( negar_theme_font_stack( 'font_family' ), 'Tahoma' )
+		&& false !== strpos( negar_theme_font_stack( 'heading_font_family' ), '-apple-system' );
+
+	// 4. Invalid font-family values fall back to defaults
+	$invalid_typo = negar_theme_test_save_group(
+		'typography',
+		array(
+			'typography' => array(
+				'font_family'         => 'invalid-hacked-font',
+				'heading_font_family' => 'comic-sans-fake',
+				'base_font_size'      => 99,
+				'heading_scale'       => 'gigantic-ultra',
+			),
+		)
+	);
+	$results['typography_whitelist_fallback'] = 'vazirmatn' === $invalid_typo['typography']['font_family']
+		&& 'vazirmatn' === $invalid_typo['typography']['heading_font_family']
+		&& 16 === $invalid_typo['typography']['base_font_size']
+		&& 'normal' === $invalid_typo['typography']['heading_scale'];
+
+	// 5. Base font size clamping (14-18px)
+	$clamped_low = negar_theme_test_save_group(
+		'typography',
+		array(
+			'typography' => array(
+				'base_font_size' => 10,
+			),
+		)
+	);
+	$clamped_high = negar_theme_test_save_group(
+		'typography',
+		array(
+			'typography' => array(
+				'base_font_size' => 25,
+			),
+		)
+	);
+	$results['typography_size_clamping'] = 16 === $clamped_low['typography']['base_font_size']
+		&& 16 === $clamped_high['typography']['base_font_size'];
+
+	// 6. Restoring default typography works
+	$_POST['negar_theme_settings_tab']              = 'typography';
+	$_POST['negar_theme_restore_default_typography'] = '1';
+	$restored_typo = negar_theme_sanitize_settings( array() );
+	unset( $_POST['negar_theme_restore_default_typography'] );
+	$results['typography_restore_defaults'] = 'vazirmatn' === $restored_typo['typography']['font_family']
+		&& 'vazirmatn' === $restored_typo['typography']['heading_font_family']
+		&& 16 === $restored_typo['typography']['base_font_size']
+		&& 'normal' === $restored_typo['typography']['heading_scale'];
+
+	// 7. Restoring default colors restores canonical values
+	$_POST['negar_theme_settings_tab']          = 'colors';
+	$_POST['negar_theme_restore_default_colors'] = '1';
+	$restored_colors = negar_theme_sanitize_settings( array() );
+	unset( $_POST['negar_theme_restore_default_colors'] );
+	update_option( $option, $restored_colors );
+	$results['colors_restore_defaults'] = '#e90544' === negar_theme_color( 'primary' )
+		&& '#c40439' === negar_theme_color( 'secondary' );
+
+	// 8. Frontend CSS design tokens include typography variables and body font-size
+	negar_theme_test_save_group(
+		'typography',
+		array(
+			'typography' => array(
+				'font_family'         => 'system',
+				'heading_font_family' => 'tahoma',
+				'base_font_size'      => 15,
+				'heading_scale'       => 'compact',
+			),
+		)
+	);
+	ob_start();
+	negar_shop_customizer_css();
+	$typo_css = ob_get_clean();
+	$results['frontend_typography_tokens'] = false !== strpos( $typo_css, '--font-primary: -apple-system' )
+		&& false !== strpos( $typo_css, '--font-heading: Tahoma' )
+		&& false !== strpos( $typo_css, 'body { font-size: 15px; }' )
+		&& false !== strpos( $typo_css, 'h1, .h1 { font-size: 1.6875rem; }' );
+
+	// 9. Core custom logo resolution via negar_theme_logo_url()
+	$results['branding_logo_url_fallback'] = ! empty( negar_theme_logo_url() )
+		&& ( false !== strpos( negar_theme_logo_url(), 'logo.svg' ) );
 
 	negar_theme_test_restore( $option, $media_option, $pack_option, $story_option, $brand_option, $mods, $verify_snapshot );
 

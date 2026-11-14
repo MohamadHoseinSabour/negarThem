@@ -102,8 +102,14 @@
 - **Phase 10:** Settings backup/import/export
 - **Phase 11:** Final QA and release preparation
 
-- [ ] **T210** Approve Typography controls with safe font-loading and performance
-  limits (Phase 8).
+- [x] **TYPO-8.1** Register `typography` group in `negar_theme_options` with canonical defaults (`font_family => 'vazirmatn'`, `heading_font_family => 'vazirmatn'`, `base_font_size => 16`, `heading_scale => 'normal'`).
+- [x] **TYPO-8.2** Implement whitelisted font families (`vazirmatn`, `system`, `tahoma`), base font size clamping (14–18px), and heading scale options (`compact`, `normal`, `large`) with strict sanitization and default fallbacks.
+- [x] **TYPO-8.3** Add dedicated Typography tab in WordPress admin (`?page=negar-theme-settings&tab=typography`) with select controls, number input, heading scale selector, and Persian live typography preview box.
+- [x] **TYPO-8.4** Add "Restore Defaults" reset actions with confirmation dialogs for both Colors (restoring canonical crimson `#e90544` / `#c40439`) and Typography.
+- [x] **TYPO-8.5** Connect core WordPress Site Identity controls for site logo and icon (`custom_logo`), providing `negar_theme_logo_url()` helper with demo SVG fallback, linked from the General tab.
+- [x] **TYPO-8.6** Connect typography and color tokens to frontend CSS via `negar_shop_customizer_css()`, generating `--font-primary`, `--font-heading`, `body { font-size: Xpx; }`, and heading scale rules.
+- [x] **TYPO-8.7** Optimize font enqueueing in `inc/enqueue.php`: conditionally load Google Fonts Vazirmatn and resource hints only when required; expose resolved family name in `kavehShopData.fontFamily`.
+- [x] **TYPO-8.8** Add automated regression tests in `tests/theme-settings-regression.php` and `tests/theme-settings-regression.js` covering persistence, validation fallback, clamping, restore defaults, computed styles, and Site Identity linking.
 - [ ] **T211** Design an SMS-provider boundary with separately stored secrets;
   never export credentials or expose them to the browser (Phase 9).
 - [ ] **T212** Design backup/import/export validation, authorization, rollback and

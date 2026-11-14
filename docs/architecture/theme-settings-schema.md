@@ -38,6 +38,12 @@ Customizer fallback or code default”; a present key with an empty string means
     }
   },
   "colors": { "primary": "#e90544", "secondary": "#c40439" },
+  "typography": {
+    "font_family": "vazirmatn",
+    "heading_font_family": "vazirmatn",
+    "base_font_size": 16,
+    "heading_scale": "normal"
+  },
   "header": { "announcement": "" },
   "footer": { "about": "", "copyright": "" },
   "contact": { "phone": "", "email": "", "address": "", "hours": "", "map_url": "" },
@@ -64,6 +70,22 @@ fallbacks are the existing storefront crimson `#e90544` (primary) and `#c40439`
 (secondary), while *any* valid saved value remains effective, including the former
 Customizer defaults `#059669` and `#e11d48`. An explicit empty color is preserved
 in storage and resolves to the canonical crimson fallback at render time.
+
+## Typography and Branding Schema
+
+`negar_theme_typography( $key = null )` resolves typography configuration with strict
+whitelisting and bounded defaults. Supported font families are:
+- `vazirmatn`: `'Vazirmatn', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif` (default webfont)
+- `system`: `-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Tahoma, Arial, sans-serif` (dependency-free stack)
+- `tahoma`: `Tahoma, -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif` (Persian system stack)
+
+Base font size is strictly clamped between 14px and 18px (default 16px).
+Heading scale supports `compact` (0.9x), `normal` (1.0x), and `large` (1.1x).
+
+Core WordPress Site Identity retains canonical ownership of the site title, site icon (favicon),
+and custom logo (`custom_logo` theme mod). The helper `negar_theme_logo_url()` resolves
+the uploaded attachment image, falling back cleanly to `/kaveh-demo/kaveh-demo/general/logo.svg`
+or `/assets/images/logo.svg`.
 
 ## Storage boundaries
 

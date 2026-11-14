@@ -716,6 +716,68 @@ async function run() {
     assert.strictEqual(await mobileBrandSlides.first().isVisible(), true, 'First brand slide must be visible on mobile');
     await brandMobilePage.close();
 
+    // --- Phase 8: Typography & Color Settings Browser Verification ---
+    // 1. Visit Typography tab in admin
+    await page.goto(BASE_URL + '/wp-admin/options-general.php?page=negar-theme-settings&tab=typography', { waitUntil: 'domcontentloaded' });
+    const fontSelect = page.locator('#negar-font-family');
+    const headingFontSelect = page.locator('#negar-heading-font-family');
+    const baseFontSizeInput = page.locator('#negar-base-font-size');
+    const headingScaleSelect = page.locator('#negar-heading-scale');
+    const typoPreview = page.locator('.negar-typography-preview');
+
+    assert.strictEqual(await fontSelect.isVisible(), true, 'Font family select must be visible');
+    assert.strictEqual(await headingFontSelect.isVisible(), true, 'Heading font family select must be visible');
+    assert.strictEqual(await baseFontSizeInput.isVisible(), true, 'Base font size input must be visible');
+    assert.strictEqual(await headingScaleSelect.isVisible(), true, 'Heading scale select must be visible');
+    assert.strictEqual(await typoPreview.isVisible(), true, 'Typography preview box must be visible');
+
+    // 2. Change font and font-size in admin, save, and verify persistence
+    await fontSelect.selectOption('system');
+    await headingFontSelect.selectOption('tahoma');
+    await baseFontSizeInput.fill('17');
+    await headingScaleSelect.selectOption('compact');
+    await Promise.all([
+      page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
+      page.locator('form input[type="submit"]').click(),
+    ]);
+
+    assert.strictEqual(await page.locator('#negar-font-family').inputValue(), 'system', 'Font family must persist after save');
+    assert.strictEqual(await page.locator('#negar-heading-font-family').inputValue(), 'tahoma', 'Heading font family must persist after save');
+    assert.strictEqual(await page.locator('#negar-base-font-size').inputValue(), '17', 'Base font size must persist after save');
+    assert.strictEqual(await page.locator('#negar-heading-scale').inputValue(), 'compact', 'Heading scale must persist after save');
+
+    // 3. Frontend verification of computed styles
+    await page.goto(BASE_URL, { waitUntil: 'domcontentloaded' });
+    const computedTypo = await page.evaluate(() => {
+      const docStyle = getComputedStyle(document.documentElement);
+      const bodyStyle = getComputedStyle(document.body);
+      return {
+        fontPrimary: docStyle.getPropertyValue('--font-primary').trim(),
+        fontHeading: docStyle.getPropertyValue('--font-heading').trim(),
+        bodyFontSize: bodyStyle.fontSize,
+      };
+    });
+    assert(computedTypo.fontPrimary.includes('-apple-system'), 'Frontend --font-primary token must reflect system font');
+    assert(computedTypo.fontHeading.includes('Tahoma'), 'Frontend --font-heading token must reflect Tahoma font');
+    assert.strictEqual(computedTypo.bodyFontSize, '17px', 'Frontend body font-size must reflect saved base_font_size (17px)');
+
+    // 4. Restore defaults via admin button
+    await page.goto(BASE_URL + '/wp-admin/options-general.php?page=negar-theme-settings&tab=typography', { waitUntil: 'domcontentloaded' });
+    page.once('dialog', async (dialog) => {
+      await dialog.accept();
+    });
+    await Promise.all([
+      page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
+      page.locator('button[name="negar_theme_restore_default_typography"]').click(),
+    ]);
+    assert.strictEqual(await page.locator('#negar-font-family').inputValue(), 'vazirmatn', 'Restoring typography defaults must reset font family to vazirmatn');
+    assert.strictEqual(await page.locator('#negar-base-font-size').inputValue(), '16', 'Restoring typography defaults must reset base size to 16');
+
+    // 5. General tab Site Identity branding link
+    await page.goto(BASE_URL + '/wp-admin/options-general.php?page=negar-theme-settings&tab=general', { waitUntil: 'domcontentloaded' });
+    const siteIdentityBtn = page.locator('a[href*="title_tagline"]');
+    assert.strictEqual(await siteIdentityBtn.isVisible(), true, 'General tab must link to WordPress Site Identity controls');
+
     console.log('[PASS] Theme settings persistence and rendered-token regression checks passed.');
   } catch (error) {
     failure = error;

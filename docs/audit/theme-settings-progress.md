@@ -185,7 +185,7 @@
 **Commits:**
 - `8eb3f0f` `feat(settings): add WooCommerce brand management`
 - `b85b710` `feat(home): render real WooCommerce brands`
-- `92a3c77` `test(settings): verify brand management and carousel`
+- `a372352` `test(settings): verify brand management and carousel`
 
 ### Summary of Accomplishments:
 - **Brand Schema & Storage Boundary:** Registered `negar_theme_brand_options` (`NEGAR_THEME_BRAND_OPTION`, schema version 1) under `negar_theme_brand_settings`, marked strictly non-autoloaded (`wp_set_option_autoload( ..., 'no' )`), maintaining complete isolation from other settings groups.
@@ -208,7 +208,37 @@
   - `tests/theme-settings-regression.js`: Browser tests verifying AJAX brand search, adding, keyboard reordering, form persistence, frontend DOM rendering of real brand names and archive links, absence of fake ratings/counts, and 375px mobile viewport responsiveness.
   - Test suites: `npm run test:lint` (114 PHP files passed), `npm run test:settings` (100% passed), `npm run test:e2e` (37 passed, 0 failed), `npm test` (all green, exit code 0).
 
+## Phase 8 — Branding, Typography and Colors
+
+**Status:** PASS (COMPLETE & VERIFIED)
+**Baseline:** `a372352123d4a0fc7a5ccdc1e0c4b22c67537b98`
+**Commits:**
+- `dc9ea81` `feat(settings): add practical typography controls`
+- `2fa322a` `feat(theme): apply branding typography and color settings`
+- [test(settings): verify phase eight settings and sync docs]
+
+### Summary of Accomplishments:
+- **Typography Schema & Settings Architecture:**
+  - Added `typography` group to `negar_theme_options` with defaults: `font_family => 'vazirmatn'`, `heading_font_family => 'vazirmatn'`, `base_font_size => 16`, `heading_scale => 'normal'`.
+  - Whitelisted font stacks: `vazirmatn` (Google Fonts default), `system` (dependency-free stack), and `tahoma` (Persian system standard).
+  - Bounded base font size (clamped 14–18px) and validated heading scales (`compact`, `normal`, `large`).
+  - Added dedicated Typography tab under Settings → تنظیمات قالب نگار → تایپوگرافی with form controls and Persian live preview box.
+  - Added "Restore Defaults" reset actions for both Colors (restoring canonical crimson `#e90544` / `#c40439`) and Typography.
+- **Branding & Site Identity Ownership:**
+  - Maintained core WordPress Site Identity ownership of site title, icon, and custom logo.
+  - Provided `negar_theme_logo_url()` helper across desktop header (`main-header.php`), mobile header (`mobile-header.php`), and JSON-LD SEO schema (`seo-schema.php`), prioritizing Customizer `custom_logo` with clean demo SVG fallback.
+  - Added direct admin link in the General tab to WordPress Customizer Site Identity controls.
+- **Frontend Design Token Integration & Performance:**
+  - Emitted `--font-primary`, `--font-heading`, `body { font-size: Xpx; }`, and heading scale CSS rules via `negar_shop_customizer_css()`.
+  - Optimized resource loading in `inc/enqueue.php`: conditionally enqueues Google Fonts Vazirmatn and preconnect resource hints only when `vazirmatn` is selected for body or heading.
+  - Updated `kavehShopData.fontFamily` to reflect the resolved body font name.
+- **Comprehensive Regression Verification:**
+  - PHP regression tests in `tests/theme-settings-regression.php` verifying unauthorized write rejection, persistence, group isolation, whitelist fallback, base size clamping, restore defaults for typography and colors, and custom logo resolution.
+  - Playwright browser tests in `tests/theme-settings-regression.js` verifying Typography tab controls, form persistence, frontend computed styles (`--font-primary`, `--font-heading`, `bodyFontSize`), restore defaults dialog, and General tab Site Identity link.
+  - Clean database snapshot restoration verified: zero test pollution in WordPress options or theme mods.
+  - Test suites: `npm run test:lint` (PASS, 114 PHP files), `npm run test:settings` (PASS), `npm run test:e2e` (37 passed, 0 failed), `npm test` (all green, exit code 0).
+
 ## Next phase
 
-Phase 8: Branding, typography and colors.
-Following approved roadmap: Phase 8 (Typography & Colors), Phase 9 (SMS/OTP), Phase 10 (Backup/Export), Phase 11 (Release QA & Packaging).
+Following approved roadmap: Phase 9 (SMS/OTP), Phase 10 (Backup/Export), Phase 11 (Release QA & Packaging).
+Phases 9, 10, and 11 remain open.

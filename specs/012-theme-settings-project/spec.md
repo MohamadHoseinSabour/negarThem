@@ -119,5 +119,17 @@ sorting, selector and catalog-visibility hardening.
   The homepage carousel displays genuine brand names, logos and archive links,
   hides arrows when single, and omits the entire section when empty. Fabricated ratings,
   counts, and demo brand names are completely removed.
+- Practical typography controls are integrated into the main `negar_theme_options`
+  under the `typography` group with bounded base font size (14–18px), whitelisted font
+  families (`vazirmatn`, `system`, `tahoma`), and heading scale options (`compact`,
+  `normal`, `large`). The typography settings emit frontend CSS tokens (`--font-primary`,
+  `--font-heading`, base body font-size and scaled headings) and optimize font loading by
+  conditionally enqueueing Google Fonts and resource hints only when `vazirmatn` is active.
+- Core WordPress Site Identity owns site logo, site title, and favicon. The theme settings
+  General tab links directly to the Customizer Site Identity panel and provides
+  `negar_theme_logo_url()` to resolve custom logos with clean demo fallbacks across desktop
+  and mobile headers, while preserving the theme's display-only brand label.
+- Dedicated "Restore Defaults" actions are provided for both Colors (restoring canonical
+  crimson `#e90544` / `#c40439`) and Typography (restoring Vazirmatn, 16px, normal scale).
 - Documentation keys exactly match implementation and the dedicated spec, plan and
   task list remain separate from specification 009.
