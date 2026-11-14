@@ -34,6 +34,7 @@ function negar_theme_settings_defaults() {
 		'texts'          => array(),
 		'layout'         => array(),
 		'colors'         => array(),
+		'typography'     => negar_theme_typography_defaults(),
 		'header'         => array(),
 		'footer'         => array(),
 		'contact'        => array(),
@@ -112,6 +113,166 @@ function negar_theme_color( $key ) {
  */
 function negar_theme_brand_label() {
 	return (string) negar_theme_setting( 'branding', 'site_label', get_bloginfo( 'name' ) );
+}
+
+/**
+ * Return the default typography settings.
+ *
+ * @return array<string, mixed>
+ */
+function negar_theme_typography_defaults() {
+	return array(
+		'font_family'         => 'vazirmatn',
+		'heading_font_family' => 'vazirmatn',
+		'base_font_size'      => 16,
+		'heading_scale'       => 'normal',
+	);
+}
+
+/**
+ * Return the supported font family options and their CSS stacks.
+ *
+ * Only dependency-free or verified font stacks are provided.
+ *
+ * @return array<string, array{label: string, stack: string, name: string}>
+ */
+function negar_theme_font_families() {
+	return array(
+		'vazirmatn' => array(
+			'label' => __( 'وزیرمتن (Vazirmatn - وب‌فونت پیش‌فرض)', 'negar-shop' ),
+			'stack' => "'Vazirmatn', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
+			'name'  => 'Vazirmatn',
+		),
+		'system'    => array(
+			'label' => __( 'فونت سیستمی (System Font Stack - بدون وابستگی به اینترنت)', 'negar-shop' ),
+			'stack' => "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Tahoma, Arial, sans-serif",
+			'name'  => 'System',
+		),
+		'tahoma'    => array(
+			'label' => __( 'تاهما (Tahoma - استاندارد سیستم‌های فارسی)', 'negar-shop' ),
+			'stack' => "Tahoma, -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif",
+			'name'  => 'Tahoma',
+		),
+	);
+}
+
+/**
+ * Return the supported heading font size scale options.
+ *
+ * @return array<string, array{label: string, factor: float}>
+ */
+function negar_theme_heading_scales() {
+	return array(
+		'compact' => array(
+			'label'  => __( 'فشرده (۹۰٪)', 'negar-shop' ),
+			'factor' => 0.9,
+		),
+		'normal'  => array(
+			'label'  => __( 'عادی (۱۰۰٪)', 'negar-shop' ),
+			'factor' => 1.0,
+		),
+		'large'   => array(
+			'label'  => __( 'بزرگ (۱۱۰٪)', 'negar-shop' ),
+			'factor' => 1.1,
+		),
+	);
+}
+
+/**
+ * Resolve and validate the typography settings.
+ *
+ * @param string|null $key Optional specific key to retrieve.
+ * @return mixed
+ */
+function negar_theme_typography( $key = null ) {
+	$defaults = negar_theme_typography_defaults();
+	$settings = negar_theme_settings_raw();
+	$stored   = isset( $settings['typography'] ) && is_array( $settings['typography'] ) ? $settings['typography'] : array();
+
+	$data = wp_parse_args( $stored, $defaults );
+
+	$families = negar_theme_font_families();
+	if ( ! array_key_exists( $data['font_family'], $families ) ) {
+		$data['font_family'] = $defaults['font_family'];
+	}
+	if ( ! array_key_exists( $data['heading_font_family'], $families ) ) {
+		$data['heading_font_family'] = $defaults['heading_font_family'];
+	}
+
+	$size = absint( $data['base_font_size'] );
+	if ( $size < 14 || $size > 18 ) {
+		$size = $defaults['base_font_size'];
+	}
+	$data['base_font_size'] = $size;
+
+	$scales = negar_theme_heading_scales();
+	if ( ! array_key_exists( $data['heading_scale'], $scales ) ) {
+		$data['heading_scale'] = $defaults['heading_scale'];
+	}
+
+	if ( null !== $key ) {
+		return isset( $data[ $key ] ) ? $data[ $key ] : ( isset( $defaults[ $key ] ) ? $defaults[ $key ] : null );
+	}
+
+	return $data;
+}
+
+/**
+ * Return the CSS font-family stack for body or heading.
+ *
+ * @param string $setting_key Either 'font_family' or 'heading_font_family'.
+ * @return string
+ */
+function negar_theme_font_stack( $setting_key = 'font_family' ) {
+	$families = negar_theme_font_families();
+	$selected = negar_theme_typography( $setting_key );
+
+	if ( isset( $families[ $selected ]['stack'] ) ) {
+		return $families[ $selected ]['stack'];
+	}
+
+	return $families['vazirmatn']['stack'];
+}
+
+/**
+ * Return the validated base font size in pixels (14-18).
+ *
+ * @return int
+ */
+function negar_theme_base_font_size() {
+	return (int) negar_theme_typography( 'base_font_size' );
+}
+
+/**
+ * Return the validated heading scale key ('compact', 'normal', 'large').
+ *
+ * @return string
+ */
+function negar_theme_heading_scale() {
+	return (string) negar_theme_typography( 'heading_scale' );
+}
+
+/**
+ * Return the site logo URL, prioritizing WordPress Customizer custom_logo.
+ *
+ * @return string
+ */
+function negar_theme_logo_url() {
+	$custom_logo_id = get_theme_mod( 'custom_logo' );
+	if ( $custom_logo_id ) {
+		$image = wp_get_attachment_image_src( $custom_logo_id, 'full' );
+		if ( ! empty( $image[0] ) ) {
+			return $image[0];
+		}
+	}
+
+	$upload_dir = wp_upload_dir();
+	$logo_svg   = $upload_dir['basedir'] . '/kaveh-demo/kaveh-demo/general/logo.svg';
+	if ( file_exists( $logo_svg ) ) {
+		return $upload_dir['baseurl'] . '/kaveh-demo/kaveh-demo/general/logo.svg';
+	}
+
+	return get_template_directory_uri() . '/assets/images/logo.svg';
 }
 
 /**
@@ -2489,7 +2650,7 @@ function negar_theme_sanitize_settings( $submitted ) {
 	$current   = negar_theme_settings_raw();
 	$raw_tab   = isset( $_POST['negar_theme_settings_tab'] ) ? wp_unslash( $_POST['negar_theme_settings_tab'] ) : '';
 	$tab       = is_scalar( $raw_tab ) ? sanitize_key( $raw_tab ) : '';
-	$allowed   = array( 'general', 'texts', 'layout', 'products', 'colors', 'header_footer' );
+	$allowed   = array( 'general', 'texts', 'layout', 'products', 'colors', 'typography', 'header_footer' );
 
 	if ( ! in_array( $tab, $allowed, true ) ) {
 		return $current;
@@ -2560,9 +2721,53 @@ function negar_theme_sanitize_settings( $submitted ) {
 	}
 
 	if ( 'colors' === $tab ) {
-		foreach ( array( 'primary', 'secondary' ) as $key ) {
-			$value = isset( $submitted['colors'][ $key ] ) ? sanitize_hex_color( $submitted['colors'][ $key ] ) : '';
-			$current['colors'][ $key ] = $value ? $value : '';
+		if ( ! empty( $_POST['negar_theme_restore_default_colors'] ) ) {
+			$current['colors'] = array(
+				'primary'   => '',
+				'secondary' => '',
+			);
+		} else {
+			foreach ( array( 'primary', 'secondary' ) as $key ) {
+				$value = isset( $submitted['colors'][ $key ] ) ? sanitize_hex_color( $submitted['colors'][ $key ] ) : '';
+				$current['colors'][ $key ] = $value ? $value : '';
+			}
+		}
+	}
+
+	if ( 'typography' === $tab ) {
+		if ( ! empty( $_POST['negar_theme_restore_default_typography'] ) ) {
+			$current['typography'] = negar_theme_typography_defaults();
+		} else {
+			$defaults       = negar_theme_typography_defaults();
+			$font_families  = array_keys( negar_theme_font_families() );
+			$heading_scales = array_keys( negar_theme_heading_scales() );
+
+			$font_family = isset( $submitted['typography']['font_family'] ) ? sanitize_key( $submitted['typography']['font_family'] ) : $defaults['font_family'];
+			if ( ! in_array( $font_family, $font_families, true ) ) {
+				$font_family = $defaults['font_family'];
+			}
+
+			$heading_font_family = isset( $submitted['typography']['heading_font_family'] ) ? sanitize_key( $submitted['typography']['heading_font_family'] ) : $defaults['heading_font_family'];
+			if ( ! in_array( $heading_font_family, $font_families, true ) ) {
+				$heading_font_family = $defaults['heading_font_family'];
+			}
+
+			$base_font_size = isset( $submitted['typography']['base_font_size'] ) ? absint( $submitted['typography']['base_font_size'] ) : $defaults['base_font_size'];
+			if ( $base_font_size < 14 || $base_font_size > 18 ) {
+				$base_font_size = $defaults['base_font_size'];
+			}
+
+			$heading_scale = isset( $submitted['typography']['heading_scale'] ) ? sanitize_key( $submitted['typography']['heading_scale'] ) : $defaults['heading_scale'];
+			if ( ! in_array( $heading_scale, $heading_scales, true ) ) {
+				$heading_scale = $defaults['heading_scale'];
+			}
+
+			$current['typography'] = array(
+				'font_family'         => $font_family,
+				'heading_font_family' => $heading_font_family,
+				'base_font_size'      => $base_font_size,
+				'heading_scale'       => $heading_scale,
+			);
 		}
 	}
 
@@ -2772,7 +2977,8 @@ function negar_theme_settings_tabs() {
 		'banners'         => __( 'بنرها و پکیج‌ها', 'negar-shop' ),
 		'stories'         => __( 'استوری‌ها', 'negar-shop' ),
 		'brands'          => __( 'برندها', 'negar-shop' ),
-		'colors'          => __( 'رنگ و تایپوگرافی', 'negar-shop' ),
+		'colors'          => __( 'رنگ‌ها', 'negar-shop' ),
+		'typography'      => __( 'تایپوگرافی', 'negar-shop' ),
 		'header_footer'   => __( 'هدر، فوتر و تماس', 'negar-shop' ),
 		'sms'             => __( 'سامانهٔ پیامکی', 'negar-shop' ),
 		'backup'          => __( 'پشتیبان‌گیری و درون‌ریزی', 'negar-shop' ),
@@ -3054,7 +3260,7 @@ function negar_theme_render_settings_page() {
 			<?php endforeach; ?>
 		</nav>
 		<?php settings_errors( 'negar_theme_settings' ); settings_errors( 'negar_theme_media_settings' ); settings_errors( 'negar_theme_story_settings' ); settings_errors( 'negar_theme_brand_settings' ); ?>
-		<?php if ( in_array( $active_tab, array( 'general', 'texts', 'layout', 'products', 'colors', 'header_footer', 'banners', 'stories', 'brands' ), true ) ) : ?>
+		<?php if ( in_array( $active_tab, array( 'general', 'texts', 'layout', 'products', 'colors', 'typography', 'header_footer', 'banners', 'stories', 'brands' ), true ) ) : ?>
 			<form action="options.php" method="post">
 				<?php
 				if ( 'banners' === $active_tab ) {
@@ -3082,6 +3288,23 @@ function negar_theme_render_settings_page() {
 				<table class="form-table" role="presentation">
 					<?php if ( 'general' === $active_tab ) : ?>
 						<?php negar_theme_settings_field( 'negar-site-label', __( 'نام نمایشی فروشگاه', 'negar-shop' ), NEGAR_THEME_SETTINGS_OPTION . '[branding][site_label]', negar_theme_brand_label(), 'text', __( 'در بخش‌های نمایشی قالب استفاده می‌شود و نام سایت وردپرس را تغییر نمی‌دهد.', 'negar-shop' ) ); ?>
+						<tr class="negar-theme-settings__section">
+							<th scope="row"><?php esc_html_e( 'لوگو و هویت دیداری', 'negar-shop' ); ?></th>
+							<td>
+								<p class="description">
+									<?php esc_html_e( 'لوگو، آیکون سایت (فاوآیکون) و عنوان اصلی سایت وردپرس از طریق بخش استاندارد هویت سایت وردپرس مدیریت می‌شوند.', 'negar-shop' ); ?>
+								</p>
+								<p style="margin-top: 10px;">
+									<a class="button button-secondary" href="<?php echo esc_url( admin_url( 'customize.php?autofocus[section]=title_tagline' ) ); ?>" target="_blank" rel="noopener">
+										<?php esc_html_e( 'مدیریت لوگو و آیکون در هویت سایت وردپرس ↗', 'negar-shop' ); ?>
+									</a>
+								</p>
+								<div style="margin-top: 14px; padding: 12px; background: #fff; border: 1px solid #c3c4c7; border-radius: 6px; display: inline-block;">
+									<span style="display: block; font-size: 12px; color: #64748b; margin-bottom: 6px;"><?php esc_html_e( 'پیش‌نمایش لوگوی فعال فعلی:', 'negar-shop' ); ?></span>
+									<img src="<?php echo esc_url( negar_theme_logo_url() ); ?>" alt="<?php echo esc_attr( negar_theme_brand_label() ); ?>" style="max-height: 44px; width: auto; vertical-align: middle;">
+								</div>
+							</td>
+						</tr>
 					<?php elseif ( 'texts' === $active_tab ) : ?>
 						<?php foreach ( negar_theme_text_registry() as $component => $section ) : ?>
 							<tr class="negar-theme-settings__section"><td colspan="2"><h2><?php echo esc_html( $section['label'] ); ?></h2><p class="description"><?php echo esc_html( $section['description'] ); ?></p></td></tr>
@@ -3092,6 +3315,61 @@ function negar_theme_render_settings_page() {
 					<?php elseif ( 'colors' === $active_tab ) : ?>
 						<?php negar_theme_settings_field( 'negar-primary-color', __( 'رنگ اصلی', 'negar-shop' ), NEGAR_THEME_SETTINGS_OPTION . '[colors][primary]', negar_theme_color( 'primary' ), 'color', __( 'برای دکمه‌ها، لینک‌ها و اجزای کلیدی قالب.', 'negar-shop' ) ); ?>
 						<?php negar_theme_settings_field( 'negar-secondary-color', __( 'رنگ ثانویه', 'negar-shop' ), NEGAR_THEME_SETTINGS_OPTION . '[colors][secondary]', negar_theme_color( 'secondary' ), 'color', __( 'برای پیشنهادها و اجزای مکمل قالب.', 'negar-shop' ) ); ?>
+					<?php elseif ( 'typography' === $active_tab ) : ?>
+						<?php
+						$typography_data = negar_theme_typography();
+						$font_families   = negar_theme_font_families();
+						$heading_scales  = negar_theme_heading_scales();
+						?>
+						<tr>
+							<th scope="row"><label for="negar-font-family"><?php esc_html_e( 'فونت متن اصلی (بدنه)', 'negar-shop' ); ?></label></th>
+							<td>
+								<select id="negar-font-family" name="<?php echo esc_attr( NEGAR_THEME_SETTINGS_OPTION ); ?>[typography][font_family]" class="regular-text">
+									<?php foreach ( $font_families as $key => $family ) : ?>
+										<option value="<?php echo esc_attr( $key ); ?>" <?php selected( $typography_data['font_family'], $key ); ?>><?php echo esc_html( $family['label'] ); ?></option>
+									<?php endforeach; ?>
+								</select>
+								<p class="description"><?php esc_html_e( 'فونت پیش‌فرض برای تمامی متون عمومی، توضیحات محصولات و منوها.', 'negar-shop' ); ?></p>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row"><label for="negar-heading-font-family"><?php esc_html_e( 'فونت عناوین (تیترها)', 'negar-shop' ); ?></label></th>
+							<td>
+								<select id="negar-heading-font-family" name="<?php echo esc_attr( NEGAR_THEME_SETTINGS_OPTION ); ?>[typography][heading_font_family]" class="regular-text">
+									<?php foreach ( $font_families as $key => $family ) : ?>
+										<option value="<?php echo esc_attr( $key ); ?>" <?php selected( $typography_data['heading_font_family'], $key ); ?>><?php echo esc_html( $family['label'] ); ?></option>
+									<?php endforeach; ?>
+								</select>
+								<p class="description"><?php esc_html_e( 'فونت مورد استفاده برای عناوین h1 تا h6 و سرتیترهای بخش‌های صفحه.', 'negar-shop' ); ?></p>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row"><label for="negar-base-font-size"><?php esc_html_e( 'اندازهٔ قلم پایه (پیکسل)', 'negar-shop' ); ?></label></th>
+							<td>
+								<input id="negar-base-font-size" name="<?php echo esc_attr( NEGAR_THEME_SETTINGS_OPTION ); ?>[typography][base_font_size]" type="number" min="14" max="18" step="1" value="<?php echo esc_attr( $typography_data['base_font_size'] ); ?>" class="small-text">
+								<span class="description"><?php esc_html_e( 'پیکسل (محدوده مجاز: ۱۴ تا ۱۸، پیش‌فرض: ۱۶). سایر اندازه‌ها متناسب با این عدد تنظیم می‌شوند.', 'negar-shop' ); ?></span>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row"><label for="negar-heading-scale"><?php esc_html_e( 'مقیاس اندازهٔ تیترها', 'negar-shop' ); ?></label></th>
+							<td>
+								<select id="negar-heading-scale" name="<?php echo esc_attr( NEGAR_THEME_SETTINGS_OPTION ); ?>[typography][heading_scale]" class="regular-text">
+									<?php foreach ( $heading_scales as $key => $scale ) : ?>
+										<option value="<?php echo esc_attr( $key ); ?>" <?php selected( $typography_data['heading_scale'], $key ); ?>><?php echo esc_html( $scale['label'] ); ?></option>
+									<?php endforeach; ?>
+								</select>
+								<p class="description"><?php esc_html_e( 'تنظیم نسبت بزرگی عناوین صفحهٔ اصلی و برگه‌ها نسبت به متن بدنه.', 'negar-shop' ); ?></p>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row"><?php esc_html_e( 'پیش‌نمایش زندهٔ تایپوگرافی', 'negar-shop' ); ?></th>
+							<td>
+								<div class="negar-typography-preview" style="padding: 16px; background: #fff; border: 1px solid #c3c4c7; border-radius: 8px; font-family: <?php echo esc_attr( negar_theme_font_stack( 'font_family' ) ); ?>; font-size: <?php echo esc_attr( $typography_data['base_font_size'] ); ?>px; line-height: 1.6;">
+									<h3 style="margin-top: 0; margin-bottom: 8px; font-family: <?php echo esc_attr( negar_theme_font_stack( 'heading_font_family' ) ); ?>;"><?php esc_html_e( 'فروشگاه اینترنتی نگار — کیفیت برتر و سرعت در خرید', 'negar-shop' ); ?></h3>
+									<p style="margin: 0;"><?php esc_html_e( 'بستری امن برای خرید انواع ساعت‌های هوشمند، لپ‌تاپ‌های گیمینگ و لوازم جانبی با ضمانت اصالت کالا و ارسال سریع به سراسر کشور (۱۲۳۴۵۶۷۸۹۰).', 'negar-shop' ); ?></p>
+								</div>
+							</td>
+						</tr>
 					<?php else : ?>
 						<?php
 						negar_theme_settings_field( 'negar-announcement', __( 'متن نوار بالا', 'negar-shop' ), NEGAR_THEME_SETTINGS_OPTION . '[header][announcement]', negar_theme_setting( 'header', 'announcement', __( 'به فروشگاه ما خوش آمدید', 'negar-shop' ), 'negar_shop_topbar_announcement' ) );
@@ -3110,7 +3388,14 @@ function negar_theme_render_settings_page() {
 				</table>
 				<?php endif; ?>
 				<?php if ( 'products' !== $active_tab ) : ?>
-					<?php submit_button( __( 'ذخیرهٔ تنظیمات', 'negar-shop' ) ); ?>
+					<p class="submit" style="display: flex; gap: 8px; align-items: center;">
+						<?php submit_button( __( 'ذخیرهٔ تنظیمات', 'negar-shop' ), 'primary', 'submit', false ); ?>
+						<?php if ( 'colors' === $active_tab ) : ?>
+							<button type="submit" name="negar_theme_restore_default_colors" value="1" class="button button-secondary" onclick="return confirm('<?php echo esc_js( __( 'آیا از بازنشانی رنگ‌ها به حالت پیش‌فرض اطمینان دارید؟', 'negar-shop' ) ); ?>');"><?php esc_html_e( 'بازنشانی رنگ‌های پیش‌فرض', 'negar-shop' ); ?></button>
+						<?php elseif ( 'typography' === $active_tab ) : ?>
+							<button type="submit" name="negar_theme_restore_default_typography" value="1" class="button button-secondary" onclick="return confirm('<?php echo esc_js( __( 'آیا از بازنشانی تایپوگرافی به حالت پیش‌فرض اطمینان دارید؟', 'negar-shop' ) ); ?>');"><?php esc_html_e( 'بازنشانی تایپوگرافی پیش‌فرض', 'negar-shop' ); ?></button>
+						<?php endif; ?>
+					</p>
 				<?php endif; ?>
 			</form>
 		<?php else : ?>
