@@ -344,3 +344,102 @@
 		grid-template-columns: 1fr;
 	}
 }
+
+/* Brands Manager */
+.negar-brands-manager-wrapper {
+	max-width: 960px;
+	margin: 20px 0;
+}
+
+.negar-brand-search-box {
+	position: relative;
+	max-width: 520px;
+	margin: 18px 0;
+}
+
+.negar-brand-search-results {
+	position: absolute;
+	top: 100%;
+	right: 0;
+	left: 0;
+	background: #fff;
+	border: 1px solid #ccd0d4;
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+	max-height: 280px;
+	overflow-y: auto;
+	z-index: 1000;
+	border-radius: 0 0 4px 4px;
+}
+
+.negar-brand-search-item {
+	padding: 10px 14px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	border-bottom: 1px solid #f0f0f1;
+	cursor: pointer;
+}
+
+.negar-brand-search-item:hover {
+	background: #f6f7f7;
+}
+
+.negar-brand-card {
+	margin: 12px 0;
+	padding: 12px 16px;
+	border: 1px solid #dcdcde;
+	border-right: 4px solid #2271b1;
+	background: #fff;
+	border-radius: 3px;
+}
+
+.negar-brand-card__header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	gap: 12px;
+}
+
+.negar-brand-card__identity {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+
+.negar-brand-card__logo-preview {
+	object-fit: contain;
+	background: #f0f0f1;
+	border: 1px solid #dcdcde;
+	border-radius: 4px;
+	padding: 2px;
+}
+
+.negar-brand-card__override-badge {
+	display: inline-block;
+	background: #dbeafe;
+	color: #1e40af;
+	border: 1px solid #bfdbfe;
+	font-size: 11px;
+	font-weight: 600;
+	padding: 2px 8px;
+	border-radius: 12px;
+	line-height: 1.4;
+}
+
+.negar-brand-card__actions {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin-inline-start: auto;
+}
+
+.negar-brand-card__body {
+	margin-top: 10px;
+	padding-top: 10px;
+	border-top: 1px solid #f0f0f1;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+

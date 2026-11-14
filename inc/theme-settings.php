@@ -16,6 +16,8 @@ define( 'NEGAR_THEME_MEDIA_VERSION', 1 );
 define( 'NEGAR_THEME_PRODUCT_PACK_OPTION', 'negar_theme_product_pack_options' );
 define( 'NEGAR_THEME_STORY_OPTION', 'negar_theme_story_options' );
 define( 'NEGAR_THEME_STORY_VERSION', 1 );
+define( 'NEGAR_THEME_BRAND_OPTION', 'negar_theme_brand_options' );
+define( 'NEGAR_THEME_BRAND_VERSION', 1 );
 
 /**
  * Return the supported schema defaults.
@@ -1932,6 +1934,476 @@ function negar_theme_render_story_fields() {
 }
 
 /**
+ * Return raw stored brand options without defaults.
+ *
+ * @return mixed
+ */
+function negar_theme_brand_options_raw() {
+	return get_option( NEGAR_THEME_BRAND_OPTION, null );
+}
+
+/**
+ * Resolve a single configured brand into genuine display data.
+ *
+ * @param array<string, mixed> $item Configured brand array.
+ * @param WP_Term|null         $term Optional pre-fetched term.
+ * @return array<string, mixed>|null
+ */
+function negar_theme_resolve_brand_item( $item, $term = null ) {
+	$term_id = isset( $item['term_id'] ) ? absint( $item['term_id'] ) : 0;
+	if ( ! $term_id ) {
+		return null;
+	}
+
+	if ( ! $term instanceof WP_Term ) {
+		$term = get_term( $term_id, 'product_brand' );
+	}
+
+	if ( ! $term || is_wp_error( $term ) || 'product_brand' !== $term->taxonomy ) {
+		return null;
+	}
+
+	$link = get_term_link( $term, 'product_brand' );
+	if ( is_wp_error( $link ) || empty( $link ) ) {
+		return null;
+	}
+
+	$logo_url         = '';
+	$logo_override_id = isset( $item['logo_override_id'] ) ? absint( $item['logo_override_id'] ) : 0;
+
+	// 1. Valid administrator-selected logo override.
+	if ( $logo_override_id > 0 && wp_attachment_is_image( $logo_override_id ) ) {
+		$logo_url = wp_get_attachment_image_url( $logo_override_id, 'full' ) ?: '';
+	}
+
+	// 2. Real brand thumbnail from WooCommerce / taxonomy metadata.
+	if ( empty( $logo_url ) ) {
+		if ( function_exists( 'wc_get_brand_thumbnail_url' ) ) {
+			$logo_url = wc_get_brand_thumbnail_url( $term->term_id, 'full' );
+		}
+		if ( empty( $logo_url ) ) {
+			$thumb_id = get_term_meta( $term->term_id, 'thumbnail_id', true );
+			if ( $thumb_id && wp_attachment_is_image( $thumb_id ) ) {
+				$logo_url = wp_get_attachment_image_url( $thumb_id, 'full' ) ?: '';
+			}
+		}
+	}
+
+	// 3. Neutral placeholder if no logo available.
+	if ( empty( $logo_url ) ) {
+		$logo_url = function_exists( 'wc_placeholder_img_src' ) ? wc_placeholder_img_src() : '';
+	}
+
+	return array(
+		'term_id'          => $term->term_id,
+		'name'             => $term->name,
+		'slug'             => $term->slug,
+		'count'            => (int) $term->count,
+		'link'             => $link,
+		'logo'             => $logo_url,
+		'logo_override_id' => $logo_override_id,
+		'enabled'          => ! empty( $item['enabled'] ),
+	);
+}
+
+/**
+ * Retrieve resolved brands for storefront carousel rendering.
+ *
+ * Discovers up to 6 real terms when unconfigured. Returns empty when explicitly configured empty.
+ *
+ * @param bool $only_enabled Whether to return only enabled brands.
+ * @return array<int, array<string, mixed>>
+ */
+function negar_theme_get_brands( $only_enabled = true ) {
+	$option = get_option( NEGAR_THEME_BRAND_OPTION, null );
+
+	if ( null === $option ) {
+		if ( ! taxonomy_exists( 'product_brand' ) ) {
+			return array();
+		}
+		$terms = get_terms(
+			array(
+				'taxonomy'   => 'product_brand',
+				'hide_empty' => false,
+				'number'     => 6,
+				'orderby'    => 'name',
+				'order'      => 'ASC',
+			)
+		);
+
+		if ( empty( $terms ) || is_wp_error( $terms ) ) {
+			return array();
+		}
+
+		$discovered = array();
+		foreach ( $terms as $term ) {
+			$resolved = negar_theme_resolve_brand_item(
+				array(
+					'term_id'          => $term->term_id,
+					'enabled'          => true,
+					'logo_override_id' => 0,
+				),
+				$term
+			);
+			if ( $resolved ) {
+				$discovered[] = $resolved;
+			}
+		}
+		return $discovered;
+	}
+
+	if ( ! is_array( $option ) || ! isset( $option['brands'] ) || ! is_array( $option['brands'] ) ) {
+		return array();
+	}
+
+	$results = array();
+	foreach ( $option['brands'] as $item ) {
+		if ( ! is_array( $item ) || empty( $item['term_id'] ) ) {
+			continue;
+		}
+
+		$enabled = ! empty( $item['enabled'] );
+		if ( $only_enabled && ! $enabled ) {
+			continue;
+		}
+
+		$term = get_term( absint( $item['term_id'] ), 'product_brand' );
+		if ( ! $term || is_wp_error( $term ) || 'product_brand' !== $term->taxonomy ) {
+			continue;
+		}
+
+		$resolved = negar_theme_resolve_brand_item( $item, $term );
+		if ( $resolved ) {
+			$results[] = $resolved;
+		}
+	}
+
+	return $results;
+}
+
+/**
+ * Sanitize Brand settings collection submitted via Settings API.
+ *
+ * @param mixed $submitted Raw option input supplied by Settings API.
+ * @return array<string, mixed>
+ */
+function negar_theme_sanitize_brand_settings( $submitted ) {
+	$current = get_option( NEGAR_THEME_BRAND_OPTION, array() );
+	$current = is_array( $current ) ? $current : array();
+
+	if ( ! current_user_can( 'manage_options' ) ) {
+		add_settings_error( 'negar_theme_brand_settings', 'negar_theme_brand_forbidden', __( 'اجازهٔ ذخیرهٔ تنظیمات را ندارید.', 'negar-shop' ), 'error' );
+		return $current;
+	}
+
+	$submitted  = is_array( $submitted ) ? wp_unslash( $submitted ) : array();
+	$raw_brands = isset( $submitted['brands'] ) && is_array( $submitted['brands'] ) ? $submitted['brands'] : array();
+
+	$sanitized_brands = array();
+	$seen_term_ids    = array();
+
+	foreach ( $raw_brands as $item ) {
+		if ( count( $sanitized_brands ) >= 20 ) {
+			break;
+		}
+		if ( ! is_array( $item ) || ! isset( $item['term_id'] ) ) {
+			continue;
+		}
+
+		$term_id = absint( $item['term_id'] );
+		if ( $term_id <= 0 || in_array( $term_id, $seen_term_ids, true ) ) {
+			continue;
+		}
+
+		// Validate that term exists in product_brand taxonomy.
+		$term = get_term( $term_id, 'product_brand' );
+		if ( ! $term || is_wp_error( $term ) || 'product_brand' !== $term->taxonomy ) {
+			continue;
+		}
+
+		$seen_term_ids[] = $term_id;
+
+		$enabled = ! empty( $item['enabled'] );
+
+		$logo_override_id = isset( $item['logo_override_id'] ) ? absint( $item['logo_override_id'] ) : 0;
+		if ( $logo_override_id > 0 && ! wp_attachment_is_image( $logo_override_id ) ) {
+			$logo_override_id = 0;
+		}
+
+		$sanitized_brands[] = array(
+			'term_id'          => $term_id,
+			'enabled'          => (bool) $enabled,
+			'logo_override_id' => $logo_override_id,
+		);
+	}
+
+	return array(
+		'schema_version' => NEGAR_THEME_BRAND_VERSION,
+		'brands'         => $sanitized_brands,
+	);
+}
+
+/**
+ * Ensure brand option is not autoloaded when created.
+ *
+ * @param string $option Option name.
+ * @return void
+ */
+function negar_theme_prevent_brand_option_autoload( $option ) {
+	if ( NEGAR_THEME_BRAND_OPTION === $option && function_exists( 'wp_set_option_autoload' ) ) {
+		wp_set_option_autoload( NEGAR_THEME_BRAND_OPTION, 'no' );
+	}
+}
+add_action( 'added_option', 'negar_theme_prevent_brand_option_autoload' );
+
+/**
+ * Render a single brand management row/card.
+ *
+ * @param int|string           $index       Numeric index or template token.
+ * @param array<string, mixed> $brand       Brand item configuration.
+ * @param bool                 $is_template Whether this is the JS template prototype.
+ * @return void
+ */
+function negar_theme_render_single_brand_card( $index, $brand = array(), $is_template = false ) {
+	$field_prefix = NEGAR_THEME_BRAND_OPTION . '[brands][' . $index . ']';
+
+	if ( $is_template ) {
+		$term_id          = 0;
+		$brand_name       = '__NAME__';
+		$term_slug        = '__SLUG__';
+		$native_logo_url  = '__NATIVE_LOGO_URL__';
+		$logo_url         = '__LOGO_URL__';
+		$logo_override_id = 0;
+		$enabled          = true;
+	} else {
+		$term_id = isset( $brand['term_id'] ) ? absint( $brand['term_id'] ) : 0;
+		if ( ! $term_id ) {
+			return;
+		}
+		$term = get_term( $term_id, 'product_brand' );
+		if ( ! $term || is_wp_error( $term ) || 'product_brand' !== $term->taxonomy ) {
+			return;
+		}
+		$brand_name      = $term->name;
+		$term_slug       = $term->slug;
+		$native_logo_url = '';
+		if ( function_exists( 'wc_get_brand_thumbnail_url' ) ) {
+			$native_logo_url = wc_get_brand_thumbnail_url( $term_id, 'thumbnail' );
+		}
+		if ( empty( $native_logo_url ) ) {
+			$thumb_id = get_term_meta( $term_id, 'thumbnail_id', true );
+			if ( $thumb_id && wp_attachment_is_image( $thumb_id ) ) {
+				$native_logo_url = wp_get_attachment_image_url( $thumb_id, 'thumbnail' ) ?: '';
+			}
+		}
+		if ( empty( $native_logo_url ) ) {
+			$native_logo_url = function_exists( 'wc_placeholder_img_src' ) ? wc_placeholder_img_src() : '';
+		}
+
+		$logo_override_id = isset( $brand['logo_override_id'] ) ? absint( $brand['logo_override_id'] ) : 0;
+		$logo_url         = '';
+		if ( $logo_override_id > 0 && wp_attachment_is_image( $logo_override_id ) ) {
+			$logo_url = wp_get_attachment_image_url( $logo_override_id, 'thumbnail' ) ?: '';
+		}
+		if ( empty( $logo_url ) ) {
+			$logo_url         = $native_logo_url;
+			$logo_override_id = 0;
+		}
+
+		$enabled = ! empty( $brand['enabled'] );
+	}
+	?>
+	<div class="negar-brand-card" data-term-id="<?php echo esc_attr( (string) $term_id ); ?>">
+		<input type="hidden" class="negar-brand-term-id" name="<?php echo esc_attr( $field_prefix ); ?>[term_id]" value="<?php echo esc_attr( (string) $term_id ); ?>">
+		<input type="hidden" class="negar-brand-enabled-hidden" name="<?php echo esc_attr( $field_prefix ); ?>[enabled]" value="0">
+		<input type="hidden" class="negar-brand-logo-override-id" name="<?php echo esc_attr( $field_prefix ); ?>[logo_override_id]" value="<?php echo esc_attr( (string) $logo_override_id ); ?>">
+
+		<div class="negar-brand-card__header">
+			<div class="negar-brand-card__identity">
+				<img class="negar-brand-card__logo-preview" src="<?php echo esc_url( $logo_url ); ?>" data-fallback-url="<?php echo esc_url( $native_logo_url ); ?>" alt="" width="60" height="36">
+				<div class="negar-brand-card__title-wrap">
+					<strong class="negar-brand-card__name"><?php echo esc_html( $brand_name ); ?></strong>
+					<span class="negar-brand-card__meta description">
+						<?php if ( ! $is_template ) : ?>
+							(#<?php echo esc_html( (string) $term_id ); ?> &bull; <?php echo esc_html( $term_slug ); ?>)
+						<?php endif; ?>
+					</span>
+				</div>
+				<span class="negar-brand-card__override-badge" style="<?php echo ( $logo_override_id > 0 ) ? '' : 'display: none;'; ?>"><?php esc_html_e( 'لوگوی اختصاصی', 'negar-shop' ); ?></span>
+			</div>
+
+			<div class="negar-brand-card__actions">
+				<label class="negar-brand-enabled-label">
+					<input type="checkbox" class="negar-brand-enabled-checkbox" name="<?php echo esc_attr( $field_prefix ); ?>[enabled]" value="1" <?php checked( $enabled ); ?>>
+					<?php esc_html_e( 'نمایش در گردونه', 'negar-shop' ); ?>
+				</label>
+				<button type="button" class="button button-small button-secondary negar-brand-btn-up" aria-label="<?php esc_attr_e( 'انتقال به بالا', 'negar-shop' ); ?>" title="<?php esc_attr_e( 'انتقال به بالا', 'negar-shop' ); ?>">&uarr; <?php esc_html_e( 'بالا', 'negar-shop' ); ?></button>
+				<button type="button" class="button button-small button-secondary negar-brand-btn-down" aria-label="<?php esc_attr_e( 'انتقال به پایین', 'negar-shop' ); ?>" title="<?php esc_attr_e( 'انتقال به پایین', 'negar-shop' ); ?>">&darr; <?php esc_html_e( 'پایین', 'negar-shop' ); ?></button>
+				<button type="button" class="button-link-delete negar-brand-btn-remove" aria-label="<?php esc_attr_e( 'حذف از گردونه', 'negar-shop' ); ?>"><?php esc_html_e( 'حذف', 'negar-shop' ); ?></button>
+			</div>
+		</div>
+
+		<div class="negar-brand-card__body">
+			<div class="negar-brand-logo-control">
+				<span class="description" style="margin-left: 8px;"><?php esc_html_e( 'تصویر لوگو:', 'negar-shop' ); ?></span>
+				<button type="button" class="button button-secondary button-small negar-brand-btn-select-logo"><?php esc_html_e( 'انتخاب لوگوی اختصاصی', 'negar-shop' ); ?></button>
+				<button type="button" class="button-link-delete button-small negar-brand-btn-remove-logo" style="<?php echo ( $logo_override_id > 0 ) ? '' : 'display: none;'; ?>"><?php esc_html_e( 'بازگشت به لوگوی اصلی برند', 'negar-shop' ); ?></button>
+			</div>
+		</div>
+	</div>
+	<?php
+}
+
+/**
+ * Render brand collection admin controls.
+ *
+ * @return void
+ */
+function negar_theme_render_brand_fields() {
+	$option           = get_option( NEGAR_THEME_BRAND_OPTION, null );
+	$is_unconfigured  = ( null === $option );
+	$brands           = ( ! $is_unconfigured && isset( $option['brands'] ) && is_array( $option['brands'] ) ) ? $option['brands'] : array();
+	$taxonomy_exists  = taxonomy_exists( 'product_brand' );
+	$brand_count      = $taxonomy_exists ? (int) wp_count_terms( array( 'taxonomy' => 'product_brand', 'hide_empty' => false ) ) : 0;
+	$admin_brands_url = admin_url( 'edit-tags.php?taxonomy=product_brand&post_type=product' );
+	?>
+	<div class="negar-brands-manager-wrapper" style="max-width: 960px; margin: 20px 0;">
+		<h2><?php esc_html_e( 'مدیریت گردونهٔ برندهای صفحهٔ اصلی', 'negar-shop' ); ?></h2>
+		<p class="description">
+			<?php esc_html_e( 'برندهای ووکامرس را برای نمایش در گردونهٔ صفحهٔ اصلی انتخاب و مرتب کنید. برای تغییر ترتیب از دکمه‌های «بالا» و «پایین» استفاده کنید. در صورت تمایل می‌توانید برای هر برند لوگوی اختصاصی تعیین کنید.', 'negar-shop' ); ?>
+		</p>
+
+		<div class="notice notice-info inline" style="margin: 14px 0; padding: 12px; border-right: 4px solid #2271b1; background: #f0f6fc;">
+			<p style="margin: 0;">
+				<strong><?php esc_html_e( 'راهنمای برندهای ووکامرس:', 'negar-shop' ); ?></strong>
+				<?php esc_html_e( 'برندها در ووکامرس تعریف می‌شوند و به محصولات اختصاص می‌یابند. این بخش تنها ترتیب و نمایش برندها در گردونهٔ صفحهٔ اصلی را مشخص می‌کند. برای ایجاد، ویرایش نام، یا مدیریت لوگوی اصلی برندها، به بخش ', 'negar-shop' ); ?>
+				<a href="<?php echo esc_url( $admin_brands_url ); ?>" target="_blank" rel="noopener noreferrer">
+					<?php esc_html_e( 'محصولات ← برندها', 'negar-shop' ); ?>
+				</a>
+				<?php esc_html_e( ' مراجعه کنید.', 'negar-shop' ); ?>
+			</p>
+		</div>
+
+		<?php if ( ! $taxonomy_exists ) : ?>
+			<div class="notice notice-error inline" style="margin: 14px 0; padding: 12px; border-right: 4px solid #d63638; background: #fcf0f1;">
+				<p style="margin: 0;">
+					<strong><?php esc_html_e( 'خطا:', 'negar-shop' ); ?></strong>
+					<?php esc_html_e( 'تاکسونومی برندهای ووکامرس (product_brand) در سیستم ثبت نشده است. لطفاً از فعال بودن افزونهٔ ووکامرس و پشتیبانی از برندها اطمینان حاصل کنید.', 'negar-shop' ); ?>
+				</p>
+			</div>
+		<?php elseif ( 0 === $brand_count ) : ?>
+			<div class="notice notice-warning inline" style="margin: 14px 0; padding: 12px; border-right: 4px solid #dba617; background: #fcf9e8;">
+				<p style="margin: 0;">
+					<strong><?php esc_html_e( 'توجه:', 'negar-shop' ); ?></strong>
+					<?php esc_html_e( 'هنوز هیچ برندی در فروشگاه ثبت نشده است. ابتدا از بخش ', 'negar-shop' ); ?>
+					<a href="<?php echo esc_url( $admin_brands_url ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'محصولات ← برندها', 'negar-shop' ); ?></a>
+					<?php esc_html_e( ' برندهای مورد نظر خود را ایجاد کنید.', 'negar-shop' ); ?>
+				</p>
+			</div>
+		<?php endif; ?>
+
+		<?php if ( $is_unconfigured ) : ?>
+			<div class="notice notice-info inline" style="margin: 14px 0; padding: 12px; border-right: 4px solid #72aee6; background: #f0f6fc;">
+				<p style="margin: 0;">
+					<strong><?php esc_html_e( 'حالت اولیه (پیکربندی‌نشده):', 'negar-shop' ); ?></strong>
+					<?php esc_html_e( 'تا زمانی که تنظیمی برای برندها ذخیره نشود، تا ۶ برند نخست فروشگاه به‌صورت خودکار در صفحهٔ اصلی نمایش داده می‌شوند. برای تنظیم دلخواه، برندهای مورد نظر را اضافه و این فرم را ذخیره کنید.', 'negar-shop' ); ?>
+				</p>
+			</div>
+		<?php endif; ?>
+
+		<div class="negar-brand-search-box">
+			<label for="negar-brand-search-input"><strong><?php esc_html_e( 'جست‌وجو و افزودن برند:', 'negar-shop' ); ?></strong></label>
+			<div style="display: flex; gap: 8px; align-items: center; margin-top: 6px;">
+				<input type="search" id="negar-brand-search-input" class="regular-text" autocomplete="off" placeholder="<?php esc_attr_e( 'نام برند را جست‌وجو کنید…', 'negar-shop' ); ?>" <?php disabled( ! $taxonomy_exists || 0 === $brand_count ); ?>>
+				<span class="spinner" id="negar-brand-search-spinner" style="float: none; margin: 0;"></span>
+			</div>
+			<p class="description" id="negar-brand-search-status" aria-live="polite" style="margin-top: 4px;"></p>
+			<div id="negar-brand-search-results" class="negar-brand-search-results" role="listbox" style="display: none;"></div>
+		</div>
+
+		<div id="negar-brands-list" class="negar-brands-list" data-max-records="20">
+			<?php foreach ( $brands as $index => $brand ) : ?>
+				<?php negar_theme_render_single_brand_card( $index, $brand ); ?>
+			<?php endforeach; ?>
+		</div>
+
+		<p class="description" id="negar-brands-empty-notice" style="<?php echo empty( $brands ) ? '' : 'display: none;'; ?> margin-top: 10px;">
+			<?php esc_html_e( 'هیچ برندی برای گردونه انتخاب نشده است. با خالی ماندن این لیست، بخش برندها در صفحهٔ اصلی مخفی خواهد شد.', 'negar-shop' ); ?>
+		</p>
+
+		<template id="negar-brand-card-template">
+			<?php negar_theme_render_single_brand_card( '__INDEX__', array(), true ); ?>
+		</template>
+	</div>
+	<?php
+}
+
+/**
+ * AJAX handler for searching genuine WooCommerce brands.
+ *
+ * @return void
+ */
+function negar_theme_ajax_search_brands() {
+	check_ajax_referer( 'negar_theme_brand_search', 'nonce' );
+
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( array( 'message' => __( 'اجازهٔ دسترسی ندارید.', 'negar-shop' ) ), 403 );
+	}
+
+	if ( ! taxonomy_exists( 'product_brand' ) ) {
+		wp_send_json_error( array( 'message' => __( 'تاکسونومی برندها یافت نشد.', 'negar-shop' ) ), 404 );
+	}
+
+	$raw_query = isset( $_POST['query'] ) ? wp_unslash( $_POST['query'] ) : '';
+	$query     = is_scalar( $raw_query ) ? sanitize_text_field( $raw_query ) : '';
+
+	$args = array(
+		'taxonomy'   => 'product_brand',
+		'hide_empty' => false,
+		'number'     => 20,
+	);
+
+	if ( '' !== $query ) {
+		$args['search'] = $query;
+	}
+
+	$terms = get_terms( $args );
+	if ( is_wp_error( $terms ) ) {
+		wp_send_json_error( array( 'message' => $terms->get_error_message() ) );
+	}
+
+	$results     = array();
+	$placeholder = function_exists( 'wc_placeholder_img_src' ) ? wc_placeholder_img_src() : '';
+
+	foreach ( $terms as $term ) {
+		$logo_url = '';
+		if ( function_exists( 'wc_get_brand_thumbnail_url' ) ) {
+			$logo_url = wc_get_brand_thumbnail_url( $term->term_id, 'thumbnail' );
+		}
+		if ( empty( $logo_url ) ) {
+			$thumb_id = get_term_meta( $term->term_id, 'thumbnail_id', true );
+			if ( $thumb_id && wp_attachment_is_image( $thumb_id ) ) {
+				$logo_url = wp_get_attachment_image_url( $thumb_id, 'thumbnail' ) ?: '';
+			}
+		}
+		if ( empty( $logo_url ) ) {
+			$logo_url = $placeholder;
+		}
+
+		$results[] = array(
+			'term_id'  => $term->term_id,
+			'name'     => $term->name,
+			'slug'     => $term->slug,
+			'count'    => (int) $term->count,
+			'logo_url' => $logo_url,
+		);
+	}
+
+	wp_send_json_success( array( 'brands' => $results ) );
+}
+add_action( 'wp_ajax_negar_theme_search_brands', 'negar_theme_ajax_search_brands' );
+
+/**
  * Register the versioned option with the Settings API.
  */
 function negar_theme_register_settings() {
@@ -1968,6 +2440,15 @@ function negar_theme_register_settings() {
 		array(
 			'type'              => 'array',
 			'sanitize_callback' => 'negar_theme_sanitize_story_settings',
+			'default'           => array(),
+		)
+	);
+	register_setting(
+		'negar_theme_brand_settings',
+		NEGAR_THEME_BRAND_OPTION,
+		array(
+			'type'              => 'array',
+			'sanitize_callback' => 'negar_theme_sanitize_brand_settings',
 			'default'           => array(),
 		)
 	);
@@ -2190,6 +2671,32 @@ function negar_theme_enqueue_settings_assets( $hook_suffix ) {
 			'messages' => array(
 				'selectVideo' => __( 'انتخاب ویدیو برای استوری', 'negar-shop' ),
 				'useVideo'    => __( 'استفاده از این ویدیو', 'negar-shop' ),
+			),
+		)
+	);
+
+	$brand_script_path = NEGAR_SHOP_DIR . '/assets/js/theme-settings-brands.js';
+	wp_enqueue_script(
+		'negar-theme-settings-brands',
+		NEGAR_SHOP_URI . '/assets/js/theme-settings-brands.js',
+		array( 'jquery', 'negar-theme-settings-media' ),
+		file_exists( $brand_script_path ) ? (string) filemtime( $brand_script_path ) : NEGAR_SHOP_VERSION,
+		true
+	);
+	wp_localize_script(
+		'negar-theme-settings-brands',
+		'NegarThemeBrandsConfig',
+		array(
+			'ajaxUrl'  => admin_url( 'admin-ajax.php' ),
+			'nonce'    => wp_create_nonce( 'negar_theme_brand_search' ),
+			'messages' => array(
+				'loading'      => __( 'در حال جست‌وجو…', 'negar-shop' ),
+				'empty'        => __( 'برندی پیدا نشد.', 'negar-shop' ),
+				'error'        => __( 'خطا در جست‌وجوی برندها.', 'negar-shop' ),
+				'alreadyAdded' => __( 'این برند قبلاً به لیست اضافه شده است.', 'negar-shop' ),
+				'maxReached'   => __( 'حداکثر ۲۰ برند می‌توانید اضافه کنید.', 'negar-shop' ),
+				'selectLogo'   => __( 'انتخاب تصویر لوگوی اختصاصی', 'negar-shop' ),
+				'useLogo'      => __( 'استفاده از این تصویر', 'negar-shop' ),
 			),
 		)
 	);
@@ -2543,14 +3050,16 @@ function negar_theme_render_settings_page() {
 				<a class="nav-tab <?php echo $active_tab === $tab_id ? 'nav-tab-active' : ''; ?>" href="<?php echo esc_url( add_query_arg( array( 'page' => 'negar-theme-settings', 'tab' => $tab_id ), admin_url( 'options-general.php' ) ) ); ?>" <?php echo $active_tab === $tab_id ? 'aria-current="page"' : ''; ?>><?php echo esc_html( $tab_label ); ?></a>
 			<?php endforeach; ?>
 		</nav>
-		<?php settings_errors( 'negar_theme_settings' ); settings_errors( 'negar_theme_media_settings' ); settings_errors( 'negar_theme_story_settings' ); ?>
-		<?php if ( in_array( $active_tab, array( 'general', 'texts', 'layout', 'products', 'colors', 'header_footer', 'banners', 'stories' ), true ) ) : ?>
+		<?php settings_errors( 'negar_theme_settings' ); settings_errors( 'negar_theme_media_settings' ); settings_errors( 'negar_theme_story_settings' ); settings_errors( 'negar_theme_brand_settings' ); ?>
+		<?php if ( in_array( $active_tab, array( 'general', 'texts', 'layout', 'products', 'colors', 'header_footer', 'banners', 'stories', 'brands' ), true ) ) : ?>
 			<form action="options.php" method="post">
 				<?php
 				if ( 'banners' === $active_tab ) {
 					settings_fields( 'negar_theme_media_settings' );
 				} elseif ( 'stories' === $active_tab ) {
 					settings_fields( 'negar_theme_story_settings' );
+				} elseif ( 'brands' === $active_tab ) {
+					settings_fields( 'negar_theme_brand_settings' );
 				} else {
 					settings_fields( 'negar_theme_settings' );
 				}
@@ -2564,6 +3073,8 @@ function negar_theme_render_settings_page() {
 					<?php negar_theme_render_media_fields(); negar_theme_render_product_pack_fields(); ?>
 				<?php elseif ( 'stories' === $active_tab ) : ?>
 					<?php negar_theme_render_story_fields(); ?>
+				<?php elseif ( 'brands' === $active_tab ) : ?>
+					<?php negar_theme_render_brand_fields(); ?>
 				<?php else : ?>
 				<table class="form-table" role="presentation">
 					<?php if ( 'general' === $active_tab ) : ?>
