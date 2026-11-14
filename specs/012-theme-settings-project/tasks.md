@@ -1,6 +1,6 @@
 # Tasks: 012 Complete Theme Settings Project
 
-**Status:** Phase 5 complete and verified. Phase 6 (T210-T213) planned.
+**Status:** Phase 6 Story Management in progress.
 
 ## Completed foundation and hardening
 
@@ -72,11 +72,28 @@
   products while retaining existing coordinates and interactions.
 - [x] **T209.4** Add authenticated reversible persistence/frontend regression
   coverage for media, pack and hotspot settings, then update architecture docs.
+
+## Phase 6: Story Management
+
+- [x] **STORY-6.1** Define `negar_theme_story_options` schema, validation rules, media mime checking, and non-autoloaded option registration under `negar_theme_story_settings`.
+- [x] **STORY-6.2** Implement admin Story Management UI under Settings → تنظیمات قالب نگار → استوری‌ها (CRUD, reordering with keyboard move buttons, separate thumbnail and image/video media selectors, product association, duration).
+- [x] **STORY-6.3** Implement frontend story rendering in `template-parts/home/story-circles.php` with real WordPress media, truthful WooCommerce product binding, clean omission when empty, and safe fallback.
+- [x] **STORY-6.4** Implement image and native HTML5 video story modal playback with actual video duration progress, pause/resume, and accessible keyboard/touch navigation.
+- [x] **STORY-6.5** Add comprehensive reversible regression tests for story persistence, validation, video/image playback, and frontend tokens.
+
+## Future Phases Roadmap
+
+- **Phase 7:** Brands
+- **Phase 8:** Branding, typography and colors
+- **Phase 9:** SMS and OTP provider integration
+- **Phase 10:** Settings backup/import/export
+- **Phase 11:** Final QA and release preparation
+
 - [ ] **T210** Approve Typography controls with safe font-loading and performance
-  limits.
+  limits (Phase 8).
 - [ ] **T211** Design an SMS-provider boundary with separately stored secrets;
-  never export credentials or expose them to the browser.
+  never export credentials or expose them to the browser (Phase 9).
 - [ ] **T212** Design backup/import/export validation, authorization, rollback and
-  non-autoloaded storage for large settings.
+  non-autoloaded storage for large settings (Phase 10).
 - [ ] **T213** Complete end-to-end, accessibility, RTL, migration and packaging
-  verification before declaring the full project complete.
+  verification before declaring the full project complete (Phase 11).

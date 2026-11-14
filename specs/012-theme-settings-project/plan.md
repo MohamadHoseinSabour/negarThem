@@ -1,6 +1,6 @@
 # Implementation Plan: 012 Complete Theme Settings Project
 
-**Status:** Phase 5 complete and verified. Phase 6 (T210-T213) planned.
+**Status:** Phase 6 Story Management in progress.
 
 ## Architecture
 
@@ -62,12 +62,16 @@
    distinction (`رایگان` without Toman symbol), purchase action compatibility by product type
    (`variable`, `grouped`, `external`, `simple`, out-of-stock), query filter reliability with
    `try ... finally`, and full regression test suite pass.
-   Stories and brands remain out of scope for Phases 6 and 7.
-8. **Typography, SMS and backup (planned):** define separate security boundaries,
-   secret handling and import/export validation before UI implementation.
-9. **Release verification (planned):** expand regression coverage, run PHP lint and
-   Playwright checks against WAMP, review RTL/keyboard behavior and package only
-   after data-integrity checks pass.
+8. **Story management (Phase 6, in progress):** implement `negar_theme_story_options`
+   separate non-autoloaded option, admin story manager (CRUD, reordering with keyboard buttons,
+   separate thumbnail and image/video media, WooCommerce product binding, duration),
+   frontend `story-circles.php` rendering, native HTML5 video playback driven by actual media duration,
+   image timing, accessible dialog with keyboard/touch navigation and focus management.
+9. **Brands (Phase 7, planned):** brand carousel/grid management.
+10. **Branding, typography and colors (Phase 8, planned):** typography controls with safe font-loading.
+11. **SMS and OTP provider integration (Phase 9, planned):** provider boundary with separately stored secrets.
+12. **Settings backup/import/export (Phase 10, planned):** validation, authorization, rollback and storage.
+13. **Final QA and release preparation (Phase 11, planned):** end-to-end, accessibility, RTL, packaging.
 
 ## Verification strategy
 

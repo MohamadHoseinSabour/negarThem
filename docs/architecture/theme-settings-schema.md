@@ -223,9 +223,66 @@ whitelists seven code-owned components and their fixed slot identifiers:
     or unpurchasable products display disabled `ناموجود` controls; empty slots suppress action buttons
     completely.
 
+## Implemented story schema (Phase 6)
+
+The option name is `negar_theme_story_options` (`NEGAR_THEME_STORY_OPTION`). It is registered under `negar_theme_story_settings`, versioned, and kept out of autoload.
+
+```json
+{
+  "schema_version": 1,
+  "stories": [
+    {
+      "id": "story_65a123...",
+      "enabled": true,
+      "type": "image",
+      "title": "پیشنهاد داغ",
+      "badge": "ویژه",
+      "thumbnail_id": 105,
+      "image_id": 106,
+      "video_id": 0,
+      "poster_id": 0,
+      "duration": 5,
+      "product_id": 42,
+      "cta_label": "مشاهده و خرید",
+      "cta_url": "/shop/special-deal/"
+    },
+    {
+      "id": "story_65b456...",
+      "enabled": true,
+      "type": "video",
+      "title": "معرفی محصول جدید",
+      "badge": "",
+      "thumbnail_id": 107,
+      "image_id": 0,
+      "video_id": 204,
+      "poster_id": 108,
+      "duration": 5,
+      "product_id": 55,
+      "cta_label": "مشاهده و خرید",
+      "cta_url": ""
+    }
+  ]
+}
+```
+
+- **Storage boundaries & empty state semantics:** Stored independently in `negar_theme_story_options` and kept out of `wp_load_alloptions()`.
+  - If the option has never been saved (`null === get_option(...)`), `negar_theme_get_stories()` returns the 10 reviewed backward-compatible demonstration stories.
+  - If the option exists and `stories` is empty (`0` stories), it represents an explicit administrative decision to disable stories: `template-parts/home/story-circles.php` omits both the `.story-shop` section and `#modal-story-shop` dialog completely from the DOM.
+- **Validation & isolation:**
+  - Clamped to at most 30 stories.
+  - Attachment IDs for thumbnails, images, and posters require verified image attachments (`wp_attachment_is_image`).
+  - Video attachment IDs require verified video mime types (`str_starts_with( get_post_mime_type( $id ), 'video/' )`).
+  - Durations are clamped between 3 and 30 seconds (default 5).
+  - Associated products require published, catalog-visible WooCommerce products (`negar_theme_sanitize_product_ids()`). Unmatched or missing products resolve safely to 0 and suppress commercial claims.
+  - Destination URLs enforce safe site-relative paths or HTTP(S) schemes (`negar_theme_sanitize_media_link()`), rejecting `javascript:`, `data:`, or malformed URLs.
+- **Story playback & interactions:**
+  - *Video stories:* Native HTML5 `<video playsinline webkit-playsinline preload="metadata">` playback is driven by actual media duration (`currentTime / duration`). Stories advance upon the authoritative `ended` event. Video stories never use a fixed 5-second timer.
+  - *Image stories:* Driven by the configured story duration (3–30s).
+  - *Controls & accessibility:* Press/hold pauses progress and playback; release resumes. Story circles are keyboard-accessible `<button>` elements with `aria-haspopup="dialog"`. Opening traps focus within the `#modal-story-shop` dialog. Pressing `Escape` or the close button unloads active media, resets progress, and restores focus to the activating circle button.
+
 ## Planned schema additions
 
 The static tab registry deliberately reserves keys for the following phased
-additions: `stories`, `brands`, `sms` and `backup`. Their field schemas must be
+additions: `brands`, `sms` and `backup`. Their field schemas must be
 documented before they are added; unknown keys must not be accepted by import or
 save handlers.

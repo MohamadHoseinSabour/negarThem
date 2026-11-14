@@ -1725,11 +1725,11 @@ function negar_theme_render_single_story_card( $index, $story = array(), $is_tem
 			<span class="negar-story-type-badge <?php echo 'video' === $type ? 'negar-badge-video' : 'negar-badge-image'; ?>">
 				<?php echo 'video' === $type ? esc_html__( 'ویدیو', 'negar-shop' ) : esc_html__( 'تصویر', 'negar-shop' ); ?>
 			</span>
-			<label class="negar-story-enabled-label" onclick="event.stopPropagation();">
+			<label class="negar-story-enabled-label">
 				<input type="checkbox" name="<?php echo esc_attr( $field_prefix ); ?>[enabled]" value="1" <?php checked( $enabled ); ?>>
 				<span><?php esc_html_e( 'نمایش', 'negar-shop' ); ?></span>
 			</label>
-			<div class="negar-story-actions" onclick="event.stopPropagation();">
+			<div class="negar-story-actions">
 				<button type="button" class="button-link negar-story-move-up" aria-label="<?php esc_attr_e( 'انتقال به بالا', 'negar-shop' ); ?>"><?php esc_html_e( 'بالا', 'negar-shop' ); ?></button>
 				<button type="button" class="button-link negar-story-move-down" aria-label="<?php esc_attr_e( 'انتقال به پایین', 'negar-shop' ); ?>"><?php esc_html_e( 'پایین', 'negar-shop' ); ?></button>
 				<button type="button" class="button-link-delete negar-story-delete" aria-label="<?php esc_attr_e( 'حذف استوری', 'negar-shop' ); ?>"><?php esc_html_e( 'حذف', 'negar-shop' ); ?></button>

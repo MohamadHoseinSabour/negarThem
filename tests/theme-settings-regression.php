@@ -17,6 +17,7 @@ $action = isset( $argv[1] ) ? $argv[1] : '';
 $option = NEGAR_THEME_SETTINGS_OPTION;
 $media_option = NEGAR_THEME_MEDIA_OPTION;
 $pack_option  = NEGAR_THEME_PRODUCT_PACK_OPTION;
+$story_option = NEGAR_THEME_STORY_OPTION;
 $mods   = 'theme_mods_' . get_option( 'stylesheet' );
 
 function negar_theme_test_admin() {
@@ -59,7 +60,7 @@ function negar_theme_test_destroy_auth_cookie( $user_id, $token ) {
 	}
 }
 
-function negar_theme_test_snapshot( $option, $media_option, $pack_option, $mods ) {
+function negar_theme_test_snapshot( $option, $media_option, $pack_option, $story_option, $mods ) {
 	$settings = get_option( $option, null );
 	$theme_mods = get_option( $mods, null );
 
@@ -72,10 +73,12 @@ function negar_theme_test_snapshot( $option, $media_option, $pack_option, $mods 
 		'media'         => get_option( $media_option, null ),
 		'pack_exists'   => null !== get_option( $pack_option, null ),
 		'pack'          => get_option( $pack_option, null ),
+		'story_exists'  => null !== get_option( $story_option, null ),
+		'story'         => get_option( $story_option, null ),
 	);
 }
 
-function negar_theme_test_restore( $option, $media_option, $pack_option, $mods, $snapshot ) {
+function negar_theme_test_restore( $option, $media_option, $pack_option, $story_option, $mods, $snapshot ) {
 	if ( ! empty( $snapshot['option_exists'] ) ) {
 		update_option( $option, $snapshot['option'] );
 	} else {
@@ -97,11 +100,17 @@ function negar_theme_test_restore( $option, $media_option, $pack_option, $mods, 
 	} else {
 		delete_option( $pack_option );
 	}
+	if ( ! empty( $snapshot['story_exists'] ) ) {
+		update_option( $story_option, $snapshot['story'] );
+	} else {
+		delete_option( $story_option );
+	}
 
 	wp_cache_delete( $option, 'options' );
 	wp_cache_delete( $mods, 'options' );
 	wp_cache_delete( $media_option, 'options' );
 	wp_cache_delete( $pack_option, 'options' );
+	wp_cache_delete( $story_option, 'options' );
 }
 
 function negar_theme_test_save_group( $tab, $input, $section_action = '' ) {
@@ -119,7 +128,7 @@ function negar_theme_test_save_group( $tab, $input, $section_action = '' ) {
 
 try {
 	if ( 'snapshot' === $action ) {
-		echo base64_encode( wp_json_encode( negar_theme_test_snapshot( $option, $media_option, $pack_option, $mods ) ) );
+		echo base64_encode( wp_json_encode( negar_theme_test_snapshot( $option, $media_option, $pack_option, $story_option, $mods ) ) );
 		exit( 0 );
 	}
 
@@ -128,7 +137,7 @@ try {
 		if ( ! is_array( $snapshot ) ) {
 			throw new InvalidArgumentException( 'Invalid settings snapshot.' );
 		}
-		negar_theme_test_restore( $option, $media_option, $pack_option, $mods, $snapshot );
+		negar_theme_test_restore( $option, $media_option, $pack_option, $story_option, $mods, $snapshot );
 		echo wp_json_encode( array( 'restored' => true ) );
 		exit( 0 );
 	}
@@ -257,7 +266,7 @@ try {
 		throw new InvalidArgumentException( 'Unknown action.' );
 	}
 
-	$verify_snapshot = negar_theme_test_snapshot( $option, $media_option, $pack_option, $mods );
+	$verify_snapshot = negar_theme_test_snapshot( $option, $media_option, $pack_option, $story_option, $mods );
 	$results         = array();
 
 	wp_set_current_user( 0 );
@@ -1016,6 +1025,118 @@ try {
 
 	update_option( $pack_option, $pack );
 
+	// --- Story Management Tests ---
+	wp_set_current_user( 0 );
+	$denied_story = negar_theme_sanitize_story_settings( array( 'stories' => array( array( 'title' => 'Unauth' ) ) ) );
+	$results['story_admin_only'] = get_option( $story_option, array() ) === $denied_story;
+	negar_theme_test_admin();
+
+	// Default demo fallback when option does not exist
+	delete_option( $story_option );
+	$default_stories = negar_theme_get_stories( true );
+	$results['story_defaults_fallback'] = 10 === count( $default_stories ) && 'پیشنهاد داغ' === $default_stories[0]['title'];
+
+	// Explicit empty array returns empty collection (does NOT fall back to demo)
+	update_option( $story_option, array( 'schema_version' => 1, 'stories' => array() ) );
+	$empty_stories = negar_theme_get_stories( true );
+	$results['story_explicit_empty'] = 0 === count( $empty_stories );
+
+	// Clean omission of homepage component and modal when 0 stories
+	ob_start();
+	get_template_part( 'template-parts/home/story-circles' );
+	$empty_story_html = ob_get_clean();
+	$results['story_clean_omission_when_empty'] = '' === trim( $empty_story_html );
+
+	// Sanitization: image vs video, links, duration clamping, product association
+	$test_input = array(
+		'stories' => array(
+			array(
+				'id'           => 'story_alpha',
+				'enabled'      => '1',
+				'type'         => 'image',
+				'title'        => 'استوری تصویر آلفا',
+				'badge'        => 'جدید',
+				'thumbnail_id' => $image_id,
+				'image_id'     => $image_id,
+				'duration'     => 12,
+				'product_id'   => $product_id,
+				'cta_label'    => 'خرید ویژه',
+				'cta_url'      => '/shop/test-page/',
+			),
+			array(
+				'id'           => 'story_beta',
+				'enabled'      => '1',
+				'type'         => 'video',
+				'title'        => 'استوری ویدیو بتا',
+				'badge'        => '',
+				'thumbnail_id' => $image_id,
+				'video_id'     => 0, // no video attachment, should sanitize safely
+				'poster_id'    => $image_id,
+				'duration'     => 50, // clamp to 30
+				'product_id'   => 9999999, // non-existent product, should sanitize to 0
+				'cta_label'    => '',
+				'cta_url'      => 'javascript:alert(1)', // unsafe URL, should sanitize to empty string
+			),
+			array(
+				'id'           => 'story_gamma',
+				'enabled'      => '0', // disabled
+				'type'         => 'image',
+				'title'        => 'استوری غیرفعال گاما',
+				'badge'        => '',
+				'thumbnail_id' => 0,
+				'image_id'     => 0,
+				'duration'     => 1, // clamp to 3
+				'product_id'   => 0,
+				'cta_label'    => '',
+				'cta_url'      => '',
+			),
+		),
+	);
+
+	$sanitized_story_settings = negar_theme_sanitize_story_settings( $test_input );
+	update_option( $story_option, $sanitized_story_settings );
+
+	$results['story_sanitization_persisted'] = 3 === count( $sanitized_story_settings['stories'] );
+	$results['story_duration_clamped']      = 30 === $sanitized_story_settings['stories'][1]['duration']
+		&& 3 === $sanitized_story_settings['stories'][2]['duration'];
+	$results['story_unsafe_url_rejected']   = '' === $sanitized_story_settings['stories'][1]['cta_url']
+		&& '/shop/test-page/' === $sanitized_story_settings['stories'][0]['cta_url'];
+	$results['story_invalid_prod_zeroed']   = 0 === $sanitized_story_settings['stories'][1]['product_id']
+		&& $product_id === $sanitized_story_settings['stories'][0]['product_id'];
+
+	// Resolved enabled stories
+	$resolved_enabled = negar_theme_get_stories( true );
+	$results['story_disabled_omitted']       = 2 === count( $resolved_enabled );
+	$results['story_product_resolved']       = true === $resolved_enabled[0]['has_product']
+		&& $product_id === $resolved_enabled[0]['product_id']
+		&& '' !== $resolved_enabled[0]['product_title']
+		&& '' !== $resolved_enabled[0]['product_link'];
+
+	// Reordering stability: moving story_beta before story_alpha
+	$reordered_input = array(
+		'stories' => array(
+			$sanitized_story_settings['stories'][1],
+			$sanitized_story_settings['stories'][0],
+			$sanitized_story_settings['stories'][2],
+		),
+	);
+	$reordered_sanitized = negar_theme_sanitize_story_settings( $reordered_input );
+	update_option( $story_option, $reordered_sanitized );
+
+	$results['story_reorder_id_stability'] = 'story_beta' === $reordered_sanitized['stories'][0]['id']
+		&& 'story_alpha' === $reordered_sanitized['stories'][1]['id']
+		&& 'story_gamma' === $reordered_sanitized['stories'][2]['id'];
+
+	// Frontend rendering of configured stories
+	ob_start();
+	get_template_part( 'template-parts/home/story-circles' );
+	$story_html = ob_get_clean();
+	$results['story_frontend_rendered'] = false !== strpos( $story_html, 'story-shop__item' )
+		&& false !== strpos( $story_html, 'modal-story-shop' )
+		&& false !== strpos( $story_html, 'استوری تصویر آلفا' )
+		&& false !== strpos( $story_html, 'استوری ویدیو بتا' )
+		&& false === strpos( $story_html, 'استوری غیرفعال گاما' );
+
 	$colors = negar_theme_test_save_group( 'colors', array( 'colors' => array( 'primary' => '#059669', 'secondary' => '#e11d48' ) ) );
 	$results['previous_defaults_valid'] = '#059669' === $colors['colors']['primary'] && '#e11d48' === $colors['colors']['secondary'];
 	$results['colors_preserve_groups']  = 'اطلاعیهٔ آزمایشی' === $colors['header']['announcement'];
@@ -1035,13 +1156,13 @@ try {
 	$css = ob_get_clean();
 	$results['frontend_tokens'] = false !== strpos( $css, '--color-primary: #059669;' ) && false !== strpos( $css, '--color-secondary: #e11d48;' );
 
-	negar_theme_test_restore( $option, $media_option, $pack_option, $mods, $verify_snapshot );
+	negar_theme_test_restore( $option, $media_option, $pack_option, $story_option, $mods, $verify_snapshot );
 
 	echo wp_json_encode( $results );
 	exit( in_array( false, $results, true ) ? 1 : 0 );
 } catch ( Throwable $error ) {
-	if ( isset( $option, $media_option, $pack_option, $mods, $verify_snapshot ) ) {
-		negar_theme_test_restore( $option, $media_option, $pack_option, $mods, $verify_snapshot );
+	if ( isset( $option, $media_option, $pack_option, $story_option, $mods, $verify_snapshot ) ) {
+		negar_theme_test_restore( $option, $media_option, $pack_option, $story_option, $mods, $verify_snapshot );
 	}
 	fwrite( STDERR, $error->getMessage() . PHP_EOL );
 	exit( 1 );

@@ -65,11 +65,10 @@
 	// Remove story
 	$( document ).on( 'click', '.negar-story-delete', function( e ) {
 		e.preventDefault();
+		e.stopPropagation();
 		var card = $( this ).closest( '.negar-story-card' );
-		card.slideUp( 200, function() {
-			card.remove();
-			updateEmptyState();
-		} );
+		card.remove();
+		updateEmptyState();
 	} );
 
 	// Move Up (keyboard and click)

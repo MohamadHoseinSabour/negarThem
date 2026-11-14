@@ -138,6 +138,35 @@
   - Snapshot restoration: All tests restore option snapshots identically in `finally` blocks.
   - Test Suite: 114 PHP files passed linting; theme settings persistence & rendered-token suite passed; 37 E2E tests passed with 0 failures.
 
+## Phase 6 — Complete Homepage Story Management
+
+**Status:** PASS (COMPLETE & VERIFIED)
+**Commits:**
+- `ff7f615` `feat(settings): add managed story collection and admin controls`
+- `51e3fd0` `feat(home): render managed image and video stories`
+
+### Summary of Accomplishments:
+- **Story Schema & Storage Boundary:** Registered `negar_theme_story_options` (`NEGAR_THEME_STORY_OPTION`, schema version 1) under `negar_theme_story_settings`, keeping it strictly out of `wp_load_alloptions()`. Distinguishes unconfigured fallback (`null === get_option(...)` -> 10 reviewed demo stories) from explicit empty state (`'stories' => array()` -> completely omits `.story-shop` and `#modal-story-shop` from the DOM).
+- **Admin Story Manager:** Added management screen under **Settings → تنظیمات قالب نگار → استوری‌ها**:
+  - Add, edit, remove, enable/disable, and reorder stories with keyboard move controls (Move Up / Down).
+  - Separate circle thumbnail image (`thumbnail_id`) from fullscreen story media (`image_id` / `video_id`).
+  - Supported Image stories with duration control (3–30s, default 5s) and Video stories with media mime validation (`str_starts_with(mime, 'video/')`).
+  - Associated optional real WooCommerce products via searchable selector (`negar-product-selector`), verifying catalog visibility and published status.
+  - Configurable custom CTA label and safe destination URL (`negar_theme_sanitize_media_link()`).
+- **Server-Side Rendered Frontend Story Component (`template-parts/home/story-circles.php`):**
+  - Story circles rendered as accessible `<button type="button" aria-haspopup="dialog">` elements with truthful badges and titles.
+  - Native HTML5 `<video playsinline webkit-playsinline preload="metadata">` playback driven by actual media duration (`currentTime / duration`) on `timeupdate`, advancing strictly on authoritative `ended` event.
+  - Image stories driven by configured duration timer (3–30s).
+  - Press and hold pause/resume interaction on touch and mouse.
+  - Escape key closes modal, ArrowLeft/ArrowRight navigates stories.
+  - Focus trap inside active modal, and focus restoration to activating story button upon close.
+  - Footer product card renders genuine WooCommerce product title and permalink, or custom CTA URL, and cleanly hides when unconfigured.
+- **Verification & Regression Testing:**
+  - `npm run test:lint` — 114 PHP files passed syntax linting.
+  - `npm run test:settings` — Passed all story checks: unauthorized save rejection, mime type validation, clamped duration, unsafe URL rejection, product association, reordering ID stability, disabled story omission, clean omission when empty, demo fallback, and admin/modal Playwright interactions.
+  - `npm run test:e2e` & `npm test` — 37 passed, 0 failed across desktop, tablet, and mobile (375px/390px) viewports.
+
 ## Next phase
 
-Phase 6 (T210-T213: Typography, SMS boundaries, Backup/Export, Release Packaging) is planned. It is not implemented by Phase 5.
+Phase 7: Brands Management.
+Following approved roadmap: Phase 7 (Brands), Phase 8 (Typography & Colors), Phase 9 (SMS/OTP), Phase 10 (Backup/Export), Phase 11 (Release QA & Packaging).

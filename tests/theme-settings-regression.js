@@ -481,6 +481,60 @@ async function run() {
     await page.reload({ waitUntil: 'domcontentloaded' });
     assert.deepStrictEqual(await readColors(page), { primary: '#059669', secondary: '#e11d48' }, 'Former Customizer default values must remain valid saved colors');
 
+    // Phase 6: Stories Admin & Frontend Interactive Tests
+    await page.goto(BASE_URL + '/wp-admin/options-general.php?page=negar-theme-settings&tab=stories', { waitUntil: 'domcontentloaded' });
+    assert.strictEqual(await page.locator('#negar-add-story-btn').isVisible(), true, 'Stories admin tab must display the Add Story button');
+    const initialStoryCardsCount = await page.locator('.negar-story-card').count();
+    assert(initialStoryCardsCount > 0, 'Stories admin must render story cards');
+
+    // Test adding a new card dynamically
+    await page.locator('#negar-add-story-btn').click();
+    const newCount = await page.locator('.negar-story-card').count();
+    assert.strictEqual(newCount, initialStoryCardsCount + 1, 'Clicking Add Story must append a new card to the list');
+    const lastCard = page.locator('.negar-story-card').last();
+    await lastCard.locator('.negar-story-title-input').fill('استوری موقت آزمایشی');
+    assert.strictEqual(await lastCard.locator('.negar-story-title-preview').textContent(), 'استوری موقت آزمایشی', 'Title input must update summary preview in real time');
+
+    // Test delete card
+    await lastCard.locator('.negar-story-delete').click();
+    await page.waitForTimeout(300);
+    assert.strictEqual(await page.locator('.negar-story-card').count(), initialStoryCardsCount, 'Deleting card must remove it from the list');
+
+    // Re-enable story-circles section in layout for frontend test
+    await page.goto(BASE_URL + '/wp-admin/options-general.php?page=negar-theme-settings&tab=layout', { waitUntil: 'domcontentloaded' });
+    await page.locator('#negar-layout-enabled-story-circles').check();
+    await Promise.all([
+      page.waitForURL((url) => url.pathname.endsWith('/wp-admin/options-general.php') && url.searchParams.get('tab') === 'layout'),
+      page.locator('form[action="options.php"] input[type="submit"]').click(),
+    ]);
+
+    // Test frontend story circles & modal viewer
+    await page.goto(BASE_URL, { waitUntil: 'domcontentloaded' });
+    const storyShopSection = page.locator('.story-shop');
+    assert.strictEqual(await storyShopSection.isVisible(), true, 'Homepage must render the story circles section');
+    const firstCircle = page.locator('.story-shop__item').first();
+    assert.strictEqual(await firstCircle.isVisible(), true, 'Story circles must be rendered and visible');
+
+    // Open story modal
+    await firstCircle.click();
+    const storyModal = page.locator('#modal-story-shop');
+    assert.strictEqual(await storyModal.getAttribute('aria-hidden'), 'false', 'Clicking a story circle must open the modal with aria-hidden=false');
+    assert.strictEqual(await storyModal.evaluate((el) => el.classList.contains('active')), true, 'Modal must have active class when open');
+
+    // Keyboard ESC to close
+    await page.keyboard.press('Escape');
+    await page.waitForTimeout(200);
+    assert.strictEqual(await storyModal.getAttribute('aria-hidden'), 'true', 'Pressing Escape must close the story modal and set aria-hidden=true');
+
+    // Responsive mobile viewport test
+    const storyMobilePage = await context.newPage();
+    await storyMobilePage.setViewportSize({ width: 375, height: 667 });
+    await storyMobilePage.goto(BASE_URL, { waitUntil: 'domcontentloaded' });
+    const mobileCircles = storyMobilePage.locator('.story-shop__item');
+    assert(await mobileCircles.count() > 0, 'Mobile viewport must render story items');
+    assert.strictEqual(await mobileCircles.first().isVisible(), true, 'Mobile story circle must be visible');
+    await storyMobilePage.close();
+
     console.log('[PASS] Theme settings persistence and rendered-token regression checks passed.');
   } catch (error) {
     failure = error;
