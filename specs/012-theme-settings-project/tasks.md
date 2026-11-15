@@ -110,6 +110,10 @@
 - [x] **TYPO-8.6** Connect typography and color tokens to frontend CSS via `negar_shop_customizer_css()`, generating `--font-primary`, `--font-heading`, `body { font-size: Xpx; }`, and heading scale rules.
 - [x] **TYPO-8.7** Optimize font enqueueing in `inc/enqueue.php`: conditionally load Google Fonts Vazirmatn and resource hints only when required; expose resolved family name in `kavehShopData.fontFamily`.
 - [x] **TYPO-8.8** Add automated regression tests in `tests/theme-settings-regression.php` and `tests/theme-settings-regression.js` covering persistence, validation fallback, clamping, restore defaults, computed styles, and Site Identity linking.
+- [x] **COLOR-8.1a** Expose NegarThem settings in WordPress admin with a prominent top-level dashboard menu (`نگارتم`, Dashicon `dashicons-art`, position 59) while preserving existing `options-general.php?page=negar-theme-settings` routes, deep links, and tab base contexts.
+- [x] **COLOR-8.1b** Clarify primary vs secondary/hover color relationship in settings UI, replace fixed decorative tokens (`--color-primary-light`, `--color-accent-light`, `--color-accent-hover`) with dynamic CSS properties and `color-mix()`.
+- [x] **COLOR-8.1c** Harmonize theme-accent styling across categories, banners, product card actions, badges, timers, add-to-cart, glows (`--ppnk-card-glow`), and Tailwind rose utilities, preserving semantic alerts/errors.
+- [x] **COLOR-8.1d** Add Playwright browser tests verifying default canonical red (#e90544/#c40439) and custom green (#16834a/#116638) palettes, hover states, 1440px desktop and 390px mobile viewports.
 - [x] **T211** Design an SMS-provider boundary with separately stored secrets; never export credentials or expose them to the browser (Phase 9).
   - [x] **SMS-9.1** Register dedicated non-autoloaded options `negar_theme_sms_options` and `negar_theme_sms_secrets` with schema isolation.
   - [x] **SMS-9.2** Implement Settings API tab (`tab=sms`) with masked API key input, configuration badge, server constant support (`NEGAR_KAVENEGAR_API_KEY`), and explicit key deletion.

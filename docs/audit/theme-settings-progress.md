@@ -238,6 +238,33 @@
   - Clean database snapshot restoration verified: zero test pollution in WordPress options or theme mods.
   - Test suites: `npm run test:lint` (PASS, 114 PHP files), `npm run test:settings` (PASS), `npm run test:e2e` (37 passed, 0 failed), `npm test` (all green, exit code 0).
 
+## Phase 8.1 — Admin Access & Color Consistency Fix
+
+**Status:** PASS (COMPLETE & VERIFIED)
+**Baseline:** `bbec4ed`
+**Commits:**
+- `b510439` `fix(admin): expose NegarThem settings in dashboard`
+- `8661e87` `fix(theme): unify dynamic accent colors across storefront`
+- [test(theme): verify admin access and color consistency]
+
+### Summary of Accomplishments:
+- **Top-Level Admin Dashboard Access:**
+  - Added prominent top-level WordPress dashboard menu `نگارتم` (Dashicon `dashicons-art`, position 59) routing to `admin.php?page=negar-theme-settings`.
+  - Preserved existing route `options-general.php?page=negar-theme-settings`, deep links, Settings API behavior, and `manage_options` authorization.
+  - Updated admin asset enqueue hook (`negar_theme_enqueue_settings_assets`) to support both `settings_page_negar-theme-settings` and `toplevel_page_negar-theme-settings`.
+  - Preserved base page context (`admin.php` vs `options-general.php`) in navigation tabs so users stay within the chosen administrative path.
+- **Dynamic Accent Color & Design Token Harmonization:**
+  - Clarified primary vs secondary/hover relationship in admin settings UI (`رنگ اصلی سازمانی (Primary)` and `رنگ ثانویه / هاور (Secondary / Hover)`).
+  - Eliminated hardcoded decorative red tokens (`--color-primary-light`, `--color-accent-light`, `--color-accent-hover`) by deriving them dynamically via CSS custom properties and `color-mix()`.
+  - Harmonized theme-accent elements across storefront: category buttons (`.btn-nk-danger`, `.categories-nk__item .btn-nk-danger-2`), promotional banners (`.banners-nk__item .detail .more`), product card action buttons, add-to-cart, buy-now, card glow (`--ppnk-card-glow`), timers, discount badges (`.price .off span`), daily deal wrapper gradient and contrast button, single product page buttons and price, navigation accents (`.category-menu-btn`), header cart badge, and Tailwind rose utilities (`.bg-rose-600`, `.hover:bg-rose-700`, `.text-rose-600`, etc.).
+  - Preserved semantic alerts/errors/stock warnings (`.woocommerce-error`, `.out-of-stock`, `.badge-danger-stock`) untouched.
+  - Ensured canonical crimson palette (`#e90544` / `#c40439`) remains visually identical to default.
+- **Comprehensive Browser Verification with Real Computed Styles:**
+  - Verified default palette (#e90544/#c40439) and custom green palette (#16834a/#116638) on 1440px desktop and 390px mobile viewports.
+  - Verified computed styles for category buttons, banner CTAs, header category button, card glows, and hover transition states.
+  - Integrated into `tests/theme-settings-regression.js`.
+  - Test suites: `npm run test:lint` (PASS, 115 PHP files), `npm run test:settings` (PASS), `npm run test:e2e` (37 passed, 0 failed), `npm test` (all green, exit code 0).
+
 ## Phase 9 — SMS Provider & Secure OTP Integration
 
 **Status:** PASS (COMPLETE & VERIFIED)

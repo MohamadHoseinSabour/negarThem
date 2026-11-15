@@ -49,10 +49,21 @@ async function run() {
     assert(adminResponse, 'Admin route must return a response');
     assert(page.url().includes('wp-login.php'), 'Unauthenticated visitors must be redirected to WordPress sign-in');
 
+    const topAdminResponse = await page.goto(`${BASE_URL}/wp-admin/admin.php?page=negar-theme-settings`, { waitUntil: 'domcontentloaded' });
+    assert(topAdminResponse, 'Top-level admin route must return a response');
+    assert(page.url().includes('wp-login.php'), 'Unauthenticated visitors to top-level admin menu must be redirected to WordPress sign-in');
+
     auth = JSON.parse(php('auth-cookie'));
     const productFixture = JSON.parse(php('product-fixture'));
 	const imageFixture = JSON.parse(php('image-fixture'));
     await context.addCookies([{ name: auth.name, value: auth.value, url: BASE_URL, expires: auth.expires }]);
+
+    // Phase 8.1: Verify top-level dashboard menu access and active tab persistence
+    await page.goto(BASE_URL + '/wp-admin/admin.php?page=negar-theme-settings', { waitUntil: 'domcontentloaded' });
+    assert(!page.url().includes('wp-login.php'), 'Authenticated administrator must access admin.php?page=negar-theme-settings');
+    const menuTitle = await page.locator('#toplevel_page_negar-theme-settings .wp-menu-name').textContent();
+    assert(menuTitle.includes('نگارتم'), 'Top-level dashboard menu must display نگارتم');
+
     await page.goto(BASE_URL + '/wp-admin/options-general.php?page=negar-theme-settings&tab=texts', { waitUntil: 'domcontentloaded' });
     assert(!page.url().includes('wp-login.php'), 'A generated administrator session must access the settings form');
 
@@ -483,6 +494,55 @@ async function run() {
     php('set-colors', '#059669', '#e11d48');
     await page.reload({ waitUntil: 'domcontentloaded' });
     assert.deepStrictEqual(await readColors(page), { primary: '#059669', secondary: '#e11d48' }, 'Former Customizer default values must remain valid saved colors');
+
+    // Phase 8.1: Computed CSS styles and hover consistency for Default and Green palettes
+    // A. Default canonical red palette (#e90544, #c40439)
+    php('set-colors', '#e90544', '#c40439');
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto(BASE_URL, { waitUntil: 'networkidle' });
+    const defaultCatBtn = await page.locator('.categories-nk .btn-nk-danger').first().evaluate(el => getComputedStyle(el).backgroundColor);
+    const defaultBannerCta = await page.locator('.banners-nk__item .detail .more').first().evaluate(el => getComputedStyle(el).backgroundColor);
+    const defaultHeaderBtn = await page.locator('.category-menu-btn').first().evaluate(el => getComputedStyle(el).backgroundColor);
+    assert.strictEqual(defaultCatBtn, 'rgb(233, 5, 68)', 'Default category button must compute to canonical red rgb(233, 5, 68)');
+    assert.strictEqual(defaultBannerCta, 'rgb(233, 5, 68)', 'Default banner CTA must compute to canonical red rgb(233, 5, 68)');
+    assert.strictEqual(defaultHeaderBtn, 'rgb(233, 5, 68)', 'Default header category button must compute to canonical red rgb(233, 5, 68)');
+
+    // B. Custom green palette (#16834a, #116638)
+    php('set-colors', '#16834a', '#116638');
+    await page.reload({ waitUntil: 'networkidle' });
+    const greenCatBtn = await page.locator('.categories-nk .btn-nk-danger').first().evaluate(el => getComputedStyle(el).backgroundColor);
+    const greenBannerCta = await page.locator('.banners-nk__item .detail .more').first().evaluate(el => getComputedStyle(el).backgroundColor);
+    const greenHeaderBtn = await page.locator('.category-menu-btn').first().evaluate(el => getComputedStyle(el).backgroundColor);
+    const greenGlow = await page.evaluate(() => getComputedStyle(document.querySelector('.popular-products-nk .product-one-nk') || document.documentElement).getPropertyValue('--ppnk-card-glow').trim());
+    assert.strictEqual(greenCatBtn, 'rgb(22, 131, 74)', 'Green category button must compute to green rgb(22, 131, 74)');
+    assert.strictEqual(greenBannerCta, 'rgb(22, 131, 74)', 'Green banner CTA must compute to green rgb(22, 131, 74)');
+    assert.strictEqual(greenHeaderBtn, 'rgb(22, 131, 74)', 'Green header category button must compute to green rgb(22, 131, 74)');
+    assert.strictEqual(greenGlow.toLowerCase(), '#16834a', 'Product card glow token must compute to green #16834a');
+
+    // Hover states check (with CSS transition wait)
+    const testCatBtn = page.locator('.categories-nk .btn-nk-danger').first();
+    await testCatBtn.scrollIntoViewIfNeeded();
+    await testCatBtn.hover();
+    await page.waitForTimeout(350);
+    const greenCatHover = await testCatBtn.evaluate(el => getComputedStyle(el).backgroundColor);
+    assert.strictEqual(greenCatHover, 'rgb(17, 102, 56)', 'Green category button hover must compute to secondary green rgb(17, 102, 56)');
+
+    const testBannerCta = page.locator('.banners-nk__item .detail .more').first();
+    await testBannerCta.scrollIntoViewIfNeeded();
+    await testBannerCta.hover();
+    await page.waitForTimeout(350);
+    const greenBannerHover = await testBannerCta.evaluate(el => getComputedStyle(el).backgroundColor);
+    assert.strictEqual(greenBannerHover, 'rgb(17, 102, 56)', 'Green banner CTA hover must compute to secondary green rgb(17, 102, 56)');
+
+    // Mobile 390px viewport
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto(BASE_URL, { waitUntil: 'networkidle' });
+    const mobileCatBtn = await page.locator('.categories-nk .btn-nk-danger').first().evaluate(el => getComputedStyle(el).backgroundColor);
+    assert.strictEqual(mobileCatBtn, 'rgb(22, 131, 74)', 'Mobile 390px category button must compute to green rgb(22, 131, 74)');
+
+    // Restore desktop viewport & default canonical colors
+    await page.setViewportSize({ width: 1440, height: 900 });
+    php('set-colors', '#e90544', '#c40439');
 
     // Phase 6: Stories Admin Persistence, Real Media Playback & Interaction Tests
     videoFixture = JSON.parse(php('video-fixture'));

@@ -475,6 +475,15 @@ function negar_shop_customizer_css() {
 	$css .= '.negar-category-mega__sale-card { border-color: var(--color-primary) !important; }';
 	$css .= '.account-page-nk__sidebar .woocommerce-MyAccount-navigation a:hover, .account-page-nk__sidebar .woocommerce-MyAccount-navigation .is-active a, .account-page-nk__header span, .negar-account-auth__eyebrow { color: var(--color-primary) !important; background-color: var(--color-primary-light) !important; }';
 
+	// 8. Theme Accent & Tailwind Rose Harmonization for theme-branded elements.
+	$css .= '.bg-rose-600, .bg-rose-500, .category-menu-btn { background-color: var(--color-primary) !important; }';
+	$css .= '.hover\:bg-rose-700:hover, .hover\:bg-rose-600:hover, .category-menu-btn:hover { background-color: var(--color-primary-hover) !important; }';
+	$css .= '.text-rose-600, .text-rose-500 { color: var(--color-primary) !important; }';
+	$css .= '.hover\:text-rose-600:hover, .hover\:text-rose-500:hover, .group:hover .group-hover\:text-rose-600 { color: var(--color-primary-hover) !important; }';
+	$css .= '.bg-rose-50, .bg-rose-100, .bg-rose-100\/70 { background-color: var(--color-primary-light) !important; }';
+	$css .= '.border-rose-100, .border-rose-200, .border-rose-300 { border-color: color-mix(in srgb, var(--color-primary) 20%, transparent) !important; }';
+	$css .= '.hover\:border-rose-300:hover { border-color: color-mix(in srgb, var(--color-primary) 40%, transparent) !important; }';
+
 	echo "\n<!-- Negar Shop theme design tokens -->\n";
 	echo '<style id="negar-shop-theme-colors">' . wp_strip_all_tags( $css ) . "</style>\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 }
