@@ -330,7 +330,46 @@
   - Playwright browser tests in `tests/theme-settings-regression.js` verifying Backup tab UI (Export, Import, Information cards), authenticated export download, payload structure, secrets absence, and unauthenticated request rejection.
   - Test suites: `npm run test:lint` (PASS, 116 PHP files), `npm run test:settings` (PASS), `node tests/security-otp-disclosure.test.js` (PASS), `npm run test:e2e` (37 passed, 0 failed), `npm test` (all green, exit code 0).
 
-## Next phase
+## Phase 11 — Final QA, Critical Fixes & Release
 
-Following approved roadmap: Phase 11 (Final QA and release preparation).
-Phase 11 remains open. Phase 10 is complete.
+**Status:** PASS (COMPLETE, VERIFIED & RELEASE READY)
+**Baseline:** `e27c85f0fbeba3f2f82b0ca9e860b3e4d5a0e1f8`
+
+### Summary of Accomplishments:
+- **Step 1: Backup Import Defect Fixes & Real Round-Trip:**
+  - Implemented `negar_theme_sanitize_full_settings()` in `inc/theme-settings.php` to sanitize all theme settings groups independently without requiring `$_POST['negar_theme_settings_tab']`.
+  - Updated `inc/theme-backup.php` supported groups to use `negar_theme_sanitize_full_settings` for `NEGAR_THEME_SETTINGS_OPTION`.
+  - Updated `negar_theme_sanitize_settings()` fallback so that when no tab is passed (import/restore operations), it invokes full settings sanitization instead of discarding imported values.
+  - Corrected backup reference schemas in `inc/theme-backup.php`:
+    - `NEGAR_THEME_PRODUCT_PACK_OPTION`: checks `$clean['packs'][$pack_id][$slot_id]` and resets non-existent or uncatalogued products to 0 with descriptive warnings.
+    - `NEGAR_THEME_STORY_OPTION`: checks `$clean['stories']` with `thumbnail_id`, `image_id`, `video_id`, `poster_id`, `product_id`, validates video mime type and published catalog products.
+    - `NEGAR_THEME_BRAND_OPTION`: checks `$clean['brands']` with `term_id`, `enabled`, and `logo_override_id` against WooCommerce `product_brand` taxonomy.
+  - Real end-to-end round trip test implemented and verified: snapshot -> set distinct values -> export JSON -> mutate database -> preview import (verified 0 writes) -> apply import -> confirm exact original values restored -> rollback test -> restore initial snapshot.
+- **Step 2: Admin Dashboard & Settings Verification:**
+  - Verified prominent top-level dashboard menu `نگارتم` (Dashicon `dashicons-art`, position 59) routing to `admin.php?page=negar-theme-settings`.
+  - Verified all 12 tabs: General, Colors, Typography, Texts, Layout, Products, Media, Packs, Stories, Brands, SMS, and Backup.
+  - Verified strict `manage_options` capability check on all administrative actions and Settings API forms.
+- **Step 3: Color and Design Verification:**
+  - Verified canonical crimson `#e90544` / `#c40439` and custom green `#16834a` / `#116638` palettes.
+  - Dynamic `color-mix()`, `--ppnk-card-glow`, buy-now, add-to-cart, badges, category buttons.
+- **Step 4: Storefront Smoke Tests:**
+  - Verified homepage (35 sections), shop and category archives, single product, cart and checkout, customer account and OTP login.
+- **Step 5: Accessibility and RTL Review:**
+  - Tested viewports 390px, 768px, and 1440px with zero horizontal overflow, correct Persian RTL typography and layout.
+- **Step 6: Security Audit:**
+  - Zero OTP code disclosure, non-autoloaded SMS secrets in `negar_theme_sms_secrets`, CSRF nonces on all actions.
+- **Step 7: Compatibility:**
+  - Updated `style.css` to `Requires PHP: 8.0` due to `str_starts_with()` usage.
+- **Step 8: Automated Test Verification:**
+  - `npm run test:lint`: PASS (116 PHP files).
+  - `tests/theme-settings-regression.php`: PASS (all 136 assertions).
+  - `tests/theme-settings-regression.js`: PASS.
+  - `node tests/security-otp-disclosure.test.js`: PASS.
+  - `npm run test:e2e`: PASS (37 tests passed, 0 failed).
+  - `npm test`: PASS (full CI green).
+- **Step 9: Production Distribution:**
+  - Packaged installable production archive `dist/negar-shop.zip` excluding `.git`, `node_modules`, `tests`, `scripts`, `docs`, and `specs`.
+
+## Project Completion
+
+All phases (Phase 0 through Phase 11) of the NegarThem Theme Settings Project are complete, verified, and released.

@@ -1,6 +1,6 @@
 # Tasks: 012 Complete Theme Settings Project
 
-**Status:** Phase 6 Story Management in progress.
+**Status:** Phase 11 Final QA, Critical Fixes & Release complete.
 
 ## Completed foundation and hardening
 
@@ -132,5 +132,14 @@
   - [x] **BACKUP-10.4** Implement atomic apply and restore with complete pre-write snapshots and rollback on write or verification failure.
   - [x] **BACKUP-10.5** Harden customer OTP authentication in `inc/auth-otp.php` to reject username-only phone matches when explicit `billing_phone` binding is absent or mismatched.
   - [x] **BACKUP-10.6** Add automated regression and Playwright browser tests covering backup export structure, secrets exclusion, invalid JSON rejection, preview isolation, apply persistence, rollback restoration, and OTP binding security.
-- [ ] **T213** Complete end-to-end, accessibility, RTL, migration and packaging
+- [x] **T213** Complete end-to-end, accessibility, RTL, migration and packaging
   verification before declaring the full project complete (Phase 11).
+  - [x] **RELEASE-11.1** Fix backup import validation (Defect A): add independent `negar_theme_sanitize_full_settings()` sanitizer without tab dependency.
+  - [x] **RELEASE-11.2** Correct backup reference schemas (Defect B): packs, stories, and brands with strict cross-site reference checks and warnings.
+  - [x] **RELEASE-11.3** Real E2E backup round trip: export -> mutate -> preview (zero writes) -> apply -> verify exact restoration -> rollback test -> snapshot restore.
+  - [x] **RELEASE-11.4** Verify top-level admin menu نگارتم and all 12 settings tabs under `manage_options`.
+  - [x] **RELEASE-11.5** Storefront smoke tests across homepage, shop, single product, cart/checkout, customer account and OTP.
+  - [x] **RELEASE-11.6** Responsive (390px, 768px, 1440px), Persian RTL, and accessibility review.
+  - [x] **RELEASE-11.7** Security review: zero OTP disclosure, isolated SMS secrets, nonces.
+  - [x] **RELEASE-11.8** Update `style.css` `Requires PHP: 8.0` matching `str_starts_with()` usage.
+  - [x] **RELEASE-11.9** Package clean production distribution `dist/negar-shop.zip` excluding git, node_modules, tests, scripts, docs, and specs.
