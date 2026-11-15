@@ -30,7 +30,7 @@ function negar_theme_backup_supported_groups() {
 	return array(
 		NEGAR_THEME_SETTINGS_OPTION     => array(
 			'label'    => __( 'تنظیمات عمومی، هویت برند، چیدمان، متن‌ها، رنگ‌ها، تایپوگرافی و اطلاعات تماس', 'negar-shop' ),
-			'sanitize' => 'negar_theme_sanitize_settings',
+			'sanitize' => 'negar_theme_sanitize_full_settings',
 			'autoload' => 'yes',
 		),
 		NEGAR_THEME_MEDIA_OPTION        => array(
@@ -274,57 +274,133 @@ function negar_theme_backup_validate_data( $data ) {
 				unset( $record );
 			}
 		} elseif ( NEGAR_THEME_PRODUCT_PACK_OPTION === $group_key ) {
-			if ( ! empty( $clean['primary_product_id'] ) ) {
-				$product = function_exists( 'wc_get_product' ) ? wc_get_product( (int) $clean['primary_product_id'] ) : null;
-				if ( ! $product ) {
-					$warnings[] = __( 'محصول اصلی پکیج در فروشگاه این سایت یافت نشد و شناسه آن پاک شد.', 'negar-shop' );
-					$clean['primary_product_id'] = 0;
-				}
-			}
-			if ( ! empty( $clean['product_ids'] ) && is_array( $clean['product_ids'] ) ) {
-				$valid_ids = array();
-				foreach ( $clean['product_ids'] as $pid ) {
-					if ( function_exists( 'wc_get_product' ) && wc_get_product( (int) $pid ) ) {
-						$valid_ids[] = (int) $pid;
+			if ( ! empty( $clean['packs'] ) && is_array( $clean['packs'] ) ) {
+				foreach ( $clean['packs'] as $pack_id => &$slots ) {
+					if ( ! is_array( $slots ) ) {
+						continue;
 					}
+					foreach ( $slots as $slot_id => &$product_id ) {
+						$product_id = absint( $product_id );
+						$submitted_id = isset( $group_data['packs'][ $pack_id ][ $slot_id ] ) ? absint( $group_data['packs'][ $pack_id ][ $slot_id ] ) : 0;
+						if ( $product_id > 0 ) {
+							$product = function_exists( 'wc_get_product' ) ? wc_get_product( $product_id ) : null;
+							if ( ! $product || 'publish' !== get_post_status( $product_id ) || ! $product->is_visible() ) {
+								$product_id = 0;
+							}
+						}
+						if ( $submitted_id > 0 && 0 === $product_id ) {
+							$warnings[] = sprintf(
+								/* translators: 1: pack id, 2: slot id */
+								__( 'محصول اسلات %2$s در پکیج %1$s در این سایت یافت نشد و صفر شد.', 'negar-shop' ),
+								esc_html( $pack_id ),
+								esc_html( $slot_id )
+							);
+						}
+					}
+					unset( $product_id );
 				}
-				$clean['product_ids'] = $valid_ids;
+				unset( $slots );
 			}
 		} elseif ( NEGAR_THEME_STORY_OPTION === $group_key ) {
-			if ( ! empty( $clean['items'] ) && is_array( $clean['items'] ) ) {
-				foreach ( $clean['items'] as $s_idx => &$story_item ) {
-					if ( ! empty( $story_item['media_id'] ) ) {
-						$media_post = get_post( (int) $story_item['media_id'] );
-						if ( ! $media_post || 'attachment' !== $media_post->post_type ) {
+			if ( ! empty( $clean['stories'] ) && is_array( $clean['stories'] ) ) {
+				foreach ( $clean['stories'] as $s_idx => &$story_item ) {
+					$submitted_item = isset( $group_data['stories'][ $s_idx ] ) && is_array( $group_data['stories'][ $s_idx ] ) ? $group_data['stories'][ $s_idx ] : array();
+					$story_label    = ! empty( $story_item['title'] ) ? $story_item['title'] : sprintf( '#%d', $s_idx + 1 );
+
+					// Thumbnail image check
+					$submitted_thumb = isset( $submitted_item['thumbnail_id'] ) ? absint( $submitted_item['thumbnail_id'] ) : 0;
+					if ( ! empty( $story_item['thumbnail_id'] ) && ! wp_attachment_is_image( (int) $story_item['thumbnail_id'] ) ) {
+						$story_item['thumbnail_id'] = 0;
+					}
+					if ( $submitted_thumb > 0 && 0 === $story_item['thumbnail_id'] ) {
+						$warnings[] = sprintf(
+							/* translators: %s: story label */
+							__( 'تصویر شاخص بندانگشتی استوری «%s» در این سایت یافت نشد و پاک شد.', 'negar-shop' ),
+							esc_html( $story_label )
+						);
+					}
+
+					// Media (video or image) check
+					if ( isset( $story_item['type'] ) && 'video' === $story_item['type'] ) {
+						$submitted_video = isset( $submitted_item['video_id'] ) ? absint( $submitted_item['video_id'] ) : 0;
+						if ( ! empty( $story_item['video_id'] ) ) {
+							$mime = (string) get_post_mime_type( (int) $story_item['video_id'] );
+							if ( ! str_starts_with( $mime, 'video/' ) ) {
+								$story_item['video_id'] = 0;
+							}
+						}
+						if ( $submitted_video > 0 && 0 === $story_item['video_id'] ) {
 							$warnings[] = sprintf(
-								/* translators: %d: story index */
-								__( 'رسانه استوری شماره %d در این سایت یافت نشد و شناسه آن پاک شد.', 'negar-shop' ),
-								$s_idx + 1
+								/* translators: %s: story label */
+								__( 'فایل ویدیوی استوری «%s» در این سایت یافت نشد و پاک شد.', 'negar-shop' ),
+								esc_html( $story_label )
 							);
-							$story_item['media_id'] = 0;
+						}
+					} else {
+						$submitted_image = isset( $submitted_item['image_id'] ) ? absint( $submitted_item['image_id'] ) : 0;
+						if ( ! empty( $story_item['image_id'] ) && ! wp_attachment_is_image( (int) $story_item['image_id'] ) ) {
+							$story_item['image_id'] = 0;
+						}
+						if ( $submitted_image > 0 && 0 === $story_item['image_id'] ) {
+							$warnings[] = sprintf(
+								/* translators: %s: story label */
+								__( 'تصویر تمام‌صفحه استوری «%s» در این سایت یافت نشد و پاک شد.', 'negar-shop' ),
+								esc_html( $story_label )
+							);
 						}
 					}
+
+					// Poster image check
+					if ( ! empty( $story_item['poster_id'] ) && ! wp_attachment_is_image( (int) $story_item['poster_id'] ) ) {
+						$story_item['poster_id'] = 0;
+					}
+
+					// Linked product check
+					$submitted_product = isset( $submitted_item['product_id'] ) ? absint( $submitted_item['product_id'] ) : 0;
 					if ( ! empty( $story_item['product_id'] ) ) {
 						$product = function_exists( 'wc_get_product' ) ? wc_get_product( (int) $story_item['product_id'] ) : null;
-						if ( ! $product ) {
+						if ( ! $product || 'publish' !== get_post_status( (int) $story_item['product_id'] ) ) {
 							$story_item['product_id'] = 0;
 						}
+					}
+					if ( $submitted_product > 0 && 0 === $story_item['product_id'] ) {
+						$warnings[] = sprintf(
+							/* translators: %s: story label */
+							__( 'محصول متصل به استوری «%s» در این سایت یافت نشد و شناسه آن پاک شد.', 'negar-shop' ),
+							esc_html( $story_label )
+						);
 					}
 				}
 				unset( $story_item );
 			}
 		} elseif ( NEGAR_THEME_BRAND_OPTION === $group_key ) {
-			if ( ! empty( $clean['selected_ids'] ) && is_array( $clean['selected_ids'] ) ) {
-				$valid_terms = array();
-				foreach ( $clean['selected_ids'] as $tid ) {
-					if ( term_exists( (int) $tid, 'product_brand' ) ) {
-						$valid_terms[] = (int) $tid;
+			if ( ! empty( $clean['brands'] ) && is_array( $clean['brands'] ) ) {
+				$valid_brands = array();
+				foreach ( $clean['brands'] as $b_item ) {
+					if ( ! is_array( $b_item ) || empty( $b_item['term_id'] ) ) {
+						continue;
 					}
+					$tid  = (int) $b_item['term_id'];
+					$term = get_term( $tid, 'product_brand' );
+					if ( ! $term || is_wp_error( $term ) || 'product_brand' !== $term->taxonomy ) {
+						continue;
+					}
+					if ( ! empty( $b_item['logo_override_id'] ) && ! wp_attachment_is_image( (int) $b_item['logo_override_id'] ) ) {
+						$warnings[] = sprintf(
+							/* translators: %d: term ID */
+							__( 'لوگوی جایگزین برای برند با شناسه %d در کتابخانه پرونده‌های چندرسانه‌ای یافت نشد و پاک شد.', 'negar-shop' ),
+							$tid
+						);
+						$b_item['logo_override_id'] = 0;
+					}
+					$valid_brands[] = $b_item;
 				}
-				if ( count( $valid_terms ) !== count( $clean['selected_ids'] ) ) {
-					$warnings[] = __( 'برخی از شناسه‌های برندهای ووکامرس در این سایت یافت نشدند و نادیده گرفته شدند.', 'negar-shop' );
-				}
-				$clean['selected_ids'] = $valid_terms;
+				$clean['brands'] = $valid_brands;
+			}
+			$submitted_brands_count = ( isset( $group_data['brands'] ) && is_array( $group_data['brands'] ) ) ? count( $group_data['brands'] ) : 0;
+			$clean_brands_count     = ( isset( $clean['brands'] ) && is_array( $clean['brands'] ) ) ? count( $clean['brands'] ) : 0;
+			if ( $submitted_brands_count > 0 && $clean_brands_count < $submitted_brands_count ) {
+				$warnings[] = __( 'برخی از برندهای موجود در فایل پشتیبان در دسته‌بندی برندهای ووکامرس این سایت یافت نشدند و نادیده گرفته شدند.', 'negar-shop' );
 			}
 		}
 

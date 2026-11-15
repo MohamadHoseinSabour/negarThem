@@ -2696,12 +2696,12 @@ try {
 	// 12f. Explicit empty collections preserved
 	$empty_brands_payload = array(
 		NEGAR_THEME_BRAND_OPTION => array(
-			'selected_ids' => array(),
+			'brands' => array(),
 		),
 	);
 	$apply_empty = negar_theme_backup_apply_data( $empty_brands_payload );
 	$stored_brands = get_option( NEGAR_THEME_BRAND_OPTION, null );
-	$results['backup_preserve_empty_collections'] = is_array( $stored_brands ) && empty( $stored_brands['selected_ids'] );
+	$results['backup_preserve_empty_collections'] = is_array( $stored_brands ) && empty( $stored_brands['brands'] );
 
 	// 12g. Cross-site invalid references cleared
 	$invalid_ref_payload = array(
@@ -2721,6 +2721,49 @@ try {
 	$results['backup_cross_site_warning']               = ! empty( $cross_val['warnings'] );
 	$results['backup_cross_site_invalid_media_cleared'] = 0 === $cross_val['clean_groups'][ NEGAR_THEME_MEDIA_OPTION ]['records']['hero-slide-one']['media_id'];
 
+	// 12g-2. Cross-site invalid story, brand and pack references cleared with warnings
+	$invalid_entities_payload = array(
+		'format'          => NEGAR_THEME_BACKUP_FORMAT,
+		'version'         => NEGAR_THEME_BACKUP_VERSION,
+		'theme'           => NEGAR_THEME_BACKUP_THEME,
+		'source_site_url' => 'http://external-site.example.com',
+		'groups'          => array(
+			NEGAR_THEME_PRODUCT_PACK_OPTION => array(
+				'packs' => array(
+					'gaming-zone' => array( 'shadows' => 9999991 ),
+				),
+			),
+			NEGAR_THEME_STORY_OPTION => array(
+				'stories' => array(
+					array(
+						'id'           => 'story_test_invalid',
+						'enabled'      => true,
+						'type'         => 'image',
+						'title'        => 'استوری تست نامعتبر',
+						'thumbnail_id' => 9999992,
+						'image_id'     => 9999993,
+						'product_id'   => 9999994,
+					),
+				),
+			),
+			NEGAR_THEME_BRAND_OPTION => array(
+				'brands' => array(
+					array(
+						'term_id'          => 9999995,
+						'enabled'          => true,
+						'logo_override_id' => 9999996,
+					),
+				),
+			),
+		),
+	);
+	$entity_val = negar_theme_backup_validate_data( $invalid_entities_payload );
+	$results['backup_invalid_pack_product_cleared'] = 0 === $entity_val['clean_groups'][ NEGAR_THEME_PRODUCT_PACK_OPTION ]['packs']['gaming-zone']['shadows'];
+	$clean_story = ! empty( $entity_val['clean_groups'][ NEGAR_THEME_STORY_OPTION ]['stories'][0] ) ? $entity_val['clean_groups'][ NEGAR_THEME_STORY_OPTION ]['stories'][0] : array();
+	$results['backup_invalid_story_media_cleared']  = 0 === $clean_story['thumbnail_id'] && 0 === $clean_story['image_id'] && 0 === $clean_story['product_id'];
+	$clean_brands = $entity_val['clean_groups'][ NEGAR_THEME_BRAND_OPTION ]['brands'];
+	$results['backup_invalid_brand_cleared']        = empty( $clean_brands );
+
 	// 12h. Rollback restore on failure
 	$rollback_snap = array(
 		NEGAR_THEME_SETTINGS_OPTION => array(
@@ -2730,6 +2773,48 @@ try {
 	);
 	negar_theme_backup_rollback( $rollback_snap );
 	$results['backup_rollback_restores_state'] = 'برند قبل از رول‌بک' === negar_theme_brand_label();
+
+	// 12i. Real End-to-End Backup Round-Trip (Snapshot -> Set Distinct -> Export -> Mutate -> Preview (0 writes) -> Apply -> Verify Restored)
+	$roundtrip_token   = 'rt_' . wp_generate_password( 8, false );
+	$distinct_settings = array(
+		'schema_version' => NEGAR_THEME_SETTINGS_VERSION,
+		'branding'       => array( 'site_label' => 'نگار شاپ دور رفت‌وبرگشت ' . $roundtrip_token ),
+		'colors'         => array( 'primary' => '#123456', 'secondary' => '#654321' ),
+	);
+	$distinct_packs    = array(
+		'schema_version' => 1,
+		'packs'          => array(),
+	);
+	$distinct_brands   = array(
+		'schema_version' => NEGAR_THEME_BRAND_VERSION,
+		'brands'         => array(),
+	);
+
+	update_option( NEGAR_THEME_SETTINGS_OPTION, $distinct_settings );
+	update_option( NEGAR_THEME_PRODUCT_PACK_OPTION, $distinct_packs );
+	update_option( NEGAR_THEME_BRAND_OPTION, $distinct_brands );
+
+	// Generate export
+	$exported = negar_theme_backup_generate_data();
+	$results['backup_roundtrip_export_valid'] = ( NEGAR_THEME_BACKUP_FORMAT === $exported['format'] );
+
+	// Mutate options in database to different values
+	update_option( NEGAR_THEME_SETTINGS_OPTION, array( 'branding' => array( 'site_label' => 'مقدار جهش‌یافته موقت' ) ) );
+
+	// Preview import (validate data without applying)
+	$preview_validation = negar_theme_backup_validate_data( $exported );
+	$results['backup_roundtrip_preview_valid']      = true === $preview_validation['valid'];
+	$results['backup_roundtrip_preview_zero_write'] = ( 'مقدار جهش‌یافته موقت' === negar_theme_brand_label() );
+
+	// Apply import
+	$apply_roundtrip = negar_theme_backup_apply_data( $preview_validation['clean_groups'] );
+	$results['backup_roundtrip_apply_success'] = ( true === $apply_roundtrip );
+
+	// Confirm exact original values restored
+	$restored_brand_label = negar_theme_brand_label();
+	$restored_primary     = negar_theme_color( 'primary' );
+	$results['backup_roundtrip_values_restored'] = ( 'نگار شاپ دور رفت‌وبرگشت ' . $roundtrip_token === $restored_brand_label )
+		&& ( '#123456' === $restored_primary );
 
 	negar_theme_test_restore( $option, $media_option, $pack_option, $story_option, $brand_option, $sms_option, $sms_secrets_option, $mods, $verify_snapshot );
 

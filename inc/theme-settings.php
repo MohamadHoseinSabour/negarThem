@@ -2635,6 +2635,181 @@ function negar_theme_ensure_media_option() {
 add_action( 'admin_init', 'negar_theme_ensure_media_option', 20 );
 
 /**
+ * Sanitize the full theme settings array independently of active admin tab.
+ *
+ * Used during backup import validation and full-settings persistence to ensure
+ * all submitted groups are validated without relying on $_POST['negar_theme_settings_tab'].
+ *
+ * @param mixed $submitted Raw settings data.
+ * @param array<string, mixed>|null $base_settings Base/fallback settings (defaults to stored settings).
+ * @return array<string, mixed>
+ */
+function negar_theme_sanitize_full_settings( $submitted, $base_settings = null ) {
+	if ( ! is_array( $submitted ) ) {
+		$submitted = array();
+	}
+
+	if ( null === $base_settings || ! is_array( $base_settings ) ) {
+		$base_settings = negar_theme_settings_raw();
+	}
+
+	$clean = $base_settings;
+	$clean['schema_version'] = NEGAR_THEME_SETTINGS_VERSION;
+
+	// 1. Branding
+	if ( isset( $submitted['branding'] ) && is_array( $submitted['branding'] ) ) {
+		$clean['branding']['site_label'] = isset( $submitted['branding']['site_label'] ) && is_scalar( $submitted['branding']['site_label'] )
+			? sanitize_text_field( $submitted['branding']['site_label'] )
+			: '';
+	}
+
+	// 2. Texts
+	if ( isset( $submitted['texts'] ) && is_array( $submitted['texts'] ) ) {
+		foreach ( negar_theme_text_registry() as $component => $section ) {
+			foreach ( $section['fields'] as $key => $field ) {
+				if ( ! isset( $submitted['texts'][ $component ] ) || ! is_array( $submitted['texts'][ $component ] ) || ! array_key_exists( $key, $submitted['texts'][ $component ] ) ) {
+					continue;
+				}
+				$value = $submitted['texts'][ $component ][ $key ];
+				$value = is_scalar( $value ) ? $value : '';
+				$clean['texts'][ $component ][ $key ] = 'textarea' === $field['type']
+					? sanitize_textarea_field( $value )
+					: sanitize_text_field( $value );
+			}
+		}
+	}
+
+	// 3. Layout
+	if ( isset( $submitted['layout'] ) && is_array( $submitted['layout'] ) ) {
+		if ( isset( $submitted['layout']['sections'] ) && is_array( $submitted['layout']['sections'] ) ) {
+			$clean['layout']['sections'] = negar_theme_normalize_home_layout( $submitted['layout']['sections'] );
+		} elseif ( isset( $submitted['layout']['order'] ) && is_array( $submitted['layout']['order'] ) ) {
+			$registry = negar_theme_home_section_registry();
+			$order    = $submitted['layout']['order'];
+			$enabled  = isset( $submitted['layout']['enabled'] ) && is_array( $submitted['layout']['enabled'] ) ? $submitted['layout']['enabled'] : array();
+			$rows     = array();
+			foreach ( $order as $id ) {
+				if ( ! is_scalar( $id ) ) {
+					continue;
+				}
+				$id = sanitize_key( $id );
+				if ( ! isset( $registry[ $id ] ) ) {
+					continue;
+				}
+				$enabled_value = isset( $enabled[ $id ] ) && is_scalar( $enabled[ $id ] ) ? $enabled[ $id ] : '';
+				$rows[]        = array(
+					'id'      => $id,
+					'enabled' => '1' === (string) $enabled_value,
+				);
+			}
+			$clean['layout']['sections'] = negar_theme_normalize_home_layout( $rows );
+		}
+	}
+
+	// 4. Products
+	if ( isset( $submitted['products'] ) && is_array( $submitted['products'] ) ) {
+		$registry           = negar_theme_product_section_registry();
+		$submitted_sections = isset( $submitted['products']['sections'] ) && is_array( $submitted['products']['sections'] )
+			? $submitted['products']['sections']
+			: array();
+
+		foreach ( array_keys( $registry ) as $section_id ) {
+			if ( array_key_exists( $section_id, $submitted_sections ) && is_array( $submitted_sections[ $section_id ] ) ) {
+				$section_input = $submitted_sections[ $section_id ];
+				$clean['products']['sections'][ $section_id ] = negar_theme_sanitize_product_section_config( $section_input, $section_id );
+			}
+		}
+	}
+
+	// 5. Colors
+	if ( isset( $submitted['colors'] ) && is_array( $submitted['colors'] ) ) {
+		foreach ( array( 'primary', 'secondary' ) as $key ) {
+			if ( array_key_exists( $key, $submitted['colors'] ) ) {
+				$val = is_scalar( $submitted['colors'][ $key ] ) ? sanitize_hex_color( $submitted['colors'][ $key ] ) : '';
+				$clean['colors'][ $key ] = $val ? $val : '';
+			}
+		}
+	}
+
+	// 6. Typography
+	if ( isset( $submitted['typography'] ) && is_array( $submitted['typography'] ) ) {
+		$defaults       = negar_theme_typography_defaults();
+		$font_families  = array_keys( negar_theme_font_families() );
+		$heading_scales = array_keys( negar_theme_heading_scales() );
+
+		$font_family = isset( $submitted['typography']['font_family'] ) ? sanitize_key( $submitted['typography']['font_family'] ) : $defaults['font_family'];
+		if ( ! in_array( $font_family, $font_families, true ) ) {
+			$font_family = $defaults['font_family'];
+		}
+
+		$heading_font_family = isset( $submitted['typography']['heading_font_family'] ) ? sanitize_key( $submitted['typography']['heading_font_family'] ) : $defaults['heading_font_family'];
+		if ( ! in_array( $heading_font_family, $font_families, true ) ) {
+			$heading_font_family = $defaults['heading_font_family'];
+		}
+
+		$base_font_size = isset( $submitted['typography']['base_font_size'] ) ? absint( $submitted['typography']['base_font_size'] ) : $defaults['base_font_size'];
+		if ( $base_font_size < 14 || $base_font_size > 18 ) {
+			$base_font_size = $defaults['base_font_size'];
+		}
+
+		$heading_scale = isset( $submitted['typography']['heading_scale'] ) ? sanitize_key( $submitted['typography']['heading_scale'] ) : $defaults['heading_scale'];
+		if ( ! in_array( $heading_scale, $heading_scales, true ) ) {
+			$heading_scale = $defaults['heading_scale'];
+		}
+
+		$clean['typography'] = array(
+			'font_family'         => $font_family,
+			'heading_font_family' => $heading_font_family,
+			'base_font_size'      => $base_font_size,
+			'heading_scale'       => $heading_scale,
+		);
+	}
+
+	// 7. Header, Contact, Footer, Social
+	if ( isset( $submitted['header'] ) && is_array( $submitted['header'] ) ) {
+		if ( array_key_exists( 'announcement', $submitted['header'] ) ) {
+			$clean['header']['announcement'] = sanitize_text_field( $submitted['header']['announcement'] );
+		}
+	}
+
+	if ( isset( $submitted['contact'] ) && is_array( $submitted['contact'] ) ) {
+		foreach ( array( 'phone', 'hours' ) as $f ) {
+			if ( array_key_exists( $f, $submitted['contact'] ) ) {
+				$clean['contact'][ $f ] = sanitize_text_field( $submitted['contact'][ $f ] );
+			}
+		}
+		if ( array_key_exists( 'email', $submitted['contact'] ) ) {
+			$clean['contact']['email'] = sanitize_email( $submitted['contact']['email'] );
+		}
+		if ( array_key_exists( 'address', $submitted['contact'] ) ) {
+			$clean['contact']['address'] = sanitize_textarea_field( $submitted['contact']['address'] );
+		}
+		if ( array_key_exists( 'map_url', $submitted['contact'] ) ) {
+			$clean['contact']['map_url'] = esc_url_raw( $submitted['contact']['map_url'] );
+		}
+	}
+
+	if ( isset( $submitted['footer'] ) && is_array( $submitted['footer'] ) ) {
+		if ( array_key_exists( 'about', $submitted['footer'] ) ) {
+			$clean['footer']['about'] = wp_kses_post( $submitted['footer']['about'] );
+		}
+		if ( array_key_exists( 'copyright', $submitted['footer'] ) ) {
+			$clean['footer']['copyright'] = sanitize_text_field( $submitted['footer']['copyright'] );
+		}
+	}
+
+	if ( isset( $submitted['social'] ) && is_array( $submitted['social'] ) ) {
+		foreach ( array( 'instagram', 'telegram', 'whatsapp', 'linkedin' ) as $network ) {
+			if ( array_key_exists( $network, $submitted['social'] ) ) {
+				$clean['social'][ $network ] = esc_url_raw( $submitted['social'][ $network ] );
+			}
+		}
+	}
+
+	return $clean;
+}
+
+/**
  * Sanitize only the submitted group, preserving all other saved groups.
  *
  * @param mixed $submitted Raw option input supplied by Settings API.
@@ -2653,7 +2828,9 @@ function negar_theme_sanitize_settings( $submitted ) {
 	$allowed   = array( 'general', 'texts', 'layout', 'products', 'colors', 'typography', 'header_footer' );
 
 	if ( ! in_array( $tab, $allowed, true ) ) {
-		return $current;
+		// When no specific tab is active (e.g., backup restore, programmatic update, or full import),
+		// sanitize all provided groups using full settings sanitization instead of discarding changes.
+		return negar_theme_sanitize_full_settings( $submitted, $current );
 	}
 
 	$current['schema_version'] = NEGAR_THEME_SETTINGS_VERSION;
