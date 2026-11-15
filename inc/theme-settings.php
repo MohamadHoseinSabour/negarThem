@@ -3336,8 +3336,8 @@ function negar_theme_render_settings_page() {
 							<?php endforeach; ?>
 						<?php endforeach; ?>
 					<?php elseif ( 'colors' === $active_tab ) : ?>
-						<?php negar_theme_settings_field( 'negar-primary-color', __( 'رنگ اصلی', 'negar-shop' ), NEGAR_THEME_SETTINGS_OPTION . '[colors][primary]', negar_theme_color( 'primary' ), 'color', __( 'برای دکمه‌ها، لینک‌ها و اجزای کلیدی قالب.', 'negar-shop' ) ); ?>
-						<?php negar_theme_settings_field( 'negar-secondary-color', __( 'رنگ ثانویه', 'negar-shop' ), NEGAR_THEME_SETTINGS_OPTION . '[colors][secondary]', negar_theme_color( 'secondary' ), 'color', __( 'برای پیشنهادها و اجزای مکمل قالب.', 'negar-shop' ) ); ?>
+						<?php negar_theme_settings_field( 'negar-primary-color', __( 'رنگ اصلی سازمانی (Primary)', 'negar-shop' ), NEGAR_THEME_SETTINGS_OPTION . '[colors][primary]', negar_theme_color( 'primary' ), 'color', __( 'رنگ اصلی برند برای دکمه‌ها، آیکون‌های اکشن، بج‌های تخفیف، لینک‌ها و اِلمان‌های کلیدی قالب.', 'negar-shop' ) ); ?>
+						<?php negar_theme_settings_field( 'negar-secondary-color', __( 'رنگ ثانویه / هاور (Secondary / Hover)', 'negar-shop' ), NEGAR_THEME_SETTINGS_OPTION . '[colors][secondary]', negar_theme_color( 'secondary' ), 'color', __( 'رنگ مکمل برند برای حالت هاور و فوکوس دکمه‌ها (Hover/Focus)، پس‌زمینه‌های هایلایت و اجزای تاکیدی مکمل قالب.', 'negar-shop' ) ); ?>
 					<?php elseif ( 'typography' === $active_tab ) : ?>
 						<?php
 						$typography_data = negar_theme_typography();

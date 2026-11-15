@@ -8,15 +8,15 @@
 :root {
   /* Design System Palette - Kaveh Demo 43 Crimson */
   --kaveh-primary-color: #e90544;
-  --kaveh-primary-hover: #d0043c;
+  --kaveh-primary-hover: #c40439;
   --kaveh-price-color: #0a0a0a;
   --color-primary: #e90544;
-  --color-primary-hover: #d0043c;
-  --color-primary-light: #fff1f2;
-  --color-secondary: #f43f5e;
-  --color-accent: #e11242;
-  --color-accent-hover: #be123c;
-  --color-accent-light: #fff1f2;
+  --color-primary-hover: #c40439;
+  --color-primary-light: color-mix(in srgb, var(--color-primary, #e90544) 8%, #ffffff);
+  --color-secondary: #c40439;
+  --color-accent: #c40439;
+  --color-accent-hover: var(--color-primary-hover, #c40439);
+  --color-accent-light: color-mix(in srgb, var(--color-secondary, #c40439) 8%, #ffffff);
   --color-background: #ffffff;
   --color-foreground: #0f172a;
   --color-card: #ffffff;
@@ -369,7 +369,7 @@ select:focus {
 }
 
 .btn-nk-danger {
-  background-color: #e90544;
+  background-color: var(--color-primary, #e90544);
   color: #ffffff !important;
   border-radius: 9999px;
   padding: 8px 24px;
@@ -380,14 +380,14 @@ select:focus {
   gap: 6px;
   transition: all 0.25s ease;
   white-space: nowrap;
-  box-shadow: 0 4px 12px rgba(233, 5, 68, 0.25);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--color-primary, #e90544) 25%, transparent);
   text-decoration: none;
 }
 
 .btn-nk-danger:hover {
-  background-color: #cb043b;
+  background-color: var(--color-primary-hover, var(--kaveh-primary-hover, #c40439));
   color: #ffffff !important;
-  box-shadow: 0 6px 18px rgba(233, 5, 68, 0.35);
+  box-shadow: 0 6px 18px color-mix(in srgb, var(--color-primary, #e90544) 35%, transparent);
   transform: translateY(-1px);
 }
 
@@ -456,7 +456,7 @@ select:focus {
   width: 36px;
   height: 36px;
   border-radius: 9999px;
-  background-color: #e90544;
+  background-color: var(--color-primary, #e90544);
   color: #ffffff !important;
   display: flex;
   align-items: center;
@@ -465,14 +465,14 @@ select:focus {
   bottom: -16px;
   left: 50%;
   transform: translateX(-50%);
-  box-shadow: 0 10px 24px rgba(233, 5, 68, 0.35);
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--color-primary, #e90544) 35%, transparent);
   transition: background-color 0.25s ease, transform 0.25s ease;
   z-index: 2;
   text-decoration: none;
 }
 
 .categories-nk__item .btn-nk-danger-2:hover {
-  background-color: #cb043b;
+  background-color: var(--color-primary-hover, var(--kaveh-primary-hover, #c40439));
   transform: translateX(-50%) scale(1.1);
 }
 
@@ -1348,11 +1348,11 @@ body.kaveh-full-product-titles .product h2, body.kaveh-full-product-titles .prod
 
 .btn-nk-danger { background-color: var(--kaveh-primary-color, #e90544); color: rgb(255, 255, 255); }
 
-.btn-nk-danger:hover, .btn-nk-danger:focus, .btn-nk-danger:active { background-color: var(--kaveh-primary-color, #e90544); color: rgb(255, 255, 255); }
+.btn-nk-danger:hover, .btn-nk-danger:focus, .btn-nk-danger:active { background-color: var(--kaveh-primary-hover, var(--color-primary-hover, #c40439)); color: rgb(255, 255, 255); }
 
 .btn-nk-danger-2 { background-color: var(--kaveh-primary-color, #e90544); color: rgb(255, 255, 255); }
 
-.btn-nk-danger-2:hover, .btn-nk-danger-2:focus, .btn-nk-danger-2:active { background-color: var(--kaveh-primary-hover, var(--kaveh-primary-color, #d0043c)); color: rgb(255, 255, 255); }
+.btn-nk-danger-2:hover, .btn-nk-danger-2:focus, .btn-nk-danger-2:active { background-color: var(--kaveh-primary-hover, var(--color-primary-hover, #c40439)); color: rgb(255, 255, 255); }
 
 .section-heading-one-nk { margin-bottom: 26px; }
 
@@ -1642,7 +1642,7 @@ body.kaveh-full-product-titles .product h2, body.kaveh-full-product-titles .prod
 
 .top-selling-products .btn-nk-danger { background-color: var(--kaveh-primary-color, #e90544); color: rgb(255, 255, 255); }
 
-.top-selling-products .btn-nk-danger:hover, .top-selling-products .btn-nk-danger:focus, .top-selling-products .btn-nk-danger:active { background-color: var(--kaveh-primary-color, #e90544); color: rgb(255, 255, 255); }
+.top-selling-products .btn-nk-danger:hover, .top-selling-products .btn-nk-danger:focus, .top-selling-products .btn-nk-danger:active { background-color: var(--kaveh-primary-hover, var(--color-primary-hover, #c40439)); color: rgb(255, 255, 255); }
 
 .top-selling-products .swiper-slide > .popular-products-nk, .top-selling-products .swiper-slide > [class*="product-cart-"], .top-selling-products .swiper-slide > .product, .top-selling-products .swiper-slide > [class*="product-"] { width: 100%; height: 100%; min-height: 100%; margin: 0px; display: flex; flex-direction: column; align-self: stretch; }
 
@@ -1678,7 +1678,7 @@ body.kaveh-full-product-titles .product h2, body.kaveh-full-product-titles .prod
 
 .top-selling-products-two-nk .btn-nk-danger { background-color: var(--kaveh-primary-color, #e90544); color: rgb(255, 255, 255); }
 
-.top-selling-products-two-nk .btn-nk-danger:hover, .top-selling-products-two-nk .btn-nk-danger:focus, .top-selling-products-two-nk .btn-nk-danger:active { background-color: var(--kaveh-primary-color, #e90544); color: rgb(255, 255, 255); }
+.top-selling-products-two-nk .btn-nk-danger:hover, .top-selling-products-two-nk .btn-nk-danger:focus, .top-selling-products-two-nk .btn-nk-danger:active { background-color: var(--kaveh-primary-hover, var(--color-primary-hover, #c40439)); color: rgb(255, 255, 255); }
 
 .top-selling-products-two-nk .section-heading-one-nk { margin-bottom: 48px; }
 
@@ -1702,7 +1702,7 @@ body.kaveh-full-product-titles .product h2, body.kaveh-full-product-titles .prod
 
 .top-selling-products-two-nk .btn-nk-danger { background-color: var(--kaveh-primary-color, #e90544); color: rgb(255, 255, 255); }
 
-.top-selling-products-two-nk .btn-nk-danger:hover, .top-selling-products-two-nk .btn-nk-danger:focus, .top-selling-products-two-nk .btn-nk-danger:active { background-color: var(--kaveh-primary-color, #e90544); color: rgb(255, 255, 255); }
+.top-selling-products-two-nk .btn-nk-danger:hover, .top-selling-products-two-nk .btn-nk-danger:focus, .top-selling-products-two-nk .btn-nk-danger:active { background-color: var(--kaveh-primary-hover, var(--color-primary-hover, #c40439)); color: rgb(255, 255, 255); }
 
 .top-selling-products-two-nk .section-heading-one-nk { margin-bottom: 48px; }
 
@@ -1914,7 +1914,7 @@ body.kaveh-full-product-titles .product h2, body.kaveh-full-product-titles .prod
 
 .top-view-products-four-nk .btn-nk-danger { background-color: var(--kaveh-primary-color, #e90544); color: rgb(255, 255, 255); }
 
-.top-view-products-four-nk .btn-nk-danger:hover, .top-view-products-four-nk .btn-nk-danger:focus, .top-view-products-four-nk .btn-nk-danger:active { background-color: rgb(193, 4, 56); color: rgb(255, 255, 255); }
+.top-view-products-four-nk .btn-nk-danger:hover, .top-view-products-four-nk .btn-nk-danger:focus, .top-view-products-four-nk .btn-nk-danger:active { background-color: var(--kaveh-primary-hover, var(--color-primary-hover, #c40439)); color: rgb(255, 255, 255); }
 
 .top-products-nk .section-heading-one-nk.top-products-nk__heading { background-image: linear-gradient(90deg, color-mix(in srgb, var(--kaveh-primary-color, #e90544) 2%, transparent) 65.1%, color-mix(in srgb, var(--kaveh-primary-color, #e90544) 10%, transparent) 100%); border-radius: 40px; padding: 20px 38px 20px 47px; margin-bottom: 62px; }
 

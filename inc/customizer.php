@@ -393,20 +393,29 @@ function negar_shop_customizer_css() {
 	$base_size       = function_exists( 'negar_theme_base_font_size' ) ? negar_theme_base_font_size() : 16;
 	$heading_scale   = function_exists( 'negar_theme_heading_scale' ) ? negar_theme_heading_scale() : 'normal';
 
-	$css             = ':root {';
-	$css            .= '--color-primary: ' . esc_attr( $primary_color ) . ';';
-	$css            .= '--negar-primary: ' . esc_attr( $primary_color ) . ';';
-	$css            .= '--kaveh-primary-color: ' . esc_attr( $primary_color ) . ';';
-	$css            .= '--wp--preset--color--primary: ' . esc_attr( $primary_color ) . ';';
-	$css            .= '--color-primary-hover: ' . esc_attr( $secondary_color ) . ';';
-	$css            .= '--kaveh-primary-hover: ' . esc_attr( $secondary_color ) . ';';
-	$css            .= '--color-accent: ' . esc_attr( $secondary_color ) . ';';
-	$css            .= '--color-secondary: ' . esc_attr( $secondary_color ) . ';';
-	$css            .= '--wp--preset--color--secondary: ' . esc_attr( $secondary_color ) . ';';
-	$css            .= '--font-primary: ' . $font_primary . ';';
-	$css            .= '--font-heading: ' . $font_heading . ';';
-	$css            .= '}';
-	$css            .= 'body { font-size: ' . absint( $base_size ) . 'px; }';
+	$p_attr = esc_attr( $primary_color );
+	$s_attr = esc_attr( $secondary_color );
+
+	$css  = ':root {';
+	$css .= '--color-primary: ' . $p_attr . ';';
+	$css .= '--negar-primary: ' . $p_attr . ';';
+	$css .= '--kaveh-primary-color: ' . $p_attr . ';';
+	$css .= '--wp--preset--color--primary: ' . $p_attr . ';';
+	$css .= '--color-primary-hover: ' . $s_attr . ';';
+	$css .= '--kaveh-primary-hover: ' . $s_attr . ';';
+	$css .= '--color-accent: ' . $s_attr . ';';
+	$css .= '--color-secondary: ' . $s_attr . ';';
+	$css .= '--wp--preset--color--secondary: ' . $s_attr . ';';
+	$css .= '--color-primary-light: color-mix(in srgb, ' . $p_attr . ' 8%, #ffffff);';
+	$css .= '--color-accent-light: color-mix(in srgb, ' . $s_attr . ' 8%, #ffffff);';
+	$css .= '--color-accent-hover: ' . $s_attr . ';';
+	$css .= '--ppnk-card-glow: ' . $p_attr . ';';
+	$css .= '--negar-checkout-primary: ' . $p_attr . ';';
+	$css .= '--negar-checkout-primary-hover: ' . $s_attr . ';';
+	$css .= '--font-primary: ' . $font_primary . ';';
+	$css .= '--font-heading: ' . $font_heading . ';';
+	$css .= '}';
+	$css .= 'body { font-size: ' . absint( $base_size ) . 'px; }';
 
 	if ( 'compact' === $heading_scale ) {
 		$css .= 'h1, .h1 { font-size: 1.6875rem; }';
@@ -423,6 +432,48 @@ function negar_shop_customizer_css() {
 		$css .= 'h5, .h5 { font-size: 1.1rem; }';
 		$css .= 'h6, .h6 { font-size: 0.9625rem; }';
 	}
+
+	// 1. Buttons, category actions and section headers.
+	$css .= '.btn-nk-danger, .btn-nk-danger-2, .categories-nk__item .btn-nk-danger-2, .categories-nk__item .btn, .section-heading-one-nk .btn, .section-heading-one-nk .btn-nk-danger, .section-heading-one-nk .more__btn, .top-products-nk .section-heading-one-nk .more__btn, .articles-nk .btn-nk-danger, .brands-nk .btn-nk-danger, .top-selling-products .btn-nk-danger, .top-selling-products-two-nk .btn-nk-danger, .top-view-products-four-nk .btn-nk-danger { background-color: var(--color-primary) !important; color: #ffffff !important; box-shadow: 0 4px 14px color-mix(in srgb, var(--color-primary) 28%, transparent) !important; }';
+	$css .= '.btn-nk-danger:hover, .btn-nk-danger:focus, .btn-nk-danger-2:hover, .btn-nk-danger-2:focus, .categories-nk__item .btn-nk-danger-2:hover, .section-heading-one-nk .btn:hover, .section-heading-one-nk .btn-nk-danger:hover, .section-heading-one-nk .more:hover .more__btn, .top-products-nk .section-heading-one-nk .more:hover .more__btn, .articles-nk .btn-nk-danger:hover, .brands-nk .btn-nk-danger:hover, .top-selling-products .btn-nk-danger:hover, .top-selling-products-two-nk .btn-nk-danger:hover, .top-view-products-four-nk .btn-nk-danger:hover { background-color: var(--color-primary-hover) !important; color: #ffffff !important; box-shadow: 0 6px 18px color-mix(in srgb, var(--color-primary-hover) 35%, transparent) !important; }';
+
+	// 2. Promotional banners and CTAs.
+	$css .= '.banners-nk__item .detail .more { background-color: var(--color-primary) !important; color: #ffffff !important; box-shadow: 0 14px 35px color-mix(in srgb, var(--color-primary) 25%, transparent) !important; }';
+	$css .= '.banners-nk__item .detail .more:hover { background-color: var(--color-primary-hover) !important; color: #ffffff !important; }';
+
+	// 3. Product cards: action buttons, likes, badges, timers, add-to-cart, buy-now.
+	$css .= '.popular-products-nk .product-one-nk { --ppnk-card-glow: var(--color-primary) !important; }';
+	$css .= '.popular-products-nk .product-nk .like:hover, .popular-products-nk .product-nk .like:focus, .popular-products-nk .product-nk .like.wlm-button--active { color: var(--color-primary) !important; }';
+	$css .= '.popular-products-nk .product-nk .title a:hover, .product-cart-thirty-nk .product-two-nk .title a:hover, .product-cart-thirty-one-nk .product-four-nk .title a:hover, .product-cart-thirty-two-nk .product-nk .title a:hover, .product-cart-thirty-three-nk .product-nk .title a:hover { color: var(--color-primary-hover) !important; }';
+	$css .= '.popular-products-nk .product-nk .price .off span, .product-cart-thirty-nk .product-nk .price .off span, .product-cart-thirty-one-nk .product-nk .price .off span, .product-cart-thirty-two-nk .product-nk .price .off span, .product-cart-thirty-three-nk .product-six-nk .offer { background-color: var(--color-primary) !important; color: #ffffff !important; }';
+	$css .= '.product-cart-thirty-nk .product-two-nk .timer { background-color: var(--color-primary) !important; color: #ffffff !important; }';
+	$css .= '.product-cart-thirty-nk .product-two-nk::before { background-image: radial-gradient(13.71% 12.89% at 79% 99.23%, var(--color-primary) 0%, transparent 100%) !important; }';
+	$css .= '.product-cart-thirty-nk .product-two-nk .add-to-cart, .product-cart-thirty-one-nk .buy-now__btn, .product-cart-thirty-two-nk .product-five-nk .add-to-cart, .product-cart-thirty-three-nk .buy-now__btn, .add-to-cart-wrap .button, .product-nk .add-to-cart { background-color: var(--color-primary) !important; color: #ffffff !important; }';
+	$css .= '.product-cart-thirty-nk .product-two-nk .add-to-cart:hover, .product-cart-thirty-one-nk .buy-now__btn:hover, .product-cart-thirty-two-nk .product-five-nk .add-to-cart:hover, .product-cart-thirty-three-nk .buy-now__btn:hover, .add-to-cart-wrap .button:hover, .product-nk .add-to-cart:hover { background-color: var(--color-primary-hover) !important; color: #ffffff !important; }';
+	$css .= '.product-cart-thirty-one-nk .buy-now .sub-text { color: var(--color-primary) !important; }';
+
+	// 4. Daily deals wrapper & contrast buttons.
+	$css .= '.popular-products-nk__wrapper { background-image: linear-gradient(247.81deg, var(--color-primary) 0.24%, var(--color-primary-hover) 64.49%) !important; box-shadow: rgba(255, 255, 255, 0.2) -20px 14px 44px inset, 0 16px 40px color-mix(in srgb, var(--color-primary) 25%, transparent) !important; }';
+	$css .= '.btn-nk-white { color: var(--color-primary) !important; }';
+	$css .= '.btn-nk-white:hover { background-color: var(--color-primary-light) !important; }';
+
+	// 5. Stories & headings.
+	$css .= '.story-shop__item .image { background: linear-gradient(180deg, var(--color-primary) 0%, var(--color-primary-hover) 100%) !important; }';
+	$css .= '.upperstorytitle { background-color: var(--color-primary) !important; box-shadow: 0 2px 8px color-mix(in srgb, var(--color-primary) 40%, transparent) !important; }';
+	$css .= '.section-heading-one-nk .title .highlight, .section-heading-one-nk .title .fw-bold, .section-heading-one-nk .title span, .top-products-nk .section-heading-one-nk .title span, .top-products-nk .section-heading-one-nk .more__title, .top-products-nk .section-heading-one-nk .more:hover .more__sub-title { color: var(--color-primary) !important; }';
+	$css .= '.section-heading-one-nk .line span:last-child, .top-products-nk .section-heading-one-nk .line span:last-child { background-color: var(--color-primary) !important; }';
+
+	// 6. Single product page.
+	$css .= '.kav-single-product-style5-cart button.single_add_to_cart_button, .product-buy-now-btn, .single_add_to_cart_button { background-color: var(--color-primary) !important; color: #ffffff !important; }';
+	$css .= '.kav-single-product-style5-cart button.single_add_to_cart_button:hover, .product-buy-now-btn:hover, .single_add_to_cart_button:hover { background-color: var(--color-primary-hover) !important; color: #ffffff !important; }';
+	$css .= '.kav-single-product-info-payment-price .price, .kav-single-product-tabs li.active i, .kav-single-product-specs-more { color: var(--color-primary) !important; }';
+	$css .= '.kav-single-product-specs-more:hover { color: var(--color-primary-hover) !important; }';
+
+	// 7. Navigation, header, bottom bar, accounts.
+	$css .= '.negar-category-mega__all, .negar-category-mega__sale-card a, .negar-mobile-bottom-bar .bottom-bar-item:hover, .negar-mobile-bottom-bar .bottom-bar-item.is-active, .negar-category-mega__parent:hover, .negar-category-mega__child a:hover { color: var(--color-primary) !important; }';
+	$css .= '.category-menu-btn:focus-visible, .negar-category-mega a:focus-visible { outline-color: var(--color-primary) !important; }';
+	$css .= '.negar-category-mega__sale-card { border-color: var(--color-primary) !important; }';
+	$css .= '.account-page-nk__sidebar .woocommerce-MyAccount-navigation a:hover, .account-page-nk__sidebar .woocommerce-MyAccount-navigation .is-active a, .account-page-nk__header span, .negar-account-auth__eyebrow { color: var(--color-primary) !important; background-color: var(--color-primary-light) !important; }';
 
 	echo "\n<!-- Negar Shop theme design tokens -->\n";
 	echo '<style id="negar-shop-theme-colors">' . wp_strip_all_tags( $css ) . "</style>\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
