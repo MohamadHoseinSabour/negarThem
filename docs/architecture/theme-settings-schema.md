@@ -353,9 +353,51 @@ Brand settings are stored independently in the non-autoloaded option `negar_them
   - Swiper navigation buttons (`.swiper-button-next`, `.swiper-button-prev`) are conditionally omitted when only 1 brand is rendered (`$has_multiple_brands` is false).
   - Fabricated commercial claims are completely removed: hardcoded ratings (`۳/۳`, `۴/۵`, etc.), star icons (`icon-star-7`), and fake product counts (`+۲۴۰ محصول`) are purged. Headings are made neutral (`برندهای منتخب`).
 
+## Implemented SMS and secret schema (Phase 9)
+
+SMS configuration is split across two dedicated options to isolate secrets from general settings and export paths:
+
+### 1. General SMS options (`negar_theme_sms_options`)
+- Option name: `negar_theme_sms_options` (defined as `NEGAR_THEME_SMS_OPTION`).
+- Version constant: `NEGAR_THEME_SMS_VERSION = 1`.
+- Autoload: `no`.
+- Schema:
+  ```php
+  array(
+      'schema_version' => 1,
+      'enabled'        => false,       // bool: whether SMS dispatch is active
+      'provider'       => 'kavenegar', // string: provider identifier (whitelisted)
+      'template'       => 'verify',    // string: verification template identifier
+  )
+  ```
+- Public getters: `negar_theme_sms_options()`, `negar_theme_sms_is_enabled()`, `negar_theme_sms_is_configured()`.
+
+### 2. Isolated SMS secrets (`negar_theme_sms_secrets`)
+- Option name: `negar_theme_sms_secrets` (defined as `NEGAR_THEME_SMS_SECRETS_OPTION`).
+- Autoload: `no`.
+- Storage: strictly separated from `negar_theme_options`, `negar_theme_sms_options`, and never exported.
+- Schema:
+  ```php
+  array(
+      'kavenegar_api_key' => '...', // string: API key
+  )
+  ```
+- Constants: supports `NEGAR_KAVENEGAR_API_KEY` environment or `wp-config.php` constant.
+- Admin protection:
+  - Input type `password` with `autocomplete="new-password"`.
+  - Stored value is never echoed into the input value attribute.
+  - Submitting a blank input preserves the existing stored key.
+  - Dedicated deletion action (`negar_theme_sms_delete_key`) allows explicit key clearing with confirmation dialog.
+- Helper functions: `negar_theme_sms_get_api_key()`, `negar_theme_sms_has_api_key()`.
+
+### 3. Dispatch & OTP hardening
+- Connected filter: `negar_dispatch_otp_sms` hook dispatches SMS via `negar_kavenegar_send_lookup()` using Kavenegar Verify Lookup REST API.
+- Error reporting: translates provider error codes (418, 411, 424, 401, 504) into honest Persian messages and transient storage without leaking tokens.
+- Customer-only policy: `negar_is_user_privileged()` prevents elevated accounts (administrator, editor, author, contributor, shop_manager) from authenticating via public OTP.
+- Ambiguous match prevention: duplicate `billing_phone` matches are rejected with an explicit error.
+- Abuse protection: client IP rate limiting (15 requests/hour) in addition to phone rate limiting (5 attempts/hour).
+- Environment guard: test transport strictly requires verified local/development environment and explicit flag.
+
 ## Planned schema additions
 
-The static tab registry deliberately reserves keys for the following phased
-additions: `sms` and `backup`. Their field schemas must be
-documented before they are added; unknown keys must not be accepted by import or
-save handlers.
+The static tab registry deliberately reserves the key `backup` for Phase 10. Its field schema must be documented before it is added; unknown keys must not be accepted by import or save handlers.

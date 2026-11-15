@@ -110,8 +110,16 @@
 - [x] **TYPO-8.6** Connect typography and color tokens to frontend CSS via `negar_shop_customizer_css()`, generating `--font-primary`, `--font-heading`, `body { font-size: Xpx; }`, and heading scale rules.
 - [x] **TYPO-8.7** Optimize font enqueueing in `inc/enqueue.php`: conditionally load Google Fonts Vazirmatn and resource hints only when required; expose resolved family name in `kavehShopData.fontFamily`.
 - [x] **TYPO-8.8** Add automated regression tests in `tests/theme-settings-regression.php` and `tests/theme-settings-regression.js` covering persistence, validation fallback, clamping, restore defaults, computed styles, and Site Identity linking.
-- [ ] **T211** Design an SMS-provider boundary with separately stored secrets;
-  never export credentials or expose them to the browser (Phase 9).
+- [x] **T211** Design an SMS-provider boundary with separately stored secrets; never export credentials or expose them to the browser (Phase 9).
+  - [x] **SMS-9.1** Register dedicated non-autoloaded options `negar_theme_sms_options` and `negar_theme_sms_secrets` with schema isolation.
+  - [x] **SMS-9.2** Implement Settings API tab (`tab=sms`) with masked API key input, configuration badge, server constant support (`NEGAR_KAVENEGAR_API_KEY`), and explicit key deletion.
+  - [x] **SMS-9.3** Implement practical Kavenegar provider (`negar_kavenegar_send_lookup`) using Verify Lookup REST API with honest Persian error mapping.
+  - [x] **SMS-9.4** Connect SMS provider to existing OTP dispatch hook (`negar_dispatch_otp_sms`).
+  - [x] **SMS-9.5** Enforce customer-only authentication policy (`negar_is_user_privileged`) rejecting administrative roles and capabilities from public OTP logins.
+  - [x] **SMS-9.6** Reject ambiguous phone-to-user matches when multiple accounts share the same `billing_phone`.
+  - [x] **SMS-9.7** Add client IP rate limiting (15 attempts/hour) alongside existing 5 requests/phone/hour rate limit.
+  - [x] **SMS-9.8** Secure test transport (`NEGAR_TEST_OTP_TRANSPORT`) requiring verified local/development environment and zero OTP code disclosure.
+  - [x] **SMS-9.9** Add automated regression and Playwright browser tests covering secrets isolation, blank key preservation, provider HTTP mocks, customer-only policy, ambiguous detection, and admin UI.
 - [ ] **T212** Design backup/import/export validation, authorization, rollback and
   non-autoloaded storage for large settings (Phase 10).
 - [ ] **T213** Complete end-to-end, accessibility, RTL, migration and packaging

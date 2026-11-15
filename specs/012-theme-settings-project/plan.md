@@ -76,7 +76,7 @@
    arrow suppression, complete removal of fake ratings and product counts, and clean section
    omission when empty or unconfigured.
 10. **Branding, typography and colors (Phase 8, complete):** practical typography controls (`negar_theme_options['typography']`), supported font families (`vazirmatn`, `system`, `tahoma`), base font size clamping (14–18px), heading size scales (`compact`, `normal`, `large`), "Restore Defaults" reset actions for colors and typography, core WordPress Site Identity integration (`custom_logo`) with `negar_theme_logo_url()` and demo fallback, frontend CSS tokens (`--font-primary`, `--font-heading`, body font size, heading scales), and conditional Google Fonts / resource hints loading.
-11. **SMS and OTP provider integration (Phase 9, planned):** provider boundary with separately stored secrets.
+11. **SMS and OTP provider integration (Phase 9, complete):** secure Kavenegar Verify Lookup provider integration with separate non-autoloaded secrets storage (`negar_theme_sms_secrets`), Settings API SMS tab (`tab=sms`), credential masking and preservation, server constant support (`NEGAR_KAVENEGAR_API_KEY`), connection to `negar_dispatch_otp_sms`, hardened customer-only OTP login policy rejecting privileged accounts, duplicate phone rejection, IP rate limiting, environment-checked local test transport, and zero credential/code leakage.
 12. **Settings backup/import/export (Phase 10, planned):** validation, authorization, rollback and storage.
 13. **Final QA and release preparation (Phase 11, planned):** end-to-end, accessibility, RTL, packaging.
 

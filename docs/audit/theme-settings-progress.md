@@ -238,7 +238,38 @@
   - Clean database snapshot restoration verified: zero test pollution in WordPress options or theme mods.
   - Test suites: `npm run test:lint` (PASS, 114 PHP files), `npm run test:settings` (PASS), `npm run test:e2e` (37 passed, 0 failed), `npm test` (all green, exit code 0).
 
+## Phase 9 — SMS Provider & Secure OTP Integration
+
+**Status:** PASS (COMPLETE & VERIFIED)
+**Baseline:** `4aa48acef0fb8e74e889f527a92023293d8387ff`
+**Commits:**
+- `f5b310c` `feat(settings): add secure Kavenegar SMS configuration`
+- `1d1f0ab` `feat(auth): connect SMS provider and harden OTP login`
+- [test(auth): verify provider integration and OTP security]
+
+### Summary of Accomplishments:
+- **SMS Configuration & Secrets Isolation Architecture:**
+  - Registered dedicated non-autoloaded options `negar_theme_sms_options` (general options: `enabled`, `provider`, `template`) and `negar_theme_sms_secrets` (isolated API key storage).
+  - Credentials are never stored in `negar_theme_options`, never exposed in JavaScript/DOM, and never included in public AJAX or export paths.
+  - Added dedicated SMS tab in WordPress Admin (`Settings → تنظیمات قالب نگار → سامانه پیامکی` / `tab=sms`) with masked password input, configuration status badge, and server constant fallback (`NEGAR_KAVENEGAR_API_KEY`).
+  - Implemented blank-key preservation (submitting empty key preserves stored secret) and explicit deletion action (`negar_theme_sms_delete_key`) with confirmation dialog.
+- **Provider Implementation & Dispatch Hook:**
+  - Implemented practical Kavenegar provider (`negar_kavenegar_send_lookup`) using Verify Lookup REST API with honest Persian error mapping (insufficient credit, invalid receptor, pending template, inactive line, unauthorized key).
+  - Connected provider to the existing `negar_dispatch_otp_sms` filter hook with transient error tracking.
+- **OTP Security & Hardened Customer-Only Policy:**
+  - Implemented strict customer-only authentication policy (`negar_is_user_privileged`): rejected administrator, editor, author, contributor, and shop manager accounts from public OTP login with an honest Persian security error.
+  - Implemented duplicate phone detection: rejected phone numbers associated with multiple customer accounts to prevent ambiguous logins.
+  - Implemented client IP rate limiting (max 15 requests per IP per hour) alongside the existing per-phone hourly limit (5 requests per phone per hour).
+  - Restricted test transport (`negar_is_test_transport_allowed`) strictly to verified local/development environments with explicit flag; disallowed on staging/production.
+  - Zero OTP code or credential disclosure in AJAX responses or logs.
+- **Comprehensive Regression Verification:**
+  - PHP regression tests in `tests/theme-settings-regression.php` verifying unauthorized save rejection, settings persistence, secrets isolation, blank key preservation, key deletion, provider HTTP mock scenarios (success, credit error, template error, network timeout), filter failure handling, customer-only policy, ambiguous phone detection, and IP rate limiting.
+  - Playwright browser tests in `tests/theme-settings-regression.js` verifying SMS tab fields, configuration badge, settings persistence, blank key preservation, and key deletion.
+  - Security suite `tests/security-otp-disclosure.test.js` verifying zero code disclosure and valid OTP responses.
+  - Snapshot and restore logic updated to cleanly isolate and restore `negar_theme_sms_options` and `negar_theme_sms_secrets`.
+  - Test suites: `npm run test:lint` (PASS, 115 PHP files), `npm run test:settings` (PASS), `node tests/security-otp-disclosure.test.js` (PASS), `npm run test:e2e` (37 passed, 0 failed), `npm test` (all green, exit code 0).
+
 ## Next phase
 
-Following approved roadmap: Phase 9 (SMS/OTP), Phase 10 (Backup/Export), Phase 11 (Release QA & Packaging).
-Phases 9, 10, and 11 remain open.
+Following approved roadmap: Phase 10 (Settings backup/import/export), Phase 11 (Final QA and release preparation).
+Phases 10 and 11 remain open. Phase 9 is complete.

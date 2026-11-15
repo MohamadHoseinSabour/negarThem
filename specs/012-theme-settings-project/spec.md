@@ -131,5 +131,12 @@ sorting, selector and catalog-visibility hardening.
   and mobile headers, while preserving the theme's display-only brand label.
 - Dedicated "Restore Defaults" actions are provided for both Colors (restoring canonical
   crimson `#e90544` / `#c40439`) and Typography (restoring Vazirmatn, 16px, normal scale).
+- SMS provider and secure OTP integration connects the phone-based authentication system
+  to Kavenegar Verify Lookup REST API with separate non-autoloaded secrets storage
+  (`negar_theme_sms_secrets`). The Settings API SMS tab (`tab=sms`) provides credential masking,
+  status indicators, server constant fallback (`NEGAR_KAVENEGAR_API_KEY`), and explicit key deletion.
+  OTP logins enforce a strict customer-only authentication policy (`negar_is_user_privileged`),
+  reject duplicate phone numbers, enforce IP rate limiting (15/hour), restrict test transport
+  strictly to local/development environments, and maintain zero OTP code or secret disclosure in client responses.
 - Documentation keys exactly match implementation and the dedicated spec, plan and
   task list remain separate from specification 009.

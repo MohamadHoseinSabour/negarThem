@@ -778,6 +778,59 @@ async function run() {
     const siteIdentityBtn = page.locator('a[href*="title_tagline"]');
     assert.strictEqual(await siteIdentityBtn.isVisible(), true, 'General tab must link to WordPress Site Identity controls');
 
+    // 6. SMS Provider Settings Tab
+    await page.goto(BASE_URL + '/wp-admin/options-general.php?page=negar-theme-settings&tab=sms', { waitUntil: 'domcontentloaded' });
+    assert(page.url().includes('tab=sms'), 'SMS tab must be accessible via query parameter');
+
+    const smsEnabled = page.locator('#negar-sms-enabled');
+    const smsProvider = page.locator('#negar-sms-provider');
+    const smsApiKey = page.locator('#negar-sms-api-key');
+    const smsTemplate = page.locator('#negar-sms-template');
+    const keyStatusBadge = page.locator('#negar-sms-key-status');
+
+    assert.strictEqual(await smsEnabled.isVisible(), true, 'SMS enabled checkbox must be visible');
+    assert.strictEqual(await smsProvider.isVisible(), true, 'SMS provider selector must be visible');
+    assert.strictEqual(await smsApiKey.isVisible(), true, 'SMS API key input must be visible');
+    assert.strictEqual(await smsTemplate.isVisible(), true, 'SMS template input must be visible');
+    assert.strictEqual(await keyStatusBadge.isVisible(), true, 'SMS key status badge must be visible');
+
+    // Configure and save SMS settings
+    await smsEnabled.check();
+    await smsProvider.selectOption('kavenegar');
+    await smsTemplate.fill('reg_verify_template');
+    await smsApiKey.fill('browser_test_kavenegar_key_98765');
+
+    await Promise.all([
+      page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
+      page.locator('form[action="options.php"] input[type="submit"]').click(),
+    ]);
+
+    assert.strictEqual(await page.locator('#negar-sms-enabled').isChecked(), true, 'SMS enabled state must persist');
+    assert.strictEqual(await page.locator('#negar-sms-template').inputValue(), 'reg_verify_template', 'SMS template name must persist');
+    assert.strictEqual(await page.locator('#negar-sms-provider').inputValue(), 'kavenegar', 'SMS provider must persist');
+    assert((await page.locator('#negar-sms-key-status').textContent()).includes('تنظیم شده'), 'API key status badge must show configured');
+
+    // Submit with empty API key - must preserve existing key
+    await page.locator('#negar-sms-api-key').fill('');
+    await Promise.all([
+      page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
+      page.locator('form[action="options.php"] input[type="submit"]').click(),
+    ]);
+    assert((await page.locator('#negar-sms-key-status').textContent()).includes('تنظیم شده'), 'Blank API key submission must preserve existing secret key');
+
+    // Delete API key via button
+    page.once('dialog', async (dialog) => {
+      await dialog.accept();
+    });
+    const deleteKeyBtn = page.locator('#negar-sms-delete-key-btn');
+    if (await deleteKeyBtn.isVisible()) {
+      await Promise.all([
+        page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
+        deleteKeyBtn.click(),
+      ]);
+      assert((await page.locator('#negar-sms-key-status').textContent()).includes('تنظیم نشده'), 'Deleting API key must update badge to not configured');
+    }
+
     console.log('[PASS] Theme settings persistence and rendered-token regression checks passed.');
   } catch (error) {
     failure = error;

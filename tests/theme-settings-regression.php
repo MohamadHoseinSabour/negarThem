@@ -12,6 +12,7 @@ if ( 'cli' !== php_sapi_name() ) {
 
 require dirname( __DIR__, 4 ) . '/wp-load.php';
 require_once ABSPATH . 'wp-admin/includes/template.php';
+require_once ABSPATH . 'wp-admin/includes/user.php';
 
 $action = isset( $argv[1] ) ? $argv[1] : '';
 $option = NEGAR_THEME_SETTINGS_OPTION;
@@ -19,6 +20,8 @@ $media_option = NEGAR_THEME_MEDIA_OPTION;
 $pack_option  = NEGAR_THEME_PRODUCT_PACK_OPTION;
 $story_option = NEGAR_THEME_STORY_OPTION;
 $brand_option = NEGAR_THEME_BRAND_OPTION;
+$sms_option   = NEGAR_THEME_SMS_OPTION;
+$sms_secrets_option = NEGAR_THEME_SMS_SECRETS_OPTION;
 $mods   = 'theme_mods_' . get_option( 'stylesheet' );
 
 function negar_theme_test_admin() {
@@ -61,27 +64,31 @@ function negar_theme_test_destroy_auth_cookie( $user_id, $token ) {
 	}
 }
 
-function negar_theme_test_snapshot( $option, $media_option, $pack_option, $story_option, $brand_option, $mods ) {
+function negar_theme_test_snapshot( $option, $media_option, $pack_option, $story_option, $brand_option, $sms_option, $sms_secrets_option, $mods ) {
 	$settings = get_option( $option, null );
 	$theme_mods = get_option( $mods, null );
 
 	return array(
-		'option_exists' => null !== $settings,
-		'option'        => $settings,
-		'mods_exists'   => null !== $theme_mods,
-		'mods'          => $theme_mods,
-		'media_exists'  => null !== get_option( $media_option, null ),
-		'media'         => get_option( $media_option, null ),
-		'pack_exists'   => null !== get_option( $pack_option, null ),
-		'pack'          => get_option( $pack_option, null ),
-		'story_exists'  => null !== get_option( $story_option, null ),
-		'story'         => get_option( $story_option, null ),
-		'brand_exists'  => null !== get_option( $brand_option, null ),
-		'brand'         => get_option( $brand_option, null ),
+		'option_exists'      => null !== $settings,
+		'option'             => $settings,
+		'mods_exists'        => null !== $theme_mods,
+		'mods'               => $theme_mods,
+		'media_exists'       => null !== get_option( $media_option, null ),
+		'media'              => get_option( $media_option, null ),
+		'pack_exists'        => null !== get_option( $pack_option, null ),
+		'pack'               => get_option( $pack_option, null ),
+		'story_exists'       => null !== get_option( $story_option, null ),
+		'story'              => get_option( $story_option, null ),
+		'brand_exists'       => null !== get_option( $brand_option, null ),
+		'brand'              => get_option( $brand_option, null ),
+		'sms_exists'         => null !== get_option( $sms_option, null ),
+		'sms'                => get_option( $sms_option, null ),
+		'sms_secrets_exists' => null !== get_option( $sms_secrets_option, null ),
+		'sms_secrets'        => get_option( $sms_secrets_option, null ),
 	);
 }
 
-function negar_theme_test_restore( $option, $media_option, $pack_option, $story_option, $brand_option, $mods, $snapshot ) {
+function negar_theme_test_restore( $option, $media_option, $pack_option, $story_option, $brand_option, $sms_option, $sms_secrets_option, $mods, $snapshot ) {
 	if ( ! empty( $snapshot['option_exists'] ) ) {
 		update_option( $option, $snapshot['option'] );
 	} else {
@@ -113,6 +120,20 @@ function negar_theme_test_restore( $option, $media_option, $pack_option, $story_
 	} else {
 		delete_option( $brand_option );
 	}
+	if ( isset( $snapshot['sms_exists'] ) ) {
+		if ( ! empty( $snapshot['sms_exists'] ) ) {
+			update_option( $sms_option, $snapshot['sms'] );
+		} else {
+			delete_option( $sms_option );
+		}
+	}
+	if ( isset( $snapshot['sms_secrets_exists'] ) ) {
+		if ( ! empty( $snapshot['sms_secrets_exists'] ) ) {
+			update_option( $sms_secrets_option, $snapshot['sms_secrets'], false );
+		} else {
+			delete_option( $sms_secrets_option );
+		}
+	}
 
 	wp_cache_delete( $option, 'options' );
 	wp_cache_delete( $mods, 'options' );
@@ -120,6 +141,8 @@ function negar_theme_test_restore( $option, $media_option, $pack_option, $story_
 	wp_cache_delete( $pack_option, 'options' );
 	wp_cache_delete( $story_option, 'options' );
 	wp_cache_delete( $brand_option, 'options' );
+	wp_cache_delete( $sms_option, 'options' );
+	wp_cache_delete( $sms_secrets_option, 'options' );
 }
 
 function negar_theme_test_save_group( $tab, $input, $section_action = '' ) {
@@ -417,7 +440,7 @@ function negar_theme_test_cleanup_brand_fixture( $term_id, $token ) {
 
 try {
 	if ( 'snapshot' === $action ) {
-		echo base64_encode( wp_json_encode( negar_theme_test_snapshot( $option, $media_option, $pack_option, $story_option, $brand_option, $mods ) ) );
+		echo base64_encode( wp_json_encode( negar_theme_test_snapshot( $option, $media_option, $pack_option, $story_option, $brand_option, $sms_option, $sms_secrets_option, $mods ) ) );
 		exit( 0 );
 	}
 
@@ -426,7 +449,7 @@ try {
 		if ( ! is_array( $snapshot ) ) {
 			throw new InvalidArgumentException( 'Invalid settings snapshot.' );
 		}
-		negar_theme_test_restore( $option, $media_option, $pack_option, $story_option, $brand_option, $mods, $snapshot );
+		negar_theme_test_restore( $option, $media_option, $pack_option, $story_option, $brand_option, $sms_option, $sms_secrets_option, $mods, $snapshot );
 		echo wp_json_encode( array( 'restored' => true ) );
 		exit( 0 );
 	}
@@ -604,9 +627,10 @@ try {
 		throw new InvalidArgumentException( 'Unknown action.' );
 	}
 
-	$verify_snapshot = negar_theme_test_snapshot( $option, $media_option, $pack_option, $story_option, $brand_option, $mods );
+	$verify_snapshot = negar_theme_test_snapshot( $option, $media_option, $pack_option, $story_option, $brand_option, $sms_option, $sms_secrets_option, $mods );
 	$results         = array();
 	$active_brand_fixtures = array();
+	$tracked_test_users    = array();
 
 	wp_set_current_user( 0 );
 	$_POST['negar_theme_settings_tab'] = 'colors';
@@ -2264,11 +2288,277 @@ try {
 	$results['branding_logo_url_fallback'] = ! empty( negar_theme_logo_url() )
 		&& ( false !== strpos( negar_theme_logo_url(), 'logo.svg' ) );
 
-	negar_theme_test_restore( $option, $media_option, $pack_option, $story_option, $brand_option, $mods, $verify_snapshot );
+	// =========================================================================
+	// Phase 9: SMS Provider & Hardened OTP Login Integration Tests
+	// =========================================================================
+
+	// 1. Unauthorized SMS settings save rejection
+	wp_set_current_user( 0 );
+	$current_sms_opts = negar_theme_sms_options();
+	$unauth_sms_save  = negar_theme_sanitize_sms_settings( array( 'enabled' => '1', 'provider' => 'kavenegar', 'template' => 'unauth_tpl' ) );
+	$results['sms_unauthorized_save_rejected'] = $current_sms_opts === $unauth_sms_save;
+
+	negar_theme_test_admin();
+
+	// 2. SMS settings persistence (enabled, provider, template)
+	$saved_sms = negar_theme_sanitize_sms_settings(
+		array(
+			'enabled'  => '1',
+			'provider' => 'kavenegar',
+			'template' => 'test_verification_template',
+		)
+	);
+	update_option( $sms_option, $saved_sms );
+	$results['sms_settings_saved'] = true === negar_theme_sms_is_enabled()
+		&& 'kavenegar' === negar_theme_sms_options()['provider']
+		&& 'test_verification_template' === negar_theme_sms_options()['template'];
+
+	// 3. Secrets isolation: saving API key stores in non-autoloaded negar_theme_sms_secrets and does not pollute general theme options
+	$secret_key_test = 'kav_secret_' . wp_generate_password( 24, false, false );
+	$_POST['negar_theme_sms_api_key'] = $secret_key_test;
+	negar_theme_sanitize_sms_settings(
+		array(
+			'enabled'  => '1',
+			'provider' => 'kavenegar',
+			'template' => 'test_verification_template',
+		)
+	);
+	unset( $_POST['negar_theme_sms_api_key'] );
+	$stored_secrets = get_option( $sms_secrets_option, array() );
+	$general_opts   = get_option( $option, array() );
+	$results['sms_secrets_isolated'] = isset( $stored_secrets['kavenegar_api_key'] )
+		&& $stored_secrets['kavenegar_api_key'] === $secret_key_test
+		&& true === negar_theme_sms_has_api_key()
+		&& $secret_key_test === negar_theme_sms_get_api_key()
+		&& ! isset( $general_opts['kavenegar_api_key'] )
+		&& ! isset( get_option( $sms_option, array() )['kavenegar_api_key'] );
+
+	// 4. Preserving existing API key when blank key is submitted
+	$_POST['negar_theme_sms_api_key'] = '';
+	negar_theme_sanitize_sms_settings(
+		array(
+			'enabled'  => '1',
+			'provider' => 'kavenegar',
+			'template' => 'test_verification_template',
+		)
+	);
+	unset( $_POST['negar_theme_sms_api_key'] );
+	$results['sms_preserve_existing_key_on_blank'] = $secret_key_test === negar_theme_sms_get_api_key();
+
+	// 5. Explicit key deletion via negar_theme_sms_delete_key
+	$_POST['negar_theme_sms_delete_key'] = '1';
+	negar_theme_sanitize_sms_settings(
+		array(
+			'enabled'  => '1',
+			'provider' => 'kavenegar',
+			'template' => 'test_verification_template',
+		)
+	);
+	unset( $_POST['negar_theme_sms_delete_key'] );
+	$results['sms_delete_api_key'] = false === negar_theme_sms_has_api_key()
+		&& '' === negar_theme_sms_get_api_key();
+
+	// Re-set a valid mock key for HTTP provider mock testing
+	update_option( $sms_secrets_option, array( 'kavenegar_api_key' => 'mock_kavenegar_test_key_12345' ), false );
+
+	// 6. Mocking Kavenegar HTTP requests via pre_http_request
+	// Scenario A: Success response (status 200)
+	$mock_http_handler = function( $preempt, $parsed_args, $url ) {
+		if ( false !== strpos( $url, 'api.kavenegar.com' ) ) {
+			return array(
+				'headers'  => array( 'Content-Type' => 'application/json; charset=utf-8' ),
+				'body'     => wp_json_encode(
+					array(
+						'return'  => array(
+							'status'  => 200,
+							'message' => 'تایید شد',
+						),
+						'entries' => array(
+							array(
+								'messageid' => 12345678,
+								'status'    => 5,
+								'cost'      => 150,
+							),
+						),
+					)
+				),
+				'response' => array(
+					'code'    => 200,
+					'message' => 'OK',
+				),
+			);
+		}
+		return $preempt;
+	};
+	add_filter( 'pre_http_request', $mock_http_handler, 10, 3 );
+
+	$send_success = negar_kavenegar_send_lookup( '09121112233', '54321', 'test_template', 'mock_kavenegar_test_key_12345' );
+	$results['kavenegar_mock_send_success'] = true === $send_success['success'] && 200 === $send_success['code'];
+
+	// Dispatch filter with success
+	$dispatch_success = apply_filters( 'negar_dispatch_otp_sms', false, '09121112233', '54321' );
+	$results['sms_dispatch_filter_success'] = true === $dispatch_success;
+
+	remove_filter( 'pre_http_request', $mock_http_handler, 10 );
+
+	// Scenario B: Provider error 418 (insufficient balance)
+	$mock_http_insufficient = function( $preempt, $parsed_args, $url ) {
+		if ( false !== strpos( $url, 'api.kavenegar.com' ) ) {
+			return array(
+				'headers'  => array( 'Content-Type' => 'application/json; charset=utf-8' ),
+				'body'     => wp_json_encode(
+					array(
+						'return'  => array(
+							'status'  => 418,
+							'message' => 'Credit is not enough',
+						),
+					)
+				),
+				'response' => array(
+					'code'    => 200,
+					'message' => 'OK',
+				),
+			);
+		}
+		return $preempt;
+	};
+	add_filter( 'pre_http_request', $mock_http_insufficient, 10, 3 );
+
+	$send_insufficient = negar_kavenegar_send_lookup( '09121112233', '54321', 'test_template', 'mock_kavenegar_test_key_12345' );
+	$results['kavenegar_mock_insufficient_credit'] = false === $send_insufficient['success']
+		&& 418 === $send_insufficient['code']
+		&& false !== strpos( $send_insufficient['message'], 'اعتبار حساب پیامکی کافی نمی‌باشد' );
+
+	remove_filter( 'pre_http_request', $mock_http_insufficient, 10 );
+
+	// Scenario C: Provider error 424 (template not approved)
+	$mock_http_invalid_tpl = function( $preempt, $parsed_args, $url ) {
+		if ( false !== strpos( $url, 'api.kavenegar.com' ) ) {
+			return array(
+				'headers'  => array( 'Content-Type' => 'application/json; charset=utf-8' ),
+				'body'     => wp_json_encode(
+					array(
+						'return'  => array(
+							'status'  => 424,
+							'message' => 'Template not found or pending',
+						),
+					)
+				),
+				'response' => array(
+					'code'    => 200,
+					'message' => 'OK',
+				),
+			);
+		}
+		return $preempt;
+	};
+	add_filter( 'pre_http_request', $mock_http_invalid_tpl, 10, 3 );
+
+	$send_invalid_tpl = negar_kavenegar_send_lookup( '09121112233', '54321', 'test_template', 'mock_kavenegar_test_key_12345' );
+	$results['kavenegar_mock_invalid_template'] = false === $send_invalid_tpl['success']
+		&& 424 === $send_invalid_tpl['code']
+		&& false !== strpos( $send_invalid_tpl['message'], 'الگوی پیامک' );
+
+	remove_filter( 'pre_http_request', $mock_http_invalid_tpl, 10 );
+
+	// Scenario D: Network timeout (WP_Error)
+	$mock_http_timeout = function( $preempt, $parsed_args, $url ) {
+		if ( false !== strpos( $url, 'api.kavenegar.com' ) ) {
+			return new WP_Error( 'http_request_failed', 'cURL error 28: Operation timed out' );
+		}
+		return $preempt;
+	};
+	add_filter( 'pre_http_request', $mock_http_timeout, 10, 3 );
+
+	$send_timeout = negar_kavenegar_send_lookup( '09121112233', '54321', 'test_template', 'mock_kavenegar_test_key_12345' );
+	$results['kavenegar_mock_network_timeout'] = false === $send_timeout['success']
+		&& 504 === $send_timeout['code']
+		&& false !== strpos( $send_timeout['message'], 'خطا در برقراری ارتباط با سرور پیامک' );
+
+	// Dispatch filter failure saves transient error
+	$dispatch_timeout = apply_filters( 'negar_dispatch_otp_sms', false, '09121112233', '54321' );
+	$stored_err       = get_transient( 'negar_otp_last_error_' . md5( '09121112233' ) );
+	$results['sms_dispatch_filter_failure'] = false === $dispatch_timeout
+		&& ! empty( $stored_err )
+		&& false !== strpos( $stored_err, 'خطا در برقراری ارتباط با سرور پیامک' );
+
+	delete_transient( 'negar_otp_last_error_' . md5( '09121112233' ) );
+	remove_filter( 'pre_http_request', $mock_http_timeout, 10 );
+
+	// 7. Security: Customer-only OTP authentication policy (privileged user rejection)
+	$test_admin_id = wp_insert_user(
+		array(
+			'user_login' => 'test_temp_admin_' . wp_generate_password( 6, false, false ),
+			'user_pass'  => wp_generate_password( 16, true, true ),
+			'user_email' => 'test_admin_' . wp_generate_password( 6, false, false ) . '@example.test',
+			'role'       => 'administrator',
+		)
+	);
+	$tracked_test_users[] = $test_admin_id;
+	$test_admin_user = get_user_by( 'id', $test_admin_id );
+	$results['privileged_user_detection'] = true === negar_is_user_privileged( $test_admin_user );
+	wp_delete_user( $test_admin_id );
+	$tracked_test_users = array_diff( $tracked_test_users, array( $test_admin_id ) );
+
+	// 8. Security: Ambiguous duplicate phone match rejection
+	$ambig_phone    = '09128880011';
+	$ambig_user1_id = wp_insert_user(
+		array(
+			'user_login' => 'test_ambig1_' . wp_generate_password( 6, false, false ),
+			'user_pass'  => wp_generate_password( 16, true, true ),
+			'user_email' => 'test_ambig1_' . wp_generate_password( 6, false, false ) . '@example.test',
+			'role'       => 'customer',
+		)
+	);
+	$ambig_user2_id = wp_insert_user(
+		array(
+			'user_login' => 'test_ambig2_' . wp_generate_password( 6, false, false ),
+			'user_pass'  => wp_generate_password( 16, true, true ),
+			'user_email' => 'test_ambig2_' . wp_generate_password( 6, false, false ) . '@example.test',
+			'role'       => 'customer',
+		)
+	);
+	$tracked_test_users[] = $ambig_user1_id;
+	$tracked_test_users[] = $ambig_user2_id;
+	update_user_meta( $ambig_user1_id, 'billing_phone', $ambig_phone );
+	update_user_meta( $ambig_user2_id, 'billing_phone', $ambig_phone );
+
+	$matched_ambig = get_users(
+		array(
+			'meta_key'   => 'billing_phone',
+			'meta_value' => $ambig_phone,
+			'number'     => 2,
+		)
+	);
+	$results['ambiguous_phone_detection'] = count( $matched_ambig ) > 1;
+
+	// Cleanup ambiguous test fixtures
+	wp_delete_user( $ambig_user1_id );
+	wp_delete_user( $ambig_user2_id );
+	$tracked_test_users = array_diff( $tracked_test_users, array( $ambig_user1_id, $ambig_user2_id ) );
+
+	// 9. IP rate-limiting check
+	$mock_ip_hash = md5( '192.0.2.1' );
+	$mock_ip_key  = 'negar_otp_ip_' . $mock_ip_hash;
+	set_transient( $mock_ip_key, 15, HOUR_IN_SECONDS );
+	$results['ip_rate_limiting_threshold'] = 15 === (int) get_transient( $mock_ip_key );
+	delete_transient( $mock_ip_key );
+
+	// 10. Test transport security (local only, never production)
+	$results['test_transport_security_guard'] = is_bool( negar_is_test_transport_allowed() );
+
+	negar_theme_test_restore( $option, $media_option, $pack_option, $story_option, $brand_option, $sms_option, $sms_secrets_option, $mods, $verify_snapshot );
 
 	echo wp_json_encode( $results );
 	exit( in_array( false, $results, true ) ? 1 : 0 );
 } catch ( Throwable $error ) {
+	if ( ! empty( $tracked_test_users ) ) {
+		foreach ( $tracked_test_users as $uid ) {
+			if ( $uid > 0 ) {
+				wp_delete_user( $uid );
+			}
+		}
+	}
 	if ( ! empty( $active_brand_fixtures ) ) {
 		foreach ( $active_brand_fixtures as $rem_id => $rem_tok ) {
 			negar_theme_test_cleanup_brand_fixture( $rem_id, $rem_tok );
@@ -2288,8 +2578,8 @@ try {
 			}
 		}
 	}
-	if ( isset( $option, $media_option, $pack_option, $story_option, $brand_option, $mods, $verify_snapshot ) ) {
-		negar_theme_test_restore( $option, $media_option, $pack_option, $story_option, $brand_option, $mods, $verify_snapshot );
+	if ( isset( $option, $media_option, $pack_option, $story_option, $brand_option, $sms_option, $sms_secrets_option, $mods, $verify_snapshot ) ) {
+		negar_theme_test_restore( $option, $media_option, $pack_option, $story_option, $brand_option, $sms_option, $sms_secrets_option, $mods, $verify_snapshot );
 	}
 	fwrite( STDERR, $error->getMessage() . PHP_EOL );
 	exit( 1 );

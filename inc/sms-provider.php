@@ -234,9 +234,9 @@ function negar_theme_render_sms_fields() {
 				<div style="display: flex; gap: 8px; align-items: center; max-width: 500px;">
 					<input id="negar-sms-api-key" name="negar_theme_sms_api_key" type="password" class="regular-text code" dir="ltr" autocomplete="new-password" placeholder="<?php echo $has_key ? '••••••••••••••••••••••••••••••••' : ''; ?>">
 					<?php if ( $has_key ) : ?>
-						<span style="color: #059669; font-weight: 600; font-size: 13px;">✔ <?php esc_html_e( 'تنظیم شده', 'negar-shop' ); ?></span>
+						<span id="negar-sms-key-status" style="color: #059669; font-weight: 600; font-size: 13px;">✔ <?php esc_html_e( 'تنظیم شده', 'negar-shop' ); ?></span>
 					<?php else : ?>
-						<span style="color: #dc2626; font-size: 13px;">✖ <?php esc_html_e( 'تنظیم نشده', 'negar-shop' ); ?></span>
+						<span id="negar-sms-key-status" style="color: #dc2626; font-size: 13px;">✖ <?php esc_html_e( 'تنظیم نشده', 'negar-shop' ); ?></span>
 					<?php endif; ?>
 				</div>
 				<p class="description">
@@ -247,7 +247,7 @@ function negar_theme_render_sms_fields() {
 				</p>
 				<?php if ( $has_key && ! $is_const ) : ?>
 					<p style="margin-top: 8px;">
-						<button type="submit" name="negar_theme_sms_delete_key" value="1" class="button button-link-delete" onclick="return confirm('<?php echo esc_js( __( 'آیا از حذف کلید API ذخیره‌شده اطمینان دارید؟', 'negar-shop' ) ); ?>');">
+						<button id="negar-sms-delete-key-btn" type="submit" name="negar_theme_sms_delete_key" value="1" class="button button-link-delete" onclick="return confirm('<?php echo esc_js( __( 'آیا از حذف کلید API ذخیره‌شده اطمینان دارید؟', 'negar-shop' ) ); ?>');">
 							<?php esc_html_e( 'حذف کلید ذخیره‌شده فعلی', 'negar-shop' ); ?>
 						</button>
 					</p>
