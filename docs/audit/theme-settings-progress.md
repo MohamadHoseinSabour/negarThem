@@ -303,7 +303,7 @@
 **Commits:**
 - `9bda986` `fix(auth): reject unbound phone username associations`
 - `e25fdd4` `feat(settings): add safe configuration backup and restore`
-- `9cc8ba7` `test(settings): verify backup restore and final carryovers`
+- `e27c85f` `test(settings): verify backup restore and final carryovers`
 
 ### Summary of Accomplishments:
 - **Carryover 1: Top-Level Admin Dashboard Access:**
