@@ -23,7 +23,7 @@ $featured_product_posts = get_posts(
 			array(
 				'taxonomy' => 'product_cat',
 				'field'    => 'slug',
-				'terms'    => 'games',
+				'terms'    => array( 'major-appliances', 'refrigerators-freezers' ),
 			),
 		),
 	)

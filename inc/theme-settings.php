@@ -431,7 +431,11 @@ function negar_theme_render_home_sections() {
 function negar_theme_product_section_registry() {
 	return array(
 		'flash-deals'              => array( 'label' => __( 'پیشنهادهای شگفت‌انگیز', 'negar-shop' ), 'count' => 8, 'sort' => 'date_desc', 'sale_only' => true ),
-		'product-tabs-laptops'     => array( 'label' => __( 'تب محصولات: لپ‌تاپ', 'negar-shop' ), 'count' => 5, 'sort' => 'date_desc', 'category_slugs' => array( 'laptop', 'لپ-تاپ', 'لپتاپ' ) ),
+		'product-tabs-refrigerators' => array( 'label' => __( 'تب محصولات: یخچال و فریزر', 'negar-shop' ), 'count' => 5, 'sort' => 'date_desc', 'category_slugs' => array( 'refrigerators-freezers' ) ),
+		'product-tabs-washers'       => array( 'label' => __( 'تب محصولات: ماشین لباسشویی', 'negar-shop' ), 'count' => 5, 'sort' => 'date_desc', 'category_slugs' => array( 'washing-machines' ) ),
+		'product-tabs-airfryers'     => array( 'label' => __( 'تب محصولات: سرخ‌کن بدون روغن', 'negar-shop' ), 'count' => 5, 'sort' => 'date_desc', 'category_slugs' => array( 'air-fryers' ) ),
+		'product-tabs-vacuums'       => array( 'label' => __( 'تب محصولات: جاروبرقی', 'negar-shop' ), 'count' => 5, 'sort' => 'date_desc', 'category_slugs' => array( 'vacuum-cleaners' ) ),
+		'product-tabs-laptops'     => array( 'label' => __( 'تب محصولات: لپ‌تاپ (قدیمی)', 'negar-shop' ), 'count' => 5, 'sort' => 'date_desc', 'category_slugs' => array( 'refrigerators-freezers' ) ),
 		'product-tabs-consoles'    => array( 'label' => __( 'تب محصولات: کنسول', 'negar-shop' ), 'count' => 5, 'sort' => 'date_desc', 'empty_category_sort' => 'random', 'category_slugs' => array( 'console', 'کنسول-بازی', 'کنسول' ) ),
 		'product-tabs-mobile'      => array( 'label' => __( 'تب محصولات: موبایل', 'negar-shop' ), 'count' => 5, 'sort' => 'date_desc', 'category_slugs' => array( 'mobile', 'گوشی-موبایل', 'موبایل' ) ),
 		'product-tabs-watches'     => array( 'label' => __( 'تب محصولات: ساعت هوشمند', 'negar-shop' ), 'count' => 5, 'sort' => 'date_desc', 'empty_category_sort' => 'comment_count_desc', 'category_slugs' => array( 'smartwatch', 'ساعت-هوشمند' ) ),

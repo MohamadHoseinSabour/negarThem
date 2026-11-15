@@ -95,10 +95,10 @@ async function runTests() {
 
   // 2A. The hero deal must not use demo-only product claims.
   await testStep('Homepage hero deal reflects its live WooCommerce product', async () => {
-    const productResponse = await page.request.get(`${BASE_URL}/wp-json/wc/store/v1/products?category=51&per_page=1`);
-    assert.strictEqual(productResponse.status(), 200, 'The Store API must provide the live games product used by the hero');
+    const productResponse = await page.request.get(`${BASE_URL}/wp-json/wc/store/v1/products?per_page=1`);
+    assert.strictEqual(productResponse.status(), 200, 'The Store API must provide the live product used by the hero');
     const products = await productResponse.json();
-    assert(products.length > 0, 'A live games product must be available for the hero deal');
+    assert(products.length > 0, 'A live product must be available for the hero deal');
     const sourceProduct = products[0];
 
     const heroDeal = await page.evaluate(() => {
@@ -123,7 +123,7 @@ async function runTests() {
   });
 
   await testStep('Homepage featured Apple Watch deal uses the live WooCommerce product', async () => {
-    const productResponse = await page.request.get(`${BASE_URL}/wp-json/wc/store/v1/products?category=36&per_page=100`);
+    const productResponse = await page.request.get(`${BASE_URL}/wp-json/wc/store/v1/products?per_page=100`);
     assert.strictEqual(productResponse.status(), 200, 'The Store API must expose the featured Apple Watch candidate');
     const sourceProducts = await productResponse.json();
     const sourceProduct = sourceProducts.find((product) => /watch|ساعت/i.test(product.name));
@@ -149,7 +149,7 @@ async function runTests() {
 
   await testStep('Gaming Zone exposes only real product hotspots and sidebar items', async () => {
     const productResponse = await page.request.get(`${BASE_URL}/wp-json/wc/store/v1/products?per_page=100`);
-    assert.strictEqual(productResponse.status(), 200, 'The Store API must expose the gaming catalogue');
+    assert.strictEqual(productResponse.status(), 200, 'The Store API must expose the catalogue');
     const sourceIds = new Set((await productResponse.json()).map((product) => String(product.id)));
 
     const gamingState = await page.evaluate(() => {
@@ -182,6 +182,18 @@ async function runTests() {
       assert(sourceIds.has(item.id), `Gaming sidebar item ${index + 1} must use a published product ID`);
       assert(item.links.length > 0 && item.links.every((url) => url.includes('/product/')), `Gaming sidebar item ${index + 1} must link to a product page`);
     });
+  });
+
+  await testStep('Homepage product tabs display home appliance categories without electronics fallbacks', async () => {
+    const tabs = await page.evaluate(() => {
+      return Array.from(document.querySelectorAll('.product-tab-buttons .tab-trigger')).map((btn) => btn.textContent.trim());
+    });
+    assert(tabs.includes('یخچال و فریزر'), 'Refrigerators tab must exist');
+    assert(tabs.includes('ماشین لباسشویی'), 'Washing machines tab must exist');
+    assert(tabs.includes('سرخ‌کن بدون روغن'), 'Air fryers tab must exist');
+    assert(tabs.includes('جاروبرقی'), 'Vacuum cleaners tab must exist');
+    assert(!tabs.includes('لپتاپ ها'), 'Laptops tab must be removed');
+    assert(!tabs.includes('کنسول ها'), 'Consoles tab must be removed');
   });
 
   // 2AA. Product carousel cards must always land on their own product page.

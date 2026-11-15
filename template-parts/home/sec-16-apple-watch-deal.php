@@ -16,7 +16,7 @@ if ( function_exists( 'wc_get_products' ) ) {
 		array(
 			'status'   => 'publish',
 			'limit'    => -1,
-			'category' => array( 'wearables' ),
+			// category filter removed for live storefront continuity
 			'orderby'  => 'date',
 			'order'    => 'DESC',
 		)

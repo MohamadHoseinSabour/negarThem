@@ -88,4 +88,5 @@ if ( class_exists( 'WooCommerce' ) || file_exists( WP_PLUGIN_DIR . '/woocommerce
 	require_once NEGAR_SHOP_DIR . '/inc/modals-ajax.php';
 	require_once NEGAR_SHOP_DIR . '/inc/auth-otp.php';
 	require_once NEGAR_SHOP_DIR . '/inc/product-qa.php';
+	require_once NEGAR_SHOP_DIR . '/inc/category-redirects.php';
 }
