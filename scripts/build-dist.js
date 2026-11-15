@@ -33,6 +33,7 @@ const EXCLUDE_NAMES = new Set([
   'backups',
   'dist',
   'scratch',
+  'specs',
   'tests',
   'scripts',
   'docs',
