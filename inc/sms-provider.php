@@ -264,3 +264,153 @@ function negar_theme_render_sms_fields() {
 	</table>
 	<?php
 }
+
+/**
+ * Send OTP lookup via Kavenegar Verify Lookup REST API.
+ *
+ * Endpoint: https://api.kavenegar.com/v1/{API_KEY}/verify/lookup.json
+ * Method: POST
+ *
+ * @param string      $receptor 11-digit mobile number (e.g. 09123456789).
+ * @param string      $token    5-digit verification code.
+ * @param string      $template Verification template identifier.
+ * @param string|null $api_key  Optional API key override.
+ * @return array{success: bool, message: string, code: int}
+ */
+function negar_kavenegar_send_lookup( $receptor, $token, $template, $api_key = null ) {
+	if ( null === $api_key ) {
+		$api_key = negar_theme_sms_get_api_key();
+	}
+
+	if ( empty( $api_key ) ) {
+		return array(
+			'success' => false,
+			'message' => __( 'کلید وب‌سرویس پیامک (API Key) تنظیم نشده است.', 'negar-shop' ),
+			'code'    => 401,
+		);
+	}
+
+	if ( empty( $template ) ) {
+		return array(
+			'success' => false,
+			'message' => __( 'نام الگوی پیامک (Template) مشخص نشده است.', 'negar-shop' ),
+			'code'    => 400,
+		);
+	}
+
+	// Build endpoint URL: https://api.kavenegar.com/v1/{API_KEY}/verify/lookup.json
+	$url = sprintf( 'https://api.kavenegar.com/v1/%s/verify/lookup.json', rawurlencode( $api_key ) );
+
+	$body_params = array(
+		'receptor' => $receptor,
+		'token'    => $token,
+		'template' => $template,
+		'type'     => 'sms',
+	);
+
+	$args = array(
+		'method'      => 'POST',
+		'timeout'     => 10,
+		'redirection' => 2,
+		'httpversion' => '1.1',
+		'blocking'    => true,
+		'headers'     => array(
+			'Accept'       => 'application/json',
+			'Content-Type' => 'application/x-www-form-urlencoded; charset=utf-8',
+		),
+		'body'        => $body_params,
+		'sslverify'   => true,
+	);
+
+	$response = wp_remote_post( $url, $args );
+
+	if ( is_wp_error( $response ) ) {
+		return array(
+			'success' => false,
+			'message' => __( 'خطا در برقراری ارتباط با سرور پیامک (تایم‌اوت یا اختلال شبکه).', 'negar-shop' ),
+			'code'    => 504,
+		);
+	}
+
+	$http_code = wp_remote_retrieve_response_code( $response );
+	$raw_body  = wp_remote_retrieve_body( $response );
+	$data      = json_decode( $raw_body, true );
+
+	if ( ! is_array( $data ) || ! isset( $data['return'] ) || ! is_array( $data['return'] ) ) {
+		return array(
+			'success' => false,
+			'message' => __( 'پاسخ نامعتبر از سامانه پیامک دریافت شد.', 'negar-shop' ),
+			'code'    => 502,
+		);
+	}
+
+	$status_code = isset( $data['return']['status'] ) ? (int) $data['return']['status'] : 0;
+
+	// Kavenegar status 200 means accepted by provider
+	if ( 200 === $http_code && 200 === $status_code ) {
+		return array(
+			'success' => true,
+			'message' => __( 'پیامک اعتبارسنجی با موفقیت ارسال شد.', 'negar-shop' ),
+			'code'    => 200,
+		);
+	}
+
+	// Provider error mappings
+	$persian_error = __( 'ارسال پیامک توسط سامانه تایید نشد.', 'negar-shop' );
+	if ( 418 === $status_code ) {
+		$persian_error = __( 'اعتبار حساب پیامکی کافی نمی‌باشد.', 'negar-shop' );
+	} elseif ( 411 === $status_code ) {
+		$persian_error = __( 'شماره گیرنده در سامانه پیامک نامعتبر است.', 'negar-shop' );
+	} elseif ( 424 === $status_code ) {
+		$persian_error = __( 'الگوی پیامک (Template) در سامانه یافت نشد یا هنوز تایید نشده است.', 'negar-shop' );
+	} elseif ( 412 === $status_code ) {
+		$persian_error = __( 'خط ارسال پیامک غیرفعال است.', 'negar-shop' );
+	} elseif ( 401 === $status_code || 403 === $status_code ) {
+		$persian_error = __( 'کلید وب‌سرویس پیامک (API Key) نامعتبر است.', 'negar-shop' );
+	}
+
+	return array(
+		'success' => false,
+		'message' => $persian_error,
+		'code'    => $status_code ? $status_code : $http_code,
+	);
+}
+
+/**
+ * Dispatch OTP SMS via configured provider (Kavenegar).
+ *
+ * Connected to the negar_dispatch_otp_sms filter hook.
+ *
+ * @param bool   $dispatched Current dispatch status.
+ * @param string $phone      Normalized 11-digit mobile number.
+ * @param string $code       5-digit verification code.
+ * @return bool
+ */
+function negar_sms_dispatch_otp( $dispatched, $phone, $code ) {
+	if ( $dispatched ) {
+		return true;
+	}
+
+	if ( ! negar_theme_sms_is_enabled() ) {
+		return false;
+	}
+
+	$options  = negar_theme_sms_options();
+	$api_key  = negar_theme_sms_get_api_key();
+	$template = ! empty( $options['template'] ) ? $options['template'] : 'verify';
+
+	if ( empty( $api_key ) || empty( $template ) ) {
+		return false;
+	}
+
+	$result = negar_kavenegar_send_lookup( $phone, $code, $template, $api_key );
+
+	if ( ! $result['success'] ) {
+		set_transient( 'negar_otp_last_error_' . md5( $phone ), $result['message'], 60 );
+		return false;
+	}
+
+	delete_transient( 'negar_otp_last_error_' . md5( $phone ) );
+	return true;
+}
+add_filter( 'negar_dispatch_otp_sms', 'negar_sms_dispatch_otp', 10, 3 );

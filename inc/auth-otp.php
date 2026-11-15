@@ -5,7 +5,7 @@
  * Hardened for release: Zero OTP disclosure in client AJAX responses.
  *
  * @package Negar_Shop
- * @version 3.0.0
+ * @version 3.1.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -52,6 +52,98 @@ function negar_normalize_phone( $phone ) {
 }
 
 /**
+ * Return the sanitized client IP address.
+ *
+ * @return string
+ */
+function negar_get_client_ip() {
+	$ip = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '';
+	return $ip ? $ip : '127.0.0.1';
+}
+
+/**
+ * Check whether the automated test OTP transport is permitted.
+ *
+ * Strict security rule: Test transport requires BOTH an explicitly enabled
+ * flag AND a verified local/development environment. It must never activate
+ * on staging or production installations regardless of flags or query strings.
+ *
+ * @return bool
+ */
+function negar_is_test_transport_allowed() {
+	$flag_active = ( defined( 'NEGAR_TEST_OTP_TRANSPORT' ) && ! empty( constant( 'NEGAR_TEST_OTP_TRANSPORT' ) ) )
+		|| ( '1' === getenv( 'NEGAR_TEST_OTP_TRANSPORT' ) );
+
+	if ( ! $flag_active ) {
+		return false;
+	}
+
+	// Disallow if environment is explicitly set to production or staging
+	if ( defined( 'WP_ENVIRONMENT_TYPE' ) && in_array( constant( 'WP_ENVIRONMENT_TYPE' ), array( 'production', 'staging' ), true ) ) {
+		return false;
+	}
+
+	// Allow if environment is explicitly local or development
+	if ( defined( 'WP_ENVIRONMENT_TYPE' ) && in_array( constant( 'WP_ENVIRONMENT_TYPE' ), array( 'local', 'development' ), true ) ) {
+		return true;
+	}
+
+	// Verify local/development host address (e.g. localhost, 127.0.0.1)
+	$host = isset( $_SERVER['HTTP_HOST'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_HOST'] ) ) : '';
+	if ( preg_match( '/^(localhost|127\.0\.0\.1|::1)(\:\d+)?$/i', $host ) ) {
+		return true;
+	}
+
+	// CLI environment on local installation
+	if ( defined( 'STDIN' ) || 'cli' === php_sapi_name() ) {
+		$site_url = function_exists( 'site_url' ) ? site_url() : '';
+		if ( preg_match( '/https?:\/\/(localhost|127\.0\.0\.1|::1)/i', $site_url ) ) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+/**
+ * Check whether a WordPress user holds elevated or administrative capabilities.
+ *
+ * Public OTP authentication must strictly be restricted to customer accounts.
+ *
+ * @param WP_User|mixed $user User object to check.
+ * @return bool
+ */
+function negar_is_user_privileged( $user ) {
+	if ( ! ( $user instanceof WP_User ) || empty( $user->ID ) ) {
+		return false;
+	}
+
+	$privileged_roles = array( 'administrator', 'editor', 'author', 'contributor', 'shop_manager' );
+	foreach ( (array) $user->roles as $role ) {
+		if ( in_array( $role, $privileged_roles, true ) ) {
+			return true;
+		}
+	}
+
+	$privileged_caps = array(
+		'manage_options',
+		'edit_posts',
+		'publish_posts',
+		'edit_pages',
+		'manage_woocommerce',
+		'edit_users',
+		'promote_users',
+	);
+	foreach ( $privileged_caps as $cap ) {
+		if ( $user->has_cap( $cap ) ) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+/**
  * AJAX Handler: Send OTP Code to Mobile Number
  * Security Rule: Never disclose OTP code in browser responses.
  */
@@ -78,11 +170,21 @@ function negar_ajax_send_otp() {
 		) );
 	}
 
-	// Hourly rate-limit check (Max 5 attempts per hour)
+	// Hourly rate-limit check (Max 5 attempts per phone per hour)
 	$hourly_attempts = (int) get_transient( $hourly_key );
 	if ( $hourly_attempts >= 5 ) {
 		wp_send_json_error( array(
-			'message' => esc_html__( 'تعداد درخواست‌های شما بیش از حد مجاز است. لطفاً یک ساعت دیگر تلاش کنید.', 'negar-shop' ),
+			'message' => esc_html__( 'تعداد درخواست‌های شما برای این شماره بیش از حد مجاز است. لطفاً یک ساعت دیگر تلاش کنید.', 'negar-shop' ),
+		) );
+	}
+
+	// IP-based abuse rate limit (Max 15 requests per IP per hour)
+	$ip_hash     = md5( negar_get_client_ip() );
+	$ip_key      = 'negar_otp_ip_' . $ip_hash;
+	$ip_attempts = (int) get_transient( $ip_key );
+	if ( $ip_attempts >= 15 ) {
+		wp_send_json_error( array(
+			'message' => esc_html__( 'تعداد درخواست‌ها از این آدرس بیش از حد مجاز است. لطفاً یک ساعت دیگر تلاش فرمایید.', 'negar-shop' ),
 		) );
 	}
 
@@ -94,15 +196,15 @@ function negar_ajax_send_otp() {
 	set_transient( 'negar_otp_code_' . $phone_hash, $code_hash, 120 );
 	set_transient( $cooldown_key, true, 60 );
 	set_transient( $hourly_key, $hourly_attempts + 1, HOUR_IN_SECONDS );
+	set_transient( $ip_key, $ip_attempts + 1, HOUR_IN_SECONDS );
 	delete_transient( 'negar_otp_attempts_' . $phone_hash );
 
 	// Filter hook for real SMS provider integration (e.g. Kavenegar, FarazSMS)
 	$dispatched = apply_filters( 'negar_dispatch_otp_sms', false, $phone, $code );
 
 	// Isolated automated test transport:
-	// ONLY enabled when explicitly configured via NEGAR_TEST_OTP_TRANSPORT constant or CI env
-	$is_test_transport = ( defined( 'NEGAR_TEST_OTP_TRANSPORT' ) && (!empty(constant('NEGAR_TEST_OTP_TRANSPORT'))) )
-		|| ( '1' === getenv( 'NEGAR_TEST_OTP_TRANSPORT' ) );
+	// ONLY enabled when explicitly configured AND verified local/development environment
+	$is_test_transport = negar_is_test_transport_allowed();
 
 	if ( ! $dispatched && $is_test_transport ) {
 		// In test mode, record dispatch status without disclosing code in public HTTP response
@@ -115,8 +217,20 @@ function negar_ajax_send_otp() {
 		// Clean up stored OTP transient on dispatch failure
 		delete_transient( 'negar_otp_code_' . $phone_hash );
 		delete_transient( $cooldown_key );
+
+		$last_error = get_transient( 'negar_otp_last_error_' . $phone_hash );
+		delete_transient( 'negar_otp_last_error_' . $phone_hash );
+
+		if ( ! empty( $last_error ) && is_string( $last_error ) ) {
+			$failure_msg = $last_error;
+		} elseif ( function_exists( 'negar_theme_sms_is_configured' ) && ! negar_theme_sms_is_configured() ) {
+			$failure_msg = esc_html__( 'سامانه پیامکی هنوز پیکربندی نشده است. لطفاً با مدیر سایت تماس بگیرید.', 'negar-shop' );
+		} else {
+			$failure_msg = esc_html__( 'سامانه پیامکی در دسترس نمی‌باشد. لطفاً لحظاتی دیگر تلاش فرمایید یا با پشتیبانی تماس بگیرید.', 'negar-shop' );
+		}
+
 		wp_send_json_error( array(
-			'message' => esc_html__( 'سامانه پیامکی در دسترس نمی‌باشد. لطفاً لحظاتی دیگر تلاش فرمایید یا با پشتیبانی تماس بگیرید.', 'negar-shop' ),
+			'message' => $failure_msg,
 		) );
 	}
 
@@ -184,28 +298,47 @@ function negar_ajax_verify_otp() {
 		) );
 	}
 
-	// OTP is valid - clear transients
+	// OTP is valid - clear transients so this code cannot authenticate twice
 	delete_transient( $code_key );
 	delete_transient( $attempts_key );
 	delete_transient( 'negar_test_transport_active_' . $phone_hash );
 
-	// Find or Create WordPress / WooCommerce User
+	// Find or Create WordPress / WooCommerce User (Customer-Only Policy)
 	$user = null;
 
 	// 1. Look up by billing_phone meta
 	$user_query = new WP_User_Query( array(
 		'meta_key'   => 'billing_phone',
 		'meta_value' => $phone,
-		'number'     => 1,
+		'number'     => 2, // Request 2 to detect ambiguous duplicate phone assignments
 	) );
 	$found_users = $user_query->get_results();
 
-	if ( ! empty( $found_users ) ) {
-		$user = $found_users[0];
+	if ( count( $found_users ) > 1 ) {
+		wp_send_json_error( array(
+			'message' => esc_html__( 'چندین حساب کاربری با این شماره ثبت شده است. به دلایل امنیتی ورود با پیامک امکان‌پذیر نیست؛ لطفاً با پشتیبانی تماس بگیرید.', 'negar-shop' ),
+		) );
+	}
+
+	if ( 1 === count( $found_users ) ) {
+		$candidate = $found_users[0];
+		// Reject privileged accounts immediately
+		if ( negar_is_user_privileged( $candidate ) ) {
+			wp_send_json_error( array(
+				'message' => esc_html__( 'ورود با شمارهٔ موبایل تنها برای حساب‌های مشتریان فعال است. لطفاً از طریق فرم ورود با گذرواژه وارد شوید.', 'negar-shop' ),
+			) );
+		}
+		$user = $candidate;
 	} else {
 		// 2. Look up by user_login matching phone ONLY if associated with this verified phone
 		$candidate = get_user_by( 'login', $phone );
 		if ( $candidate ) {
+			// Reject privileged accounts immediately
+			if ( negar_is_user_privileged( $candidate ) ) {
+				wp_send_json_error( array(
+					'message' => esc_html__( 'ورود با شمارهٔ موبایل تنها برای حساب‌های مشتریان فعال است. لطفاً از طریق فرم ورود با گذرواژه وارد شوید.', 'negar-shop' ),
+				) );
+			}
 			$saved_phone = get_user_meta( $candidate->ID, 'billing_phone', true );
 			if ( empty( $saved_phone ) || $saved_phone === $phone ) {
 				$user = $candidate;
@@ -227,6 +360,12 @@ function negar_ajax_verify_otp() {
 			$new_user_id = wc_create_new_customer( $email, $username, $password );
 		} else {
 			$new_user_id = wp_create_user( $username, $password, $email );
+			if ( ! is_wp_error( $new_user_id ) ) {
+				$new_user = get_user_by( 'id', $new_user_id );
+				if ( $new_user ) {
+					$new_user->set_role( 'customer' );
+				}
+			}
 		}
 
 		if ( is_wp_error( $new_user_id ) ) {
