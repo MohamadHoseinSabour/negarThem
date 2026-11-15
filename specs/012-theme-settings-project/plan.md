@@ -1,6 +1,6 @@
 # Implementation Plan: 012 Complete Theme Settings Project
 
-**Status:** Phase 6 Story Management in progress.
+**Status:** Phase 10 Settings Backup, Import & Export and Carryovers complete.
 
 ## Architecture
 
@@ -77,7 +77,7 @@
    omission when empty or unconfigured.
 10. **Branding, typography and colors (Phase 8, complete):** practical typography controls (`negar_theme_options['typography']`), supported font families (`vazirmatn`, `system`, `tahoma`), base font size clamping (14–18px), heading size scales (`compact`, `normal`, `large`), "Restore Defaults" reset actions for colors and typography, core WordPress Site Identity integration (`custom_logo`) with `negar_theme_logo_url()` and demo fallback, frontend CSS tokens (`--font-primary`, `--font-heading`, body font size, heading scales), and conditional Google Fonts / resource hints loading.
 11. **SMS and OTP provider integration (Phase 9, complete):** secure Kavenegar Verify Lookup provider integration with separate non-autoloaded secrets storage (`negar_theme_sms_secrets`), Settings API SMS tab (`tab=sms`), credential masking and preservation, server constant support (`NEGAR_KAVENEGAR_API_KEY`), connection to `negar_dispatch_otp_sms`, hardened customer-only OTP login policy rejecting privileged accounts, duplicate phone rejection, IP rate limiting, environment-checked local test transport, and zero credential/code leakage.
-12. **Settings backup/import/export (Phase 10, planned):** validation, authorization, rollback and storage.
+12. **Settings backup/import/export (Phase 10, complete):** dedicated `inc/theme-backup.php` module implementing versioned JSON configuration export (`negar_theme_settings_backup` v1.0) for the 5 supported theme groups (`negar_theme_options`, `negar_theme_media_options`, `negar_theme_product_pack_options`, `negar_theme_story_options`, `negar_theme_brand_options`). Completely excludes secrets, API keys, SMS settings, user accounts, orders, and database tables. Non-destructive preview validates schema, disallowed keys, and cross-site object references. Atomic apply verifies all writes with automatic rollback on failure. Top-level admin menu (`نگارتم`, Dashicon `dashicons-art`, position 59) exposes settings prominently. Storefront colors harmonized dynamically via CSS custom properties and `color-mix()`. Hardened customer OTP login in `inc/auth-otp.php` rejecting unbound phone-to-username associations without verified `billing_phone` meta.
 13. **Final QA and release preparation (Phase 11, planned):** end-to-end, accessibility, RTL, packaging.
 
 ## Verification strategy

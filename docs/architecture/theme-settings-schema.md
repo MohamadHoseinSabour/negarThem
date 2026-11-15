@@ -397,7 +397,63 @@ SMS configuration is split across two dedicated options to isolate secrets from 
 - Ambiguous match prevention: duplicate `billing_phone` matches are rejected with an explicit error.
 - Abuse protection: client IP rate limiting (15 requests/hour) in addition to phone rate limiting (5 attempts/hour).
 - Environment guard: test transport strictly requires verified local/development environment and explicit flag.
+- Account binding protection (Phase 10): OTP login strictly rejects existing accounts matched solely by `user_login` when `billing_phone` is absent or mismatched, preventing account takeover without verified phone ownership.
+
+## Implemented Settings Backup, Import & Export Schema (Phase 10)
+
+The Backup tab (`tab=backup`) provides secure configuration export, validation preview, and atomic restoration in `inc/theme-backup.php`.
+
+### 1. Exportable Configuration Scope
+Only five schema-validated theme options are exported:
+1. `negar_theme_options`: General branding, layout order/visibility, texts registry, color palette, typography settings, header/footer/contact information.
+2. `negar_theme_media_options`: Hero and promotional banner records, attachments, links, and enabled states.
+3. `negar_theme_product_pack_options`: Homepage product pack and hotspot product assignments.
+4. `negar_theme_story_options`: Story items, duration, thumbnail/media attachment IDs, and CTA links.
+5. `negar_theme_brand_options`: Selected WooCommerce brand terms, display order, visibility, and logo overrides.
+
+### 2. Strictly Excluded Data & Secrets Boundary
+The export format deliberately excludes all credentials, secrets, customer records, and system data:
+- `negar_theme_sms_secrets` and all API keys (`kavenegar_api_key`).
+- `negar_theme_sms_options` (SMS provider configuration is kept out of portable backups for safety).
+- Passwords, nonces, session tokens, and OTP codes/transients.
+- Customer accounts, user records, and personally identifiable information (PII).
+- Orders, transactions, and WooCommerce payment gateway credentials.
+- WordPress authentication keys, salts, and raw database tables.
+
+### 3. Backup JSON Document Schema
+```json
+{
+  "format": "negar_theme_settings_backup",
+  "version": "1.0",
+  "theme": "negarThem",
+  "created_at": "2026-11-15T12:00:00Z",
+  "source_site_url": "http://localhost/wp4",
+  "groups": {
+    "negar_theme_options": { ... },
+    "negar_theme_media_options": { ... },
+    "negar_theme_product_pack_options": { ... },
+    "negar_theme_story_options": { ... },
+    "negar_theme_brand_options": { ... }
+  }
+}
+```
+
+### 4. Import Validation & Non-Destructive Preview
+- Authorization: Requires `current_user_can('manage_options')` and a valid CSRF nonce (`negar_import_nonce`).
+- Bounded file upload: Enforces maximum size of 2 MB (`2 * 1024 * 1024` bytes).
+- JSON syntax validation: Strictly checks `json_last_error() === JSON_ERROR_NONE`.
+- Header validation: Verifies `format === 'negar_theme_settings_backup'` and `version <= '1.0'`.
+- Disallowed key rejection: Recursively scans all payload keys and rejects any payload containing `secret`, `api_key`, `token`, `password`, `sms`, or `user` fields.
+- Unknown group rejection: Any key in `groups` not listed in the 5 supported options causes immediate rejection.
+- Cross-site reference handling: Compares `source_site_url` with current `home_url()`. If different, displays a prominent Persian warning. Attachment IDs, WooCommerce product IDs, and brand term IDs are validated against the destination database; invalid or non-existent IDs are cleanly zeroed or skipped.
+- Non-destructive preview: The preview step stores validated data in a transient (`negar_theme_backup_preview_{user_id}`) for 15 minutes without modifying any database options.
+
+### 5. Atomic Apply & Rollback
+- Confirmation required: Explicit checkbox confirmation is required before applying (`negar_confirm_apply`).
+- Pre-write snapshot: Captures the exact existence and values of all 5 options prior to modifying any setting.
+- Write verification: Verifies each option write via `get_option()`. If any write or verification check fails, all options are immediately restored to their snapshot state, and a descriptive error is returned.
+- Autoload preservation: Preserves `autoload = 'yes'` for `negar_theme_options` and `autoload = 'no'` for large repeater options (`negar_theme_media_options`, `negar_theme_product_pack_options`, `negar_theme_story_options`, `negar_theme_brand_options`).
 
 ## Planned schema additions
 
-The static tab registry deliberately reserves the key `backup` for Phase 10. Its field schema must be documented before it is added; unknown keys must not be accepted by import or save handlers.
+All core theme settings tabs (General, Texts, Layout, Products, Banners, Stories, Brands, Colors, Typography, Header/Footer, SMS, and Backup) are now fully implemented and active. Phase 11 will conduct final QA, packaging, and release verification.

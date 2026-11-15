@@ -2547,6 +2547,190 @@ try {
 	// 10. Test transport security (local only, never production)
 	$results['test_transport_security_guard'] = is_bool( negar_is_test_transport_allowed() );
 
+	// 11. Phase 10 Security: OTP Account Association Hardening
+	// Case 11a: Existing account with user_login matching phone but missing billing_phone binding
+	$unbound_phone   = '0912' . wp_rand( 1000000, 9999999 );
+	$unbound_user_id = wp_insert_user(
+		array(
+			'user_login' => $unbound_phone,
+			'user_pass'  => wp_generate_password( 16, true, true ),
+			'user_email' => 'unbound_' . wp_generate_password( 6, false, false ) . '@example.test',
+			'role'       => 'customer',
+		)
+	);
+	if ( ! is_wp_error( $unbound_user_id ) ) {
+		$tracked_test_users[] = $unbound_user_id;
+		delete_user_meta( $unbound_user_id, 'billing_phone' );
+
+		$matched_unbound = get_users(
+			array(
+				'meta_key'   => 'billing_phone',
+				'meta_value' => $unbound_phone,
+			)
+		);
+		$results['otp_unbound_phone_no_meta_match'] = empty( $matched_unbound );
+
+		$cand_by_login    = get_user_by( 'login', $unbound_phone );
+		$saved_phone      = get_user_meta( $cand_by_login->ID, 'billing_phone', true );
+		$accepted_unbound = ( ! empty( $matched_unbound ) ) || ( $cand_by_login && ! empty( $saved_phone ) && $saved_phone === $unbound_phone );
+		$results['otp_unbound_account_rejected'] = false === $accepted_unbound;
+	}
+
+	// Case 11b: Existing account with mismatched billing_phone
+	$mismatch_phone   = '0912' . wp_rand( 1000000, 9999999 );
+	$mismatch_user_id = wp_insert_user(
+		array(
+			'user_login' => $mismatch_phone,
+			'user_pass'  => wp_generate_password( 16, true, true ),
+			'user_email' => 'mismatch_' . wp_generate_password( 6, false, false ) . '@example.test',
+			'role'       => 'customer',
+		)
+	);
+	if ( ! is_wp_error( $mismatch_user_id ) ) {
+		$tracked_test_users[] = $mismatch_user_id;
+		update_user_meta( $mismatch_user_id, 'billing_phone', '09120000000' );
+
+		$matched_mismatch = get_users(
+			array(
+				'meta_key'   => 'billing_phone',
+				'meta_value' => $mismatch_phone,
+			)
+		);
+		$results['otp_mismatched_phone_rejected'] = empty( $matched_mismatch );
+	}
+
+	// Case 11c: Valid customer account matching billing_phone is accepted
+	$valid_phone   = '0912' . wp_rand( 1000000, 9999999 );
+	$valid_user_id = wp_insert_user(
+		array(
+			'user_login' => 'valid_cust_' . wp_generate_password( 6, false, false ),
+			'user_pass'  => wp_generate_password( 16, true, true ),
+			'user_email' => 'valid_' . wp_generate_password( 6, false, false ) . '@example.test',
+			'role'       => 'customer',
+		)
+	);
+	if ( ! is_wp_error( $valid_user_id ) ) {
+		$tracked_test_users[] = $valid_user_id;
+		update_user_meta( $valid_user_id, 'billing_phone', $valid_phone );
+
+		$matched_valid = get_users(
+			array(
+				'meta_key'   => 'billing_phone',
+				'meta_value' => $valid_phone,
+			)
+		);
+		$results['otp_valid_customer_accepted'] = ( count( $matched_valid ) >= 1 ) && ( (int) $matched_valid[0]->ID === $valid_user_id );
+	}
+
+	// 12. Phase 10 Backup, Export, Validation, Apply & Rollback
+	// 12a. Export data structure
+	$export_data                         = negar_theme_backup_generate_data();
+	$results['backup_export_format']     = NEGAR_THEME_BACKUP_FORMAT === $export_data['format'];
+	$results['backup_export_version']    = NEGAR_THEME_BACKUP_VERSION === $export_data['version'];
+	$results['backup_export_theme']      = NEGAR_THEME_BACKUP_THEME === $export_data['theme'];
+	$results['backup_export_has_groups'] = isset( $export_data['groups'][ NEGAR_THEME_SETTINGS_OPTION ] );
+
+	// 12b. Secrets exclusion from export
+	$results['backup_export_no_secrets_option'] = ! isset( $export_data['groups'][ NEGAR_THEME_SMS_SECRETS_OPTION ] );
+	$results['backup_export_no_sms_option']     = ! isset( $export_data['groups'][ NEGAR_THEME_SMS_OPTION ] );
+	$export_json                                = wp_json_encode( $export_data );
+	$results['backup_export_no_api_key_leak']   = false === strpos( $export_json, 'kavenegar_api_key' );
+
+	// 12c. Validation rejects invalid structures
+	$res_non_array                      = negar_theme_backup_validate_data( 'invalid string' );
+	$results['backup_reject_non_array'] = false === $res_non_array['valid'];
+
+	$res_bad_format                      = negar_theme_backup_validate_data( array( 'format' => 'hacked_format', 'version' => '1.0', 'groups' => array() ) );
+	$results['backup_reject_bad_format'] = false === $res_bad_format['valid'];
+
+	$res_bad_version                      = negar_theme_backup_validate_data( array( 'format' => NEGAR_THEME_BACKUP_FORMAT, 'version' => '99.0', 'groups' => array() ) );
+	$results['backup_reject_bad_version'] = false === $res_bad_version['valid'];
+
+	$res_unknown_group = negar_theme_backup_validate_data(
+		array(
+			'format'  => NEGAR_THEME_BACKUP_FORMAT,
+			'version' => NEGAR_THEME_BACKUP_VERSION,
+			'groups'  => array( 'unauthorized_wp_option' => array( 'data' => 1 ) ),
+		)
+	);
+	$results['backup_reject_unknown_group'] = false === $res_unknown_group['valid'];
+
+	$res_secret_group = negar_theme_backup_validate_data(
+		array(
+			'format'  => NEGAR_THEME_BACKUP_FORMAT,
+			'version' => NEGAR_THEME_BACKUP_VERSION,
+			'groups'  => array(
+				NEGAR_THEME_SETTINGS_OPTION => array( 'kavenegar_api_key' => 'secret_val' ),
+			),
+		)
+	);
+	$results['backup_reject_disallowed_keys'] = false === $res_secret_group['valid'];
+
+	// 12d. Preview performs no writes
+	$brand_before = negar_theme_brand_label();
+	$preview_payload = array(
+		'format'          => NEGAR_THEME_BACKUP_FORMAT,
+		'version'         => NEGAR_THEME_BACKUP_VERSION,
+		'theme'           => NEGAR_THEME_BACKUP_THEME,
+		'source_site_url' => home_url(),
+		'groups'          => array(
+			NEGAR_THEME_SETTINGS_OPTION => array(
+				'branding' => array( 'site_label' => 'برند تستی بدون تغییر' ),
+			),
+		),
+	);
+	$preview_res = negar_theme_backup_validate_data( $preview_payload );
+	$results['backup_preview_valid']    = true === $preview_res['valid'];
+	$results['backup_preview_no_write'] = negar_theme_brand_label() === $brand_before;
+
+	// 12e. Valid Apply restores settings
+	$apply_payload = array(
+		NEGAR_THEME_SETTINGS_OPTION => array(
+			'branding' => array( 'site_label' => 'برند بازیابی‌شده آزمایشی' ),
+		),
+	);
+	$apply_res = negar_theme_backup_apply_data( $apply_payload );
+	$results['backup_apply_succeeds']       = true === $apply_res;
+	$results['backup_apply_reflects_in_db'] = 'برند بازیابی‌شده آزمایشی' === negar_theme_brand_label();
+
+	// 12f. Explicit empty collections preserved
+	$empty_brands_payload = array(
+		NEGAR_THEME_BRAND_OPTION => array(
+			'selected_ids' => array(),
+		),
+	);
+	$apply_empty = negar_theme_backup_apply_data( $empty_brands_payload );
+	$stored_brands = get_option( NEGAR_THEME_BRAND_OPTION, null );
+	$results['backup_preserve_empty_collections'] = is_array( $stored_brands ) && empty( $stored_brands['selected_ids'] );
+
+	// 12g. Cross-site invalid references cleared
+	$invalid_ref_payload = array(
+		'format'          => NEGAR_THEME_BACKUP_FORMAT,
+		'version'         => NEGAR_THEME_BACKUP_VERSION,
+		'theme'           => NEGAR_THEME_BACKUP_THEME,
+		'source_site_url' => 'http://external-site.example.com',
+		'groups'          => array(
+			NEGAR_THEME_MEDIA_OPTION => array(
+				'records' => array(
+					'hero-slide-one' => array( 'media_id' => 9999999 ),
+				),
+			),
+		),
+	);
+	$cross_val = negar_theme_backup_validate_data( $invalid_ref_payload );
+	$results['backup_cross_site_warning']               = ! empty( $cross_val['warnings'] );
+	$results['backup_cross_site_invalid_media_cleared'] = 0 === $cross_val['clean_groups'][ NEGAR_THEME_MEDIA_OPTION ]['records']['hero-slide-one']['media_id'];
+
+	// 12h. Rollback restore on failure
+	$rollback_snap = array(
+		NEGAR_THEME_SETTINGS_OPTION => array(
+			'exists' => true,
+			'value'  => array( 'branding' => array( 'site_label' => 'برند قبل از رول‌بک' ) ),
+		),
+	);
+	negar_theme_backup_rollback( $rollback_snap );
+	$results['backup_rollback_restores_state'] = 'برند قبل از رول‌بک' === negar_theme_brand_label();
+
 	negar_theme_test_restore( $option, $media_option, $pack_option, $story_option, $brand_option, $sms_option, $sms_secrets_option, $mods, $verify_snapshot );
 
 	echo wp_json_encode( $results );

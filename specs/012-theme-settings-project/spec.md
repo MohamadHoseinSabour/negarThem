@@ -1,7 +1,7 @@
 # Feature Specification: 012 Complete Theme Settings Project
 
 **Feature code:** `SETTINGS-01`
-**Status:** Phase 7 Brand Management complete.
+**Status:** Phase 10 Settings Backup, Import & Export and Carryovers complete.
 **Supersedes for new work:** None. `009-featurename-theme-options` remains the
 historical Customizer-and-widgets specification and is not this project.
 
@@ -138,5 +138,9 @@ sorting, selector and catalog-visibility hardening.
   OTP logins enforce a strict customer-only authentication policy (`negar_is_user_privileged`),
   reject duplicate phone numbers, enforce IP rate limiting (15/hour), restrict test transport
   strictly to local/development environments, and maintain zero OTP code or secret disclosure in client responses.
+- Customer OTP authentication rejects existing accounts whose username equals the phone number when an explicit `billing_phone` binding is absent or mismatched, preventing account takeover without verified phone ownership.
+- Prominent top-level dashboard menu `نگارتم` (Dashicon `dashicons-art`, position 59) provides direct access to theme configuration while preserving existing Settings submenu routes, deep links, and tab base contexts.
+- Design tokens and dynamic CSS custom properties harmonize primary and secondary/hover colors across buttons, banners, badges, glows (`--ppnk-card-glow`), and single product actions without altering semantic warning/error styles or the default crimson look.
+- Settings Backup / Export / Import / Restore module in `inc/theme-backup.php` safely exports and imports versioned JSON containing the 5 supported theme configuration groups (`negar_theme_options`, `negar_theme_media_options`, `negar_theme_product_pack_options`, `negar_theme_story_options`, `negar_theme_brand_options`), completely excluding secrets, SMS credentials, API keys, user accounts, orders, and database tables. Non-destructive preview validates schema, disallowed keys, and cross-site object references, and apply operations execute atomic rollback if write verification fails.
 - Documentation keys exactly match implementation and the dedicated spec, plan and
   task list remain separate from specification 009.

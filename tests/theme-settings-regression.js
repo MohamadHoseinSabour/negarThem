@@ -891,6 +891,51 @@ async function run() {
       assert((await page.locator('#negar-sms-key-status').textContent()).includes('تنظیم نشده'), 'Deleting API key must update badge to not configured');
     }
 
+    // Phase 10: Settings Backup, Export, Preview & Restore UI Tests
+    await page.goto(BASE_URL + '/wp-admin/admin.php?page=negar-theme-settings&tab=backup', { waitUntil: 'domcontentloaded' });
+    assert(!page.url().includes('wp-login.php'), 'Authenticated administrator must access the backup tab');
+
+    // 1. Verify Export, Import and Information cards are rendered
+    const exportCard = page.locator('.negar-backup-card', { hasText: 'برون‌بری تنظیمات پوسته' });
+    const importCard = page.locator('.negar-backup-card', { hasText: 'درون‌ریزی و بازیابی تنظیمات' });
+    const infoCard   = page.locator('.negar-backup-card', { hasText: 'دامنه، ایمنی و راهنمای انتقال تنظیمات' });
+
+    assert.strictEqual(await exportCard.isVisible(), true, 'Export card must be visible on the backup tab');
+    assert.strictEqual(await importCard.isVisible(), true, 'Import card must be visible on the backup tab');
+    assert.strictEqual(await infoCard.isVisible(), true, 'Information and scope card must be visible on the backup tab');
+
+    // 2. Export button and action
+    const exportLink = page.locator('a.button-hero[href*="negar_action=export_backup"]');
+    assert.strictEqual(await exportLink.isVisible(), true, 'Export download button must be visible');
+    const exportUrl = await exportLink.getAttribute('href');
+    assert(exportUrl.includes('negar_export_nonce='), 'Export link must include security nonce');
+
+    // 3. Trigger Export download via authenticated request and verify payload
+    const exportRes = await page.request.get(exportUrl);
+    assert.strictEqual(exportRes.status(), 200, 'Export request must return HTTP 200');
+    assert(exportRes.headers()['content-type'].includes('application/json'), 'Export response must be JSON');
+    assert(exportRes.headers()['content-disposition'].includes('attachment'), 'Export response must be an attachment');
+
+    const exportedJson = await exportRes.json();
+    assert.strictEqual(exportedJson.format, 'negar_theme_settings_backup', 'Exported JSON format must match');
+    assert.strictEqual(exportedJson.version, '1.0', 'Exported JSON version must match 1.0');
+    assert.strictEqual(exportedJson.theme, 'negarThem', 'Exported JSON theme must be negarThem');
+    assert(exportedJson.groups && typeof exportedJson.groups === 'object', 'Exported JSON must contain groups');
+    assert(!('negar_theme_sms_secrets' in exportedJson.groups), 'CRITICAL: SMS secrets must NOT exist in export');
+    assert(!('negar_theme_sms_options' in exportedJson.groups), 'SMS configuration must NOT exist in export');
+
+    // 4. Import form components
+    const fileInput = page.locator('#negar_backup_file');
+    assert.strictEqual(await fileInput.isVisible(), true, 'File upload input must be visible on import card');
+    assert.strictEqual(await fileInput.getAttribute('accept'), '.json,application/json', 'File upload must accept only JSON');
+
+    // 5. Unauthenticated access protection
+    const freshCtx = await browser.newContext();
+    const freshPage = await freshCtx.newPage();
+    const unauthRes = await freshPage.goto(exportUrl, { waitUntil: 'domcontentloaded' });
+    assert(unauthRes.status() === 403 || freshPage.url().includes('wp-login.php'), 'Unauthenticated export request must be rejected or redirected');
+    await freshCtx.close();
+
     console.log('[PASS] Theme settings persistence and rendered-token regression checks passed.');
   } catch (error) {
     failure = error;

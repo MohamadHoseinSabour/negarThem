@@ -124,7 +124,13 @@
   - [x] **SMS-9.7** Add client IP rate limiting (15 attempts/hour) alongside existing 5 requests/phone/hour rate limit.
   - [x] **SMS-9.8** Secure test transport (`NEGAR_TEST_OTP_TRANSPORT`) requiring verified local/development environment and zero OTP code disclosure.
   - [x] **SMS-9.9** Add automated regression and Playwright browser tests covering secrets isolation, blank key preservation, provider HTTP mocks, customer-only policy, ambiguous detection, and admin UI.
-- [ ] **T212** Design backup/import/export validation, authorization, rollback and
+- [x] **T212** Design backup/import/export validation, authorization, rollback and
   non-autoloaded storage for large settings (Phase 10).
+  - [x] **BACKUP-10.1** Implement versioned configuration export in `inc/theme-backup.php` covering the 5 supported groups (`negar_theme_options`, `negar_theme_media_options`, `negar_theme_product_pack_options`, `negar_theme_story_options`, `negar_theme_brand_options`).
+  - [x] **BACKUP-10.2** Strictly exclude secrets, API keys, SMS configuration, customer accounts, orders, passwords, and database tables from export payloads.
+  - [x] **BACKUP-10.3** Implement upload and preview workflow in Backup tab (`tab=backup`) with file size validation (max 2 MB), JSON schema verification, disallowed key rejection, and cross-site reference checks without modifying the database.
+  - [x] **BACKUP-10.4** Implement atomic apply and restore with complete pre-write snapshots and rollback on write or verification failure.
+  - [x] **BACKUP-10.5** Harden customer OTP authentication in `inc/auth-otp.php` to reject username-only phone matches when explicit `billing_phone` binding is absent or mismatched.
+  - [x] **BACKUP-10.6** Add automated regression and Playwright browser tests covering backup export structure, secrets exclusion, invalid JSON rejection, preview isolation, apply persistence, rollback restoration, and OTP binding security.
 - [ ] **T213** Complete end-to-end, accessibility, RTL, migration and packaging
   verification before declaring the full project complete (Phase 11).

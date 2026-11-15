@@ -245,7 +245,7 @@
 **Commits:**
 - `b510439` `fix(admin): expose NegarThem settings in dashboard`
 - `8661e87` `fix(theme): unify dynamic accent colors across storefront`
-- [test(theme): verify admin access and color consistency]
+- `37273e8` `test(theme): verify admin access and color consistency`
 
 ### Summary of Accomplishments:
 - **Top-Level Admin Dashboard Access:**
@@ -272,7 +272,7 @@
 **Commits:**
 - `f5b310c` `feat(settings): add secure Kavenegar SMS configuration`
 - `1d1f0ab` `feat(auth): connect SMS provider and harden OTP login`
-- [test(auth): verify provider integration and OTP security]
+- `bbec4ed` `test(auth): verify provider integration and OTP security`
 
 ### Summary of Accomplishments:
 - **SMS Configuration & Secrets Isolation Architecture:**
@@ -296,7 +296,41 @@
   - Snapshot and restore logic updated to cleanly isolate and restore `negar_theme_sms_options` and `negar_theme_sms_secrets`.
   - Test suites: `npm run test:lint` (PASS, 115 PHP files), `npm run test:settings` (PASS), `node tests/security-otp-disclosure.test.js` (PASS), `npm run test:e2e` (37 passed, 0 failed), `npm test` (all green, exit code 0).
 
+## Phase 10 — Final Carryovers + Settings Backup / Import / Export
+
+**Status:** PASS (COMPLETE & VERIFIED)
+**Baseline:** `bbec4edca0755511a211e08f8f26160dce827d4e`
+**Commits:**
+- `9bda986` `fix(auth): reject unbound phone username associations`
+- `e25fdd4` `feat(settings): add safe configuration backup and restore`
+- `9cc8ba7` `test(settings): verify backup restore and final carryovers`
+
+### Summary of Accomplishments:
+- **Carryover 1: Top-Level Admin Dashboard Access:**
+  - Added visible top-level WordPress dashboard menu `نگارتم` (Dashicon `dashicons-art`, position 59) routing to `admin.php?page=negar-theme-settings`.
+  - Preserved existing route `options-general.php?page=negar-theme-settings`, deep links, Settings API behavior, and `manage_options` capability check.
+  - Preserved base page context (`admin.php` vs `options-general.php`) in navigation tabs.
+- **Carryover 2: Dynamic Color Consistency Across Storefront:**
+  - Replaced hardcoded red tokens with dynamic CSS properties and `color-mix()`.
+  - Harmonized category buttons, promotional banners, product cards, add-to-cart, buy-now, card glows (`--ppnk-card-glow`), discount badges, timers, daily deal gradient, single-product page actions, header category button, and Tailwind rose utilities.
+  - Verified default canonical crimson (`#e90544`, `#c40439`) and custom green (`#16834a`, `#116638`) on desktop (1440px) and mobile (390px).
+- **Carryover 3: Customer OTP Account-Association Security:**
+  - In `inc/auth-otp.php`, eliminated vulnerable fallback accepting username matches when `billing_phone` is empty or mismatched.
+  - Strictly requires explicit, trustworthy phone-to-account binding (`billing_phone === $phone`).
+  - Safely rejects ambiguous or unbound existing accounts with an honest Persian error directing to password login or support.
+- **Phase 10 Settings Backup, Export, Preview & Restore:**
+  - Implemented versioned JSON configuration export (`negar_theme_settings_backup` v1.0) in `inc/theme-backup.php` covering the 5 supported configuration groups: `negar_theme_options`, `negar_theme_media_options`, `negar_theme_product_pack_options`, `negar_theme_story_options`, and `negar_theme_brand_options`.
+  - Strictly excluded all secrets (`negar_theme_sms_secrets`, API keys), SMS settings, passwords, OTP transients, customer records, orders, and database tables.
+  - Generated export downloads on-the-fly with CSRF nonce verification; no JSON files written to public uploads directories.
+  - Implemented upload and preview workflow in Backup tab (`tab=backup`) with file size boundary (max 2 MB), JSON validation, format/version check, disallowed key rejection, unknown group rejection, and cross-site reference checks.
+  - Implemented atomic apply and restore: takes full pre-write snapshots of all 5 options, verifies all writes, and automatically rolls back all settings if any write or verification check fails.
+  - Preserved non-autoloaded settings behavior for large repeater options.
+- **Comprehensive Regression Verification:**
+  - PHP regression tests in `tests/theme-settings-regression.php` (section 11 and 12) verifying unbound phone account rejection, mismatched phone rejection, duplicate phone rejection, valid customer acceptance, export payload structure, secrets exclusion, invalid JSON rejection, preview isolation, apply persistence, empty collection preservation, cross-site reference clearing, and rollback restoration.
+  - Playwright browser tests in `tests/theme-settings-regression.js` verifying Backup tab UI (Export, Import, Information cards), authenticated export download, payload structure, secrets absence, and unauthenticated request rejection.
+  - Test suites: `npm run test:lint` (PASS, 116 PHP files), `npm run test:settings` (PASS), `node tests/security-otp-disclosure.test.js` (PASS), `npm run test:e2e` (37 passed, 0 failed), `npm test` (all green, exit code 0).
+
 ## Next phase
 
-Following approved roadmap: Phase 10 (Settings backup/import/export), Phase 11 (Final QA and release preparation).
-Phases 10 and 11 remain open. Phase 9 is complete.
+Following approved roadmap: Phase 11 (Final QA and release preparation).
+Phase 11 remains open. Phase 10 is complete.
