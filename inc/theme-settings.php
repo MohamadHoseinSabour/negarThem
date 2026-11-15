@@ -2792,9 +2792,21 @@ function negar_theme_sanitize_settings( $submitted ) {
 }
 
 /**
- * Register the Settings > Theme Settings destination.
+ * Register the Settings > Theme Settings destination and top-level dashboard menu.
  */
 function negar_theme_add_settings_page() {
+	// Top-level dashboard menu for prominent access.
+	add_menu_page(
+		__( 'تنظیمات نگارتم', 'negar-shop' ),
+		__( 'نگارتم', 'negar-shop' ),
+		'manage_options',
+		'negar-theme-settings',
+		'negar_theme_render_settings_page',
+		'dashicons-art',
+		59
+	);
+
+	// Preserve the existing Settings submenu route (options-general.php?page=negar-theme-settings).
 	add_options_page(
 		__( 'تنظیمات قالب نگار', 'negar-shop' ),
 		__( 'تنظیمات قالب نگار', 'negar-shop' ),
@@ -2812,7 +2824,7 @@ add_action( 'admin_menu', 'negar_theme_add_settings_page' );
  * @return void
  */
 function negar_theme_enqueue_settings_assets( $hook_suffix ) {
-	if ( 'settings_page_negar-theme-settings' !== $hook_suffix ) {
+	if ( 'settings_page_negar-theme-settings' !== $hook_suffix && 'toplevel_page_negar-theme-settings' !== $hook_suffix ) {
 		return;
 	}
 
@@ -3255,8 +3267,11 @@ function negar_theme_render_settings_page() {
 			@media (max-width: 782px) { .negar-theme-settings .form-table th { width: auto; } .negar-theme-settings .nav-tab { flex: 1 1 45%; text-align: center; } }
 		</style>
 		<nav class="nav-tab-wrapper" aria-label="<?php esc_attr_e( 'بخش‌های تنظیمات قالب', 'negar-shop' ); ?>">
-			<?php foreach ( $tabs as $tab_id => $tab_label ) : ?>
-				<a class="nav-tab <?php echo $active_tab === $tab_id ? 'nav-tab-active' : ''; ?>" href="<?php echo esc_url( add_query_arg( array( 'page' => 'negar-theme-settings', 'tab' => $tab_id ), admin_url( 'options-general.php' ) ) ); ?>" <?php echo $active_tab === $tab_id ? 'aria-current="page"' : ''; ?>><?php echo esc_html( $tab_label ); ?></a>
+			<?php
+			$base_page = ( isset( $GLOBALS['pagenow'] ) && 'admin.php' === $GLOBALS['pagenow'] ) ? 'admin.php' : 'options-general.php';
+			foreach ( $tabs as $tab_id => $tab_label ) :
+			?>
+				<a class="nav-tab <?php echo $active_tab === $tab_id ? 'nav-tab-active' : ''; ?>" href="<?php echo esc_url( add_query_arg( array( 'page' => 'negar-theme-settings', 'tab' => $tab_id ), admin_url( $base_page ) ) ); ?>" <?php echo $active_tab === $tab_id ? 'aria-current="page"' : ''; ?>><?php echo esc_html( $tab_label ); ?></a>
 			<?php endforeach; ?>
 		</nav>
 		<?php settings_errors( 'negar_theme_settings' ); settings_errors( 'negar_theme_media_settings' ); settings_errors( 'negar_theme_story_settings' ); settings_errors( 'negar_theme_brand_settings' ); settings_errors( 'negar_theme_sms_settings' ); ?>
