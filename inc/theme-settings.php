@@ -3274,7 +3274,7 @@ function negar_theme_render_settings_page() {
 				<a class="nav-tab <?php echo $active_tab === $tab_id ? 'nav-tab-active' : ''; ?>" href="<?php echo esc_url( add_query_arg( array( 'page' => 'negar-theme-settings', 'tab' => $tab_id ), admin_url( $base_page ) ) ); ?>" <?php echo $active_tab === $tab_id ? 'aria-current="page"' : ''; ?>><?php echo esc_html( $tab_label ); ?></a>
 			<?php endforeach; ?>
 		</nav>
-		<?php settings_errors( 'negar_theme_settings' ); settings_errors( 'negar_theme_media_settings' ); settings_errors( 'negar_theme_story_settings' ); settings_errors( 'negar_theme_brand_settings' ); settings_errors( 'negar_theme_sms_settings' ); ?>
+		<?php settings_errors( 'negar_theme_settings' ); settings_errors( 'negar_theme_media_settings' ); settings_errors( 'negar_theme_story_settings' ); settings_errors( 'negar_theme_brand_settings' ); settings_errors( 'negar_theme_sms_settings' ); settings_errors( 'negar_theme_backup' ); ?>
 		<?php if ( in_array( $active_tab, array( 'general', 'texts', 'layout', 'products', 'colors', 'typography', 'header_footer', 'banners', 'stories', 'brands', 'sms' ), true ) ) : ?>
 			<form action="options.php" method="post">
 				<?php
@@ -3421,6 +3421,12 @@ function negar_theme_render_settings_page() {
 					</p>
 				<?php endif; ?>
 			</form>
+		<?php elseif ( 'backup' === $active_tab ) : ?>
+			<?php
+			if ( function_exists( 'negar_theme_render_backup_tab' ) ) {
+				negar_theme_render_backup_tab();
+			}
+			?>
 		<?php else : ?>
 			<div class="negar-not-ready" role="status">
 				<strong><?php esc_html_e( 'این بخش در مرحلهٔ بعدی فعال می‌شود.', 'negar-shop' ); ?></strong>

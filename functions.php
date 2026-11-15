@@ -63,6 +63,11 @@ require_once NEGAR_SHOP_DIR . '/inc/theme-settings.php';
 require_once NEGAR_SHOP_DIR . '/inc/sms-provider.php';
 
 /**
+ * Theme settings backup, export, preview and restore (Phase 10).
+ */
+require_once NEGAR_SHOP_DIR . '/inc/theme-backup.php';
+
+/**
  * SEO, OpenGraph and JSON-LD Structured Data (HRD-02)
  */
 require_once NEGAR_SHOP_DIR . '/inc/seo-schema.php';
