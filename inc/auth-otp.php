@@ -330,7 +330,7 @@ function negar_ajax_verify_otp() {
 		}
 		$user = $candidate;
 	} else {
-		// 2. Look up by user_login matching phone ONLY if associated with this verified phone
+		// 2. Check if an existing account uses this phone as user_login without verified phone binding
 		$candidate = get_user_by( 'login', $phone );
 		if ( $candidate ) {
 			// Reject privileged accounts immediately
@@ -339,10 +339,13 @@ function negar_ajax_verify_otp() {
 					'message' => esc_html__( 'ورود با شمارهٔ موبایل تنها برای حساب‌های مشتریان فعال است. لطفاً از طریق فرم ورود با گذرواژه وارد شوید.', 'negar-shop' ),
 				) );
 			}
-			$saved_phone = get_user_meta( $candidate->ID, 'billing_phone', true );
-			if ( empty( $saved_phone ) || $saved_phone === $phone ) {
-				$user = $candidate;
-			}
+
+			// Security rule (Phase 10): Never authenticate an existing account solely because its
+			// username equals the verified phone number when its verified phone binding is absent or mismatched.
+			// Do not silently assign the verified phone number or create a duplicate customer.
+			wp_send_json_error( array(
+				'message' => esc_html__( 'حساب کاربری با این نام کاربری فاقد شماره موبایل تاییدشده است. لطفاً با نام کاربری و گذرواژه وارد شوید یا با پشتیبانی تماس بگیرید.', 'negar-shop' ),
+			) );
 		}
 	}
 
