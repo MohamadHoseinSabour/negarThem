@@ -12,21 +12,45 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$upload_dir = wp_upload_dir();
-$image_url  = $upload_dir['baseurl'] . '/kaveh-demo/image-01.png';
-$shop_url   = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/shop/' );
+$upload_dir     = wp_upload_dir();
+$image_url_webp = $upload_dir['baseurl'] . '/kaveh-demo/refrigerator-card.webp';
+$image_url_png  = $upload_dir['baseurl'] . '/kaveh-demo/refrigerator-card.png';
+$image_url      = $image_url_png;
+$shop_url       = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/shop/' );
+$fridge_term    = function_exists( 'get_term_by' ) ? get_term_by( 'slug', 'refrigerators-freezers', 'product_cat' ) : false;
+$fridge_url     = ( $fridge_term && ! is_wp_error( $fridge_term ) ) ? get_term_link( $fridge_term ) : $shop_url;
 
-// Query published products for accessories carousel
+// Query published products for refrigerators showcase carousel
 $args = negar_theme_product_section_is_configured( 'accessories' )
 	? negar_theme_product_section_query_args( 'accessories', array( 'post_type' => 'product', 'post_status' => 'publish' ) )
 	: array(
 		'post_type'      => 'product',
 		'post_status'    => 'publish',
 		'posts_per_page' => 9,
+		'tax_query'      => array(
+			array(
+				'taxonomy' => 'product_cat',
+				'field'    => 'slug',
+				'terms'    => array( 'refrigerators-freezers', 'major-appliances' ),
+			),
+		),
 		'orderby'        => 'date',
 		'order'          => 'DESC',
 	);
 $products_query = new WP_Query( negar_theme_catalog_visibility_query_args( $args ) );
+if ( ! $products_query->have_posts() ) {
+	$products_query = new WP_Query(
+		negar_theme_catalog_visibility_query_args(
+			array(
+				'post_type'      => 'product',
+				'post_status'    => 'publish',
+				'posts_per_page' => 9,
+				'orderby'        => 'date',
+				'order'          => 'DESC',
+			)
+		)
+	);
+}
 ?>
 
 <div class="elementor-element elementor-element-39e1b751 e-con-full e-flex e-con e-parent e-lazyloaded my-8 lg:my-12" data-id="39e1b751" data-element_type="container" data-e-type="container">
@@ -40,19 +64,22 @@ $products_query = new WP_Query( negar_theme_catalog_visibility_query_args( $args
 						<div class="buy-accessories-nk__right w-100 flex-fill flex-grow-0 flex-shrink-0 position-relative d-none d-lg-block">
 							<div class="buy-accessories-nk__right__box position-relative h-100 d-flex flex-column">
 								<div class="title f-iran-yekan fw-bold text-center position-relative mxw-fit mx-auto mb-2">
-									<?php esc_html_e( 'خرید لوازم جانبی', 'negar-shop' ); ?>
+									<?php esc_html_e( 'خرید یخچال و فریزر', 'negar-shop' ); ?>
 									<svg xmlns="http://www.w3.org/2000/svg" width="33" height="19" fill="none" viewBox="0 0 33 19" class="position-absolute top-0 end-100" aria-hidden="true">
 										<path stroke="#000" stroke-linecap="round" d="M7.274 14.836c1.2-3.929 7.858-11.917 24.882-12.44M1.054 8.616c.65-2.292 4.256-6.952 13.477-7.257m-1.036 16.587c.45-1.637 2.946-4.965 9.33-5.184"></path>
 									</svg>
 								</div>
 								<div class="sub-title f-iran-yekan fw-normal text-center position-relative mxw-fit mx-auto">
-									<?php esc_html_e( 'انواع لوازم جانبیــــــــــــ ایفون', 'negar-shop' ); ?>
+									<?php esc_html_e( 'انواع یخچال و ساید‌بای‌سایدــــــــــــ روز', 'negar-shop' ); ?>
 									<svg xmlns="http://www.w3.org/2000/svg" width="33" height="18" fill="none" viewBox="0 0 33 18" class="position-absolute top-0 start-100" aria-hidden="true">
 										<path stroke="#000" stroke-linecap="round" d="M25.739 3.864C24.539 7.793 17.88 15.78.857 16.304m31.102-6.22c-.65 2.292-4.256 6.952-13.477 7.257M19.518.754c-.45 1.637-2.946 4.965-9.33 5.183"></path>
 									</svg>
 								</div>
 								<div class="image mt-auto position-relative">
-									<img loading="lazy" decoding="async" src="<?php echo esc_url( $image_url ); ?>" alt="<?php esc_attr_e( 'خرید لوازم جانبی', 'negar-shop' ); ?>" width="272" height="264" class="d-block w-100">
+									<picture>
+										<source srcset="<?php echo esc_url( $image_url_webp ); ?>" type="image/webp">
+										<img loading="lazy" decoding="async" src="<?php echo esc_url( $image_url_png ); ?>" alt="<?php esc_attr_e( 'خرید یخچال و فریزر', 'negar-shop' ); ?>" width="272" height="264" class="d-block w-100 object-contain">
+									</picture>
 									<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="none" viewBox="0 0 23 23" class="shape shape-1 position-absolute" aria-hidden="true">
 										<path fill="#fff" d="m11.27.773 1.4 9.485 9.486 1.4-9.485 1.402-1.401 9.484-1.4-9.484-9.486-1.401 9.485-1.401L11.27.773Z"></path>
 									</svg>
@@ -61,7 +88,7 @@ $products_query = new WP_Query( negar_theme_catalog_visibility_query_args( $args
 									</svg>
 								</div>
 								<div class="buy-accessories-nk__right__box__more-wrap">
-									<a href="<?php echo esc_url( $shop_url ); ?>" class="more d-flex align-items-center justify-content-center text-white" aria-label="<?php esc_attr_e( 'مشاهده بیشتر', 'negar-shop' ); ?>">
+									<a href="<?php echo esc_url( $fridge_url ); ?>" class="more d-flex align-items-center justify-content-center text-white" aria-label="<?php esc_attr_e( 'مشاهده بیشتر', 'negar-shop' ); ?>">
 										<i class="icon icon-chevron-left-2 lh-1" aria-hidden="true"></i>
 									</a>
 								</div>
@@ -78,22 +105,25 @@ $products_query = new WP_Query( negar_theme_catalog_visibility_query_args( $args
 										<div class="buy-accessories-nk__right w-100 flex-fill flex-grow-0 flex-shrink-0 position-relative">
 											<div class="buy-accessories-nk__right__box position-relative h-100 d-flex flex-column">
 												<div class="title f-iran-yekan fw-bold text-center position-relative mxw-fit mx-auto mb-2">
-													<?php esc_html_e( 'خرید لوازم جانبی', 'negar-shop' ); ?>
+													<?php esc_html_e( 'خرید یخچال و فریزر', 'negar-shop' ); ?>
 													<svg xmlns="http://www.w3.org/2000/svg" width="33" height="19" fill="none" viewBox="0 0 33 19" class="position-absolute top-0 end-100" aria-hidden="true">
 														<path stroke="#000" stroke-linecap="round" d="M7.274 14.836c1.2-3.929 7.858-11.917 24.882-12.44M1.054 8.616c.65-2.292 4.256-6.952 13.477-7.257m-1.036 16.587c.45-1.637 2.946-4.965 9.33-5.184"></path>
 													</svg>
 												</div>
 												<div class="sub-title f-iran-yekan fw-normal text-center position-relative mxw-fit mx-auto">
-													<?php esc_html_e( 'انواع لوازم جانبیــــــــــــ ایفون', 'negar-shop' ); ?>
+													<?php esc_html_e( 'انواع یخچال و ساید‌بای‌سایدــــــــــــ روز', 'negar-shop' ); ?>
 													<svg xmlns="http://www.w3.org/2000/svg" width="33" height="18" fill="none" viewBox="0 0 33 18" class="position-absolute top-0 start-100" aria-hidden="true">
 														<path stroke="#000" stroke-linecap="round" d="M25.739 3.864C24.539 7.793 17.88 15.78.857 16.304m31.102-6.22c-.65 2.292-4.256 6.952-13.477 7.257M19.518.754c-.45 1.637-2.946 4.965-9.33 5.183"></path>
 													</svg>
 												</div>
 												<div class="image mt-auto position-relative">
-													<img loading="lazy" decoding="async" src="<?php echo esc_url( $image_url ); ?>" alt="<?php esc_attr_e( 'خرید لوازم جانبی', 'negar-shop' ); ?>" width="272" height="264" class="d-block w-100">
+													<picture>
+										<source srcset="<?php echo esc_url( $image_url_webp ); ?>" type="image/webp">
+										<img loading="lazy" decoding="async" src="<?php echo esc_url( $image_url_png ); ?>" alt="<?php esc_attr_e( 'خرید یخچال و فریزر', 'negar-shop' ); ?>" width="272" height="264" class="d-block w-100 object-contain">
+									</picture>
 												</div>
 												<div class="buy-accessories-nk__right__box__more-wrap">
-													<a href="<?php echo esc_url( $shop_url ); ?>" class="more d-flex align-items-center justify-content-center text-white" aria-label="<?php esc_attr_e( 'مشاهده بیشتر', 'negar-shop' ); ?>">
+													<a href="<?php echo esc_url( $fridge_url ); ?>" class="more d-flex align-items-center justify-content-center text-white" aria-label="<?php esc_attr_e( 'مشاهده بیشتر', 'negar-shop' ); ?>">
 														<i class="icon icon-chevron-left-2 lh-1" aria-hidden="true"></i>
 													</a>
 												</div>

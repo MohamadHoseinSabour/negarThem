@@ -272,7 +272,7 @@
 
   /* Right crescent notch centered navigation button (Prev / > in RTL) */
   .landing-nk__carousel .swiper-button-prev {
-    right: 8px !important;
+    right: 48px !important;
     left: auto !important;
     top: 50% !important;
     transform: translateY(-50%) !important;
@@ -284,7 +284,7 @@
 
   /* Left crescent notch centered navigation button (Next / < in RTL) */
   .landing-nk__carousel .swiper-button-next {
-    left: 4px !important;
+    left: 21px !important;
     right: auto !important;
     top: 50% !important;
     transform: translateY(-50%) !important;
@@ -292,6 +292,14 @@
     height: 38px !important;
     z-index: 20 !important;
     display: flex !important;
+  }
+
+  /* Flash deal price lifted cleanly above the bottom crescent cutout */
+  .landing-nk__products__box .landing-nk__products__price {
+    bottom: 40px !important;
+    left: 32px !important;
+    right: 32px !important;
+    width: auto !important;
   }
 }
 

@@ -22,7 +22,7 @@ $laptop_products = new WP_Query( negar_theme_catalog_visibility_query_args( arra
 		array(
 			'taxonomy' => 'product_cat',
 			'field'    => 'slug',
-			'terms'    => array( 'laptop', 'لپ-تاپ', 'گیمینگ' ),
+			'terms'    => array( 'electric-cooking', 'air-fryers', 'toaster-ovens', 'microwaves', 'rice-pressure-cookers' ),
 		),
 	),
 ) ) );
@@ -36,17 +36,17 @@ if ( ! $laptop_products->have_posts() ) {
 }
 ?>
 
-<section class="negar-sec-19-laptops py-6" aria-label="<?php esc_attr_e( 'لپ‌تاپ‌های گیمینگ پربازدید', 'negar-shop' ); ?>">
+<section class="negar-sec-19-laptops py-6" aria-label="<?php esc_attr_e( 'لوازم پخت‌وپز برقی پربازدید', 'negar-shop' ); ?>">
 	<div class="container max-w-[1320px] mx-auto px-3">
 		
 		<!-- Section Heading & Divider matching Demo 43 -->
 		<div class="section-heading-one-nk mb-6 flex items-center justify-between gap-4">
 			<div class="flex items-center gap-3">
 				<h2 class="title text-base sm:text-lg font-black text-[#212341] m-0">
-					<span class="text-rose-600"><?php esc_html_e( 'پربازدید', 'negar-shop' ); ?></span> <?php esc_html_e( 'ترین لپ‌تاپ‌های گیمینگ', 'negar-shop' ); ?>
+					<span class="text-rose-600"><?php esc_html_e( 'پربازدید', 'negar-shop' ); ?></span> <?php esc_html_e( 'ترین لوازم پخت‌وپز برقی', 'negar-shop' ); ?>
 				</h2>
 				<div class="sub-title text-2xs text-slate-400 font-medium hidden sm:inline-block">
-					<?php esc_html_e( 'کانفیگ‌های حرفه‌ای پردازنده و کارت گرافیک', 'negar-shop' ); ?>
+					<?php esc_html_e( 'انواع سرخ‌کن بدون روغن، هواپز و پلوپز چندکاره', 'negar-shop' ); ?>
 				</div>
 			</div>
 			
@@ -55,7 +55,7 @@ if ( ! $laptop_products->have_posts() ) {
 				<span class="dot w-1.5 h-1.5 rounded-full bg-rose-600 absolute right-12"></span>
 			</div>
 
-			<a href="<?php echo esc_url( wc_get_page_permalink( 'shop' ) ); ?>" class="btn-nk-danger">
+			<a href="<?php $cook_url = function_exists('get_term_link') ? get_term_link('electric-cooking', 'product_cat') : ''; echo esc_url( !is_wp_error($cook_url) && !empty($cook_url) ? $cook_url : home_url('/product-category/electric-cooking/') ); ?>" class="btn-nk-danger">
 				<span><?php esc_html_e( 'مشاهده بیشتر', 'negar-shop' ); ?></span>
 				<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
 			</a>

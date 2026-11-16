@@ -48,7 +48,7 @@ $discount_items_sec24 = array(
 		'comments'      => '11',
 		'regular_price' => '32,500,000',
 		'sale_price'    => '30,875,000',
-		'needles'       => array( 'Galaxy Watch Ultra', 'Galaxy Watch' ),
+		'needles'       => array( 'BGL8GOLDIR', 'جاروبرقی', 'Galaxy Watch Ultra' ),
 	),
 	array(
 		'slot'          => 'promo-2',
@@ -60,7 +60,7 @@ $discount_items_sec24 = array(
 		'comments'      => '7',
 		'regular_price' => '24,000,000',
 		'sale_price'    => '23,280,000',
-		'needles'       => array( 'Watch Series 9', 'Series 9' ),
+		'needles'       => array( 'Vacuum S10', 'جارو رباتیک', 'Watch Series 9' ),
 	),
 );
 
@@ -75,7 +75,7 @@ $carousel_products_sec24 = array(
 		'regular_price'=> '12,200,000',
 		'offer'        => '٪ 6',
 		'colors'       => array( '#212529', '#6c757d' ),
-		'needles'      => array( 'Balance', 'Amazfit' ),
+		'needles'      => array( 'SC3', 'بخارشوی', 'Balance', 'Amazfit' ),
 	),
 	array(
 		'slot'         => 'carousel-2',
@@ -86,7 +86,7 @@ $carousel_products_sec24 = array(
 		'regular_price'=> '',
 		'offer'        => '',
 		'colors'       => array( '#000000', '#f8f9fa' ),
-		'needles'      => array( 'Smart Band 8', 'Band 8' ),
+		'needles'      => array( 'GC4909', 'اتو بخار', 'Smart Band 8' ),
 	),
 	array(
 		'slot'         => 'carousel-3',
@@ -97,7 +97,7 @@ $carousel_products_sec24 = array(
 		'regular_price'=> '31,500,000',
 		'offer'        => '٪ 5',
 		'colors'       => array( '#0f172a', '#e11d48' ),
-		'needles'      => array( 'Forerunner 265', 'Garmin' ),
+		'needles'      => array( 'BGL8GOLDIR', 'جاروبرقی', 'Forerunner 265' ),
 	),
 	array(
 		'slot'         => 'carousel-4',
@@ -133,16 +133,17 @@ $carousel_products_sec24 = array(
 					<!-- Signature Section Heading -->
 					<div class="section-heading-one-nk d-flex align-items-center gap-2">
 						<div class="title f-iran-yekan">
-							<span class="fw-bold"><?php esc_html_e( 'پرفروش ترین', 'negar-shop' ); ?></span> <?php esc_html_e( 'ساعت هوشمند و گجت پوشیدنی', 'negar-shop' ); ?>
+							<span class="fw-bold"><?php esc_html_e( 'پرفروش ترین', 'negar-shop' ); ?></span> <?php esc_html_e( 'تجهیزات نظافت و شست‌وشو', 'negar-shop' ); ?>
 						</div>
 						<div class="sub-title f-iran-yekan fw-normal d-none d-md-block">
-							<?php esc_html_e( 'تجربه ای نوین از برترین برندهای روز بازار', 'negar-shop' ); ?>
+							<?php esc_html_e( 'انواع جاروبرقی، جارو رباتیک، بخارشوی و اتو بخار خانگی', 'negar-shop' ); ?>
 						</div>
 						<div class="line flex-grow-1 d-flex align-items-center gap-1">
 							<span class="flex-grow-1"></span>
 							<span></span>
 						</div>
-						<a href="<?php echo esc_url( $shop_url ); ?>" class="btn btn-nk-danger d-flex align-items-center justify-content-center fw-normal position-relative">
+						<?php $clean_cat_url = function_exists("get_term_link") ? get_term_link("cleaning-ironing", "product_cat") : ""; if (is_wp_error($clean_cat_url) || empty($clean_cat_url)) { $clean_cat_url = home_url("/product-category/cleaning-ironing/"); } ?>
+						<a href="<?php echo esc_url( $clean_cat_url ); ?>" class="btn btn-nk-danger d-flex align-items-center justify-content-center fw-normal position-relative">
 							<?php esc_html_e( 'مشاهده بیشتر', 'negar-shop' ); ?>
 							<i class="icon icon-chevron-left-2 lh-1" aria-hidden="true"></i>
 						</a>

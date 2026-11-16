@@ -32,7 +32,7 @@ $visited3_products = new WP_Query(
 				<span class="highlight">پربازدید</span> ترین محصولات
 			</div>
 			<div class="sub-title hidden sm:inline-block">
-				<?php esc_html_e( 'کنسول‌ها، لپ‌تاپ‌ها، موبایل و لوازم جانبی', 'negar-shop' ); ?>
+				<?php esc_html_e( 'لوازم خانگی بزرگ، برقی پخت‌وپز، نوشیدنی‌ساز و نظافت', 'negar-shop' ); ?>
 			</div>
 			<div class="line">
 				<span></span>
