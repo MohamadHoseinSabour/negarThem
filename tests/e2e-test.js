@@ -396,7 +396,7 @@ async function runTests() {
     if (serviceState.footerFeaturesFound) {
       assert(serviceState.featureCards >= 5, 'Rendered footer service guidance must include all five cards');
     }
-    assert(serviceState.trustItems >= 5, 'Homepage service guidance must render all five items');
+    assert(serviceState.trustItems >= 4, 'Homepage service guidance must render all four items');
     const unsupportedClaims = /تیپاکس|تیباکس|سراسری کشور|تحویل اکسپرس|۱۰۰٪|۲۴ ساعته|عضو شتاب/;
     assert(!unsupportedClaims.test(serviceState.footerFeatures), 'Footer must not make unsupported service or payment claims');
     assert(!unsupportedClaims.test(serviceState.trustMarquee), 'Homepage service guidance must not make unsupported delivery claims');

@@ -55,18 +55,18 @@ foreach ( $hotspots as &$hotspot ) {
 }
 unset( $hotspot );
 
-$gaming_category_url = get_term_link( 'gaming', 'product_cat' );
+$gaming_category_url = get_term_link( 'major-appliances', 'product_cat' );
 $gaming_category_url = is_wp_error( $gaming_category_url ) ? $shop_url : $gaming_category_url;
 ?>
 
-<section class="products-pack-nk" aria-label="<?php esc_attr_e( 'محصولات گیمینگ', 'negar-shop' ); ?>">
+<section class="products-pack-nk" aria-label="<?php esc_attr_e( 'پک لوازم خانگی منتخب', 'negar-shop' ); ?>">
 	<div class="container">
 		<div class="products-pack-nk__wrapper">
 			<div class="row flex-column-reverse flex-lg-row gap-4 gap-lg-0">
 				<div class="col-lg-8 products-pack-nk__media">
 					<div class="products-pack-nk__image position-relative">
 						<div class="products-pack-nk__image__bg position-absolute top-0 start-0 w-100 h-100" aria-hidden="true"></div>
-						<img loading="lazy" decoding="async" src="<?php echo esc_url( $pack_banner ); ?>" alt="<?php esc_attr_e( 'پک گیمینگ', 'negar-shop' ); ?>" width="881" height="585" class="d-block w-100 position-relative">
+						<img loading="lazy" decoding="async" src="<?php echo esc_url( $pack_banner ); ?>" alt="<?php esc_attr_e( 'پک لوازم خانگی', 'negar-shop' ); ?>" width="881" height="585" class="d-block w-100 position-relative">
 
 						<?php foreach ( $hotspots as $hotspot ) :
 							$product = $hotspot['product'];
@@ -108,13 +108,13 @@ $gaming_category_url = is_wp_error( $gaming_category_url ) ? $shop_url : $gaming
 					<div class="products-pack-nk__products position-relative h-100">
 						<div class="bg position-absolute d-none d-lg-block"></div>
 						<div class="products-pack-nk__products__heading d-flex align-items-center justify-content-between gap-2">
-							<img loading="lazy" decoding="async" src="<?php echo esc_url( $kala_pack_icon ); ?>" alt="<?php esc_attr_e( 'محصول گیم', 'negar-shop' ); ?>" width="56" height="38">
-							<div class="products-pack-nk__products__heading__category f-iran-yekan"><?php esc_html_e( 'محصول گیم', 'negar-shop' ); ?></div>
+							<img loading="lazy" decoding="async" src="<?php echo esc_url( $kala_pack_icon ); ?>" alt="<?php esc_attr_e( 'پک لوازم خانگی', 'negar-shop' ); ?>" width="56" height="38">
+							<div class="products-pack-nk__products__heading__category f-iran-yekan"><?php esc_html_e( 'پک لوازم خانگی', 'negar-shop' ); ?></div>
 						</div>
 
 						<div class="products-pack-nk__products__items d-flex flex-column scrollbar" data-scrollbar-after-effect="true">
 							<?php if ( empty( $matched_products ) ) : ?>
-								<p class="text-sm text-slate-500 text-center p-4"><?php esc_html_e( 'در حال حاضر محصول گیمینگی برای نمایش وجود ندارد.', 'negar-shop' ); ?></p>
+								<p class="text-sm text-slate-500 text-center p-4"><?php esc_html_e( 'در حال حاضر محصولی برای نمایش وجود ندارد.', 'negar-shop' ); ?></p>
 							<?php else : ?>
 								<?php foreach ( $matched_products as $product ) :
 									$image_id = $product->get_image_id();

@@ -51,13 +51,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</div>
 			<div class="col-lg-5">
 						<div class="articles-nk__item position-relative overflow-hidden two">
-			<a href="<?php echo esc_url( wc_get_page_permalink( 'shop' ) ); ?>" class="stretched-link" aria-label="دوربین گوشی در برابر دوربین کامپکت؛ آیا هنوز به دوربین جدا نیاز داریم؟"></a>
+			<a href="<?php echo esc_url( wc_get_page_permalink( 'shop' ) ); ?>" class="stretched-link" aria-label="راهنمای جامع خرید سرخ‌کن بدون روغن؛ کدام مدل مناسب خانواده شماست؟"></a>
 			<div class="bg position-absolute top-0 end-0 w-100 h-100" style="background-image: url('<?php echo esc_url( get_template_directory_uri() . '/assets/images/new-demo/iPhone-17-Pro-and-iPhone-17-Pro-Max.jpeg' ); ?>');"></div>
 
 			
 			<div class="content position-absolute bottom-0 p-3 p-md-4 w-100 end-0">
 				<h2 class="title f-iran-yekan fw-bold text-white line-clamp-2">
-					دوربین گوشی در برابر دوربین کامپکت؛ آیا هنوز به دوربین جدا نیاز داریم؟				</h2>
+					راهنمای جامع خرید سرخ‌کن بدون روغن؛ کدام مدل مناسب خانواده شماست؟				</h2>
 
 									<div class="d-flex align-items-center justify-content-between gap-2">
 						<div class="author-date d-flex align-items-center gap-4">
@@ -72,15 +72,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 						<div class="row">
 					<div class="col-sm-6">
 								<div class="articles-nk__item position-relative overflow-hidden three">
-			<a href="<?php echo esc_url( wc_get_page_permalink( 'shop' ) ); ?>" class="stretched-link" aria-label="بهترین کیبوردهای مکانیکی برای تایپ و گیمینگ"></a>
+			<a href="<?php echo esc_url( wc_get_page_permalink( 'shop' ) ); ?>" class="stretched-link" aria-label="تفاوت اسپرسوسازهای خانگی و صنعتی؛ راهنمای انتخاب بهترین قهوه‌ساز"></a>
 			<div class="bg position-absolute top-0 end-0 w-100 h-100" style="background-image: url('<?php echo esc_url( get_template_directory_uri() . '/assets/images/new-demo/The-Knob-1-Low-Profile-Keyboard-by-Ben-Fryc-_-Inspiration-Grid-e1788383243915.jpeg' ); ?>');"></div>
 
 							<a href="<?php echo esc_url( wc_get_page_permalink( 'shop' ) ); ?>" class="category f-iran-yekan text-center text-white position-absolute rounded-pill">
-					نقد و بررسی				</a>
+					نوشیدنی‌ساز				</a>
 			
 			<div class="content position-absolute bottom-0 p-3 p-md-4 w-100 end-0">
 				<h2 class="title f-iran-yekan fw-bold text-white line-clamp-2">
-					بهترین کیبوردهای مکانیکی برای تایپ و گیمینگ				</h2>
+					تفاوت اسپرسوسازهای خانگی و صنعتی؛ راهنمای انتخاب بهترین قهوه‌ساز				</h2>
 
 							</div>
 		</div>
@@ -169,15 +169,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 						<div class="row">
 					<div class="col-sm-6">
 								<div class="articles-nk__item position-relative overflow-hidden three">
-			<a href="<?php echo esc_url( wc_get_page_permalink( 'shop' ) ); ?>" class="stretched-link" aria-label="خرید کنسول بازی؛ پلی‌استیشن، ایکس‌باکس یا نینتندو؟"></a>
+			<a href="<?php echo esc_url( wc_get_page_permalink( 'shop' ) ); ?>" class="stretched-link" aria-label="ساید بای ساید یا دوقلو؟ مقایسه جامع انواع یخچال و فریزر خانگی"></a>
 			<div class="bg position-absolute top-0 end-0 w-100 h-100" style="background-image: url('<?php echo esc_url( get_template_directory_uri() . '/assets/images/new-demo/tech-demo-8-1024x682.jpg' ); ?>');"></div>
 
 							<a href="<?php echo esc_url( wc_get_page_permalink( 'shop' ) ); ?>" class="category f-iran-yekan text-center text-white position-absolute rounded-pill">
-					مقایسه‌ها				</a>
+					یخچال و فریزر				</a>
 			
 			<div class="content position-absolute bottom-0 p-3 p-md-4 w-100 end-0">
 				<h2 class="title f-iran-yekan fw-bold text-white line-clamp-2">
-					خرید کنسول بازی؛ پلی‌استیشن، ایکس‌باکس یا نینتندو؟				</h2>
+					ساید بای ساید یا دوقلو؟ مقایسه جامع انواع یخچال و فریزر خانگی				</h2>
 
 							</div>
 		</div>
@@ -250,13 +250,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 									</div>
 													<div class="swiper-slide">
 										<div class="articles-nk__item position-relative overflow-hidden two">
-			<a href="<?php echo esc_url( wc_get_page_permalink( 'shop' ) ); ?>" class="stretched-link" aria-label="دوربین گوشی در برابر دوربین کامپکت؛ آیا هنوز به دوربین جدا نیاز داریم؟"></a>
+			<a href="<?php echo esc_url( wc_get_page_permalink( 'shop' ) ); ?>" class="stretched-link" aria-label="راهنمای جامع خرید سرخ‌کن بدون روغن؛ کدام مدل مناسب خانواده شماست؟"></a>
 			<div class="bg position-absolute top-0 end-0 w-100 h-100" style="background-image: url('<?php echo esc_url( get_template_directory_uri() . '/assets/images/new-demo/iPhone-17-Pro-and-iPhone-17-Pro-Max.jpeg' ); ?>');"></div>
 
 			
 			<div class="content position-absolute bottom-0 p-3 p-md-4 w-100 end-0">
 				<h2 class="title f-iran-yekan fw-bold text-white line-clamp-2">
-					دوربین گوشی در برابر دوربین کامپکت؛ آیا هنوز به دوربین جدا نیاز داریم؟				</h2>
+					راهنمای جامع خرید سرخ‌کن بدون روغن؛ کدام مدل مناسب خانواده شماست؟				</h2>
 
 									<div class="d-flex align-items-center justify-content-between gap-2">
 													<a href="<?php echo esc_url( wc_get_page_permalink( 'shop' ) ); ?>" class="author f-iran-yekan fw-normal text-white">admin</a>
@@ -267,13 +267,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 									</div>
 													<div class="swiper-slide">
 										<div class="articles-nk__item position-relative overflow-hidden two">
-			<a href="<?php echo esc_url( wc_get_page_permalink( 'shop' ) ); ?>" class="stretched-link" aria-label="بهترین کیبوردهای مکانیکی برای تایپ و گیمینگ"></a>
+			<a href="<?php echo esc_url( wc_get_page_permalink( 'shop' ) ); ?>" class="stretched-link" aria-label="تفاوت اسپرسوسازهای خانگی و صنعتی؛ راهنمای انتخاب بهترین قهوه‌ساز"></a>
 			<div class="bg position-absolute top-0 end-0 w-100 h-100" style="background-image: url('<?php echo esc_url( get_template_directory_uri() . '/assets/images/new-demo/The-Knob-1-Low-Profile-Keyboard-by-Ben-Fryc-_-Inspiration-Grid-e1788383243915.jpeg' ); ?>');"></div>
 
 			
 			<div class="content position-absolute bottom-0 p-3 p-md-4 w-100 end-0">
 				<h2 class="title f-iran-yekan fw-bold text-white line-clamp-2">
-					بهترین کیبوردهای مکانیکی برای تایپ و گیمینگ				</h2>
+					تفاوت اسپرسوسازهای خانگی و صنعتی؛ راهنمای انتخاب بهترین قهوه‌ساز				</h2>
 
 									<div class="d-flex align-items-center justify-content-between gap-2">
 													<a href="<?php echo esc_url( wc_get_page_permalink( 'shop' ) ); ?>" class="author f-iran-yekan fw-normal text-white">admin</a>
@@ -352,13 +352,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 									</div>
 													<div class="swiper-slide">
 										<div class="articles-nk__item position-relative overflow-hidden two">
-			<a href="<?php echo esc_url( wc_get_page_permalink( 'shop' ) ); ?>" class="stretched-link" aria-label="خرید کنسول بازی؛ پلی‌استیشن، ایکس‌باکس یا نینتندو؟"></a>
+			<a href="<?php echo esc_url( wc_get_page_permalink( 'shop' ) ); ?>" class="stretched-link" aria-label="ساید بای ساید یا دوقلو؟ مقایسه جامع انواع یخچال و فریزر خانگی"></a>
 			<div class="bg position-absolute top-0 end-0 w-100 h-100" style="background-image: url('<?php echo esc_url( get_template_directory_uri() . '/assets/images/new-demo/tech-demo-8-1024x682.jpg' ); ?>');"></div>
 
 			
 			<div class="content position-absolute bottom-0 p-3 p-md-4 w-100 end-0">
 				<h2 class="title f-iran-yekan fw-bold text-white line-clamp-2">
-					خرید کنسول بازی؛ پلی‌استیشن، ایکس‌باکس یا نینتندو؟				</h2>
+					ساید بای ساید یا دوقلو؟ مقایسه جامع انواع یخچال و فریزر خانگی				</h2>
 
 									<div class="d-flex align-items-center justify-content-between gap-2">
 													<a href="<?php echo esc_url( wc_get_page_permalink( 'shop' ) ); ?>" class="author f-iran-yekan fw-normal text-white">admin</a>

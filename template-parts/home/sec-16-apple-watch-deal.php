@@ -15,14 +15,13 @@ if ( function_exists( 'wc_get_products' ) ) {
 	$deal_products = wc_get_products(
 		array(
 			'status'   => 'publish',
-			'limit'    => -1,
-			// category filter removed for live storefront continuity
+			'limit'    => 20,
 			'orderby'  => 'date',
 			'order'    => 'DESC',
 		)
 	);
 	foreach ( $deal_products as $candidate ) {
-		if ( false !== stripos( $candidate->get_name(), 'watch' ) || false !== strpos( $candidate->get_name(), 'ساعت' ) ) {
+		if ( $candidate->is_on_sale() ) {
 			$deal_product = $candidate;
 			break;
 		}

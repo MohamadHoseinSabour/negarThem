@@ -445,7 +445,8 @@ try {
 	}
 
 	if ( 'restore' === $action ) {
-		$snapshot = isset( $argv[2] ) ? json_decode( base64_decode( $argv[2] ), true ) : null;
+		$raw_input = ( isset( $argv[2] ) && '' !== trim( $argv[2] ) ) ? $argv[2] : stream_get_contents( STDIN );
+		$snapshot  = ! empty( $raw_input ) ? json_decode( base64_decode( trim( $raw_input ) ), true ) : null;
 		if ( ! is_array( $snapshot ) ) {
 			throw new InvalidArgumentException( 'Invalid settings snapshot.' );
 		}
@@ -2286,8 +2287,13 @@ try {
 		&& false !== strpos( $typo_css, 'h1, .h1 { font-size: 1.6875rem; }' );
 
 	// 9. Core custom logo resolution via negar_theme_logo_url()
+	$saved_custom_logo = get_theme_mod( 'custom_logo' );
+	remove_theme_mod( 'custom_logo' );
 	$results['branding_logo_url_fallback'] = ! empty( negar_theme_logo_url() )
 		&& ( false !== strpos( negar_theme_logo_url(), 'logo.svg' ) );
+	if ( $saved_custom_logo ) {
+		set_theme_mod( 'custom_logo', $saved_custom_logo );
+	}
 
 	// =========================================================================
 	// Phase 9: SMS Provider & Hardened OTP Login Integration Tests

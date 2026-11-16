@@ -11,7 +11,10 @@ const BASE_URL = process.env.WP_BASE_URL || 'http://localhost/wp4';
 const helper = path.join(__dirname, 'theme-settings-regression.php');
 
 function php(action, ...args) {
-  return execFileSync('php', [helper, action, ...args], { encoding: 'utf8' }).trim();
+  if (action === 'restore' && args[0]) {
+    return execFileSync('php', [helper, action], { input: args[0], encoding: 'utf8', maxBuffer: 10 * 1024 * 1024 }).trim();
+  }
+  return execFileSync('php', [helper, action, ...args], { encoding: 'utf8', maxBuffer: 10 * 1024 * 1024 }).trim();
 }
 
 async function readColors(page) {

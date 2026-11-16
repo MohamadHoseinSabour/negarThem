@@ -36,10 +36,10 @@ if ( class_exists( 'WooCommerce' ) ) {
 							<?php esc_html_e( 'دسته برگزیده ماه', 'negar-shop' ); ?>
 						</span>
 						<h3 class="text-xl md:text-2xl font-black text-white m-0 leading-tight mb-2">
-							<?php esc_html_e( 'دنیای صوت و هدفون‌های پیشرفته', 'negar-shop' ); ?>
+							<?php esc_html_e( 'دنیای نوشیدنی‌ساز و قهوه‌ساز پیشرفته', 'negar-shop' ); ?>
 						</h3>
 						<p class="text-xs text-teal-100 m-0 leading-relaxed">
-							<?php esc_html_e( 'بهترین برندهای روز دنیا با گارانتی تعویض و ضمانت بهترین کیفیت پخش صدا.', 'negar-shop' ); ?>
+							<?php esc_html_e( 'بهترین برندهای روز دنیا با گارانتی رسمی و ضمانت سلامت فیزیکی کالا.', 'negar-shop' ); ?>
 						</p>
 					</div>
 
@@ -68,7 +68,7 @@ if ( class_exists( 'WooCommerce' ) ) {
 									<div class="w-full aspect-square bg-slate-100 rounded-xl mb-3 flex items-center justify-center text-slate-400">
 										<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18v-6a9 9 0 0 1 18 0v6"></path><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path></svg>
 									</div>
-									<h4 class="text-xs font-bold text-slate-800 mb-1">هدفون بلوتوثی نمونه <?php echo esc_html( $i ); ?></h4>
+									<h4 class="text-xs font-bold text-slate-800 mb-1">اسپرسوساز حرفه‌ای نمونه <?php echo esc_html( $i ); ?></h4>
 									<span class="text-xs font-bold text-rose-600">۱,۱۵۰,۰۰۰ تومان</span>
 								</div>
 								<?php

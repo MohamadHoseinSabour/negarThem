@@ -21,35 +21,33 @@ $fridge_term    = function_exists( 'get_term_by' ) ? get_term_by( 'slug', 'refri
 $fridge_url     = ( $fridge_term && ! is_wp_error( $fridge_term ) ) ? get_term_link( $fridge_term ) : $shop_url;
 
 // Query published products for refrigerators showcase carousel
-$args = negar_theme_product_section_is_configured( 'accessories' )
-	? negar_theme_product_section_query_args( 'accessories', array( 'post_type' => 'product', 'post_status' => 'publish' ) )
-	: array(
-		'post_type'      => 'product',
-		'post_status'    => 'publish',
-		'posts_per_page' => 9,
-		'tax_query'      => array(
-			array(
-				'taxonomy' => 'product_cat',
-				'field'    => 'slug',
-				'terms'    => array( 'refrigerators-freezers', 'major-appliances' ),
-			),
+$default_fridge_args = array(
+	'post_type'      => 'product',
+	'post_status'    => 'publish',
+	'posts_per_page' => 9,
+	'tax_query'      => array(
+		array(
+			'taxonomy' => 'product_cat',
+			'field'    => 'slug',
+			'terms'    => array( 'refrigerators-freezers' ),
 		),
-		'orderby'        => 'date',
-		'order'          => 'DESC',
-	);
+	),
+	'orderby'        => 'date',
+	'order'          => 'DESC',
+);
+
+if ( negar_theme_product_section_is_configured( 'accessories' ) ) {
+	$args = negar_theme_product_section_query_args( 'accessories', $default_fridge_args );
+	if ( empty( $args['tax_query'] ) ) {
+		$args['tax_query'] = $default_fridge_args['tax_query'];
+	}
+} else {
+	$args = $default_fridge_args;
+}
+
 $products_query = new WP_Query( negar_theme_catalog_visibility_query_args( $args ) );
 if ( ! $products_query->have_posts() ) {
-	$products_query = new WP_Query(
-		negar_theme_catalog_visibility_query_args(
-			array(
-				'post_type'      => 'product',
-				'post_status'    => 'publish',
-				'posts_per_page' => 9,
-				'orderby'        => 'date',
-				'order'          => 'DESC',
-			)
-		)
-	);
+	$products_query = new WP_Query( negar_theme_catalog_visibility_query_args( $default_fridge_args ) );
 }
 ?>
 

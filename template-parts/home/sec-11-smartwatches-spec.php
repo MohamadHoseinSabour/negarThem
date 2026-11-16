@@ -36,83 +36,88 @@ if ( ! function_exists( 'negar_get_matching_product_info' ) ) {
 	}
 }
 
-// 1. Discount Showcase Items (Left Column Red Card - Audio/Wearable)
+// 1. Discount Showcase Items (Left Column Red Card - Food Preparation)
 $discount_items_sec11 = array(
 	array(
-		'title'         => 'ساعت هوشمند اپل مدل Apple Watch Ultra 2 تیتانیومی',
-		'short_title'   => 'ساعت هوشمند اپل مدل Apple Watch Ultra 2...',
-		'image'         => $kaveh_base . '/3c0f8ff8a12c67f061136e8fafd65eb6f6c56d2e_1787055103-300x300-removebg-preview-1.png',
-		'discount'      => '4',
+		'title'         => 'چرخ‌گوشت ۲۰۰۰ وات پاناسونیک مدل MK-MG1360 ساخت ژاپن',
+		'short_title'   => 'چرخ‌گوشت ۲۰۰۰ وات پاناسونیک...',
+		'image'         => $kaveh_base . '/real_trans/meat_grinder.png',
+		'discount'      => '11',
 		'rating'        => '5/4.8',
-		'comments'      => '8',
-		'regular_price' => '46,000,000',
-		'sale_price'    => '42,500,000',
-		'keyword'       => 'Apple Watch',
+		'comments'      => '12',
+		'regular_price' => '6,300,000',
+		'sale_price'    => '5,600,000',
+		'keyword'       => 'MK-MG1360',
 	),
 	array(
-		'title'         => 'هندزفری بی‌سیم اپل مدل AirPods Pro 2 با پورت Type-C',
-		'short_title'   => 'هندزفری بی‌سیم اپل مدل AirPods Pro 2...',
-		'image'         => $kaveh_base . '/0ca4d5b25eba55f934a668f923d996a8ef5862fd_1786538643-removebg-preview-300x300.png',
-		'discount'      => '7',
+		'title'         => 'غذاساز ۳۴ کاره فیلیپس مدل HR7778 با تیغه استیل',
+		'short_title'   => 'غذاساز ۳۴ کاره فیلیپس مدل HR7778...',
+		'image'         => $upload_dir['baseurl'] . '/2026/11/food-processors-blenders.png',
+		'discount'      => '12',
 		'rating'        => '5/4.7',
-		'comments'      => '15',
-		'regular_price' => '14,500,000',
-		'sale_price'    => '12,900,000',
-		'keyword'       => 'AirPods',
+		'comments'      => '9',
+		'regular_price' => '6,700,000',
+		'sale_price'    => '5,900,000',
+		'keyword'       => 'HR7778',
 	),
 );
 
-// 2. Carousel Products (Right Column)
+// 2. Carousel Products (Right Column - Food Preparation)
 $carousel_products_sec11 = array(
 	array(
-		'title'       => 'هندزفری بلوتوثی سامسونگ مدل Galaxy Buds 2 Pro',
-		'image'       => $kaveh_base . '/1149308650aa177c213e4175a23076419198dabf_1786296597-300x300-removebg-preview-1.png',
-		'rating'      => '5/4.6',
-		'price'       => '7,950,000',
-		'regular_price'=> '8,800,000',
-		'offer'       => '٪ 10',
-		'colors'      => array( '#212529', '#e9ecef', '#6f42c1' ),
-		'keyword'     => 'Galaxy Buds',
+		'title'       => 'غذاساز ۳۴ کاره فیلیپس مدل HR7778 با تیغه استیل PowerChop',
+		'short_title' => 'غذاساز ۳۴ کاره فیلیپس مدل HR7778',
+		'image'       => $upload_dir['baseurl'] . '/2026/11/food-processors-blenders.png',
+		'rating'      => '5/4.7',
+		'price'       => '5,900,000',
+		'regular_price'=> '6,700,000',
+		'offer'       => '٪ 12',
+		'colors'      => array( '#c0c0c0', '#000000' ),
+		'keyword'     => 'HR7778',
 	),
 	array(
-		'title'       => 'ساعت هوشمند شیائومی مدل Watch S3 با بند سیلیکونی',
-		'image'       => $kaveh_base . '/3eef521897412a152c5b42551b623c91c41d90c0_1786388224-300x300-removebg-preview-1.png',
-		'rating'      => '5/4.4',
-		'price'       => '6,450,000',
-		'regular_price'=> '',
-		'offer'       => '',
-		'colors'      => array( '#1a1a1a', '#adb5bd' ),
-		'keyword'     => 'Xiaomi',
-	),
-	array(
-		'title'       => 'هدفون بلوتوثی سونی مدل WH-1000XM5 با قابلیت نویز کنسلینگ',
-		'image'       => $kaveh_base . '/128bfd71ad4017050659832b191c846cd050c5c1_1763052371-300x300-removebg-preview-1.png',
-		'rating'      => '5/4.9',
-		'price'       => '18,900,000',
-		'regular_price'=> '20,500,000',
-		'offer'       => '٪ 8',
-		'colors'      => array( '#000000', '#dcd8cf' ),
-		'keyword'     => 'Sony',
-	),
-	array(
-		'title'       => 'ساعت هوشمند سامسونگ مدل Galaxy Watch 6 Classic',
-		'image'       => $kaveh_base . '/6276e4189055b9e96d2779c652b748384f11a3a2_1786388736-300x300-removebg-preview-1.png',
+		'title'       => 'خردکن برقی ۳ لیتری سیلور کرست ۳۰۰۰ وات کاسه پیرکس',
+		'short_title' => 'خردکن برقی ۳ لیتری سیلور کرست',
+		'image'       => $upload_dir['baseurl'] . '/2026/11/choppers-grinders.png',
 		'rating'      => '5/4.5',
-		'price'       => '13,200,000',
-		'regular_price'=> '',
-		'offer'       => '',
-		'colors'      => array( '#111827', '#9ca3af' ),
-		'keyword'     => 'Galaxy Watch',
+		'price'       => '2,350,000',
+		'regular_price'=> '2,700,000',
+		'offer'       => '٪ 13',
+		'colors'      => array( '#ffffff', '#212529' ),
+		'keyword'     => 'سیلور کرست',
 	),
 	array(
-		'title'       => 'ساعت هوشمند هواوی مدل Watch GT 4 نسخه 46 میلی متری',
-		'image'       => $kaveh_base . '/26eb5a74fbf76467080d4a69a6a0dd6f9c5f1008_1786454574-300x300-removebg-preview-1.png',
-		'rating'      => '5/4.3',
-		'price'       => '9,100,000',
-		'regular_price'=> '9,900,000',
-		'offer'       => '٪ 8',
-		'colors'      => array( '#0f172a', '#10b981' ),
-		'keyword'     => 'Huawei',
+		'title'       => 'چرخ‌گوشت ۲۰۰۰ وات پاناسونیک مدل MK-MG1360 ساخت ژاپن',
+		'short_title' => 'چرخ‌گوشت ۲۰۰۰ وات پاناسونیک',
+		'image'       => $kaveh_base . '/real_trans/meat_grinder.png',
+		'rating'      => '5/4.8',
+		'price'       => '5,600,000',
+		'regular_price'=> '6,300,000',
+		'offer'       => '٪ 11',
+		'colors'      => array( '#000000', '#dcd8cf' ),
+		'keyword'     => 'MK-MG1360',
+	),
+	array(
+		'title'       => 'آبمیوه‌گیری تک‌کاره بوش مدل MES3500 دهانه بزرگ',
+		'short_title' => 'آبمیوه‌گیری تک‌کاره بوش مدل MES3500',
+		'image'       => $upload_dir['baseurl'] . '/2026/11/juicers.png',
+		'rating'      => '5/4.6',
+		'price'       => '8,900,000',
+		'regular_price'=> '9,800,000',
+		'offer'       => '٪ 9',
+		'colors'      => array( '#111827', '#9ca3af' ),
+		'keyword'     => 'MES3500',
+	),
+	array(
+		'title'       => 'همزن کاسه‌دار حرفه‌ای بوش مدل MFQ36460 با کاسه گردان',
+		'short_title' => 'همزن کاسه‌دار حرفه‌ای بوش',
+		'image'       => $upload_dir['baseurl'] . '/2026/11/mixers.png',
+		'rating'      => '5/4.5',
+		'price'       => '3,250,000',
+		'regular_price'=> '3,800,000',
+		'offer'       => '٪ 14',
+		'colors'      => array( '#ffffff', '#10b981' ),
+		'keyword'     => 'MFQ36460',
 	),
 );
 ?>
@@ -126,16 +131,22 @@ $carousel_products_sec11 = array(
 					<!-- Signature Section Heading -->
 					<div class="section-heading-one-nk d-flex align-items-center gap-2">
 						<div class="title f-iran-yekan">
-							<span class="fw-bold"><?php esc_html_e( 'پرفروش ترین', 'negar-shop' ); ?></span> <?php esc_html_e( 'هدفون و ساعت هوشمند', 'negar-shop' ); ?>
+							<span class="fw-bold"><?php esc_html_e( 'پرفروش ترین', 'negar-shop' ); ?></span> <?php esc_html_e( 'تجهیزات آماده‌سازی غذا', 'negar-shop' ); ?>
 						</div>
 						<div class="sub-title f-iran-yekan fw-normal d-none d-md-block">
-							<?php esc_html_e( 'ضمانت اصالت و سلامت فیزیکی کالا', 'negar-shop' ); ?>
+							<?php esc_html_e( 'انواع غذاساز، خردکن، مخلوط‌کن، چرخ‌گوشت و همزن حرفه‌ای', 'negar-shop' ); ?>
 						</div>
 						<div class="line flex-grow-1 d-flex align-items-center gap-1">
 							<span class="flex-grow-1"></span>
 							<span></span>
 						</div>
-						<a href="<?php echo esc_url( $shop_url ); ?>" class="btn btn-nk-danger d-flex align-items-center justify-content-center fw-normal position-relative">
+						<?php
+						$food_cat_url = function_exists( 'get_term_link' ) ? get_term_link( 'food-preparation', 'product_cat' ) : '';
+						if ( is_wp_error( $food_cat_url ) || empty( $food_cat_url ) ) {
+							$food_cat_url = home_url( '/product-category/food-preparation/' );
+						}
+						?>
+						<a href="<?php echo esc_url( $food_cat_url ); ?>" class="btn btn-nk-danger d-flex align-items-center justify-content-center fw-normal position-relative">
 							<?php esc_html_e( 'مشاهده بیشتر', 'negar-shop' ); ?>
 							<i class="icon icon-chevron-left-2 lh-1" aria-hidden="true"></i>
 						</a>

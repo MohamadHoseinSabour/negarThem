@@ -44,38 +44,38 @@ $top_products = array(
 	array(
 		'slot'    => 'slot-1',
 		'number'  => '۱',
-		'title'   => 'کنسول بازی سونی مدل PlayStation 5 Slim ظرفیت 1 ترابایت',
-		'img'     => $kaveh_base . '/1149308650aa177c213e4175a23076419198dabf_1786296597-300x300-removebg-preview-1.png',
-		'price'   => '169.300.000',
-		'rate'    => '5/4.5',
-		'needles' => array( 'PlayStation 5 Slim', 'PlayStation 5' ),
+		'title'   => 'سرخ‌کن بدون روغن فیلیپس مدل HD9280 سایز XL',
+		'img'     => $kaveh_base . '/banner-01.webp',
+		'price'   => '7,950,000',
+		'rate'    => '5/4.8',
+		'needles' => array( 'HD9280', 'سرخ‌کن', 'PlayStation 5 Slim' ),
 	),
 	array(
 		'slot'    => 'slot-2',
 		'number'  => '۲',
-		'title'   => 'بازی Ghost of Yotei مخصوص PS5',
-		'img'     => $kaveh_base . '/26eb5a74fbf76467080d4a69a6a0dd6f9c5f1008_1786454574-300x300-removebg-preview-1.png',
-		'price'   => '9.290.000',
-		'rate'    => '5/3.5',
-		'needles' => array( 'Ghost of Yotei', 'Yotei' ),
+		'title'   => 'پلوپز و زودپز چندکاره تفال مدل CY505',
+		'img'     => $upload_dir['baseurl'] . '/2026/11/rice-pressure-cookers.png',
+		'price'   => '6,950,000',
+		'rate'    => '5/4.7',
+		'needles' => array( 'CY505', 'پلوپز', 'Ghost of Yotei' ),
 	),
 	array(
 		'slot'    => 'slot-3',
 		'number'  => '۳',
-		'title'   => 'بازی مدل  بازی Mortal Kombat 1 مخصوص PS5',
-		'img'     => $kaveh_base . '/92d9b95b55d4cf336cee4cf408c8908caf74c7af_1786388232-300x300-removebg-preview-1.png',
-		'price'   => '4.700.000',
-		'rate'    => '5/5.0',
-		'needles' => array( 'Mortal Kombat 1', 'Mortal Kombat' ),
+		'title'   => 'مایکروویو ۴۲ لیتری ال‌جی مدل MH8265CIS',
+		'img'     => $upload_dir['baseurl'] . '/2026/11/microwaves.png',
+		'price'   => '12,900,000',
+		'rate'    => '5/4.6',
+		'needles' => array( 'MH8265CIS', 'مایکروویو', 'Mortal Kombat 1' ),
 	),
 	array(
 		'slot'    => 'slot-4',
 		'number'  => '۴',
-		'title'   => 'بازی Ghostrunner 2 مخصوص PS5',
-		'img'     => $kaveh_base . '/3eef521897412a152c5b42551b623c91c41d90c0_1786388224-300x300-removebg-preview-1.png',
-		'price'   => '3.990.000',
-		'rate'    => '5/2.0',
-		'needles' => array( 'Ghostrunner 2', 'Ghostrunner' ),
+		'title'   => 'آون توستر ۵۰ لیتری نوبل کینگ مدل NF-1004',
+		'img'     => $upload_dir['baseurl'] . '/2026/11/toaster-ovens.png',
+		'price'   => '4,800,000',
+		'rate'    => '5/4.5',
+		'needles' => array( 'NF-1004', 'توستر', 'Ghostrunner 2' ),
 	),
 );
 ?>
@@ -87,12 +87,12 @@ $top_products = array(
 				<section class="buy-top-product-nk position-relative buy-top-product-nk-61868f3">
 					<div class="buy-top-product-nk__wrapper d-flex align-items-center gap-lg-3 flex-wrap flex-lg-nowrap">
 						<div class="text">
-							<div class="title f-iran-yekan">خرید برترین ساعتــــ</div>
-							<div class="sub-title f-iran-yekan text-uppercase">incididunt ut labore et dolore magna aliqua</div>
+							<div class="title f-iran-yekan"><?php esc_html_e( 'خرید برترین لوازم پخت‌وپز', 'negar-shop' ); ?></div>
+							<div class="sub-title f-iran-yekan"><?php esc_html_e( 'انواع سرخ‌کن، پلوپز و آون توستر هوشمند', 'negar-shop' ); ?></div>
 						</div>
 
 						<div class="buy-top-product-nk__image ms-auto flex-fill flex-grow-0 flex-shrink-0">
-							<img loading="lazy" decoding="async" src="<?php echo esc_url( $theme_img ); ?>" alt="خرید برترین ساعتــــ" width="291" height="290">
+							<img loading="lazy" decoding="async" src="<?php echo esc_url( $theme_img ); ?>" alt="<?php esc_attr_e( 'خرید برترین لوازم پخت‌وپز', 'negar-shop' ); ?>" width="291" height="290">
 						</div>
 
 						<div class="buy-top-product-nk__products w-100 position-relative flex-fill flex-grow-0 flex-shrink-0">

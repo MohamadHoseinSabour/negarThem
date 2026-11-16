@@ -41,38 +41,38 @@ $top_products = array(
 	array(
 		'slot'    => 'slot-1',
 		'number'  => '۱',
-		'title'   => 'بازی Gran Turismo 7 مخصوص PS5',
-		'img'     => $kaveh_base . '/e2a1ec7e564e1d9555bdf7a48e62cc138ff24cd0_1786388718-removebg-preview-300x300-1.png',
-		'price'   => '6.374.200',
-		'rate'    => '5/4.3',
-		'needles' => array( 'Gran Turismo 7', 'Gran Turismo' ),
+		'title'   => 'اسپرسوساز مباشی مدل ECM2026 فشار بخار ۲۰ بار پمپ ایتالیا',
+		'img'     => $kaveh_base . '/espresso-discount-card.webp',
+		'price'   => '4,420,000',
+		'rate'    => '5/4.8',
+		'needles' => array( 'ECM2026', 'اسپرسوساز', 'Gran Turismo 7' ),
 	),
 	array(
 		'slot'    => 'slot-2',
 		'number'  => '۲',
-		'title'   => 'بازی Horizon Forbidden West نسخه کامل مخصوص PS5',
-		'img'     => $kaveh_base . '/86f41915edf5a7e926e2ae0bbd19a2d0ba9c5d06_1786388241-300x300-removebg-preview-1.png',
-		'price'   => '7.700.000',
-		'rate'    => '5/4.0',
-		'needles' => array( 'Horizon Forbidden West', 'Horizon Forbidden' ),
+		'title'   => 'چای‌ساز روهمی بوش مدل BS-1111 با قوری پیرکس',
+		'img'     => $kaveh_base . '/tea-maker-discount-card.webp',
+		'price'   => '3,420,000',
+		'rate'    => '5/4.6',
+		'needles' => array( 'BS-1111', 'چای‌ساز', 'Horizon Forbidden West' ),
 	),
 	array(
 		'slot'    => 'slot-3',
 		'number'  => '۳',
-		'title'   => 'بازی Ghostrunner 2 مخصوص PS5',
-		'img'     => $kaveh_base . '/3eef521897412a152c5b42551b623c91c41d90c0_1786388224-300x300-removebg-preview-1.png',
-		'price'   => '3.990.000',
-		'rate'    => '5/2.0',
-		'needles' => array( 'Ghostrunner 2', 'Ghostrunner' ),
+		'title'   => 'آسیاب قهوه خانگی دلونگی مدل KG79 دندانه‌ای برقی',
+		'img'     => $upload_dir['baseurl'] . '/2026/11/coffee-grinders.png',
+		'price'   => '3,750,000',
+		'rate'    => '5/4.7',
+		'needles' => array( 'KG79', 'آسیاب قهوه', 'Ghostrunner 2' ),
 	),
 	array(
 		'slot'    => 'slot-4',
 		'number'  => '۴',
-		'title'   => 'بازی مدل بازی Mortal Kombat 1 مخصوص PS5',
-		'img'     => $kaveh_base . '/92d9b95b55d4cf336cee4cf408c8908caf74c7af_1786388232-300x300-removebg-preview-1.png',
-		'price'   => '4.700.000',
-		'rate'    => '5/5.0',
-		'needles' => array( 'Mortal Kombat 1', 'Mortal Kombat' ),
+		'title'   => 'توستر نان دو شیار فیلیپس مدل HD2581 با ۸ درجه برشته‌کنندگی',
+		'img'     => $upload_dir['baseurl'] . '/2026/11/bread-toasters.png',
+		'price'   => '2,100,000',
+		'rate'    => '5/4.5',
+		'needles' => array( 'HD2581', 'توستر نان', 'Mortal Kombat 1' ),
 	),
 );
 ?>
@@ -84,12 +84,12 @@ $top_products = array(
 				<section class="buy-top-product-nk position-relative buy-top-product-nk-46ce8511">
 					<div class="buy-top-product-nk__wrapper d-flex align-items-center gap-lg-3 flex-wrap flex-lg-nowrap">
 						<div class="text">
-							<div class="title f-iran-yekan">خرید برترین ساعتــــ</div>
-							<div class="sub-title f-iran-yekan text-uppercase">incididunt ut labore et dolore magna aliqua</div>
+							<div class="title f-iran-yekan"><?php esc_html_e( 'خرید برترین نوشیدنی‌ساز', 'negar-shop' ); ?></div>
+							<div class="sub-title f-iran-yekan"><?php esc_html_e( 'انواع اسپرسوساز، قهوه‌ساز و چای‌ساز خانگی', 'negar-shop' ); ?></div>
 						</div>
 
 						<div class="buy-top-product-nk__image ms-auto flex-fill flex-grow-0 flex-shrink-0">
-							<img loading="lazy" decoding="async" src="<?php echo esc_url( $theme_img ); ?>" alt="خرید برترین ساعتــــ" width="291" height="290">
+							<img loading="lazy" decoding="async" src="<?php echo esc_url( $theme_img ); ?>" alt="<?php esc_attr_e( 'خرید برترین نوشیدنی‌ساز', 'negar-shop' ); ?>" width="291" height="290">
 						</div>
 
 						<div class="buy-top-product-nk__products w-100 position-relative flex-fill flex-grow-0 flex-shrink-0">

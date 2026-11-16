@@ -16,7 +16,7 @@ $upload_dir = wp_upload_dir();
 $s25_img    = $upload_dir['baseurl'] . '/kaveh-demo/products/samsung-s25-fe.png';
 
 $focal_product = function_exists( 'negar_theme_product_pack_product' )
-	? negar_theme_product_pack_product( 'mobile-spotlight', 'focal', array( 'Galaxy S25 FE', 'S25 FE', 'Galaxy S25' ) )
+	? negar_theme_product_pack_product( 'mobile-spotlight', 'focal', array( 'D4S-0036SS', 'دوو', 'ساید بای ساید', 'دیپوینت', 'F4V5', 'ال‌جی', 'BGL8GOLDIR', 'بوش' ) )
 	: false;
 
 if ( ! $focal_product && function_exists( 'wc_get_products' ) ) {
@@ -104,7 +104,7 @@ $adjacent_products = new WP_Query(
 				<span class="highlight">پربازدید</span> ترین محصولات
 			</div>
 			<div class="sub-title hidden sm:inline-block">
-				<?php esc_html_e( 'بر اساس مخاطبان', 'negar-shop' ); ?>
+				<?php esc_html_e( 'انواع یخچال ساید‌بای‌ساید و لوازم خانگی مدرن', 'negar-shop' ); ?>
 			</div>
 			<div class="line">
 				<span></span>

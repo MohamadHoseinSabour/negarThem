@@ -2,7 +2,7 @@
 /**
  * Section 19: Gaming Laptops Spotlight Showcase (HOME-19)
  * Reference: Demo 43 Section 18 (Top: 8859px, Height: ~379px)
- * Heading: "پربازدید ترین محصولات - لپ تاپ ۱۶ اینچی ایسوس"
+ * Heading: "پربازدید ترین لوازم پخت‌وپز برقی"
  *
  * @package Negar_Shop
  */
