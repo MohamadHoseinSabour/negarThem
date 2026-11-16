@@ -18,13 +18,12 @@ $shop_link           = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_
 $sale_link           = add_query_arg( 'on_sale', '1', $shop_link );
 $deal_banner_path    = trailingslashit( $upload_dir['basedir'] ) . 'kaveh-demo/deal/deal-banner-bg.png';
 $deal_banner_url     = file_exists( $deal_banner_path ) ? trailingslashit( $upload_dir['baseurl'] ) . 'kaveh-demo/deal/deal-banner-bg.png' : '';
+$exclude_cat_ids     = function_exists( 'negar_shop_get_excluded_category_ids' ) ? negar_shop_get_excluded_category_ids() : array();
 $product_categories  = function_exists( 'get_terms' ) ? get_terms(
 	array(
 		'taxonomy'   => 'product_cat',
 		'hide_empty' => false,
-		'exclude'    => array( (int) get_option( 'default_product_cat' ) ),
-		'orderby'    => 'name',
-		'order'      => 'ASC',
+		'exclude'    => $exclude_cat_ids,
 	)
 ) : array();
 $categories_by_parent = array();
@@ -36,6 +35,13 @@ if ( ! is_wp_error( $product_categories ) ) {
 			$categories_by_parent[ $parent_id ] = array();
 		}
 		$categories_by_parent[ $parent_id ][] = $product_category;
+	}
+
+	if ( function_exists( 'negar_shop_sort_categories_by_priority' ) ) {
+		foreach ( $categories_by_parent as $pid => &$cat_group ) {
+			$cat_group = negar_shop_sort_categories_by_priority( $cat_group );
+		}
+		unset( $cat_group );
 	}
 }
 

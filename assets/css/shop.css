@@ -675,15 +675,17 @@
 .category-nk__filter__categories__items .category-filter-item label {
   display: flex;
   align-items: center;
-  width: 100%;
+  width: auto;
+  flex: 1 1 auto;
+  min-width: 0;
   min-height: 38px;
-  padding: 0.5rem 0.6rem;
-  gap: 0.5rem !important;
+  padding: 0.45rem 0;
+  gap: 0.45rem !important;
   border: 1px solid transparent;
   border-radius: 10px;
   color: #475569;
-  font-size: 0.82rem;
-  line-height: 1.55;
+  font-size: 0.81rem;
+  line-height: 1.35;
   cursor: pointer;
   user-select: none;
   transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease;
@@ -702,23 +704,27 @@
 .category-nk__filter__categories__items .category-filter-item__name {
   min-width: 0;
   flex: 1 1 auto;
+  font-size: 0.81rem;
+  line-height: 1.35;
 }
 .category-nk__filter__categories__items .category-filter-item__kind {
+  margin-inline-start: auto;
   flex: 0 0 auto;
-  padding: 0.08rem 0.38rem;
+  padding: 0.08rem 0.32rem;
   border-radius: 999px;
   background: #ffe8ee;
   color: #c70d42;
-  font-size: 0.64rem;
+  font-size: 0.61rem;
   font-weight: 800;
   white-space: nowrap;
+  line-height: 1.4;
 }
 .category-nk__filter__categories__items .category-filter-item--parent > .category-filter-item__heading {
   border: 1px solid #ffd4df;
   background: #fff7f9;
   color: #9f1239;
   font-weight: 700;
-  padding: 0 0.35rem 0 0.2rem;
+  padding: 0 0.5rem 0 0.25rem;
 }
 .category-nk__filter__categories__items .category-filter-item--parent > .category-filter-item__heading:hover {
   border-color: #fca5a5;
@@ -729,35 +735,34 @@
   background: transparent;
   color: inherit;
   font-weight: inherit;
-  padding: 0.5rem 0.25rem;
+  padding: 0.45rem 0;
 }
 .category-nk__filter__categories__items .category-filter-item__toggle {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
-  margin-inline-start: 0.25rem;
+  width: 20px;
+  height: 20px;
+  margin: 0;
   padding: 0;
   border: none;
   background: transparent;
   border-radius: 6px;
   color: #9f1239;
   cursor: pointer;
-  flex-shrink: 0;
+  flex: 0 0 20px;
   transition: background-color 160ms ease, color 160ms ease;
 }
 .category-nk__filter__categories__items .category-filter-item__toggle:hover {
   background-color: #ffe4e6;
   color: #be123c;
 }
-.category-nk__filter__categories__items .category-filter-item__toggle i.arrow {
+.category-nk__filter__categories__items .category-filter-item__toggle .arrow {
   display: inline-block;
-  font-size: 11px;
   transition: transform 220ms ease;
 }
-.category-nk__filter__categories__items .category-filter-item__toggle:not(.collapsed) i.arrow,
-.category-nk__filter__categories__items .category-filter-item.is-expanded > .category-filter-item__heading .category-filter-item__toggle i.arrow {
+.category-nk__filter__categories__items .category-filter-item__toggle:not(.collapsed) .arrow,
+.category-nk__filter__categories__items .category-filter-item.is-expanded > .category-filter-item__heading .category-filter-item__toggle .arrow {
   transform: rotate(180deg);
 }
 .category-nk__filter__categories__items .category-filter-sub {

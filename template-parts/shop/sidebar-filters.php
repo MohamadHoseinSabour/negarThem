@@ -20,13 +20,12 @@ $in_stock  = isset( $_GET['in_stock'] ) && '1' === $_GET['in_stock'];
 $on_sale   = isset( $_GET['on_sale'] ) && '1' === $_GET['on_sale'];
 
 // Retrieve categories
-$categories = get_terms(
+$exclude_cat_ids = function_exists( 'negar_shop_get_excluded_category_ids' ) ? negar_shop_get_excluded_category_ids() : array();
+$categories      = get_terms(
 	array(
 		'taxonomy'   => 'product_cat',
 		'hide_empty' => false,
-		'exclude'    => array( (int) get_option( 'default_product_cat' ) ),
-		'orderby'    => 'name',
-		'order'      => 'ASC',
+		'exclude'    => $exclude_cat_ids,
 	)
 );
 
@@ -38,6 +37,13 @@ if ( ! is_wp_error( $categories ) ) {
 			$categories_by_parent[ $parent_id ] = array();
 		}
 		$categories_by_parent[ $parent_id ][] = $category;
+	}
+
+	if ( function_exists( 'negar_shop_sort_categories_by_priority' ) ) {
+		foreach ( $categories_by_parent as $pid => &$cat_group ) {
+			$cat_group = negar_shop_sort_categories_by_priority( $cat_group );
+		}
+		unset( $cat_group );
 	}
 }
 
@@ -71,7 +77,7 @@ $render_category_filter_items = static function ( $parent_id = 0, $depth = 0 ) u
 		echo '</label>';
 		if ( $has_children ) {
 			echo '<button type="button" class="category-filter-item__toggle collapsed" data-bs-toggle="collapse" data-bs-target="#category-sub-' . esc_attr( $category->term_id ) . '" aria-expanded="false" aria-controls="category-sub-' . esc_attr( $category->term_id ) . '" aria-label="' . esc_attr__( 'نمایش زیردسته‌ها', 'negar-shop' ) . '">';
-			echo '<i class="arrow icon-chevron-down-2 lh-1" aria-hidden="true"></i>';
+			echo '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" class="arrow" aria-hidden="true"><path d="M2.5 4.5L6 8L9.5 4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 			echo '</button>';
 		}
 		echo '</div>';

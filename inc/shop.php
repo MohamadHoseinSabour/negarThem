@@ -35,6 +35,141 @@ function negar_shop_pagination_args( $args ) {
 add_filter( 'woocommerce_pagination_args', 'negar_shop_pagination_args' );
 
 /**
+ * Return priority order map for WooCommerce product categories.
+ *
+ * @return array
+ */
+function negar_shop_get_category_priority_order() {
+	return array(
+		// 1. Major appliances (لوازم خانگی سنگین)
+		'major-appliances'                 => 10,
+		'refrigerators-freezers'           => 11,
+		'washing-machines'                 => 12,
+		'dishwashers'                      => 13,
+		'cookers-stoves'                   => 14,
+		'built-in-ovens'                   => 15,
+		'range-hoods'                      => 16,
+
+		// 2. Electric cooking (لوازم برقی پخت‌وپز)
+		'electric-cooking'                 => 20,
+		'microwaves'                       => 21,
+		'air-fryers'                       => 22,
+		'toaster-ovens'                    => 23,
+		'rice-pressure-cookers'            => 24,
+		'electric-grills-sandwich-makers'  => 25,
+
+		// 3. Food preparation (لوازم آماده‌سازی غذا)
+		'food-preparation'                 => 30,
+		'food-processors-blenders'         => 31,
+		'juicers'                          => 32,
+		'meat-grinders'                    => 33,
+		'mixers'                           => 34,
+		'choppers-grinders'                => 35,
+
+		// 4. Beverage & Breakfast (نوشیدنی‌ساز و صبحانه)
+		'beverage-breakfast'               => 40,
+		'tea-makers-electric-kettles'      => 41,
+		'coffee-espresso-machines'         => 42,
+		'coffee-grinders'                  => 43,
+		'bread-toasters'                   => 44,
+		'water-dispensers'                 => 45,
+
+		// 5. Cleaning & Ironing (نظافت و اتوکشی)
+		'cleaning-ironing'                 => 50,
+		'vacuum-cleaners'                  => 51,
+		'cordless-robot-vacuums'           => 52,
+		'steam-cleaners'                   => 53,
+		'irons-garment-steamers'           => 54,
+
+		// 6. Cooling, Heating & Air (سرمایش، گرمایش و تهویه)
+		'cooling-heating-air'              => 60,
+		'air-conditioners-splits'          => 61,
+		'fans'                             => 62,
+		'electric-heaters'                 => 63,
+		'air-purifiers'                    => 64,
+		'humidifiers'                      => 65,
+
+		// 7. TV & Audio (تلویزیون و صوت‌وتصویر)
+		'tv-audio'                         => 70,
+		'televisions'                      => 71,
+		'soundbars-home-audio'             => 72,
+
+		// 8. Personal care (لوازم برقی بهداشت شخصی)
+		'personal-care-appliances'         => 80,
+		'hair-dryers'                      => 81,
+		'electric-shavers'                 => 82,
+		'hair-straighteners'               => 83,
+	);
+}
+
+/**
+ * Return category IDs that should be excluded from storefront listings (e.g. Uncategorized).
+ *
+ * @return array
+ */
+function negar_shop_get_excluded_category_ids() {
+	$excluded = array();
+
+	$default_cat_id = (int) get_option( 'default_product_cat' );
+	if ( $default_cat_id ) {
+		$default_cat = get_term( $default_cat_id, 'product_cat' );
+		if ( $default_cat && ! is_wp_error( $default_cat ) && in_array( $default_cat->slug, array( 'uncategorized', 'daste-bandi-nashode' ), true ) ) {
+			$excluded[] = $default_cat_id;
+		}
+	}
+
+	$uncat = get_term_by( 'slug', 'uncategorized', 'product_cat' );
+	if ( $uncat && ! is_wp_error( $uncat ) ) {
+		$excluded[] = (int) $uncat->term_id;
+	}
+
+	return array_values( array_unique( array_filter( $excluded ) ) );
+}
+
+/**
+ * Sort an array of WP_Term category objects according to priority order.
+ *
+ * @param array $categories Array of WP_Term objects.
+ * @return array
+ */
+function negar_shop_sort_categories_by_priority( $categories ) {
+	if ( empty( $categories ) || ! is_array( $categories ) ) {
+		return $categories;
+	}
+
+	$order_map = negar_shop_get_category_priority_order();
+
+	usort(
+		$categories,
+		static function ( $a, $b ) use ( $order_map ) {
+			$order_a = isset( $order_map[ $a->slug ] ) ? $order_map[ $a->slug ] : ( (int) get_term_meta( $a->term_id, 'order', true ) ?: 999 );
+			$order_b = isset( $order_map[ $b->slug ] ) ? $order_map[ $b->slug ] : ( (int) get_term_meta( $b->term_id, 'order', true ) ?: 999 );
+			if ( $order_a === $order_b ) {
+				return strcmp( $a->name, $b->name );
+			}
+			return $order_a <=> $order_b;
+		}
+	);
+
+	return $categories;
+}
+
+/**
+ * Keep product categories checklist in admin in tree/priority order.
+ *
+ * @param array $args
+ * @param int   $post_id
+ * @return array
+ */
+function negar_shop_admin_category_checklist_args( $args, $post_id = 0 ) {
+	if ( isset( $args['taxonomy'] ) && 'product_cat' === $args['taxonomy'] ) {
+		$args['checked_ontop'] = false;
+	}
+	return $args;
+}
+add_filter( 'wp_terms_checklist_args', 'negar_shop_admin_category_checklist_args', 10, 2 );
+
+/**
  * Output semantic breadcrumbs for Shop and WooCommerce pages.
  */
 function negar_shop_breadcrumbs() {

@@ -79,13 +79,12 @@ $mobile_hotline_href = function_exists( 'negar_shop_phone_href' ) ? negar_shop_p
 		<div id="mobile-tab-categories" class="mobile-tab-pane hidden">
 			<?php
 			if ( class_exists( 'WooCommerce' ) ) :
-				$mobile_cats = get_terms(
+				$exclude_cat_ids = function_exists( 'negar_shop_get_excluded_category_ids' ) ? negar_shop_get_excluded_category_ids() : array();
+				$mobile_cats     = get_terms(
 					array(
 						'taxonomy'   => 'product_cat',
 						'hide_empty' => false,
-						'exclude'    => array( (int) get_option( 'default_product_cat' ) ),
-						'orderby'    => 'name',
-						'order'      => 'ASC',
+						'exclude'    => $exclude_cat_ids,
 					)
 				);
 				if ( ! empty( $mobile_cats ) && ! is_wp_error( $mobile_cats ) ) :
@@ -96,6 +95,13 @@ $mobile_hotline_href = function_exists( 'negar_shop_phone_href' ) ? negar_shop_p
 							$mobile_categories_by_parent[ $parent_id ] = array();
 						}
 						$mobile_categories_by_parent[ $parent_id ][] = $mobile_cat;
+					}
+
+					if ( function_exists( 'negar_shop_sort_categories_by_priority' ) ) {
+						foreach ( $mobile_categories_by_parent as $pid => &$mobile_group ) {
+							$mobile_group = negar_shop_sort_categories_by_priority( $mobile_group );
+						}
+						unset( $mobile_group );
 					}
 
 					$render_mobile_categories = null;

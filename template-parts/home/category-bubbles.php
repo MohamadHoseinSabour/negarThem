@@ -16,7 +16,7 @@ $shop_link = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink(
 // Initial 6 storefront priority main categories in specified order
 $priority_categories = array(
 	'major-appliances'    => array(
-		'fallback_name' => 'لوازم خانگی بزرگ',
+		'fallback_name' => 'لوازم خانگی سنگین',
 		'fallback_img'  => 'cat-1793876649-728.png',
 	),
 	'electric-cooking'    => array(
