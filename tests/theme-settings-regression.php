@@ -1264,8 +1264,9 @@ try {
 	$results['gaming_zone_manual_resolved_without_fallback'] = $resolved_manual && $resolved_manual->get_id() === $product_id && ! $fallback_called;
 
 	negar_theme_find_product_by_title_needles( array(), true );
-	$fallback_search = negar_theme_gaming_zone_product( 'shadows', array( 'EA Sports FC' ) );
-	$results['gaming_zone_unassigned_slot_uses_fallback'] = $fallback_search && false !== stripos( $fallback_search->get_name(), 'EA Sports FC' );
+	$test_needle     = $product ? mb_substr( $product->get_name(), 0, 10 ) : 'فیلیپس';
+	$fallback_search = negar_theme_gaming_zone_product( 'shadows', array( $test_needle ) );
+	$results['gaming_zone_unassigned_slot_uses_fallback'] = $fallback_search && false !== stripos( $fallback_search->get_name(), $test_needle );
 
 	$fallback_none = negar_theme_gaming_zone_product( 'shadows', array( 'NonExistentNeedleXYZ987' ) );
 	$results['gaming_zone_missing_needle_returns_false'] = false === $fallback_none;

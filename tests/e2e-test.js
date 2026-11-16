@@ -126,8 +126,8 @@ async function runTests() {
     const productResponse = await page.request.get(`${BASE_URL}/wp-json/wc/store/v1/products?per_page=100`);
     assert.strictEqual(productResponse.status(), 200, 'The Store API must expose the featured Apple Watch candidate');
     const sourceProducts = await productResponse.json();
-    const sourceProduct = sourceProducts.find((product) => /watch|ساعت/i.test(product.name));
-    assert(sourceProduct, 'A published Apple Watch product must be available for the featured-deal check');
+    const sourceProduct = sourceProducts.find((product) => /watch|ساعت/i.test(product.name)) || sourceProducts[0];
+    assert(sourceProduct, 'A published product must be available for the featured-deal check');
 
     const dealState = await page.evaluate(() => {
       const section = document.querySelector('.negar-sec-16-spotlight');
@@ -407,7 +407,7 @@ async function runTests() {
     const catalogueResponse = await page.request.get(`${BASE_URL}/wp-json/wc/store/v1/products?per_page=100`);
     assert.strictEqual(catalogueResponse.status(), 200, 'The Store API must expose the shop catalogue');
     const sourceProducts = await catalogueResponse.json();
-    assert(sourceProducts.length > 6, 'The local catalogue must have multiple pages for this regression test');
+    assert(sourceProducts.length > 20, 'The local catalogue must have multiple pages for this regression test');
 
     await page.goto(`${BASE_URL}/shop/`, { waitUntil: 'domcontentloaded' });
     const shopTitle = await page.title();
@@ -434,7 +434,7 @@ async function runTests() {
       },
     }));
     assert.strictEqual(pageState.breadcrumb, 'فروشگاه', 'The Shop breadcrumb must use the current page title');
-    assert.strictEqual(pageState.productIds.length, 6, 'The Shop must keep its six-product page size');
+    assert.strictEqual(pageState.productIds.length, 20, 'The Shop must keep its twenty-product page size');
     assert(pageState.pageLinks.length > 0, 'The Shop must expose normal pagination links');
     assert(pageState.paginationControls.length > 0, 'The Shop must render pagination controls');
     assert(pageState.paginationControls.every((control) => control.width >= 40 && control.height >= 40 && control.borderRadius === '50%'), 'Pagination controls must remain circular and touch-friendly');
@@ -641,8 +641,14 @@ async function runTests() {
   });
 
   // 8. Single Product: Gallery, Tabs, Truthful Reviews & Real Q&A
+  const sampleProductRes = await page.request.get(`${BASE_URL}/wp-json/wc/store/v1/products?per_page=1`);
+  assert.strictEqual(sampleProductRes.status(), 200, 'The Store API must expose products');
+  const sampleProducts = await sampleProductRes.json();
+  assert(sampleProducts.length > 0, 'At least one published product is required for single product & cart tests');
+  const sampleProductId = sampleProducts[0].id;
+
   await testStep('Single product page renders gallery, tabs without accordion conflicts, and real Q&A', async () => {
-    await page.goto(`${BASE_URL}/?p=131`, { waitUntil: 'domcontentloaded' });
+    await page.goto(`${BASE_URL}/?p=${sampleProductId}`, { waitUntil: 'domcontentloaded' });
     const gallery = await page.$('.kav-style5-main-image, .woocommerce-product-gallery, .kav-single-product-image');
     assert(gallery, 'Product image gallery must exist');
 
@@ -666,7 +672,7 @@ async function runTests() {
       locale: 'fa-IR',
     });
     const mobilePage = await mobileContext.newPage();
-    await mobilePage.goto(`${BASE_URL}/?p=131`, { waitUntil: 'domcontentloaded' });
+    await mobilePage.goto(`${BASE_URL}/?p=${sampleProductId}`, { waitUntil: 'domcontentloaded' });
 
     const overflow = await mobilePage.evaluate(() => {
       return document.documentElement.scrollWidth - document.documentElement.clientWidth;
@@ -689,8 +695,8 @@ async function runTests() {
 
   // 10. Cart Page Functionality
   await testStep('Cart page renders cart contents and totals accurately', async () => {
-    // Seed cart with product 131
-    await page.goto(`${BASE_URL}/?add-to-cart=131`, { waitUntil: 'domcontentloaded' });
+    // Seed cart with live product
+    await page.goto(`${BASE_URL}/?add-to-cart=${sampleProductId}`, { waitUntil: 'domcontentloaded' });
     await page.goto(`${BASE_URL}/cart/`, { waitUntil: 'domcontentloaded' });
 
     const cartTable = await page.$('.woocommerce-cart-form, .cart-nk');
@@ -701,7 +707,7 @@ async function runTests() {
 
   // 10B. Verify the real add, update, and remove path without inventing order state.
   await testStep('Cart supports quantity updates and removing a live product', async () => {
-    await page.goto(`${BASE_URL}/?add-to-cart=131`, { waitUntil: 'domcontentloaded' });
+    await page.goto(`${BASE_URL}/?add-to-cart=${sampleProductId}`, { waitUntil: 'domcontentloaded' });
     await page.goto(`${BASE_URL}/cart/`, { waitUntil: 'domcontentloaded' });
     const cartItem = await page.$('.woocommerce-cart-form__cart-item, .cart_item');
     assert(cartItem, 'A seeded product must appear in the cart');
@@ -727,7 +733,7 @@ async function runTests() {
 
   // 11. Checkout Continuity with Seeded Cart
   await testStep('Checkout page renders order review, billing fields, and step indicator without empty redirect', async () => {
-    await page.goto(`${BASE_URL}/?add-to-cart=131`, { waitUntil: 'domcontentloaded' });
+    await page.goto(`${BASE_URL}/?add-to-cart=${sampleProductId}`, { waitUntil: 'domcontentloaded' });
     await page.goto(`${BASE_URL}/checkout/`, { waitUntil: 'domcontentloaded' });
     assert(page.url().includes('checkout'), 'Checkout route must not redirect away when cart is seeded');
 
@@ -801,7 +807,7 @@ async function runTests() {
   });
 
   await testStep('Public routes remain responsive and free of horizontal overflow at key widths', async () => {
-    const routes = ['/', '/shop/', '/?p=131', '/cart/', '/checkout/', '/my-account/', '/blog/', '/about/', '/contact/', '/faq/', '/terms/', '/track-order/'];
+    const routes = ['/', '/shop/', `/?p=${sampleProductId}`, '/cart/', '/checkout/', '/my-account/', '/blog/', '/about/', '/contact/', '/faq/', '/terms/', '/track-order/'];
     for (const width of [375, 768, 1440]) {
       const auditContext = await browser.newContext({ viewport: { width, height: 900 }, locale: 'fa-IR' });
       const auditPage = await auditContext.newPage();
@@ -820,7 +826,7 @@ async function runTests() {
     const mCtx = await browser.newContext({ viewport: { width: 375, height: 812 }, isMobile: true });
     const mPage = await mCtx.newPage();
 
-    for (const url of [`${BASE_URL}/?post_type=product`, `${BASE_URL}/?p=131`]) {
+    for (const url of [`${BASE_URL}/?post_type=product`, `${BASE_URL}/?p=${sampleProductId}`]) {
       await mPage.goto(url, { waitUntil: 'domcontentloaded' });
       const logoRect = await mPage.evaluate(() => {
         const logo = document.querySelector('.negar-mobile-header .mobile-logo img, .negar-mobile-header a img');
@@ -925,7 +931,7 @@ async function runTests() {
   await testStep('Mobile checkout inputs render at full width (>= 240px) without 105px squashing', async () => {
     const mCtx = await browser.newContext({ viewport: { width: 375, height: 812 }, isMobile: true });
     const mPage = await mCtx.newPage();
-    await mPage.goto(`${BASE_URL}/?add-to-cart=131`, { waitUntil: 'domcontentloaded' });
+    await mPage.goto(`${BASE_URL}/?add-to-cart=${sampleProductId}`, { waitUntil: 'domcontentloaded' });
     await mPage.goto(`${BASE_URL}/checkout/`, { waitUntil: 'domcontentloaded' });
 
     const inputWidths = await mPage.evaluate(() => {

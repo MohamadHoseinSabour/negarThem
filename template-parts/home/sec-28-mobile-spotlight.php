@@ -19,6 +19,20 @@ $focal_product = function_exists( 'negar_theme_product_pack_product' )
 	? negar_theme_product_pack_product( 'mobile-spotlight', 'focal', array( 'Galaxy S25 FE', 'S25 FE', 'Galaxy S25' ) )
 	: false;
 
+if ( ! $focal_product && function_exists( 'wc_get_products' ) ) {
+	$fallback_prods = wc_get_products(
+		array(
+			'status'  => 'publish',
+			'limit'   => 1,
+			'orderby' => 'date',
+			'order'   => 'DESC',
+		)
+	);
+	if ( ! empty( $fallback_prods ) ) {
+		$focal_product = $fallback_prods[0];
+	}
+}
+
 if ( $focal_product ) {
 	$focal_title      = $focal_product->get_name();
 	$focal_short_desc = wp_strip_all_tags( $focal_product->get_short_description() );

@@ -27,6 +27,9 @@ if ( function_exists( 'wc_get_products' ) ) {
 			break;
 		}
 	}
+	if ( ! $deal_product && ! empty( $deal_products ) ) {
+		$deal_product = $deal_products[0];
+	}
 }
 
 $shop_url = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/shop/' );

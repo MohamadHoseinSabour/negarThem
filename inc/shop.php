@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return int
  */
 function negar_shop_loop_products_per_page( $per_page ) {
-	return 6;
+	return 20;
 }
 add_filter( 'loop_shop_per_page', 'negar_shop_loop_products_per_page', 20 );
 

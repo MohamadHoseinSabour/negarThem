@@ -15,276 +15,82 @@ $upload_dir = wp_upload_dir();
 $kaveh_base = $upload_dir['baseurl'] . '/kaveh-demo';
 $shop_url   = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/shop/' );
 
-if ( ! function_exists( 'negar_get_taste_product_info' ) ) {
-	/**
-	 * Helper to find WooCommerce product ID and permalink if available
-	 */
-	function negar_get_taste_product_info( $slug_fragment, $fallback_url ) {
-		$prods = get_posts( array(
-			'post_type'      => 'product',
-			'posts_per_page' => 1,
-			'post_status'    => 'publish',
-			's'              => $slug_fragment,
-		) );
-		if ( ! empty( $prods ) ) {
-			return array(
-				'id'  => $prods[0]->ID,
-				'url' => get_permalink( $prods[0]->ID ),
-			);
-		}
-		return array(
-			'id'  => 0,
-			'url' => $fallback_url,
-		);
+// Query the 8 main categories of the store (parent = 0)
+$excluded_ids = function_exists( 'negar_shop_get_excluded_category_ids' )
+	? negar_shop_get_excluded_category_ids()
+	: array();
+
+$main_categories = function_exists( 'get_terms' ) ? get_terms(
+	array(
+		'taxonomy'   => 'product_cat',
+		'parent'     => 0,
+		'hide_empty' => false,
+		'exclude'    => $excluded_ids,
+	)
+) : array();
+
+$eligible_cats = array();
+if ( ! empty( $main_categories ) && ! is_wp_error( $main_categories ) ) {
+	foreach ( $main_categories as $m_cat ) {
+		$eligible_cats[] = $m_cat;
 	}
 }
 
-// 4 Category Boxes matching Demo 43 Exactly
-$taste_categories = array(
-	// Box 1: Digital Products / Laptops
-	array(
-		'title'    => 'کالای دیجیتال',
-		'subtitle' => 'محصولات پیشنهادی از دسته',
-		'link'     => $shop_url,
-		'products' => array(
-			array(
-				'slot'          => 'box-1-1',
-				'title'         => 'لپ تاپ 16 اینچی ایسوس مدل TUF Gaming A16 FA608PP-Ryzen',
-				'img'           => $kaveh_base . '/230ce545eaa1028a10622044bde2cbfdf2969235_1785675702-removebg-preview-300x300.png',
-				'rate'          => '4.0',
-				'price'         => '580,000,000',
-				'regular_price' => '',
-				'discount'      => '',
-				'colors'        => array(
-					array( 'bg' => '#808080', 'title' => 'خاکستری' ),
-				),
-				'needles'       => array( 'TUF Gaming' ),
-			),
-			array(
-				'slot'          => 'box-1-2',
-				'title'         => 'لپ تاپ 15.3 اینچی لنوو مدل Legion 5 15IRX10-i7',
-				'img'           => $kaveh_base . '/203a083f03f1506a710c1e6a88c71e1919e20a76_1786268142-300x300-removebg-preview-1-1.png',
-				'rate'          => '4.0',
-				'price'         => '586,000,000',
-				'regular_price' => '',
-				'discount'      => '',
-				'colors'        => array(
-					array( 'bg' => '#000000', 'title' => 'مشکی' ),
-				),
-				'needles'       => array( 'Legion 5' ),
-			),
-			array(
-				'slot'          => 'box-1-3',
-				'title'         => 'لپ تاپ 16 اینچی ایسوس مدل WQXGA 240Hz',
-				'img'           => $kaveh_base . '/3c0f8ff8a12c67f061136e8fafd65eb6f6c56d2e_1786985097-300x300-removebg-preview-1.png',
-				'rate'          => '5.0',
-				'price'         => '839,000,000',
-				'regular_price' => '',
-				'discount'      => '',
-				'colors'        => array(
-					array( 'bg' => '#808080', 'title' => 'خاکستری' ),
-				),
-				'needles'       => array( 'ROG Strix', 'WQXGA' ),
-			),
-			array(
-				'slot'          => 'box-1-4',
-				'title'         => 'لپ‌تاپ 17 اینچی ام اس آی مدل Vector 17 HX AI A2XWJG-Core',
-				'img'           => $kaveh_base . '/04124d815f3ee9d9adb91f219ad4b45d298b8408_1779002328-300x300-removebg-preview-1.png',
-				'rate'          => '4.0',
-				'price'         => '858,900,000',
-				'regular_price' => '',
-				'discount'      => '',
-				'colors'        => array(
-					array( 'bg' => '#808080', 'title' => 'خاکستری' ),
-				),
-				'needles'       => array( 'Vector' ),
-			),
-		),
-	),
+// Randomly choose 3 main categories
+if ( count( $eligible_cats ) > 3 ) {
+	shuffle( $eligible_cats );
+	$chosen_cats = array_slice( $eligible_cats, 0, 3 );
+} elseif ( ! empty( $eligible_cats ) ) {
+	$chosen_cats = $eligible_cats;
+} else {
+	$chosen_cats = array();
+}
 
-	// Box 2: Smartphones / Mobile
-	array(
-		'title'    => 'موبایل',
-		'subtitle' => 'محصولات پیشنهادی از دسته',
-		'link'     => $shop_url,
-		'products' => array(
-			array(
-				'slot'          => 'box-2-1',
-				'title'         => 'گوشی موبایل اپل مدل iPhone 17 Pro Max ZAA',
-				'img'           => $kaveh_base . '/ec57ce03f2a92834058f502174b1a2aeffc9a580_1759666637-300x300-removebg-preview-1.png',
-				'rate'          => '4.0',
-				'price'         => '409,999,000',
-				'regular_price' => '',
-				'discount'      => '',
-				'colors'        => array(
-					array( 'bg' => '#c0c0c0', 'title' => 'نقره ای' ),
-					array( 'bg' => '#00008b', 'title' => 'آبی تیره' ),
-					array( 'bg' => '#ffa500', 'title' => 'نارنجی' ),
-				),
-				'needles'       => array( 'iPhone 17' ),
-			),
-			array(
-				'slot'          => 'box-2-2',
-				'title'         => 'گوشی موبایل اپل مدل iPhone 15 Ch',
-				'img'           => $kaveh_base . '/f4c0e5f4199abda603494b54e0655cbd0447405f_1765624240-300x300-removebg-preview-1.png',
-				'rate'          => '3.5',
-				'price'         => '214,999,000',
-				'regular_price' => '',
-				'discount'      => '',
-				'colors'        => array(
-					array( 'bg' => '#1e73be', 'title' => 'آبی' ),
-				),
-				'needles'       => array( 'iPhone 15' ),
-			),
-			array(
-				'slot'          => 'box-2-3',
-				'title'         => 'گوشی موبایل اپل مدل iPhone 16 CH دو سیم کارت ظرفیت 128 گیگابایت',
-				'img'           => $kaveh_base . '/5af568b4909435c6a215ad5e728e902db234b673_1736597759-300x300-removebg-preview-1.png',
-				'rate'          => '4.5',
-				'price'         => '269,990,000',
-				'regular_price' => '',
-				'discount'      => '',
-				'colors'        => array(
-					array( 'bg' => '#ff69b4', 'title' => 'صورتی' ),
-					array( 'bg' => '#000000', 'title' => 'مشکی' ),
-					array( 'bg' => '#1e73be', 'title' => 'آبی' ),
-				),
-				'needles'       => array( 'iPhone 16' ),
-			),
-			array(
-				'slot'          => 'box-2-4',
-				'title'         => 'گوشی موبایل سامسونگ مدل Galaxy S25 FE دو سیم کارت',
-				'img'           => $kaveh_base . '/89c0e7b3f400348a3add26684b7ece5084e4361f_1777115891-300x300-removebg-preview-1.png',
-				'rate'          => '4.0',
-				'price'         => '162,999,000',
-				'regular_price' => '175,000,000',
-				'discount'      => '7',
-				'colors'        => array(
-					array( 'bg' => '#000000', 'title' => 'مشکی' ),
-				),
-				'needles'       => array( 'Galaxy S25' ),
-			),
-		),
-	),
+$taste_categories = array();
+if ( ! empty( $chosen_cats ) ) {
+	foreach ( $chosen_cats as $cat ) {
+		$cat_link = get_term_link( $cat );
+		$cat_link = is_wp_error( $cat_link ) ? $shop_url : $cat_link;
 
-	// Box 3: Console Games
-	array(
-		'title'    => 'بازی های کنسول خانگی',
-		'subtitle' => 'محصولات پیشنهادی از دسته',
-		'link'     => $shop_url,
-		'products' => array(
+		$cat_products = function_exists( 'wc_get_products' ) ? wc_get_products(
 			array(
-				'slot'          => 'box-3-1',
-				'title'         => 'بازی Gran Turismo 7 مخصوص PS5',
-				'img'           => $kaveh_base . '/e2a1ec7e564e1d9555bdf7a48e62cc138ff24cd0_1786388718-removebg-preview-300x300-1.png',
-				'rate'          => '4.3',
-				'price'         => '6,374,200',
-				'regular_price' => '',
-				'discount'      => '',
-				'colors'        => array(),
-				'needles'       => array( 'Gran Turismo' ),
-			),
-			array(
-				'slot'          => 'box-3-2',
-				'title'         => 'بازی Horizon Forbidden West نسخه کامل مخصوص PS5',
-				'img'           => $kaveh_base . '/86f41915edf5a7e926e2ae0bbd19a2d0ba9c5d06_1786388241-300x300-removebg-preview-1.png',
-				'rate'          => '4.0',
-				'price'         => '7,700,000',
-				'regular_price' => '',
-				'discount'      => '',
-				'colors'        => array(),
-				'needles'       => array( 'Horizon Forbidden' ),
-			),
-			array(
-				'slot'          => 'box-3-3',
-				'title'         => 'بازی Ghostrunner 2 مخصوص PS5',
-				'img'           => $kaveh_base . '/3eef521897412a152c5b42551b623c91c41d90c0_1786388224-300x300-removebg-preview-1.png',
-				'rate'          => '2.0',
-				'price'         => '3,990,000',
-				'regular_price' => '',
-				'discount'      => '',
-				'colors'        => array(),
-				'needles'       => array( 'Ghostrunner' ),
-			),
-			array(
-				'slot'          => 'box-3-4',
-				'title'         => 'بازی مدل بازی Mortal Kombat 1 مخصوص PS5',
-				'img'           => $kaveh_base . '/92d9b95b55d4cf336cee4cf408c8908caf74c7af_1786388232-300x300-removebg-preview-1.png',
-				'rate'          => '5.0',
-				'price'         => '4,700,000',
-				'regular_price' => '',
-				'discount'      => '',
-				'colors'        => array(),
-				'needles'       => array( 'Mortal Kombat' ),
-			),
-		),
-	),
+				'status'   => 'publish',
+				'limit'    => 4,
+				'orderby'  => 'rand',
+				'category' => array( $cat->slug ),
+			)
+		) : array();
 
-	// Box 4: Additional Category (Mobile Phones)
-	array(
-		'title'    => 'گوشی موبایل',
-		'subtitle' => 'محصولات پیشنهادی از دسته',
-		'link'     => $shop_url,
-		'products' => array(
-			array(
-				'slot'          => 'box-4-1',
-				'title'         => 'گوشی موبایل اپل مدل iPhone 17 Pro Max ZAA',
-				'img'           => $kaveh_base . '/ec57ce03f2a92834058f502174b1a2aeffc9a580_1759666637-300x300-removebg-preview-1.png',
-				'rate'          => '4.0',
-				'price'         => '409,999,000',
-				'regular_price' => '',
-				'discount'      => '',
-				'colors'        => array(
-					array( 'bg' => '#c0c0c0', 'title' => 'نقره ای' ),
-					array( 'bg' => '#00008b', 'title' => 'آبی تیره' ),
-					array( 'bg' => '#ffa500', 'title' => 'نارنجی' ),
-				),
-				'needles'       => array( 'iPhone 17' ),
-			),
-			array(
-				'slot'          => 'box-4-2',
-				'title'         => 'گوشی موبایل اپل مدل iPhone 15 Ch',
-				'img'           => $kaveh_base . '/f4c0e5f4199abda603494b54e0655cbd0447405f_1765624240-300x300-removebg-preview-1.png',
-				'rate'          => '3.5',
-				'price'         => '214,999,000',
-				'regular_price' => '',
-				'discount'      => '',
-				'colors'        => array(
-					array( 'bg' => '#1e73be', 'title' => 'آبی' ),
-				),
-				'needles'       => array( 'iPhone 15' ),
-			),
-			array(
-				'slot'          => 'box-4-3',
-				'title'         => 'گوشی موبایل اپل مدل iPhone 16 CH دو سیم کارت ظرفیت 128 گیگابایت',
-				'img'           => $kaveh_base . '/5af568b4909435c6a215ad5e728e902db234b673_1736597759-300x300-removebg-preview-1.png',
-				'rate'          => '4.5',
-				'price'         => '269,990,000',
-				'regular_price' => '',
-				'discount'      => '',
-				'colors'        => array(
-					array( 'bg' => '#ff69b4', 'title' => 'صورتی' ),
-					array( 'bg' => '#000000', 'title' => 'مشکی' ),
-					array( 'bg' => '#1e73be', 'title' => 'آبی' ),
-				),
-				'needles'       => array( 'iPhone 16' ),
-			),
-			array(
-				'slot'          => 'box-4-4',
-				'title'         => 'گوشی موبایل سامسونگ مدل Galaxy S25 FE دو سیم کارت',
-				'img'           => $kaveh_base . '/89c0e7b3f400348a3add26684b7ece5084e4361f_1777115891-300x300-removebg-preview-1.png',
-				'rate'          => '4.0',
-				'price'         => '162,999,000',
-				'regular_price' => '175,000,000',
-				'discount'      => '7',
-				'colors'        => array(
-					array( 'bg' => '#000000', 'title' => 'مشکی' ),
-				),
-				'needles'       => array( 'Galaxy S25' ),
-			),
-		),
-	),
-);
+		$product_slots = array();
+		if ( ! empty( $cat_products ) ) {
+			$orig_count = count( $cat_products );
+			for ( $i = 0; $i < 4; $i++ ) {
+				$product_slots[] = $cat_products[ $i % $orig_count ];
+			}
+		} else {
+			// Truthful empty slot state when no products exist
+			for ( $i = 0; $i < 4; $i++ ) {
+				$product_slots[] = false;
+			}
+		}
+
+		$taste_categories[] = array(
+			'title'    => $cat->name,
+			'subtitle' => __( 'محصولات پیشنهادی از دسته', 'negar-shop' ),
+			'link'     => $cat_link,
+			'products' => $product_slots,
+		);
+	}
+} else {
+	for ( $b = 1; $b <= 3; $b++ ) {
+		$taste_categories[] = array(
+			'title'    => __( 'دسته‌بندی منتخب', 'negar-shop' ),
+			'subtitle' => __( 'محصولات پیشنهادی از دسته', 'negar-shop' ),
+			'link'     => $shop_url,
+			'products' => array( false, false, false, false ),
+		);
+	}
+}
 ?>
 
 <div class="elementor-element elementor-element-7980ffc8 e-con-full e-flex e-con e-parent e-lazyloaded" data-id="7980ffc8" data-element_type="container" data-e-type="container">
@@ -327,9 +133,12 @@ $taste_categories = array(
 										<div class="your-taste-box-nk__box__products d-flex flex-wrap">
 											<?php
 											foreach ( $cat['products'] as $item ) :
-												$product = function_exists( 'negar_theme_product_pack_product' )
-													? negar_theme_product_pack_product( 'taste-grid', $item['slot'], $item['needles'] )
-													: false;
+												$product = false;
+												if ( $item instanceof WC_Product ) {
+													$product = $item;
+												} elseif ( is_array( $item ) && isset( $item['slot'] ) && function_exists( 'negar_theme_product_pack_product' ) ) {
+													$product = negar_theme_product_pack_product( 'taste-grid', $item['slot'], isset( $item['needles'] ) ? $item['needles'] : array() );
+												}
 
 												if ( $product ) {
 													$item_title = $product->get_name();
