@@ -19,13 +19,6 @@ $featured_product_posts = get_posts(
 		'post_type'      => 'product',
 		'post_status'    => 'publish',
 		'posts_per_page' => 1,
-		'tax_query'      => array(
-			array(
-				'taxonomy' => 'product_cat',
-				'field'    => 'slug',
-				'terms'    => array( 'major-appliances', 'refrigerators-freezers' ),
-			),
-		),
 	)
 );
 

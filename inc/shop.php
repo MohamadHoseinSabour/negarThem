@@ -22,6 +22,19 @@ function negar_shop_loop_products_per_page( $per_page ) {
 add_filter( 'loop_shop_per_page', 'negar_shop_loop_products_per_page', 20 );
 
 /**
+ * Ensure pagination exposes all page links across the storefront.
+ *
+ * @param array $args Pagination arguments.
+ * @return array
+ */
+function negar_shop_pagination_args( $args ) {
+	$args['end_size'] = 50;
+	$args['mid_size'] = 50;
+	return $args;
+}
+add_filter( 'woocommerce_pagination_args', 'negar_shop_pagination_args' );
+
+/**
  * Output semantic breadcrumbs for Shop and WooCommerce pages.
  */
 function negar_shop_breadcrumbs() {

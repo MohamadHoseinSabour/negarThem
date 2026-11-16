@@ -36,6 +36,8 @@ global $wp_query;
 			'prev_text' => '<i class="icon-chevron-right-2 lh-1" aria-hidden="true"></i>',
 			'next_text' => '<i class="icon-chevron-left-2 lh-1" aria-hidden="true"></i>',
 			'type'      => 'list',
+			'end_size'  => 50,
+			'mid_size'  => 50,
 		)
 	);
 	?>

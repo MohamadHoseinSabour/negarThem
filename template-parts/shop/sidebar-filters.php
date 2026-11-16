@@ -59,16 +59,32 @@ $render_category_filter_items = static function ( $parent_id = 0, $depth = 0 ) u
 			$item_classes[] = 'category-filter-item--has-children';
 		}
 
-		echo '<li class="' . esc_attr( implode( ' ', $item_classes ) ) . '" style="--category-depth: ' . esc_attr( min( $depth, 4 ) ) . ';">';
+		echo '<li class="' . esc_attr( implode( ' ', $item_classes ) ) . '" style="--category-depth: ' . esc_attr( min( $depth, 4 ) ) . ';" data-category-id="' . esc_attr( $category->term_id ) . '">';
+		echo '<div class="heading_category category-filter-item__heading d-flex align-items-center justify-content-between">';
 		echo '<input type="checkbox" name="category" id="category-' . esc_attr( $category->term_id ) . '" myid="' . esc_attr( $category->term_id ) . '" hidden="" autocomplete="off">';
-		echo '<label for="category-' . esc_attr( $category->term_id ) . '" class="d-flex align-items-center gap-3 f-payda fw-normal">';
+		echo '<label for="category-' . esc_attr( $category->term_id ) . '" class="d-flex align-items-center gap-2 f-payda fw-normal flex-grow-1 mb-0">';
 		echo '<span class="category-filter-item__control" aria-hidden="true"></span>';
 		echo '<span class="category-filter-item__name">' . esc_html( $category->name ) . '</span>';
 		if ( 0 === $depth ) {
 			echo '<span class="category-filter-item__kind">دسته اصلی</span>';
 		}
-		echo '</label></li>';
-		$render_category_filter_items( (int) $category->term_id, $depth + 1 );
+		echo '</label>';
+		if ( $has_children ) {
+			echo '<button type="button" class="category-filter-item__toggle collapsed" data-bs-toggle="collapse" data-bs-target="#category-sub-' . esc_attr( $category->term_id ) . '" aria-expanded="false" aria-controls="category-sub-' . esc_attr( $category->term_id ) . '" aria-label="' . esc_attr__( 'نمایش زیردسته‌ها', 'negar-shop' ) . '">';
+			echo '<i class="arrow icon-chevron-down-2 lh-1" aria-hidden="true"></i>';
+			echo '</button>';
+		}
+		echo '</div>';
+
+		if ( $has_children ) {
+			echo '<div id="category-sub-' . esc_attr( $category->term_id ) . '" class="category-filter-sub collapse">';
+			echo '<ul class="category-filter-children d-flex flex-column gap-2 pt-2">';
+			$render_category_filter_items( (int) $category->term_id, $depth + 1 );
+			echo '</ul>';
+			echo '</div>';
+		}
+
+		echo '</li>';
 	}
 };
 

@@ -345,28 +345,133 @@ jQuery(document).ready(function ($) {
     filterProducts();
   });
 
+  function toggleCategorySubmenu($li, forceOpen) {
+    var $collapse = $li.children('.category-filter-sub').first();
+    if (!$collapse.length) {
+      $collapse = $li.children('.collapse').first();
+    }
+    if (!$collapse.length) {
+      $collapse = $li.find('.category-filter-sub, .collapse').first();
+    }
+    if (!$collapse.length) {
+      return;
+    }
+
+    var $toggle = $li.children('.category-filter-item__heading, .heading_category').find('.category-filter-item__toggle');
+    if (!$toggle.length) {
+      $toggle = $li.find('.category-filter-item__toggle').first();
+    }
+
+    var isShown = $collapse.hasClass('show');
+    var shouldOpen = (typeof forceOpen === 'boolean') ? forceOpen : !isShown;
+
+    if (shouldOpen) {
+      $collapse.stop(true, true).slideDown(180, function () {
+        $collapse.addClass('show').css('display', '');
+      });
+      $li.addClass('is-expanded').data('user-expanded', true);
+      $toggle.removeClass('collapsed').attr('aria-expanded', 'true');
+    } else {
+      $collapse.stop(true, true).slideUp(180, function () {
+        $collapse.removeClass('show').css('display', '');
+      });
+      $li.removeClass('is-expanded').data('user-expanded', false);
+      $toggle.addClass('collapsed').attr('aria-expanded', 'false');
+    }
+  }
+
+  jQuery(document).on('click', '.category-nk__filter__box__heading[data-bs-toggle="collapse"]', function (e) {
+    e.preventDefault();
+    var $heading = jQuery(this);
+    var target = $heading.attr('data-bs-target');
+    if (!target) return;
+    var $target = jQuery(target);
+    if (!$target.length) return;
+
+    var isShown = $target.hasClass('show');
+    if (isShown) {
+      $target.stop(true, true).slideUp(200, function () {
+        $target.removeClass('show').css('display', '');
+      });
+      $heading.addClass('collapsed').attr('aria-expanded', 'false');
+    } else {
+      $target.stop(true, true).slideDown(200, function () {
+        $target.addClass('show').css('display', '');
+      });
+      $heading.removeClass('collapsed').attr('aria-expanded', 'true');
+    }
+  });
+
   jQuery(document).on('click', 'ul.cathidden li', function (e) {
     if (jQuery(e.target).is('.filterhiddeninput') || jQuery(e.target).closest('.filterhiddeninput').length) {
       return;
     }
+
+    var $target = jQuery(e.target);
     var $li = jQuery(this);
-    var $input = $li.find('input[type="checkbox"]').first();
+
+    // If the click happened inside a deeper nested li, ignore in this outer li handler.
+    if (!$target.closest('li').is($li)) {
+      return;
+    }
+
+    var hasChildren = $li.hasClass('category-filter-item--has-children');
+    var isToggleBtn = $target.is('.category-filter-item__toggle') || $target.closest('.category-filter-item__toggle').length > 0;
+    var isCheckboxControl = $target.is('.category-filter-item__control') || $target.closest('.category-filter-item__control').length > 0;
+
+    // 1. Clicked on the accordion expand/collapse toggle button
+    if (isToggleBtn) {
+      e.preventDefault();
+      e.stopPropagation();
+      toggleCategorySubmenu($li);
+      return;
+    }
+
+    // 2. Clicked on a parent category that has subcategories, but not on the checkbox control
+    //    -> Expand/collapse its subcategories!
+    if (hasChildren && !isCheckboxControl) {
+      e.preventDefault();
+      e.stopPropagation();
+      toggleCategorySubmenu($li);
+      return;
+    }
+
+    // 3. Clicked on the checkbox control or clicked on a leaf category (e.g. child category)
+    var $input = $li.children('.category-filter-item__heading, .heading_category').children('input[type="checkbox"]').first();
+    if (!$input.length) {
+      $input = $li.children('input[type="checkbox"]').first();
+    }
+    if (!$input.length) {
+      $input = $li.find('input[type="checkbox"]').first();
+    }
     if (!$input.length || !$input.attr('myid')) {
       return;
     }
+
     e.preventDefault();
     e.stopPropagation();
 
     $input.toggleClass('activeFilter');
     var isOn = $input.hasClass('activeFilter');
     $input.prop('checked', isOn);
+
+    var $heading = $li.children('.category-filter-item__heading, .heading_category').first();
+    var $label = $heading.length ? $heading.children('label').first() : $li.children('label').first();
+
     if (isOn) {
       $input.attr('checked', 'checked');
-      $li.find('label').addClass('active');
+      $label.addClass('active');
+      $li.addClass('is-active');
+      // If parent has children, ensure subcategories are open
+      if (hasChildren) {
+        toggleCategorySubmenu($li, true);
+      }
     } else {
       $input.removeAttr('checked');
-      $li.find('label').removeClass('active');
+      $label.removeClass('active');
+      $li.removeClass('is-active');
     }
+
     editFilterInputs(jQuery('.filterhiddeninput'), $input.attr('myid'));
     filterProducts();
   });
@@ -466,6 +571,12 @@ jQuery(document).ready(function ($) {
       .removeClass('activeFilter')
       .prop('checked', false)
       .removeAttr('checked');
+    jQuery('ul.cathidden li').removeClass('is-active').find('label').removeClass('active');
+    jQuery('ul.cathidden li.category-filter-item--has-children').each(function () {
+      var $p = jQuery(this);
+      $p.data('user-expanded', false);
+      toggleCategorySubmenu($p, false);
+    });
     jQuery('.attrhiddeninput, .filterhiddeninput, .filterhiddeninputbrand').val('');
     resetEphemeralAvailabilityFilters();
     resetPriceFilterToDefaults();
@@ -1021,17 +1132,20 @@ jQuery(document).ready(function ($) {
   function nkGetFilterItemLabel($li) {
     var $label = $li.children('label').first();
     if (!$label.length) {
-      $label = $li.children('.heading_category').children('label').first();
+      $label = $li.children('.category-filter-item__heading, .heading_category').children('label').first();
     }
     return nkNormalizeFilterSearch($label.text());
   }
 
   function nkExpandFilterParent($li) {
-    var $collapse = $li.children('.collapse').first();
+    var $collapse = $li.children('.category-filter-sub, .collapse').first();
     if ($collapse.length) {
-      $collapse.addClass('show');
+      $collapse.stop(true, true).slideDown(120, function () {
+        $collapse.addClass('show').css('display', '');
+      });
     }
-    $li.children('.heading_category').find('[data-bs-toggle="collapse"]').removeClass('collapsed').attr('aria-expanded', 'true');
+    $li.addClass('is-expanded');
+    $li.find('.category-filter-item__toggle').removeClass('collapsed').attr('aria-expanded', 'true');
   }
 
   function nkFilterTreeList($list, query) {
@@ -1042,7 +1156,7 @@ jQuery(document).ready(function ($) {
 
     $list.children('li').each(function () {
       var $li = jQuery(this);
-      var $childList = $li.children('.collapse').children('ul').first();
+      var $childList = $li.children('.category-filter-sub, .collapse').children('ul').first();
       if (!$childList.length) {
         $childList = $li.children('ul').first();
       }
@@ -1106,6 +1220,13 @@ jQuery(document).ready(function ($) {
 
     if (!query) {
       $list.find('li').removeClass('nk-filter-search-hidden');
+      $list.children('li.category-filter-item--has-children').each(function () {
+        var $parentLi = jQuery(this);
+        var hasActiveInput = $parentLi.find('input[type="checkbox"]:checked').length > 0;
+        if (!hasActiveInput && !$parentLi.data('user-expanded')) {
+          toggleCategorySubmenu($parentLi, false);
+        }
+      });
       anyVisible = true;
     }
 

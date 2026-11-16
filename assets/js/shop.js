@@ -60,6 +60,10 @@
 	   2. Category & Brand Live Search Filter Inside Sidebar Box
 	   ========================================================================== */
 	function initCategorySearch() {
+		// Handled with hierarchical tree support in kaveh-ajax-shop-method.js
+		if (typeof window.jQuery !== 'undefined' && document.querySelector('.cathidden')) {
+			return;
+		}
 		var searchInputs = document.querySelectorAll('.category-nk__filter__search-input');
 		searchInputs.forEach(function (input) {
 			input.addEventListener('input', function () {
