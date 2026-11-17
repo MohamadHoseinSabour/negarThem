@@ -355,20 +355,62 @@ async function runTests() {
     });
   });
 
-  // 2C. Video-review content must not pretend that sample presenters are customers.
-  await testStep('Homepage video-review section uses a truthful no-content state', async () => {
+  // 2C. Video-review content must only render verified Media Library videos or a truthful empty state.
+  await testStep('Homepage video-review section renders verified Media Library videos or a truthful empty state', async () => {
     const videoReviewState = await page.evaluate(() => {
       const section = document.querySelector('.videos-nk-39f2483d');
+      const buttons = Array.from(section?.querySelectorAll('.videos-nk__play') || []).map((btn) => ({
+        type: btn.getAttribute('data-video-type') || '',
+        src: btn.getAttribute('data-video-src') || '',
+        poster: btn.getAttribute('data-video-poster') || '',
+        orientation: btn.getAttribute('data-video-orientation') || '',
+        productLink: btn.getAttribute('data-product-link') || '',
+      }));
       return {
         sectionFound: Boolean(section),
         hasEmptyState: Boolean(section?.querySelector('.videos-nk__empty')),
-        videoButtons: section?.querySelectorAll('.videos-nk__play').length || 0,
+        text: section?.textContent.replace(/\s+/g, ' ').trim() || '',
+        buttons,
       };
     });
 
     assert(videoReviewState.sectionFound, 'The homepage video-review section must exist');
-    assert(videoReviewState.hasEmptyState, 'Video reviews without a verified source must show a truthful empty state');
-    assert.strictEqual(videoReviewState.videoButtons, 0, 'The empty state must not present sample videos as customer reviews');
+    assert(!videoReviewState.text.includes('امیرحسین شبانی'), 'Video-review section must not show Demo 43 sample presenter names');
+
+    if (videoReviewState.buttons.length === 0) {
+      assert(videoReviewState.hasEmptyState, 'Video reviews without a verified source must show a truthful empty state');
+    } else {
+      assert.strictEqual(videoReviewState.hasEmptyState, false, 'Empty state must not appear when verified videos exist');
+      for (const btn of videoReviewState.buttons) {
+        assert.strictEqual(btn.type, 'upload', 'Verified video reviews must use local upload videos');
+        assert(btn.src.includes('/wp-content/uploads/'), `Video source must point to WordPress Media Library: ${btn.src}`);
+        assert(!btn.src.includes('aparat.com'), 'Video reviews must not use Demo 43 external Aparat embeds');
+        assert(btn.productLink.startsWith(BASE_URL), `Video card must link to an owned store route: ${btn.productLink}`);
+      }
+
+      // Open the first video review popup and confirm a playable HTML5 video mounts cleanly.
+      const firstPlayBtn = page.locator('.videos-nk-39f2483d .videos-nk__play').first();
+      await firstPlayBtn.scrollIntoViewIfNeeded();
+      await firstPlayBtn.click();
+      await page.waitForSelector('.videos-nk-39f2483d .videos-nk-popup.is-open video[src]', { timeout: 5000 });
+      const popupState = await page.evaluate(() => {
+        const popup = document.querySelector('.videos-nk-39f2483d .videos-nk-popup');
+        const video = popup?.querySelector('video');
+        return {
+          isOpen: Boolean(popup?.classList.contains('is-open')),
+          isVertical: Boolean(popup?.classList.contains('is-vertical')),
+          src: video?.getAttribute('src') || '',
+        };
+      });
+      assert.strictEqual(popupState.isOpen, true, 'Video review popup must open on click');
+      assert(popupState.src.includes('/wp-content/uploads/'), 'Popup player must mount the local Media Library video');
+
+      await page.locator('.videos-nk-39f2483d .videos-nk-popup__close').click();
+      await page.waitForFunction(() => {
+        const popup = document.querySelector('.videos-nk-39f2483d .videos-nk-popup');
+        return popup && !popup.classList.contains('is-open');
+      }, { timeout: 5000 });
+    }
   });
 
   // 2D. Footer navigation and contact surfaces must not retain demo-store placeholders.

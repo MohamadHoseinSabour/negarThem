@@ -3741,3 +3741,94 @@ function negar_theme_render_settings_page() {
 	</div>
 	<?php
 }
+
+
+/**
+ * Return verified store product video reviews backed by WordPress Media Library videos.
+ *
+ * Pulls enabled video stories that reference a real WordPress video attachment
+ * so the homepage video-reviews section and vertical stories stay synchronized
+ * without inventing sample presenters or external demo URLs.
+ *
+ * @return array<int, array<string, mixed>>
+ */
+function negar_theme_get_video_reviews() {
+	$stories        = negar_theme_get_stories( true );
+	$publisher_name = function_exists( 'negar_theme_brand_label' ) ? negar_theme_brand_label() : get_bloginfo( 'name' );
+	$publisher_logo = function_exists( 'negar_theme_logo_url' ) ? negar_theme_logo_url() : '';
+	$site_icon      = get_site_icon_url( 96 );
+	$avatar_url     = $site_icon ? $site_icon : $publisher_logo;
+	$shop_link      = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/shop/' );
+	$reviews        = array();
+
+	foreach ( $stories as $story ) {
+		if ( ! is_array( $story ) || 'video' !== ( $story['type'] ?? '' ) ) {
+			continue;
+		}
+
+		$video_id  = isset( $story['video_id'] ) ? absint( $story['video_id'] ) : 0;
+		$video_url = isset( $story['video_url'] ) ? (string) $story['video_url'] : '';
+		if ( ! $video_id || '' === $video_url ) {
+			continue;
+		}
+
+		$video_post = get_post( $video_id );
+		if ( ! $video_post || 'attachment' !== $video_post->post_type ) {
+			continue;
+		}
+
+		$mime = (string) get_post_mime_type( $video_id );
+		if ( ! str_starts_with( $mime, 'video/' ) ) {
+			continue;
+		}
+
+		$meta        = wp_get_attachment_metadata( $video_id );
+		$width       = is_array( $meta ) && ! empty( $meta['width'] ) ? absint( $meta['width'] ) : 0;
+		$height      = is_array( $meta ) && ! empty( $meta['height'] ) ? absint( $meta['height'] ) : 0;
+		$orientation = ( $height > 0 && $width > 0 && $height > $width ) ? 'vertical' : 'horizontal';
+		$duration    = is_array( $meta ) && ! empty( $meta['length_formatted'] ) ? (string) $meta['length_formatted'] : '';
+
+		$poster_url = ! empty( $story['poster_url'] ) ? (string) $story['poster_url'] : (string) ( $story['thumbnail_url'] ?? '' );
+		$product_id = isset( $story['product_id'] ) ? absint( $story['product_id'] ) : 0;
+		$product    = ( $product_id && function_exists( 'wc_get_product' ) ) ? wc_get_product( $product_id ) : false;
+
+		if ( '' === $poster_url && $product && $product->get_image_id() ) {
+			$poster_url = (string) wp_get_attachment_image_url( $product->get_image_id(), 'medium_large' );
+		}
+
+		$timestamp      = get_post_timestamp( $video_post );
+		$published_date = $timestamp ? wp_date( 'j F Y', $timestamp ) : '';
+		$product_link   = ! empty( $story['product_link'] ) ? (string) $story['product_link'] : $shop_link;
+		$product_title  = ! empty( $story['product_title'] ) ? (string) $story['product_title'] : '';
+		$title          = ! empty( $story['title'] ) ? (string) $story['title'] : ( '' !== $product_title ? $product_title : get_the_title( $video_post ) );
+
+		$reviews[] = array(
+			'id'             => (string) ( $story['id'] ?? ( 'video-' . $video_id ) ),
+			'video_id'       => $video_id,
+			'video_url'      => $video_url,
+			'poster_url'     => $poster_url,
+			'thumbnail_url'  => (string) ( $story['thumbnail_url'] ?? $poster_url ),
+			'title'          => $title,
+			'badge'          => (string) ( $story['badge'] ?? '' ),
+			'orientation'    => $orientation,
+			'width'          => $width,
+			'height'         => $height,
+			'duration'       => $duration,
+			'publisher_name' => $publisher_name,
+			'avatar_url'     => $avatar_url,
+			'published_date' => $published_date,
+			'has_product'    => ! empty( $story['has_product'] ),
+			'product_id'     => $product_id,
+			'product_title'  => $product_title,
+			'product_link'   => $product_link,
+			'cta_label'      => ! empty( $story['cta_label'] ) ? (string) $story['cta_label'] : __( 'مشاهده محصول', 'negar-shop' ),
+		);
+	}
+
+	/**
+	 * Filter verified product video reviews rendered in homepage Section 31.
+	 *
+	 * @param array<int, array<string, mixed>> $reviews Resolved video review entries.
+	 */
+	return apply_filters( 'negar_theme_video_reviews', $reviews );
+}

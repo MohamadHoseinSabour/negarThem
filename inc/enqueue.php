@@ -158,7 +158,7 @@ function negar_shop_scripts() {
 		'kaveh-videos',
 		NEGAR_SHOP_URI . '/assets/css/vendor/videosnkkaveh.css',
 		array( 'bootstrap-rtl', 'kaveh-icomoon' ),
-		NEGAR_SHOP_VERSION
+		file_exists( NEGAR_SHOP_DIR . '/assets/css/vendor/videosnkkaveh.css' ) ? (string) filemtime( NEGAR_SHOP_DIR . '/assets/css/vendor/videosnkkaveh.css' ) : NEGAR_SHOP_VERSION
 	);
 	wp_enqueue_style(
 		'kaveh-articles',
@@ -458,7 +458,7 @@ function negar_shop_scripts() {
 			'kaveh-videos-script',
 			NEGAR_SHOP_URI . '/assets/js/vendor/videosnkkaveh.js',
 			array( 'jquery', 'swiper-bundle' ),
-			NEGAR_SHOP_VERSION,
+			file_exists( NEGAR_SHOP_DIR . '/assets/js/vendor/videosnkkaveh.js' ) ? (string) filemtime( NEGAR_SHOP_DIR . '/assets/js/vendor/videosnkkaveh.js' ) : NEGAR_SHOP_VERSION,
 			true
 		);
 		wp_enqueue_script(

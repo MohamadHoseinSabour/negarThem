@@ -116,8 +116,12 @@
 			return;
 		}
 
-		$popup.removeClass('is-open').attr({ hidden: true, 'aria-hidden': 'true' });
+		$popup.removeClass('is-open is-vertical').attr({ hidden: true, 'aria-hidden': 'true' });
 		clearPlayer($popup);
+		var $footer = $popup.find('[data-videos-nk-footer]');
+		if ($footer.length) {
+			$footer.attr('hidden', true);
+		}
 		$('body').removeClass('videos-nk-popup-open');
 
 		if ($activePopup && $activePopup[0] === $popup[0]) {
@@ -134,7 +138,7 @@
 		});
 	}
 
-	function mountPlayer($player, type, src, poster) {
+	function mountPlayer($popup, $player, type, src, poster) {
 		if ('aparat' === type) {
 			var $iframe = $('<iframe>', {
 				src: src,
@@ -162,17 +166,34 @@
 		$player.empty().append($video);
 
 		var videoEl = $video.get(0);
-		if (videoEl && typeof videoEl.play === 'function') {
-			var playPromise = videoEl.play();
-			if (playPromise && typeof playPromise.catch === 'function') {
-				playPromise.catch(function () {
-					/* autoplay may be blocked; controls remain available */
-				});
+		if (videoEl) {
+			videoEl.addEventListener('loadedmetadata', function () {
+				if (videoEl.videoHeight && videoEl.videoWidth) {
+					$popup.toggleClass('is-vertical', videoEl.videoHeight > videoEl.videoWidth);
+				}
+			});
+			if (typeof videoEl.play === 'function') {
+				var playPromise = videoEl.play();
+				if (playPromise && typeof playPromise.catch === 'function') {
+					playPromise.catch(function () {
+						videoEl.muted = true;
+						var mutedPromise = videoEl.play();
+						if (mutedPromise && typeof mutedPromise.catch === 'function') {
+							mutedPromise.catch(function () {
+								/* controls remain available */
+							});
+						}
+					});
+				}
 			}
 		}
 	}
 
-	function openPopup($section, type, src, poster) {
+	function openPopup($section, options) {
+		var type = options.type || 'upload';
+		var src = options.src || '';
+		var poster = options.poster || '';
+		var orientation = options.orientation || '';
 		var $popup = $section.find('.videos-nk-popup').first();
 		if (!$popup.length || !src) {
 			return;
@@ -195,13 +216,29 @@
 		var $player = $popup.find('[data-videos-nk-player]');
 		clearPlayer($popup);
 
+		$popup.toggleClass('is-vertical', 'vertical' === orientation);
+
+		var $footer = $popup.find('[data-videos-nk-footer]');
+		if ($footer.length) {
+			if (options.productLink) {
+				$footer.find('[data-videos-nk-title]').text(options.title || '');
+				$footer.find('[data-videos-nk-product]').text(options.productTitle || '');
+				$footer.find('[data-videos-nk-cta]')
+					.attr('href', options.productLink)
+					.text(options.ctaLabel || 'مشاهده و خرید');
+				$footer.removeAttr('hidden');
+			} else {
+				$footer.attr('hidden', true);
+			}
+		}
+
 		$popup.removeAttr('hidden').attr('aria-hidden', 'false').addClass('is-open');
 		$('body').addClass('videos-nk-popup-open');
 		$activePopup = $popup;
 
 		// Keep page pinned while mounting media (video/iframe can trigger scroll-into-view).
 		restoreScroll();
-		mountPlayer($player, type, src, poster);
+		mountPlayer($popup, $player, type, src, poster);
 		restoreScroll();
 
 		window.requestAnimationFrame(function () {
@@ -225,12 +262,16 @@
 				return;
 			}
 
-			openPopup(
-				$section,
-				$btn.attr('data-video-type') || 'upload',
-				$btn.attr('data-video-src') || '',
-				$btn.attr('data-video-poster') || ''
-			);
+			openPopup($section, {
+				type: $btn.attr('data-video-type') || 'upload',
+				src: $btn.attr('data-video-src') || '',
+				poster: $btn.attr('data-video-poster') || '',
+				orientation: $btn.attr('data-video-orientation') || '',
+				title: $btn.attr('data-video-title') || '',
+				productTitle: $btn.attr('data-product-title') || '',
+				productLink: $btn.attr('data-product-link') || '',
+				ctaLabel: $btn.attr('data-cta-label') || ''
+			});
 		});
 
 		$section.on('click.videosNk', '[data-videos-nk-close]', function (event) {

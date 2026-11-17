@@ -580,6 +580,21 @@ try {
 		exit( 0 );
 	}
 
+	if ( 'clear-stories' === $action ) {
+		negar_theme_test_admin();
+		update_option(
+			$story_option,
+			array(
+				'schema_version' => defined( 'NEGAR_THEME_STORY_VERSION' ) ? NEGAR_THEME_STORY_VERSION : 1,
+				'stories'        => array(),
+			),
+			false
+		);
+		wp_cache_delete( $story_option, 'options' );
+		echo 'cleared';
+		exit( 0 );
+	}
+
 	if ( 'cleanup-video-fixture' === $action ) {
 		$target_id = isset( $argv[2] ) ? (int) $argv[2] : 0;
 		$token     = isset( $argv[3] ) ? trim( (string) $argv[3] ) : '';

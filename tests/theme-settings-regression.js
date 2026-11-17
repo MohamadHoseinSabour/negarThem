@@ -563,6 +563,7 @@ async function run() {
     php('set-colors', '#e90544', '#c40439');
 
     // Phase 6: Stories Admin Persistence, Real Media Playback & Interaction Tests
+    php('clear-stories');
     videoFixture = JSON.parse(php('video-fixture'));
     assert(videoFixture && videoFixture.id > 0, 'Video fixture ID must be positive');
     assert(videoFixture.token && videoFixture.token.length > 0, 'Video fixture token must be present');
