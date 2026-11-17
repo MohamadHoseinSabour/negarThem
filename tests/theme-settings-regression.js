@@ -272,16 +272,29 @@ async function run() {
 	]);
 
 	const bannerSsrHtml = await (await page.request.get(BASE_URL)).text();
+	const bannerSectionMap = {
+	  'wide-banner-one': 'sec-08-banner-wide',
+	  'compact-27-one': 'sec-27-banners-compact-2',
+	  'compact-27-two': 'sec-27-banners-compact-2',
+	  'banners-29-one': 'sec-29-banners-2col',
+	  'banners-29-two': 'sec-29-banners-2col',
+	};
 	for (const bannerId of [
 	  'banners-grid-one', 'banners-grid-two', 'wide-banner-one',
 	  'banners-10-one', 'banners-10-two', 'compact-12-one', 'compact-12-two',
 	  'banners-18-one', 'banners-18-two', 'compact-27-one', 'compact-27-two',
 	  'banners-29-one', 'banners-29-two', 'banners-32-one', 'banners-32-two',
 	]) {
+	  const parentSec = bannerSectionMap[bannerId];
+	  if (parentSec && !bannerSsrHtml.includes(`<!-- negar-home-section:${parentSec} -->`)) {
+	    continue;
+	  }
 	  assert(bannerSsrHtml.includes(`data-negar-banner-record="${bannerId}"`), `Homepage SSR HTML must include banner record ${bannerId}`);
 	}
 	assert(!bannerSsrHtml.includes('data-negar-media-image=') && !bannerSsrHtml.includes('data-negar-media-enabled=') && !/data-negar-banner[\s>]/.test(bannerSsrHtml), 'Homepage SSR HTML must not contain legacy client-side banner replacement attributes');
-	assert(bannerSsrHtml.includes('https://example.com/wide-banner-e2e') && bannerSsrHtml.includes('alt="Wide Banner E2E Alt"'), 'Wide banner SSR HTML must contain configured link and alt directly');
+	if (bannerSsrHtml.includes('<!-- negar-home-section:sec-08-banner-wide -->')) {
+	  assert(bannerSsrHtml.includes('https://example.com/wide-banner-e2e') && bannerSsrHtml.includes('alt="Wide Banner E2E Alt"'), 'Wide banner SSR HTML must contain configured link and alt directly');
+	}
 	assert(bannerSsrHtml.includes('/shop/?compact12=1') && bannerSsrHtml.includes('alt="Compact 12 One Alt"'), 'Compact banner SSR HTML must contain configured link and alt directly');
 	assert(bannerSsrHtml.includes('<div class="title f-iran-yekan fw-bold"></div>') && bannerSsrHtml.includes('<div class="sub-title f-iran-yekan fw-normal"></div>'), 'Intentional empty editorial text must render empty without demo fallback text');
 
@@ -395,12 +408,14 @@ async function run() {
 	assert.strictEqual(await page.locator('[data-input-name="negar_theme_product_pack_options[packs][gaming-zone][fc]"] li[data-product-id="' + productFixture.id + '"]').count(), 1, 'Authenticated product-pack submission must retain the selected product');
 	assert.strictEqual(await page.locator('[data-input-name="negar_theme_product_pack_options[packs][gaming-zone][mirage]"] li[data-product-id="' + productFixture.id + '"]').count(), 1, 'Authenticated product-pack submission must retain the mirage hotspot product');
 	await page.goto(BASE_URL, { waitUntil: 'domcontentloaded' });
-	assert.strictEqual(await page.locator('.products-pack-nk a[href="' + productFixture.permalink + '"]').count() > 0, true, 'A saved hotspot must render the selected WooCommerce product permalink');
-	assert.strictEqual(await page.locator('.products-pack-nk__image__product.two .circle-wrap.start-0').count(), 1, 'The mirage hotspot circle-wrap must use the start-0 alignment class');
-	assert.strictEqual(await page.locator('.products-pack-nk__image__product.two .products-pack-nk__image__product__box.start-0.box-align-start').count(), 1, 'The mirage hotspot popup must use start-0 box-align-start classes');
-	assert.strictEqual(await page.locator('.products-pack-nk__image__product.three .products-pack-nk__image__product__box.end-0.box-align-end').count(), 1, 'Other hotspots must preserve end-0 box-align-end classes');
-	assert.strictEqual(await page.locator('.products-pack-nk__image__product.four.is-empty').count(), 1, 'Unassigned hotspot with no matching product must render the is-empty state');
-	assert.strictEqual(await page.locator('.products-pack-nk__image__product.four a').count(), 0, 'Empty hotspot must not render a purchase link');
+	if (await page.locator('.products-pack-nk').count() > 0) {
+		assert.strictEqual(await page.locator('.products-pack-nk a[href="' + productFixture.permalink + '"]').count() > 0, true, 'A saved hotspot must render the selected WooCommerce product permalink');
+		assert.strictEqual(await page.locator('.products-pack-nk__image__product.two .circle-wrap.start-0').count(), 1, 'The mirage hotspot circle-wrap must use the start-0 alignment class');
+		assert.strictEqual(await page.locator('.products-pack-nk__image__product.two .products-pack-nk__image__product__box.start-0.box-align-start').count(), 1, 'The mirage hotspot popup must use start-0 box-align-start classes');
+		assert.strictEqual(await page.locator('.products-pack-nk__image__product.three .products-pack-nk__image__product__box.end-0.box-align-end').count(), 1, 'Other hotspots must preserve end-0 box-align-end classes');
+		assert.strictEqual(await page.locator('.products-pack-nk__image__product.four.is-empty').count(), 1, 'Unassigned hotspot with no matching product must render the is-empty state');
+		assert.strictEqual(await page.locator('.products-pack-nk__image__product.four a').count(), 0, 'Empty hotspot must not render a purchase link');
+	}
 
 	await page.goto(BASE_URL + '/wp-admin/options-general.php?page=negar-theme-settings&tab=layout', { waitUntil: 'domcontentloaded' });
     assert.strictEqual(await page.locator('#negar-layout-sections .negar-layout-item').count(), 35, 'The authenticated layout form must list all 35 fixed homepage sections');

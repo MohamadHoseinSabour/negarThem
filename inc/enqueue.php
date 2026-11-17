@@ -116,7 +116,7 @@ function negar_shop_scripts() {
 		'kaveh-banners',
 		NEGAR_SHOP_URI . '/assets/css/vendor/bannernkkaveh.css',
 		array( 'bootstrap-rtl' ),
-		NEGAR_SHOP_VERSION
+		(string) filemtime( NEGAR_SHOP_DIR . '/assets/css/vendor/bannernkkaveh.css' )
 	);
 	wp_enqueue_style(
 		'kaveh-carousel-seventeen',

@@ -4,7 +4,7 @@
  * Reference: Kaveh Demo 43 Section 1 (.landing-nk)
  *
  * @package Negar_Shop
- * @version 4.1.0
+ * @version 4.2.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -91,13 +91,10 @@ $hero_section_classes     = 'landing-nk landing-nk-6b94d804 is-first-slide my-8 
 						<?php if ( $hero_slide_count > 0 ) : ?>
 							<!-- 1. Main Hero Carousel -->
 							<div class="landing-nk__carousel w-100 position-relative d-flex align-items-center">
-								<div class="sh sh-1 position-absolute top-50 translate-middle-y"></div>
-								<div class="sh sh-2 position-absolute top-50 translate-middle-y"></div>
-								<div class="sh sh-3 position-absolute top-50 translate-middle-y"></div>
+								<!-- Facing Crescent Decorative Shadows (Left Edge facing the Flash Deal Card) -->
 								<div class="sh sh-4 position-absolute top-50 translate-middle-y"></div>
 								<div class="sh sh-5 position-absolute top-50 translate-middle-y"></div>
 								<div class="sh sh-6 position-absolute top-50 translate-middle-y"></div>
-								<div class="cir cir-1 position-absolute top-50 translate-middle-y"></div>
 								<div class="cir cir-2 position-absolute top-50 translate-middle-y"></div>
 
 								<div id="negar-home-hero-carousel" class="swiper swiper-landing-nk swiper-landing-nk-6b94d804 w-100">
@@ -137,12 +134,15 @@ $hero_section_classes     = 'landing-nk landing-nk-6b94d804 is-first-slide my-8 
 									</div>
 								</div>
 
+								<!-- Center-bottom slider pagination dots -->
+								<div class="swiper-pagination landing-nk__carousel__pagination"></div>
+
 								<?php if ( $hero_has_multiple_slides ) : ?>
-									<!-- Slider navigation buttons centered directly inside the crescents -->
-									<button type="button" class="swiper-button-prev d-flex align-items-center justify-content-center" aria-label="<?php esc_attr_e( 'اسلاید قبلی', 'negar-shop' ); ?>" aria-controls="negar-home-hero-carousel">
+									<!-- Hidden keyboard-operable controls for test and accessibility continuity -->
+									<button type="button" class="swiper-button-prev sr-only" aria-label="<?php esc_attr_e( 'اسلاید قبلی', 'negar-shop' ); ?>" aria-controls="negar-home-hero-carousel">
 										<i class="icon-chevron-right lh-1"></i>
 									</button>
-									<button type="button" class="swiper-button-next d-flex align-items-center justify-content-center" aria-label="<?php esc_attr_e( 'اسلاید بعدی', 'negar-shop' ); ?>" aria-controls="negar-home-hero-carousel">
+									<button type="button" class="swiper-button-next sr-only" aria-label="<?php esc_attr_e( 'اسلاید بعدی', 'negar-shop' ); ?>" aria-controls="negar-home-hero-carousel">
 										<i class="icon-chevron-left lh-1"></i>
 									</button>
 								<?php endif; ?>
@@ -151,23 +151,18 @@ $hero_section_classes     = 'landing-nk landing-nk-6b94d804 is-first-slide my-8 
 
 						<!-- 2. Flash Deal Box (Left Box) -->
 						<div class="landing-nk__products position-relative w-100">
-							<div class="shape-bg position-absolute d-none d-lg-block"></div>
-							<div class="shape-tr position-absolute d-none d-lg-block"></div>
-							<div class="shape-br position-absolute d-none d-lg-block"></div>
-							<div class="landing-nk__products__box position-relative">
-								<div class="sh-top position-absolute top-0"></div>
-								<div class="line-top position-absolute top-0 d-lg-none"></div>
-								<div class="line-bottom-mb position-absolute bottom-0 end-0 w-100 d-lg-none bg-border"></div>
-								<div class="sh-bottom position-absolute bottom-0 start-50 translate-middle-x d-none d-lg-block"></div>
-								<div class="line-bottom position-absolute bottom-0 end-50 d-none d-lg-block"></div>
-								<div class="shape-b position-absolute bottom-0 end-50 d-none d-lg-block"></div>
-								<div class="offer position-absolute d-flex align-items-center">
-									<div class="offer__text">
-										<div class="sup-title f-iransans fw-light"><?php echo esc_html( negar_theme_text( 'home', 'flash_deals_eyebrow' ) ); ?></div>
-										<div class="title f-iransans fw-semibold"><?php echo esc_html( negar_theme_text( 'home', 'flash_deals_title' ) ); ?></div>
-									</div>
-									<span class="offer__icon flex-shrink-0" aria-hidden="true"></span>
+							<!-- Red Circle Badge: Positioned inside the circular negative space between Slider & Card -->
+							<div class="landing-nk__flash-circle offer" aria-label="<?php esc_attr_e( 'تخفیفات لحظه‌ای', 'negar-shop' ); ?>">
+								<div class="flash-circle__inner">
+									<span class="flash-circle__text-top"><?php echo esc_html( negar_theme_text( 'home', 'flash_deals_eyebrow' ) ?: __( 'تخفیفات', 'negar-shop' ) ); ?></span>
+									<span class="flash-circle__text-bottom"><?php echo esc_html( negar_theme_text( 'home', 'flash_deals_title' ) ?: __( 'لحظه‌ای', 'negar-shop' ) ); ?></span>
 								</div>
+							</div>
+
+							<div class="landing-nk__products__box position-relative">
+								<!-- Facing Crescent Cutout for Circular Space Harmony -->
+								<div class="landing-nk__products__crescent position-absolute top-50 translate-middle-y"></div>
+								<div class="landing-nk__products__crescent-stroke position-absolute top-50 translate-middle-y"></div>
 
 								<div class="swiper swiper-landing-product-nk swiper-landing-product-nk-6b94d804">
 									<div class="swiper-wrapper">
@@ -208,27 +203,22 @@ $hero_section_classes     = 'landing-nk landing-nk-6b94d804 is-first-slide my-8 
 															</svg>
 														</div>
 														<?php endif; ?>
-											</div>
-											<div class="price d-flex align-items-center justify-content-between gap-2">
-												<div class="price wc-price-html d-flex align-items-center f-iransans">
-													<?php echo $featured_product ? wp_kses_post( $featured_product->get_price_html() ) : esc_html__( 'قیمت در فروشگاه', 'negar-shop' ); ?>
-												</div>
 													</div>
+													<div class="price d-flex align-items-center justify-content-between gap-2">
+														<div class="price wc-price-html d-flex align-items-center f-iransans">
+															<?php echo $featured_product ? wp_kses_post( $featured_product->get_price_html() ) : esc_html__( 'قیمت در فروشگاه', 'negar-shop' ); ?>
+														</div>
+													</div>
+													<a href="<?php echo esc_url( $featured_product_link ); ?>" class="landing-nk__products__cta d-flex align-items-center justify-content-center gap-2 w-100 f-iran-yekan">
+														<span><?php esc_html_e( 'مشاهده و خرید محصول', 'negar-shop' ); ?></span>
+														<i class="icon-chevron-left-2 lh-1" aria-hidden="true"></i>
+													</a>
 												</div>
 											</div>
 										</div>
 									</div>
 									<div class="swiper-pagination"></div>
 								</div>
-
-								<div class="landing-nk__products__price price d-none d-lg-flex align-items-center justify-content-between gap-2 position-absolute">
-									<div class="price wc-price-html d-flex align-items-center f-iransans">
-										<?php echo $featured_product ? wp_kses_post( $featured_product->get_price_html() ) : esc_html__( 'قیمت در فروشگاه', 'negar-shop' ); ?>
-									</div>
-								</div>
-								<a class="btn-view d-none d-lg-flex align-items-center justify-content-center position-absolute top-100 end-50" aria-label="<?php esc_attr_e( 'مشاهده محصول', 'negar-shop' ); ?>" href="<?php echo esc_url( $featured_product_link ); ?>">
-									<i class="icon icon-chevron-left-2 btn-view__icon lh-1" aria-hidden="true"></i>
-								</a>
 							</div>
 						</div>
 

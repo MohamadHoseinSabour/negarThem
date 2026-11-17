@@ -164,13 +164,7 @@
   transform: translateY(-4px);
 }
 
-/* 9. Hero Flash Deal Badge Positioning (Halved offset per user request) */
-@media (min-width: 992px) {
-  .landing-nk__products__box .offer {
-    top: -13px !important;
-    left: -17px !important;
-  }
-}
+
 
 /* ==========================================================================
    10. Dual Asymmetric Promo Banners (773px Right / 538px Left)
@@ -232,8 +226,40 @@
 
 
 /* ==========================================================================
-   11. Hero Slider Stabilization & Crescent Alignment (Desktop & Mobile)
+   11. Hero Section Redesign: Clean Aesthetic, Harmonious Circular Opening & Pagination
    ========================================================================== */
+
+/* Compact vertical rhythm between Stories strip and Hero section */
+.story-shop {
+  margin-bottom: 12px !important;
+}
+
+.landing-nk {
+  margin-top: 8px !important;
+  padding-top: 0 !important;
+}
+
+@media (max-width: 991px) {
+  .story-shop {
+    margin-bottom: 6px !important;
+  }
+
+  .landing-nk {
+    margin-top: 6px !important;
+    padding-top: 0 !important;
+  }
+}
+
+/* 1. Global Reset: Remove all gray backdrops, jigsaw shapes, and underlays */
+.landing-nk__wrapper::before,
+.landing-nk__products::before,
+.landing-nk__products::after,
+.landing-nk__products .shape-bg,
+.landing-nk__products .shape-tr,
+.landing-nk__products .shape-br {
+  content: none !important;
+  display: none !important;
+}
 
 /* Base visibility fallback: Slide content must NEVER collapse to scale(0) */
 .landing-nk__carousel__item .image img {
@@ -262,61 +288,464 @@
   transform: scale(1) !important;
 }
 
-/* Desktop Hero Arrow Positioning (Centered inside crescent cutouts) */
+/* 2. Hero Carousel (Red Container) */
+.landing-nk__carousel {
+  border-radius: 28px !important;
+  position: relative !important;
+  overflow: visible !important;
+}
+
+/* Hide right crescent notch, all internal legacy glow/shadows, and slide navigation arrow buttons */
+.landing-nk__carousel::before,
+.landing-nk__carousel .sh,
+.landing-nk__carousel .cir,
+.landing-nk__carousel .swiper-button-prev:not(.sr-only),
+.landing-nk__carousel .swiper-button-next:not(.sr-only) {
+  display: none !important;
+}
+
+/* Left crescent cutout on the slider: crisp white matching page background (#ffffff) */
+.landing-nk__carousel::after {
+  background-color: var(--bg-body, #ffffff) !important;
+  left: -0.65px !important;
+  width: 41px !important;
+  height: 163px !important;
+  z-index: 2 !important;
+}
+
+/* Center-bottom slider pagination dots */
+.landing-nk__carousel .landing-nk__carousel__pagination {
+  position: absolute !important;
+  bottom: 22px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  z-index: 15 !important;
+  width: auto !important;
+}
+
+.landing-nk__carousel .landing-nk__carousel__pagination .swiper-pagination-bullet {
+  width: 8px !important;
+  height: 8px !important;
+  border-radius: 9999px !important;
+  background-color: #ffffff !important;
+  opacity: 0.45 !important;
+  margin: 0 !important;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  cursor: pointer !important;
+}
+
+.landing-nk__carousel .landing-nk__carousel__pagination .swiper-pagination-bullet-active {
+  width: 26px !important;
+  border-radius: 9999px !important;
+  background-color: #ffffff !important;
+  opacity: 1 !important;
+}
+
+/* 3. Flash Deal Card (Clean Unified Box) */
+.landing-nk__products__box::before,
+.landing-nk__products__box::after,
+.landing-nk__products__box .sh-top,
+.landing-nk__products__box .line-top,
+.landing-nk__products__box .sh-bottom,
+.landing-nk__products__box .line-bottom,
+.landing-nk__products__box .shape-b,
+.landing-nk__products__box .btn-view,
+.landing-nk__products__box .line-bottom-mb,
+.landing-nk__products__box .offer:not(.landing-nk__flash-circle) {
+  display: none !important;
+  content: none !important;
+}
+
+/* Pure white seamless background for hero product card & image (Desktop & Mobile) */
+.landing-nk__products__item,
+.landing-nk__products__item .image,
+.landing-nk__products__item .image a,
+.landing-nk__products__item .image img {
+  background-color: #ffffff !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  filter: none !important;
+}
+
+.landing-nk__products__item .image img {
+  mix-blend-mode: multiply !important;
+}
+
+.landing-nk__products__item .image .bg,
+.landing-nk__products__item .image .cir,
+.landing-nk__products__item .image svg {
+  display: none !important;
+  content: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+
+/* Desktop Hero Carousel & Card Geometry (min-width: 992px) */
 @media (min-width: 992px) {
+  .landing-nk__wrapper {
+    padding-left: 0 !important;
+    gap: 16px !important;
+    position: relative !important;
+    align-items: stretch !important;
+  }
+
   .landing-nk__carousel {
-    max-width: calc(100% - 314px) !important;
+    max-width: calc(100% - 326px) !important;
+    height: 455px !important;
     min-height: 455px !important;
-    padding: 81px 140px 81px 80px !important;
+    padding: 70px 75px 70px 75px !important;
+    box-sizing: border-box !important;
   }
 
-  /* Right crescent notch centered navigation button (Prev / > in RTL) */
-  .landing-nk__carousel .swiper-button-prev {
-    right: 48px !important;
-    left: auto !important;
-    top: 50% !important;
-    transform: translateY(-50%) !important;
-    width: 38px !important;
-    height: 38px !important;
-    z-index: 20 !important;
+  /* Flash Deal Container */
+  /* Flash Deal Container */
+  .landing-nk__products {
+    max-width: 310px !important;
+    flex: 0 0 310px !important;
+    position: relative !important;
+    height: 455px !important;
+  }
+
+  .landing-nk__products__box {
+    background-color: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 28px !important;
+    box-shadow: 0 4px 24px -2px rgba(15, 23, 42, 0.05) !important;
+    position: relative !important;
+    overflow: visible !important;
+    height: 455px !important;
+    max-height: 455px !important;
+    padding: 22px 42px 22px 18px !important;
+    box-sizing: border-box !important;
+  }
+
+  .landing-nk__products__box .swiper-landing-product-nk,
+  .landing-nk__products__box .swiper-wrapper,
+  .landing-nk__products__box .swiper-slide {
+    height: 100% !important;
+    width: 100% !important;
+  }
+
+  /* Product layout within card - perfectly fills the full card height */
+  .landing-nk__products__item {
     display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    height: 100% !important;
+    justify-content: space-between !important;
+    padding: 0 !important;
+    width: 100% !important;
+    position: relative !important;
   }
 
-  /* Left crescent notch centered navigation button (Next / < in RTL) */
-  .landing-nk__carousel .swiper-button-next {
-    left: 21px !important;
+  .landing-nk__products__item .discount {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
     right: auto !important;
-    top: 50% !important;
-    transform: translateY(-50%) !important;
-    width: 38px !important;
-    height: 38px !important;
-    z-index: 20 !important;
-    display: flex !important;
+    background: linear-gradient(135deg, #e90544, #f43f5e) !important;
+    color: #ffffff !important;
+    font-size: 13px !important;
+    font-weight: 800 !important;
+    padding: 4px 10px !important;
+    border-radius: 9999px !important;
+    box-shadow: 0 4px 12px rgba(233, 5, 68, 0.3) !important;
+    gap: 4px !important;
+    z-index: 10 !important;
   }
 
-  /* Flash deal price lifted cleanly above the bottom crescent cutout */
-  .landing-nk__products__box .landing-nk__products__price {
-    bottom: 40px !important;
-    left: 32px !important;
-    right: 32px !important;
+  .landing-nk__products__item .image {
+    flex: 0 0 185px !important;
+    height: 185px !important;
+    width: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 4px 0 10px 0 !important;
+    position: relative !important;
+  }
+
+  .landing-nk__products__item .image a {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    height: 100% !important;
+    width: 100% !important;
+  }
+
+  .landing-nk__products__item .image img {
+    height: auto !important;
+    max-height: 170px !important;
     width: auto !important;
+    max-width: 88% !important;
+    object-fit: contain !important;
+    transform: none !important;
+    filter: none !important;
+    box-shadow: none !important;
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+  }
+
+  .landing-nk__products__box:hover .landing-nk__products__item .image img {
+    transform: translateY(-4px) scale(1.05) !important;
+  }
+
+  .landing-nk__products__item .detail {
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    flex: 1 1 auto !important;
+    padding-top: 4px !important;
+  }
+
+  .landing-nk__products__item .title {
+    font-size: 15px !important;
+    line-height: 24px !important;
+    font-weight: 700 !important;
+    margin-bottom: 10px !important;
+    text-align: right !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+    min-height: 48px !important;
+  }
+
+  .landing-nk__products__item .title a {
+    color: #1e293b !important;
+    transition: color 0.2s ease !important;
+  }
+
+  .landing-nk__products__item .title a:hover {
+    color: var(--kaveh-primary-color, #e90544) !important;
+  }
+
+  .landing-nk__products__item .comments-rate {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    margin-bottom: 12px !important;
+    padding: 6px 12px !important;
+    background-color: #f8fafc !important;
+    border-radius: 12px !important;
+    border: 1px solid #f1f5f9 !important;
+  }
+
+  .landing-nk__products__item .comments-rate .comments {
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    color: #64748b !important;
+  }
+
+  .landing-nk__products__item .comments-rate .line {
+    display: none !important;
+  }
+
+  .landing-nk__products__item .comments-rate .rate {
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    color: #0f172a !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 5px !important;
+  }
+
+  .landing-nk__products__item .comments-rate .rate svg {
+    color: #f59e0b !important;
+    width: 15px !important;
+    height: 15px !important;
+  }
+
+  /* Price display inside card on desktop */
+  .landing-nk__products__item .detail > .price {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    width: 100% !important;
+    padding-top: 10px !important;
+    margin-bottom: 12px !important;
+    border-top: 1px solid #f1f5f9 !important;
+    margin-top: auto !important;
+  }
+
+  .landing-nk__products__item .detail > .price .wc-price-html {
+    display: flex !important;
+    align-items: baseline !important;
+    justify-content: space-between !important;
+    width: 100% !important;
+    gap: 8px !important;
+  }
+
+  .landing-nk__products__item .detail > .price del,
+  .landing-nk__products__item .detail > .price del .amount,
+  .landing-nk__products__item .detail > .price del bdi {
+    font-size: 13px !important;
+    color: #94a3b8 !important;
+    text-decoration: line-through !important;
+    font-weight: 400 !important;
+  }
+
+  .landing-nk__products__item .detail > .price ins,
+  .landing-nk__products__item .detail > .price ins .amount,
+  .landing-nk__products__item .detail > .price ins bdi {
+    font-size: 18.5px !important;
+    font-weight: 800 !important;
+    color: #0f172a !important;
+    text-decoration: none !important;
+  }
+
+  .landing-nk__products__item .detail > .price ins .woocommerce-Price-currencySymbol {
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    color: #64748b !important;
+    margin-right: 4px !important;
+  }
+
+  .landing-nk__products__cta {
+    background: linear-gradient(135deg, var(--kaveh-primary-color, #e90544), #f43f5e) !important;
+    color: #ffffff !important;
+    border-radius: 14px !important;
+    height: 42px !important;
+    font-size: 13.5px !important;
+    font-weight: 700 !important;
+    text-decoration: none !important;
+    box-shadow: 0 4px 14px rgba(233, 5, 68, 0.28) !important;
+    transition: all 0.25s ease !important;
+  }
+
+  .landing-nk__products__cta:hover {
+    background: linear-gradient(135deg, #d0043c, #e11d48) !important;
+    color: #ffffff !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 18px rgba(233, 5, 68, 0.38) !important;
+  }
+
+  .landing-nk__products__cta i {
+    font-size: 14px !important;
+    transition: transform 0.2s ease !important;
+  }
+
+  .landing-nk__products__cta:hover i {
+    transform: translateX(-3px) !important;
+  }
+
+  .landing-nk__products__box .landing-nk__products__price {
+    display: none !important;
+  }
+
+  /* Matching facing crescent cutout on the right edge of the card */
+  .landing-nk__products__crescent {
+    position: absolute !important;
+    top: 50% !important;
+    right: -1px !important;
+    transform: translateY(-50%) scaleX(-1) !important;
+    width: 42px !important;
+    height: 163px !important;
+    mask-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MiIgaGVpZ2h0PSIxNjMiIGZpbGw9Im5vbmUiPjxwYXRoIGZpbGw9IiNEOUQ5RDkiIGQ9Ik0wIDBhNTUgNTUgMCAwIDAgMTguMzcgNDEuMDNsNy43NCA2LjlhNDUgNDUgMCAwIDEgMCA2Ny4xNGwtNy43NCA2LjlBNTUgNTUgMCAwIDAgMCAxNjN6IiBzdHlsZT0iZmlsbDojZDlkOWQ5O2ZpbGw6Y29sb3IoZGlzcGxheS1wMyAuODUxIC44NTEgLjg1MSk7ZmlsbC1vcGFjaXR5OjEiLz48L3N2Zz4=") !important;
+    mask-position: 0px 0px !important;
+    mask-size: 100% 100% !important;
+    mask-repeat: no-repeat !important;
+    background-color: var(--bg-body, #ffffff) !important;
+    z-index: 5 !important;
+    pointer-events: none !important;
+  }
+
+  .landing-nk__products__crescent-stroke {
+    position: absolute !important;
+    top: 50% !important;
+    right: -1px !important;
+    transform: translateY(-50%) scaleX(-1) !important;
+    width: 42px !important;
+    height: 163px !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='42' height='163' fill='none'%3E%3Cpath stroke='%23e2e8f0' stroke-width='1.5' stroke-linecap='round' d='M0 0a55 55 0 0 0 18.37 41.03l7.74 6.9a45 45 0 0 1 0 67.14l-7.74 6.9A55 55 0 0 0 0 163'/%3E%3C/svg%3E") !important;
+    background-position: 0px 0px !important;
+    background-size: 100% 100% !important;
+    background-repeat: no-repeat !important;
+    z-index: 6 !important;
+    pointer-events: none !important;
+  }
+
+  /* 4. Red Circle Badge: Centered in the circular negative space between Slider & Card */
+  .landing-nk__flash-circle {
+    position: absolute !important;
+    top: 50% !important;
+    right: -8px !important;
+    left: auto !important;
+    transform: translate(50%, -50%) !important;
+    width: 76px !important;
+    height: 76px !important;
+    border-radius: 50% !important;
+    background: var(--kaveh-primary-color, #e90544) !important;
+    border: 2px solid #ffffff !important;
+    box-shadow: 0 4px 18px rgba(233, 5, 68, 0.4), 0 0 0 3px rgba(255, 255, 255, 0.85) !important;
+    z-index: 25 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    color: #ffffff !important;
+    padding: 6px !important;
+    box-sizing: border-box !important;
+    user-select: none !important;
+    cursor: default !important;
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease !important;
+  }
+
+  .landing-nk__flash-circle:hover {
+    transform: translate(50%, -50%) scale(1.05) !important;
+    box-shadow: 0 6px 24px rgba(233, 5, 68, 0.55), 0 0 0 4px #ffffff !important;
+  }
+
+  .landing-nk__flash-circle .flash-circle__text-top {
+    font-family: var(--font-primary, 'IRANYekan', 'IRANSans', system-ui) !important;
+    font-size: 11.5px !important;
+    font-weight: 800 !important;
+    line-height: 1.25 !important;
+    color: #ffffff !important;
+    white-space: nowrap !important;
+    display: block !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) !important;
+  }
+
+  .landing-nk__flash-circle .flash-circle__text-bottom {
+    font-family: var(--font-primary, 'IRANYekan', 'IRANSans', system-ui) !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    line-height: 1.25 !important;
+    color: rgba(255, 255, 255, 0.95) !important;
+    white-space: nowrap !important;
+    display: block !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) !important;
   }
 }
 
-/* Mobile Hero Slider Redesign & Fitting (320px - 991px) */
+/* Mobile Hero Redesign & Fitting (320px - 991px) */
 @media (max-width: 991px) {
   .landing-nk__wrapper {
-    gap: 16px !important;
+    gap: 14px !important;
   }
 
   .landing-nk__carousel {
     max-width: 100% !important;
     width: 100% !important;
     min-height: auto !important;
-    padding: 28px 36px !important;
+    padding: 28px 36px 36px 36px !important;
     border-radius: 24px !important;
     overflow: hidden !important;
     box-sizing: border-box !important;
+    position: relative !important;
+    -webkit-mask-image: radial-gradient(circle 44px at 72px calc(100% + 7px), transparent 0, transparent 43.5px, black 44px) !important;
+    mask-image: radial-gradient(circle 44px at 72px calc(100% + 7px), transparent 0, transparent 43.5px, black 44px) !important;
+  }
+
+  .landing-nk__carousel::before,
+  .landing-nk__carousel::after {
+    display: none !important;
   }
 
   .landing-nk__carousel > .swiper {
@@ -397,42 +826,223 @@
     font-weight: 700 !important;
   }
 
-  /* Compact crescent notches on mobile */
-  .landing-nk__carousel::before,
-  .landing-nk__carousel::after {
-    width: 22px !important;
-    height: 70px !important;
+  .landing-nk__products {
+    position: relative !important;
+    min-width: 0;
+    max-width: 100%;
   }
 
-  /* Navigation arrows on mobile */
-  .landing-nk__carousel .swiper-button-prev {
-    width: 28px !important;
-    height: 28px !important;
-    font-size: 11px !important;
-    right: 2px !important;
-    left: auto !important;
-    top: 50% !important;
-    transform: translateY(-50%) !important;
-    z-index: 20 !important;
-    display: flex !important;
-  }
-
-  .landing-nk__carousel .swiper-button-next {
-    width: 28px !important;
-    height: 28px !important;
-    font-size: 11px !important;
-    left: 2px !important;
+  /* Stroke along the circular cutout on the card */
+  .landing-nk__products__crescent-stroke {
+    display: block !important;
+    position: absolute !important;
+    top: -1px !important;
+    left: 28.56px !important;
     right: auto !important;
-    top: 50% !important;
-    transform: translateY(-50%) !important;
-    z-index: 20 !important;
+    transform: none !important;
+    width: 86.88px !important;
+    height: 39px !important;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 86.88 39' fill='none'%3E%3Cpath d='M0 1 A44 44 0 0 0 86.88 1' stroke='%23e2e8f0' stroke-width='1.5' fill='none'/%3E%3C/svg%3E") no-repeat 0 0 / 100% 100% !important;
+    z-index: 15 !important;
+    pointer-events: none !important;
+  }
+
+  .landing-nk__products__box {
+    position: relative !important;
+    min-width: 0;
+    max-width: 100%;
+    background-color: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 20px !important;
+    padding: 40px 16px 18px 16px !important;
+    box-shadow: 0 4px 18px rgba(15, 23, 42, 0.05) !important;
+    -webkit-mask-image: radial-gradient(circle 44px at 72px -7px, transparent 0, transparent 43.5px, black 44px) !important;
+    mask-image: radial-gradient(circle 44px at 72px -7px, transparent 0, transparent 43.5px, black 44px) !important;
+  }
+
+  .landing-nk__flash-circle {
+    position: absolute !important;
+    top: -7px !important;
+    left: 72px !important;
+    right: auto !important;
+    width: 70px !important;
+    height: 70px !important;
+    border-radius: 50% !important;
+    background: var(--kaveh-primary-color, #e90544) !important;
+    border: 2px solid #ffffff !important;
+    box-shadow: 0 4px 16px rgba(233, 5, 68, 0.38), 0 0 0 2.5px rgba(255, 255, 255, 0.95) !important;
+    transform: translate(-50%, -50%) !important;
+    z-index: 30 !important;
+    margin: 0 !important;
     display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    color: #ffffff !important;
+    padding: 6px !important;
+    box-sizing: border-box !important;
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease !important;
+  }
+
+  .landing-nk__flash-circle .flash-circle__inner {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  .landing-nk__flash-circle .flash-circle__text-top {
+    font-size: 9.8px !important;
+    font-weight: 800 !important;
+    line-height: 1.35 !important;
+    white-space: nowrap !important;
+    text-align: center !important;
+  }
+
+  .landing-nk__flash-circle .flash-circle__text-bottom {
+    font-size: 9.8px !important;
+    font-weight: 700 !important;
+    line-height: 1.35 !important;
+    white-space: nowrap !important;
+    text-align: center !important;
+  }
+
+  .landing-nk__flash-circle:hover {
+    transform: translate(-50%, -50%) scale(1.05) !important;
+    box-shadow: 0 6px 20px rgba(233, 5, 68, 0.5), 0 0 0 3px #ffffff !important;
+  }
+
+  /* Card interior styling on mobile */
+  .landing-nk__products__box .swiper-landing-product-nk {
+    overflow: visible !important;
+  }
+
+  .landing-nk__products__item {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 14px !important;
+    padding: 0 !important;
+    width: 100% !important;
+    position: relative !important;
+    box-sizing: border-box !important;
+  }
+
+  .landing-nk__products__item .image {
+    flex: 0 0 96px !important;
+    max-width: 96px !important;
+    height: 106px !important;
+    position: relative !important;
+    margin: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .landing-nk__products__item .image img {
+    max-height: 100px !important;
+    max-width: 100% !important;
+    object-fit: contain !important;
+    transform: none !important;
+  }
+
+  .landing-nk__products__item .discount {
+    position: absolute !important;
+    top: 0 !important;
+    right: 0 !important;
+    left: auto !important;
+    font-size: 10.5px !important;
+    font-weight: 700 !important;
+    padding: 2px 7px !important;
+    border-radius: 9999px !important;
+    background: #e90544 !important;
+    color: #ffffff !important;
+    z-index: 12 !important;
+  }
+
+  .landing-nk__products__item .detail {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    text-align: right !important;
+  }
+
+  .landing-nk__products__item .detail .title {
+    font-size: 13.5px !important;
+    line-height: 21px !important;
+    margin-bottom: 8px !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+  }
+
+  .landing-nk__products__item .detail .price {
+    display: flex !important;
+    align-items: baseline !important;
+    justify-content: flex-start !important;
+    gap: 8px !important;
+    margin: 0 !important;
+  }
+
+  .landing-nk__products__item .detail .price del {
+    font-size: 11.5px !important;
+    color: #94a3b8 !important;
+    text-decoration: line-through !important;
+  }
+
+  .landing-nk__products__item .detail .price del .woocommerce-Price-currencySymbol {
+    display: none !important;
+  }
+
+  .landing-nk__products__item .detail .price ins {
+    font-size: 15.5px !important;
+    font-weight: 800 !important;
+    color: #0f172a !important;
+    text-decoration: none !important;
+  }
+
+  .landing-nk__products__item .detail .price ins .woocommerce-Price-currencySymbol {
+    font-size: 11px !important;
+    font-weight: 500 !important;
+    margin-right: 2px !important;
+  }
+
+  .landing-nk__products__cta {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    width: 100% !important;
+    height: 38px !important;
+    margin-top: 12px !important;
+    background: linear-gradient(135deg, var(--kaveh-primary-color, #e90544), #f43f5e) !important;
+    color: #ffffff !important;
+    border-radius: 12px !important;
+    font-size: 12.5px !important;
+    font-weight: 700 !important;
+    text-decoration: none !important;
+    box-shadow: 0 4px 12px rgba(233, 5, 68, 0.26) !important;
+    transition: all 0.25s ease !important;
+  }
+
+  .landing-nk__products__cta:hover,
+  .landing-nk__products__cta:active {
+    background: linear-gradient(135deg, #d0043c, #e11d48) !important;
+    color: #ffffff !important;
+  }
+
+  .landing-nk__products__cta i {
+    font-size: 12px !important;
   }
 }
 
 @media (max-width: 430px) {
   .landing-nk__carousel {
-    padding: 22px 28px !important;
+    padding: 22px 24px 32px 24px !important;
     border-radius: 20px !important;
   }
 
@@ -455,122 +1065,11 @@
   }
 }
 
-/* Mobile flash-deal geometry must override the desktop rules loaded in main.css. */
-@media (max-width: 991px) {
-  .landing-nk__wrapper::before {
-    content: none !important;
-    display: none !important;
-  }
+/* ==========================================================================
+   Daily Deals Carousels (Section 1: Red | Section 2: Purple)
+   ========================================================================== */
 
-  .landing-nk__products,
-  .landing-nk__products__box,
-  .landing-nk__products__item {
-    min-width: 0;
-    max-width: 100%;
-  }
-
-  .landing-nk__products__box {
-    --bg-box: #e6ecf3;
-  }
-
-  .landing-nk__products__box::before {
-    left: 158px !important;
-    height: 43px !important;
-    border-radius: 0 16px 0 0 !important;
-  }
-
-  .landing-nk__products__box::after {
-    top: 43px !important;
-    border-radius: 16px 0 16px 16px !important;
-  }
-
-  .landing-nk__products__box .sh-top {
-    left: 95px !important;
-    width: 64px !important;
-    height: 43px !important;
-    -webkit-mask-image: none !important;
-    mask-image: none !important;
-    clip-path: polygon(100% 0, 100% 100%, 0 100%, 0 74%, 25% 74%, 46% 22%, 67% 0);
-  }
-
-  .landing-nk__products__box .line-top {
-    left: 68px !important;
-    width: 118px !important;
-    height: 44px !important;
-  }
-
-  .landing-nk__products__box .line-bottom-mb {
-    top: 43px !important;
-    bottom: auto !important;
-    padding: 1px !important;
-    border-radius: 30px !important;
-  }
-
-  .landing-nk__products__box .offer {
-    top: -3px !important;
-    left: 0 !important;
-    gap: 10px !important;
-    padding: 4px 33px 4px 20px !important;
-    border-radius: 15px !important;
-  }
-
-  .landing-nk__products__box .offer::before {
-    width: 37px !important;
-    height: 39px !important;
-  }
-
-  .landing-nk__products__box .offer::after {
-    right: 37px !important;
-  }
-
-  .landing-nk__products__box .offer .sup-title {
-    font-size: 9px !important;
-    line-height: 12px !important;
-  }
-
-  .landing-nk__products__box .offer .title {
-    font-size: 11px !important;
-    line-height: 15px !important;
-  }
-
-  .landing-nk__products__item {
-    box-sizing: border-box;
-  }
-
-  .landing-nk__products__item .detail > .price,
-  .landing-nk__products__box .landing-nk__products__price,
-  .landing-nk__products__item .price .price.wc-price-html {
-    min-width: 0;
-    flex-wrap: wrap;
-  }
-
-  .landing-nk__products__item .price .price.wc-price-html {
-    justify-content: flex-end;
-    gap: 4px 8px;
-  }
-}
-
-@media (max-width: 430px) {
-  .landing-nk__products__item {
-    padding: 52px 24px 30px 18px !important;
-    gap: 24px !important;
-  }
-
-  .landing-nk__products__item .detail {
-    min-width: 0;
-    max-width: calc(100% - 94px) !important;
-  }
-
-  .landing-nk__products__item .image {
-    max-width: 70px !important;
-  }
-
-  .landing-nk__products__item .detail > .price {
-    justify-content: flex-end;
-  }
-}
-
-/* Homepage product prices keep the amount and currency as one readable unit. */
+/* Product prices keep amount and currency on one line */
 .homepage-main .product-card-price-current,
 .homepage-main .price-rate > .price > .price {
   display: inline-flex !important;
@@ -588,47 +1087,438 @@
   white-space: nowrap;
 }
 
-/* The live sale carousel uses the same red daily-deals treatment as the
- * original storefront promo while retaining real WooCommerce product cards. */
+/* 1. First Daily Deals Section (Red Theme) */
 .negar-home-sale-carousel .popular-products-nk__wrapper {
   background-color: transparent !important;
   background-image: linear-gradient(247.81deg, #e90544 0.24%, #ff0046 64.49%) !important;
+  box-shadow: rgba(255, 255, 255, 0.2) -20px 14px 44px inset, 0 16px 40px rgba(233, 5, 68, 0.25) !important;
 }
 
-/* Restore the red treatment for the second daily-deals block. Elementor's
- * generated gray rule is intentionally overridden only for this section. */
+.negar-home-sale-carousel .popular-products-nk__right .title {
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+  background-image: none !important;
+  font-size: 44px;
+  line-height: 60px;
+  font-weight: 800;
+}
+
+.negar-home-sale-carousel .popular-products-nk__right .sub-title {
+  color: rgba(255, 255, 255, 0.85) !important;
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.85) !important;
+  font-size: 33px;
+  line-height: 48px;
+  font-weight: 400;
+  margin-bottom: 24px;
+}
+
+/* 2. Second Daily Deals Section (Purple Theme) */
 .popular-products-nk-375f8bd8 .popular-products-nk__wrapper {
   background-color: transparent !important;
-  background-image: linear-gradient(247.81deg, #e90544 0.24%, #ff0046 64.49%) !important;
+  background-image: linear-gradient(247.81deg, #7c3aed 0.24%, #9333ea 64.49%) !important;
+  box-shadow: rgba(255, 255, 255, 0.2) -20px 14px 44px inset, 0 16px 40px rgba(124, 58, 237, 0.25) !important;
 }
 
-.popular-products-nk-375f8bd8 .popular-products-nk__right .title,
+.popular-products-nk-375f8bd8 .popular-products-nk__right .title {
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+  background-image: none !important;
+  font-size: 44px;
+  line-height: 60px;
+  font-weight: 800;
+}
+
 .popular-products-nk-375f8bd8 .popular-products-nk__right .sub-title {
-  color: #fff;
-  -webkit-text-fill-color: #fff;
-  background-image: none;
+  color: rgba(255, 255, 255, 0.85) !important;
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.85) !important;
+  font-size: 33px;
+  line-height: 48px;
+  font-weight: 400;
+  margin-bottom: 24px;
 }
 
+.popular-products-nk-375f8bd8 .popular-products-nk__right .btn {
+  border-radius: 50rem !important;
+  background-color: #ffffff !important;
+  color: #1e1e2d !important;
+  transition: all 0.3s ease;
+}
+
+.popular-products-nk-375f8bd8 .popular-products-nk__right .btn:hover {
+  background-color: #f8fafc !important;
+}
+
+/* Completely remove left/right navigation buttons from both daily deals carousels */
+.negar-home-sale-carousel .swiper-button-prev,
+.negar-home-sale-carousel .swiper-button-next,
 .negar-home-sale-carousel__body .swiper-button-prev,
-.negar-home-sale-carousel__body .swiper-button-next {
-  width: 36px;
-  height: 36px;
-  margin-top: -18px;
-  border: 1px solid rgba(255, 255, 255, 0.7);
-  background: #fff;
-  color: #e90544;
-  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.16);
+.negar-home-sale-carousel__body .swiper-button-next,
+.popular-products-nk-375f8bd8 .swiper-button-prev,
+.popular-products-nk-375f8bd8 .swiper-button-next,
+.popular-products-nk-375f8bd8 .popular-products-nk__left .swiper-button-prev,
+.popular-products-nk-375f8bd8 .popular-products-nk__left .swiper-button-next {
+  display: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
 }
 
-.negar-home-sale-carousel__body .swiper-button-prev::after,
-.negar-home-sale-carousel__body .swiper-button-next::after {
-  content: none;
+/* ==========================================================================
+   Category Cards Redesign: Alternating White & Crimson + Top-Left Halo
+   ========================================================================== */
+
+.categories-nk .swiper-categories-nk {
+  padding: 14px 4px 26px !important;
+  margin-inline: -4px;
 }
 
-.negar-home-sale-carousel__body .swiper-button-prev {
-  right: 2px;
+.categories-nk .swiper-categories-nk .swiper-wrapper {
+  align-items: stretch;
 }
 
-.negar-home-sale-carousel__body .swiper-button-next {
-  left: 2px;
+.categories-nk .swiper-categories-nk .swiper-slide {
+  height: auto;
+  display: flex;
+}
+
+.categories-nk .swiper-categories-nk:not(.swiper-initialized) .swiper-wrapper {
+  display: flex;
+  gap: 18px;
+}
+
+.categories-nk .swiper-categories-nk:not(.swiper-initialized) .swiper-slide {
+  width: calc(20% - 14.4px);
+  max-width: calc(20% - 14.4px);
+  flex: 0 0 auto;
+}
+
+/* Neutralize legacy notch cutouts & shapes */
+.categories-nk .categories-nk__item::before,
+.categories-nk .categories-nk__item::after {
+  content: none !important;
+  display: none !important;
+}
+
+.categories-nk .categories-nk__item {
+  width: 100%;
+  height: 100%;
+  min-height: 278px;
+  padding: 0 !important;
+  border-radius: 26px !important;
+  background-color: #ffffff;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.32s ease;
+}
+
+.categories-nk .categories-nk__link {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  min-height: inherit;
+  padding: 20px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  text-decoration: none !important;
+  color: inherit;
+  border-radius: inherit;
+}
+
+.categories-nk .categories-nk__link:focus-visible {
+  outline: 2.5px solid var(--color-primary, #e90544);
+  outline-offset: -3px;
+}
+
+/* --- Alternating Variants --- */
+
+/* 1. White Card Variant */
+.categories-nk .categories-nk__item--white {
+  background: linear-gradient(165deg, #ffffff 0%, #fcfdff 62%, #f7f9fc 100%);
+  border: 1px solid rgba(226, 232, 240, 0.92);
+  box-shadow: 0 12px 28px -10px rgba(15, 23, 42, 0.08),
+              0 2px 6px rgba(15, 23, 42, 0.03);
+}
+
+.categories-nk .categories-nk__item--white:hover {
+  transform: translateY(-6px);
+  border-color: color-mix(in srgb, var(--color-primary, #e90544) 24%, #e2e8f0);
+  box-shadow: 0 22px 40px -12px rgba(15, 23, 42, 0.13),
+              0 8px 18px -6px color-mix(in srgb, var(--color-primary, #e90544) 14%, transparent);
+}
+
+/* 2. Red / Crimson Card Variant */
+.categories-nk .categories-nk__item--red {
+  background: linear-gradient(
+    148deg,
+    color-mix(in srgb, var(--color-primary, #e90544) 92%, #ff2e68) 0%,
+    var(--color-primary, #e90544) 44%,
+    color-mix(in srgb, var(--color-primary-hover, #c40439) 76%, #56001b) 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 16px 34px -10px color-mix(in srgb, var(--color-primary, #e90544) 42%, transparent),
+              inset 0 1px 0 rgba(255, 255, 255, 0.24);
+}
+
+.categories-nk .categories-nk__item--red:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 24px 46px -10px color-mix(in srgb, var(--color-primary, #e90544) 52%, transparent),
+              inset 0 1px 0 rgba(255, 255, 255, 0.32);
+}
+
+.categories-nk .categories-nk__item--red .categories-nk__link:focus-visible {
+  outline-color: #ffffff;
+}
+
+/* --- Top-Right Category Icon Badge --- */
+.categories-nk .categories-nk__icon {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 3;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              background-color 0.3s ease,
+              box-shadow 0.3s ease;
+}
+
+.categories-nk .categories-nk__icon svg {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+.categories-nk .categories-nk__item--white .categories-nk__icon {
+  background-color: #ffffff;
+  color: var(--color-primary, #e90544);
+  border: 1px solid color-mix(in srgb, var(--color-primary, #e90544) 14%, #eef2f6);
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
+}
+
+.categories-nk .categories-nk__item--red .categories-nk__icon {
+  background-color: rgba(255, 255, 255, 0.18);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.26);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 6px 16px rgba(86, 0, 27, 0.22);
+}
+
+.categories-nk .categories-nk__item:hover .categories-nk__icon {
+  transform: scale(1.07);
+}
+
+/* --- Product / Category Media Stage (Larger Prominent Visual) --- */
+.categories-nk .categories-nk__media {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 156px;
+  margin-top: 12px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-inline: 4px;
+}
+
+.categories-nk .categories-nk__media img {
+  width: 100%;
+  height: 100%;
+  max-width: 184px;
+  max-height: 152px;
+  object-fit: contain;
+  border-radius: 14px;
+  transition: transform 0.38s cubic-bezier(0.16, 1, 0.3, 1), filter 0.38s ease;
+}
+
+.categories-nk .categories-nk__item--white .categories-nk__media img {
+  filter: drop-shadow(0 12px 18px rgba(15, 23, 42, 0.15));
+}
+
+.categories-nk .categories-nk__item--red .categories-nk__media img {
+  filter: drop-shadow(0 14px 22px rgba(72, 0, 22, 0.34));
+}
+
+.categories-nk .categories-nk__item:hover .categories-nk__media img {
+  transform: translateY(-5px) scale(1.05);
+}
+
+/* --- Category Title --- */
+.categories-nk .categories-nk__title {
+  position: relative;
+  z-index: 2;
+  margin: 0 0 10px;
+  font-size: 15px;
+  line-height: 1.5;
+  font-weight: 800;
+  text-align: center;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 24px;
+  background-image: none !important;
+  -webkit-background-clip: initial !important;
+  background-clip: initial !important;
+}
+
+.categories-nk .categories-nk__item--white .categories-nk__title {
+  color: #1e2433 !important;
+  -webkit-text-fill-color: #1e2433 !important;
+}
+
+.categories-nk .categories-nk__item--red .categories-nk__title {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* --- Bottom Action Button (Wide Pill, Centered) --- */
+.categories-nk .categories-nk__footer {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  margin-top: auto;
+  padding-top: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.categories-nk .categories-nk__arrow {
+  width: 74px;
+  height: 32px;
+  border-radius: 9999px;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+              background-color 0.28s ease,
+              color 0.28s ease,
+              border-color 0.28s ease,
+              box-shadow 0.28s ease;
+}
+
+.categories-nk .categories-nk__arrow svg {
+  width: 17px;
+  height: 17px;
+  display: block;
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.categories-nk .categories-nk__item:hover .categories-nk__arrow svg {
+  transform: translateX(-2px);
+}
+
+.categories-nk .categories-nk__item--white .categories-nk__arrow {
+  background-color: var(--color-primary, #e90544);
+  color: #ffffff;
+  border: 1px solid transparent;
+  box-shadow: 0 8px 18px color-mix(in srgb, var(--color-primary, #e90544) 32%, transparent);
+}
+
+.categories-nk .categories-nk__item--white:hover .categories-nk__arrow {
+  background-color: var(--color-primary-hover, #c40439);
+  color: #ffffff;
+  transform: scale(1.04);
+  box-shadow: 0 10px 22px color-mix(in srgb, var(--color-primary, #e90544) 42%, transparent);
+}
+
+.categories-nk .categories-nk__item--red .categories-nk__arrow {
+  background-color: #ffffff;
+  color: var(--color-primary, #e90544);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 8px 18px rgba(72, 0, 22, 0.22);
+}
+
+.categories-nk .categories-nk__item--red:hover .categories-nk__arrow {
+  background-color: #fff5f7;
+  color: var(--color-primary-hover, #c40439);
+  transform: scale(1.04);
+  box-shadow: 0 10px 22px rgba(72, 0, 22, 0.3);
+}
+
+/* --- Responsive Adjustments --- */
+@media only screen and (max-width: 767px) {
+  .categories-nk .swiper-categories-nk {
+    padding: 10px 2px 20px !important;
+    margin-inline: -2px;
+  }
+
+  .categories-nk .categories-nk__item {
+    min-height: 226px;
+    border-radius: 20px !important;
+  }
+
+  .categories-nk .categories-nk__link {
+    padding: 14px 12px 12px;
+  }
+
+  .categories-nk .categories-nk__icon {
+    top: 10px;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+  }
+
+  .categories-nk .categories-nk__icon svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .categories-nk .categories-nk__media {
+    height: 112px;
+    margin-top: 22px;
+    margin-bottom: 10px;
+  }
+
+  .categories-nk .categories-nk__media img {
+    max-width: 126px;
+    max-height: 108px;
+    border-radius: 10px;
+  }
+
+  .categories-nk .categories-nk__title {
+    font-size: 13px;
+    margin-bottom: 8px;
+  }
+
+  .categories-nk .categories-nk__arrow {
+    width: 58px;
+    height: 28px;
+  }
+
+  .categories-nk .categories-nk__arrow svg {
+    width: 15px;
+    height: 15px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .categories-nk .categories-nk__item,
+  .categories-nk .categories-nk__icon,
+  .categories-nk .categories-nk__media img,
+  .categories-nk .categories-nk__arrow,
+  .categories-nk .categories-nk__arrow svg {
+    transition: none !important;
+  }
+
+  .categories-nk .categories-nk__item:hover,
+  .categories-nk .categories-nk__item:hover .categories-nk__media img,
+  .categories-nk .categories-nk__item:hover .categories-nk__icon,
+  .categories-nk .categories-nk__item:hover .categories-nk__arrow,
+  .categories-nk .categories-nk__item:hover .categories-nk__arrow svg {
+    transform: none !important;
+  }
 }

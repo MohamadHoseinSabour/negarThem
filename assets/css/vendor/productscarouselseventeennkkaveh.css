@@ -116,7 +116,7 @@
   z-index: 2;
 }
 .buy-accessories-nk__right {
-  max-width: 280px;
+  max-width: 320px;
   z-index: 5;
 }
 .buy-accessories-nk__right__box {
@@ -245,7 +245,7 @@
   background-color: var(--kaveh-primary-hover, var(--kaveh-primary-color, #d0043c));
 }
 .buy-accessories-nk__left {
-  max-width: calc(100% - 304px);
+  max-width: calc(100% - 344px);
 }
 .buy-accessories-nk > .container > .row > .buy-accessories-nk__left:only-child {
   max-width: 100%;

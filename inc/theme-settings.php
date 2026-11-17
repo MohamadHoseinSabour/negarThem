@@ -742,7 +742,8 @@ function negar_theme_text_registry() {
 				'mobile_search_placeholder'  => array( 'label' => __( 'راهنمای جستجو در موبایل', 'negar-shop' ), 'default' => __( 'جستجوی نام کالا یا برند...', 'negar-shop' ), 'type' => 'text' ),
 				'login_label'                 => array( 'label' => __( 'برچسب ورود', 'negar-shop' ), 'default' => __( 'ورود / ثبت‌نام', 'negar-shop' ), 'type' => 'text' ),
 				'cart_label'                  => array( 'label' => __( 'برچسب سبد خرید', 'negar-shop' ), 'default' => __( 'سبد خرید', 'negar-shop' ), 'type' => 'text' ),
-				'topbar_tagline'              => array( 'label' => __( 'نوار بالا › برچسب مناسبتی', 'negar-shop' ), 'default' => __( 'خوش‌پوش یلدا باش', 'negar-shop' ), 'type' => 'text' ),
+				'topbar_tagline'              => array( 'label' => __( 'نوار بالا › متن با پس‌زمینه (کپسولی)', 'negar-shop' ), 'default' => __( 'خوش‌پوش یلدا باش', 'negar-shop' ), 'type' => 'text' ),
+				'topbar_announcement'         => array( 'label' => __( 'نوار بالا › متن بدون پس‌زمینه (ساده)', 'negar-shop' ), 'default' => __( 'هر چیزی که برای استایل کردن لازمه', 'negar-shop' ), 'type' => 'text' ),
 				'mega_heading'                => array( 'label' => __( 'مگامنو › عنوان دسته‌ها', 'negar-shop' ), 'default' => __( 'دسته‌بندی محصولات', 'negar-shop' ), 'type' => 'text' ),
 				'mega_all_products_label'     => array( 'label' => __( 'مگامنو › برچسب همهٔ محصولات', 'negar-shop' ), 'default' => __( 'همهٔ محصولات', 'negar-shop' ), 'type' => 'text' ),
 				'mega_hint'                   => array( 'label' => __( 'مگامنو › راهنما', 'negar-shop' ), 'default' => __( 'انتخاب هر دسته شما را به آرشیو آن می‌برد.', 'negar-shop' ), 'type' => 'textarea' ),
@@ -880,7 +881,7 @@ function negar_theme_media_registry() {
 		'alt'      => __( 'محل قرار گیری بنر', 'negar-shop' ),
 		'title'    => __( 'محل قرار گیری بنر', 'negar-shop' ),
 		'subtitle' => __( 'همین الان با تخفیف خرید کنید', 'negar-shop' ),
-		'cta_label'=> __( 'مشاهده بیشتر', 'negar-shop' ),
+		'cta_label'=> __( 'مشاهده و خرید', 'negar-shop' ),
 		'fields'   => array( 'media_id', 'link', 'alt', 'title', 'subtitle', 'cta_label', 'enabled' ),
 	);
 	$image_only = array(
@@ -982,7 +983,11 @@ function negar_theme_banner_item_data( $record_id ) {
 	$title          = array_key_exists( 'title', $record ) ? (string) $record['title'] : '';
 	$subtitle       = array_key_exists( 'subtitle', $record ) ? (string) $record['subtitle'] : '';
 	$cta_label      = array_key_exists( 'cta_label', $record ) ? (string) $record['cta_label'] : '';
-	$aria_label     = '' !== trim( $cta_label ) ? $cta_label : __( 'مشاهده بیشتر', 'negar-shop' );
+	$trimmed_cta    = trim( $cta_label );
+	$default_cta    = __( 'مشاهده و خرید', 'negar-shop' );
+	$legacy_cta     = __( 'مشاهده بیشتر', 'negar-shop' );
+	$resolved_cta   = ( '' !== $trimmed_cta && $legacy_cta !== $trimmed_cta && 'مشاهده بیشتر' !== $trimmed_cta ) ? $trimmed_cta : $default_cta;
+	$aria_label     = $resolved_cta;
 
 	return array(
 		'id'         => (string) $record_id,
@@ -992,6 +997,7 @@ function negar_theme_banner_item_data( $record_id ) {
 		'title'      => $title,
 		'subtitle'   => $subtitle,
 		'cta_label'  => $cta_label,
+		'cta_text'   => $resolved_cta,
 		'aria_label' => $aria_label,
 	);
 }
@@ -1048,14 +1054,16 @@ function negar_theme_render_editorial_banner_grid( $outer_classes, $outer_attrs,
 						<div class="elementor-widget-container">
 							<section class="banners-nk banners-nk-<?php echo esc_attr( $widget_id ); ?>" data-negar-banner-record="<?php echo esc_attr( $item['id'] ); ?>">
 								<div class="banners-nk__item position-relative">
+									<div class="banners-nk__glow" aria-hidden="true"></div>
 									<div class="detail">
-										<a href="<?php echo esc_url( $item['link'] ); ?>" class="more d-flex align-items-center justify-content-center rounded-pill" aria-label="<?php echo esc_attr( $item['aria_label'] ); ?>">
-											<i class="icon icon-chevron-left-2 lh-1" aria-hidden="true"></i>
-										</a>
 										<div class="title f-iran-yekan fw-bold"><?php echo esc_html( $item['title'] ); ?></div>
 										<div class="sub-title f-iran-yekan fw-normal"><?php echo esc_html( $item['subtitle'] ); ?></div>
+										<a href="<?php echo esc_url( $item['link'] ); ?>" class="more banners-nk__cta d-inline-flex align-items-center justify-content-center gap-2 f-iran-yekan" aria-label="<?php echo esc_attr( $item['aria_label'] ); ?>">
+											<span><?php echo esc_html( $item['cta_text'] ); ?></span>
+											<i class="icon icon-chevron-left-2 lh-1" aria-hidden="true"></i>
+										</a>
 									</div>
-									<img src="<?php echo esc_url( $item['image_url'] ); ?>" alt="<?php echo esc_attr( $item['alt'] ); ?>" width="218" height="245" class="banner-image position-absolute bottom-0"<?php echo $loading_attr; ?>>
+									<img src="<?php echo esc_url( $item['image_url'] ); ?>" alt="<?php echo esc_attr( $item['alt'] ); ?>" width="218" height="245" class="banner-image position-absolute"<?php echo $loading_attr; ?>>
 								</div>
 							</section>
 						</div>
@@ -2790,8 +2798,23 @@ function negar_theme_sanitize_full_settings( $submitted, $base_settings = null )
 
 	// 7. Header, Contact, Footer, Social
 	if ( isset( $submitted['header'] ) && is_array( $submitted['header'] ) ) {
-		if ( array_key_exists( 'announcement', $submitted['header'] ) ) {
-			$clean['header']['announcement'] = sanitize_text_field( $submitted['header']['announcement'] );
+		if ( array_key_exists( 'announcement', $submitted['header'] ) ) {
+			$clean['header']['announcement'] = sanitize_text_field( $submitted['header']['announcement'] );
+		}
+		if ( array_key_exists( 'topbar_tagline', $submitted['header'] ) ) {
+			$clean['header']['topbar_tagline'] = sanitize_text_field( $submitted['header']['topbar_tagline'] );
+		}
+		if ( array_key_exists( 'topbar_icon_right', $submitted['header'] ) ) {
+			$clean['header']['topbar_icon_right'] = sanitize_text_field( $submitted['header']['topbar_icon_right'] );
+		}
+		if ( array_key_exists( 'topbar_icon_left', $submitted['header'] ) ) {
+			$clean['header']['topbar_icon_left'] = sanitize_text_field( $submitted['header']['topbar_icon_left'] );
+		}
+		if ( array_key_exists( 'topbar_link', $submitted['header'] ) ) {
+			$clean['header']['topbar_link'] = esc_url_raw( $submitted['header']['topbar_link'] );
+		}
+		if ( array_key_exists( 'topbar_enabled', $submitted['header'] ) ) {
+			$clean['header']['topbar_enabled'] = ! empty( $submitted['header']['topbar_enabled'] ) ? 1 : 0;
 		}
 	}
 
@@ -2972,7 +2995,24 @@ function negar_theme_sanitize_settings( $submitted ) {
 	}
 
 	if ( 'header_footer' === $tab ) {
-		$current['header']['announcement'] = isset( $submitted['header']['announcement'] ) ? sanitize_text_field( $submitted['header']['announcement'] ) : '';
+		if ( array_key_exists( 'announcement', $submitted['header'] ?? array() ) ) {
+			$current['header']['announcement'] = sanitize_text_field( $submitted['header']['announcement'] );
+		}
+		if ( array_key_exists( 'topbar_tagline', $submitted['header'] ?? array() ) ) {
+			$current['header']['topbar_tagline'] = sanitize_text_field( $submitted['header']['topbar_tagline'] );
+		}
+		if ( array_key_exists( 'topbar_icon_right', $submitted['header'] ?? array() ) ) {
+			$current['header']['topbar_icon_right'] = sanitize_text_field( $submitted['header']['topbar_icon_right'] );
+		}
+		if ( array_key_exists( 'topbar_icon_left', $submitted['header'] ?? array() ) ) {
+			$current['header']['topbar_icon_left'] = sanitize_text_field( $submitted['header']['topbar_icon_left'] );
+		}
+		if ( array_key_exists( 'topbar_link', $submitted['header'] ?? array() ) ) {
+			$current['header']['topbar_link'] = esc_url_raw( $submitted['header']['topbar_link'] );
+		}
+		if ( array_key_exists( 'topbar_enabled', $submitted['header'] ?? array() ) ) {
+			$current['header']['topbar_enabled'] = ! empty( $submitted['header']['topbar_enabled'] ) ? 1 : 0;
+		}
 		$current['contact']['phone']       = isset( $submitted['contact']['phone'] ) ? sanitize_text_field( $submitted['contact']['phone'] ) : '';
 		$current['contact']['email']       = isset( $submitted['contact']['email'] ) ? sanitize_email( $submitted['contact']['email'] ) : '';
 		$current['contact']['address']     = isset( $submitted['contact']['address'] ) ? sanitize_textarea_field( $submitted['contact']['address'] ) : '';
@@ -3214,6 +3254,8 @@ function negar_theme_settings_field( $id, $label, $name, $value, $type = 'text',
 		<td>
 			<?php if ( 'textarea' === $type ) : ?>
 				<textarea class="large-text" rows="4" id="<?php echo esc_attr( $id ); ?>" name="<?php echo esc_attr( $name ); ?>"><?php echo esc_textarea( $value ); ?></textarea>
+			<?php elseif ( 'checkbox' === $type ) : ?>
+				<label><input id="<?php echo esc_attr( $id ); ?>" name="<?php echo esc_attr( $name ); ?>" type="checkbox" value="1" <?php checked( ! empty( $value ) ); ?>> <?php echo esc_html( $description ); ?></label>
 			<?php elseif ( 'email' === $type || 'url' === $type || 'color' === $type ) : ?>
 				<input class="regular-text" id="<?php echo esc_attr( $id ); ?>" name="<?php echo esc_attr( $name ); ?>" type="<?php echo esc_attr( $type ); ?>" value="<?php echo esc_attr( $value ); ?>">
 			<?php else : ?>
@@ -3593,9 +3635,72 @@ function negar_theme_render_settings_page() {
 								</div>
 							</td>
 						</tr>
-					<?php else : ?>
-						<?php
-						negar_theme_settings_field( 'negar-announcement', __( 'متن نوار بالا', 'negar-shop' ), NEGAR_THEME_SETTINGS_OPTION . '[header][announcement]', negar_theme_setting( 'header', 'announcement', __( 'به فروشگاه ما خوش آمدید', 'negar-shop' ), 'negar_shop_topbar_announcement' ) );
+					<?php else : ?>
+						<tr>
+							<th colspan="2" style="padding: 14px 0 6px; border-bottom: 2px solid #e2e8f0;">
+								<h3 style="margin: 0; color: #1e293b; font-size: 15px; font-weight: 700;">
+									<?php esc_html_e( 'تنظیمات نوار بالای هدر (Top Announcement Bar)', 'negar-shop' ); ?>
+								</h3>
+								<p class="description" style="margin: 4px 0 0; color: #64748b;">
+									<?php esc_html_e( 'مدیریت متن کپسولی با پس‌زمینه، متن ساده بدون پس‌زمینه، آیکون‌ها و لینک نوار بالای هدر.', 'negar-shop' ); ?>
+								</p>
+							</th>
+						</tr>
+
+						<?php
+						negar_theme_settings_field(
+							'negar-topbar-tagline',
+							__( 'متن نوار بالا (بخش دارای پس‌زمینه / کپسولی)', 'negar-shop' ),
+							NEGAR_THEME_SETTINGS_OPTION . '[header][topbar_tagline]',
+							negar_theme_setting( 'header', 'topbar_tagline', 'خوش‌پوش یلدا باش' ),
+							'text',
+							__( 'این بخش درون کادر بیضی‌شکل و همراه با پس‌زمینه نمایش داده می‌شود (مثال: خوش‌پوش یلدا باش).', 'negar-shop' )
+						);
+
+						negar_theme_settings_field(
+							'negar-announcement',
+							__( 'متن نوار بالا (بخش بدون پس‌زمینه / ساده)', 'negar-shop' ),
+							NEGAR_THEME_SETTINGS_OPTION . '[header][announcement]',
+							negar_theme_setting( 'header', 'announcement', __( 'هر چیزی که برای استایل کردن لازمه', 'negar-shop' ), 'negar_shop_topbar_announcement' ),
+							'text',
+							__( 'این بخش به صورت متن ساده و بدون پس‌زمینه در کنار کپسول نمایش داده می‌شود (مثال: هر چیزی که برای استایل کردن لازمه).', 'negar-shop' )
+						);
+
+						negar_theme_settings_field(
+							'negar-topbar-icon-right',
+							__( 'آیکون اول نوار بالا (سمت راست / ابتدای نوار)', 'negar-shop' ),
+							NEGAR_THEME_SETTINGS_OPTION . '[header][topbar_icon_right]',
+							negar_theme_setting( 'header', 'topbar_icon_right', '🌙' ),
+							'text',
+							__( 'ایموجی یا آیکون ابتدای نوار (مثال: 🌙، ⚡، 🔥، 🎉). برای حذف، کادر را خالی بگذارید.', 'negar-shop' )
+						);
+
+						negar_theme_settings_field(
+							'negar-topbar-icon-left',
+							__( 'آیکون دوم نوار بالا (سمت چپ / انتهای نوار)', 'negar-shop' ),
+							NEGAR_THEME_SETTINGS_OPTION . '[header][topbar_icon_left]',
+							negar_theme_setting( 'header', 'topbar_icon_left', '🍉' ),
+							'text',
+							__( 'ایموجی یا آیکون انتهای نوار (مثال: 🍉، ✨، 🎁، 🛍️). برای حذف، کادر را خالی بگذارید.', 'negar-shop' )
+						);
+
+						negar_theme_settings_field(
+							'negar-topbar-link',
+							__( 'لینک نوار بالا', 'negar-shop' ),
+							NEGAR_THEME_SETTINGS_OPTION . '[header][topbar_link]',
+							negar_theme_setting( 'header', 'topbar_link', '' ),
+							'url',
+							__( 'آدرس صفحهٔ مقصد هنگام کلیک روی نوار بالا (در صورت خالی بودن، لینک به برگهٔ فروشگاه متصل خواهد بود).', 'negar-shop' )
+						);
+						?>
+
+						<tr>
+							<th colspan="2" style="padding: 20px 0 6px; border-bottom: 2px solid #e2e8f0;">
+								<h3 style="margin: 0; color: #1e293b; font-size: 15px; font-weight: 700;">
+									<?php esc_html_e( 'اطلاعات تماس، فوتر و شبکه‌های اجتماعی', 'negar-shop' ); ?>
+								</h3>
+							</th>
+						</tr>
 						negar_theme_settings_field( 'negar-phone', __( 'تلفن تماس', 'negar-shop' ), NEGAR_THEME_SETTINGS_OPTION . '[contact][phone]', negar_theme_setting( 'contact', 'phone', '', 'negar_shop_phone_hotline' ) );
 						negar_theme_settings_field( 'negar-email', __( 'ایمیل تماس', 'negar-shop' ), NEGAR_THEME_SETTINGS_OPTION . '[contact][email]', negar_theme_setting( 'contact', 'email', 'contact@example.com', 'negar_shop_contact_email' ), 'email' );
 						negar_theme_settings_field( 'negar-address', __( 'نشانی فروشگاه', 'negar-shop' ), NEGAR_THEME_SETTINGS_OPTION . '[contact][address]', negar_theme_setting( 'contact', 'address', '', 'negar_shop_contact_address' ), 'textarea' );

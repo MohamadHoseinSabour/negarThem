@@ -1,6 +1,8 @@
 /**
- * Kaveh Demo 43 - Banners NK Widget CSS (Exact 1:1 Match)
- * Source: kaveh.moeinwp.com/43/
+ * Negar Shop - 2-Column Editorial Banners CSS
+ * Sculpted Split-Stage Design:
+ * Bold curved crimson studio stage on the left framing the product,
+ * paired with a clean white editorial right panel and wide "مشاهده و خرید" CTA.
  */
 
 .banners-nk [class^="icon-"],
@@ -26,52 +28,218 @@
 }
 
 .banners-nk__item {
-  background-color: #e6ecf3;
-  border-radius: 30px;
-  padding-block: 50px 47px;
-  padding-inline: 61px 310px;
-  overflow: hidden;
-  min-height: 180px;
   position: relative;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  align-items: center;
+  min-height: 236px;
+  border-radius: 28px;
+  padding-block: 34px;
+  padding-inline: 58px 326px;
+  overflow: hidden;
+  background-color: #ffffff;
+  background-image: linear-gradient(180deg, #ffffff 0%, #f7f9fc 100%);
+  border: 1px solid #e4ebf4;
+  box-shadow:
+    0 14px 34px -18px rgba(15, 23, 42, 0.12),
+    0 2px 6px -2px rgba(15, 23, 42, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.35s ease;
+}
+
+/* Outer soft crimson echo arch hugging the solid product stage */
+.banners-nk__item::before {
+  content: "";
+  position: absolute;
+  left: -94px;
+  right: auto;
+  top: 50%;
+  width: 404px;
+  height: 454px;
+  transform: translateY(-50%);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  background-color: color-mix(in srgb, var(--color-primary, #e90544) 11%, transparent);
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Primary bold sculpted crimson curved stage behind the product image */
+.banners-nk__item::after {
+  content: "";
+  position: absolute;
+  left: -98px;
+  right: auto;
+  top: 50%;
+  width: 382px;
+  height: 424px;
+  transform: translateY(-50%);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  background-color: var(--color-primary, #e90544);
+  background-image: linear-gradient(
+    148deg,
+    color-mix(in srgb, var(--color-primary, #e90544) 88%, #ff3b73) 0%,
+    var(--color-primary, #e90544) 46%,
+    color-mix(in srgb, var(--color-primary-hover, #c40439) 76%, #56001b) 100%
+  );
+  box-shadow:
+    inset -12px 0 28px rgba(72, 0, 22, 0.22),
+    12px 0 28px -10px color-mix(in srgb, var(--color-primary, #e90544) 36%, transparent);
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Crisp translucent white graphic shine inside the crimson stage */
+.banners-nk__glow {
+  position: absolute;
+  left: -30px;
+  right: auto;
+  top: -124px;
+  width: 244px;
+  height: 244px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 1;
+  background-color: rgba(255, 255, 255, 0.11);
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Subtle secondary lower white accent ring inside the crimson stage */
+.banners-nk__glow::after {
+  content: "";
+  position: absolute;
+  left: 26px;
+  top: 236px;
+  width: 170px;
+  height: 170px;
+  border-radius: 50%;
+  pointer-events: none;
+  border: 1.5px solid rgba(255, 255, 255, 0.18);
+  background-color: rgba(255, 255, 255, 0.05);
 }
 
 .banners-nk__item:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+  transform: translateY(-4px);
+  border-color: color-mix(in srgb, var(--color-primary, #e90544) 24%, #dce4f0);
+  box-shadow:
+    0 22px 44px -18px rgba(15, 23, 42, 0.16),
+    0 10px 24px -12px color-mix(in srgb, var(--color-primary, #e90544) 20%, transparent),
+    inset 0 1px 0 rgba(255, 255, 255, 0.98);
+}
+
+.banners-nk__item:hover::before {
+  transform: translateY(-50%) scale(1.04);
+}
+
+.banners-nk__item:hover::after {
+  transform: translateY(-50%) scale(1.03);
+}
+
+.banners-nk__item:hover .banners-nk__glow {
+  transform: translate(6px, 6px) scale(1.05);
 }
 
 .banners-nk__item .detail {
   position: relative;
-  z-index: 2;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+}
+
+/* Refined crimson eyebrow bar above non-empty title */
+.banners-nk__item .detail:has(.title:not(:empty))::before {
+  content: "";
+  display: block;
+  width: 34px;
+  height: 4px;
+  border-radius: 9999px;
+  margin-bottom: 12px;
+  background-color: var(--color-primary, #e90544);
+  opacity: 0.9;
+}
+
+.banners-nk__item .detail .title {
+  font-size: 22px;
+  line-height: 1.45;
+  color: #10214f;
+  margin: 0 0 8px;
+  font-weight: 800;
+  letter-spacing: -0.015em;
+}
+
+.banners-nk__item .detail .title:empty {
+  margin-bottom: 0;
+}
+
+.banners-nk__item .detail .sub-title {
+  font-size: 14px;
+  line-height: 1.65;
+  color: #606d86;
+  margin: 0 0 22px;
+  font-weight: 400;
+}
+
+.banners-nk__item .detail .sub-title:empty {
+  margin-bottom: 0;
 }
 
 .banners-nk__item .detail .more {
-  width: 54px;
+  width: auto;
+  min-width: 196px;
   height: 44px;
-  background-color: var(--kaveh-primary-color, #e90544);
+  padding: 0 34px;
+  background-color: var(--color-primary, var(--kaveh-primary-color, #e90544));
+  background-image: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.14) 0%,
+    rgba(255, 255, 255, 0) 60%
+  );
   color: #ffffff;
-  box-shadow: 0px 14px 35px color-mix(in srgb, var(--kaveh-primary-color, #e90544) 25%, transparent);
-  font-size: 14px;
-  margin-bottom: 44px;
+  box-shadow: 0 10px 24px -6px color-mix(in srgb, var(--color-primary, #e90544) 42%, transparent);
+  font-size: 13.5px;
+  font-weight: 700;
+  line-height: 1;
+  margin: 0;
   text-decoration: none;
-  transition: background-color 0.25s, color 0.25s, box-shadow 0.25s, transform 0.25s;
-  border-radius: 800px;
+  border-radius: 14px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 10px;
+  white-space: nowrap;
+  transition: background-color 0.25s ease,
+              color 0.25s ease,
+              box-shadow 0.25s ease,
+              transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .banners-nk__item .detail .more:hover {
-  background-color: var(--kaveh-primary-hover, var(--kaveh-primary-color, #d0043d));
+  background-color: var(--color-primary-hover, var(--kaveh-primary-hover, #c40439));
   color: #ffffff;
-  transform: scale(1.05);
+  transform: translateY(-2px);
+  box-shadow: 0 14px 28px -6px color-mix(in srgb, var(--color-primary-hover, #c40439) 48%, transparent);
+}
+
+.banners-nk__item .detail .more:focus-visible {
+  outline: 2px solid var(--color-primary, #e90544);
+  outline-offset: 3px;
 }
 
 .banners-nk__item .detail .more i,
 .banners-nk__item .detail .more svg {
   display: block;
   line-height: 1;
+  font-size: 12px;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.banners-nk__item .detail .more:hover i,
+.banners-nk__item .detail .more:hover svg {
+  transform: translateX(-3px);
 }
 
 .banners-nk__item .detail .more svg {
@@ -89,136 +257,314 @@ body.ltr .banners-nk__item .detail .more svg,
   transform: scaleX(-1);
 }
 
-.banners-nk__item .detail .title {
-  font-size: 25px;
-  line-height: 38px;
-  color: rgb(19, 39, 95);
-  margin: 0 0 8px;
-  font-weight: 700;
+html[dir="ltr"] .banners-nk__item .detail .more:hover i,
+html[dir="ltr"] .banners-nk__item .detail .more:hover svg,
+body.ltr .banners-nk__item .detail .more:hover i,
+body.ltr .banners-nk__item .detail .more:hover svg,
+[dir="ltr"] .banners-nk__item .detail .more:hover i,
+[dir="ltr"] .banners-nk__item .detail .more:hover svg {
+  transform: scaleX(-1) translateX(-3px);
 }
 
-.banners-nk__item .detail .sub-title {
-  font-size: 15px;
-  line-height: 23px;
-  color: rgb(164, 168, 186);
-  margin: 0;
-  font-weight: 400;
+html[dir="ltr"] .banners-nk__item::before,
+body.ltr .banners-nk__item::before {
+  left: auto;
+  right: -94px;
+}
+
+html[dir="ltr"] .banners-nk__item::after,
+body.ltr .banners-nk__item::after {
+  left: auto;
+  right: -98px;
+}
+
+html[dir="ltr"] .banners-nk__glow,
+body.ltr .banners-nk__glow {
+  left: auto;
+  right: -30px;
 }
 
 .banners-nk__item .banner-image {
-  --banner-img-offset: 90px;
+  --banner-img-offset: 52px;
   left: auto;
   right: auto;
   inset-inline-end: var(--banner-img-offset);
   inset-inline-start: auto;
-  bottom: 0;
-  width: 218px;
+  top: 50%;
+  bottom: auto;
+  transform: translateY(-50%);
+  width: 204px;
   height: auto;
-  max-height: 100%;
+  max-height: calc(100% - 26px);
   object-fit: contain;
-  z-index: 1;
+  z-index: 2;
   pointer-events: none;
+  filter: drop-shadow(0 20px 26px rgba(48, 0, 16, 0.34));
+  transition: transform 0.42s cubic-bezier(0.16, 1, 0.3, 1), filter 0.42s ease;
+}
+
+.banners-nk__item:hover .banner-image {
+  transform: translateY(calc(-50% - 6px)) scale(1.04);
+  filter: drop-shadow(0 26px 32px rgba(48, 0, 16, 0.42));
 }
 
 /* RTL explicit positioning for cross-browser reliability */
 [dir="rtl"] .banners-nk__item,
 body.rtl .banners-nk__item,
 html[dir="rtl"] .banners-nk__item {
-  padding-left: 310px;
-  padding-right: 61px;
+  padding-left: 326px;
+  padding-right: 58px;
 }
 
 [dir="rtl"] .banners-nk__item .banner-image,
 body.rtl .banners-nk__item .banner-image,
 html[dir="rtl"] .banners-nk__item .banner-image {
-  left: 90px;
+  left: 52px;
   right: auto;
 }
 
-/* Responsive Breakpoints from Demo 43 */
+/* Responsive Breakpoints */
 @media only screen and (max-width: 1399px) {
   .banners-nk__item {
-    padding-inline: 32px 310px;
+    padding-inline: 44px 298px;
   }
   [dir="rtl"] .banners-nk__item,
   body.rtl .banners-nk__item {
-    padding-left: 310px;
-    padding-right: 32px;
+    padding-left: 298px;
+    padding-right: 44px;
+  }
+  .banners-nk__item .detail .more {
+    min-width: 184px;
+    padding: 0 30px;
   }
   .banners-nk__item .banner-image {
-    --banner-img-offset: 64px;
+    --banner-img-offset: 40px;
+    width: 192px;
   }
   [dir="rtl"] .banners-nk__item .banner-image,
   body.rtl .banners-nk__item .banner-image {
-    left: 64px;
+    left: 40px;
+  }
+  .banners-nk__item::before {
+    left: -104px;
+    width: 388px;
+    height: 436px;
+  }
+  .banners-nk__item::after {
+    left: -108px;
+    width: 368px;
+    height: 408px;
+  }
+  .banners-nk__glow {
+    left: -42px;
+    top: -120px;
+    width: 228px;
+    height: 228px;
   }
 }
 
 @media only screen and (max-width: 1199px) {
   .banners-nk__item {
-    padding-inline: 24px 220px;
+    min-height: 214px;
+    padding-block: 28px;
+    padding-inline: 34px 240px;
+    border-radius: 24px;
   }
   [dir="rtl"] .banners-nk__item,
   body.rtl .banners-nk__item {
-    padding-left: 220px;
-    padding-right: 24px;
+    padding-left: 240px;
+    padding-right: 34px;
+  }
+  .banners-nk__item .detail:has(.title:not(:empty))::before {
+    width: 28px;
+    height: 3.5px;
+    margin-bottom: 10px;
   }
   .banners-nk__item .detail .title {
-    font-size: 20px;
-    line-height: 32px;
+    font-size: 19.5px;
+    line-height: 1.45;
   }
   .banners-nk__item .detail .sub-title {
-    font-size: 12px;
-    line-height: 18px;
+    font-size: 13px;
+    line-height: 1.6;
+    margin-bottom: 18px;
+  }
+  .banners-nk__item .detail .more {
+    height: 40px;
+    min-width: 168px;
+    padding: 0 24px;
+    font-size: 13px;
+    border-radius: 12px;
   }
   .banners-nk__item .banner-image {
-    --banner-img-offset: 32px;
-    width: 180px;
+    --banner-img-offset: 30px;
+    width: 162px;
+    max-height: calc(100% - 24px);
   }
   [dir="rtl"] .banners-nk__item .banner-image,
   body.rtl .banners-nk__item .banner-image {
-    left: 32px;
+    left: 30px;
+  }
+  .banners-nk__item::before {
+    left: -104px;
+    width: 330px;
+    height: 374px;
+  }
+  .banners-nk__item::after {
+    left: -106px;
+    width: 314px;
+    height: 350px;
+  }
+  .banners-nk__glow {
+    left: -44px;
+    top: -112px;
+    width: 196px;
+    height: 196px;
+  }
+  .banners-nk__glow::after {
+    top: 204px;
+    width: 140px;
+    height: 140px;
   }
 }
 
 @media only screen and (max-width: 767px) {
   .banners-nk__item {
-    padding-block: 32px;
-    padding-inline: 20px 190px;
+    min-height: 196px;
+    padding-block: 24px;
+    padding-inline: 28px 204px;
+    border-radius: 22px;
   }
   [dir="rtl"] .banners-nk__item,
   body.rtl .banners-nk__item {
-    padding-left: 190px;
-    padding-right: 20px;
+    padding-left: 204px;
+    padding-right: 28px;
+  }
+  .banners-nk__item .detail .more {
+    min-width: 158px;
+    padding: 0 22px;
+  }
+  .banners-nk__item .banner-image {
+    --banner-img-offset: 24px;
+    width: 140px;
+    max-height: calc(100% - 22px);
+  }
+  [dir="rtl"] .banners-nk__item .banner-image,
+  body.rtl .banners-nk__item .banner-image {
+    left: 24px;
+  }
+  .banners-nk__item::before {
+    left: -98px;
+    width: 288px;
+    height: 332px;
+  }
+  .banners-nk__item::after {
+    left: -100px;
+    width: 274px;
+    height: 310px;
+  }
+  .banners-nk__glow {
+    left: -44px;
+    top: -102px;
+    width: 174px;
+    height: 174px;
   }
 }
 
 @media only screen and (max-width: 575px) {
   .banners-nk__item {
-    padding-block: 24px;
-    padding-inline: 16px 140px;
+    min-height: 176px;
+    padding-block: 20px;
+    padding-inline: 20px 158px;
+    border-radius: 20px;
   }
   [dir="rtl"] .banners-nk__item,
   body.rtl .banners-nk__item {
-    padding-left: 140px;
-    padding-right: 16px;
+    padding-left: 158px;
+    padding-right: 20px;
   }
-  .banners-nk__item .detail .more {
-    width: 36px;
-    height: 32px;
-    font-size: 12px;
-    margin-bottom: 24px;
+  .banners-nk__item .detail:has(.title:not(:empty))::before {
+    width: 24px;
+    height: 3px;
+    margin-bottom: 8px;
   }
   .banners-nk__item .detail .title {
-    font-size: 16px;
-    line-height: 24px;
+    font-size: 15.5px;
+    line-height: 1.45;
+    margin-bottom: 5px;
   }
   .banners-nk__item .detail .sub-title {
-    font-size: 11px;
-    line-height: 16px;
+    font-size: 11.5px;
+    line-height: 1.55;
+    margin-bottom: 14px;
+  }
+  .banners-nk__item .detail .more {
+    height: 36px;
+    min-width: 142px;
+    padding: 0 20px;
+    font-size: 12px;
+    gap: 8px;
+    border-radius: 10px;
+  }
+  .banners-nk__item .detail .more i,
+  .banners-nk__item .detail .more svg {
+    font-size: 10px;
   }
   .banners-nk__item .banner-image {
-    width: 130px;
-    left: 16px;
+    width: 112px;
+    max-height: calc(100% - 20px);
+    left: 18px;
+  }
+  [dir="rtl"] .banners-nk__item .banner-image,
+  body.rtl .banners-nk__item .banner-image {
+    left: 18px;
+  }
+  .banners-nk__item::before {
+    left: -88px;
+    width: 238px;
+    height: 282px;
+  }
+  .banners-nk__item::after {
+    left: -90px;
+    width: 226px;
+    height: 264px;
+  }
+  .banners-nk__glow {
+    left: -42px;
+    top: -86px;
+    width: 146px;
+    height: 146px;
+  }
+  .banners-nk__glow::after {
+    top: 162px;
+    width: 106px;
+    height: 106px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .banners-nk__item,
+  .banners-nk__item::before,
+  .banners-nk__item::after,
+  .banners-nk__glow,
+  .banners-nk__item .banner-image,
+  .banners-nk__item .detail .more,
+  .banners-nk__item .detail .more i,
+  .banners-nk__item .detail .more svg {
+    transition: none !important;
+  }
+
+  .banners-nk__item:hover,
+  .banners-nk__item:hover .banners-nk__glow,
+  .banners-nk__item .detail .more:hover,
+  .banners-nk__item .detail .more:hover i,
+  .banners-nk__item .detail .more:hover svg {
+    transform: none !important;
+  }
+
+  .banners-nk__item:hover::before,
+  .banners-nk__item:hover::after,
+  .banners-nk__item:hover .banner-image {
+    transform: translateY(-50%) !important;
   }
 }

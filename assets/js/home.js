@@ -214,6 +214,7 @@
         const hasMultipleSlides = heroSlides.length > 1;
         const prevBtn = landingContainer ? landingContainer.querySelector('.swiper-button-prev') : landingEl.parentElement?.querySelector('.swiper-button-prev');
         const nextBtn = landingContainer ? landingContainer.querySelector('.swiper-button-next') : landingEl.parentElement?.querySelector('.swiper-button-next');
+        const paginationEl = landingContainer ? landingContainer.querySelector('.landing-nk__carousel__pagination') : landingEl.parentElement?.querySelector('.landing-nk__carousel__pagination');
         const landingConfig = {
           loop: hasMultipleSlides,
           effect: 'fade',
@@ -221,11 +222,19 @@
           speed: 600,
           allowTouchMove: hasMultipleSlides,
         };
+        if (hasMultipleSlides && paginationEl) {
+          landingConfig.pagination = {
+            el: paginationEl,
+            clickable: true,
+          };
+        }
         if (hasMultipleSlides && prevBtn && nextBtn) {
           landingConfig.navigation = {
             prevEl: prevBtn,
             nextEl: nextBtn,
           };
+        }
+        if (hasMultipleSlides) {
           landingConfig.autoplay = {
             delay: 5500,
             disableOnInteraction: false,
@@ -253,7 +262,7 @@
 
     // 3. Category Bubbles Slider
     const catEl = document.querySelector('.swiper-categories-nk');
-    if (catEl) {
+    if (catEl && !catEl.classList.contains('swiper-initialized')) {
       new Swiper(catEl, {
         watchSlidesProgress: true,
         watchOverflow: true,
@@ -261,10 +270,10 @@
         spaceBetween: 12,
         breakpoints: {
           320: { slidesPerView: 2.1, spaceBetween: 12 },
-          576: { slidesPerView: 3, spaceBetween: 12 },
-          768: { slidesPerView: 3, spaceBetween: 12 },
-          992: { slidesPerView: 5, spaceBetween: 12 },
-          1200: { slidesPerView: 5, spaceBetween: 12 },
+          576: { slidesPerView: 3, spaceBetween: 14 },
+          768: { slidesPerView: 3.2, spaceBetween: 16 },
+          992: { slidesPerView: 5, spaceBetween: 16 },
+          1200: { slidesPerView: 5, spaceBetween: 18 },
         },
       });
     }

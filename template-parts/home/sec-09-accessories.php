@@ -68,7 +68,7 @@ if ( ! $products_query->have_posts() ) {
 									</svg>
 								</div>
 								<div class="sub-title f-iran-yekan fw-normal text-center position-relative mxw-fit mx-auto">
-									<?php esc_html_e( 'انواع یخچال و ساید‌بای‌سایدــــــــــــ روز', 'negar-shop' ); ?>
+									<?php esc_html_e( 'انواع یخچال و فریزر جفت و کمبی', 'negar-shop' ); ?>
 									<svg xmlns="http://www.w3.org/2000/svg" width="33" height="18" fill="none" viewBox="0 0 33 18" class="position-absolute top-0 start-100" aria-hidden="true">
 										<path stroke="#000" stroke-linecap="round" d="M25.739 3.864C24.539 7.793 17.88 15.78.857 16.304m31.102-6.22c-.65 2.292-4.256 6.952-13.477 7.257M19.518.754c-.45 1.637-2.946 4.965-9.33 5.183"></path>
 									</svg>
@@ -109,7 +109,7 @@ if ( ! $products_query->have_posts() ) {
 													</svg>
 												</div>
 												<div class="sub-title f-iran-yekan fw-normal text-center position-relative mxw-fit mx-auto">
-													<?php esc_html_e( 'انواع یخچال و ساید‌بای‌سایدــــــــــــ روز', 'negar-shop' ); ?>
+													<?php esc_html_e( 'انواع یخچال و فریزر جفت و کمبی', 'negar-shop' ); ?>
 													<svg xmlns="http://www.w3.org/2000/svg" width="33" height="18" fill="none" viewBox="0 0 33 18" class="position-absolute top-0 start-100" aria-hidden="true">
 														<path stroke="#000" stroke-linecap="round" d="M25.739 3.864C24.539 7.793 17.88 15.78.857 16.304m31.102-6.22c-.65 2.292-4.256 6.952-13.477 7.257M19.518.754c-.45 1.637-2.946 4.965-9.33 5.183"></path>
 													</svg>

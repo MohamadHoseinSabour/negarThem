@@ -68,6 +68,16 @@ foreach ( $priority_categories as $slug => $meta ) {
 		'image' => $image_url,
 	);
 }
+
+$category_icons = array(
+	'major-appliances'    => '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="3"></rect><line x1="5" y1="10" x2="19" y2="10"></line><line x1="9" y1="6" x2="9" y2="7.5"></line><line x1="9" y1="13.5" x2="9" y2="16.5"></line></svg>',
+	'electric-cooking'    => '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.5"></rect><rect x="6.5" y="8.5" width="8.5" height="7" rx="1"></rect><circle cx="18" cy="9.5" r="0.8" fill="currentColor" stroke="none"></circle><circle cx="18" cy="13" r="0.8" fill="currentColor" stroke="none"></circle><line x1="6" y1="19" x2="6" y2="20.5"></line><line x1="18" y1="19" x2="18" y2="20.5"></line></svg>',
+	'food-preparation'    => '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h10l-1.5 9.5a2 2 0 0 1-2 1.5h-3a2 2 0 0 1-2-1.5L7 4Z"></path><path d="M17 6h2a1.5 1.5 0 0 1 1.5 1.5v2A1.5 1.5 0 0 1 19 11h-2.3"></path><path d="M8 15h8l1 5H7l1-5Z"></path><line x1="10" y1="2" x2="14" y2="2"></line></svg>',
+	'beverage-breakfast'  => '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"><path d="M5 10h11v5a5 5 0 0 1-5 5h-1a5 5 0 0 1-5-5v-5Z"></path><path d="M16 11h2a2.5 2.5 0 0 1 0 5h-2.2"></path><path d="M8 6.5c0-1 .8-1.5.8-2.5"></path><path d="M12 6.5c0-1 .8-1.5.8-2.5"></path></svg>',
+	'cleaning-ironing'    => '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.6 4.4L18 9l-4.4 1.6L12 15l-1.6-4.4L6 9l4.4-1.6L12 3Z"></path><path d="M18.5 15.5l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8.8-2.2Z"></path><path d="M5.5 15l.7 1.8L8 17.5l-1.8.7-.7 1.8-.7-1.8L3 17.5l1.8-.7.7-1.8Z"></path></svg>',
+	'cooling-heating-air' => '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h11a3 3 0 1 0-3-3"></path><path d="M3 12h15a3 3 0 1 1-3 3"></path><path d="M3 16h8a2.5 2.5 0 1 1-2.5 2.5"></path></svg>',
+);
+$default_icon = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect></svg>';
 ?>
 <div class="elementor-element elementor-element-619bae2e e-con-full e-flex e-con e-parent e-lazyloaded" data-id="619bae2e" data-element_type="container" data-e-type="container">
 	<div class="elementor-element elementor-element-57191199 elementor-widget elementor-widget-categoriesnkkaveh" data-id="57191199" data-element_type="widget" data-e-type="widget" data-widget_type="categoriesnkkaveh.default">
@@ -92,69 +102,38 @@ foreach ( $priority_categories as $slug => $meta ) {
 						</a>
 					</div>
 
-					<svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" fill="none" viewBox="0 0 17 18" aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden;">
-						<defs>
-							<linearGradient id="a_category_57191199" x1=".948" x2="14.325" y1="14.662" y2="1.285" gradientUnits="userSpaceOnUse">
-								<stop></stop>
-								<stop offset="1" stop-opacity=".1"></stop>
-							</linearGradient>
-							<linearGradient id="b_category_57191199" x1="3.623" x2="9.866" y1="17.337" y2="11.094" gradientUnits="userSpaceOnUse">
-								<stop></stop>
-								<stop offset="1" stop-opacity=".1"></stop>
-							</linearGradient>
-							<linearGradient id="c_category_57191199" x1="8.082" x2="16.108" y1="17.337" y2="9.311" gradientUnits="userSpaceOnUse">
-								<stop></stop>
-								<stop offset="1" stop-opacity=".1"></stop>
-							</linearGradient>
-							<linearGradient id="a_category_2_57191199" x1="15.835" x2="2.458" y1="14.398" y2="1.022" gradientUnits="userSpaceOnUse">
-								<stop></stop>
-								<stop offset="1" stop-opacity=".1"></stop>
-							</linearGradient>
-							<linearGradient id="b_category_2_57191199" x1="13.16" x2="6.918" y1="17.073" y2="10.831" gradientUnits="userSpaceOnUse">
-								<stop></stop>
-								<stop offset="1" stop-opacity=".1"></stop>
-							</linearGradient>
-							<linearGradient id="c_category_2_57191199" x1="8.701" x2=".675" y1="17.073" y2="9.048" gradientUnits="userSpaceOnUse">
-								<stop></stop>
-								<stop offset="1" stop-opacity=".1"></stop>
-							</linearGradient>
-						</defs>
-					</svg>
-
-					<div class="swiper swiper-categories-nk swiper-visible swiper-visibled-mobile overflow-hidden overflow-visible-xs swiper-initialized swiper-horizontal swiper-pointer-events swiper-rtl swiper-watch-progress swiper-backface-hidden" data-swiper='{"watchSlidesProgress":true,"watchOverflow":true,"breakpoints":{"320":{"slidesPerView":2.1,"spaceBetween":12},"576":{"slidesPerView":3,"spaceBetween":12},"768":{"slidesPerView":3,"spaceBetween":12},"992":{"slidesPerView":5,"spaceBetween":12},"1200":{"slidesPerView":6,"spaceBetween":12}}}' data-kaveh-swiper-mounted="1">
-						<div class="swiper-wrapper" id="swiper-wrapper-ff94973cb950f8a8" aria-live="polite" style="transform: translate3d(0px, 0px, 0px);">
+					<div class="swiper swiper-categories-nk swiper-visible swiper-visibled-mobile overflow-hidden overflow-visible-xs swiper-horizontal swiper-rtl" data-swiper='{"watchSlidesProgress":true,"watchOverflow":true,"breakpoints":{"320":{"slidesPerView":2.1,"spaceBetween":12},"576":{"slidesPerView":3,"spaceBetween":14},"768":{"slidesPerView":3.2,"spaceBetween":16},"992":{"slidesPerView":5,"spaceBetween":16},"1200":{"slidesPerView":5,"spaceBetween":18}}}'>
+						<div class="swiper-wrapper" aria-live="polite">
 							<?php
 							$total_bubbles = count( $bubbles );
 							foreach ( $bubbles as $idx => $bubble ) :
-								$slide_index = $idx + 1;
-								$is_first = 0 === $idx;
-								$slide_classes = array( 'swiper-slide', 'swiper-slide-visible' );
-								if ( $is_first ) {
-									$slide_classes[] = 'swiper-slide-active';
-								} elseif ( 1 === $idx ) {
-									$slide_classes[] = 'swiper-slide-next';
-								}
+								$slide_index   = $idx + 1;
+								$is_red_card   = ( 1 === ( $idx % 2 ) );
+								$variant_class = $is_red_card ? 'categories-nk__item--red' : 'categories-nk__item--white';
+								$icon_svg      = isset( $category_icons[ $bubble['slug'] ] ) ? $category_icons[ $bubble['slug'] ] : $default_icon;
 								?>
-								<div class="<?php echo esc_attr( implode( ' ', $slide_classes ) ); ?>" role="group" aria-label="<?php echo esc_attr( "{$slide_index} / {$total_bubbles}" ); ?>" style="width: 200px; margin-left: 12px;">
-									<div class="categories-nk__item h-100 d-flex flex-column align-items-center position-relative">
-										<div class="image position-relative mx-auto">
-											<img loading="lazy" decoding="async" src="<?php echo esc_url( $bubble['image'] ); ?>" alt="<?php echo esc_attr( $bubble['name'] ); ?>" width="111" height="111" style="object-fit: contain;">
-											<svg xmlns="http://www.w3.org/2000/svg" width="17" height="18" fill="none" viewBox="0 0 17 18" class="shape shape-1 position-absolute end-100">
-												<path stroke="url(#a_category_57191199)" stroke-linecap="round" d="M.595 14.308 13.97.93"></path>
-												<path stroke="url(#b_category_57191199)" stroke-linecap="round" d="m3.27 16.983 6.242-6.242"></path>
-												<path stroke="url(#c_category_57191199)" stroke-linecap="round" d="m7.729 16.983 8.026-8.026"></path>
-											</svg>
-											<svg xmlns="http://www.w3.org/2000/svg" width="17" height="18" fill="none" viewBox="0 0 17 18" class="shape shape-2 position-absolute start-100">
-												<path stroke="url(#a_category_2_57191199)" stroke-linecap="round" d="M16.188 14.045 2.812.668"></path>
-												<path stroke="url(#b_category_2_57191199)" stroke-linecap="round" d="M13.514 16.72 7.27 10.478"></path>
-												<path stroke="url(#c_category_2_57191199)" stroke-linecap="round" d="M9.055 16.72 1.029 8.694"></path>
-											</svg>
-										</div>
-										<h2 class="title text-center fw-bold f-iran-yekan"><?php echo esc_html( $bubble['name'] ); ?></h2>
-										<a href="<?php echo esc_url( $bubble['link'] ); ?>" class="btn btn-nk-danger-2 d-flex align-items-center justify-content-center position-relative p-0" aria-label="<?php echo esc_attr( $bubble['name'] ); ?>">
-											<i class="icon icon-chevron-left-2 lh-1" aria-hidden="true"></i>
+								<div class="swiper-slide" role="group" aria-label="<?php echo esc_attr( "{$slide_index} / {$total_bubbles}" ); ?>">
+									<article class="categories-nk__item <?php echo esc_attr( $variant_class ); ?>">
+										<a href="<?php echo esc_url( $bubble['link'] ); ?>" class="categories-nk__link" aria-label="<?php echo esc_attr( $bubble['name'] ); ?>">
+											<span class="categories-nk__icon" aria-hidden="true">
+												<?php echo $icon_svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Static trusted SVG icon markup. ?>
+											</span>
+
+											<div class="categories-nk__media">
+												<img loading="lazy" decoding="async" src="<?php echo esc_url( $bubble['image'] ); ?>" alt="<?php echo esc_attr( $bubble['name'] ); ?>" width="184" height="152">
+											</div>
+
+											<h2 class="categories-nk__title f-iran-yekan"><?php echo esc_html( $bubble['name'] ); ?></h2>
+
+											<div class="categories-nk__footer" aria-hidden="true">
+												<span class="categories-nk__arrow">
+													<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+														<polyline points="15 18 9 12 15 6"></polyline>
+													</svg>
+												</span>
+											</div>
 										</a>
-									</div>
+									</article>
 								</div>
 							<?php endforeach; ?>
 						</div>

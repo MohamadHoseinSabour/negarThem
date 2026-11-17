@@ -438,8 +438,8 @@ function negar_shop_customizer_css() {
 	$css .= '.btn-nk-danger:hover, .btn-nk-danger:focus, .btn-nk-danger-2:hover, .btn-nk-danger-2:focus, .categories-nk__item .btn-nk-danger-2:hover, .section-heading-one-nk .btn:hover, .section-heading-one-nk .btn-nk-danger:hover, .section-heading-one-nk .more:hover .more__btn, .top-products-nk .section-heading-one-nk .more:hover .more__btn, .articles-nk .btn-nk-danger:hover, .brands-nk .btn-nk-danger:hover, .top-selling-products .btn-nk-danger:hover, .top-selling-products-two-nk .btn-nk-danger:hover, .top-view-products-four-nk .btn-nk-danger:hover { background-color: var(--color-primary-hover) !important; color: #ffffff !important; box-shadow: 0 6px 18px color-mix(in srgb, var(--color-primary-hover) 35%, transparent) !important; }';
 
 	// 2. Promotional banners and CTAs.
-	$css .= '.banners-nk__item .detail .more { background-color: var(--color-primary) !important; color: #ffffff !important; box-shadow: 0 14px 35px color-mix(in srgb, var(--color-primary) 25%, transparent) !important; }';
-	$css .= '.banners-nk__item .detail .more:hover { background-color: var(--color-primary-hover) !important; color: #ffffff !important; }';
+	$css .= '.banners-nk__item .detail .more { background-color: var(--color-primary) !important; color: #ffffff !important; box-shadow: 0 10px 24px -6px color-mix(in srgb, var(--color-primary) 42%, transparent) !important; }';
+	$css .= '.banners-nk__item .detail .more:hover { background-color: var(--color-primary-hover) !important; color: #ffffff !important; box-shadow: 0 14px 28px -6px color-mix(in srgb, var(--color-primary-hover) 48%, transparent) !important; }';
 
 	// 3. Product cards: action buttons, likes, badges, timers, add-to-cart, buy-now.
 	$css .= '.popular-products-nk .product-one-nk { --ppnk-card-glow: var(--color-primary) !important; }';

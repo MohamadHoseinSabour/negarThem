@@ -55,6 +55,10 @@ $sale_url         = add_query_arg( 'on_sale', '1', wc_get_page_permalink( 'shop'
 $upload_dir       = wp_upload_dir();
 $kaveh_base       = trailingslashit( $upload_dir['baseurl'] ) . 'kaveh-demo';
 $previous_product = isset( $GLOBALS['product'] ) ? $GLOBALS['product'] : null;
+
+$banner_deal_img = file_exists( get_theme_file_path( 'assets/images/washing-machine-deal.webp' ) )
+	? get_theme_file_uri( 'assets/images/washing-machine-deal.webp' )
+	: ( $kaveh_base . '/washing-machine-deal.webp' );
 ?>
 
 <section class="negar-home-sale-carousel popular-products-nk popular-products-nk-6ef6dd31 my-8 lg:my-16" aria-labelledby="negar-home-sale-carousel-title">
@@ -62,7 +66,7 @@ $previous_product = isset( $GLOBALS['product'] ) ? $GLOBALS['product'] : null;
 		<div class="popular-products-nk__wrapper position-relative d-flex align-items-center overflow-hidden">
 			<div class="popular-products-nk__right position-relative" aria-labelledby="negar-home-sale-carousel-title">
 				<div class="image mx-auto position-relative">
-					<img loading="lazy" decoding="async" src="<?php echo esc_url( $kaveh_base . '/popular-products.png' ); ?>" alt="<?php esc_attr_e( 'پیشنهاد تخفیفات روز', 'negar-shop' ); ?>" width="294" height="265" class="d-block">
+					<img loading="lazy" decoding="async" src="<?php echo esc_url( $banner_deal_img ); ?>" alt="<?php esc_attr_e( 'پیشنهاد تخفیفات روز', 'negar-shop' ); ?>" width="294" height="265" class="d-block">
 				</div>
 				<div class="title f-iran-yekan text-center position-relative mxw-fit mx-auto" id="negar-home-sale-carousel-title">
 					<?php esc_html_e( 'پیشنهاد', 'negar-shop' ); ?>
@@ -77,7 +81,7 @@ $previous_product = isset( $GLOBALS['product'] ) ? $GLOBALS['product'] : null;
 			</div>
 
 			<div class="popular-products-nk__left negar-home-sale-carousel__body position-relative">
-			<div id="negar-home-sale-products" class="swiper swiper-negar-home-sale-products swiper-visible overflow-hidden" data-swiper='{"watchSlidesProgress":true,"watchOverflow":true,"breakpoints":{"320":{"slidesPerView":1.2,"spaceBetween":12},"576":{"slidesPerView":2.1,"spaceBetween":16},"768":{"slidesPerView":2.7,"spaceBetween":18},"992":{"slidesPerView":3.2,"spaceBetween":20},"1200":{"slidesPerView":3.2,"spaceBetween":24}},"navigation":{"nextEl":".negar-home-sale-carousel .swiper-button-next","prevEl":".negar-home-sale-carousel .swiper-button-prev"}}'>
+			<div id="negar-home-sale-products" class="swiper swiper-negar-home-sale-products swiper-visible overflow-hidden" data-swiper='{"watchSlidesProgress":true,"watchOverflow":true,"breakpoints":{"320":{"slidesPerView":1.2,"spaceBetween":12},"576":{"slidesPerView":2.1,"spaceBetween":16},"768":{"slidesPerView":2.7,"spaceBetween":18},"992":{"slidesPerView":3.2,"spaceBetween":20},"1200":{"slidesPerView":3.2,"spaceBetween":24}}}'>
 				<div class="swiper-wrapper">
 					<?php foreach ( $sale_products as $index => $sale_product ) : ?>
 						<div class="swiper-slide h-auto" role="group" aria-label="<?php echo esc_attr( ( $index + 1 ) . ' / ' . count( $sale_products ) ); ?>">
@@ -89,8 +93,6 @@ $previous_product = isset( $GLOBALS['product'] ) ? $GLOBALS['product'] : null;
 					<?php endforeach; ?>
 				</div>
 			</div>
-			<button type="button" class="swiper-button-prev rounded-circle d-none d-md-flex" aria-label="<?php esc_attr_e( 'محصول قبلی', 'negar-shop' ); ?>" aria-controls="negar-home-sale-products"><i class="icon-chevron-right lh-1" aria-hidden="true"></i></button>
-			<button type="button" class="swiper-button-next rounded-circle d-none d-md-flex" aria-label="<?php esc_attr_e( 'محصول بعدی', 'negar-shop' ); ?>" aria-controls="negar-home-sale-products"><i class="icon-chevron-left lh-1" aria-hidden="true"></i></button>
 			</div>
 		</div>
 	</div>
