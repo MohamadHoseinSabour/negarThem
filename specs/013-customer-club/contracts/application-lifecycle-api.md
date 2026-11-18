@@ -3,8 +3,8 @@
 **Feature:** 013-customer-club
 **Component:** Customer Application & Operator Review Workflow
 **Target Phase:** Phase 5 (Applications & Operator Workflow)
-**Phase:** Phase 2.1 — Architecture Corrections & Design Consistency
-**Status:** `DRAFT — PHASE 2.1 TECHNICAL DESIGN (AWAITING EXTERNAL REVIEW)`
+**Phase:** Phase 2.2 — Final Architecture Consistency & Financial Lifecycle Audit
+**Status:** `DRAFT — PHASE 2.2 TECHNICAL DESIGN (AWAITING EXTERNAL REVIEW)`
 
 ---
 

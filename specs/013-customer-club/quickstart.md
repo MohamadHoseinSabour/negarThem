@@ -3,8 +3,8 @@
 **Feature:** 013-customer-club
 **Project:** Negar Shop WordPress Theme (`negarThem`)
 **Target Environment:** Local WAMP (`http://localhost/wp4/`)
-**Phase:** Phase 2.1 — Architecture Corrections & Design Consistency
-**Status:** `DRAFT — PHASE 2.1 TECHNICAL DESIGN (AWAITING EXTERNAL REVIEW)`
+**Phase:** Phase 2.2 — Final Architecture Consistency & Financial Lifecycle Audit
+**Status:** `DRAFT — PHASE 2.2 TECHNICAL DESIGN (AWAITING EXTERNAL REVIEW)`
 
 ---
 
@@ -54,19 +54,23 @@ npm run test:e2e
 npm run build:dist
 ```
 
-### 3.1 Critical Note on `npm run test:settings` (Correction C8)
+### 3.1 Critical Note on `npm run test:settings` (Correction C8 Reclassification)
 > [!WARNING]
-> **Database Safety & Pre-existing Test Caveat:**
-> During Phase 2, `npm run test:settings` reported an assertion failure:
+> **Database Safety & Pre-existing Test Finding Classification:**
+> During Phase 2 preflight, `npm run test:settings` reported an assertion failure:
 > `[FAIL] Theme settings regression: Homepage SSR HTML must include banner record compact-12-one`
 >
-> **Root Cause Investigation:**
-> Investigation of `tests/theme-settings-regression.js` confirmed that `compact-12-one` belongs to section `sec-12-banners-compact`, but was **omitted from `bannerSectionMap`** in the test runner. Consequently, the test runner failed to conditionally skip this banner when section 12 is disabled or when the homepage is rendered via Elementor.
+> **Finding Classification:**
+> $$\textbf{Status: DIAGNOSED — NOT CODE-FIXED / NOT RE-VERIFIED}$$
 >
-> In accordance with project instructions and database safety rules:
+> **Root Cause Diagnosis:**
+> Code inspection of `tests/theme-settings-regression.js` (lines 274–293) confirmed that `compact-12-one` belongs to section `sec-12-banners-compact`, but was **omitted from `bannerSectionMap`** in the test runner. Consequently, the test runner failed to conditionally skip this banner when section 12 is disabled or when the homepage is rendered via Elementor, triggering an assertion failure at line 292.
+>
+> In accordance with project instructions and strict database safety rules:
 > - **DO NOT re-run `npm run test:settings` against the local live WAMP database** during documentation phases.
 > - The test suite creates and restores live database option snapshots (`tests/theme-settings-regression.php`).
 > - PHP code quality is fully protected by `npm run test:lint`, which passed 100% on all 122 PHP files.
+> - The code fix (adding `'compact-12-one': 'sec-12-banners-compact'` to `bannerSectionMap`) is documented and deferred to an authorized code phase.
 
 ---
 
@@ -90,10 +94,12 @@ Write-Host "Discovered MySQL Dump: $dumpExe"
 & $dumpExe -u root wp4 > "backups/pre-customer-club-migration.sql"
 ```
 
-### 4.3 Safe Rollback Rule
-In the event of a migration test failure during future phases:
-- Drop **only** custom `wp_negar_club_*` tables (`wp_negar_club_applications`, `wp_negar_club_contracts`, `wp_negar_club_installments`, `wp_negar_club_payments`, `wp_negar_club_refunds`, `wp_negar_club_audit_log`).
-- **Never** drop core WordPress (`wp_posts`, `wp_users`, `wp_options`) or WooCommerce tables (`wp_wc_orders`).
+### 4.3 Safe Data-Preserving Migration & Rollback Strategy (Correction C7)
+In the event of a migration failure or schema reversion:
+- **Pre-Migration Snapshot:** Always restore from `backups/pre-customer-club-migration.sql` if a migration fails mid-flight.
+- **Migration Version Tracking:** Schema version is tracked via `negar_club_schema_version` option; migrations must be strictly idempotent.
+- **Data Preservation Rule:** Down-migrations must reverse DDL without dropping populated customer data.
+- **Prohibition Against Dropping Populated Tables:** In production or populated staging environments, dropping `wp_negar_club_*` tables is **strictly prohibited** to protect legal credit agreements and audit trails.
 
 ---
 
@@ -106,13 +112,14 @@ In accordance with `AGENTS.md` and project regulations:
 
 ---
 
-## 6. Phase 2.1 Scope Boundaries Reminder
+## 6. Phase 2.2 Scope Boundaries Reminder
 
-During **Phase 2.1 (Architecture Corrections & Consistency)**:
+During **Phase 2.2 (Final Architecture Consistency & Financial Lifecycle Audit)**:
 - ❌ Do NOT create or edit PHP application files in `inc/`, `woocommerce/`, or `page-templates/`.
 - ❌ Do NOT create or run database migration scripts.
 - ❌ Do NOT create plugin files in `wp-content/plugins/`.
 - ❌ Do NOT modify WordPress database options or WooCommerce order records.
+- ❌ Do NOT run `npm run test:settings` against the local database.
 - ❌ Do NOT create `tasks.md` or execute `speckit.tasks`.
 - ❌ Do NOT approve or bypass the `review-plan` gate.
 - ✅ DO review, verify, and commit architectural corrections in Markdown.

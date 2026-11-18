@@ -3,8 +3,8 @@
 **Feature:** 013-customer-club
 **Component:** Provider-Independent Payment Webhook & Settlement Engine
 **Target Phase:** Phase 6 (Financial Engine & Installment Payments)
-**Phase:** Phase 2.1 — Architecture Corrections & Design Consistency
-**Status:** `DRAFT — PHASE 2.1 TECHNICAL DESIGN (AWAITING EXTERNAL REVIEW)`
+**Phase:** Phase 2.2 — Final Architecture Consistency & Financial Lifecycle Audit
+**Status:** `DRAFT — PHASE 2.2 TECHNICAL DESIGN (AWAITING EXTERNAL REVIEW)`
 
 ---
 
@@ -24,9 +24,9 @@ To satisfy `CLUB-NFR-007` and `CLUB-AC-047`:
 
 ---
 
-## 2. Idempotency Correlation Architecture (Correction C4.2)
+## 2. Idempotency Correlation & Two-Stage Settlement Sequence (Correction C4.2 & C4.5)
 
-To reliably correlate callbacks without assuming gateways preserve arbitrary merchant metadata:
+To reliably correlate callbacks without assuming gateways preserve arbitrary merchant metadata, and to avoid database starvation from holding locks across external HTTP requests:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -35,8 +35,9 @@ To reliably correlate callbacks without assuming gateways preserve arbitrary mer
 │ 1. Payment Initiation:                                                      │
 │    • Local record created in wp_negar_club_payments with:                   │
 │      - status = 'initiated'                                                 │
-│      - idempotency_key = 'PAY-INST-<agreement_id>-<seq>-<unique_token>'     │
-│      - client_tracking_token = wp_generate_uuid4()                          │
+│      - client_token = wp_generate_uuid4() (Unique public tracking token)   │
+│      - payment_context = 'initial_checkout' OR 'scheduled_installment'     │
+│      - idempotency_key = 'PAY-<context>-<id>-<unique_token>'                │
 │                                                                             │
 │ 2. Gateway Dispatch:                                                        │
 │    • Send transaction request to gateway API.                               │
@@ -47,14 +48,14 @@ To reliably correlate callbacks without assuming gateways preserve arbitrary mer
 │                                                                             │
 │ 3. Callback Ingestion:                                                      │
 │    • Inbound callback matches payment row by:                               │
-│      (a) `token` query parameter, OR                                        │
+│      (a) `token` query parameter (`client_token`), OR                       │
 │      (b) `provider_tx_id` (Authority / trackId) in POST body.               │
 │                                                                             │
-│ 4. Concurrency Guard:                                                       │
-│    • If payment row status is ALREADY 'verified':                           │
-│      Return HTTP 200 idempotent acknowledgment immediately; zero mutations. │
-│    • If payment row status is 'initiated' or 'pending_verification':        │
-│      Lock payment row (SELECT FOR UPDATE) and execute settlement sequence.  │
+│ 4. Two-Stage Execution Boundary:                                            │
+│    • STAGE A (External Verification): Execute provider verification         │
+│      WITHOUT holding database transaction or row locks.                     │
+│    • STAGE B (Atomic Local Settlement): Acquire DB locks and mutate ledger  │
+│      atomically inside an isolated MySQL transaction.                       │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -68,8 +69,9 @@ To reliably correlate callbacks without assuming gateways preserve arbitrary mer
   "gateway_provider": "generic_fintech",
   "provider_tx_id": "TX-99887766",
   "client_token": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d",
-  "amount_irr": 33333330,
-  "currency": "IRR",
+  "gateway_amount": 33333330,
+  "gateway_currency": "IRR",
+  "payment_context": "scheduled_installment",
   "status_code": 100,
   "timestamp": 1795000000,
   "signature": "TEST_HMAC_SHA256_e4d909c290d0fb1ca068ffaddf22cbd0c0e5a840e53a"
@@ -95,69 +97,110 @@ To reliably correlate callbacks without assuming gateways preserve arbitrary mer
 ## 4. Currency Conversion Boundary (Correction C4.3)
 
 Storefront prices and customer debts are denominated in **integer Toman (`IRT`)**.
-Iranian bank gateways predominantly report in **Rial (`IRR`)**.
+When external bank gateways report in **Rial (`IRR`)**, strict integer modulo verification is mandatory.
+If the gateway operates natively in **Toman (`IRT`)**, currency conversion is bypassed.
 
-### Exact Integer Conversion Rule
-$$\text{amount\_irr} \pmod{10} === 0$$
-$$\text{amount\_irt} = \text{intdiv}(\text{amount\_irr}, 10)$$
+### Exact Integer Conversion Rule (When `gateway_currency == 'IRR'`)
+$$\text{gateway\_amount} \pmod{10} === 0$$
+$$\text{amount\_internal\_irt} = \text{intdiv}(\text{gateway\_amount}, 10)$$
 
 ### Validation Guard:
 ```php
-if ( ( $amount_irr % 10 ) !== 0 ) {
-    // Corrupted or fractional Rial amount detected — halt immediately
-    $payment->update_status( 'disputed_amount', 'مبلغ ریالی دریافتی بر ۱۰ بخش‌پذیر نیست.' );
-    return new WP_Error( 'INVALID_CURRENCY_CONVERSION', 'مبلغ نامعتبر است.', array( 'status' => 422 ) );
+if ( 'IRR' === $payment->gateway_currency ) {
+    if ( ( $gateway_amount % 10 ) !== 0 ) {
+        // Corrupted or fractional Rial amount detected — halt immediately
+        $payment->update_status( 'disputed_amount', 'مبلغ ریالی دریافتی بر ۱۰ بخش‌پذیر نیست.' );
+        return new WP_Error( 'INVALID_CURRENCY_CONVERSION', 'مبلغ نامعتبر است.', array( 'status' => 422 ) );
+    }
+    $amount_internal_irt = intdiv( $gateway_amount, 10 );
+} else {
+    $amount_internal_irt = $gateway_amount;
 }
-$amount_irt = intdiv( $amount_irr, 10 );
-if ( $amount_irt !== $expected_installment_amount_irt ) {
-    $payment->update_status( 'disputed_amount', 'مغایرت مبلغ پرداختی با مبلغ قسط.' );
+
+if ( $amount_internal_irt !== (int) $payment->amount_internal_irt ) {
+    $payment->update_status( 'disputed_amount', 'مغایرت مبلغ پرداختی با مبلغ ثبت‌شده.' );
     return new WP_Error( 'AMOUNT_MISMATCH', 'مبلغ پرداختی مطابقت ندارد.', array( 'status' => 422 ) );
 }
 ```
 
 ---
 
-## 5. Complete Atomic Settlement Sequence (Correction C4.5)
+## 5. Complete Two-Stage Settlement Sequence (Correction C4.5)
 
 ```
-[Inbound Callback Received]
-          │
-          ▼
-[Step 1: Locate Payment Row by Token or provider_tx_id]
-          │ (Row not found) ──► HTTP 404
-          ▼ (Found)
-[Step 2: Begin Database Transaction & Row Lock]
-          │ SQL: SELECT * FROM wp_negar_club_payments WHERE id = ? FOR UPDATE
-          ▼
-[Step 3: Check Idempotent State]
-          │ (status == 'verified') ──► COMMIT + HTTP 200 (Already Settled, No-Op)
-          ▼ (status == 'initiated' or 'pending_verification')
-[Step 4: Execute Provider-Specific Authentication / Outbound Verify API]
-          │ (Provider rejects / verify fails) ──►
-          │   UPDATE status = 'failed'; COMMIT; HTTP 400
-          ▼ (Provider confirms success with provider_reference)
-[Step 5: Mathematical Invariant Checks]
-          │ • amount_irr % 10 === 0
-          │ • intdiv(amount_irr, 10) === installment.total_amount
-          │ (Mismatch) ──►
-          │   UPDATE status = 'disputed_amount'; COMMIT; HTTP 422 + Alert Operator
-          ▼ (All invariants hold)
-[Step 6: Atomic Settlement Mutations]
-          │ • UPDATE wp_negar_club_payments:
-          │     status = 'verified', verified_at = NOW(), provider_reference = ?
-          │ • UPDATE wp_negar_club_installments:
-          │     status = 'paid', paid_amount = total_amount,
-          │     settled_payment_id = payment.id, settled_at = NOW()
-          │ • UPDATE wp_negar_club_contracts:
-          │     paid_principal = paid_principal + installment.principal_amount,
-          │     paid_charges = paid_charges + installment.charge_amount,
-          │     remaining_principal_balance = financed_principal - paid_principal,
-          │     remaining_charges_balance = total_charges - paid_charges,
-          │     total_outstanding_balance = remaining_principal_balance + remaining_charges_balance
-          │ • IF total_outstanding_balance == 0:
-          │     UPDATE wp_negar_club_contracts SET status = 'completed', completed_at = NOW()
-          │ • INSERT INTO wp_negar_club_audit_log (append-only settlement event)
-          ▼
+[Inbound Callback Received at /wp-json/negar-club/v1/payment-callback]
+                                  │
+                                  ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ STAGE A: EXTERNAL VERIFICATION (Zero Database Locks Held)                  │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ Step A1: Read-only lookup of payment attempt by `token` or `provider_tx_id`. │
+│          (Not found ──► HTTP 404 Not Found)                                 │
+│                                                                             │
+│ Step A2: Check Current State:                                               │
+│          If payment.status == 'verified' ──► HTTP 200 OK (Idempotent No-Op) │
+│                                                                             │
+│ Step A3: Provider-Specific Verification:                                    │
+│          • Class 1: Verify HMAC signature on incoming payload.              │
+│          • Class 2 / 3: Make outbound HTTPS verify call to provider API     │
+│            WITHOUT holding any open MySQL transaction or row lock.          │
+│          (Provider verify fails ──► UPDATE status='failed'; HTTP 400 Bad Req)
+│          (Provider verify succeeds with verified_ref and verified_amount)   │
+└─────────────────────────────────────┬───────────────────────────────────────┘
+                                      │ Provider Confirmed
+                                      ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ STAGE B: ATOMIC LOCAL SETTLEMENT (Strict DB Transaction & Row Locks)        │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ Step B1: Begin MySQL Transaction ($wpdb->query('START TRANSACTION')).       │
+│                                                                             │
+│ Step B2: Acquire row locks in consistent deadlock-prevention hierarchy:     │
+│          1. SELECT * FROM wp_negar_club_contracts WHERE id = ? FOR UPDATE   │
+│             (if contract_id is not null)                                    │
+│          2. SELECT * FROM wp_negar_club_installments WHERE id = ? FOR UPDATE│
+│             (if installment_id is not null)                                 │
+│          3. SELECT * FROM wp_negar_club_payments WHERE id = ? FOR UPDATE    │
+│                                                                             │
+│ Step B3: Concurrency Guard:                                                 │
+│          If payment.status == 'verified':                                   │
+│            $wpdb->query('COMMIT'); return HTTP 200 OK (Already settled)     │
+│                                                                             │
+│ Step B4: Mathematical Invariant Checks:                                     │
+│          • If gateway_currency == 'IRR': verified_amount % 10 === 0         │
+│          • verified_amount_irt === payment.amount_internal_irt              │
+│          (Mismatch ──► UPDATE status='disputed_amount'; COMMIT; HTTP 422)   │
+│                                                                             │
+│ Step B5: Atomic Ledger Mutations:                                           │
+│          • UPDATE wp_negar_club_payments:                                   │
+│              status = 'verified',                                           │
+│              provider_reference = $verified_ref,                            │
+│              verified_at = NOW();                                           │
+│                                                                             │
+│          • Context: scheduled_installment:                                  │
+│              - UPDATE wp_negar_club_installments:                           │
+│                  status = 'paid', paid_amount = total_amount,               │
+│                  settled_payment_id = payment.id, settled_at = NOW();       │
+│              - UPDATE wp_negar_club_contracts:                              │
+│                  paid_principal = paid_principal + installment.principal,   │
+│                  paid_charges = paid_charges + installment.charge_amount,   │
+│                  remaining_principal_balance = financed_p - paid_principal, │
+│                  remaining_charges_balance = total_c - paid_charges,        │
+│                  total_outstanding_balance = remaining_p + remaining_c;     │
+│              - IF total_outstanding_balance == 0:                           │
+│                  UPDATE wp_negar_club_contracts SET status = 'completed';   │
+│                                                                             │
+│          • Context: initial_checkout:                                       │
+│              - UPDATE wp_negar_club_contracts:                              │
+│                  status = 'active', activated_at = NOW();                   │
+│              - Link to WooCommerce Order: set order status to 'processing', │
+│                record payment metadata, and call wc_reduce_stock_levels();  │
+│                                                                             │
+│ Step B6: Write Append-Only Audit Event:                                     │
+│          INSERT INTO wp_negar_club_audit_log (event_action='payment_settled')│
+│                                                                             │
+│ Step B7: Commit Transaction ($wpdb->query('COMMIT')) and return HTTP 200.   │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
 [Step 7: Commit Transaction & Return HTTP 200 OK]
 ```
 

@@ -3,9 +3,9 @@
 **Feature:** 013-customer-club
 **Project:** Negar Shop WordPress Theme (`negarThem`)
 **Date:** 2026-11-18
-**Phase:** Phase 2.1 — Architecture Corrections & Design Consistency
+**Phase:** Phase 2.2 — Final Architecture Consistency & Financial Lifecycle Audit
 **Author:** Senior WordPress & WooCommerce Architect Agent
-**Status:** `DRAFT — PHASE 2.1 TECHNICAL DESIGN (AWAITING EXTERNAL REVIEW)`
+**Status:** `DRAFT — PHASE 2.2 TECHNICAL DESIGN (AWAITING EXTERNAL REVIEW)`
 
 ---
 
@@ -68,31 +68,39 @@ We evaluated whether to reuse standard WordPress/WooCommerce entities (posts, or
 │   wp_negar_club_installments     │             │      wp_negar_club_payments      │
 ├──────────────────────────────────┤             ├──────────────────────────────────┤
 │ id (BIGINT PK)                   │             │ id (BIGINT PK)                   │
-│ contract_id (BIGINT FK)          │             │ contract_id (BIGINT FK)          │
+│ contract_id (BIGINT FK)          │             │ client_token (VARCHAR, UQ)       │
 │ installment_sequence (INT)       │◄────────────┼─ installment_id (BIGINT FK, Null)│
-│ due_date (DATE)                  │             │ user_id (BIGINT FK -> wp_users)  │
-│ principal_amount (BIGINT)        │             │ amount_irt (BIGINT)              │
-│ charge_amount (BIGINT)           │             │ amount_irr (BIGINT)              │
-│ total_amount (BIGINT)            │             │ gateway_provider (VARCHAR)       │
-│ paid_amount (BIGINT)             │             │ provider_tx_id (VARCHAR, UQ)     │
-│ status (VARCHAR)                 │             │ idempotency_key (VARCHAR, UQ)    │
-│ settled_payment_id (BIGINT FK) ──┼────────────►│ status (VARCHAR)                 │
-└────────────────┬─────────────────┘             └────────────────┬─────────────────┘
-                 │                                                │
-                 ▼                                                ▼
-┌──────────────────────────────────┐             ┌──────────────────────────────────┐
-│     wp_negar_club_audit_log      │             │      wp_negar_club_refunds       │
-├──────────────────────────────────┤             ├──────────────────────────────────┤
-│ id (BIGINT PK)                   │             │ id (BIGINT PK)                   │
-│ entity_type (VARCHAR)            │             │ refund_number (VARCHAR, UQ)      │
-│ entity_id (BIGINT)               │             │ contract_id (BIGINT FK)          │
-│ event_action (VARCHAR)           │             │ payment_id (BIGINT FK)           │
-│ old_state (JSON)                 │             │ order_id (BIGINT FK)             │
-│ new_state (JSON)                 │             │ amount_irt (BIGINT)              │
-│ actor_id (BIGINT)                │             │ amount_irr (BIGINT)              │
-│ actor_ip (VARCHAR)               │             │ reason (VARCHAR)                 │
-│ created_at (DATETIME)            │             │ status (VARCHAR)                 │
-└──────────────────────────────────┘             │ gateway_refund_ref (VARCHAR)     │
+│ due_date (DATE)                  │             │ contract_id (BIGINT FK, Null)    │
+│ principal_amount (BIGINT)        │             │ application_id (BIGINT FK, Null) │
+│ charge_amount (BIGINT)           │             │ order_id (BIGINT FK, Null)       │
+│ total_amount (BIGINT)            │             │ user_id (BIGINT FK -> wp_users)  │
+│ paid_amount (BIGINT)             │             │ amount_internal_irt (BIGINT)     │
+│ status (VARCHAR)                 │             │ gateway_amount (BIGINT)          │
+│ settled_payment_id (BIGINT FK) ──┼────────────►│ gateway_currency (VARCHAR)       │
+└────────────────┬─────────────────┘             │ gateway_provider (VARCHAR)       │
+                 │                               │ provider_tx_id (VARCHAR, Null)   │
+                 ▼                               │ payment_context (VARCHAR)        │
+┌──────────────────────────────────┐             │ idempotency_key (VARCHAR, UQ)    │
+│     wp_negar_club_audit_log      │             │ status (VARCHAR)                 │
+├──────────────────────────────────┤             └────────────────┬─────────────────┘
+│ id (BIGINT PK)                   │                              │
+│ entity_type (VARCHAR)            │                              ▼
+│ entity_id (BIGINT)               │             ┌──────────────────────────────────┐
+│ event_action (VARCHAR)           │             │      wp_negar_club_refunds       │
+│ old_state (JSON)                 │             ├──────────────────────────────────┤
+│ new_state (JSON)                 │             │ id (BIGINT PK)                   │
+│ actor_id (BIGINT)                │             │ refund_number (VARCHAR, UQ)      │
+│ actor_ip (VARCHAR)               │             │ contract_id (BIGINT FK)          │
+│ created_at (DATETIME)            │             │ payment_id (BIGINT FK, Null)     │
+└──────────────────────────────────┘             │ order_id (BIGINT FK)             │
+                                                 │ installment_id (BIGINT FK, Null) │
+                                                 │ amount_irt (BIGINT)              │
+                                                 │ principal_refunded_irt (BIGINT)  │
+                                                 │ charges_refunded_irt (BIGINT)    │
+                                                 │ amount_irr (BIGINT, Null)        │
+                                                 │ reason (VARCHAR)                 │
+                                                 │ status (VARCHAR)                 │
+                                                 │ gateway_refund_ref (VARCHAR)     │
                                                  │ idempotency_key (VARCHAR, UQ)    │
                                                  │ created_at (DATETIME)            │
                                                  │ settled_at (DATETIME)            │
@@ -134,7 +142,7 @@ CREATE TABLE `wp_negar_club_applications` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 ```
 
-- **Canonical Statuses:** `submitted` (intake staging), `pending_review` (default active review state), `approved`, `rejected`, `cancelled`, `expired`.
+- **Canonical Statuses:** `pending_review` (sole canonical initial state), `approved`, `rejected`, `cancelled`, `expired`.
 - **Monetary Units:** `requested_ceiling` and `approved_ceiling` are stored strictly as integer Toman (`BIGINT UNSIGNED`).
 - **Privacy:** `national_id_hash` is a one-way cryptographic SHA-256 hash with site salt, preventing plaintext national code exposure while permitting duplicate detection.
 
@@ -226,33 +234,53 @@ CREATE TABLE `wp_negar_club_installments` (
 ---
 
 ### 3.4 `wp_negar_club_payments`
-Stores verified online transaction attempts and settlements.
+Stores verified online transaction attempts and settlements across both initial checkout and installment contexts.
 
 ```sql
 CREATE TABLE `wp_negar_club_payments` (
   `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `contract_id` BIGINT UNSIGNED NOT NULL,
+  `client_token` VARCHAR(64) NOT NULL,
+  `contract_id` BIGINT UNSIGNED NULL,
+  `application_id` BIGINT UNSIGNED NULL,
+  `order_id` BIGINT UNSIGNED NULL,
   `installment_id` BIGINT UNSIGNED NULL,
   `user_id` BIGINT UNSIGNED NOT NULL,
-  `amount_irt` BIGINT UNSIGNED NOT NULL,
-  `amount_irr` BIGINT UNSIGNED NOT NULL,
+  `amount_internal_irt` BIGINT UNSIGNED NOT NULL,
+  `gateway_amount` BIGINT UNSIGNED NOT NULL,
+  `gateway_currency` VARCHAR(8) NOT NULL DEFAULT 'IRR',
   `gateway_provider` VARCHAR(32) NOT NULL,
-  `provider_tx_id` VARCHAR(64) NOT NULL,
+  `provider_tx_id` VARCHAR(64) NULL,
   `provider_reference` VARCHAR(128) NULL,
   `idempotency_key` VARCHAR(64) NOT NULL,
+  `payment_context` VARCHAR(24) NOT NULL DEFAULT 'scheduled_installment',
   `status` VARCHAR(24) NOT NULL DEFAULT 'initiated',
   `verified_at` DATETIME NULL,
   `raw_callback_payload` TEXT NULL,
   `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `uq_client_token` (`client_token`),
   UNIQUE KEY `uq_provider_tx` (`gateway_provider`, `provider_tx_id`),
   UNIQUE KEY `uq_idempotency` (`idempotency_key`),
   KEY `ix_contract_payments` (`contract_id`, `status`),
-  KEY `ix_installment_payments` (`installment_id`, `status`)
+  KEY `ix_order_payments` (`order_id`, `status`),
+  KEY `ix_installment_payments` (`installment_id`, `status`),
+  KEY `ix_context_status` (`payment_context`, `status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 ```
 
+- **Nullable Keys at Initiation:**
+  - `contract_id`: `NULL` during initial checkout payment initiation, because binding contracts are only activated/created upon verified payment. In that context, `order_id` and `application_id` provide initial association.
+  - `provider_tx_id`: `NULL` at the moment a local payment attempt is created, before the gateway returns a tracking authority (e.g. Zibal `trackId`). In MySQL/InnoDB, `UNIQUE KEY (gateway_provider, provider_tx_id)` permits multiple `NULL` values safely.
+- **Client Tracking Token:**
+  - `client_token`: Cryptographically random UUIDv4 (`wp_generate_uuid4()`), passed in gateway redirect/callback parameters for reliable lookup.
+- **Currency Representation:**
+  - `amount_internal_irt`: Stored strictly as integer Iranian Toman (`IRT`), matching contract schedules.
+  - `gateway_amount` & `gateway_currency`: Stores the amount and currency transacted with the external provider (`IRR` or `IRT`). Rial conversion is bypassed when the gateway operates natively in Toman.
+- **Payment Contexts:**
+  - `initial_checkout`: First down-payment at checkout; triggers order fulfillment and contract activation.
+  - `scheduled_installment`: Monthly repayment settling a specific `installment_id`.
+  - `early_settlement`: Settle remaining total debt under `CLUB-BD-013`.
 - **Reconciled Payment Statuses:**
   - `initiated`: Payment attempt created, user redirected to gateway.
   - `pending_verification`: Inbound callback received, awaiting provider verification inquiry.
@@ -266,7 +294,7 @@ CREATE TABLE `wp_negar_club_payments` (
 ---
 
 ### 3.5 `wp_negar_club_refunds` (Dedicated Refund Architecture)
-Stores partial and full refund transactions linked to orders, contracts, and payments.
+Stores partial and full refund transactions linked to orders, contracts, installments, and payments with deterministic principal vs charges allocation.
 
 ```sql
 CREATE TABLE `wp_negar_club_refunds` (
@@ -275,8 +303,11 @@ CREATE TABLE `wp_negar_club_refunds` (
   `contract_id` BIGINT UNSIGNED NOT NULL,
   `payment_id` BIGINT UNSIGNED NULL,
   `order_id` BIGINT UNSIGNED NOT NULL,
+  `installment_id` BIGINT UNSIGNED NULL,
   `amount_irt` BIGINT UNSIGNED NOT NULL,
-  `amount_irr` BIGINT UNSIGNED NOT NULL,
+  `principal_refunded_irt` BIGINT UNSIGNED NOT NULL DEFAULT 0,
+  `charges_refunded_irt` BIGINT UNSIGNED NOT NULL DEFAULT 0,
+  `amount_irr` BIGINT UNSIGNED NULL,
   `reason` VARCHAR(255) NOT NULL,
   `status` VARCHAR(24) NOT NULL DEFAULT 'initiated',
   `gateway_refund_ref` VARCHAR(128) NULL,
@@ -287,12 +318,23 @@ CREATE TABLE `wp_negar_club_refunds` (
   UNIQUE KEY `uq_refund_number` (`refund_number`),
   UNIQUE KEY `uq_refund_idempotency` (`idempotency_key`),
   KEY `ix_contract_refunds` (`contract_id`, `status`),
-  KEY `ix_payment_refunds` (`payment_id`)
+  KEY `ix_payment_refunds` (`payment_id`),
+  KEY `ix_order_refunds` (`order_id`),
+  KEY `ix_installment_refunds` (`installment_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 ```
 
+- **Allocation Invariant:**
+  `amount_irt = principal_refunded_irt + charges_refunded_irt`
+- **Immutability of Original Terms:**
+  Original contract terms (`purchase_amount`, `initial_payment`, `financed_principal`, `total_charges`, `total_customer_obligation`) are **strictly immutable** and are never decremented on refund.
+- **Deterministic Post-Refund Rolling Balances:**
+  $$\text{Net Paid Principal} = \text{contract.paid\_principal} - \text{principal\_refunded\_irt}$$
+  $$\text{contract.remaining\_principal\_balance} = \text{contract.financed\_principal} - \text{Net Paid Principal}$$
+  $$\text{Net Paid Charges} = \text{contract.paid\_charges} - \text{charges\_refunded\_irt}$$
+  $$\text{contract.total\_outstanding\_balance} = \text{contract.total\_customer\_obligation} - (\text{Net Paid Principal} + \text{Net Paid Charges})$$
 - **Statuses:** `initiated`, `completed`, `failed`.
-- **Accounting Synchronization:** On `completed`, adjusts `contract.paid_principal`, `contract.total_outstanding_balance`, and emits an append-only audit event.
+- **Accounting Synchronization:** On `completed`, updates contract rolling balances, transitions linked installment status if applicable, and writes an append-only audit event. Governed by `CLUB-BD-014` (`PROPOSED — REQUIRES EMPLOYER APPROVAL`).
 
 ---
 
