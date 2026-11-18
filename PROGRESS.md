@@ -171,3 +171,22 @@
 - [x] **فاز F (Verification):** تصویربرداری کامل صفحه اصلی در ۶ ویوپورت (۱۴۴۰، ۱۲۸۰، ۱۰۲۴، ۷۶۸، ۳۹۰، ۳۷۵) و تصویربرداری ۳۵ سکشن به صورت مجزا در `docs/fidelity/local-shots/`.
 - [x] **نتیجه نهایی:** افزایش ارتفاع صفحه از ۵,۴۷۳px به ۲۱,۰۰۰px، برطرف شدن ۱۰۰٪ نقایص P0 و مطابقت کامل ترتیب و ساختار با دمو.
 
+---
+
+## ۵. فیچر 013: باشگاه مشتریان پیشرفته نگار (NegarThem Advanced Customer Club)
+
+**شاخه توسعه:** `feat/013-customer-club`  
+**مسیر مستندات:** `specs/013-customer-club/`  
+**Baseline مصوب:** `eda9740a9943ab54c2eeb8161498b6556e1533d6`  
+**وضعیت کلی:** `IN PROGRESS (Phase 1 Completed — Awaiting External Review)`
+
+- [x] **Phase 0 — Repository Audit & Discovery:** ممیزی کامل کدبیس، محیط WAMP (`WP 7.1.4`, `WC 10.5.2`, `HPOS=yes`, `IRT` با ۰ رقم اعشار)، تنظیمات قالب، سیستم طراحی، مسیرهای WooCommerce/My Account، ابزارها و ریسک‌ها (تأییدشده).
+- [x] **Phase 1 — Specification & Business Rules:**
+  - تأیید baseline جدید `eda9740` (شامل رفع باگ تگ `<?php` خط ۳۷۱۲ در `inc/theme-settings.php` و تفکیک تصویر نماد زیبال از درگاه فعال) و ایجاد شاخهٔ `feat/013-customer-club`.
+  - تدوین مشخصات جامع در `specs/013-customer-club/spec.md` (`Status: Draft`) شامل ۱۴ داستان کاربری (`CLUB-US-01`–`14`)، ۴۰ نیازمندی کارکردی (`CLUB-FR-001`–`040`)، ۲۴ نیازمندی غیرکارکردی/امنیتی/UI (`CLUB-NFR-001`–`024`) و ۱۰ معیار موفقیت (`CLUB-SC-001`–`010`).
+  - تدوین رجیستر قوانین تجاری و ۲۳ تصمیم باز (`CLUB-BD-001`–`022` و `CLUB-AD-001`) با مثال‌های عددی در `specs/013-customer-club/business-rules.md`.
+  - تدوین ماتریس ردیابی ۱۰۰٪ نیازمندی‌ها به معیارهای پذیرش (`CLUB-AC-001`–`064` با وضعیت `NOT RUN`) در `specs/013-customer-club/acceptance-matrix.md` و چک‌لیست کیفیت مشخصات در `specs/013-customer-club/checklists/requirements.md`.
+  - افزودن ۹ ردیف جدید (`CLUB-PAGE-01` تا `CLUB-SEC-01`) با وضعیت `todo` به `specs/coverage-matrix.md`.
+- [ ] **Phase 2 — Architecture & Task Planning:** در انتظار بازبینی مستقل Phase 1 و دستور شروع Phase 2 (شامل تصمیم‌گیری رسمی درباره `CLUB-AD-001`).
+- [ ] **Phases 3–9:** آغاز نشده (موتور مالی تا تأیید تصمیم‌های تجاری `CLUB-BD-001`–`022` غیرفعال می‌ماند).
+
