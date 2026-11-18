@@ -12,6 +12,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $upload_dir = wp_upload_dir();
 $demo_base  = $upload_dir['baseurl'] . '/kaveh-demo';
+$theme_images_dir = get_template_directory() . '/assets/images';
+$theme_images_uri = get_template_directory_uri() . '/assets/images';
+$enamad_file      = $theme_images_dir . '/trust-enamad.png';
+$zibal_file       = $theme_images_dir . '/trust-zibal.png';
 $shop_url   = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/' );
 $cart_url   = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'cart' ) : home_url( '/' );
 $account_url = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'myaccount' ) : wp_login_url();
@@ -27,6 +31,20 @@ $phone_hotline = trim( (string) negar_theme_setting( 'contact', 'phone', '', 'ne
 $phone_hotline_href = function_exists( 'negar_shop_phone_href' ) ? negar_shop_phone_href( $phone_hotline ) : preg_replace( '/[^0-9+]/', '', $phone_hotline );
 $copyright_text = trim( (string) negar_theme_setting( 'footer', 'copyright', '', 'negar_shop_copyright_text' ) );
 $copyright_text = $copyright_text ? $copyright_text : __( 'تمامی حقوق این وب‌سایت محفوظ است.', 'negar-shop' );
+$enamad_url     = esc_url_raw( (string) negar_theme_setting( 'footer', 'enamad_url', '' ) );
+$zibal_url      = esc_url_raw( (string) negar_theme_setting( 'footer', 'zibal_url', '' ) );
+$trust_badges   = array(
+	'enamad' => array(
+		'label' => __( 'نماد اعتماد الکترونیک', 'negar-shop' ),
+		'image' => $theme_images_uri . '/trust-enamad.png' . ( file_exists( $enamad_file ) ? '?ver=' . filemtime( $enamad_file ) : '' ),
+		'url'   => $enamad_url,
+	),
+	'zibal'  => array(
+		'label' => __( 'نماد درگاه پرداخت زیبال', 'negar-shop' ),
+		'image' => $theme_images_uri . '/trust-zibal.png' . ( file_exists( $zibal_file ) ? '?ver=' . filemtime( $zibal_file ) : '' ),
+		'url'   => $zibal_url,
+	),
+);
 $social_links = array_filter(
 	array(
 		'instagram' => esc_url_raw( negar_theme_setting( 'social', 'instagram', '', 'negar_shop_instagram_url' ) ),
@@ -222,9 +240,64 @@ $social_meta = array(
 				<?php endif; ?>
 			</div>
 
-			<div class="lg:col-span-4 grid grid-cols-2 gap-2">
-				<a href="<?php echo esc_url( $shop_url ); ?>" class="block bg-white p-3 rounded-xl border border-slate-200/70 hover:border-slate-300 transition shadow-2xs text-center text-xs font-bold text-slate-700"><?php esc_html_e( 'مشاهده محصولات', 'negar-shop' ); ?></a>
-				<a href="<?php echo esc_url( $account_url ); ?>" class="block bg-white p-3 rounded-xl border border-slate-200/70 hover:border-slate-300 transition shadow-2xs text-center text-xs font-bold text-slate-700"><?php esc_html_e( 'حساب کاربری', 'negar-shop' ); ?></a>
+			<div class="lg:col-span-4 negar-footer-trust-actions">
+				<div class="negar-footer-quick-icons" aria-label="<?php esc_attr_e( 'دسترسی سریع فروشگاه و حساب کاربری', 'negar-shop' ); ?>">
+					<a
+						href="<?php echo esc_url( $shop_url ); ?>"
+						class="negar-footer-quick-icon negar-footer-quick-icon--shop"
+						aria-label="<?php esc_attr_e( 'مشاهده محصولات', 'negar-shop' ); ?>"
+						title="<?php esc_attr_e( 'مشاهده محصولات', 'negar-shop' ); ?>"
+						data-tooltip="<?php esc_attr_e( 'مشاهده محصولات', 'negar-shop' ); ?>"
+					>
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+							<path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+							<line x1="3" y1="6" x2="21" y2="6"></line>
+							<path d="M16 10a4 4 0 0 1-8 0"></path>
+						</svg>
+						<span class="sr-only"><?php esc_html_e( 'مشاهده محصولات', 'negar-shop' ); ?></span>
+					</a>
+					<a
+						href="<?php echo esc_url( $account_url ); ?>"
+						class="negar-footer-quick-icon negar-footer-quick-icon--account"
+						aria-label="<?php esc_attr_e( 'حساب کاربری', 'negar-shop' ); ?>"
+						title="<?php esc_attr_e( 'حساب کاربری', 'negar-shop' ); ?>"
+						data-tooltip="<?php esc_attr_e( 'حساب کاربری', 'negar-shop' ); ?>"
+					>
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+							<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+							<circle cx="12" cy="7" r="4"></circle>
+						</svg>
+						<span class="sr-only"><?php esc_html_e( 'حساب کاربری', 'negar-shop' ); ?></span>
+					</a>
+				</div>
+
+				<span class="negar-footer-trust-divider" aria-hidden="true"></span>
+
+				<div class="negar-footer-trust-badges" aria-label="<?php esc_attr_e( 'نمادهای اعتماد و درگاه پرداخت', 'negar-shop' ); ?>">
+					<?php foreach ( $trust_badges as $badge_key => $badge ) : ?>
+						<?php if ( ! empty( $badge['url'] ) ) : ?>
+							<a
+								href="<?php echo esc_url( $badge['url'] ); ?>"
+								target="_blank"
+								rel="noopener noreferrer"
+								class="negar-footer-trust-badge negar-footer-trust-badge--<?php echo esc_attr( $badge_key ); ?> is-linked"
+								aria-label="<?php echo esc_attr( $badge['label'] ); ?>"
+								title="<?php echo esc_attr( $badge['label'] ); ?>"
+								data-tooltip="<?php echo esc_attr( $badge['label'] ); ?>"
+							>
+								<img src="<?php echo esc_url( $badge['image'] ); ?>" alt="<?php echo esc_attr( $badge['label'] ); ?>" loading="lazy" decoding="async">
+							</a>
+						<?php else : ?>
+							<div
+								class="negar-footer-trust-badge negar-footer-trust-badge--<?php echo esc_attr( $badge_key ); ?>"
+								title="<?php echo esc_attr( $badge['label'] ); ?>"
+								data-tooltip="<?php echo esc_attr( $badge['label'] ); ?>"
+							>
+								<img src="<?php echo esc_url( $badge['image'] ); ?>" alt="<?php echo esc_attr( $badge['label'] ); ?>" loading="lazy" decoding="async">
+							</div>
+						<?php endif; ?>
+					<?php endforeach; ?>
+				</div>
 			</div>
 		</div>
 

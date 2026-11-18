@@ -422,6 +422,15 @@ async function runTests() {
         text: footer?.textContent.replace(/\s+/g, ' ').trim() || '',
         links: Array.from(footer?.querySelectorAll('a') || []).map((link) => link.getAttribute('href') || ''),
         badgeImages: Array.from(footer?.querySelectorAll('img') || []).map((image) => image.getAttribute('src') || ''),
+        trustBadges: Array.from(footer?.querySelectorAll('.negar-footer-trust-badge img') || []).map((image) => ({
+          src: image.getAttribute('src') || '',
+          complete: image.complete,
+          naturalWidth: image.naturalWidth,
+        })),
+        quickIcons: Array.from(footer?.querySelectorAll('.negar-footer-quick-icon') || []).map((link) => ({
+          href: link.getAttribute('href') || '',
+          label: link.getAttribute('aria-label') || '',
+        })),
       };
     });
 
@@ -430,7 +439,11 @@ async function runTests() {
     assert(!footerState.text.includes('moeinwp@'), 'Footer must not expose a demo social-media handle');
     assert(!footerState.text.includes('info@Sitename.com'), 'Footer must not expose a placeholder email address');
     assert(!footerState.links.some((href) => href === '#'), 'Footer links must resolve to a real route or configured URL');
-    assert(!footerState.badgeImages.some((src) => /(?:enamad|samandehi)\.png/i.test(src)), 'Unverified demo trust-badge images must not be rendered');
+    assert(!footerState.badgeImages.some((src) => /kaveh-demo\/(?:enamad|samandehi)\.png/i.test(src)), 'Unverified demo trust-badge images must not be rendered');
+    assert(footerState.trustBadges.some((img) => /trust-enamad\.png/i.test(img.src) && img.naturalWidth > 0), 'Footer must render the eNamad trust badge image');
+    assert(footerState.trustBadges.some((img) => /trust-zibal\.png/i.test(img.src) && img.naturalWidth > 0), 'Footer must render the Zibal payment gateway badge image');
+    assert(footerState.quickIcons.some((item) => item.label.includes('مشاهده محصولات') && item.href && item.href !== '#'), 'Footer must render the shop quick-action icon link');
+    assert(footerState.quickIcons.some((item) => item.label.includes('حساب کاربری') && item.href && item.href !== '#'), 'Footer must render the account quick-action icon link');
   });
 
   // 2E. Service guidance must describe only verifiable storefront behaviour.

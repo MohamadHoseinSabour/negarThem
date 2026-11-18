@@ -234,7 +234,7 @@ function negar_shop_scripts() {
 		'negar-shop-header-footer',
 		NEGAR_SHOP_URI . '/assets/css/header-footer.css',
 		array( 'negar-shop-main' ),
-		NEGAR_SHOP_VERSION
+		file_exists( NEGAR_SHOP_DIR . '/assets/css/header-footer.css' ) ? (string) filemtime( NEGAR_SHOP_DIR . '/assets/css/header-footer.css' ) : NEGAR_SHOP_VERSION
 	);
 
 	// Homepage Dedicated CSS

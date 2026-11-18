@@ -2842,6 +2842,12 @@ function negar_theme_sanitize_full_settings( $submitted, $base_settings = null )
 		if ( array_key_exists( 'copyright', $submitted['footer'] ) ) {
 			$clean['footer']['copyright'] = sanitize_text_field( $submitted['footer']['copyright'] );
 		}
+		if ( array_key_exists( 'enamad_url', $submitted['footer'] ) ) {
+			$clean['footer']['enamad_url'] = esc_url_raw( $submitted['footer']['enamad_url'] );
+		}
+		if ( array_key_exists( 'zibal_url', $submitted['footer'] ) ) {
+			$clean['footer']['zibal_url'] = esc_url_raw( $submitted['footer']['zibal_url'] );
+		}
 	}
 
 	if ( isset( $submitted['social'] ) && is_array( $submitted['social'] ) ) {
@@ -3020,6 +3026,8 @@ function negar_theme_sanitize_settings( $submitted ) {
 		$current['contact']['map_url']     = isset( $submitted['contact']['map_url'] ) ? esc_url_raw( $submitted['contact']['map_url'] ) : '';
 		$current['footer']['about']        = isset( $submitted['footer']['about'] ) ? wp_kses_post( $submitted['footer']['about'] ) : '';
 		$current['footer']['copyright']    = isset( $submitted['footer']['copyright'] ) ? sanitize_text_field( $submitted['footer']['copyright'] ) : '';
+		$current['footer']['enamad_url']   = isset( $submitted['footer']['enamad_url'] ) ? esc_url_raw( $submitted['footer']['enamad_url'] ) : '';
+		$current['footer']['zibal_url']    = isset( $submitted['footer']['zibal_url'] ) ? esc_url_raw( $submitted['footer']['zibal_url'] ) : '';
 
 		foreach ( array( 'instagram', 'telegram', 'whatsapp', 'linkedin' ) as $network ) {
 			$current['social'][ $network ] = isset( $submitted['social'][ $network ] ) ? esc_url_raw( $submitted['social'][ $network ] ) : '';
@@ -3701,6 +3709,7 @@ function negar_theme_render_settings_page() {
 								</h3>
 							</th>
 						</tr>
+						<?php
 						negar_theme_settings_field( 'negar-phone', __( 'تلفن تماس', 'negar-shop' ), NEGAR_THEME_SETTINGS_OPTION . '[contact][phone]', negar_theme_setting( 'contact', 'phone', '', 'negar_shop_phone_hotline' ) );
 						negar_theme_settings_field( 'negar-email', __( 'ایمیل تماس', 'negar-shop' ), NEGAR_THEME_SETTINGS_OPTION . '[contact][email]', negar_theme_setting( 'contact', 'email', 'contact@example.com', 'negar_shop_contact_email' ), 'email' );
 						negar_theme_settings_field( 'negar-address', __( 'نشانی فروشگاه', 'negar-shop' ), NEGAR_THEME_SETTINGS_OPTION . '[contact][address]', negar_theme_setting( 'contact', 'address', '', 'negar_shop_contact_address' ), 'textarea' );
@@ -3708,6 +3717,8 @@ function negar_theme_render_settings_page() {
 						negar_theme_settings_field( 'negar-map-url', __( 'نشانی نقشه', 'negar-shop' ), NEGAR_THEME_SETTINGS_OPTION . '[contact][map_url]', negar_theme_setting( 'contact', 'map_url', '', 'negar_shop_contact_map_url' ), 'url' );
 						negar_theme_settings_field( 'negar-footer-about', __( 'معرفی کوتاه فوتر', 'negar-shop' ), NEGAR_THEME_SETTINGS_OPTION . '[footer][about]', negar_theme_setting( 'footer', 'about', '', 'negar_shop_footer_about' ), 'textarea' );
 						negar_theme_settings_field( 'negar-copyright', __( 'متن کپی‌رایت', 'negar-shop' ), NEGAR_THEME_SETTINGS_OPTION . '[footer][copyright]', negar_theme_setting( 'footer', 'copyright', '', 'negar_shop_copyright_text' ) );
+						negar_theme_settings_field( 'negar-footer-enamad-url', __( 'لینک نماد اعتماد الکترونیک (اینماد)', 'negar-shop' ), NEGAR_THEME_SETTINGS_OPTION . '[footer][enamad_url]', negar_theme_setting( 'footer', 'enamad_url', '' ), 'url', __( 'اختیاری: آدرس صفحهٔ تأیید اینماد را وارد کنید تا با کلیک روی تصویر نماد در فوتر باز شود.', 'negar-shop' ) );
+						negar_theme_settings_field( 'negar-footer-zibal-url', __( 'لینک نماد درگاه پرداخت زیبال', 'negar-shop' ), NEGAR_THEME_SETTINGS_OPTION . '[footer][zibal_url]', negar_theme_setting( 'footer', 'zibal_url', '' ), 'url', __( 'اختیاری: آدرس صفحهٔ اعتماد زیبال را وارد کنید تا با کلیک روی تصویر نماد در فوتر باز شود.', 'negar-shop' ) );
 						foreach ( array( 'instagram' => 'Instagram', 'telegram' => 'Telegram', 'whatsapp' => 'WhatsApp', 'linkedin' => 'LinkedIn' ) as $network => $label ) {
 							negar_theme_settings_field( 'negar-' . $network, $label, NEGAR_THEME_SETTINGS_OPTION . '[social][' . $network . ']', negar_theme_setting( 'social', $network, '', 'negar_shop_' . $network . '_url' ), 'url' );
 						}
