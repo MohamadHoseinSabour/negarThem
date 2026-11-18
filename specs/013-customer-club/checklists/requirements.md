@@ -15,7 +15,7 @@
 - [x] All three provisional plans (`negar_aghaz`, `negar_plus`, `negar_vizhe`) are defined with immutable internal IDs, provisional amounts, ceilings, durations, and featured default.
 - [x] All 20 functional domains required by Phase 1 §6 are covered (`CLUB-FR-001` through `CLUB-FR-040`).
 - [x] All technical, security, reliability, and UI/UX requirements from Phase 1 §9–§10 are specified (`CLUB-NFR-001` through `CLUB-NFR-024`).
-- [x] All 21 commercial/financial decision topics plus the pending financial-plugin source-control decision (`CLUB-AD-001`) are documented with 8 governance fields each in `business-rules.md`.
+- [x] All 22 business decisions (`CLUB-BD-001` through `CLUB-BD-022`) and 1 architecture decision (`CLUB-AD-001`) are documented with 8 governance fields each in `business-rules.md`.
 - [x] All mandatory edge cases (disabled plan, zero/below-initial/above-ceiling amounts, non-divisible rounding, live price/stock changes, plan edits post-agreement, failed/duplicate callbacks, refunds, IDOR, inactive dependencies, 375px RTL overflow) are covered.
 
 ## Review Pass 2 — Internal Consistency
