@@ -7,13 +7,23 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$phone       = trim( (string) negar_theme_setting( 'contact', 'phone', '', 'negar_shop_phone_hotline' ) );
-$email       = trim( (string) negar_theme_setting( 'contact', 'email', 'contact@example.com', 'negar_shop_contact_email' ) );
-$address     = trim( (string) negar_theme_setting( 'contact', 'address', __( 'نشانی فروشگاه شما؛ قابل ویرایش از سفارشی‌سازی', 'negar-shop' ), 'negar_shop_contact_address' ) );
-$hours       = trim( (string) negar_theme_setting( 'contact', 'hours', __( 'ساعت پاسخ‌گویی خود را اینجا وارد کنید', 'negar-shop' ), 'negar_shop_contact_hours' ) );
-$map_url     = trim( (string) negar_theme_setting( 'contact', 'map_url', '', 'negar_shop_contact_map_url' ) );
-$phone_href  = function_exists( 'negar_shop_phone_href' ) ? negar_shop_phone_href( $phone ) : preg_replace( '/[^0-9+]/', '', $phone );
-$email_is_sample = 'contact@example.com' === strtolower( $email );
+$default_address = __( 'نشانی فروشگاه شما؛ قابل ویرایش از سفارشی‌سازی', 'negar-shop' );
+$default_hours   = __( 'ساعت پاسخ‌گویی خود را اینجا وارد کنید', 'negar-shop' );
+$phone           = trim( (string) negar_theme_setting( 'contact', 'phone', '', 'negar_shop_phone_hotline' ) );
+$email           = trim( (string) negar_theme_setting( 'contact', 'email', 'contact@example.com', 'negar_shop_contact_email' ) );
+$address         = trim( (string) negar_theme_setting( 'contact', 'address', $default_address, 'negar_shop_contact_address' ) );
+$hours           = trim( (string) negar_theme_setting( 'contact', 'hours', $default_hours, 'negar_shop_contact_hours' ) );
+$map_url         = trim( (string) negar_theme_setting( 'contact', 'map_url', '', 'negar_shop_contact_map_url' ) );
+$map_open_url    = str_replace( '/maps/iframe/', '/maps/', $map_url );
+if ( preg_match( '/marker=([0-9.\-]+)(?:,|%2C)([0-9.\-]+)/i', $map_url, $coords ) ) {
+	$map_open_url = ( '31.3207561' === $coords[1] && '48.6837418' === $coords[2] )
+		? 'https://nshn.ir/cf_bkRkyGBbPau'
+		: sprintf( 'https://neshan.org/maps/@%s,%s,17z', $coords[1], $coords[2] );
+}
+$phone_href      = function_exists( 'negar_shop_phone_href' ) ? negar_shop_phone_href( $phone ) : preg_replace( '/[^0-9+]/', '', $phone );
+$email_is_sample   = 'contact@example.com' === strtolower( $email );
+$hours_is_sample   = '' === $hours || $hours === $default_hours;
+$address_is_sample = '' === $address || $address === $default_address;
 
 get_header();
 ?>
@@ -44,8 +54,8 @@ get_header();
 			<?php else : ?>
 				<div class="negar-contact-card"><span class="negar-contact-card__icon"><i class="icon-email" aria-hidden="true"></i></span><span><b><?php echo esc_html( negar_theme_text( 'contact', 'email_card_label' ) ); ?></b><strong dir="ltr"><?php echo esc_html( $email ); ?></strong><em><?php esc_html_e( 'نمونهٔ قابل ویرایش', 'negar-shop' ); ?></em></span></div>
 			<?php endif; ?>
-			<div class="negar-contact-card"><span class="negar-contact-card__icon"><i class="icon-calendar" aria-hidden="true"></i></span><span><b><?php echo esc_html( negar_theme_text( 'contact', 'hours_card_label' ) ); ?></b><strong><?php echo esc_html( $hours ); ?></strong><em><?php esc_html_e( 'قابل ویرایش', 'negar-shop' ); ?></em></span></div>
-			<div class="negar-contact-card"><span class="negar-contact-card__icon"><i class="icon-location" aria-hidden="true"></i></span><span><b><?php echo esc_html( negar_theme_text( 'contact', 'address_card_label' ) ); ?></b><strong><?php echo esc_html( $address ); ?></strong><em><?php esc_html_e( 'قابل ویرایش', 'negar-shop' ); ?></em></span></div>
+			<div class="negar-contact-card"><span class="negar-contact-card__icon"><i class="icon-calendar" aria-hidden="true"></i></span><span><b><?php echo esc_html( negar_theme_text( 'contact', 'hours_card_label' ) ); ?></b><strong><?php echo esc_html( $hours ); ?></strong><?php if ( $hours_is_sample ) : ?><em><?php esc_html_e( 'قابل ویرایش', 'negar-shop' ); ?></em><?php endif; ?></span></div>
+			<div class="negar-contact-card"><span class="negar-contact-card__icon"><i class="icon-location" aria-hidden="true"></i></span><span><b><?php echo esc_html( negar_theme_text( 'contact', 'address_card_label' ) ); ?></b><strong><?php echo esc_html( $address ); ?></strong><?php if ( $address_is_sample ) : ?><em><?php esc_html_e( 'قابل ویرایش', 'negar-shop' ); ?></em><?php endif; ?></span></div>
 		</section>
 
 		<section class="negar-contact-layout">
@@ -72,6 +82,14 @@ get_header();
 						<div class="negar-map-placeholder"><i class="icon-location" aria-hidden="true"></i><strong><?php echo esc_html( negar_theme_text( 'contact', 'map_placeholder_title' ) ); ?></strong><span><?php echo esc_html( negar_theme_text( 'contact', 'map_placeholder_description' ) ); ?></span></div>
 					<?php endif; ?>
 				</div>
+				<?php if ( $map_open_url ) : ?>
+					<p class="mt-3 mb-0 text-center">
+						<a href="<?php echo esc_url( $map_open_url ); ?>" target="_blank" rel="noopener noreferrer" class="negar-contact-btn" style="display:inline-flex;justify-content:center;width:100%;text-decoration:none;">
+							<span><?php esc_html_e( 'مسیریابی روی نقشه نشان', 'negar-shop' ); ?></span>
+							<i class="icon-arrow-left" aria-hidden="true"></i>
+						</a>
+					</p>
+				<?php endif; ?>
 			</aside>
 		</section>
 	</div>

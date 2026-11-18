@@ -174,13 +174,13 @@ $specs           = negar_shop_get_product_specs( $product );
 						<!-- Mid Banners (Style 5) -->
 						<div class="row kav-style5-banners">
 							<div class="col-6">
-								<a href="#" class="d-block">
-									<img loading="lazy" src="<?php echo esc_url( NEGAR_SHOP_URI . '/assets/images/banner-01.png' ); ?>" alt="" width="240" height="108" class="d-block w-100">
+								<a href="<?php echo esc_url( home_url( '/contact/' ) ); ?>" class="d-block">
+									<img loading="lazy" src="<?php echo esc_url( NEGAR_SHOP_URI . '/assets/images/banner-installment-snapppay.png' ); ?>" alt="<?php esc_attr_e( 'خرید اقساطی', 'negar-shop' ); ?>" width="240" height="108" class="d-block w-100">
 								</a>
 							</div>
 							<div class="col-6">
-								<a href="#" class="d-block">
-									<img loading="lazy" src="<?php echo esc_url( NEGAR_SHOP_URI . '/assets/images/banner-02-1-1.png' ); ?>" alt="" width="240" height="108" class="d-block w-100">
+								<a href="<?php echo esc_url( home_url( '/contact/' ) ); ?>" class="d-block">
+									<img loading="lazy" src="<?php echo esc_url( NEGAR_SHOP_URI . '/assets/images/banner-02-1-1.png' ); ?>" alt="<?php esc_attr_e( 'ارسال به سراسر کشور', 'negar-shop' ); ?>" width="240" height="108" class="d-block w-100">
 								</a>
 							</div>
 						</div>

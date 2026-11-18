@@ -30,10 +30,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</div>
 				<div class="elementor-icon-box-content">
 					<h3 class="elementor-icon-box-title">
-						<span><?php esc_html_e( 'ارسال سریع و مطمئن', 'negar-shop' ); ?></span>
+						<span><?php esc_html_e( 'ارسال به سراسر ایران', 'negar-shop' ); ?></span>
 					</h3>
 					<p class="elementor-icon-box-description">
-						<?php esc_html_e( 'تحویل سریع و بسته‌بندی ایمن کالا', 'negar-shop' ); ?>
+						<?php esc_html_e( 'ارسال مطمئن به تمام کشور و تحویل حضوری در اهواز', 'negar-shop' ); ?>
 					</p>
 				</div>
 			</div>
@@ -53,41 +53,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</div>
 				<div class="elementor-icon-box-content">
 					<h3 class="elementor-icon-box-title">
-						<span><?php esc_html_e( 'ضمانت اصالت کالا', 'negar-shop' ); ?></span>
+						<span><?php esc_html_e( 'گارانتی معتبر شرکتی', 'negar-shop' ); ?></span>
 					</h3>
 					<p class="elementor-icon-box-description">
-						<?php esc_html_e( 'تضمین کیفیت و سلامت فیزیکی سفارش', 'negar-shop' ); ?>
+						<?php esc_html_e( 'تضمین اصالت و سلامت فیزیکی تمامی کالاها', 'negar-shop' ); ?>
 					</p>
 				</div>
 			</div>
 		</div>
 
-		<!-- 3. Expert Support & Consultation (Pink) -->
+		<!-- 3. Installment Purchase (Pink) -->
 		<div class="elementor-element elementor-element-334dcbf3 elementor-view-stacked elementor-shape-rounded elementor-position-inline-start elementor-widget elementor-widget-icon-box" data-id="334dcbf3" data-element_type="widget" data-e-type="widget" data-widget_type="icon-box.default">
-			<div class="elementor-icon-box-wrapper">
-				<div class="elementor-icon-box-icon">
-					<span class="elementor-icon">
-						<svg xmlns="http://www.w3.org/2000/svg" width="31" height="31" viewBox="0 0 31 31" fill="none" aria-hidden="true">
-							<path opacity="0.4" d="M26.4792 14.8542C26.4792 8.78828 21.5659 3.875 15.5 3.875C9.43411 3.875 4.52083 8.78828 4.52083 14.8542C3.44896 14.8542 2.58333 15.7198 2.58333 16.7917V20.6667C2.58333 21.7385 3.44896 22.6042 4.52083 22.6042H6.45833V14.8542C6.45833 9.85547 10.5013 5.8125 15.5 5.8125C20.4987 5.8125 24.5417 9.85547 24.5417 14.8542V22.6042H26.4792C27.551 22.6042 28.4167 21.7385 28.4167 20.6667V16.7917C28.4167 15.7198 27.551 14.8542 26.4792 14.8542Z" fill="white"></path>
-							<rect x="5.16667" y="15.5" width="3.875" height="7.75" rx="1.9375" fill="white"></rect>
-							<rect x="21.9583" y="15.5" width="3.875" height="7.75" rx="1.9375" fill="white"></rect>
-							<path d="M23.8958 21.9583V23.8958C23.8958 25.3167 22.7333 26.4792 21.3125 26.4792H16.7917C16.262 26.4792 15.8229 26.0401 15.8229 25.5104C15.8229 24.9807 16.262 24.5417 16.7917 24.5417H21.3125C21.6742 24.5417 21.9583 24.2575 21.9583 23.8958V21.9583H23.8958Z" fill="white"></path>
-						</svg>
-					</span>
-				</div>
-				<div class="elementor-icon-box-content">
-					<h3 class="elementor-icon-box-title">
-						<span><?php esc_html_e( 'پشتیبانی و مشاوره', 'negar-shop' ); ?></span>
-					</h3>
-					<p class="elementor-icon-box-description">
-						<?php esc_html_e( 'راهنمایی خرید و پاسخگویی سریع', 'negar-shop' ); ?>
-					</p>
-				</div>
-			</div>
-		</div>
-
-		<!-- 4. Secure Payment (Purple) -->
-		<div class="elementor-element elementor-element-2adb1017 elementor-view-stacked elementor-shape-rounded elementor-position-inline-start elementor-widget elementor-widget-icon-box" data-id="2adb1017" data-element_type="widget" data-e-type="widget" data-widget_type="icon-box.default">
 			<div class="elementor-icon-box-wrapper">
 				<div class="elementor-icon-box-icon">
 					<span class="elementor-icon">
@@ -101,10 +77,34 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</div>
 				<div class="elementor-icon-box-content">
 					<h3 class="elementor-icon-box-title">
-						<span><?php esc_html_e( 'پرداخت امن بانکی', 'negar-shop' ); ?></span>
+						<span><?php esc_html_e( 'فروش اقساطی', 'negar-shop' ); ?></span>
 					</h3>
 					<p class="elementor-icon-box-description">
-						<?php esc_html_e( 'درگاه معتبر و تضمین امنیت خرید', 'negar-shop' ); ?>
+						<?php esc_html_e( 'امکان خرید اقساطی لوازم خانگی با شرایط آسان', 'negar-shop' ); ?>
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<!-- 4. Expert Support & Consultation (Purple) -->
+		<div class="elementor-element elementor-element-2adb1017 elementor-view-stacked elementor-shape-rounded elementor-position-inline-start elementor-widget elementor-widget-icon-box" data-id="2adb1017" data-element_type="widget" data-e-type="widget" data-widget_type="icon-box.default">
+			<div class="elementor-icon-box-wrapper">
+				<div class="elementor-icon-box-icon">
+					<span class="elementor-icon">
+						<svg xmlns="http://www.w3.org/2000/svg" width="31" height="31" viewBox="0 0 31 31" fill="none" aria-hidden="true">
+							<path opacity="0.4" d="M26.4792 14.8542C26.4792 8.78828 21.5659 3.875 15.5 3.875C9.43411 3.875 4.52083 8.78828 4.52083 14.8542C3.44896 14.8542 2.58333 15.7198 2.58333 16.7917V20.6667C2.58333 21.7385 3.44896 22.6042 4.52083 22.6042H6.45833V14.8542C6.45833 9.85547 10.5013 5.8125 15.5 5.8125C20.4987 5.8125 24.5417 9.85547 24.5417 14.8542V22.6042H26.4792C27.551 22.6042 28.4167 21.7385 28.4167 20.6667V16.7917C28.4167 15.7198 27.551 14.8542 26.4792 14.8542Z" fill="white"></path>
+							<rect x="5.16667" y="15.5" width="3.875" height="7.75" rx="1.9375" fill="white"></rect>
+							<rect x="21.9583" y="15.5" width="3.875" height="7.75" rx="1.9375" fill="white"></rect>
+							<path d="M23.8958 21.9583V23.8958C23.8958 25.3167 22.7333 26.4792 21.3125 26.4792H16.7917C16.262 26.4792 15.8229 26.0401 15.8229 25.5104C15.8229 24.9807 16.262 24.5417 16.7917 24.5417H21.3125C21.6742 24.5417 21.9583 24.2575 21.9583 23.8958V21.9583H23.8958Z" fill="white"></path>
+						</svg>
+					</span>
+				</div>
+				<div class="elementor-icon-box-content">
+					<h3 class="elementor-icon-box-title">
+						<span><?php esc_html_e( 'مشاوره و پشتیبانی', 'negar-shop' ); ?></span>
+					</h3>
+					<p class="elementor-icon-box-description">
+						<?php esc_html_e( 'بیش از یک دهه تجربه و راهنمایی تخصصی خرید', 'negar-shop' ); ?>
 					</p>
 				</div>
 			</div>

@@ -29,13 +29,32 @@ $copyright_text = trim( (string) negar_theme_setting( 'footer', 'copyright', '',
 $copyright_text = $copyright_text ? $copyright_text : __( 'تمامی حقوق این وب‌سایت محفوظ است.', 'negar-shop' );
 $social_links = array_filter(
 	array(
-		'telegram'  => esc_url_raw( negar_theme_setting( 'social', 'telegram', '', 'negar_shop_telegram_url' ) ),
 		'instagram' => esc_url_raw( negar_theme_setting( 'social', 'instagram', '', 'negar_shop_instagram_url' ) ),
+		'telegram'  => esc_url_raw( negar_theme_setting( 'social', 'telegram', '', 'negar_shop_telegram_url' ) ),
 		'whatsapp'  => esc_url_raw( negar_theme_setting( 'social', 'whatsapp', '', 'negar_shop_whatsapp_url' ) ),
+		'linkedin'  => esc_url_raw( negar_theme_setting( 'social', 'linkedin', '', 'negar_shop_linkedin_url' ) ),
 	),
 	static function ( $url ) {
-		return ! empty( $url ) && ! in_array( untrailingslashit( $url ), array( 'https://instagram.com', 'https://t.me', 'https://wa.me' ), true );
+		return ! empty( $url ) && ! in_array( untrailingslashit( $url ), array( 'https://instagram.com', 'https://t.me', 'https://wa.me', 'https://linkedin.com' ), true );
 	}
+);
+$social_meta = array(
+	'instagram' => array(
+		'label' => __( 'اینستاگرام', 'negar-shop' ),
+		'icon'  => '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>',
+	),
+	'telegram'  => array(
+		'label' => __( 'تلگرام', 'negar-shop' ),
+		'icon'  => '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M20.665 3.717l-17.73 6.837c-1.21.486-1.203 1.161-.222 1.462l4.552 1.42 10.532-6.645c.498-.303.953-.14.579.192l-8.533 7.701h-.002l.002.001-.314 4.692c.46 0 .663-.211.921-.46l2.211-2.15 4.599 3.397c.848.467 1.457.227 1.668-.785l3.019-14.228c.309-1.239-.473-1.8-1.282-1.434z"/></svg>',
+	),
+	'whatsapp'  => array(
+		'label' => __( 'واتس‌اپ', 'negar-shop' ),
+		'icon'  => '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M12.031 2c-5.516 0-9.969 4.453-9.969 9.969 0 1.766.469 3.484 1.344 5l-1.406 5.141 5.266-1.375c1.469.797 3.109 1.219 4.766 1.219 5.516 0 9.969-4.453 9.969-9.984S17.547 2 12.031 2zm5.828 14.109c-.25.703-1.438 1.344-2 1.422-.516.078-1.172.109-1.891-.125-.438-.141-1-.328-1.719-.641-3.031-1.313-5-4.375-5.156-4.578-.156-.203-1.234-1.641-1.234-3.125s.781-2.219 1.063-2.516c.281-.297.609-.375.813-.375.203 0 .406 0 .578.016.188.016.438-.078.688.531.25.609.859 2.094.938 2.25.078.156.125.344.031.547-.094.203-.141.328-.281.5-.141.172-.297.391-.422.516-.141.141-.297.297-.125.594.172.297.766 1.266 1.641 2.047 1.125 1 2.078 1.313 2.375 1.469.297.156.469.125.641-.078.172-.203.734-.859.938-1.156.203-.297.391-.25.656-.156.266.094 1.703.813 2 .953.297.141.484.219.563.344.078.125.078.734-.172 1.438z"/></svg>',
+	),
+	'linkedin'  => array(
+		'label' => __( 'لینکدین', 'negar-shop' ),
+		'icon'  => '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M6.94 5a2 2 0 1 1-4-.002 2 2 0 0 1 4 .002zM7 8.48H3V21h4V8.48zm6.32 0H9.34V21h3.94v-6.57c0-3.66 4.77-4 4.77 0V21H22v-7.93c0-6.17-7.06-5.94-8.72-2.91l.04-1.68z"/></svg>',
+	),
 );
 ?>
 
@@ -175,16 +194,31 @@ $social_links = array_filter(
 				</a>
 			</div>
 
-			<div class="lg:col-span-4 grid grid-cols-1 sm:grid-cols-3 gap-2 text-center">
+			<div class="lg:col-span-4 flex items-center justify-center">
 				<?php if ( $social_links ) : ?>
-					<?php foreach ( $social_links as $network => $url ) : ?>
-						<a href="<?php echo esc_url( $url ); ?>" class="bg-white p-3 rounded-2xl border border-slate-200/60 shadow-2xs hover:border-rose-300 transition">
-							<span class="text-3xs text-slate-500 font-bold block mb-1"><?php echo esc_html( ucfirst( $network ) ); ?></span>
-							<span class="text-xs font-black text-slate-700 block dir-ltr"><?php echo esc_html( wp_parse_url( $url, PHP_URL_HOST ) ); ?></span>
-						</a>
-					<?php endforeach; ?>
+					<div class="negar-footer-social-channels" aria-label="<?php esc_attr_e( 'شبکه‌های اجتماعی', 'negar-shop' ); ?>">
+						<?php foreach ( $social_links as $network => $url ) : ?>
+							<?php
+							$meta  = isset( $social_meta[ $network ] ) ? $social_meta[ $network ] : array();
+							$label = isset( $meta['label'] ) ? $meta['label'] : ucfirst( $network );
+							$icon  = isset( $meta['icon'] ) ? $meta['icon'] : '';
+							?>
+							<a
+								href="<?php echo esc_url( $url ); ?>"
+								target="_blank"
+								rel="noopener noreferrer"
+								class="negar-footer-social-btn negar-footer-social-btn--<?php echo esc_attr( $network ); ?>"
+								aria-label="<?php echo esc_attr( $label ); ?>"
+								title="<?php echo esc_attr( $label ); ?>"
+								data-tooltip="<?php echo esc_attr( $label ); ?>"
+							>
+								<?php echo $icon; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Static trusted SVG icon markup. ?>
+								<span class="sr-only"><?php echo esc_html( $label ); ?></span>
+							</a>
+						<?php endforeach; ?>
+					</div>
 				<?php else : ?>
-					<div class="sm:col-span-3 bg-white p-3 rounded-2xl border border-slate-200/60 shadow-2xs text-xs text-slate-500"><?php echo esc_html( negar_theme_text( 'footer', 'social_empty_notice' ) ); ?></div>
+					<div class="w-full bg-white p-3 rounded-2xl border border-slate-200/60 shadow-2xs text-xs text-slate-500 text-center"><?php echo esc_html( negar_theme_text( 'footer', 'social_empty_notice' ) ); ?></div>
 				<?php endif; ?>
 			</div>
 
@@ -216,9 +250,24 @@ $social_links = array_filter(
 			<?php if ( $social_links ) : ?>
 				<div class="flex items-center gap-3">
 					<span class="text-3xs text-slate-400 font-bold"><?php echo esc_html( negar_theme_text( 'footer', 'social_prompt' ) ); ?></span>
-					<div class="flex items-center gap-2">
+					<div class="negar-footer-social-mini-list">
 						<?php foreach ( $social_links as $network => $url ) : ?>
-							<a href="<?php echo esc_url( $url ); ?>" class="px-3 py-1.5 rounded-full bg-white border border-slate-200/70 text-slate-600 hover:text-rose-600 transition shadow-2xs" aria-label="<?php echo esc_attr( $network ); ?>"><?php echo esc_html( ucfirst( $network ) ); ?></a>
+							<?php
+							$meta  = isset( $social_meta[ $network ] ) ? $social_meta[ $network ] : array();
+							$label = isset( $meta['label'] ) ? $meta['label'] : ucfirst( $network );
+							$icon  = isset( $meta['icon'] ) ? $meta['icon'] : '';
+							?>
+							<a
+								href="<?php echo esc_url( $url ); ?>"
+								target="_blank"
+								rel="noopener noreferrer"
+								class="negar-footer-social-mini negar-footer-social-mini--<?php echo esc_attr( $network ); ?>"
+								aria-label="<?php echo esc_attr( $label ); ?>"
+								title="<?php echo esc_attr( $label ); ?>"
+							>
+								<?php echo $icon; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Static trusted SVG icon markup. ?>
+								<span class="sr-only"><?php echo esc_html( $label ); ?></span>
+							</a>
 						<?php endforeach; ?>
 					</div>
 				</div>

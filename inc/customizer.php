@@ -457,9 +457,7 @@ function negar_shop_customizer_css() {
 	$css .= '.btn-nk-white { color: var(--color-primary) !important; }';
 	$css .= '.btn-nk-white:hover { background-color: var(--color-primary-light) !important; }';
 
-	// 5. Stories & headings.
-	$css .= '.story-shop__item .image { background: linear-gradient(180deg, var(--color-primary) 0%, var(--color-primary-hover) 100%) !important; }';
-	$css .= '.upperstorytitle { background-color: var(--color-primary) !important; box-shadow: 0 2px 8px color-mix(in srgb, var(--color-primary) 40%, transparent) !important; }';
+	// 5. Section headings (stories use their dedicated multi-stop spectrum in main.css).
 	$css .= '.section-heading-one-nk .title .highlight, .section-heading-one-nk .title .fw-bold, .section-heading-one-nk .title span, .top-products-nk .section-heading-one-nk .title span, .top-products-nk .section-heading-one-nk .more__title, .top-products-nk .section-heading-one-nk .more:hover .more__sub-title { color: var(--color-primary) !important; }';
 	$css .= '.section-heading-one-nk .line span:last-child, .top-products-nk .section-heading-one-nk .line span:last-child { background-color: var(--color-primary) !important; }';
 

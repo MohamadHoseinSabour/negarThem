@@ -18,7 +18,7 @@ defined( 'ABSPATH' ) || exit;
 			<div class="w-14 h-14 mx-auto mb-3 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center" aria-hidden="true">
 				<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
 			</div>
-			<h2 id="negar-otp-modal-title" class="text-lg sm:text-xl font-black text-slate-900 mb-1 f-iran-yekan"><?php esc_html_e( 'ورود یا ثبت‌نام در نگار شاپ', 'negar-shop' ); ?></h2>
+			<h2 id="negar-otp-modal-title" class="text-lg sm:text-xl font-black text-slate-900 mb-1 f-iran-yekan"><?php echo esc_html( sprintf( __( 'ورود یا ثبت‌نام در %s', 'negar-shop' ), function_exists( 'negar_theme_brand_label' ) ? negar_theme_brand_label() : get_bloginfo( 'name' ) ) ); ?></h2>
 			<p class="text-xs text-slate-500 font-medium"><?php esc_html_e( 'حساب کاربری با تأیید شمارهٔ موبایل شما ایجاد یا وارد می‌شود.', 'negar-shop' ); ?></p>
 		</header>
 

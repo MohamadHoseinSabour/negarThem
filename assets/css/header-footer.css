@@ -829,3 +829,227 @@ body.drawer-open {
 }
 
 
+/* ==========================================================================
+   Footer Social Channels (Icon Buttons & Bottom Mini Icons)
+   ========================================================================== */
+.negar-footer-social-channels {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.875rem;
+}
+
+.negar-footer-social-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 54px;
+  height: 54px;
+  border-radius: 18px;
+  border: 1px solid #e2e8f0;
+  background-color: #f8fafc;
+  color: #475569;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
+  text-decoration: none;
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.22s ease,
+    border-color 0.22s ease,
+    color 0.22s ease,
+    background 0.22s ease;
+}
+
+.negar-footer-social-btn svg {
+  width: 24px;
+  height: 24px;
+  display: block;
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.negar-footer-social-btn::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 9px);
+  left: 50%;
+  transform: translate(-50%, 4px);
+  padding: 4px 10px;
+  border-radius: 999px;
+  background-color: #212341;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.5;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  box-shadow: 0 8px 18px rgba(33, 35, 65, 0.2);
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+}
+
+.negar-footer-social-btn:hover,
+.negar-footer-social-btn:focus-visible {
+  transform: translateY(-3px);
+  color: #ffffff;
+  border-color: transparent;
+}
+
+.negar-footer-social-btn:hover svg,
+.negar-footer-social-btn:focus-visible svg {
+  transform: scale(1.08);
+}
+
+.negar-footer-social-btn:hover::after,
+.negar-footer-social-btn:focus-visible::after {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0);
+}
+
+.negar-footer-social-btn:focus-visible,
+.negar-footer-social-mini:focus-visible {
+  outline: 2px solid var(--color-primary, #e90544);
+  outline-offset: 3px;
+}
+
+/* Network Brand Palettes - Main Icon Tiles */
+.negar-footer-social-btn--instagram {
+  background-color: #fff1f5;
+  border-color: #fecdd9;
+  color: #d62976;
+}
+
+.negar-footer-social-btn--instagram:hover,
+.negar-footer-social-btn--instagram:focus-visible {
+  background: linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 55%, #cc2366 78%, #bc1888 100%);
+  box-shadow: 0 12px 24px -6px rgba(220, 39, 67, 0.45);
+}
+
+.negar-footer-social-btn--telegram {
+  background-color: #f0f9ff;
+  border-color: #bae6fd;
+  color: #1d9bf0;
+}
+
+.negar-footer-social-btn--telegram:hover,
+.negar-footer-social-btn--telegram:focus-visible {
+  background: linear-gradient(135deg, #38bdf8 0%, #229ed9 55%, #0077b5 100%);
+  box-shadow: 0 12px 24px -6px rgba(34, 158, 217, 0.45);
+}
+
+.negar-footer-social-btn--whatsapp {
+  background-color: #ecfdf5;
+  border-color: #a7f3d0;
+  color: #16a34a;
+}
+
+.negar-footer-social-btn--whatsapp:hover,
+.negar-footer-social-btn--whatsapp:focus-visible {
+  background: linear-gradient(135deg, #25d366 0%, #16a34a 60%, #128c7e 100%);
+  box-shadow: 0 12px 24px -6px rgba(37, 211, 102, 0.42);
+}
+
+.negar-footer-social-btn--linkedin {
+  background-color: #eff6ff;
+  border-color: #bfdbfe;
+  color: #0a66c2;
+}
+
+.negar-footer-social-btn--linkedin:hover,
+.negar-footer-social-btn--linkedin:focus-visible {
+  background: linear-gradient(135deg, #0a66c2 0%, #004182 100%);
+  box-shadow: 0 12px 24px -6px rgba(10, 102, 194, 0.42);
+}
+
+/* Bottom Copyright Bar Compact Social Icons */
+.negar-footer-social-mini-list {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.negar-footer-social-mini {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 9999px;
+  border: 1px solid #e2e8f0;
+  background-color: #f8fafc;
+  color: #475569;
+  text-decoration: none;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+}
+
+.negar-footer-social-mini svg {
+  width: 17px;
+  height: 17px;
+  display: block;
+}
+
+.negar-footer-social-mini:hover,
+.negar-footer-social-mini:focus-visible {
+  transform: translateY(-2px);
+  color: #ffffff;
+  border-color: transparent;
+}
+
+.negar-footer-social-mini--instagram {
+  background-color: #fff1f5;
+  border-color: #fecdd9;
+  color: #d62976;
+}
+
+.negar-footer-social-mini--instagram:hover,
+.negar-footer-social-mini--instagram:focus-visible {
+  background: linear-gradient(135deg, #f09433 0%, #dc2743 55%, #bc1888 100%);
+  box-shadow: 0 8px 16px -4px rgba(220, 39, 67, 0.4);
+}
+
+.negar-footer-social-mini--telegram {
+  background-color: #f0f9ff;
+  border-color: #bae6fd;
+  color: #1d9bf0;
+}
+
+.negar-footer-social-mini--telegram:hover,
+.negar-footer-social-mini--telegram:focus-visible {
+  background: linear-gradient(135deg, #38bdf8 0%, #229ed9 60%, #0077b5 100%);
+  box-shadow: 0 8px 16px -4px rgba(34, 158, 217, 0.4);
+}
+
+.negar-footer-social-mini--whatsapp {
+  background-color: #ecfdf5;
+  border-color: #a7f3d0;
+  color: #16a34a;
+}
+
+.negar-footer-social-mini--whatsapp:hover,
+.negar-footer-social-mini--whatsapp:focus-visible {
+  background: linear-gradient(135deg, #25d366 0%, #16a34a 60%, #128c7e 100%);
+  box-shadow: 0 8px 16px -4px rgba(37, 211, 102, 0.38);
+}
+
+.negar-footer-social-mini--linkedin {
+  background-color: #eff6ff;
+  border-color: #bfdbfe;
+  color: #0a66c2;
+}
+
+.negar-footer-social-mini--linkedin:hover,
+.negar-footer-social-mini--linkedin:focus-visible {
+  background: linear-gradient(135deg, #0a66c2 0%, #004182 100%);
+  box-shadow: 0 8px 16px -4px rgba(10, 102, 194, 0.38);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .negar-footer-social-btn,
+  .negar-footer-social-btn svg,
+  .negar-footer-social-btn::after,
+  .negar-footer-social-mini {
+    transition: none;
+  }
+}
