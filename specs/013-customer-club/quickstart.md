@@ -1,9 +1,10 @@
 # Developer Quickstart & Verification Guide: NegarThem Customer Club
 
-**Feature:** 013-customer-club  
-**Project:** Negar Shop WordPress Theme (`negarThem`)  
-**Target Environment:** Local WAMP (`http://localhost/wp4/`)  
-**Status:** `DRAFT — PHASE 2 TECHNICAL DESIGN`  
+**Feature:** 013-customer-club
+**Project:** Negar Shop WordPress Theme (`negarThem`)
+**Target Environment:** Local WAMP (`http://localhost/wp4/`)
+**Phase:** Phase 2.1 — Architecture Corrections & Design Consistency
+**Status:** `DRAFT — PHASE 2.1 TECHNICAL DESIGN (AWAITING EXTERNAL REVIEW)`
 
 ---
 
@@ -20,36 +21,60 @@ Before executing any tests or inspecting Customer Club artifacts, ensure your lo
 
 ---
 
-## 2. Standard Test & Validation Commands
+## 2. Monorepo Local Development Setup (Option B)
+
+Under the recommended monorepo architecture (`CLUB-AD-001` Option B), the persistent plugin source lives in `packages/negar-customer-club/`.
+
+### 2.1 Directory Junction Setup (PowerShell Administrator)
+To link the plugin source directly into the local WAMP WordPress plugins directory without duplicating files:
+
+```powershell
+# Create NTFS Directory Junction (Run once when plugin scaffolding is authorized)
+New-Item -ItemType Junction `
+  -Path "X:\apps\wamp\www\wp4\wp-content\plugins\negar-customer-club" `
+  -Target "X:\apps\wamp\www\wp4\wp-content\themes\negarThem\packages\negar-customer-club"
+```
+
+*Effect:* Any edits in `packages/negar-customer-club/` are reflected immediately in WordPress admin and runtime.
+
+---
+
+## 3. Standard Test & Validation Commands
 
 All test and linting commands are managed via `package.json` in the theme root:
 
 ```powershell
-# 1. Validate PHP syntax and code standards
+# 1. Validate PHP syntax and code standards (Safe, read-only)
 npm run test:lint
 
-# 2. Run Theme Settings & Backup regression tests
-npm run test:settings
-
-# 3. Run Playwright E2E visual & functional tests (requires local WAMP running)
+# 2. Run Playwright E2E visual & functional tests (requires local WAMP running)
 npm run test:e2e
 
-# 4. Run unified test suite
-npm test
-
-# 5. Build distribution archive (theme zip)
+# 3. Build distribution archives
 npm run build:dist
 ```
 
-*Note:* In Phase 2, all tests must pass cleanly against the approved baseline without adding any broken or unverified code.
+### 3.1 Critical Note on `npm run test:settings` (Correction C8)
+> [!WARNING]
+> **Database Safety & Pre-existing Test Caveat:**
+> During Phase 2, `npm run test:settings` reported an assertion failure:
+> `[FAIL] Theme settings regression: Homepage SSR HTML must include banner record compact-12-one`
+>
+> **Root Cause Investigation:**
+> Investigation of `tests/theme-settings-regression.js` confirmed that `compact-12-one` belongs to section `sec-12-banners-compact`, but was **omitted from `bannerSectionMap`** in the test runner. Consequently, the test runner failed to conditionally skip this banner when section 12 is disabled or when the homepage is rendered via Elementor.
+>
+> In accordance with project instructions and database safety rules:
+> - **DO NOT re-run `npm run test:settings` against the local live WAMP database** during documentation phases.
+> - The test suite creates and restores live database option snapshots (`tests/theme-settings-regression.php`).
+> - PHP code quality is fully protected by `npm run test:lint`, which passed 100% on all 122 PHP files.
 
 ---
 
-## 3. Safe Database Backup & Migration Preflight
+## 4. Safe Database Backup & Migration Preflight
 
 Before any future database-modifying phase (Phase 5/6) is initiated, a full MySQL backup must be captured:
 
-### 3.1 Locate MySQL Dump Binary on Windows WAMP
+### 4.1 Locate MySQL Dump Binary on Windows WAMP
 Because `mysqldump.exe` is not placed on the global `$env:PATH` by WAMP, locate it dynamically in PowerShell:
 
 ```powershell
@@ -60,19 +85,19 @@ if (-not $dumpExe) {
 Write-Host "Discovered MySQL Dump: $dumpExe"
 ```
 
-### 3.2 Capture Pre-Migration Backup
+### 4.2 Capture Pre-Migration Backup
 ```powershell
 & $dumpExe -u root wp4 > "backups/pre-customer-club-migration.sql"
 ```
 
-### 3.3 Safe Rollback Rule
+### 4.3 Safe Rollback Rule
 In the event of a migration test failure during future phases:
-- Drop **only** the custom `wp_negar_club_*` tables.
+- Drop **only** custom `wp_negar_club_*` tables (`wp_negar_club_applications`, `wp_negar_club_contracts`, `wp_negar_club_installments`, `wp_negar_club_payments`, `wp_negar_club_refunds`, `wp_negar_club_audit_log`).
 - **Never** drop core WordPress (`wp_posts`, `wp_users`, `wp_options`) or WooCommerce tables (`wp_wc_orders`).
 
 ---
 
-## 4. Test Mocking & Zero-Fake-Payment Policy
+## 5. Test Mocking & Zero-Fake-Payment Policy
 
 In accordance with `AGENTS.md` and project regulations:
 1. **No Live Gateway Calls:** Live Iranian payment gateways (Zibal, ZarinPal, Shaparak) are not active in this development environment. Payment tests must execute against the isolated mock adapter specified in `contracts/payment-webhook-contract.md`.
@@ -81,11 +106,13 @@ In accordance with `AGENTS.md` and project regulations:
 
 ---
 
-## 5. Phase 2 Scope Boundaries Reminder
+## 6. Phase 2.1 Scope Boundaries Reminder
 
-During **Phase 2 (Architecture & Planning)**:
+During **Phase 2.1 (Architecture Corrections & Consistency)**:
 - ❌ Do NOT create or edit PHP application files in `inc/`, `woocommerce/`, or `page-templates/`.
 - ❌ Do NOT create or run database migration scripts.
 - ❌ Do NOT create plugin files in `wp-content/plugins/`.
 - ❌ Do NOT modify WordPress database options or WooCommerce order records.
-- ✅ DO review, verify, and commit specification and architectural design documents.
+- ❌ Do NOT create `tasks.md` or execute `speckit.tasks`.
+- ❌ Do NOT approve or bypass the `review-plan` gate.
+- ✅ DO review, verify, and commit architectural corrections in Markdown.

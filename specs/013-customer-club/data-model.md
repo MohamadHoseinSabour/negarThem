@@ -1,10 +1,11 @@
 # Data Model & Schema Specification: NegarThem Customer Club
 
-**Feature:** 013-customer-club  
-**Project:** Negar Shop WordPress Theme (`negarThem`)  
-**Date:** 2026-11-18  
-**Author:** Senior WordPress & WooCommerce Architect Agent  
-**Status:** `DRAFT — PHASE 2 TECHNICAL DESIGN`  
+**Feature:** 013-customer-club
+**Project:** Negar Shop WordPress Theme (`negarThem`)
+**Date:** 2026-11-18
+**Phase:** Phase 2.1 — Architecture Corrections & Design Consistency
+**Author:** Senior WordPress & WooCommerce Architect Agent
+**Status:** `DRAFT — PHASE 2.1 TECHNICAL DESIGN (AWAITING EXTERNAL REVIEW)`
 
 ---
 
@@ -13,76 +14,89 @@
 We evaluated whether to reuse standard WordPress/WooCommerce entities (posts, order meta, user meta) or to introduce dedicated custom tables.
 
 ### 1.1 Architectural Evaluation
-1. **Customer Applications (`ClubApplication`):** Reusing `wp_posts` with a custom post type (CPT) was evaluated. However, credit applications contain structured identity hashes, operator review workflows, and scoring metrics that are fundamentally non-public and require strict schema enforcement and indexing. Dedicated table `wp_negar_club_applications` is chosen.
+1. **Customer Applications (`ClubApplication`):** Reusing `wp_posts` with a custom post type (CPT) was evaluated. However, credit applications contain structured identity hashes, operator review workflows, and scoring metrics that are fundamentally non-public and require strict schema enforcement, zero accidental public querying, and fast indexed lookups. Dedicated table `wp_negar_club_applications` is chosen.
 2. **Credit Agreements (`CreditAgreement`):** Storing agreements inside WooCommerce order meta (`wp_wc_orders_meta`) was rejected because a customer's credit relationship may span multiple orders, refunds, and extended payment schedules, and must remain durable even if order data is archived. Dedicated table `wp_negar_club_contracts` is chosen.
 3. **Installment Schedules (`InstallmentItem`):** An installment schedule creates 3 to 36 rows per agreement. Storing these in meta tables causes severe performance degradation, non-atomic querying, and high risk of race conditions during concurrent payments. Dedicated indexed table `wp_negar_club_installments` is essential.
 4. **Payment Transactions (`PaymentTransaction`):** Storing payment callbacks in transient options or post meta violates financial durability and makes idempotency enforcement fragile. Dedicated table `wp_negar_club_payments` guarantees unique provider transaction constraints.
-5. **Operational Audit Trail (`LedgerAuditEvent`):** An append-only audit trail `wp_negar_club_audit_log` is required for regulatory compliance, anti-tampering, and incident investigation.
+5. **Refunds Ledger (`PaymentRefund`):** A dedicated table `wp_negar_club_refunds` is required to accurately track partial and full refunds, link them to the original payment and WooCommerce order, and reconcile rolling agreement balances.
+6. **Operational Audit Trail (`LedgerAuditEvent`):** An append-only audit trail `wp_negar_club_audit_log` is required for regulatory compliance, anti-tampering, and incident investigation.
 
 ---
 
 ## 2. Relational Schema & Entity Diagram
 
 ```
-┌──────────────────────────────┐
-│  wp_negar_club_applications  │
-├──────────────────────────────┤
-│ id (PK)                      │◄───────────┐
-│ user_id (FK -> wp_users)     │            │
-│ plan_id (VARCHAR)            │            │
-│ status (VARCHAR)             │            │
-│ requested_ceiling (BIGINT)   │            │
-└──────────────┬───────────────┘            │
-               │ 1:1 (on approval)          │
-               ▼                            │
-┌──────────────────────────────┐            │
-│   wp_negar_club_contracts    │            │
-├──────────────────────────────┤            │
-│ id (PK)                      │            │
-│ contract_number (VARCHAR, UQ)│            │
-│ application_id (FK) ─────────┼────────────┘
-│ user_id (FK -> wp_users)     │
-│ order_id (FK -> wc_orders)   │
-│ plan_id (VARCHAR)            │
-│ plan_snapshot (JSON/TEXT)    │
-│ purchase_amount (BIGINT)     │
-│ initial_payment (BIGINT)     │
-│ remaining_principal (BIGINT) │
-│ total_disclosed_charges (BIG)│
-│ installments_count (INT)     │
-│ status (VARCHAR)             │
-└──────────────┬───────────────┘
-               │ 1:N
-               ▼
-┌──────────────────────────────┐            ┌──────────────────────────────┐
-│  wp_negar_club_installments  │            │    wp_negar_club_payments    │
-├──────────────────────────────┤            ├──────────────────────────────┤
-│ id (PK)                      │            │ id (PK)                      │
-│ contract_id (FK)             │            │ contract_id (FK)             │
-│ installment_sequence (INT)   │◄───────────┼─ installment_id (FK, Nullable│
-│ due_date (DATE)              │            │ user_id (FK -> wp_users)     │
-│ principal_amount (BIGINT)    │            │ amount_irt (BIGINT)          │
-│ charge_amount (BIGINT)       │            │ amount_irr (BIGINT)          │
-│ total_amount (BIGINT)        │            │ gateway_provider (VARCHAR)   │
-│ paid_amount (BIGINT)         │            │ provider_tx_id (VARCHAR, UQ) │
-│ status (VARCHAR)             │            │ idempotency_key (VARCHAR, UQ)│
-│ settled_payment_id (FK) ─────┼───────────►│ status (VARCHAR)             │
-└──────────────────────────────┘            └──────────────────────────────┘
-               ▲
-               │
-┌──────────────┴───────────────┐
-│   wp_negar_club_audit_log    │
-├──────────────────────────────┤
-│ id (BIGINT PK)               │
-│ entity_type (VARCHAR)        │ (e.g., 'application', 'contract', 'installment')
-│ entity_id (BIGINT)           │
-│ event_action (VARCHAR)       │ (e.g., 'status_transition', 'settlement', 'rejection')
-│ old_state (JSON/TEXT)        │
-│ new_state (JSON/TEXT)        │
-│ actor_id (BIGINT)            │
-│ actor_ip (VARCHAR)           │
-│ created_at (DATETIME)        │
-└──────────────────────────────┘
+┌──────────────────────────────────┐
+│   wp_negar_club_applications     │
+├──────────────────────────────────┤
+│ id (BIGINT PK)                   │◄────────────┐
+│ application_number (VARCHAR, UQ) │             │
+│ user_id (BIGINT FK -> wp_users)  │             │
+│ plan_id (VARCHAR)                │             │
+│ status (VARCHAR)                 │             │ (default: 'pending_review')
+│ requested_ceiling (BIGINT)       │             │
+│ approved_ceiling (BIGINT)        │             │
+└────────────────┬─────────────────┘             │
+                 │ 1:1 (on approval)             │
+                 ▼                               │
+┌──────────────────────────────────┐             │
+│     wp_negar_club_contracts      │             │
+├──────────────────────────────────┤             │
+│ id (BIGINT PK)                   │             │
+│ contract_number (VARCHAR, UQ)    │             │
+│ application_id (BIGINT FK) ──────┼─────────────┘
+│ user_id (BIGINT FK -> wp_users)  │
+│ order_id (BIGINT FK -> wc_orders)│
+│ plan_id (VARCHAR)                │
+│ plan_snapshot (JSON)             │ (Frozen terms at execution)
+│ purchase_amount (BIGINT)         │ (Total retail merchandise amount)
+│ initial_payment (BIGINT)         │ (Cash collected at checkout)
+│ financed_principal (BIGINT)      │ (Original principal: purchase - initial)
+│ total_charges (BIGINT)           │ (Original markup/fees, default: 0)
+│ total_customer_obligation (BIGINT│ (financed_principal + total_charges)
+│ paid_principal (BIGINT)          │ (Rolling sum of settled principal)
+│ paid_charges (BIGINT)            │ (Rolling sum of settled charges)
+│ remaining_principal_balance (BIG)│ (financed_principal - paid_principal)
+│ remaining_charges_balance (BIG)  │ (total_charges - paid_charges)
+│ total_outstanding_balance (BIGINT│ (Unpaid debt: remaining_p + remaining_c)
+│ installments_count (INT)         │
+│ status (VARCHAR)                 │ (active, completed, cancelled, defaulted)
+└────────────────┬─────────────────┘
+                 │ 1:N
+                 ▼
+┌──────────────────────────────────┐             ┌──────────────────────────────────┐
+│   wp_negar_club_installments     │             │      wp_negar_club_payments      │
+├──────────────────────────────────┤             ├──────────────────────────────────┤
+│ id (BIGINT PK)                   │             │ id (BIGINT PK)                   │
+│ contract_id (BIGINT FK)          │             │ contract_id (BIGINT FK)          │
+│ installment_sequence (INT)       │◄────────────┼─ installment_id (BIGINT FK, Null)│
+│ due_date (DATE)                  │             │ user_id (BIGINT FK -> wp_users)  │
+│ principal_amount (BIGINT)        │             │ amount_irt (BIGINT)              │
+│ charge_amount (BIGINT)           │             │ amount_irr (BIGINT)              │
+│ total_amount (BIGINT)            │             │ gateway_provider (VARCHAR)       │
+│ paid_amount (BIGINT)             │             │ provider_tx_id (VARCHAR, UQ)     │
+│ status (VARCHAR)                 │             │ idempotency_key (VARCHAR, UQ)    │
+│ settled_payment_id (BIGINT FK) ──┼────────────►│ status (VARCHAR)                 │
+└────────────────┬─────────────────┘             └────────────────┬─────────────────┘
+                 │                                                │
+                 ▼                                                ▼
+┌──────────────────────────────────┐             ┌──────────────────────────────────┐
+│     wp_negar_club_audit_log      │             │      wp_negar_club_refunds       │
+├──────────────────────────────────┤             ├──────────────────────────────────┤
+│ id (BIGINT PK)                   │             │ id (BIGINT PK)                   │
+│ entity_type (VARCHAR)            │             │ refund_number (VARCHAR, UQ)      │
+│ entity_id (BIGINT)               │             │ contract_id (BIGINT FK)          │
+│ event_action (VARCHAR)           │             │ payment_id (BIGINT FK)           │
+│ old_state (JSON)                 │             │ order_id (BIGINT FK)             │
+│ new_state (JSON)                 │             │ amount_irt (BIGINT)              │
+│ actor_id (BIGINT)                │             │ amount_irr (BIGINT)              │
+│ actor_ip (VARCHAR)               │             │ reason (VARCHAR)                 │
+│ created_at (DATETIME)            │             │ status (VARCHAR)                 │
+└──────────────────────────────────┘             │ gateway_refund_ref (VARCHAR)     │
+                                                 │ idempotency_key (VARCHAR, UQ)    │
+                                                 │ created_at (DATETIME)            │
+                                                 │ settled_at (DATETIME)            │
+                                                 └──────────────────────────────────┘
 ```
 
 ---
@@ -100,7 +114,7 @@ CREATE TABLE `wp_negar_club_applications` (
   `application_number` VARCHAR(32) NOT NULL,
   `user_id` BIGINT UNSIGNED NOT NULL,
   `plan_id` VARCHAR(32) NOT NULL,
-  `status` VARCHAR(24) NOT NULL DEFAULT 'submitted',
+  `status` VARCHAR(24) NOT NULL DEFAULT 'pending_review',
   `requested_ceiling` BIGINT UNSIGNED NOT NULL DEFAULT 0,
   `approved_ceiling` BIGINT UNSIGNED NOT NULL DEFAULT 0,
   `national_id_hash` VARCHAR(64) NULL,
@@ -120,8 +134,8 @@ CREATE TABLE `wp_negar_club_applications` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 ```
 
+- **Canonical Statuses:** `submitted` (intake staging), `pending_review` (default active review state), `approved`, `rejected`, `cancelled`, `expired`.
 - **Monetary Units:** `requested_ceiling` and `approved_ceiling` are stored strictly as integer Toman (`BIGINT UNSIGNED`).
-- **Statuses:** `submitted`, `pending_review`, `approved`, `rejected`, `cancelled`, `expired`.
 - **Privacy:** `national_id_hash` is a one-way cryptographic SHA-256 hash with site salt, preventing plaintext national code exposure while permitting duplicate detection.
 
 ---
@@ -141,8 +155,14 @@ CREATE TABLE `wp_negar_club_contracts` (
   `plan_snapshot` JSON NOT NULL,
   `purchase_amount` BIGINT UNSIGNED NOT NULL,
   `initial_payment` BIGINT UNSIGNED NOT NULL,
-  `remaining_principal` BIGINT UNSIGNED NOT NULL,
-  `total_disclosed_charges` BIGINT UNSIGNED NOT NULL DEFAULT 0,
+  `financed_principal` BIGINT UNSIGNED NOT NULL,
+  `total_charges` BIGINT UNSIGNED NOT NULL DEFAULT 0,
+  `total_customer_obligation` BIGINT UNSIGNED NOT NULL,
+  `paid_principal` BIGINT UNSIGNED NOT NULL DEFAULT 0,
+  `paid_charges` BIGINT UNSIGNED NOT NULL DEFAULT 0,
+  `remaining_principal_balance` BIGINT UNSIGNED NOT NULL,
+  `remaining_charges_balance` BIGINT UNSIGNED NOT NULL DEFAULT 0,
+  `total_outstanding_balance` BIGINT UNSIGNED NOT NULL,
   `installments_count` INT UNSIGNED NOT NULL,
   `status` VARCHAR(24) NOT NULL DEFAULT 'pending_prerequisite',
   `activated_at` DATETIME NULL,
@@ -157,10 +177,16 @@ CREATE TABLE `wp_negar_club_contracts` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 ```
 
-- **Immutability Invariant:** `plan_snapshot` stores the exact JSON representation of plan terms (ceiling, initial payment percentage/amount, charges, duration) at the moment of agreement execution. Subsequent changes to theme settings **never** alter this snapshot.
-- **Arithmetic Invariant:**
-  `purchase_amount = initial_payment + remaining_principal`
-- **Statuses:** `pending_prerequisite`, `active`, `completed`, `cancelled`, `defaulted`.
+- **Immutability Invariant:** `purchase_amount`, `initial_payment`, `financed_principal`, `total_charges`, `total_customer_obligation`, `installments_count`, and `plan_snapshot` are frozen at agreement execution.
+- **Initial Balancing:**
+  - `financed_principal = purchase_amount - initial_payment`
+  - `total_customer_obligation = financed_principal + total_charges`
+  - `remaining_principal_balance = financed_principal`
+  - `remaining_charges_balance = total_charges`
+  - `total_outstanding_balance = total_customer_obligation`
+- **Rolling Balances:**
+  - `paid_principal`, `paid_charges`, `remaining_principal_balance`, `remaining_charges_balance`, and `total_outstanding_balance` are updated atomically upon each verified settlement or refund.
+- **Canonical Statuses:** `pending_prerequisite`, `active`, `completed`, `cancelled`, `defaulted`.
 
 ---
 
@@ -192,9 +218,10 @@ CREATE TABLE `wp_negar_club_installments` (
 - **Per-Row Accounting Invariant:**
   `total_amount = principal_amount + charge_amount`
 - **Schedule Reconciliation Invariant:**
-  $$\sum \text{principal\_amount} \equiv \text{contract.remaining\_principal}$$
-  $$\sum \text{total\_amount} \equiv \text{contract.remaining\_principal} + \text{contract.total\_disclosed\_charges}$$
-- **Statuses:** `scheduled`, `due`, `paid`, `overdue`, `waived`, `cancelled`.
+  $$\sum \text{principal\_amount} \equiv \text{contract.financed\_principal}$$
+  $$\sum \text{charge\_amount} \equiv \text{contract.total\_charges}$$
+  $$\sum \text{total\_amount} \equiv \text{contract.total\_customer\_obligation}$$
+- **Canonical Statuses:** `scheduled`, `due`, `paid`, `overdue`, `waived`, `cancelled`.
 
 ---
 
@@ -226,12 +253,50 @@ CREATE TABLE `wp_negar_club_payments` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 ```
 
-- **Idempotency Invariant:** `uq_provider_tx` and `uq_idempotency` guarantee that a duplicate callback or replayed webhook is rejected at the database level with zero secondary credit.
-- **Statuses:** `initiated`, `pending_verification`, `verified`, `failed`, `cancelled`, `refunded`.
+- **Reconciled Payment Statuses:**
+  - `initiated`: Payment attempt created, user redirected to gateway.
+  - `pending_verification`: Inbound callback received, awaiting provider verification inquiry.
+  - `verified`: Provider inquiry/signature verified, funds settled.
+  - `failed`: Transaction failed at gateway or cancelled by user.
+  - `cancelled`: Payment attempt timed out or cancelled prior to settlement.
+  - `disputed_amount`: Transaction amount or currency mismatch detected.
+  - `partially_refunded`: Partial refund processed against this payment.
+  - `refunded`: Full refund processed against this payment.
 
 ---
 
-### 3.5 `wp_negar_club_audit_log`
+### 3.5 `wp_negar_club_refunds` (Dedicated Refund Architecture)
+Stores partial and full refund transactions linked to orders, contracts, and payments.
+
+```sql
+CREATE TABLE `wp_negar_club_refunds` (
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `refund_number` VARCHAR(32) NOT NULL,
+  `contract_id` BIGINT UNSIGNED NOT NULL,
+  `payment_id` BIGINT UNSIGNED NULL,
+  `order_id` BIGINT UNSIGNED NOT NULL,
+  `amount_irt` BIGINT UNSIGNED NOT NULL,
+  `amount_irr` BIGINT UNSIGNED NOT NULL,
+  `reason` VARCHAR(255) NOT NULL,
+  `status` VARCHAR(24) NOT NULL DEFAULT 'initiated',
+  `gateway_refund_ref` VARCHAR(128) NULL,
+  `idempotency_key` VARCHAR(64) NOT NULL,
+  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `settled_at` DATETIME NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uq_refund_number` (`refund_number`),
+  UNIQUE KEY `uq_refund_idempotency` (`idempotency_key`),
+  KEY `ix_contract_refunds` (`contract_id`, `status`),
+  KEY `ix_payment_refunds` (`payment_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+```
+
+- **Statuses:** `initiated`, `completed`, `failed`.
+- **Accounting Synchronization:** On `completed`, adjusts `contract.paid_principal`, `contract.total_outstanding_balance`, and emits an append-only audit event.
+
+---
+
+### 3.6 `wp_negar_club_audit_log`
 Append-only operational event log for financial security and compliance.
 
 ```sql
@@ -255,29 +320,35 @@ CREATE TABLE `wp_negar_club_audit_log` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 ```
 
-- **Tamper Resistance:** This table contains no `updated_at` column and application code must never issue `UPDATE` or `DELETE` queries against it.
-- **Redaction Rule:** Passwords, payment card numbers, gateway API keys, and OTP codes must never be included in `old_state` or `new_state`.
+- **Audit vs. Ledger Boundary:** `wp_negar_club_audit_log` is strictly an operational tracking log. Authoritative balances are derived exclusively from `wp_negar_club_contracts`, `wp_negar_club_installments`, `wp_negar_club_payments`, and `wp_negar_club_refunds`.
+- **Tamper Resistance:** Zero `UPDATE` or `DELETE` statements are ever executed against this table.
 
 ---
 
-## 4. Accounting Boundary & Invariant Verification
+## 4. Reconciliation Integrity Verification
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                       RECONCILIATION INTEGRITY CHECK                        │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│ 1. Remaining Debt Balance Check:                                            │
-│    agreement.remaining_debt == SUM(installments.total_amount)               │
-│                                WHERE status IN ('scheduled','due','overdue')│
+│ 1. Principal Schedule Check:                                                │
+│    contract.financed_principal == SUM(installments.principal_amount)        │
 │                                                                             │
-│ 2. Paid Balance Check:                                                      │
-│    agreement.paid_debt      == SUM(installments.paid_amount)                │
-│                                WHERE status = 'paid'                        │
+│ 2. Charges Schedule Check:                                                  │
+│    contract.total_charges      == SUM(installments.charge_amount)           │
 │                                                                             │
-│ 3. Settlement Completeness:                                                 │
-│    IF COUNT(installments WHERE status != 'paid') == 0                       │
-│    THEN agreement.status MUST BE 'completed'                                │
+│ 3. Outstanding Balance Check:                                               │
+│    contract.total_outstanding_balance == SUM(installments.total_amount)     │
+│       WHERE status IN ('scheduled', 'due', 'overdue')                       │
+│                                                                             │
+│ 4. Paid Balance Check:                                                      │
+│    (contract.paid_principal + contract.paid_charges) ==                     │
+│       SUM(installments.paid_amount) WHERE status = 'paid'                   │
+│                                                                             │
+│ 5. Settlement Completeness:                                                 │
+│    IF contract.total_outstanding_balance == 0 THEN                          │
+│       contract.status MUST BE 'completed'                                   │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-The system executes this integrity check automatically upon any installment settlement before committing the transaction. Any discrepancy triggers an immediate administrative alert and halts automatic settlement until reviewed by an operator.
+The system executes this integrity check automatically upon any installment settlement or refund before committing the database transaction.

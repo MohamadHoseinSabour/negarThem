@@ -1,11 +1,11 @@
 # Feature Specification: NegarThem Advanced Customer Club (باشگاه مشتریان نگار)
 
-**Feature Directory**: `specs/013-customer-club`  
-**Feature Branch**: `feat/013-customer-club`  
-**Feature Code**: `CLUB-013`  
-**Created**: 2026-11-18  
-**Status**: `Draft` *(Remains in Draft until unresolved commercial, financial, and legal decisions in `business-rules.md` receive explicit employer approval)*  
-**Approved Git Baseline**: `eda9740a9943ab54c2eeb8161498b6556e1533d6` *(superseding Phase 0 baseline `f8fadc4465803f148ce261984ff10db00106893b` after verified baseline reconciliation)*  
+**Feature Directory**: `specs/013-customer-club`
+**Feature Branch**: `feat/013-customer-club`
+**Feature Code**: `CLUB-013`
+**Created**: 2026-11-18
+**Status**: `Draft` *(Remains in Draft until unresolved commercial, financial, and legal decisions in `business-rules.md` receive explicit employer approval)*
+**Approved Git Baseline**: `eda9740a9943ab54c2eeb8161498b6556e1533d6` *(superseding Phase 0 baseline `f8fadc4465803f148ce261984ff10db00106893b` after verified baseline reconciliation)*
 **Input**: Master Prompt — NegarThem Advanced Customer Club, Phase 0 Audit Report, and Phase 1 Specification & Business Rules Directive.
 
 ---
@@ -430,7 +430,7 @@ As the **System**, I must process payment callbacks idempotently under concurren
    - `total_payable_amount = applied_initial_payment + sum(installment_amounts[1..N])`
 4. **Proposed Integer Rounding Invariant (`PROPOSED — NEEDS APPROVAL`, see `CLUB-BD-022`):**
    - When `remaining_principal` is not evenly divisible by `installments_count` (`N`), integer division MUST ensure no Toman is created or destroyed:
-     - **Option A (Recommended):** Compute base installment `base = intdiv(remaining_principal, N)` (or rounded to nearest `1,000` IRT step for installments `1..N-1` if approved) and set final installment `installment[N] = remaining_principal - (base * (N - 1))` so `sum(installment_amounts) === remaining_principal` is guaranteed mathematically.
+     - **Proposed Convention (`CLUB-BD-022`):** Compute base installment `base = intdiv(remaining_principal, N)`, compute integer remainder `rem = remaining_principal % N`, and allocate remainder to the first installment (`installment[1] = base + rem`, `installment[2..N] = base`) so `sum(installment_amounts) === remaining_principal` is guaranteed with zero drift across all N installments.
    - Until approved, this rule is explicitly labeled **Proposed** and documented alongside alternatives in `business-rules.md`.
 5. **Boundary Conditions:**
    - `actual_purchase_amount <= 0`: Not eligible for installment calculation; display clear boundary message.

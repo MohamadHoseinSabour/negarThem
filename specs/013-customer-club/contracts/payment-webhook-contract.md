@@ -1,147 +1,173 @@
-# Integration Contract: Payment Webhook & Settlement Contract
+# Integration Contract: Payment Webhook & Settlement Gateway
 
-**Feature:** 013-customer-club  
-**Component:** External Payment Provider Webhook & Settlement Gateway  
-**Target Phase:** Phase 6 (Financial Engine & Installment Payments)  
-**Status:** `DRAFT — PHASE 2 TECHNICAL DESIGN`  
+**Feature:** 013-customer-club
+**Component:** Provider-Independent Payment Webhook & Settlement Engine
+**Target Phase:** Phase 6 (Financial Engine & Installment Payments)
+**Phase:** Phase 2.1 — Architecture Corrections & Design Consistency
+**Status:** `DRAFT — PHASE 2.1 TECHNICAL DESIGN (AWAITING EXTERNAL REVIEW)`
 
 ---
 
-## 1. Security Architecture & Separation of Concerns
+## 1. Security Architecture & Provider Adapter Model (Correction C4.1)
 
 ### 1.1 Nonce Boundary & Webhook Authentication
-Standard WordPress nonces (`wp_verify_nonce()`) rely on authenticated browser cookies or user session tokens. External bank payment gateways (e.g., Shaparak, Zibal, ZarinPal, Saman, Mellat) dispatch server-to-server HTTP POST callbacks completely outside of user browser sessions.
+Standard WordPress nonces (`wp_verify_nonce()`) rely on authenticated browser cookies or user session tokens. External bank payment gateways (Shaparak, Zibal, ZarinPal, Saman, Mellat) dispatch server-to-server callbacks outside of user browser sessions.
 
 To satisfy `CLUB-NFR-007` and `CLUB-AC-047`:
-1. **Public Webhook Endpoint:** The callback endpoint (`/wp-json/negar-club/v1/payment-callback` or dedicated rewrite endpoint) is accessible without WordPress browser cookies.
-2. **Provider Authentication:** The endpoint **strictly enforces** provider-specific authentication before processing any payload:
-   - **Method A (Digital Signature / HMAC):** Validating the cryptographic signature in the callback header (e.g., `X-Provider-Signature: HMAC-SHA256(payload, secret_key)`).
-   - **Method B (Authenticated Server-to-Server Verification):** Making an immediate outbound HTTPS inquiry from the local server to the provider's verified inquiry/verification endpoint using stored merchant credentials.
-3. **No Unauthenticated Bypass:** A request lacking a valid provider signature or failing provider inquiry is rejected with HTTP 401/403 and discarded. **No public webhook is ever processed unauthenticated.**
+1. **Public Endpoint:** The callback endpoint (`/wp-json/negar-club/v1/payment-callback`) is accessible without WordPress browser cookies.
+2. **Provider-Specific Adapter Architecture:** Because Iranian payment gateways do not follow a uniform callback schema, the system uses a **provider-independent settlement interface** backed by gateway-specific adapters:
+   - **Class 1 (Cryptographic Signature):** Validates inbound HMAC-SHA256 signature in headers/payload (e.g., `X-Signature: HMAC-SHA256(payload, secret)`).
+   - **Class 2 (Server-to-Server Inquiry):** Inbound callback provides tracking parameters (e.g., Zibal `trackId`, ZarinPal `Authority`); the adapter makes an immediate outbound authenticated HTTPS call to the provider's `/verify` endpoint using stored merchant credentials.
+   - **Class 3 (Dual Authentication):** Inbound signature is validated first, followed by an outbound server inquiry before settlement.
+3. **Removal of Universal Signature Assumption:** A callback schema does **not** mandate a universal `signature` field if the specific provider adapter relies on authoritative server-to-server inquiry (Class 2).
+4. **No Unauthenticated Bypass:** Every callback must pass its provider-specific authentication before any business logic or settlement executes.
 
 ---
 
-## 2. Inbound Webhook Specification
+## 2. Idempotency Correlation Architecture (Correction C4.2)
 
-### Endpoint Specification
-- **Route:** `POST /wp-json/negar-club/v1/payment-callback`
-- **Rate Limiting:** IP and endpoint throttled.
-- **Payload Format:** JSON or `application/x-www-form-urlencoded`.
+To reliably correlate callbacks without assuming gateways preserve arbitrary merchant metadata:
 
-### 2.1 Inbound Payload Schema
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                      IDEMPOTENCY CORRELATION SEQUENCE                       │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ 1. Payment Initiation:                                                      │
+│    • Local record created in wp_negar_club_payments with:                   │
+│      - status = 'initiated'                                                 │
+│      - idempotency_key = 'PAY-INST-<agreement_id>-<seq>-<unique_token>'     │
+│      - client_tracking_token = wp_generate_uuid4()                          │
+│                                                                             │
+│ 2. Gateway Dispatch:                                                        │
+│    • Send transaction request to gateway API.                               │
+│    • Set callback URL containing the token:                                 │
+│      https://site.ir/wp-json/negar-club/v1/payment-callback?token=<token>  │
+│    • Gateway returns provider tracking ID (e.g., trackId, Authority).       │
+│    • Store provider_tx_id in pending payment row.                           │
+│                                                                             │
+│ 3. Callback Ingestion:                                                      │
+│    • Inbound callback matches payment row by:                               │
+│      (a) `token` query parameter, OR                                        │
+│      (b) `provider_tx_id` (Authority / trackId) in POST body.               │
+│                                                                             │
+│ 4. Concurrency Guard:                                                       │
+│    • If payment row status is ALREADY 'verified':                           │
+│      Return HTTP 200 idempotent acknowledgment immediately; zero mutations. │
+│    • If payment row status is 'initiated' or 'pending_verification':        │
+│      Lock payment row (SELECT FOR UPDATE) and execute settlement sequence.  │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 3. Inbound Webhook Schemas & Examples (Correction C4.4)
+
+### 3.1 Class 1 Schema Example (Signature-Based Gateway)
+```json
+{
+  "gateway_provider": "generic_fintech",
+  "provider_tx_id": "TX-99887766",
+  "client_token": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d",
+  "amount_irr": 33333330,
+  "currency": "IRR",
+  "status_code": 100,
+  "timestamp": 1795000000,
+  "signature": "TEST_HMAC_SHA256_e4d909c290d0fb1ca068ffaddf22cbd0c0e5a840e53a"
+}
+```
+*Note:* The signature is an illustrative test placeholder. In production, adapters compute:
+`hash_hmac('sha256', $canonical_payload, $provider_merchant_secret)`.
+
+### 3.2 Class 2 Schema Example (Inquiry-Based Gateway — e.g., Zibal / ZarinPal)
 ```json
 {
   "gateway_provider": "zibal",
-  "provider_tx_id": "9876543210",
-  "provider_reference": "REF-998877",
-  "amount_irr": 33333330,
-  "currency": "IRR",
-  "status_code": 1,
-  "idempotency_key": "PAY-INST-202611-1004-SEQ2",
-  "signature": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  "trackId": "123456789",
+  "success": 1,
+  "status": 2,
+  "orderId": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d"
 }
 ```
-
-| Field | Type | Required | Description |
-| :--- | :--- | :---: | :--- |
-| `gateway_provider` | String | Yes | Provider identifier (`zibal`, `zarinpal`, etc.). |
-| `provider_tx_id` | String | Yes | Unique transaction ID assigned by gateway (Shaparak RRN / Authority). |
-| `provider_reference` | String | No | Bank card trace number / masked PAN. |
-| `amount_irr` | Integer | Yes | Settled amount in Iranian Rial (`IRR`). |
-| `currency` | String | Yes | Expected `IRR` (or `IRT` if provider natively operates in Toman). |
-| `status_code` | Integer | Yes | Provider status code indicating successful bank debit. |
-| `idempotency_key` | String | Yes | Internal unique settlement key generated at payment initiation. |
-| `signature` | String | Yes | Provider HMAC-SHA256 signature over payload. |
+*Verification Action:* Adapter extracts `trackId: 123456789`, makes outbound POST to `https://gateway.zibal.ir/v1/verify` with `merchant: <secret>`, and verifies `result: 100` and `amount: 33333330`.
 
 ---
 
-## 3. Server Verification & Reconciliation Workflow
+## 4. Currency Conversion Boundary (Correction C4.3)
 
-```
-[Inbound Webhook Received]
-          │
-          ▼
-[1. Verify Provider Signature / Token] ──(Invalid)──► [HTTP 401: REJECT + LOG]
-          │ (Valid)
-          ▼
-[2. Lookup Pending Payment by Idempotency Key] ──(Not Found)──► [HTTP 404: REJECT]
-          │ (Found)
-          ▼
-[3. Check Existing Settlement Status]
-          │
-          ├──(Already Verified / Settled)──► [HTTP 200: IDEMPOTENT NO-OP + AUDIT REPLAY]
-          │
-          ▼ (Status is 'initiated' or 'pending_verification')
-[4. Outbound Server-to-Server Inquiry] ──(Gateway Rejects)──► [Update Payment 'failed' + HTTP 400]
-          │ (Gateway Confirms Success)
-          ▼
-[5. Validate Currency & Amount]
-    Expected IRT == Amount IRR / 10 ? ──(Mismatch)──► [CRITICAL FRAUD ALERT + HALT]
-          │ (Exact Match)
-          ▼
-[6. Atomic Database Transaction (SELECT FOR UPDATE)]:
-    • Insert or Update `wp_negar_club_payments` -> status = 'verified'
-    • Update `wp_negar_club_installments` -> status = 'paid', settled_payment_id
-    • Recalculate `wp_negar_club_contracts` remaining debt
-    • Check if all installments paid -> contract status = 'completed'
-    • Emit append-only event into `wp_negar_club_audit_log`
-          │
-          ▼
-[7. Return HTTP 200 OK with Acknowledgment JSON]
+Storefront prices and customer debts are denominated in **integer Toman (`IRT`)**.
+Iranian bank gateways predominantly report in **Rial (`IRR`)**.
+
+### Exact Integer Conversion Rule
+$$\text{amount\_irr} \pmod{10} === 0$$
+$$\text{amount\_irt} = \text{intdiv}(\text{amount\_irr}, 10)$$
+
+### Validation Guard:
+```php
+if ( ( $amount_irr % 10 ) !== 0 ) {
+    // Corrupted or fractional Rial amount detected — halt immediately
+    $payment->update_status( 'disputed_amount', 'مبلغ ریالی دریافتی بر ۱۰ بخش‌پذیر نیست.' );
+    return new WP_Error( 'INVALID_CURRENCY_CONVERSION', 'مبلغ نامعتبر است.', array( 'status' => 422 ) );
+}
+$amount_irt = intdiv( $amount_irr, 10 );
+if ( $amount_irt !== $expected_installment_amount_irt ) {
+    $payment->update_status( 'disputed_amount', 'مغایرت مبلغ پرداختی با مبلغ قسط.' );
+    return new WP_Error( 'AMOUNT_MISMATCH', 'مبلغ پرداختی مطابقت ندارد.', array( 'status' => 422 ) );
+}
 ```
 
 ---
 
-## 4. Webhook Responses & Idempotency Rules
+## 5. Complete Atomic Settlement Sequence (Correction C4.5)
 
-### 4.1 First Settlement Success (`200 OK`)
-```json
-{
-  "success": true,
-  "code": "PAYMENT_SETTLED",
-  "data": {
-    "provider_tx_id": "9876543210",
-    "installment_id": 104,
-    "contract_id": 12,
-    "amount_irt": 3333333,
-    "new_installment_status": "paid",
-    "contract_remaining_installments": 4,
-    "settled_at": "2026-11-18T21:10:00+03:30"
-  }
-}
+```
+[Inbound Callback Received]
+          │
+          ▼
+[Step 1: Locate Payment Row by Token or provider_tx_id]
+          │ (Row not found) ──► HTTP 404
+          ▼ (Found)
+[Step 2: Begin Database Transaction & Row Lock]
+          │ SQL: SELECT * FROM wp_negar_club_payments WHERE id = ? FOR UPDATE
+          ▼
+[Step 3: Check Idempotent State]
+          │ (status == 'verified') ──► COMMIT + HTTP 200 (Already Settled, No-Op)
+          ▼ (status == 'initiated' or 'pending_verification')
+[Step 4: Execute Provider-Specific Authentication / Outbound Verify API]
+          │ (Provider rejects / verify fails) ──►
+          │   UPDATE status = 'failed'; COMMIT; HTTP 400
+          ▼ (Provider confirms success with provider_reference)
+[Step 5: Mathematical Invariant Checks]
+          │ • amount_irr % 10 === 0
+          │ • intdiv(amount_irr, 10) === installment.total_amount
+          │ (Mismatch) ──►
+          │   UPDATE status = 'disputed_amount'; COMMIT; HTTP 422 + Alert Operator
+          ▼ (All invariants hold)
+[Step 6: Atomic Settlement Mutations]
+          │ • UPDATE wp_negar_club_payments:
+          │     status = 'verified', verified_at = NOW(), provider_reference = ?
+          │ • UPDATE wp_negar_club_installments:
+          │     status = 'paid', paid_amount = total_amount,
+          │     settled_payment_id = payment.id, settled_at = NOW()
+          │ • UPDATE wp_negar_club_contracts:
+          │     paid_principal = paid_principal + installment.principal_amount,
+          │     paid_charges = paid_charges + installment.charge_amount,
+          │     remaining_principal_balance = financed_principal - paid_principal,
+          │     remaining_charges_balance = total_charges - paid_charges,
+          │     total_outstanding_balance = remaining_principal_balance + remaining_charges_balance
+          │ • IF total_outstanding_balance == 0:
+          │     UPDATE wp_negar_club_contracts SET status = 'completed', completed_at = NOW()
+          │ • INSERT INTO wp_negar_club_audit_log (append-only settlement event)
+          ▼
+[Step 7: Commit Transaction & Return HTTP 200 OK]
 ```
 
-### 4.2 Idempotent Replay Handling (`200 OK`)
-If the gateway retries an already settled webhook with identical `provider_tx_id` and `idempotency_key`:
-```json
-{
-  "success": true,
-  "code": "ALREADY_SETTLED",
-  "message": "تراکنش قبلاً با موفقیت تسویه گردیده است.",
-  "data": {
-    "provider_tx_id": "9876543210",
-    "original_settled_at": "2026-11-18T21:10:00+03:30"
-  }
-}
-```
-*Effect:* Zero database mutation on agreement or installment; emits `audit:idempotent_replay` event to record duplicate callback receipt.
+---
 
-### 4.3 Amount or Currency Mismatch (`422 Unprocessable Entity`)
-If the gateway reports 30,000,000 IRR when the installment requires 33,333,330 IRR:
-```json
-{
-  "success": false,
-  "code": "AMOUNT_MISMATCH",
-  "message": "مبلغ تراکنش با بدهی قسط مطابقت ندارد. تسویه متوقف شد."
-}
-```
-*Effect:* Payment flagged as `disputed_amount`; installment remains `due`; operator notified.
+## 6. Edge Cases & Commercial Policies
 
-### 4.4 Signature Authentication Failure (`401 Unauthorized`)
-```json
-{
-  "success": false,
-  "code": "INVALID_SIGNATURE",
-  "message": "امضای امنیتی ارائه‌دهنده درگاه نامعتبر است."
-}
-```
+1. **Partial Payments / Underpayments:**
+   By default, the system rejects underpayments (`amount_irt < installment.total_amount`) as `disputed_amount`. Supporting partial installment settlement is governed by `CLUB-BD-013` and remains `BLOCKED BY EMPLOYER APPROVAL`.
+2. **Overpayments:**
+   Overpayments are flagged as `disputed_amount` for operator reconciliation; excess funds are never silently absorbed.
+3. **Duplicate Callbacks (Replay):**
+   Database unique key `uq_provider_tx` on `(gateway_provider, provider_tx_id)` guarantees that replayed callbacks hit the idempotency check and return HTTP 200 with zero state mutation.
