@@ -178,7 +178,7 @@
 **شاخه توسعه:** `feat/013-customer-club`  
 **مسیر مستندات:** `specs/013-customer-club/`  
 **Baseline مصوب:** `eda9740a9943ab54c2eeb8161498b6556e1533d6`  
-**وضعیت کلی:** `IN PROGRESS (Phase 1 Completed — Awaiting External Review)`
+**وضعیت کلی:** `IN PROGRESS (Phase 2 Architecture & Design Completed — Gated at Spec Kit review-plan)`
 
 - [x] **Phase 0 — Repository Audit & Discovery:** ممیزی کامل کدبیس، محیط WAMP (`WP 7.1.4`, `WC 10.5.2`, `HPOS=yes`, `IRT` با ۰ رقم اعشار)، تنظیمات قالب، سیستم طراحی، مسیرهای WooCommerce/My Account، ابزارها و ریسک‌ها (تأییدشده).
 - [x] **Phase 1 — Specification & Business Rules:**
@@ -187,6 +187,12 @@
   - تدوین رجیستر قوانین تجاری و ۲۳ تصمیم باز (`CLUB-BD-001`–`022` و `CLUB-AD-001`) با مثال‌های عددی در `specs/013-customer-club/business-rules.md`.
   - تدوین ماتریس ردیابی ۱۰۰٪ نیازمندی‌ها به معیارهای پذیرش (`CLUB-AC-001`–`064` با وضعیت `NOT RUN`) در `specs/013-customer-club/acceptance-matrix.md` و چک‌لیست کیفیت مشخصات در `specs/013-customer-club/checklists/requirements.md`.
   - افزودن ۹ ردیف جدید (`CLUB-PAGE-01` تا `CLUB-SEC-01`) با وضعیت `todo` به `specs/coverage-matrix.md`.
-- [ ] **Phase 2 — Architecture & Task Planning:** در انتظار بازبینی مستقل Phase 1 و دستور شروع Phase 2 (شامل تصمیم‌گیری رسمی درباره `CLUB-AD-001`).
-- [ ] **Phases 3–9:** آغاز نشده (موتور مالی تا تأیید تصمیم‌های تجاری `CLUB-BD-001`–`022` غیرفعال می‌ماند).
+- [x] **Phase 2 — Architecture, Technical Design & Implementation Planning:**
+  - اعمال اصلاحات چهارگانه مستندات Phase 1 (C1: تفکیک احراز هویت وب‌هوک از نانس مرورگر، C2: اعتبارسنجی سه‌گانه حسابداری اقساط بدون انحراف ریالی، C3: کامپوننت زودهنگام ماشین‌حساب سروری Phase 4، C4: تصحیح شمارش به ۲۲ تصمیم تجاری و ۱ تصمیم معماری) در کامیت `ee67db7` (`T303`).
+  - تدوین سند تصمیمات معماری (ADR) در `architecture-decisions.md` جهت تفکیک لایه پوسته از پلاگین پایدار مالی (`CLUB-AD-001`) با وضعیت `PROPOSED — REQUIRES EMPLOYER APPROVAL` در کامیت `145e259` (`T304`).
+  - تدوین مستند تحقیق و تحلیل فنی `research.md` (شامل اتصال HPOS ووکامرس، ماشین‌های وضعیت، مرز تبدیل IRT/IRR و رویه بکاپ لوکال WAMP) و مدل داده `data-model.md` با ۵ جدول اختصاصی در کامیت `145e259` (`T304`).
+  - تدوین ۳ کانترکت یکپارچه‌سازی در پوشه `contracts/` (`quote-calculator-api.md`, `application-lifecycle-api.md`, `payment-webhook-contract.md`) و راهنمای توسعه‌دهنده `quickstart.md` در کامیت `32ff1b6` (`T305`).
+  - تدوین سند برنامه اجرایی `plan.md` منطبق با الگوی Spec Kit و تحلیل دروازه بازبینی گردش کار (`review-plan [gate]`).
+  - توقف هوشمند و قانونی در دروازه بازبینی Spec Kit جهت تأیید برنامه پیش از تولید تسک‌های `tasks.md`.
+- [ ] **Phases 3–9:** آغاز نشده (موتور مالی تا تأیید تصمیم‌های تجاری `CLUB-BD-001`–`022` و مجوز کارفرما کاملاً غیرفعال می‌ماند).
 
