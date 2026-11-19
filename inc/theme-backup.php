@@ -53,6 +53,11 @@ function negar_theme_backup_supported_groups() {
 			'sanitize' => 'negar_theme_sanitize_brand_settings',
 			'autoload' => 'no',
 		),
+		NEGAR_THEME_CLUB_OPTION         => array(
+			'label'    => __( 'تنظیمات باشگاه مشتریان و طرح‌های اقساطی', 'negar-shop' ),
+			'sanitize' => 'negar_theme_sanitize_club_settings',
+			'autoload' => 'no',
+		),
 	);
 }
 

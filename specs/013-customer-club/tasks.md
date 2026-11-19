@@ -1,6 +1,6 @@
 # Tasks: NegarThem Advanced Customer Club & Installment System (013-customer-club)
 
-**Branch**: `feat/013-customer-club` | **Date**: 2026-11-19
+**Branch**: `main` (integrated from `feat/013-customer-club`) | **Date**: 2026-11-19
 **Spec**: [specs/013-customer-club/spec.md](file:///x:/apps/wamp/www\wp4\wp-content\themes\negarThem\specs\013-customer-club\spec.md)
 **Plan**: [specs/013-customer-club/plan.md](file:///x:/apps/wamp\www\wp4\wp-content\themes\negarThem\specs\013-customer-club\plan.md)
 **Approved Baseline**: `40d48aef54180681ee2add2fb12fb33a13fe6fd9`
@@ -33,70 +33,70 @@
 
 ### Tasks for Phase 3:
 
-- [ ] **T310** [Phase 3] [US-09] [AC: CLUB-AC-004] Register «باشگاه مشتریان» settings tab in `inc/theme-settings.php`
+- [x] **T310** [Phase 3] [US-09] [AC: CLUB-AC-004] Register «باشگاه مشتریان» settings tab in `inc/theme-settings.php`
   - **Objective**: Add `customer_club` tab to `negar_theme_settings_tabs()` with icon, title «باشگاه مشتریان», and registration in tab renderer.
   - **Files**: `inc/theme-settings.php`
   - **Acceptance Criteria**: Admin settings page displays the new tab; active tab highlights properly in RTL layout; clicking tab loads club settings pane without PHP notices.
   - **Required Tests**: PHP syntax check (`npm run test:lint`); admin page HTTP 200 verification.
   - **Dependencies**: None (Can start immediately upon Phase 3 authorization).
 
-- [ ] **T311** [Phase 3] [US-09, US-11] [AC: CLUB-AC-004, CLUB-AC-011] Register `negar_theme_club_options` setting in WordPress Settings API with non-autoload storage
+- [x] **T311** [Phase 3] [US-09, US-11] [AC: CLUB-AC-004, CLUB-AC-011] Register `negar_theme_club_options` setting in WordPress Settings API with non-autoload storage
   - **Objective**: Call `register_setting()` for `negar_theme_club_options` group with default options structure (`is_enabled`, `allow_applications`, `plans`, `sections_visibility`, `copy`) and explicitly set `autoload = 'no'`.
   - **Files**: `inc/theme-settings.php`
   - **Acceptance Criteria**: Option is stored in `wp_options` with `autoload = 'no'`; default values populate automatically when option does not exist.
   - **Required Tests**: CLI check verifying `autoload` flag in `wp_options`.
   - **Dependencies**: T310.
 
-- [ ] **T312** [Phase 3] [US-10] [AC: CLUB-AC-007, CLUB-AC-008] Implement plan configuration UI for the 3 primary fixed plans
+- [x] **T312** [Phase 3] [US-10] [AC: CLUB-AC-007, CLUB-AC-008] Implement plan configuration UI for the 3 primary fixed plans
   - **Objective**: Render settings fields for 3 plans (`negar_aghaz`, `negar_plus`, `negar_vizhe`): editable title, subtitle/tagline, initial payment (`IRT`), purchase ceiling (`IRT`), term duration (months), and featured plan flag.
   - **Files**: `inc/theme-settings.php`
   - **Acceptance Criteria**: All 3 plans render distinct input cards; inputs display formatted Persian labels; monetary fields indicate `تومان`; fixed plan identifiers cannot be altered by admin.
   - **Required Tests**: Visual inspection of admin UI; form submission roundtrip test.
   - **Dependencies**: T311.
 
-- [ ] **T313** [P] [Phase 3] [US-10] [AC: CLUB-AC-009, CLUB-AC-010] Implement plan feature bullet lists, badges, and per-plan enabled toggles
+- [x] **T313** [P] [Phase 3] [US-10] [AC: CLUB-AC-009, CLUB-AC-010] Implement plan feature bullet lists, badges, and per-plan enabled toggles
   - **Objective**: Add repeater / textarea for plan feature bullet items, marketing badge text (e.g. «انتخاب محبوب»), and individual plan enable/disable toggles.
   - **Files**: `inc/theme-settings.php`
   - **Acceptance Criteria**: Feature list parses line breaks or arrays cleanly; badge text renders in admin preview; disabled plans persist their state.
   - **Required Tests**: Unit test parsing feature strings into sanitized array.
   - **Dependencies**: T312.
 
-- [ ] **T314** [P] [Phase 3] [US-09] [AC: CLUB-AC-005, CLUB-AC-006] Implement public page copy controls and section visibility toggles
+- [x] **T314** [P] [Phase 3] [US-09] [AC: CLUB-AC-005, CLUB-AC-006] Implement public page copy controls and section visibility toggles
   - **Objective**: Render settings fields for Hero heading/subheading, How-It-Works timeline steps, primary CTA copy, disabled notice copy, and independent section visibility switches (benefits, comparison, calculator, timeline, faq).
   - **Files**: `inc/theme-settings.php`
   - **Acceptance Criteria**: Each section toggle saves boolean state; text fields support Persian typography; disabled notice copy is editable.
   - **Required Tests**: Settings form save test with toggles on/off.
   - **Dependencies**: T311.
 
-- [ ] **T315** [P] [Phase 3] [US-09] [AC: CLUB-AC-006] Implement dynamic FAQ accordion management repeater in settings
+- [x] **T315** [P] [Phase 3] [US-09] [AC: CLUB-AC-006] Implement dynamic FAQ accordion management repeater in settings
   - **Objective**: Implement dynamic question/answer repeater field allowing store managers to add, edit, reorder, and delete FAQ items for the customer club landing page.
   - **Files**: `inc/theme-settings.php`, `assets/js/admin-settings.js` (or inline admin script)
   - **Acceptance Criteria**: Store manager can add multiple FAQ rows; empty rows are pruned on save; HTML in answers is sanitized with `wp_kses_post()`.
   - **Required Tests**: Form submission with 3 FAQ items; verify sanitized storage.
   - **Dependencies**: T311.
 
-- [ ] **T316** [Phase 3] [US-10, US-11] [AC: CLUB-AC-013, CLUB-AC-014] Implement server-side sanitization and validation callback `negar_theme_sanitize_club_settings`
+- [x] **T316** [Phase 3] [US-10, US-11] [AC: CLUB-AC-013, CLUB-AC-014] Implement server-side sanitization and validation callback `negar_theme_sanitize_club_settings`
   - **Objective**: Register validation callback enforcing: `is_enabled` and `allow_applications` as booleans; positive integer amounts; `initial_payment <= purchase_ceiling`; `terms > 0`; text escaping via `sanitize_text_field()` and `wp_kses_post()`; add administrative error notices via `add_settings_error()` on violation.
   - **Files**: `inc/theme-settings.php`
   - **Acceptance Criteria**: Submitting `initial_payment > purchase_ceiling` rejects invalid values, preserves previous valid state, and outputs accessible Persian error notice; zero XSS payloads survive sanitization.
   - **Required Tests**: PHPUnit / CLI test asserting sanitization boundaries and rejection logic.
   - **Dependencies**: T312, T313, T314, T315.
 
-- [ ] **T317** [Phase 3] [US-09] [AC: CLUB-AC-015] Register `negar_theme_club_options` in `inc/theme-backup.php` for backup and restore
+- [x] **T317** [Phase 3] [US-09] [AC: CLUB-AC-015] Register `negar_theme_club_options` in `inc/theme-backup.php` for backup and restore
   - **Objective**: Register `NEGAR_THEME_CLUB_OPTION` in `negar_theme_backup_supported_groups()` with sanitization callback, allowing JSON export, preview validation, and import.
   - **Files**: `inc/theme-backup.php`, `inc/theme-settings.php`
   - **Acceptance Criteria**: Export backup JSON includes `negar_theme_club_options`; import preview parses and validates data; applying backup restores all club settings without data loss.
   - **Required Tests**: PHP unit test verifying export payload and import restoration roundtrip.
   - **Dependencies**: T316.
 
-- [ ] **T318** [P] [Phase 3] [US-09, NFR-004] [AC: CLUB-AC-053] Apply Admin RTL styling consistency and accessible markup
+- [x] **T318** [P] [Phase 3] [US-09, NFR-004] [AC: CLUB-AC-053] Apply Admin RTL styling consistency and accessible markup
   - **Objective**: Style the «باشگاه مشتریان» settings tab with standard WordPress admin classes, CSS grid/flexbox, RTL alignment, crimson accent colors, and clear field descriptions.
   - **Files**: `inc/theme-settings.php`, `assets/css/admin-settings.css` (if applicable)
   - **Acceptance Criteria**: Admin layout aligns strictly to the right in Persian locale; input fields have high contrast and clear focus states; responsive down to tablet viewports.
   - **Required Tests**: Visual verification in browser at 1024px and 1440px.
   - **Dependencies**: T312, T314, T315.
 
-- [ ] **T319** [Phase 3] [US-09, US-10] [AC: CLUB-AC-004..016] Implement focused PHP CLI regression test suite for theme settings
+- [x] **T319** [Phase 3] [US-09, US-10] [AC: CLUB-AC-004..016] Implement focused PHP CLI regression test suite for theme settings
   - **Objective**: Create `tests/club-settings-regression.php` testing option registration, non-autoload verification, default values, sanitization constraints, error generation, and backup compatibility without mutating production data.
   - **Files**: `tests/club-settings-regression.php`
   - **Acceptance Criteria**: 100% assertions pass; clean exit code 0; verified by `npm run test:lint`.

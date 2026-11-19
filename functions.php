@@ -58,6 +58,11 @@ require_once NEGAR_SHOP_DIR . '/inc/customizer.php';
 require_once NEGAR_SHOP_DIR . '/inc/theme-settings.php';
 
 /**
+ * Customer Club & Installment Settings Management (013-customer-club).
+ */
+require_once NEGAR_SHOP_DIR . '/inc/customer-club-settings.php';
+
+/**
  * SMS provider and secure OTP integration.
  */
 require_once NEGAR_SHOP_DIR . '/inc/sms-provider.php';
