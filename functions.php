@@ -63,6 +63,13 @@ require_once NEGAR_SHOP_DIR . '/inc/theme-settings.php';
 require_once NEGAR_SHOP_DIR . '/inc/customer-club-settings.php';
 
 /**
+ * Customer Club Canonical Quote Calculator Package (Phase 4).
+ */
+if ( ! defined( 'NEGAR_CLUB_VERSION' ) && file_exists( NEGAR_SHOP_DIR . '/packages/negar-customer-club/negar-customer-club.php' ) ) {
+	require_once NEGAR_SHOP_DIR . '/packages/negar-customer-club/negar-customer-club.php';
+}
+
+/**
  * SMS provider and secure OTP integration.
  */
 require_once NEGAR_SHOP_DIR . '/inc/sms-provider.php';

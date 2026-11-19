@@ -601,6 +601,24 @@ function negar_shop_scripts() {
 		);
 	}
 
+	// Customer Club & Installment Purchase Page (013-customer-club)
+	if ( is_page_template( 'page-templates/page-customer-club.php' ) || is_page( 'customer-club' ) ) {
+		wp_enqueue_style(
+			'negar-customer-club-style',
+			NEGAR_SHOP_URI . '/assets/css/customer-club.css',
+			array( 'negar-shop-style', 'negar-shop-header-footer' ),
+			NEGAR_SHOP_VERSION
+		);
+
+		wp_enqueue_script(
+			'negar-customer-club-script',
+			NEGAR_SHOP_URI . '/assets/js/customer-club.js',
+			array(),
+			NEGAR_SHOP_VERSION,
+			true
+		);
+	}
+
 	// Threaded Comments
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 		wp_enqueue_script( 'comment-reply' );

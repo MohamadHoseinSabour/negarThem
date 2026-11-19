@@ -168,11 +168,16 @@ function negar_theme_club_settings_raw() {
 function negar_theme_club_setting( $group, $key = null, $default = null ) {
 	$settings = negar_theme_club_settings_raw();
 
+	// If only 2 arguments passed and 2nd is not a string key (e.g. default array), treat as default
+	if ( 2 === func_num_args() && ! is_string( $key ) ) {
+		return $settings[ $group ] ?? $key;
+	}
+
 	if ( null === $key ) {
 		return $settings[ $group ] ?? $default;
 	}
 
-	if ( isset( $settings[ $group ][ $key ] ) ) {
+	if ( is_scalar( $key ) && isset( $settings[ $group ][ $key ] ) ) {
 		return $settings[ $group ][ $key ];
 	}
 
@@ -190,6 +195,54 @@ function negar_theme_ensure_club_option() {
 	}
 }
 add_action( 'admin_init', 'negar_theme_ensure_club_option', 20 );
+
+/**
+ * Ensure customer club page exists in WordPress and is linked to the template.
+ *
+ * @return int Page ID.
+ */
+function negar_theme_ensure_club_page() {
+	$page = get_page_by_path( 'customer-club' );
+	if ( ! $page ) {
+		$page_id = wp_insert_post(
+			array(
+				'post_title'     => __( 'باشگاه مشتریان و خرید اقساطی', 'negar-shop' ),
+				'post_name'      => 'customer-club',
+				'post_status'    => 'publish',
+				'post_type'      => 'page',
+				'comment_status' => 'closed',
+			)
+		);
+		if ( $page_id && ! is_wp_error( $page_id ) ) {
+			update_post_meta( $page_id, '_wp_page_template', 'page-templates/page-customer-club.php' );
+			return (int) $page_id;
+		}
+		return 0;
+	}
+
+	if ( 'page-templates/page-customer-club.php' !== get_post_meta( $page->ID, '_wp_page_template', true ) ) {
+		update_post_meta( $page->ID, '_wp_page_template', 'page-templates/page-customer-club.php' );
+	}
+
+	return (int) $page->ID;
+}
+
+/**
+ * Filter template_include to route /customer-club/ to page-templates/page-customer-club.php.
+ *
+ * @param string $template Matched template file path.
+ * @return string
+ */
+function negar_theme_club_template_include( $template ) {
+	if ( is_page( 'customer-club' ) ) {
+		$club_template = locate_template( array( 'page-templates/page-customer-club.php' ) );
+		if ( $club_template ) {
+			return $club_template;
+		}
+	}
+	return $template;
+}
+add_filter( 'template_include', 'negar_theme_club_template_include' );
 
 /**
  * Server-side sanitization and validation callback for customer club settings.

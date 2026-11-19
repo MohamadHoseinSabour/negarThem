@@ -5,6 +5,7 @@
 # Scratch and backups
 scratch/
 backups/
+tests/screenshots/
 
 # Dependencies & build
 node_modules/

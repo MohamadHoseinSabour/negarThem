@@ -115,70 +115,70 @@
 
 ### Tasks for Phase 4:
 
-- [ ] **T320** [Phase 4] [US-01] [AC: CLUB-AC-001] Create public page template `page-templates/page-customer-club.php`
+- [x] **T320** [Phase 4] [US-01] [AC: CLUB-AC-001] Create public page template `page-templates/page-customer-club.php`
   - **Objective**: Scaffold page template with WordPress header/footer hooks, container wrappers (`--container-width: 1320px`), breadcrumb integration, and modular template-part includes.
   - **Files**: `page-templates/page-customer-club.php`
   - **Acceptance Criteria**: Page loads cleanly; HTTP 200; proper HTML5 semantic tags; respects `is_enabled` toggle from settings.
   - **Required Tests**: Playwright HTTP status check; linting check.
   - **Dependencies**: Phase 3 complete.
 
-- [ ] **T321** [P] [Phase 4] [US-01] [AC: CLUB-AC-001] Implement Hero section component `template-parts/customer-club/hero.php`
+- [x] **T321** [P] [Phase 4] [US-01] [AC: CLUB-AC-001] Implement Hero section component `template-parts/customer-club/hero.php`
   - **Objective**: Render hero banner with Persian headline, value proposition subtitle, trust badges, and anchor link CTA to plan cards.
   - **Files**: `template-parts/customer-club/hero.php`
   - **Acceptance Criteria**: Text loads dynamically from `negar_theme_club_options`; fallback copy displays if option empty; CTA smoothly scrolls to plans.
   - **Required Tests**: Visual verification on 375px mobile and 1440px desktop.
   - **Dependencies**: T320.
 
-- [ ] **T322** [P] [Phase 4] [US-01] [AC: CLUB-AC-001] Implement Benefits and How-It-Works timeline components
+- [x] **T322** [P] [Phase 4] [US-01] [AC: CLUB-AC-001] Implement Benefits and How-It-Works timeline components
   - **Objective**: Create `template-parts/customer-club/benefits.php` (4 trust cards with accessible SVG icons) and `template-parts/customer-club/steps.php` (step-by-step application and purchase timeline).
   - **Files**: `template-parts/customer-club/benefits.php`, `template-parts/customer-club/steps.php`
   - **Acceptance Criteria**: Clean RTL layout; SVG icons without raw emojis; steps clearly explain application → review → purchase → installment payoff.
   - **Required Tests**: Visual inspection; accessibility contrast check.
   - **Dependencies**: T320.
 
-- [ ] **T323** [Phase 4] [US-02] [AC: CLUB-AC-002] Implement three-tier plan cards component `template-parts/customer-club/plans.php`
+- [x] **T323** [Phase 4] [US-02] [AC: CLUB-AC-002] Implement three-tier plan cards component `template-parts/customer-club/plans.php`
   - **Objective**: Render 3 responsive cards for `negar_aghaz`, `negar_plus`, `negar_vizhe` showing formatted Toman amounts, installment term, bullet features, featured badge («انتخاب محبوب»), and CTA button («درخواست طرح»).
   - **Files**: `template-parts/customer-club/plans.php`
   - **Acceptance Criteria**: Featured plan has visual prominence; amounts format with Persian thousands separators; disabled plans are hidden; cards adapt to 1-column on mobile and 3-column on desktop.
   - **Required Tests**: Playwright viewport snapshot at 375px, 768px, 1440px.
   - **Dependencies**: T320, Phase 3 settings.
 
-- [ ] **T324** [Phase 4] [US-02] [AC: CLUB-AC-002] Implement plan comparison matrix component `template-parts/customer-club/comparison.php`
+- [x] **T324** [Phase 4] [US-02] [AC: CLUB-AC-002] Implement plan comparison matrix component `template-parts/customer-club/comparison.php`
   - **Objective**: Render structured table comparing initial payment, maximum ceiling, duration, eligibility criteria, and guarantor requirements across the 3 plans.
   - **Files**: `template-parts/customer-club/comparison.php`
   - **Acceptance Criteria**: Table scrolls horizontally on mobile with scroll hint; table headers remain clear; respects section visibility setting.
   - **Required Tests**: Playwright mobile table interaction test.
   - **Dependencies**: T323.
 
-- [ ] **T325** [Phase 4] [US-13, CLUB-AD-001] [AC: CLUB-AC-045] Scaffold lightweight canonical calculator service and REST endpoint
+- [x] **T325** [Phase 4] [US-13, CLUB-AD-001] [AC: CLUB-AC-045] Scaffold lightweight canonical calculator service and REST endpoint
   - **Objective**: Implement stateless `Negar_Club_Quote_Calculator` class in `packages/negar-customer-club/includes/class-quote-calculator.php` and public REST endpoint `/wp-json/negar-club/v1/quote` for server-authoritative preview calculation (Phase 4 foundation).
   - **Files**: `packages/negar-customer-club/includes/class-quote-calculator.php`, `packages/negar-customer-club/negar-customer-club.php` (or theme fallback loader)
   - **Acceptance Criteria**: REST endpoint accepts `plan_id` and `purchase_amount_irt`; validates inputs; returns monthly installment, principal, charges, and schedule preview in integer IRT; zero database writes.
   - **Required Tests**: REST API unit test asserting exact integer output across divisible and non-divisible test amounts.
   - **Dependencies**: T320.
 
-- [ ] **T326** [Phase 4] [US-03] [AC: CLUB-AC-003, CLUB-AC-046] Implement interactive preview calculator UI and client controller
+- [x] **T326** [Phase 4] [US-03] [AC: CLUB-AC-003, CLUB-AC-046] Implement interactive preview calculator UI and client controller
   - **Objective**: Create `template-parts/customer-club/calculator.php` and `assets/js/customer-club.js` with range slider, numeric input, plan selector, dynamic monthly payment display, and non-binding disclaimer notice.
   - **Files**: `template-parts/customer-club/calculator.php`, `assets/js/customer-club.js`
   - **Acceptance Criteria**: Persian digit normalization; live calculation matches server formula exactly; prominent disclaimer explains that estimate is non-binding; debounced REST validation check.
   - **Required Tests**: Playwright calculator interaction test (slider change, typing Persian digits `۱۲۳۴`).
   - **Dependencies**: T325.
 
-- [ ] **T327** [P] [Phase 4] [US-01] [AC: CLUB-AC-001] Implement FAQ accordion and final CTA components
+- [x] **T327** [P] [Phase 4] [US-01] [AC: CLUB-AC-001] Implement FAQ accordion and final CTA components
   - **Objective**: Create `template-parts/customer-club/faq.php` (accessible accordion with ARIA attributes) and `template-parts/customer-club/cta.php` (closing motivation banner).
   - **Files**: `template-parts/customer-club/faq.php`, `template-parts/customer-club/cta.php`
   - **Acceptance Criteria**: Accordion items toggle smoothly without layout jump; keyboard navigable (Enter/Space); data renders from settings.
   - **Required Tests**: Keyboard navigation test; screen reader ARIA attribute inspection.
   - **Dependencies**: T320.
 
-- [ ] **T328** [Phase 4] [US-04] [AC: CLUB-AC-004, CLUB-AC-052] Implement honest disabled notice, loading states, and guest authentication routing intent
+- [x] **T328** [Phase 4] [US-04] [AC: CLUB-AC-004, CLUB-AC-052] Implement honest disabled notice, loading states, and guest authentication routing intent
   - **Objective**: When `allow_applications` is off, render honest notice «سیستم ثبت درخواست در حال به‌روزرسانی می‌باشد»; when guest clicks «درخواست طرح», store plan intent in `sessionStorage` and trigger native OTP/login modal.
   - **Files**: `template-parts/customer-club/plans.php`, `assets/js/customer-club.js`
   - **Acceptance Criteria**: Guests are not blocked silently; intent persists across login; disabled state prevents broken application submissions.
   - **Required Tests**: E2E test verifying intent storage and modal trigger for unauthenticated users.
   - **Dependencies**: T323, T326.
 
-- [ ] **T329** [Phase 4] [US-01, NFR-012] [AC: CLUB-AC-055, CLUB-AC-056] Implement scoped stylesheet `assets/css/customer-club.css` and verify multi-viewport responsiveness
+- [x] **T329** [Phase 4] [US-01, NFR-012] [AC: CLUB-AC-055, CLUB-AC-056] Implement scoped stylesheet `assets/css/customer-club.css` and verify multi-viewport responsiveness
   - **Objective**: Write scoped CSS using theme CSS variables (`--color-primary`, `--font-family-base`, `--container-width`), zero external CSS libraries, and test across 4 viewports (`375px`, `768px`, `1024px`, `1440px`).
   - **Files**: `assets/css/customer-club.css`, `inc/enqueues.php`
   - **Acceptance Criteria**: Zero horizontal scrollbar on 375px mobile; proper spacing and contrast in all viewports; CSS enqueued only on Customer Club page.
