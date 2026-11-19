@@ -2,10 +2,10 @@
 
 **Feature:** 013-customer-club
 **Project:** Negar Shop WordPress Theme (`negarThem`)
-**Date:** 2026-11-18
-**Phase:** Phase 2.2 — Final Architecture Consistency & Financial Lifecycle Audit
+**Date:** 2026-11-19
+**Phase:** Phase 2.3 — Critical Financial Architecture Corrections (Minimal Scope)
 **Author:** Senior WordPress & WooCommerce Architect Agent
-**Status:** `DRAFT — PHASE 2.2 TECHNICAL DESIGN (AWAITING EXTERNAL REVIEW)`
+**Status:** `DRAFT — PHASE 2.3 TECHNICAL DESIGN (AWAITING EXTERNAL REVIEW)`
 
 ---
 
@@ -46,7 +46,7 @@ We evaluated whether to reuse standard WordPress/WooCommerce entities (posts, or
 │ contract_number (VARCHAR, UQ)    │             │
 │ application_id (BIGINT FK) ──────┼─────────────┘
 │ user_id (BIGINT FK -> wp_users)  │
-│ order_id (BIGINT FK -> wc_orders)│
+│ order_id (BIGINT FK, UQ) ────────┼─► (1:1 with wc_orders, prevents duplicate contracts)
 │ plan_id (VARCHAR)                │
 │ plan_snapshot (JSON)             │ (Frozen terms at execution)
 │ purchase_amount (BIGINT)         │ (Total retail merchandise amount)
@@ -54,10 +54,10 @@ We evaluated whether to reuse standard WordPress/WooCommerce entities (posts, or
 │ financed_principal (BIGINT)      │ (Original principal: purchase - initial)
 │ total_charges (BIGINT)           │ (Original markup/fees, default: 0)
 │ total_customer_obligation (BIGINT│ (financed_principal + total_charges)
-│ paid_principal (BIGINT)          │ (Rolling sum of settled principal)
-│ paid_charges (BIGINT)            │ (Rolling sum of settled charges)
-│ remaining_principal_balance (BIG)│ (financed_principal - paid_principal)
-│ remaining_charges_balance (BIG)  │ (total_charges - paid_charges)
+│ paid_principal (BIGINT)          │ (Cumulative gross settled principal cash)
+│ paid_charges (BIGINT)            │ (Cumulative gross settled charges cash)
+│ remaining_principal_balance (BIG)│ (financed_principal - net_paid_principal)
+│ remaining_charges_balance (BIG)  │ (total_charges - net_paid_charges)
 │ total_outstanding_balance (BIGINT│ (Unpaid debt: remaining_p + remaining_c)
 │ installments_count (INT)         │
 │ status (VARCHAR)                 │ (active, completed, cancelled, defaulted)
@@ -94,6 +94,7 @@ We evaluated whether to reuse standard WordPress/WooCommerce entities (posts, or
 │ created_at (DATETIME)            │             │ payment_id (BIGINT FK, Null)     │
 └──────────────────────────────────┘             │ order_id (BIGINT FK)             │
                                                  │ installment_id (BIGINT FK, Null) │
+                                                 │ refund_type (VARCHAR)            │ (cash_refund vs debt_cancellation)
                                                  │ amount_irt (BIGINT)              │
                                                  │ principal_refunded_irt (BIGINT)  │
                                                  │ charges_refunded_irt (BIGINT)    │
@@ -149,7 +150,7 @@ CREATE TABLE `wp_negar_club_applications` (
 ---
 
 ### 3.2 `wp_negar_club_contracts`
-Stores binding credit agreements created upon initial payment verification for an approved order.
+Stores binding credit agreements created upon initial payment verification for an approved order. Exactly one contract is permitted per WooCommerce order.
 
 ```sql
 CREATE TABLE `wp_negar_club_contracts` (
@@ -179,21 +180,26 @@ CREATE TABLE `wp_negar_club_contracts` (
   `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uq_contract_number` (`contract_number`),
+  UNIQUE KEY `uq_contract_order` (`order_id`),
   KEY `ix_user_contracts` (`user_id`, `status`),
-  KEY `ix_order_id` (`order_id`),
   KEY `ix_application_id` (`application_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 ```
 
-- **Immutability Invariant:** `purchase_amount`, `initial_payment`, `financed_principal`, `total_charges`, `total_customer_obligation`, `installments_count`, and `plan_snapshot` are frozen at agreement execution.
+- **Immutability Invariant:** `purchase_amount`, `initial_payment`, `financed_principal`, `total_charges`, `total_customer_obligation`, `installments_count`, and `plan_snapshot` are frozen at agreement execution and never modified.
+- **Single Contract Per Order Guard (Correction C2):** `UNIQUE KEY uq_contract_order (order_id)` enforces at the database engine level that no race condition or duplicate callback can ever create a second contract for the same WooCommerce order.
 - **Initial Balancing:**
   - `financed_principal = purchase_amount - initial_payment`
   - `total_customer_obligation = financed_principal + total_charges`
   - `remaining_principal_balance = financed_principal`
   - `remaining_charges_balance = total_charges`
   - `total_outstanding_balance = total_customer_obligation`
-- **Rolling Balances:**
-  - `paid_principal`, `paid_charges`, `remaining_principal_balance`, `remaining_charges_balance`, and `total_outstanding_balance` are updated atomically upon each verified settlement or refund.
+- **Gross vs. Net Accounting Convention (Correction C4):**
+  - `paid_principal` and `paid_charges` represent **Gross Cumulative Cash Settled** (total money received from customer, never decremented).
+  - Cash refunds tracked in `wp_negar_club_refunds` reduce net cash received:
+    $$\text{Net Cash Paid} = (\text{paid\_principal} - \text{principal\_refunded\_irt}) + (\text{paid\_charges} - \text{charges\_refunded\_irt})$$
+  - Product returns / cancellations reduce debt directly by cancelling future unpaid installment rows:
+    $$\text{Remaining Debt Balance} = \text{total\_customer\_obligation} - \text{Net Cash Paid} - \text{cancelled\_obligation}$$
 - **Canonical Statuses:** `pending_prerequisite`, `active`, `completed`, `cancelled`, `defaulted`.
 
 ---
@@ -283,9 +289,11 @@ CREATE TABLE `wp_negar_club_payments` (
   - `early_settlement`: Settle remaining total debt under `CLUB-BD-013`.
 - **Reconciled Payment Statuses:**
   - `initiated`: Payment attempt created, user redirected to gateway.
-  - `pending_verification`: Inbound callback received, awaiting provider verification inquiry.
-  - `verified`: Provider inquiry/signature verified, funds settled.
-  - `failed`: Transaction failed at gateway or cancelled by user.
+  - `pending_verification`: Inbound callback received or outbound inquiry in progress, awaiting server verification.
+  - `verified`: Provider inquiry/signature verified, funds settled atomically.
+  - `duplicate_settlement_detected`: Gateway confirmed payment, but target installment was already settled by a concurrent attempt; logged for operator review without double-crediting.
+  - `verified_pending_contract`: Gateway confirmed payment, but local contract creation encountered a temporary failure; queued for safe automated retry.
+  - `failed`: Transaction definitively failed at gateway or cancelled by user.
   - `cancelled`: Payment attempt timed out or cancelled prior to settlement.
   - `disputed_amount`: Transaction amount or currency mismatch detected.
   - `partially_refunded`: Partial refund processed against this payment.
@@ -294,7 +302,7 @@ CREATE TABLE `wp_negar_club_payments` (
 ---
 
 ### 3.5 `wp_negar_club_refunds` (Dedicated Refund Architecture)
-Stores partial and full refund transactions linked to orders, contracts, installments, and payments with deterministic principal vs charges allocation.
+Stores partial and full refund transactions linked to orders, contracts, installments, and payments with deterministic principal vs charges allocation and explicit operation type.
 
 ```sql
 CREATE TABLE `wp_negar_club_refunds` (
@@ -304,6 +312,7 @@ CREATE TABLE `wp_negar_club_refunds` (
   `payment_id` BIGINT UNSIGNED NULL,
   `order_id` BIGINT UNSIGNED NOT NULL,
   `installment_id` BIGINT UNSIGNED NULL,
+  `refund_type` VARCHAR(24) NOT NULL DEFAULT 'cash_refund',
   `amount_irt` BIGINT UNSIGNED NOT NULL,
   `principal_refunded_irt` BIGINT UNSIGNED NOT NULL DEFAULT 0,
   `charges_refunded_irt` BIGINT UNSIGNED NOT NULL DEFAULT 0,
@@ -324,17 +333,23 @@ CREATE TABLE `wp_negar_club_refunds` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 ```
 
+- **Two Distinct Operations (`refund_type` — Correction C4):**
+  - `cash_refund`: Cash sent back to customer for funds previously collected. Reduces net cash collected.
+  - `debt_cancellation`: Contractual debt extinguished because merchandise was returned before payment. Unpaid future installments are marked `cancelled`. No cash is disbursed.
+- **Double-Deduction Prevention Rule:**
+  - A cash refund for an already paid installment never cancels future product obligations twice.
+  - A product return debt cancellation never issues a cash payout for unpaid future installments.
 - **Allocation Invariant:**
   `amount_irt = principal_refunded_irt + charges_refunded_irt`
 - **Immutability of Original Terms:**
   Original contract terms (`purchase_amount`, `initial_payment`, `financed_principal`, `total_charges`, `total_customer_obligation`) are **strictly immutable** and are never decremented on refund.
-- **Deterministic Post-Refund Rolling Balances:**
+- **Deterministic Post-Refund Balances:**
   $$\text{Net Paid Principal} = \text{contract.paid\_principal} - \text{principal\_refunded\_irt}$$
-  $$\text{contract.remaining\_principal\_balance} = \text{contract.financed\_principal} - \text{Net Paid Principal}$$
   $$\text{Net Paid Charges} = \text{contract.paid\_charges} - \text{charges\_refunded\_irt}$$
-  $$\text{contract.total\_outstanding\_balance} = \text{contract.total\_customer\_obligation} - (\text{Net Paid Principal} + \text{Net Paid Charges})$$
+  $$\text{Remaining Principal Balance} = \text{contract.financed\_principal} - \text{Net Paid Principal} - \text{cancelled\_principal}$$
+  $$\text{Total Outstanding Balance} = \text{contract.total\_customer\_obligation} - (\text{Net Paid Principal} + \text{Net Paid Charges}) - \text{cancelled\_debt}$$
 - **Statuses:** `initiated`, `completed`, `failed`.
-- **Accounting Synchronization:** On `completed`, updates contract rolling balances, transitions linked installment status if applicable, and writes an append-only audit event. Governed by `CLUB-BD-014` (`PROPOSED — REQUIRES EMPLOYER APPROVAL`).
+- **Commercial Limitation:** Allocation of single-item returns from multi-item orders requires an explicit merchant policy under `CLUB-BD-014` (`PROPOSED — REQUIRES EMPLOYER APPROVAL`).
 
 ---
 

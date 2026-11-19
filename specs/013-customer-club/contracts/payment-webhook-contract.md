@@ -3,8 +3,8 @@
 **Feature:** 013-customer-club
 **Component:** Provider-Independent Payment Webhook & Settlement Engine
 **Target Phase:** Phase 6 (Financial Engine & Installment Payments)
-**Phase:** Phase 2.2 — Final Architecture Consistency & Financial Lifecycle Audit
-**Status:** `DRAFT — PHASE 2.2 TECHNICAL DESIGN (AWAITING EXTERNAL REVIEW)`
+**Phase:** Phase 2.3 — Critical Financial Architecture Corrections (Minimal Scope)
+**Status:** `DRAFT — PHASE 2.3 TECHNICAL DESIGN (AWAITING EXTERNAL REVIEW)`
 
 ---
 
@@ -125,7 +125,7 @@ if ( $amount_internal_irt !== (int) $payment->amount_internal_irt ) {
 
 ---
 
-## 5. Complete Two-Stage Settlement Sequence (Correction C4.5)
+## 5. Complete Two-Stage Settlement Sequence (Corrections C2, C3, C5)
 
 ```
 [Inbound Callback Received at /wp-json/negar-club/v1/payment-callback]
@@ -137,15 +137,26 @@ if ( $amount_internal_irt !== (int) $payment->amount_internal_irt ) {
 │ Step A1: Read-only lookup of payment attempt by `token` or `provider_tx_id`. │
 │          (Not found ──► HTTP 404 Not Found)                                 │
 │                                                                             │
-│ Step A2: Check Current State:                                               │
-│          If payment.status == 'verified' ──► HTTP 200 OK (Idempotent No-Op) │
+│ Step A2: Check Current State & Stale Callback Guard:                        │
+│          If payment.status IN ('verified', 'duplicate_settlement_detected'): │
+│            return HTTP 200 OK immediately (Idempotent No-Op).               │
 │                                                                             │
 │ Step A3: Provider-Specific Verification:                                    │
 │          • Class 1: Verify HMAC signature on incoming payload.              │
 │          • Class 2 / 3: Make outbound HTTPS verify call to provider API     │
 │            WITHOUT holding any open MySQL transaction or row lock.          │
-│          (Provider verify fails ──► UPDATE status='failed'; HTTP 400 Bad Req)
-│          (Provider verify succeeds with verified_ref and verified_amount)   │
+│                                                                             │
+│ Step A4: Failure Classification (Correction C5):                            │
+│          • Network Timeout / cURL Error / HTTP 5xx: DO NOT mark failed!      │
+│            Keep status = 'pending_verification'; return HTTP 503 to gateway │
+│            to trigger retry, or queue for scheduled reconciler.             │
+│          • Definitive Provider Rejection (Code -1, cancelled by user):      │
+│            UPDATE wp_negar_club_payments SET status = 'failed'               │
+│            WHERE id = ? AND status IN ('initiated', 'pending_verification');│
+│            return HTTP 400 Bad Request.                                     │
+│                                                                             │
+│ Step A5: Provider Confirms Success:                                         │
+│          Extract normalized `provider_reference` and `verified_amount`.     │
 └─────────────────────────────────────┬───────────────────────────────────────┘
                                       │ Provider Confirmed
                                       ▼
@@ -154,55 +165,80 @@ if ( $amount_internal_irt !== (int) $payment->amount_internal_irt ) {
 ├─────────────────────────────────────────────────────────────────────────────┤
 │ Step B1: Begin MySQL Transaction ($wpdb->query('START TRANSACTION')).       │
 │                                                                             │
-│ Step B2: Acquire row locks in consistent deadlock-prevention hierarchy:     │
-│          1. SELECT * FROM wp_negar_club_contracts WHERE id = ? FOR UPDATE   │
-│             (if contract_id is not null)                                    │
-│          2. SELECT * FROM wp_negar_club_installments WHERE id = ? FOR UPDATE│
-│             (if installment_id is not null)                                 │
-│          3. SELECT * FROM wp_negar_club_payments WHERE id = ? FOR UPDATE    │
+│ Step B2: BRANCH BY PAYMENT CONTEXT:                                         │
 │                                                                             │
-│ Step B3: Concurrency Guard:                                                 │
-│          If payment.status == 'verified':                                   │
-│            $wpdb->query('COMMIT'); return HTTP 200 OK (Already settled)     │
+│ ┌─────────────────────────────────────────────────────────────────────────┐ │
+│ │ Context A: initial_checkout (Correction C2)                             │ │
+│ ├─────────────────────────────────────────────────────────────────────────┤ │
+│ │ 1. Lock Application:                                                    │ │
+│ │    SELECT * FROM wp_negar_club_applications WHERE id = ? FOR UPDATE;    │ │
+│ │    Verify status == 'approved'.                                         │ │
+│ │ 2. Check Contract Existence (Single Contract Per Order Guard):          │ │
+│ │    SELECT * FROM wp_negar_club_contracts WHERE order_id = ? FOR UPDATE; │ │
+│ │    - If ALREADY exists (idempotent replay):                             │ │
+│ │        Reuse existing contract; DO NOT insert duplicate schedule.       │ │
+│ │    - If NOT exists:                                                     │ │
+│ │        - INSERT INTO wp_negar_club_contracts (order_id, user_id,        │ │
+│ │            purchase_amount, initial_payment, financed_principal,        │ │
+│ │            total_charges, total_customer_obligation, status='active',   │ │
+│ │            activated_at=NOW(), plan_snapshot=...);                      │ │
+│ │        - Generate N scheduled installment rows in                       │ │
+│ │          wp_negar_club_installments with status='scheduled'.            │ │
+│ │ 3. Link & Verify Payment:                                               │ │
+│ │    UPDATE wp_negar_club_payments SET status = 'verified',               │ │
+│ │      contract_id = contract.id, provider_reference = $provider_ref,     │ │
+│ │      verified_at = NOW()                                                │ │
+│ │      WHERE id = ? AND status IN ('initiated', 'pending_verification');  │ │
+│ │ 4. Update WooCommerce Order (Correction C1):                            │ │
+│ │    - Transition to custom status: 'wc-partially-paid'                   │ │
+│ │      (Keeps $order->is_paid() == false, preventing false 100% cash).    │ │
+│ │    - Record metadata: _negar_club_initial_paid, _negar_club_contract_id.│ │
+│ │    - Call wc_reduce_stock_levels($order->get_id()) (exactly once).      │ │
+│ │ 5. INSERT INTO wp_negar_club_audit_log ('initial_checkout_settled').    │ │
+│ └─────────────────────────────────────────────────────────────────────────┘ │
 │                                                                             │
-│ Step B4: Mathematical Invariant Checks:                                     │
-│          • If gateway_currency == 'IRR': verified_amount % 10 === 0         │
-│          • verified_amount_irt === payment.amount_internal_irt              │
-│          (Mismatch ──► UPDATE status='disputed_amount'; COMMIT; HTTP 422)   │
+│ ┌─────────────────────────────────────────────────────────────────────────┐ │
+│ │ Context B: scheduled_installment (Correction C3)                        │ │
+│ ├─────────────────────────────────────────────────────────────────────────┤ │
+│ │ 1. Lock Installment:                                                    │ │
+│ │    SELECT * FROM wp_negar_club_installments WHERE id = ? FOR UPDATE;    │ │
+│ │ 2. Concurrency & Duplicate Settlement Guard:                            │ │
+│ │    If installment.status == 'paid' OR settled_payment_id IS NOT NULL:   │ │
+│ │      - If payment.id == installment.settled_payment_id:                 │ │
+│ │          COMMIT; return HTTP 200 OK (Idempotent replay).                │ │
+│ │      - If payment.id != installment.settled_payment_id:                 │ │
+│ │          Concurrent duplicate payment detected! DO NOT settle again.    │ │
+│ │          UPDATE wp_negar_club_payments SET                              │ │
+│ │            status = 'duplicate_settlement_detected',                    │ │
+│ │            provider_reference = $provider_ref, verified_at = NOW()      │ │
+│ │            WHERE id = ?;                                                │ │
+│ │          INSERT INTO wp_negar_club_audit_log                            │ │
+│ │            ('duplicate_installment_payment_flagged');                   │ │
+│ │          COMMIT; return HTTP 200 OK to gateway.                         │ │
+│ │ 3. Conditional Atomic Update:                                           │ │
+│ │    UPDATE wp_negar_club_installments SET status = 'paid',               │ │
+│ │      paid_amount = total_amount, settled_payment_id = payment.id,       │ │
+│ │      settled_at = NOW() WHERE id = ? AND status != 'paid';              │ │
+│ │    (Only if rows_affected == 1):                                        │ │
+│ │      - Lock contract: SELECT * FROM wp_negar_club_contracts             │ │
+│ │        WHERE id = ? FOR UPDATE; update rolling balances.                │ │
+│ │      - IF total_outstanding_balance == 0: contract.status = 'completed'│ │
+│ │      - UPDATE wp_negar_club_payments SET status = 'verified',           │ │
+│ │        provider_reference = $provider_ref, verified_at = NOW()          │ │
+│ │        WHERE id = ?;                                                    │ │
+│ │      - INSERT INTO wp_negar_club_audit_log ('installment_settled');     │ │
+│ └─────────────────────────────────────────────────────────────────────────┘ │
 │                                                                             │
-│ Step B5: Atomic Ledger Mutations:                                           │
-│          • UPDATE wp_negar_club_payments:                                   │
-│              status = 'verified',                                           │
-│              provider_reference = $verified_ref,                            │
-│              verified_at = NOW();                                           │
-│                                                                             │
-│          • Context: scheduled_installment:                                  │
-│              - UPDATE wp_negar_club_installments:                           │
-│                  status = 'paid', paid_amount = total_amount,               │
-│                  settled_payment_id = payment.id, settled_at = NOW();       │
-│              - UPDATE wp_negar_club_contracts:                              │
-│                  paid_principal = paid_principal + installment.principal,   │
-│                  paid_charges = paid_charges + installment.charge_amount,   │
-│                  remaining_principal_balance = financed_p - paid_principal, │
-│                  remaining_charges_balance = total_c - paid_charges,        │
-│                  total_outstanding_balance = remaining_p + remaining_c;     │
-│              - IF total_outstanding_balance == 0:                           │
-│                  UPDATE wp_negar_club_contracts SET status = 'completed';   │
-│                                                                             │
-│          • Context: initial_checkout:                                       │
-│              - UPDATE wp_negar_club_contracts:                              │
-│                  status = 'active', activated_at = NOW();                   │
-│              - Link to WooCommerce Order: set order status to 'processing', │
-│                record payment metadata, and call wc_reduce_stock_levels();  │
-│                                                                             │
-│ Step B6: Write Append-Only Audit Event:                                     │
-│          INSERT INTO wp_negar_club_audit_log (event_action='payment_settled')│
-│                                                                             │
-│ Step B7: Commit Transaction ($wpdb->query('COMMIT')) and return HTTP 200.   │
+│ Step B3: Commit Transaction ($wpdb->query('COMMIT')) and return HTTP 200.   │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
-[Step 7: Commit Transaction & Return HTTP 200 OK]
-```
+
+#### Contract Creation Recovery Mechanism (Correction C2):
+If Stage A provider verification succeeds, but Stage B encounters an unhandled local database error:
+1. The transaction automatically rolls back.
+2. The payment record is updated to `verified_pending_contract` with `provider_reference` preserved.
+3. An urgent operator alert is written to `wp_negar_club_audit_log` and an administrative order note is created.
+4. An automated background reconciler (`negar_club_reconcile_pending_contracts`) or administrative retry action safely re-executes Stage B contract creation without re-charging the customer.
 
 ---
 

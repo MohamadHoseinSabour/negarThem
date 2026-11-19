@@ -2,10 +2,10 @@
 
 **Feature:** 013-customer-club
 **Project:** Negar Shop WordPress Theme (`negarThem`)
-**Date:** 2026-11-18
-**Phase:** Phase 2.2 — Final Architecture Consistency & Financial Lifecycle Audit
+**Date:** 2026-11-19
+**Phase:** Phase 2.3 — Critical Financial Architecture Corrections (Minimal Scope)
 **Author:** Senior WordPress & WooCommerce Architect Agent
-**Status:** `DRAFT — PHASE 2.2 TECHNICAL DESIGN (AWAITING EXTERNAL REVIEW)`
+**Status:** `DRAFT — PHASE 2.3 TECHNICAL DESIGN (AWAITING EXTERNAL REVIEW)`
 
 ---
 
@@ -29,85 +29,114 @@ Phase 0 and Phase 2 preflight verified the following runtime facts in the active
 ## 2. WooCommerce Accounting Architecture & HPOS Integration (Correction C1)
 
 ### 2.1 The Accounting Challenge in Installment Purchases
-In a typical WooCommerce purchase, `WC_Order::get_total()` equals the cash charged through a payment gateway. When the gateway confirms payment, calling `$order->payment_complete()` automatically:
-1. Records `total_paid = order_total`.
-2. Transitions order status to `processing` (or `completed`).
-3. Decrements inventory stock.
-4. Marks the order as eligible for fulfillment.
+In standard WooCommerce purchases, `WC_Order::get_total()` equals the full cash charged through a payment gateway. When a gateway confirms payment, standard integrations call `$order->payment_complete()`, which:
+1. Transitions order status to `processing` (or `completed`).
+2. Decrements inventory stock via `wc_reduce_stock_levels()`.
+3. Marks the order as eligible for warehouse fulfillment.
 
 However, in an **installment purchase**:
 - The customer purchases merchandise of total value $M$ (e.g., 50,000,000 IRT).
 - The customer pays an upfront **Initial Payment** $I$ (e.g., 10,000,000 IRT) at checkout.
 - The remaining **Financed Principal** $P = M - I$ (e.g., 40,000,000 IRT) is extended as a credit facility repayable in monthly installments.
 
-If an integration naively leaves WooCommerce order total at 50,000,000 IRT while charging the gateway 10,000,000 IRT:
-- Calling `$order->payment_complete()` marks 50M IRT as paid in cash, producing a **40M IRT cash discrepancy** in WooCommerce accounting and financial reporting.
-- Conversely, leaving the order in `pending` or `partially-paid` prevents automatic fulfillment and stock deduction.
+In WooCommerce 10.5.2 core (`includes/wc-order-functions.php:134-143`), `wc_get_is_paid_statuses()` strictly defines the paid statuses:
+```php
+function wc_get_is_paid_statuses() {
+    return apply_filters( 'woocommerce_order_is_paid_statuses', array( OrderStatus::PROCESSING, OrderStatus::COMPLETED ) );
+}
+```
+Furthermore, `WC_Order::is_paid()` (`includes/class-wc-order.php:1681`) evaluates as:
+```php
+return apply_filters( 'woocommerce_order_is_paid', $this->has_status( wc_get_is_paid_statuses() ), $this );
+```
 
-### 2.2 Deep Investigation of WooCommerce Core APIs & `class-wc-order-item-fee.php`
-We conducted a line-by-line inspection of WooCommerce 10.5.2 core code in `x:\apps\wamp\www\wp4\wp-content\plugins\woocommerce\includes\class-wc-order-item-fee.php`:
+> [!CRITICAL]
+> **Core Accounting Fact:**
+> WooCommerce considers `processing` and `completed` as **paid statuses**.
+> If an order containing 50,000,000 IRT of merchandise is transitioned to `processing` upon receipt of only the 10,000,000 IRT initial payment:
+> - `$order->is_paid()` evaluates to `true`.
+> - WooCommerce sales reports, tax reports, customer invoice emails, and external ERP/accounting exports falsely book **50,000,000 IRT as collected cash**, creating an immediate **40,000,000 IRT unearned cash discrepancy**.
+> - Therefore, **an installment order must NEVER be marked as `processing` or `completed` merely because its initial down payment was received.**
+
+### 2.2 Deep Investigation of WooCommerce Core APIs
+We inspected WooCommerce 10.5.2 core source code across `class-wc-order.php`, `wc-order-functions.php`, and `class-wc-order-item-fee.php`:
 
 ```php
-// WooCommerce Core: class-wc-order-item-fee.php (lines 5-6)
- * Fee
- *
+// WooCommerce Core: class-wc-order-item-fee.php (lines 5-6, 170)
  * Fee is an amount of money charged for a service or something else. It is not supposed to be negative.
-
-// WooCommerce Core: class-wc-order-item-fee.php (line 170)
  * @param string $amount Fee amount (do not enter negative amounts).
 ```
 
-Furthermore, line 94 shows that negative fees trigger discount-like behavior that WooCommerce core explicitly discourages. In addition, calling `$order->payment_complete()` sets `$order->set_date_paid()` and records `total_paid` equal to `get_total()`. Therefore, treating a deferred installment credit as a "negative fee" or calling `payment_complete()` when only the initial payment is received introduces severe architectural and accounting flaws.
-
-| WooCommerce Method / Class | Core Behavior in WC 10.5.2 | Architectural Impact & Hazards |
+| WooCommerce Method / Class | Core Behavior in WC 10.5.2 | Architectural Impact & Constraints |
 | :--- | :--- | :--- |
-| `WC_Order::get_total()` | Returns net total payable after fees, taxes, shipping, and coupons. Gateways use this to charge customers. | Must reflect the exact cash amount to be charged or transacted. |
-| `WC_Order::get_total_paid()` | Tracks exact cash collected. In core, `payment_complete()` sets `total_paid = get_total()`. | **Accounting Hazard:** Calling `payment_complete()` when only initial payment was collected falsely books 100% of merchandise value as received cash. |
-| `WC_Order::get_remaining_refund_amount()` | Calculated as `get_total() - get_total_refunded()`. An order cannot refund more than `get_total()`. | If order total was artificially reduced to initial payment, refunding the whole order later (including paid installments) is blocked by core WooCommerce limits. |
-| `WC_Order_Item_Fee` | Native line item for extra charges. Docstring line 6 & 170: *"not supposed to be negative (do not enter negative amounts)"*. | **Rejected Approach:** Using negative fees violates WooCommerce core contract and can distort tax calculation bases. |
-| `WC_Order::payment_complete($tx_id)` | Core payment finalizer. Sets `date_paid`, transitions status (`processing`), triggers stock reduction. | **Must be bypassed or replaced** by explicit partial payment tracking to prevent false full cash settlement. |
-| `wc_reduce_stock_levels($order_id)` | Explicit core function to decrement product inventory. | Can be invoked directly by custom gateway without calling `payment_complete()`. |
+| `WC_Order::get_total()` | Returns net total payable after fees, taxes, shipping, and coupons. Gateways use this to charge customers. | Retains the full legally binding merchandise value ($50M IRT). |
+| `wc_get_is_paid_statuses()` | Returns `['processing', 'completed']`. | **Crucial Guard:** Any custom status for partial installment payment must NOT be added to this list. |
+| `WC_Order::is_paid()` | Checks `$this->has_status( wc_get_is_paid_statuses() )`. | Returns `false` while an order is partially paid, preventing false revenue recognition. |
+| `WC_Order_Item_Fee` | Line item for fees. Lines 6 & 170 explicitly warn: *"not supposed to be negative (do not enter negative amounts)"*. | **Rejected:** Using negative fees violates core contract and distorts VAT tax bases. |
+| `wc_reduce_stock_levels($order_id)` | Core function to decrement inventory. Checks `_order_stock_reduced` in order meta. | **Called exactly once** upon verified down payment; subsequent calls are safely no-ops. |
+| Order Meta (`update_post_meta` / HPOS CRUD) | Key-value metadata bound to the order. | Safely stores `_negar_club_initial_paid`, `_negar_club_financed_principal`, and `_negar_club_contract_id`. |
+
+*(Note: Earlier documents referenced a non-existent `WC_Order::get_total_paid()`. That reference is now removed; native WooCommerce 10.5.2 tracks order totals and refunds, while partial cash amounts are tracked via order metadata).*
 
 ---
 
-### 2.3 Exhaustive Evaluation of Three Architectural Alternatives Across 10 Criteria
+### 2.3 Practical Order Lifecycle via Custom Order Status (`wc-partially-paid`)
 
-We evaluated three potential architectures for reconciling WooCommerce orders with installment credit:
+To solve the accounting challenge cleanly without bloated custom infrastructure:
 
-- **Alternative A: Full-value WooCommerce Order with Custom Order Status / Partial Payment Tracking**
-  The order total represents the full catalog value (50M IRT). Initial payment (10M IRT) is collected via standard gateway. Upon callback, custom metadata records `_negar_club_initial_paid = 10000000`, `_negar_club_financed_principal = 40000000`. The system transitions order status to `processing` (or custom `negar-installment-active`) and manually triggers `wc_reduce_stock_levels()`, but **does NOT call `$order->payment_complete()`** to avoid false full cash recognition.
-- **Alternative B: Net Gateway Charge via Negative Fee Line Item**
-  Merchandise is in cart at 50M IRT. A negative fee of -40M IRT is injected, reducing `get_total()` to 10M IRT. Gateway charges 10M IRT and calls `payment_complete()`.
-- **Alternative C: Dedicated Installment Payment Gateway Integration (`WC_Gateway_Negar_Installment`) (RECOMMENDED)**
-  A custom WooCommerce gateway handles checkout. The order total remains the full merchandise value (50M IRT) for official VAT invoicing, product gross, and tax compliance. The gateway intercepts the checkout redirect and passes **only the initial payment amount** (10M IRT) to the online banking gateway. Upon callback verification, the gateway records initial cash settlement, records agreement linkage metadata, updates order status to `processing`, and calls `wc_reduce_stock_levels()`. Remaining principal is managed strictly in `wp_negar_club_contracts`.
+1. **Full Merchandise Value Preserved:**
+   `WC_Order::get_total()` remains at full retail value (50,000,000 IRT) for official commercial invoices, tax compliance, and legal customer obligations.
+2. **Dedicated Installment Gateway (`WC_Gateway_Negar_Installment`):**
+   Intercepts checkout, calculates the initial down payment (10,000,000 IRT), and passes **only the initial payment amount** to the online banking gateway.
+3. **Custom Order Status: `wc-partially-paid`:**
+   Upon verified receipt of the initial down payment, the order transitions to:
+   - Status: `wc-partially-paid` (عنوان نمایشی: «پیش‌پرداخت اقساط پرداخت شد»).
+   - Registered via standard WordPress `register_post_status()` and added to `wc_order_statuses`.
+   - **Crucial Invariant:** `wc-partially-paid` is **NOT** included in `wc_get_is_paid_statuses()`.
+   - Result: `$order->is_paid()` evaluates to **`false`**. WooCommerce reports and accounting systems truthfully show that the full order amount has not yet been received in cash.
+4. **Order Metadata Tracking:**
+   The gateway writes clean metadata to the order:
+   - `_negar_club_initial_paid`: `10000000` (IRT)
+   - `_negar_club_financed_principal`: `40000000` (IRT)
+   - `_negar_club_contract_id`: `<contract_id>` (Link to `wp_negar_club_contracts`)
+   - `_negar_club_initial_payment_tx`: `<provider_reference>`
+5. **Exact Single Stock Reduction:**
+   When transitioning from `pending` to `wc-partially-paid`, the engine calls `wc_reduce_stock_levels($order->get_id())` **exactly once**. WooCommerce records `_order_stock_reduced = 'yes'`, guaranteeing that inventory is never decremented twice.
+6. **Warehouse Fulfillment:**
+   Warehouse operators and store managers treat `wc-partially-paid` as an authorized, fulfillable order, allowing physical packaging and shipping.
+7. **Terminal Settlement:**
+   When all scheduled monthly installments in `wp_negar_club_contracts` are settled (`contract.total_outstanding_balance === 0`), the contract status becomes `completed`, and the order status is updated to `completed`, at which point `$order->is_paid()` truthfully becomes `true`.
 
-#### 10-Criteria Comparative Evaluation Matrix:
+---
 
-| Evaluation Criterion | Alternative A (Full Order + Custom Status) | Alternative B (Negative Fee Line Item) | Alternative C (Dedicated Gateway - Recommended) |
+### 2.4 Comparative Evaluation Across 10 Criteria
+
+| Evaluation Criterion | Alternative A (Full Order + Processing Status) | Alternative B (Negative Fee Line Item) | Alternative C (Dedicated Gateway + `wc-partially-paid` - Recommended) |
 | :--- | :--- | :--- | :--- |
-| **1. Product Gross** | **Accurate:** Full merchandise line item value is retained in order lines. | **Accurate:** Product line items retain catalog price, but net total is deflated. | **Accurate:** Retains exact catalog line item totals for all merchandise. |
-| **2. Discount Accounting** | **Clean:** Standard WooCommerce coupons and discounts apply normally to items. | **Distorted:** Line item fee can be classified as discount, confusing analytics. | **Clean:** Coupons and discounts calculate natively before installment terms. |
-| **3. Taxable Base (VAT)** | **Compliant:** Tax calculated on full legally binding purchase price per Iranian tax law. | **Non-Compliant / Risky:** Negative fee deflates taxable base; risks tax audit penalties. | **Compliant:** Tax calculated on full sale amount, meeting Iranian VAT requirements. |
-| **4. Gateway Charge** | **Requires Custom Handling:** Standard gateways charge full total unless intercepted. | **Direct:** Gateway natively charges `get_total()` ($10M IRT). | **Precise:** Gateway explicitly instructs online provider to charge only initial payment. |
-| **5. Order Total** | **Full Value ($50M):** Matches binding merchandise sale agreement. | **Deflated ($10M):** Displays only upfront cash; invoice does not show full sale price. | **Full Value ($50M):** Matches legal sale agreement and customer invoice. |
-| **6. Total Paid** | **Managed:** Explicitly tracks initial paid ($10M) in metadata; avoids false $50M cash. | **False Core Paid:** `payment_complete()` marks entire order as paid in full cash. | **Controlled:** Metadata tracks settled cash ($10M); avoids false `payment_complete()` call. |
-| **7. Deferred Receivable** | **Clear:** Deferred balance ($40M) tracked in club contract ledger. | **Hidden:** WooCommerce has zero record of receivable; exists only in external tables. | **Fully Linked:** Order metadata links directly to `wp_negar_club_contracts.id`. |
-| **8. Sales Reporting** | **Requires Filter:** Standard WC reports may count full sale before cash is in hand. | **Distorted:** Reports show only $10M revenue; understates actual sales volume. | **Integrated:** Sales report reflects gross GMV; club ledger tracks cash vs receivable. |
-| **9. Inventory Reduction** | **Manual Core Hook:** Requires calling `wc_reduce_stock_levels()` explicitly. | **Automatic:** Core `payment_complete()` automatically reduces stock. | **Controlled:** Gateway executes `wc_reduce_stock_levels()` upon verified callback. |
-| **10. Refund/Cancellation** | **Flexible:** Full merchandise value allows refunds of both initial and later payments. | **Capped:** Core `get_remaining_refund_amount()` caps refunds at $10M; breaks future refunds. | **Comprehensive:** Supports partial initial refund via WC and installment refund via club ledger. |
+| **1. Product Gross** | Accurate: Full line items retained. | Accurate in line items, deflated total. | **Accurate:** Full merchandise line item value is retained. |
+| **2. Discount Accounting** | Clean: Coupons calculate natively. | Distorted: Fee classified as discount. | **Clean:** Coupons and discounts calculate natively. |
+| **3. Taxable Base (VAT)** | Compliant: Tax on full legal price. | Non-Compliant: Deflates VAT base. | **Compliant:** Tax calculated on full legally binding sale value. |
+| **4. Gateway Charge** | Requires manual intercept. | Charges net total ($10M). | **Precise:** Gateway charges only initial payment ($10M). |
+| **5. Order Total** | Full Value ($50M). | Deflated ($10M). | **Full Value ($50M):** Matches legal purchase contract and invoice. |
+| **6. WooCommerce Paid Status** | **Fatal Flaw:** `processing` marks order as 100% paid ($50M). | False: Core marks order 100% paid ($10M). | **Truthful:** `wc-partially-paid` keeps `is_paid() == false`. |
+| **7. Deferred Receivable** | Tracked in club ledger. | Hidden from WooCommerce. | **Fully Linked:** Order metadata links directly to `wp_negar_club_contracts.id`. |
+| **8. Sales Reporting** | Distorted: $50M counted as cash. | Distorted: Only $10M reported. | **Truthful:** Gross merchandise volume reported; cash receipt tracked cleanly. |
+| **9. Inventory Reduction** | Manual or core hook. | Core `payment_complete()`. | **Exactly Once:** `wc_reduce_stock_levels()` called upon verified down payment. |
+| **10. Refund/Cancellation** | Supported. | Capped at $10M by WC limits. | **Comprehensive:** Supports down-payment refund via WC and installment refund via ledger. |
 
-### 2.4 Recommended Architecture & Governance
-We recommend **Alternative C (Dedicated Installment Payment Gateway Integration)** as the most robust, compliant, and architecturally sound approach. Alternative A is a viable secondary fallback. Alternative B is **rejected** due to explicit core warnings in `class-wc-order-item-fee.php` and VAT compliance risks.
+### 2.5 Recommended Architecture & Governance
+We recommend **Alternative C (Dedicated Installment Payment Gateway + `wc-partially-paid` Custom Status)**.
+Alternative B is rejected due to `class-wc-order-item-fee.php` core violations. Alternative A is rejected because `processing` falsely triggers `$order->is_paid() === true`.
 
-Because this affects store accounting, revenue recognition, and tax reporting, this architecture is governed by:
+Because commercial invoicing and VAT timing depend on merchant legal and tax policies, this decision remains:
 $$\textbf{Status: PROPOSED — REQUIRES EMPLOYER APPROVAL (CLUB-BD-001, CLUB-BD-002, CLUB-BD-014)}$$
 
 > [!IMPORTANT]
 > **Commercial & Tax Policy Dependency:**
-> The final choice depends on the merchant's official tax and accounting policy:
-> 1. Does the store issue an official VAT invoice (فاکتور رسمی ارزش افزوده) for the full 100% merchandise amount at the date of purchase, or are periodic VAT invoices issued upon installment settlements?
-> 2. How does the merchant's financial system book deferred credit receivables (حساب‌های دریافتنی اقساطی)?
-> Implementation will proceed in Phase 6 only after explicit employer approval.
+> The merchant's tax advisor must confirm whether:
+> 1. Official VAT invoices (فاکتور رسمی ارزش افزوده) are issued for the full 100% amount upon order creation, or periodically as installments are paid.
+> 2. How deferred installment receivables (حساب‌های دریافتنی اقساطی) are mapped to external accounting ledgers.
+> Implementation will proceed in Phase 6 only after explicit employer/accountant approval.
 
 ---
 
@@ -198,22 +227,37 @@ Every settlement, refund, or adjustment must satisfy:
 3. **Settlement Completion:**
    $$\text{contract.total\_outstanding\_balance} === 0 \iff \text{contract.status} = \text{'completed'}$$
 
-### 4.3 Refund Allocation Model & Invariants
-Partial and full refunds are supported via a dedicated table `wp_negar_club_refunds` with deterministic allocation between principal and charges:
-- Stores `refund_number`, `contract_id`, `payment_id`, `order_id`, `installment_id`, `amount_irt`, `principal_refunded_irt`, `charges_refunded_irt`, `amount_irr`, `reason`, `status`, and `gateway_refund_ref`.
-- **Allocation Rule:** When an installment payment or initial payment is refunded:
-  - If linked to a specific installment (`installment_id` is set), the refund is allocated proportionally or sequentially to that installment's `principal_amount` and `charge_amount`.
-  - The linked installment status transitions from `paid` to `due` (or `refunded`/`waived` per approved policy `CLUB-BD-014`).
-  - **Immutability of Original Terms:** The contract's original terms (`purchase_amount`, `initial_payment`, `financed_principal`, `total_charges`, `total_customer_obligation`) remain **strictly immutable** and are never decremented or overwritten.
-  - **Deterministic Rolling Balance Invariants Post-Refund:**
-    $$\text{Net Paid Principal} = \text{paid\_principal} - \text{principal\_refunded\_irt}$$
-    $$\text{Remaining Principal Balance} = \text{financed\_principal} - \text{Net Paid Principal}$$
-    $$\text{Net Paid Charges} = \text{paid\_charges} - \text{charges\_refunded\_irt}$$
-    $$\text{Total Outstanding Balance} = \text{total\_customer\_obligation} - (\text{Net Paid Principal} + \text{Net Paid Charges})$$
-  - An append-only audit event is written to `wp_negar_club_audit_log`.
-  - Governed by `CLUB-BD-014` (`PROPOSED — REQUIRES EMPLOYER APPROVAL`).
+### 4.3 Refund Accounting Consistency & Allocation Model (Correction C4)
+To ensure absolute mathematical integrity and prevent double-deduction errors, the financial engine enforces a strict distinction between two fundamentally different financial operations:
 
-### 4.4 Payment Schema Investigation & Dual Settlement Contexts
+1. **Operation A: Cash Refund (بازگشت وجه نقد):**
+   - The merchant returns cash previously collected from the customer back to their bank account (e.g. for an overpayment or a returned item that was already paid for).
+   - This operation reduces the cumulative net cash received by the merchant.
+   - It does **not** reduce the customer's remaining contractual debt obligation (in fact, if the customer retains the merchandise, unpaid debt increases).
+2. **Operation B: Contractual Debt Cancellation / Product Return (کاهش تعهد ناشی از عودت کالا):**
+   - The customer returns physical merchandise before completing installment payments.
+   - Unpaid future scheduled installments are transitioned to status `cancelled`.
+   - The customer's remaining contractual obligation is reduced by the value of the returned goods.
+   - **Crucial Rule:** No cash is refunded to the customer for unpaid future installments, because cash was never collected for them.
+
+#### Accounting Convention in `wp_negar_club_contracts`:
+- **Original Contract Terms (Strictly Immutable):**
+  `purchase_amount`, `initial_payment`, `financed_principal`, `total_charges`, and `total_customer_obligation` are frozen at execution and **never decremented**.
+- **Cumulative Gross Cash Received:**
+  - `paid_principal`: Cumulative gross principal cash paid by customer (never decremented on refund).
+  - `paid_charges`: Cumulative gross charges cash paid by customer (never decremented on refund).
+- **Dedicated Refund Ledger (`wp_negar_club_refunds`):**
+  Stores each cash refund transaction with explicit breakdown:
+  - `principal_refunded_irt`: Cash refunded from previously paid principal.
+  - `charges_refunded_irt`: Cash refunded from previously paid charges.
+- **Derived Net Invariants (Zero Double Deduction):**
+  $$\text{Net Cash Received} = (\text{paid\_principal} - \text{principal\_refunded\_irt}) + (\text{paid\_charges} - \text{charges\_refunded\_irt})$$
+  $$\text{Remaining Principal Balance} = \text{financed\_principal} - (\text{paid\_principal} - \text{principal\_refunded\_irt}) - \text{cancelled\_principal\_obligation}$$
+  $$\text{Total Outstanding Debt} = \text{total\_customer\_obligation} - \text{Net Cash Received} - \text{cancelled\_obligation}$$
+- **Limitation on Product-Level Partial Returns:**
+  If a customer returns a single item from a multi-item installment order, allocating the debt reduction across remaining installments (e.g. reducing monthly installment amounts vs shortening remaining tenure) requires an explicit commercial policy governed by `CLUB-BD-014` (`PROPOSED — REQUIRES EMPLOYER APPROVAL`). Rather than introducing speculative code abstractions, this limitation is formally documented.
+
+### 4.4 Payment Schema & Dual Settlement Contexts
 Our technical investigation identified several essential constraints in `wp_negar_club_payments`:
 1. **Initial Payment vs. Agreement Lifecycle:** For initial checkout payments, the binding `CreditAgreement` is activated/created **only after** the initial payment has been verified by the payment provider. Therefore, `contract_id` cannot be `BIGINT UNSIGNED NOT NULL` during payment initiation; it must be **nullable** (`BIGINT UNSIGNED NULL`) and linked via `order_id` and `application_id` at initiation time, or tied to a provisional contract in `pending_prerequisite` state.
 2. **Provider Transaction ID Nullability at Initiation:** At the moment a payment attempt is created on the merchant server, the external gateway has not yet returned a transaction reference or tracking token (e.g. Zibal `trackId` or ZarinPal `Authority`). Thus, `provider_tx_id` must be **nullable** (`VARCHAR(64) NULL`) during initiation. The unique constraint `UNIQUE KEY uq_provider_tx (gateway_provider, provider_tx_id)` is fully compliant with MySQL/InnoDB semantics, which permit multiple `NULL` values.
@@ -225,16 +269,18 @@ Our technical investigation identified several essential constraints in `wp_nega
    - If a provider natively accepts and reports in Toman (such as certain modern direct fintech APIs), Rial conversion is bypassed, eliminating unnecessary integer multiplication and division.
 5. **Separation of Settlement Contexts:** To eliminate ambiguity between initial checkout payments and monthly installment servicing, each payment record declares its explicit settlement context:
    - `payment_context`: `VARCHAR(24) NOT NULL DEFAULT 'scheduled_installment'` (`ENUM('initial_checkout', 'scheduled_installment', 'early_settlement')`).
-   - `initial_checkout`: Settles initial checkout payment, updates WooCommerce order, and activates `wp_negar_club_contracts`.
+   - `initial_checkout`: Settles initial checkout payment, updates WooCommerce order to `wc-partially-paid`, reduces stock once, and creates/activates `wp_negar_club_contracts`.
    - `scheduled_installment`: Settles a specific installment row identified by `installment_id`.
    - `early_settlement`: Settles all remaining outstanding balance for the contract.
 
 ### 4.5 Canonical Payment State Machine
 Payment statuses are standardized across all documents:
 - `initiated`: Payment attempt created; user redirected to gateway.
-- `pending_verification`: Callback received from gateway; awaiting server verification.
+- `pending_verification`: Callback received or outbound inquiry in progress; awaiting server verification.
 - `verified`: Transaction verified by provider inquiry/signature and settled atomically.
-- `failed`: Transaction failed at gateway or cancelled by user.
+- `duplicate_settlement_detected`: Gateway confirmed payment, but target installment was already settled by a concurrent payment attempt; held for operator review/refund without double-crediting.
+- `verified_pending_contract`: Initial payment verified with gateway, but local contract creation encountered a temporary database error; queued for safe automated retry.
+- `failed`: Transaction definitively rejected or cancelled by provider/user.
 - `cancelled`: Payment attempt timed out or cancelled before callback.
 - `disputed_amount`: Transaction amount or currency mismatch detected; flagged for operator review.
 - `partially_refunded`: A portion of the verified amount was refunded.
@@ -277,7 +323,7 @@ To reliably correlate callbacks without assuming gateways preserve arbitrary cus
   $$\text{amount\_irt} = \text{intdiv}(\text{amount\_irr}, 10)$$
 - If $\text{amount\_irr} \pmod{10} \ne 0$, the payload is corrupted or fraudulent; the transaction is rejected immediately with status `disputed_amount`.
 
-### 5.4 Two-Stage Webhook Transaction Architecture (Correction C4)
+### 5.4 Two-Stage Webhook Transaction Architecture (Corrections C2, C3, C5)
 A critical architectural defect in naive webhook implementations is holding a database row lock during an outbound HTTPS API call to the payment gateway. Network latency (often 500ms–3000ms for banking switches) or transient gateway timeouts while holding an open transaction starves the database connection pool and induces deadlocks under concurrent callbacks.
 
 The NegarThem payment engine enforces a strict **Two-Stage Settlement Architecture**:
@@ -290,12 +336,19 @@ The NegarThem payment engine enforces a strict **Two-Stage Settlement Architectu
 │ STAGE A: EXTERNAL VERIFICATION (Zero Database Locks Held)                  │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │ 1. Locate payment row by `client_token` or `provider_tx_id` (Read-only).    │
-│ 2. If status is already 'verified': return HTTP 200 immediately (Idempotent)│
-│ 3. Validate callback payload syntax and provider signature (Class 1).       │
-│ 4. If Class 2 / Class 3: dispatch outbound HTTPS verification request to    │
-│    provider verify endpoint WITHOUT holding any database transaction/lock. │
-│ 5. Parse and normalize provider response (provider_ref, verified_amount).  │
-│ 6. If provider reports payment failure: update status='failed'; return 400. │
+│ 2. If status is already terminal ('verified', 'duplicate_settlement_detected'):
+│    return HTTP 200 immediately (Idempotent No-Op; Stale Callback Guard).    │
+│ 3. If Class 1: Validate cryptographic signature on incoming payload.        │
+│ 4. If Class 2 / Class 3: Make outbound HTTPS verify call to provider API   │
+│    WITHOUT holding any database transaction or row lock.                    │
+│ 5. Failure Classification (Correction C5):                                  │
+│    • Network Timeout / cURL Error / HTTP 5xx: DO NOT mark failed!            │
+│      Keep status = 'pending_verification'; return HTTP 503 to trigger retry. │
+│    • Definitive Provider Rejection (Code -1, cancelled, invalid token):     │
+│      UPDATE wp_negar_club_payments SET status = 'failed'                     │
+│      WHERE id = ? AND status IN ('initiated', 'pending_verification');      │
+│      return HTTP 400.                                                       │
+│ 6. Parse and normalize provider response (provider_ref, verified_amount).  │
 └─────────────────────────────────────┬───────────────────────────────────────┘
                                       │ Provider Confirms Success
                                       ▼
@@ -303,27 +356,69 @@ The NegarThem payment engine enforces a strict **Two-Stage Settlement Architectu
 │ STAGE B: ATOMIC LOCAL SETTLEMENT (Strict DB Transaction & Row Locks)        │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │ 1. Start MySQL Transaction ($wpdb->query('START TRANSACTION')).             │
-│ 2. Acquire row locks in consistent deadlock-prevention hierarchy:           │
-│    a. SELECT * FROM wp_negar_club_contracts WHERE id = ? FOR UPDATE         │
-│    b. SELECT * FROM wp_negar_club_installments WHERE id = ? FOR UPDATE      │
-│    c. SELECT * FROM wp_negar_club_payments WHERE id = ? FOR UPDATE          │
-│ 3. Concurrency Re-Check: If payment is ALREADY 'verified', COMMIT & 200 OK. │
-│ 4. Revalidate mathematical invariants:                                      │
-│    • amount_irr % 10 === 0                                                  │
-│    • intdiv(amount_irr, 10) === payment.amount_internal_irt                 │
-│ 5. Execute atomic state mutations:                                          │
-│    • UPDATE wp_negar_club_payments: status='verified', verified_at=NOW()    │
-│    • IF payment_context == 'scheduled_installment':                         │
-│        - UPDATE wp_negar_club_installments: status='paid', settled_at=NOW() │
-│        - UPDATE wp_negar_club_contracts: update rolling balances            │
-│        - IF total_outstanding_balance == 0: contract.status = 'completed'   │
-│    • IF payment_context == 'initial_checkout':                              │
-│        - UPDATE wp_negar_club_contracts: status='active', activated_at=NOW()│
-│        - Set order status to 'processing' and call wc_reduce_stock_levels()  │
-│ 6. INSERT append-only audit event into wp_negar_club_audit_log.             │
-│ 7. COMMIT transaction; return HTTP 200 to gateway.                          │
+│                                                                             │
+│ 2. BRANCH BY PAYMENT CONTEXT:                                               │
+│                                                                             │
+│ [Context A: initial_checkout (Correction C2)]                               │
+│  a. Lock application: SELECT * FROM wp_negar_club_applications              │
+│     WHERE id = ? FOR UPDATE; verify status == 'approved'.                   │
+│  b. Check contract existence: SELECT * FROM wp_negar_club_contracts         │
+│     WHERE order_id = ? FOR UPDATE.                                          │
+│     - If ALREADY exists (idempotent replay): use existing contract.         │
+│     - If NOT exists:                                                        │
+│         - INSERT INTO wp_negar_club_contracts:                              │
+│             contract_number, order_id, application_id, user_id,             │
+│             purchase_amount, initial_payment, financed_principal,           │
+│             total_charges, total_customer_obligation, status = 'active',   │
+│             activated_at = NOW(), plan_snapshot = ...                        │
+│         - Generate N scheduled installment rows in                          │
+│           wp_negar_club_installments with status = 'scheduled'.             │
+│  c. Link & verify payment: UPDATE wp_negar_club_payments SET                 │
+│     status = 'verified', contract_id = contract.id,                         │
+│     provider_reference = ?, verified_at = NOW()                             │
+│     WHERE id = ? AND status IN ('initiated', 'pending_verification');       │
+│  d. Update WooCommerce Order:                                               │
+│     - Set custom status: 'wc-partially-paid' (keeps is_paid() == false).    │
+│     - Set order meta: _negar_club_initial_paid, _negar_club_contract_id.    │
+│     - Call wc_reduce_stock_levels($order->get_id()) (executed exactly once).│
+│  e. INSERT audit_log event: 'initial_checkout_settled'.                     │
+│                                                                             │
+│ [Context B: scheduled_installment (Correction C3)]                          │
+│  a. Lock installment: SELECT * FROM wp_negar_club_installments              │
+│     WHERE id = ? FOR UPDATE.                                                │
+│  b. Concurrency & Duplicate Check:                                          │
+│     - If installment.status == 'paid' OR settled_payment_id IS NOT NULL:    │
+│         - If payment.id == installment.settled_payment_id:                  │
+│             COMMIT; return HTTP 200 OK (Idempotent replay).                 │
+│         - If payment.id != installment.settled_payment_id:                  │
+│             Concurrent duplicate payment detected! DO NOT settle again.     │
+│             UPDATE wp_negar_club_payments SET                               │
+│               status = 'duplicate_settlement_detected',                     │
+│               provider_reference = ?, verified_at = NOW() WHERE id = ?;     │
+│             INSERT audit_log: 'duplicate_installment_payment_flagged';      │
+│             COMMIT; return HTTP 200 OK.                                     │
+│  c. Conditional Atomic Update:                                              │
+│     UPDATE wp_negar_club_installments SET status = 'paid',                  │
+│       paid_amount = total_amount, settled_payment_id = payment.id,          │
+│       settled_at = NOW() WHERE id = ? AND status != 'paid';                 │
+│     (Only if rows_affected == 1):                                           │
+│       - Lock contract: SELECT * FROM wp_negar_club_contracts                │
+│         WHERE id = ? FOR UPDATE; update rolling balances.                   │
+│       - IF total_outstanding_balance == 0: contract.status = 'completed'.  │
+│       - UPDATE wp_negar_club_payments: status = 'verified'.                 │
+│       - INSERT audit_log event: 'installment_settled'.                      │
+│                                                                             │
+│ 3. COMMIT transaction ($wpdb->query('COMMIT')); return HTTP 200 to gateway. │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
+
+#### Practical Recovery Mechanism for Contract Creation Failure (Correction C2):
+If provider verification succeeds in Stage A, but Stage B encounters an unhandled local failure (e.g. database connection drop or constraint error during contract generation):
+1. The transaction automatically rolls back.
+2. The payment record is updated to `verified_pending_contract` with `provider_reference` stored.
+3. An urgent alert is recorded in `wp_negar_club_audit_log` and an administrative order note is appended:
+   «پیش‌پرداخت در درگاه بانکی تأیید شد اما صدور قرارداد با خطای پایگاه داده مواجه گردید. شماره ارجاع درگاه: XYZ».
+4. A scheduled recovery reconciler (`negar_club_reconcile_pending_contracts`) or an administrative action allows the operator to trigger Stage B contract creation safely and idempotently without charging the customer again.
 
 ---
 

@@ -3,8 +3,8 @@
 **Feature:** 013-customer-club
 **Project:** Negar Shop WordPress Theme (`negarThem`)
 **Target Environment:** Local WAMP (`http://localhost/wp4/`)
-**Phase:** Phase 2.2 — Final Architecture Consistency & Financial Lifecycle Audit
-**Status:** `DRAFT — PHASE 2.2 TECHNICAL DESIGN (AWAITING EXTERNAL REVIEW)`
+**Phase:** Phase 2.3 — Critical Financial Architecture Corrections (Minimal Scope)
+**Status:** `DRAFT — PHASE 2.3 TECHNICAL DESIGN (AWAITING EXTERNAL REVIEW)`
 
 ---
 
@@ -109,12 +109,17 @@ In accordance with `AGENTS.md` and project regulations:
 1. **No Live Gateway Calls:** Live Iranian payment gateways (Zibal, ZarinPal, Shaparak) are not active in this development environment. Payment tests must execute against the isolated mock adapter specified in `contracts/payment-webhook-contract.md`.
 2. **Zero Fake Customer Data:** Never invent real national identification codes, phone numbers, bank account numbers, or fraudulent customer reviews. Test fixtures must use reserved test identifiers (e.g., phone `09000000000`, national ID test hash `TEST_NATIONAL_HASH_001`).
 3. **No Fictitious Settlement:** Never record a real financial debt as paid unless backed by the verified test harness assertion.
+4. **Order Status Accounting Integrity (C1):**
+   - An installment order with only down payment collected must NEVER be marked as `processing` or `completed`. In WooCommerce 10.5.2, `wc_get_is_paid_statuses()` treats those as 100% paid.
+   - Installment orders must use the custom order status `wc-partially-paid` («پرداخت جزئی (اقساطی)»), which keeps `$order->is_paid() === false` while permitting warehouse fulfillment.
+   - Stock reduction must be triggered exactly once via `wc_reduce_stock_levels($order_id)`.
+   - Never reference `WC_Order::get_total_paid()`, as it does not exist in WooCommerce core.
 
 ---
 
-## 6. Phase 2.2 Scope Boundaries Reminder
+## 6. Phase 2.3 Scope Boundaries Reminder
 
-During **Phase 2.2 (Final Architecture Consistency & Financial Lifecycle Audit)**:
+During **Phase 2.3 (Critical Financial Architecture Corrections — Minimal Scope)**:
 - ❌ Do NOT create or edit PHP application files in `inc/`, `woocommerce/`, or `page-templates/`.
 - ❌ Do NOT create or run database migration scripts.
 - ❌ Do NOT create plugin files in `wp-content/plugins/`.
@@ -122,4 +127,5 @@ During **Phase 2.2 (Final Architecture Consistency & Financial Lifecycle Audit)*
 - ❌ Do NOT run `npm run test:settings` against the local database.
 - ❌ Do NOT create `tasks.md` or execute `speckit.tasks`.
 - ❌ Do NOT approve or bypass the `review-plan` gate.
+- ❌ Do NOT proceed to Phase 3.
 - ✅ DO review, verify, and commit architectural corrections in Markdown.

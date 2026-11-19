@@ -3,7 +3,7 @@
 **Feature:** 013-customer-club
 **Project:** Negar Shop WordPress Theme (`negarThem`)
 **Date:** 2026-11-18
-**Phase:** Phase 2.2 — Final Architecture Consistency & Financial Lifecycle Audit
+**Phase:** Phase 2.3 — Critical Financial Architecture Corrections (Minimal Scope)
 **Author:** Senior WordPress & WooCommerce Architect Agent
 **Status:** `PROPOSED — REQUIRES EMPLOYER APPROVAL`
 
@@ -191,3 +191,32 @@ The implementation plan requires an early server-authoritative quote calculator 
    - Must enforce database-level idempotency via unique index on provider transaction ID and idempotency key.
    - Must **never** rely on browser nonces or user cookies.
    - Must **never** allow unauthenticated execution.
+
+---
+
+## Record 4: WooCommerce Accounting & Custom Order Status (`CLUB-AD-002`)
+
+### Status
+`PROPOSED — REQUIRES EMPLOYER APPROVAL`
+
+### Context & Problem Statement
+When an order is placed using installment payment (`WC_Gateway_Negar_Installment`), only the initial down payment is collected immediately at checkout. The remaining balance represents customer debt to be paid over future installments.
+In WooCommerce 10.5.2 core:
+- `wc_get_is_paid_statuses()` returns `array('processing', 'completed')`.
+- Calling `$order->payment_complete()` or transitioning the order to `processing` or `completed` causes `$order->is_paid()` to return `true`.
+- If an installment order with only down payment collected is marked `processing`, WooCommerce native sales reports, tax accounting, and invoices record 100% of merchandise value as received cash, distorting financial books.
+- Furthermore, native `WC_Order::get_total_paid()` does not exist in WooCommerce 10.5.2 core.
+- Alternative B (inserting a negative fee line item to balance order total to down payment) is rejected due to core warnings in `class-wc-order-item-fee.php`.
+
+### Decision
+1. **Adopt Alternative C (Dedicated Gateway + Custom Status `wc-partially-paid`):**
+   - Register custom WooCommerce order status `wc-partially-paid` («پرداخت جزئی (اقساطی)»).
+   - `wc-partially-paid` is NOT added to `wc_get_is_paid_statuses()`, guaranteeing `$order->is_paid() === false`.
+   - Native WooCommerce reports and tax summaries reflect that full merchandise cash has not been received.
+2. **Warehouse Fulfillment & Stock Reduction:**
+   - `wc-partially-paid` is registered as a valid fulfillment-ready status for store dispatchers.
+   - Upon initial down payment verification, inventory stock is reduced exactly once by calling `wc_reduce_stock_levels($order_id)`. Native WooCommerce `_order_stock_reduced` metadata prevents duplicate stock reduction.
+3. **Transition to Fully Paid:**
+   - When all installments are fully settled and the credit agreement status transitions to `settled`, the WooCommerce order is transitioned to `processing` (or `completed` if already fulfilled), and `$order->payment_complete()` is invoked.
+4. **Disallow Non-Existent Core Methods:**
+   - All references to `WC_Order::get_total_paid()` are strictly forbidden. Initial cash received is tracked in order metadata `_negar_club_down_payment_settled` and in the immutable `wp_negar_club_payments` table.

@@ -2,8 +2,8 @@
 
 **Branch**: `feat/013-customer-club` | **Date**: 2026-11-18 | **Spec**: [specs/013-customer-club/spec.md](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/specs/013-customer-club/spec.md)
 **Input**: Feature specification from `/specs/013-customer-club/spec.md`
-**Phase**: Phase 2.2 — Final Architecture Consistency & Financial Lifecycle Audit
-**Status**: `DRAFT — PHASE 2.2 TECHNICAL PLAN (GATED AT REVIEW-PLAN)`
+**Phase**: Phase 2.3 — Critical Financial Architecture Corrections (Minimal Scope)
+**Status**: `DRAFT — PHASE 2.3 TECHNICAL PLAN (GATED AT REVIEW-PLAN)`
 
 ---
 
@@ -15,7 +15,7 @@ The technical approach decouples:
 1. **Storefront Presentation Layer (Theme):** High-fidelity Persian RTL customer club landing page, responsive plan comparison cards, interactive preview calculator UI, Settings API management tab (`negar_theme_club_options`), and My Account customer endpoints, integrated into the existing crimson design system.
 2. **Persistent Financial Core (Decoupled Module):** Custom database schema (`wp_negar_club_*`), application underwriting lifecycle, immutable credit agreements with rolling balance tracking, dedicated refunds ledger (`wp_negar_club_refunds`), zero-drift integer Toman (`IRT`) installment scheduling, HPOS-compliant WooCommerce order association, and provider-independent payment webhooks.
 3. **Single Canonical Server-Authoritative Calculator:** A lightweight, stateless calculation service (`packages/negar-customer-club/includes/class-quote-calculator.php`) available as a foundation in Phase 4 to guarantee exact server/client parity for public previews without requiring live payment or credit activation.
-4. **WooCommerce Accounting Alignment:** At checkout, full merchandise catalog value is retained for accurate legal and Iranian VAT invoicing. A dedicated installment payment gateway integration (`WC_Gateway_Negar_Installment` — Alternative C, Recommended) collects the initial payment upfront, tracks cash received in order metadata, links the credit agreement, reduces inventory stock, and transitions status to `processing` without calling `$order->payment_complete()`, avoiding false cash recognition and preserving core accounting integrity (`PROPOSED — REQUIRES EMPLOYER APPROVAL`). Alternative B (negative fee line item) is rejected due to explicit WooCommerce 10.5.2 core warnings in `class-wc-order-item-fee.php`.
+4. **WooCommerce Accounting Alignment:** At checkout, full merchandise catalog value is retained for accurate legal and Iranian VAT invoicing. A dedicated installment payment gateway integration (`WC_Gateway_Negar_Installment` — Alternative C, Recommended) collects the initial down payment upfront, tracks cash received in order metadata, creates the credit agreement and schedule, reduces inventory stock exactly once via `wc_reduce_stock_levels()`, and transitions status to custom status `wc-partially-paid` without calling `$order->payment_complete()` or using standard `processing`/`completed` statuses (which core `wc_get_is_paid_statuses()` treats as 100% paid). This keeps `$order->is_paid() === false`, avoiding false cash recognition and preserving core accounting integrity while permitting warehouse fulfillment (`PROPOSED — REQUIRES EMPLOYER APPROVAL`). Alternative B (negative fee line item) is rejected due to explicit WooCommerce 10.5.2 core warnings in `class-wc-order-item-fee.php`. Native `WC_Order::get_total_paid()` does not exist in WooCommerce 10.5.2 and is strictly avoided.
 
 ---
 
@@ -71,14 +71,14 @@ specs/013-customer-club/
 ├── business-rules.md                # Phase 1 Business rules & decision register (CLUB-BD-001..022, CLUB-AD-001)
 ├── acceptance-matrix.md             # Phase 1 Acceptance criteria traceability matrix (CLUB-AC-001..064)
 ├── architecture-decisions.md        # Phase 2 ADR (CLUB-AD-001 Theme vs Plugin separation)
-├── research.md                      # Phase 2.1 Technical research, HPOS, Modulo 11, state machines, math
-├── data-model.md                    # Phase 2.1 Relational database schemas, refunds, rolling balances
-├── quickstart.md                    # Phase 2.1 Local WAMP developer setup & testing guide
-├── plan.md                          # Phase 2.1 Implementation plan (This document)
+├── research.md                      # Phase 2.3 Technical research, HPOS, Modulo 11, state machines, math
+├── data-model.md                    # Phase 2.3 Relational database schemas, refunds, rolling balances
+├── quickstart.md                    # Phase 2.3 Local WAMP developer setup & testing guide
+├── plan.md                          # Phase 2.3 Implementation plan (This document)
 ├── contracts/
-│   ├── quote-calculator-api.md      # Phase 2.1 Quote Calculator contract (Phase 4 preview parity)
-│   ├── application-lifecycle-api.md # Phase 2.1 Application intake & Modulo 11 review contract
-│   └── payment-webhook-contract.md  # Phase 2.1 Webhook security & adapter contract
+│   ├── quote-calculator-api.md      # Phase 2.3 Quote Calculator contract (Phase 4 preview parity)
+│   ├── application-lifecycle-api.md # Phase 2.3 Application intake & Modulo 11 review contract
+│   └── payment-webhook-contract.md  # Phase 2.3 Webhook security & adapter contract
 └── checklists/
     └── requirements.md              # Phase 1 Specification completeness & consistency review
 ```
@@ -162,7 +162,12 @@ As documented in `architecture-decisions.md`:
 - **Single Canonical Calculator:** Owned by `packages/negar-customer-club/includes/class-quote-calculator.php`. Phase 4 introduces a lightweight foundation of this plugin exposing the calculator service and REST endpoint.
 - **Two-Stage Webhook Transaction Architecture (`CLUB-NFR-007` & `CLUB-AC-047`):**
   - **Stage A (External Verification):** Inbound callback received -> verify HMAC signature or dispatch outbound HTTPS inquiry to provider verify endpoint **WITHOUT holding any database transaction or row lock**.
-  - **Stage B (Atomic Local Settlement):** Begin MySQL transaction -> lock rows in consistent hierarchy (`wp_negar_club_contracts` -> `wp_negar_club_installments` -> `wp_negar_club_payments` `FOR UPDATE`) -> idempotency re-check -> validate amount (`amount_internal_irt`, `gateway_amount`, `gateway_currency`) -> mutate payment and agreement rolling balances -> write append-only audit event -> `COMMIT`.
+    - *Network Timeout / Transient Error Handling (C5):* If provider returns HTTP 5xx or times out, local payment remains `pending_verification` and webhook endpoint returns HTTP 503 Service Unavailable with `Retry-After: 60`. Local payment is NEVER marked `failed` on transient communication failures.
+    - *Terminal State Immutability (C5):* Stale callbacks cannot overwrite terminal statuses (`verified`, `failed`).
+  - **Stage B (Atomic Local Settlement):** Begin MySQL transaction -> lock rows in consistent hierarchy -> idempotency re-check -> validate amount -> mutate state:
+    - *Initial Down Payment Settlement (C1, C2):* Initial payment has `contract_id = NULL` at initiation. Stage B checks if contract exists for `order_id` (guarded by `UNIQUE KEY uq_contract_order`). If absent, it creates contract in `active` status, inserts installment schedule, links payment, sets WooCommerce order status to custom `wc-partially-paid` (preserving `$order->is_paid() === false`), and triggers stock reduction exactly once via `wc_reduce_stock_levels()`. If contract creation encounters local SQL error after provider verification succeeded, payment status is set to `verified_pending_contract` for idempotent reconciliation.
+    - *Installment Settlement & Concurrency Guard (C3):* Locks contract, installment, and payment rows `FOR UPDATE`. Performs atomic conditional update on installment (`WHERE status != 'paid'`). If already settled by a concurrent payment, flags current payment as `duplicate_settlement_detected` without double-crediting contract balances or mutating installment status.
+    - *Refund Accounting Invariants (C4):* Distinguishes Cash Refund (Operation A — cash returned, reduces net collected cash but not customer debt) from Debt Cancellation (Operation B — product return, cancels future installments without cash movement). Fields `paid_principal` and `paid_charges` remain cumulative gross settled cash.
   - Browser/user requests enforce session cookies, user nonces, and object ownership. Payment webhooks operate via provider authentication and correlation tokens (`client_token`).
 
 ---
@@ -171,7 +176,7 @@ As documented in `architecture-decisions.md`:
 
 | Phase | Title | Scope Summary | Preconditions / Dependencies | Gated By |
 | :---: | :--- | :--- | :--- | :--- |
-| **Phase 3** | **Theme Settings** | Implement «باشگاه مشتریان» tab in `inc/theme-settings.php`, register `negar_theme_club_options`, validation callbacks, and backup integration. | Phase 2.2 approved. | None |
+| **Phase 3** | **Theme Settings** | Implement «باشگاه مشتریان» tab in `inc/theme-settings.php`, register `negar_theme_club_options`, validation callbacks, and backup integration. | Phase 2.3 approved. | None |
 | **Phase 4** | **Public Customer Club UI** | Page template, template parts, responsive CSS, interactive calculator, and lightweight plugin foundation exposing single canonical quote calculator. | Phase 3 settings active. | `CLUB-BD-005`, `006`, `011`, `022` (provisional fallback used if open) |
 | **Phase 5** | **Customer Applications** | Application submission endpoint, Modulo 11 validation, anti-IDOR checks, and scoped operator review interface (`negar_club_operator`). | Phase 4 UI completed; Plugin packaging approved (`CLUB-AD-001`). | `CLUB-AD-001`, `CLUB-BD-009`, `010`, `018` |
 | **Phase 6** | **Financial Engine & Payments** | Database tables, dedicated refunds ledger, HPOS order linkage, immutable agreement snapshots with rolling balances, installment generation, webhook adapters, and settlement. | Phase 5 applications; Commercial policies approved. | **BLOCKED BY ALL COMMERCIAL DECISIONS (`CLUB-BD-001`–`022`)** |
@@ -214,5 +219,5 @@ The project's installed Spec Kit workflow explicitly specifies:
    - The provider-independent webhook adapter architecture, two-stage settlement, and normalized currency validation.
    - The single canonical quote calculator ownership.
    - The operational specification of monorepo packaging (`CLUB-AD-001` Option B) and safe migration rollback.
-2. **Phase 2.2 Boundary:** In strict compliance with Prompt Section 2.1 and Section 15 ("Do not generate `tasks.md`. Do not run `speckit.tasks`. Do not approve `review-plan`. The project must remain at Phase 2 awaiting a second independent architectural review"), the generation of `tasks.md` is **strictly held at this gate**.
+2. **Phase 2.3 Boundary:** In strict compliance with Master Prompt Phase 2.3 instructions ("Do not generate `tasks.md`. Do not run `speckit.tasks`. Do not approve `review-plan`. The project must remain at Phase 2 awaiting employer approval"), the generation of `tasks.md` is **strictly held at this gate**.
 3. **Review Ready:** The architecture is now 100% internally consistent, coherent, and ready for external review.
