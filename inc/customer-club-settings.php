@@ -33,18 +33,18 @@ function negar_theme_club_settings_defaults() {
 			'negar_aghaz' => array(
 				'id'              => 'negar_aghaz',
 				'title'           => 'نگار آغاز',
-				'subtitle'        => 'شروعی آسان برای خرید اقساطی لوازم خانگی',
+				'subtitle'        => 'شروعی آسان برای برآورد خرید اقساطی لوازم خانگی',
 				'initial_payment' => 3000000,
 				'ceiling'         => 6000000,
 				'duration_months' => 3,
-				'badge'           => '',
+				'badge'           => 'پیش‌فرض اقتصادی',
 				'is_featured'     => false,
 				'is_enabled'      => true,
 				'features'        => array(
-					'پیش‌پرداخت ۳,۰۰۰,۰۰۰ تومان',
-					'سقف خرید تا ۶,۰۰۰,۰۰۰ تومان',
-					'بازپرداخت ۳ ماهه',
-					'بدون نیاز به ضامن رسمی',
+					'پیش‌پرداخت اولیه: ۳,۰۰۰,۰۰۰ تومان (برآورد)',
+					'سقف خرید: تا ۶,۰۰۰,۰۰۰ تومان',
+					'پیش‌بینی بازپرداخت ۳ ماهه',
+					'بررسی اولیه شرایط بر اساس ضوابط فروشگاه',
 				),
 			),
 			'negar_plus'  => array(
@@ -58,27 +58,27 @@ function negar_theme_club_settings_defaults() {
 				'is_featured'     => true,
 				'is_enabled'      => true,
 				'features'        => array(
-					'پیش‌پرداخت ۵,۰۰۰,۰۰۰ تومان',
-					'سقف خرید تا ۱۰,۰۰۰,۰۰۰ تومان',
-					'بازپرداخت ۶ ماهه',
-					'بررسی سریع درخواست',
+					'پیش‌پرداخت اولیه: ۵,۰۰۰,۰۰۰ تومان (برآورد)',
+					'سقف خرید: تا ۱۰,۰۰۰,۰۰۰ تومان',
+					'پیش‌بینی بازپرداخت ۶ ماهه',
+					'مناسب برای خریدهای متوسط لوازم خانگی',
 				),
 			),
 			'negar_vizhe' => array(
 				'id'              => 'negar_vizhe',
 				'title'           => 'نگار ویژه',
-				'subtitle'        => 'حداکثر سقف خرید برای تجهیز کامل لوازم خانگی',
+				'subtitle'        => 'حداکثر سقف برآورد برای تجهیز کامل لوازم خانگی',
 				'initial_payment' => 10000000,
 				'ceiling'         => 20000000,
 				'duration_months' => 6,
-				'badge'           => '',
+				'badge'           => 'حداکثر تسهیلات',
 				'is_featured'     => false,
 				'is_enabled'      => true,
 				'features'        => array(
-					'پیش‌پرداخت ۱۰,۰۰۰,۰۰۰ تومان',
-					'سقف خرید تا ۲۰,۰۰۰,۰۰۰ تومان',
-					'بازپرداخت ۶ ماهه',
-					'پشتیبانی اختصاصی باشگاه',
+					'پیش‌پرداخت اولیه: ۱۰,۰۰۰,۰۰۰ تومان (برآورد)',
+					'سقف خرید: تا ۲۰,۰۰۰,۰۰۰ تومان',
+					'پیش‌بینی بازپرداخت ۶ ماهه',
+					'مناسب برای خریدهای کامل جهیزیه و لوازم اصلی',
 				),
 			),
 		),
@@ -94,51 +94,51 @@ function negar_theme_club_settings_defaults() {
 		),
 		'copy'                => array(
 			'hero_title'      => 'باشگاه مشتریان و خرید اقساطی نگار',
-			'hero_subtitle'   => 'لوازم خانگی مورد نظرتان را همین حالا تحویل بگیرید و هزینه آن را در اقساط ماهانه پرداخت کنید.',
+			'hero_subtitle'   => 'آشنایی با شرایط و برآورد اولیه‌ی طرح‌های خرید اقساطی لوازم خانگی و پیگیری وضعیت عضویت در باشگاه مشتریان.',
 			'hero_cta_text'   => 'مشاهده و انتخاب طرح‌ها',
-			'cta_title'       => 'آماده شروع خرید اقساطی هستید؟',
-			'cta_subtitle'    => 'همین حالا طرح مورد نظرتان را انتخاب کرده و از مزایای باشگاه مشتریان نگار بهره‌مند شوید.',
+			'cta_title'       => 'آشنایی با طرح‌ها و برآورد شرایط اقساطی',
+			'cta_subtitle'    => 'شرایط و مبالغ طرح‌ها را بررسی فرمایید. فرآیند پذیرش درخواست‌ها پس از اتمام فاز اعتبارسنجی فعال خواهد شد.',
 			'cta_button_text' => 'مشاهده طرح‌های اقساطی',
-			'disabled_notice' => 'سیستم ثبت درخواست و تسهیلات در حال به‌روزرسانی می‌باشد.',
+			'disabled_notice' => 'بخش باشگاه مشتریان در حال حاضر در دست پیکربندی و به‌روزرسانی زیرساخت‌های اعتبارسنجی است.',
 			'timeline_steps'  => array(
 				array(
 					'step'        => 1,
-					'title'       => 'انتخاب طرح و ثبت درخواست',
-					'description' => 'طرح متناسب با نیاز خود را انتخاب کرده و فرم ساده درخواست را تکمیل کنید.',
+					'title'       => 'بررسی و انتخاب طرح',
+					'description' => 'آشنایی با شرایط اولیه، سقف خرید و مدت اقساط پیشنهادی.',
 				),
 				array(
 					'step'        => 2,
-					'title'       => 'بررسی و تایید اعتبار',
-					'description' => 'درخواست شما در کوتاه‌ترین زمان توسط کارشناسان فروشگاه بررسی و نتیجه اعلام می‌شود.',
+					'title'       => 'ثبت درخواست و مدارک',
+					'description' => 'تکمیل فرم اطلاعات و ارائه مستندات پس از فعال‌سازی ثبت‌نام.',
 				),
 				array(
 					'step'        => 3,
-					'title'       => 'خرید اقساطی کالا',
-					'description' => 'کالای انتخابی خود را با پرداخت مبلغ اولیه سفارش داده و تحویل بگیرید.',
+					'title'       => 'بررسی مدارک و اعتبارسنجی',
+					'description' => 'ارزیابی صلاحیت و شرایط خریدار توسط کارشناسان فروشگاه.',
 				),
 				array(
 					'step'        => 4,
-					'title'       => 'تسویه منظم اقساط',
-					'description' => 'اقساط ماهانه را به آسانی از طریق پنل کاربری خود در موعد سررسید پرداخت فرمایید.',
+					'title'       => 'تکمیل سفارش و بازپرداخت',
+					'description' => 'نهایی‌سازی سفارش در صورت تأیید و پرداخت اقساط طبق توافقنامه مصوب.',
 				),
 			),
 		),
 		'faqs'                => array(
 			array(
-				'question' => 'شرایط عمومی خرید اقساطی در نگار شاپ چیست؟',
-				'answer'   => 'کلیه خریداران با داشتن حساب کاربری فعال و ارائه اطلاعات هویتی معتبر می‌توانند متناسب با سقف طرح انتخابی، درخواست خرید اقساطی ثبت نمایند.',
+				'question' => 'شرایط عمومی استفاده از طرح‌های باشگاه مشتریان چیست؟',
+				'answer'   => 'در حال حاضر اطلاعات طرح‌ها به عنوان برآورد و پیش‌نمایش شرایط ارائه شده است. ضوابط نهایی، مدارک مورد نیاز و فرآیند پذیرش پس از اتمام فاز اعتبارسنجی رسماً اعلام خواهد شد.',
 			),
 			array(
 				'question' => 'آیا برای خرید اقساطی نیاز به ضامن است؟',
-				'answer'   => 'بسته به سقف تسهیلات و اعتبارسنجی اولیه، اکثر طرح‌ها بدون ضامن و صرفاً با بررسی هویت و اعتبارسنجی مشتری فعال می‌شوند.',
+				'answer'   => 'ضوابط مربوط به تضامین، مدارک شغلی و اعتبارسنجی پس از تدوین مقررات تجاری فروشگاه مشخص خواهد شد و هیچ‌گونه تعهد قطعی پیش از ارزیابی مدارک وجود ندارد.',
 			),
 			array(
-				'question' => 'مبلغ پیش‌پرداخت چه زمانی و چگونه واریز می‌شود؟',
-				'answer'   => 'پیش‌پرداخت همزمان با نهایی‌سازی سفارش در درگاه پرداخت اینترنتی تسویه می‌شود و جزئی از فاکتور خرید کالاست.',
+				'question' => 'مبلغ پیش‌پرداخت به چه صورت تعیین و واریز می‌شود؟',
+				'answer'   => 'مبالغ اعلام‌شده در طرح‌ها جنبه برآورد اولیه دارد و هرگونه واریز یا پیش‌پرداخت تنها پس از تأیید نهایی درخواست و انعقاد توافقنامه امکان‌پذیر خواهد بود.',
 			),
 			array(
-				'question' => 'اقساط ماهانه را چگونه می‌توان پرداخت کرد؟',
-				'answer'   => 'از طریق بخش «باشگاه مشتریان من» در حساب کاربری، وضعیت سررسیدها مشخص بوده و امکان پرداخت آنلاین هر قسط فراهم است.',
+				'question' => 'آیا در حال حاضر امکان ثبت نهایی درخواست وجود دارد؟',
+				'answer'   => 'خیر، سامانه در مرحله پیش‌نمایش و ارزیابی زیرساخت بوده و دریافت درخواست‌های جدید به زودی پس از ابلاغ مقررات فعال خواهد شد.',
 			),
 		),
 	);
@@ -226,16 +226,81 @@ function negar_theme_sanitize_club_settings( $input ) {
 		$curr_plan = $current['plans'][ $plan_id ] ?? $defaults['plans'][ $plan_id ];
 		$raw_plan  = $submitted_plans[ $plan_id ] ?? array();
 
-		$title           = isset( $raw_plan['title'] ) ? sanitize_text_field( $raw_plan['title'] ) : $curr_plan['title'];
-		$subtitle        = isset( $raw_plan['subtitle'] ) ? sanitize_text_field( $raw_plan['subtitle'] ) : $curr_plan['subtitle'];
-		$initial_payment = isset( $raw_plan['initial_payment'] ) ? absint( $raw_plan['initial_payment'] ) : (int) $curr_plan['initial_payment'];
-		$ceiling         = isset( $raw_plan['ceiling'] ) ? absint( $raw_plan['ceiling'] ) : (int) $curr_plan['ceiling'];
-		$duration_months = isset( $raw_plan['duration_months'] ) ? absint( $raw_plan['duration_months'] ) : (int) $curr_plan['duration_months'];
-		$badge           = isset( $raw_plan['badge'] ) ? sanitize_text_field( $raw_plan['badge'] ) : (string) ( $curr_plan['badge'] ?? '' );
-		$is_featured     = ! empty( $raw_plan['is_featured'] );
-		$is_enabled      = ! empty( $raw_plan['is_enabled'] );
+		$title       = isset( $raw_plan['title'] ) ? sanitize_text_field( $raw_plan['title'] ) : $curr_plan['title'];
+		$subtitle    = isset( $raw_plan['subtitle'] ) ? sanitize_text_field( $raw_plan['subtitle'] ) : $curr_plan['subtitle'];
+		$badge       = isset( $raw_plan['badge'] ) ? sanitize_text_field( $raw_plan['badge'] ) : (string) ( $curr_plan['badge'] ?? '' );
+		$is_featured = ! empty( $raw_plan['is_featured'] );
+		$is_enabled  = ! empty( $raw_plan['is_enabled'] );
 
-		if ( $duration_months < 1 ) {
+		// Validate initial_payment: must be strictly positive numeric integer
+		if ( isset( $raw_plan['initial_payment'] ) ) {
+			$raw_init = trim( (string) $raw_plan['initial_payment'] );
+			if ( ! is_numeric( $raw_init ) || (int) $raw_init <= 0 || false !== strpos( $raw_init, '-' ) ) {
+				if ( function_exists( 'add_settings_error' ) ) {
+					add_settings_error(
+						'negar_theme_club_options',
+						'invalid_initial_payment_' . $plan_id,
+						sprintf(
+							/* translators: %s: plan title */
+							__( 'در طرح «%s»، مبلغ پیش‌پرداخت باید یک عدد مثبت معتبر باشد. مقدار قبلی حفظ شد.', 'negar-shop' ),
+							esc_html( $title )
+						),
+						'error'
+					);
+				}
+				$initial_payment = (int) $curr_plan['initial_payment'];
+			} else {
+				$initial_payment = (int) $raw_init;
+			}
+		} else {
+			$initial_payment = (int) $curr_plan['initial_payment'];
+		}
+
+		// Validate ceiling: must be strictly positive numeric integer
+		if ( isset( $raw_plan['ceiling'] ) ) {
+			$raw_ceil = trim( (string) $raw_plan['ceiling'] );
+			if ( ! is_numeric( $raw_ceil ) || (int) $raw_ceil <= 0 || false !== strpos( $raw_ceil, '-' ) ) {
+				if ( function_exists( 'add_settings_error' ) ) {
+					add_settings_error(
+						'negar_theme_club_options',
+						'invalid_ceiling_' . $plan_id,
+						sprintf(
+							/* translators: %s: plan title */
+							__( 'در طرح «%s»، سقف خرید باید یک عدد مثبت معتبر باشد. مقدار قبلی حفظ شد.', 'negar-shop' ),
+							esc_html( $title )
+						),
+						'error'
+					);
+				}
+				$ceiling = (int) $curr_plan['ceiling'];
+			} else {
+				$ceiling = (int) $raw_ceil;
+			}
+		} else {
+			$ceiling = (int) $curr_plan['ceiling'];
+		}
+
+		// Validate duration_months: must be at least 1 month
+		if ( isset( $raw_plan['duration_months'] ) ) {
+			$raw_dur = trim( (string) $raw_plan['duration_months'] );
+			if ( ! is_numeric( $raw_dur ) || (int) $raw_dur < 1 || false !== strpos( $raw_dur, '-' ) ) {
+				if ( function_exists( 'add_settings_error' ) ) {
+					add_settings_error(
+						'negar_theme_club_options',
+						'invalid_duration_' . $plan_id,
+						sprintf(
+							/* translators: %s: plan title */
+							__( 'در طرح «%s»، مدت اقساط باید حداقل ۱ ماه باشد. مقدار قبلی حفظ شد.', 'negar-shop' ),
+							esc_html( $title )
+						),
+						'error'
+					);
+				}
+				$duration_months = (int) $curr_plan['duration_months'];
+			} else {
+				$duration_months = (int) $raw_dur;
+			}
+		} else {
 			$duration_months = (int) $curr_plan['duration_months'];
 		}
 
