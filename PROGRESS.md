@@ -178,7 +178,7 @@
 **شاخه توسعه:** `feat/013-customer-club`
 **مسیر مستندات:** `specs/013-customer-club/`
 **Baseline مصوب:** `eda9740a9943ab54c2eeb8161498b6556e1533d6`
-**وضعیت کلی:** `IN PROGRESS (Phase 2.3 Critical Financial Corrections Completed — Gated at Spec Kit review-plan)`
+**وضعیت کلی:** `IN PROGRESS (Plan Approved & Tasks Generated — Ready for Phase 3 Implementation upon Authorization)`
 
 - [x] **Phase 0 — Repository Audit & Discovery:** ممیزی کامل کدبیس، محیط WAMP (`WP 7.1.4`, `WC 10.5.2`, `HPOS=yes`, `IRT` با ۰ رقم اعشار)، تنظیمات قالب، سیستم طراحی، مسیرهای WooCommerce/My Account، ابزارها و ریسک‌ها (تأییدشده).
 - [x] **Phase 1 — Specification & Business Rules:**
@@ -223,5 +223,12 @@
   - اصلاح C4 (تخصیص استرداد و ترازهای مالی): تفکیک قاطع عودت نقدی (عملیات A: بازگشت وجه پرداختی) از ابطال دین/مرجوعی کالا (عملیات B: لغو اقساط سررسیدنیافته)؛ حفظ تغییرناپذیری فیلدهای تجمعی ناخالص `paid_principal` و `paid_charges`؛ و افزودن فیلد `refund_type` به جدول `wp_negar_club_refunds`.
   - اصلاح C5 (مدیریت خطاهای گذرای وب‌هوک و تایم‌اوت): تفکیک تایم‌اوت شبکه یا خطای ۵xx ارائه‌دهنده در Stage A از رد قطعی تراکنش؛ باقی ماندن پرداخت در وضعیت `pending_verification` و ارسال پاسخ HTTP 503 جهت تلاش مجدد وب‌هوک ارائه‌دهنده؛ و تغییرناپذیری وضعیت‌های نهایی (`verified`, `failed`) در برابر فراخوانی‌های با تأخیر.
   - توقف الزامی (Mandatory Stop) در گیت `review-plan` بدون تولید `tasks.md` و بدون آغاز فاز ۳.
+- [x] **T307 — Review-Plan Approval & Task Generation (Phase 2 Convergence):**
+  - تایید رسمی گیت `review-plan` توسط بازبین خارجی با شناسه پایه `40d48aef54180681ee2add2fb12fb33a13fe6fd9` و ثبت عبارت رسمی: «Review-plan approved by external reviewer for implementation task generation; financial activation remains separately gated.»
+  - تدوین سند وظایف اجرایی جامع در `specs/013-customer-club/tasks.md` شامل ۶۴ تسک اجرایی ساختاریافته (`T310` تا `T380`) منطبق ۱:۱ با ۶۴ معیار پذیرش (`CLUB-AC-001`–`064`) و ۱۴ داستان کاربری در ۷ فاز عملیاتی.
+  - اعمال محافظ‌های پنج‌گانه مالی و حسابداری (Financial Guards A-E) در تسک‌های فاز ۶ همراه با مسدود ماندن صریح فعال‌سازی مالی تا تصویب قوانین تجاری `CLUB-BD-001` تا `CLUB-BD-022`.
+  - اجرای موفق ابزارهای پیش‌نیاز Spec Kit (`check-prerequisites.ps1 -Json -RequireTasks -IncludeTasks`) و تایید کامل انسجام اسناد با `speckit.analyze`.
+  - نگاشت شناسه‌های تسک‌ها به ردیف‌های ۹‌گانه باشگاه مشتریان در `specs/coverage-matrix.md`.
+  - آماده‌سازی کامل فاز ۳ (تنظیمات پوسته) جهت پیاده‌سازی بلادرنگ به محض دریافت پرامپت تایید کارفرما.
 - [ ] **Phases 3–9:** آغاز نشده (موتور مالی تا تأیید تصمیم‌های تجاری `CLUB-BD-001`–`022` و مجوز کارفرما کاملاً غیرفعال می‌ماند).
 

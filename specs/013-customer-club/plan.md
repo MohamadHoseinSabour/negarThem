@@ -3,7 +3,7 @@
 **Branch**: `feat/013-customer-club` | **Date**: 2026-11-18 | **Spec**: [specs/013-customer-club/spec.md](file:///x:/apps/wamp/www/wp4/wp-content/themes/negarThem/specs/013-customer-club/spec.md)
 **Input**: Feature specification from `/specs/013-customer-club/spec.md`
 **Phase**: Phase 2.3 — Critical Financial Architecture Corrections (Minimal Scope)
-**Status**: `DRAFT — PHASE 2.3 TECHNICAL PLAN (GATED AT REVIEW-PLAN)`
+**Status**: `APPROVED — PHASE 2.3 TECHNICAL PLAN (REVIEW-PLAN GATE PASSED)`
 
 ---
 
@@ -212,12 +212,8 @@ The project's installed Spec Kit workflow explicitly specifies:
 ```
 
 ### Review Gate Status & Decision
-1. **Mandatory Human Gate:** The step `review-plan` is an explicit, mandatory review gate designed to ensure that the employer/system architect reviews and approves the updated architecture:
-   - The WooCommerce accounting model (Alternative C recommended, Alternative B rejected) and HPOS order association.
-   - The Iranian National ID Modulo 11 algorithm and test vectors.
-   - The updated data model with dedicated refunds ledger, nullable initiation fields, client tokens, and rolling balances.
-   - The provider-independent webhook adapter architecture, two-stage settlement, and normalized currency validation.
-   - The single canonical quote calculator ownership.
-   - The operational specification of monorepo packaging (`CLUB-AD-001` Option B) and safe migration rollback.
-2. **Phase 2.3 Boundary:** In strict compliance with Master Prompt Phase 2.3 instructions ("Do not generate `tasks.md`. Do not run `speckit.tasks`. Do not approve `review-plan`. The project must remain at Phase 2 awaiting employer approval"), the generation of `tasks.md` is **strictly held at this gate**.
-3. **Review Ready:** The architecture is now 100% internally consistent, coherent, and ready for external review.
+1. **Mandatory Human Gate Passed:** The step `review-plan` has been reviewed and formally approved by the external reviewer.
+2. **Reviewer Decision Record:**
+   > `Review-plan approved by external reviewer for implementation task generation; financial activation remains separately gated.`
+3. **Task Generation Authorized:** Generation of `specs/013-customer-club/tasks.md` is authorized under the approved baseline `40d48aef54180681ee2add2fb12fb33a13fe6fd9`.
+4. **Financial Operations Boundary:** Live financial operations, real-money gateways, and persistent financial tables remain strictly gated until commercial decisions `CLUB-BD-001` through `CLUB-BD-022` and architectural decisions `CLUB-AD-001` and `CLUB-AD-002` receive formal employer signoff. Implementation begins with Phase 3 (Theme Settings) upon subsequent employer authorization.
