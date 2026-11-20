@@ -60,10 +60,11 @@ class Negar_Club_Admin_Applications {
 			wp_die( 'شما دسترسی لازم برای این عملیات را ندارید.' );
 		}
 
-		$action     = sanitize_key( (string) $_POST['negar_club_admin_action'] );
-		$app_number = sanitize_text_field( (string) ( $_POST['application_number'] ?? '' ) );
-		$actor_id   = get_current_user_id();
-		$notes      = sanitize_textarea_field( (string) ( $_POST['operator_notes'] ?? '' ) );
+		$action           = sanitize_key( (string) $_POST['negar_club_admin_action'] );
+		$app_number       = sanitize_text_field( (string) ( $_POST['application_number'] ?? '' ) );
+		$actor_id         = get_current_user_id();
+		$notes            = sanitize_textarea_field( (string) ( $_POST['operator_notes'] ?? '' ) );
+		$customer_message = sanitize_textarea_field( (string) ( $_POST['customer_message'] ?? '' ) );
 
 		if ( empty( $app_number ) ) {
 			add_settings_error( 'negar_club_messages', 'missing_app', 'شماره درخواست معتبر نمی‌باشد.', 'error' );
@@ -88,6 +89,7 @@ class Negar_Club_Admin_Applications {
 				array(
 					'approved_ceiling' => $ceiling,
 					'validity_days'    => $validity_days,
+					'customer_message' => $customer_message,
 				)
 			);
 
@@ -111,7 +113,10 @@ class Negar_Club_Admin_Applications {
 				$app_number,
 				Negar_Club_Application_Manager::STATUS_REJECTED,
 				$actor_id,
-				$notes
+				$notes,
+				array(
+					'customer_message' => $customer_message,
+				)
 			);
 
 			if ( is_wp_error( $result ) ) {
@@ -288,13 +293,16 @@ class Negar_Club_Admin_Applications {
 													<input type="hidden" name="application_number" value="<?php echo esc_attr( $item['application_number'] ); ?>" />
 													
 													<label style="display: block; font-size: 11px; margin-bottom: 4px; font-weight: 600;">سقف مصوب (تومان):</label>
-													<input type="number" name="approved_ceiling" value="<?php echo esc_attr( $item['requested_ceiling'] ); ?>" style="width: 100%; margin-bottom: 8px;" required />
+													<input type="number" name="approved_ceiling" value="<?php echo esc_attr( $item['requested_ceiling'] ); ?>" max="<?php echo esc_attr( $item['requested_ceiling'] ); ?>" style="width: 100%; margin-bottom: 8px;" required />
 													
 													<label style="display: block; font-size: 11px; margin-bottom: 4px; font-weight: 600;">مدت اعتبار (روز):</label>
-													<input type="number" name="validity_days" value="14" style="width: 100%; margin-bottom: 8px;" />
+													<input type="number" name="validity_days" value="14" min="1" max="90" style="width: 100%; margin-bottom: 8px;" />
 													
-													<label style="display: block; font-size: 11px; margin-bottom: 4px; font-weight: 600;">یادداشت کارشناس:</label>
-													<textarea name="operator_notes" rows="2" style="width: 100%; margin-bottom: 8px;" placeholder="علت یا توضیحات تأیید..."></textarea>
+													<label style="display: block; font-size: 11px; margin-bottom: 4px; font-weight: 600;">پیام به متقاضی (قابل مشاهده در پنل کاربر):</label>
+													<textarea name="customer_message" rows="2" style="width: 100%; margin-bottom: 8px;" placeholder="توضیح عمومی برای مشتری..."></textarea>
+
+													<label style="display: block; font-size: 11px; margin-bottom: 4px; font-weight: 600; color: #475569;">یادداشت داخلی کارشناس (محرمانه):</label>
+													<textarea name="operator_notes" rows="2" style="width: 100%; margin-bottom: 8px;" placeholder="یادداشت و بررسی‌های پرونده..."></textarea>
 													
 													<button type="submit" class="button button-primary button-small" style="width: 100%; background: #166534; border-color: #166534;">
 														✓ تأیید درخواست
@@ -307,8 +315,11 @@ class Negar_Club_Admin_Applications {
 													<input type="hidden" name="negar_club_admin_action" value="reject" />
 													<input type="hidden" name="application_number" value="<?php echo esc_attr( $item['application_number'] ); ?>" />
 													
-													<label style="display: block; font-size: 11px; margin-bottom: 4px; font-weight: 600; color: #991b1b;">دلیل رد درخواست (الزامی):</label>
-													<textarea name="operator_notes" rows="2" style="width: 100%; margin-bottom: 8px;" placeholder="دلیل عدم احراز شرایط..." required></textarea>
+													<label style="display: block; font-size: 11px; margin-bottom: 4px; font-weight: 600; color: #991b1b;">دلیل رد درخواست برای مشتری:</label>
+													<textarea name="customer_message" rows="2" style="width: 100%; margin-bottom: 8px;" placeholder="علت عدم تأیید قابل مشاهده برای مشتری..."></textarea>
+
+													<label style="display: block; font-size: 11px; margin-bottom: 4px; font-weight: 600; color: #475569;">یادداشت داخلی کارشناس (محرمانه - الزامی):</label>
+													<textarea name="operator_notes" rows="2" style="width: 100%; margin-bottom: 8px;" placeholder="دلیل محرمانه رد پرونده..." required></textarea>
 													
 													<button type="submit" class="button button-secondary button-small" style="width: 100%; color: #991b1b; border-color: #fca5a5;">
 														✕ رد درخواست

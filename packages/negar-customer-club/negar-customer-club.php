@@ -16,8 +16,8 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'NEGAR_CLUB_VERSION', '1.0.0' );
-define( 'NEGAR_CLUB_DB_VERSION', '1.0.0' );
+define( 'NEGAR_CLUB_VERSION', '1.1.0' );
+define( 'NEGAR_CLUB_DB_VERSION', '1.1.0' );
 define( 'NEGAR_CLUB_DIR', __DIR__ );
 
 // Core components

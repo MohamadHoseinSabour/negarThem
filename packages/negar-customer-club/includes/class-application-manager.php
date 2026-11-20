@@ -2,11 +2,12 @@
 /**
  * Application Lifecycle & State Machine Manager for Negar Customer Club.
  *
- * Implements customer application submission, state machine transitions,
- * anti-IDOR authorization guards, audit trail emission, and REST endpoints.
+ * Implements customer application submission, atomic concurrency protection,
+ * state machine transitions with optimistic concurrency locking,
+ * anti-IDOR authorization guards, audit trail emission, and secure REST endpoints.
  *
  * @package NegarCustomerClub
- * @version 1.0.0
+ * @version 1.1.0
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -92,14 +93,14 @@ class Negar_Club_Application_Manager {
 	public static function generate_application_number() {
 		global $wpdb;
 
-		$table = $wpdb->prefix . 'negar_club_applications';
+		$table = Negar_Club_Database::get_table_name( 'applications' );
 		$date  = gmdate( 'Ymd' );
 
 		for ( $i = 0; $i < 10; $i++ ) {
 			$random = strtoupper( wp_generate_password( 4, false ) );
 			$number = "APP-{$date}-{$random}";
 
-			$existing = $wpdb->get_var( $wpdb->prepare( "SELECT id FROM {$table} WHERE application_number = %s LIMIT 1", $number ) );
+			$existing = $wpdb->get_var( $wpdb->prepare( "SELECT id FROM `{$table}` WHERE application_number = %s LIMIT 1", $number ) );
 			if ( ! $existing ) {
 				return $number;
 			}
@@ -123,9 +124,9 @@ class Negar_Club_Application_Manager {
 			return new WP_Error( 'UNAUTHORIZED', 'جهت ثبت درخواست عضویت باید وارد حساب کاربری خود شوید.', array( 'status' => 401 ) );
 		}
 
-		// 1. Check if club and applications intake are enabled in theme settings
-		$club_enabled = function_exists( 'negar_theme_club_setting' ) ? (bool) negar_theme_club_setting( 'is_enabled', null, true ) : true;
-		$allow_apply  = function_exists( 'negar_theme_club_setting' ) ? (bool) negar_theme_club_setting( 'allow_applications', null, true ) : true;
+		// 1. Check if club and applications intake are enabled in theme settings (Fail-closed Fix D)
+		$club_enabled = function_exists( 'negar_theme_club_setting' ) ? (bool) negar_theme_club_setting( 'is_enabled', null, false ) : false;
+		$allow_apply  = function_exists( 'negar_theme_club_setting' ) ? (bool) negar_theme_club_setting( 'allow_applications', null, false ) : false;
 
 		if ( ! $club_enabled || ! $allow_apply ) {
 			return new WP_Error(
@@ -186,35 +187,42 @@ class Negar_Club_Application_Manager {
 			);
 		}
 
-		// 6. Check Duplicate Active Applications
-		$table_applications = $wpdb->prefix . 'negar_club_applications';
-		$active_statuses    = array( self::STATUS_PENDING_REVIEW, self::STATUS_UNDER_REVIEW, self::STATUS_APPROVED );
-		$status_placeholders = implode( "','", array_map( 'esc_sql', $active_statuses ) );
+		// 6. Pre-check Duplicate Active Applications & Information Disclosure Protection (Fix A & Fix B)
+		$table_applications = Negar_Club_Database::get_table_name( 'applications' );
 
 		$existing_active = $wpdb->get_row(
 			$wpdb->prepare(
-				"SELECT id, application_number, status FROM {$table_applications}
-				 WHERE status IN ('{$status_placeholders}')
-				   AND (user_id = %d OR national_id_hash = %s)
+				"SELECT id, user_id, application_number, status FROM `{$table_applications}`
+				 WHERE (active_lock_user = %s OR active_lock_nid = %s)
 				 LIMIT 1",
-				$user_id,
-				$national_id_hash
+				(string) $user_id,
+				(string) $national_id_hash
 			)
 		);
 
 		if ( $existing_active ) {
-			return new WP_Error(
-				'DUPLICATE_ACTIVE_APPLICATION',
-				sprintf(
-					'شما قبلاً یک درخواست فعال یا در حال بررسی (شماره %s با وضعیت %s) دارید. امکان ثبت درخواست همزمان وجود ندارد.',
-					$existing_active->application_number,
-					self::get_status_label( $existing_active->status )
-				),
-				array(
-					'status'             => 409,
-					'application_number' => $existing_active->application_number,
-				)
-			);
+			// Fix A: If active application belongs to the current user, inform them of their own application
+			if ( (int) $existing_active->user_id === $user_id ) {
+				return new WP_Error(
+					'DUPLICATE_ACTIVE_APPLICATION',
+					sprintf(
+						'شما قبلاً یک درخواست فعال یا در حال بررسی (شماره %s با وضعیت %s) دارید. امکان ثبت درخواست همزمان وجود ندارد.',
+						$existing_active->application_number,
+						self::get_status_label( $existing_active->status )
+					),
+					array(
+						'status'             => 409,
+						'application_number' => $existing_active->application_number,
+					)
+				);
+			} else {
+				// Fix A: If active application belongs to a DIFFERENT user account, NEVER disclose metadata!
+				return new WP_Error(
+					'DUPLICATE_APPLICATION_RESTRICTED',
+					'امکان ثبت درخواست برای این اطلاعات هویتی وجود ندارد. در صورت نیاز به بررسی، لطفاً با پشتیبانی فروشگاه تماس حاصل فرمایید.',
+					array( 'status' => 409 )
+				);
+			}
 		}
 
 		// 7. Sanitize optional notes
@@ -225,7 +233,7 @@ class Negar_Club_Application_Manager {
 
 		$income_bracket = isset( $data['income_bracket'] ) ? sanitize_text_field( (string) $data['income_bracket'] ) : null;
 
-		// 8. Generate unique application number and insert
+		// 8. Generate unique application number and insert with active lock tokens (Fix B)
 		$application_number = self::generate_application_number();
 		$now                = current_time( 'mysql' );
 
@@ -237,10 +245,13 @@ class Negar_Club_Application_Manager {
 			'requested_ceiling'  => $requested_ceiling,
 			'approved_ceiling'   => 0,
 			'national_id_hash'   => $national_id_hash,
+			'active_lock_user'   => (string) $user_id,
+			'active_lock_nid'    => (string) $national_id_hash,
 			'income_bracket'     => $income_bracket,
 			'contact_phone'      => $contact_phone,
 			'applicant_notes'    => $applicant_notes,
 			'operator_notes'     => null,
+			'customer_message'   => null,
 			'reviewed_by'        => null,
 			'reviewed_at'        => null,
 			'expires_at'         => null,
@@ -248,10 +259,22 @@ class Negar_Club_Application_Manager {
 			'updated_at'         => $now,
 		);
 
-		$format = array( '%s', '%d', '%s', '%s', '%d', '%d', '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%s', '%s', '%s' );
+		$format = array( '%s', '%d', '%s', '%s', '%d', '%d', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%s', '%s', '%s' );
 
+		// Suppress errors temporarily to gracefully catch concurrent MySQL duplicate key exceptions
+		$wpdb->suppress_errors( true );
 		$inserted = $wpdb->insert( $table_applications, $insert_data, $format );
+		$wpdb->suppress_errors( false );
+
 		if ( false === $inserted ) {
+			// Catch atomic MySQL unique constraint conflict (Fix B)
+			if ( false !== strpos( $wpdb->last_error, 'uq_active_user' ) || false !== strpos( $wpdb->last_error, 'uq_active_nid' ) || false !== strpos( $wpdb->last_error, 'Duplicate entry' ) ) {
+				return new WP_Error(
+					'DUPLICATE_ACTIVE_APPLICATION',
+					'یک درخواست فعال دیگر به صورت همزمان ثبت شده یا در حال پردازش است.',
+					array( 'status' => 409 )
+				);
+			}
 			return new WP_Error( 'DB_ERROR', 'خطا در ثبت اطلاعات درخواست در پایگاه داده.', array( 'status' => 500 ) );
 		}
 
@@ -291,23 +314,26 @@ class Negar_Club_Application_Manager {
 	/**
 	 * Transition an application to a new status following state machine rules.
 	 *
+	 * Uses optimistic concurrency locking (conditional status check) to prevent
+	 * competing operator transitions from overwriting one another.
+	 *
 	 * @param string|int           $app_id_or_number Application ID or application_number.
 	 * @param string               $new_status       Target status.
 	 * @param int                  $actor_id         ID of operator/user making the transition.
-	 * @param string               $operator_notes   Mandatory reason or explanatory notes.
-	 * @param array<string, mixed> $additional_data  Optional payload (e.g. approved_ceiling, validity_days).
+	 * @param string               $operator_notes   Mandatory reason or internal explanatory notes.
+	 * @param array<string, mixed> $additional_data  Optional payload (approved_ceiling, validity_days, customer_message).
 	 * @return array<string, mixed>|WP_Error
 	 */
 	public static function transition_status( $app_id_or_number, $new_status, $actor_id, $operator_notes = '', $additional_data = array() ) {
 		global $wpdb;
 
-		$table = $wpdb->prefix . 'negar_club_applications';
+		$table = Negar_Club_Database::get_table_name( 'applications' );
 
 		// 1. Fetch current application
 		if ( is_numeric( $app_id_or_number ) ) {
-			$app = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$table} WHERE id = %d LIMIT 1", (int) $app_id_or_number ) );
+			$app = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM `{$table}` WHERE id = %d LIMIT 1", (int) $app_id_or_number ) );
 		} else {
-			$app = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$table} WHERE application_number = %s LIMIT 1", sanitize_text_field( $app_id_or_number ) ) );
+			$app = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM `{$table}` WHERE application_number = %s LIMIT 1", sanitize_text_field( $app_id_or_number ) ) );
 		}
 
 		if ( ! $app ) {
@@ -334,10 +360,9 @@ class Negar_Club_Application_Manager {
 			'status'     => $new_status,
 			'updated_at' => $now,
 		);
-		$update_format    = array( '%s', '%s' );
 		$approved_ceiling = (int) $app->approved_ceiling;
 
-		// 3. Status-specific validation & handling
+		// 3. Status-specific validation & handling (Fix C)
 		if ( self::STATUS_APPROVED === $new_status ) {
 			$raw_ceiling = $additional_data['approved_ceiling'] ?? $app->requested_ceiling;
 			$ceiling_val = Negar_Club_Validator::validate_amount( $raw_ceiling, 1, 10000000000 );
@@ -345,45 +370,103 @@ class Negar_Club_Application_Manager {
 				return new WP_Error( 'INVALID_CEILING', 'سقف اعتبار تأیید شده باید یک مبلغ مثبت معتبر باشد.', array( 'status' => 422 ) );
 			}
 
+			// Validate against plan ceiling (Fix C)
+			$defaults     = function_exists( 'negar_theme_club_settings_defaults' ) ? negar_theme_club_settings_defaults() : array();
+			$all_plans    = function_exists( 'negar_theme_club_setting' ) ? negar_theme_club_setting( 'plans', null, array() ) : ( $defaults['plans'] ?? array() );
+			$plan         = $all_plans[ $app->plan_id ] ?? ( $defaults['plans'][ $app->plan_id ] ?? null );
+			$plan_ceiling = isset( $plan['ceiling'] ) ? (int) $plan['ceiling'] : 0;
+
+			if ( $plan_ceiling > 0 && $ceiling_val > $plan_ceiling ) {
+				return new WP_Error(
+					'EXCESSIVE_CEILING',
+					sprintf( 'سقف مصوب (%s تومان) نمی‌تواند از سقف مجاز طرح (%s تومان) فراتر رود.', number_format( $ceiling_val ), number_format( $plan_ceiling ) ),
+					array( 'status' => 422 )
+				);
+			}
+
+			// Validate against requested ceiling (Fix C)
+			if ( (int) $app->requested_ceiling > 0 && $ceiling_val > (int) $app->requested_ceiling ) {
+				return new WP_Error(
+					'EXCESSIVE_CEILING',
+					sprintf( 'سقف مصوب (%s تومان) نمی‌تواند از سقف درخواستی مشتری (%s تومان) فراتر رود.', number_format( $ceiling_val ), number_format( $app->requested_ceiling ) ),
+					array( 'status' => 422 )
+				);
+			}
+
+			// Validate validity duration (between 1 and 90 days)
+			$raw_validity_days = isset( $additional_data['validity_days'] ) ? (int) $additional_data['validity_days'] : 14;
+			if ( $raw_validity_days <= 0 || $raw_validity_days > 90 ) {
+				return new WP_Error( 'INVALID_VALIDITY_DAYS', 'مدت اعتبار مصوب باید بین ۱ تا ۹۰ روز باشد.', array( 'status' => 422 ) );
+			}
+
 			$approved_ceiling              = $ceiling_val;
-			$validity_days                 = isset( $additional_data['validity_days'] ) ? max( 1, (int) $additional_data['validity_days'] ) : 14;
-			$expires_at                    = gmdate( 'Y-m-d H:i:s', time() + ( $validity_days * DAY_IN_SECONDS ) );
+			$expires_at                    = gmdate( 'Y-m-d H:i:s', time() + ( $raw_validity_days * DAY_IN_SECONDS ) );
 			$update_data['approved_ceiling'] = $approved_ceiling;
 			$update_data['reviewed_by']     = (int) $actor_id;
 			$update_data['reviewed_at']     = $now;
 			$update_data['expires_at']      = $expires_at;
-			$update_format[]               = '%d';
-			$update_format[]               = '%d';
-			$update_format[]               = '%s';
-			$update_format[]               = '%s';
+
+			// Public message for customer
+			$update_data['customer_message'] = sanitize_textarea_field( (string) ( $additional_data['customer_message'] ?? sprintf( 'درخواست شما برای خرید اقساطی تا سقف %s تومان مورد تأیید قرار گرفت.', number_format( $approved_ceiling ) ) ) );
 		} elseif ( self::STATUS_REJECTED === $new_status ) {
 			if ( empty( trim( (string) $operator_notes ) ) ) {
 				return new WP_Error( 'MISSING_REASON', 'درج علت رد درخواست توسط کارشناس الزامی است.', array( 'status' => 422 ) );
 			}
-			$update_data['reviewed_by'] = (int) $actor_id;
-			$update_data['reviewed_at'] = $now;
-			$update_format[]            = '%d';
-			$update_format[]            = '%s';
+			$update_data['reviewed_by']      = (int) $actor_id;
+			$update_data['reviewed_at']      = $now;
+			$update_data['customer_message'] = sanitize_textarea_field( (string) ( $additional_data['customer_message'] ?? 'متأسفانه مدارک و شرایط هویتی شما برای طرح انتخابی مورد تأیید قرار نگرفت.' ) );
 		}
 
 		if ( ! empty( $operator_notes ) ) {
 			$update_data['operator_notes'] = sanitize_textarea_field( (string) $operator_notes );
-			$update_format[]               = '%s';
 		}
 
-		$updated = $wpdb->update(
-			$table,
-			$update_data,
-			array( 'id' => (int) $app->id ),
-			$update_format,
-			array( '%d' )
+		// In terminal states, release active lock tokens to allow future applications (Fix B)
+		if ( in_array( $new_status, array( self::STATUS_REJECTED, self::STATUS_CANCELLED, self::STATUS_EXPIRED ), true ) ) {
+			$update_data['active_lock_user'] = null;
+			$update_data['active_lock_nid']  = null;
+		}
+
+		// 4. Conditional State Transition / Optimistic Concurrency Guard (Fix C)
+		$set_clauses = array();
+		$query_args  = array();
+		foreach ( $update_data as $col => $val ) {
+			if ( null === $val ) {
+				$set_clauses[] = "`{$col}` = NULL";
+			} else {
+				$set_clauses[] = "`{$col}` = %s";
+				$query_args[]  = $val;
+			}
+		}
+		$set_sql = implode( ', ', $set_clauses );
+
+		$query_args[] = (int) $app->id;
+		$query_args[] = $current_status;
+
+		$affected = $wpdb->query(
+			$wpdb->prepare(
+				"UPDATE `{$table}` SET {$set_sql} WHERE `id` = %d AND `status` = %s",
+				$query_args
+			)
 		);
 
-		if ( false === $updated ) {
+		if ( false === $affected ) {
 			return new WP_Error( 'DB_UPDATE_ERROR', 'خطا در به‌روزرسانی وضعیت درخواست.', array( 'status' => 500 ) );
 		}
 
-		// 4. Append audit log
+		if ( 0 === $affected ) {
+			// Verify if the status changed concurrently
+			$fresh = $wpdb->get_row( $wpdb->prepare( "SELECT status FROM `{$table}` WHERE `id` = %d", (int) $app->id ) );
+			if ( $fresh && $fresh->status !== $current_status ) {
+				return new WP_Error(
+					'CONCURRENT_STATE_CONFLICT',
+					sprintf( 'وضعیت این درخواست همزمان توسط کارشناس دیگری به "%s" تغییر یافته است.', self::get_status_label( $fresh->status ) ),
+					array( 'status' => 409 )
+				);
+			}
+		}
+
+		// 5. Append audit log ONLY for successfully committed transition (Fix C)
 		$audit_id = Negar_Club_Database::log_audit(
 			'club_application',
 			(int) $app->id,
@@ -415,10 +498,9 @@ class Negar_Club_Application_Manager {
 	}
 
 	/**
-	 * Query application details for a user with strict anti-IDOR isolation.
+	 * Query application details for a user with strict anti-IDOR isolation and note privacy.
 	 *
-	 * Only the owning customer or a user with `negar_club_operator` can view.
-	 * Plaintext national ID is NEVER returned.
+	 * Internal operator notes are never disclosed to customers (Fix A).
 	 *
 	 * @param string|int $app_id_or_number Application ID or application_number.
 	 * @param int        $requesting_user_id ID of requesting user.
@@ -427,12 +509,12 @@ class Negar_Club_Application_Manager {
 	public static function get_application_for_user( $app_id_or_number, $requesting_user_id ) {
 		global $wpdb;
 
-		$table = $wpdb->prefix . 'negar_club_applications';
+		$table = Negar_Club_Database::get_table_name( 'applications' );
 
 		if ( is_numeric( $app_id_or_number ) ) {
-			$app = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$table} WHERE id = %d LIMIT 1", (int) $app_id_or_number ) );
+			$app = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM `{$table}` WHERE id = %d LIMIT 1", (int) $app_id_or_number ) );
 		} else {
-			$app = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$table} WHERE application_number = %s LIMIT 1", sanitize_text_field( $app_id_or_number ) ) );
+			$app = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM `{$table}` WHERE application_number = %s LIMIT 1", sanitize_text_field( $app_id_or_number ) ) );
 		}
 
 		if ( ! $app ) {
@@ -452,24 +534,33 @@ class Negar_Club_Application_Manager {
 			);
 		}
 
-		return array(
-			'application_number'   => $app->application_number,
-			'plan_id'              => $app->plan_id,
-			'status'               => $app->status,
-			'status_label'         => self::get_status_label( $app->status ),
-			'requested_ceiling'    => (int) $app->requested_ceiling,
-			'approved_ceiling'     => (int) $app->approved_ceiling,
-			'contact_phone'        => $app->contact_phone,
-			'applicant_notes'      => $app->applicant_notes,
-			'operator_public_note' => $app->operator_notes,
-			'reviewed_at'          => $app->reviewed_at,
-			'expires_at'           => $app->expires_at,
-			'created_at'           => $app->created_at,
+		$response = array(
+			'application_number' => $app->application_number,
+			'plan_id'            => $app->plan_id,
+			'status'             => $app->status,
+			'status_label'       => self::get_status_label( $app->status ),
+			'requested_ceiling'  => (int) $app->requested_ceiling,
+			'approved_ceiling'   => (int) $app->approved_ceiling,
+			'contact_phone'      => $app->contact_phone,
+			'applicant_notes'    => $app->applicant_notes,
+			'customer_message'   => $app->customer_message,
+			'reviewed_at'        => $app->reviewed_at,
+			'expires_at'         => $app->expires_at,
+			'created_at'         => $app->created_at,
 		);
+
+		// Expose private operator notes ONLY to authorized operators (Fix A)
+		if ( $is_operator ) {
+			$response['operator_notes'] = $app->operator_notes;
+		}
+
+		return $response;
 	}
 
 	/**
 	 * Retrieve all applications belonging to a specific customer.
+	 *
+	 * Private operator notes are completely omitted from customer responses (Fix A).
 	 *
 	 * @param int $user_id Customer user ID.
 	 * @return array<array<string, mixed>>
@@ -477,14 +568,14 @@ class Negar_Club_Application_Manager {
 	public static function get_user_applications( $user_id ) {
 		global $wpdb;
 
-		$table   = $wpdb->prefix . 'negar_club_applications';
+		$table   = Negar_Club_Database::get_table_name( 'applications' );
 		$user_id = (int) $user_id;
 
 		$rows = $wpdb->get_results(
 			$wpdb->prepare(
 				"SELECT application_number, plan_id, status, requested_ceiling, approved_ceiling,
-				        operator_notes, reviewed_at, expires_at, created_at
-				 FROM {$table}
+				        customer_message, reviewed_at, expires_at, created_at
+				 FROM `{$table}`
 				 WHERE user_id = %d
 				 ORDER BY created_at DESC",
 				$user_id
@@ -498,16 +589,16 @@ class Negar_Club_Application_Manager {
 		$results = array();
 		foreach ( $rows as $row ) {
 			$results[] = array(
-				'application_number'   => $row->application_number,
-				'plan_id'              => $row->plan_id,
-				'status'               => $row->status,
-				'status_label'         => self::get_status_label( $row->status ),
-				'requested_ceiling'    => (int) $row->requested_ceiling,
-				'approved_ceiling'     => (int) $row->approved_ceiling,
-				'operator_public_note' => $row->operator_notes,
-				'reviewed_at'          => $row->reviewed_at,
-				'expires_at'           => $row->expires_at,
-				'created_at'           => $row->created_at,
+				'application_number' => $row->application_number,
+				'plan_id'            => $row->plan_id,
+				'status'             => $row->status,
+				'status_label'       => self::get_status_label( $row->status ),
+				'requested_ceiling'  => (int) $row->requested_ceiling,
+				'approved_ceiling'   => (int) $row->approved_ceiling,
+				'customer_message'   => $row->customer_message,
+				'reviewed_at'        => $row->reviewed_at,
+				'expires_at'         => $row->expires_at,
+				'created_at'         => $row->created_at,
 			);
 		}
 
@@ -523,7 +614,7 @@ class Negar_Club_Application_Manager {
 	public static function get_admin_applications( $args = array() ) {
 		global $wpdb;
 
-		$table    = $wpdb->prefix . 'negar_club_applications';
+		$table    = Negar_Club_Database::get_table_name( 'applications' );
 		$status   = ! empty( $args['status'] ) ? sanitize_key( $args['status'] ) : '';
 		$search   = ! empty( $args['search'] ) ? sanitize_text_field( $args['search'] ) : '';
 		$page     = max( 1, (int) ( $args['page'] ?? 1 ) );
@@ -549,9 +640,9 @@ class Negar_Club_Application_Manager {
 
 		// Count total
 		if ( ! empty( $query_params ) ) {
-			$count_sql = $wpdb->prepare( "SELECT COUNT(*) FROM {$table} WHERE {$where_sql}", $query_params );
+			$count_sql = $wpdb->prepare( "SELECT COUNT(*) FROM `{$table}` WHERE {$where_sql}", $query_params );
 		} else {
-			$count_sql = "SELECT COUNT(*) FROM {$table} WHERE {$where_sql}";
+			$count_sql = "SELECT COUNT(*) FROM `{$table}` WHERE {$where_sql}";
 		}
 		$total = (int) $wpdb->get_var( $count_sql );
 
@@ -562,9 +653,9 @@ class Negar_Club_Application_Manager {
 
 		$select_sql = $wpdb->prepare(
 			"SELECT id, application_number, user_id, plan_id, status, requested_ceiling, approved_ceiling,
-			        contact_phone, income_bracket, applicant_notes, operator_notes, reviewed_by, reviewed_at,
-			        expires_at, created_at, updated_at
-			 FROM {$table}
+			        contact_phone, income_bracket, applicant_notes, operator_notes, customer_message,
+			        reviewed_by, reviewed_at, expires_at, created_at, updated_at
+			 FROM `{$table}`
 			 WHERE {$where_sql}
 			 {$order_sql}",
 			$query_params
@@ -597,6 +688,7 @@ class Negar_Club_Application_Manager {
 					'income_bracket'     => $row->income_bracket,
 					'applicant_notes'    => $row->applicant_notes,
 					'operator_notes'     => $row->operator_notes,
+					'customer_message'   => $row->customer_message,
 					'reviewed_by'        => (int) $row->reviewed_by,
 					'reviewed_at'        => $row->reviewed_at,
 					'expires_at'         => $row->expires_at,
@@ -618,9 +710,17 @@ class Negar_Club_Application_Manager {
 	/**
 	 * Register REST API routes for customer applications and operator review.
 	 *
+	 * Idempotent: protects against double registration (Fix D).
+	 *
 	 * @return void
 	 */
 	public static function register_rest_routes() {
+		static $routes_registered = false;
+		if ( $routes_registered ) {
+			return;
+		}
+		$routes_registered = true;
+
 		// 1. Submit Application
 		register_rest_route(
 			'negar-club/v1',
@@ -700,7 +800,7 @@ class Negar_Club_Application_Manager {
 	 * @return WP_REST_Response
 	 */
 	public static function handle_rest_submit( $request ) {
-		$params  = $request->get_json_params();
+		$params = $request->get_json_params();
 		if ( empty( $params ) || ! is_array( $params ) ) {
 			$params = $request->get_params();
 		}
