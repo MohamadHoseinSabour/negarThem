@@ -298,7 +298,7 @@
   - **Acceptance Criteria**: Each plan maps to a virtual simple product; purchasable through standard WooCommerce checkout; non-downloadable; no shipping required.
   - **Dependencies**: T340-VIP.
 
-- [ ] **T342-VIP** [Phase 6] [VIP-03] Verified WooCommerce order completion listener for idempotent VIP membership activation
+- [x] **T342-VIP** [Phase 6] [VIP-03] Verified WooCommerce order completion listener for idempotent VIP membership activation
   - **Objective**: Implement `Negar_Club_Membership_Manager` listening to `woocommerce_order_status_completed` (and verified payment hooks). Identifies VIP products via `_negar_club_plan_id`, verifies payment is genuinely received, idempotently creates active membership linking `order_id`, sets initial `unused_deposit` equal to received prepayment, assigns plan purchase ceiling, and writes audit log entry.
   - **Files**: `packages/negar-customer-club/includes/class-membership-manager.php`
   - **Acceptance Criteria**: Paid order creates exactly one active VIP membership; repeated hooks or concurrent calls do not duplicate records or funds; unpaid or deferred on-hold orders do not activate membership until confirmed.
@@ -322,7 +322,7 @@
   - **Acceptance Criteria**: Public page features VIP prepayment tiers; CTA initiates standard WooCommerce checkout; obsolete calculator and application form hidden; responsive RTL layout preserved.
   - **Dependencies**: T341-VIP.
 
-- [ ] **T346-VIP** [Phase 6] [VIP-07] Order refund/cancellation reconciliation handler & accounting guards
+- [x] **T346-VIP** [Phase 6] [VIP-07] Order refund/cancellation reconciliation handler & accounting guards
   - **Objective**: Hook into `woocommerce_order_status_refunded` and `woocommerce_order_status_cancelled`. When a VIP order is refunded/cancelled, flag membership for operator reconciliation (or suspend status), restrict further usage of disputed prepaid funds, record audit trail entry, and preserve links to the source order. Include explicit accounting disclosure that VIP prepayments represent customer advances toward future merchandise, requiring accountant approval for official VAT/deposit liability treatment.
   - **Files**: `packages/negar-customer-club/includes/class-membership-manager.php`
   - **Acceptance Criteria**: Refund of source order suspends membership or flags for reconciliation; prevents double deposit recognition; audit logged.
