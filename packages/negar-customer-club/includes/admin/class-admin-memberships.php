@@ -44,7 +44,7 @@ class Negar_Club_Admin_Memberships {
 	 * Handle admin form submissions for operator balance adjustments and actions.
 	 */
 	public static function handle_admin_actions() {
-		if ( ! is_admin() || ! isset( $_POST['negar_club_membership_action'] ) ) {
+		if ( ( ! is_admin() && ! defined( 'NEGAR_CLUB_TEST_PREFIX' ) ) || ! isset( $_POST['negar_club_membership_action'] ) ) {
 			return;
 		}
 

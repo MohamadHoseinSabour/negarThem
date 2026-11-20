@@ -328,7 +328,7 @@
   - **Acceptance Criteria**: Refund of source order suspends membership or flags for reconciliation; prevents double deposit recognition; audit logged.
   - **Dependencies**: T342-VIP.
 
-- [ ] **T347-VIP** [Phase 6] [VIP-08] Automated test suite for VIP lifecycle (`tests/vip-membership-lifecycle-test.php`)
+- [x] **T347-VIP** [Phase 6] [VIP-08] Automated test suite for VIP lifecycle (`tests/vip-membership-lifecycle-test.php`)
   - **Objective**: Implement comprehensive automated CLI test suite covering: (1) schema migration and table verification, (2) VIP product mapping, (3) order completion and idempotent membership activation, (4) repeat payment / duplicate order guard, (5) operator manual bookkeeping adjustments and audit logging, (6) customer dashboard anti-IDOR checks, (7) order refund suspension. Run cleanly with PASS on all tests in isolated tables.
   - **Files**: `tests/vip-membership-lifecycle-test.php`
   - **Acceptance Criteria**: 100% pass on all test assertions; isolated test execution; no modification of live store data.

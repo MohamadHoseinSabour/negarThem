@@ -96,17 +96,32 @@ class Negar_Club_Membership_Manager {
 	 * 4. Flags repeat purchases for operator review if an active membership exists.
 	 * 5. Records full audit trail.
 	 *
-	 * @param int $order_id WooCommerce Order ID.
+	 * @param int|object $order_or_id WooCommerce Order ID or Order object.
+	 * @param object|null $order_obj   Optional order object if ID was passed first.
 	 * @return int|false Activated membership ID or false.
 	 */
-	public static function process_paid_order( $order_id ) {
-		$order_id = (int) $order_id;
-		if ( $order_id <= 0 || ! function_exists( 'wc_get_order' ) ) {
-			return false;
+	public static function process_paid_order( $order_or_id, $order_obj = null ) {
+		$order = null;
+		$order_id = 0;
+
+		if ( is_object( $order_or_id ) ) {
+			$order    = $order_or_id;
+			$order_id = method_exists( $order, 'get_id' ) ? (int) $order->get_id() : (int) ( $order->id ?? 0 );
+		} elseif ( is_object( $order_obj ) ) {
+			$order    = $order_obj;
+			$order_id = (int) $order_or_id;
+		} else {
+			$order_id = (int) $order_or_id;
+			if ( function_exists( 'wc_get_order' ) ) {
+				$order = wc_get_order( $order_id );
+			}
 		}
 
-		$order = wc_get_order( $order_id );
-		if ( ! $order ) {
+		if ( function_exists( 'apply_filters' ) ) {
+			$order = apply_filters( 'negar_club_get_order', $order, $order_id );
+		}
+
+		if ( ! $order || $order_id <= 0 ) {
 			return false;
 		}
 
