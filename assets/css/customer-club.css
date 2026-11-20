@@ -1198,3 +1198,203 @@
 		grid-template-columns: 1fr;
 	}
 }
+
+/* 9. Application Form & Intake Status (Fix E) */
+.negar-club-application-section {
+	margin-bottom: 60px;
+}
+
+.negar-club-app-card {
+	display: flex;
+	align-items: center;
+	gap: 20px;
+	padding: 28px 24px;
+	border-radius: 16px;
+	background: #ffffff;
+	border: 1px solid var(--club-slate-200);
+	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+}
+
+.negar-club-app-card--closed {
+	background: #fffbeb;
+	border-color: #fde68a;
+	color: #92400e;
+}
+
+.negar-club-app-card--closed .negar-club-app-card__icon {
+	color: #d97706;
+}
+
+.negar-club-app-card--auth {
+	background: var(--club-slate-50);
+	border-color: var(--club-slate-200);
+}
+
+.negar-club-app-card--auth .negar-club-app-card__icon {
+	color: var(--club-crimson);
+}
+
+.negar-club-app-card--success {
+	background: #f0fdf4;
+	border-color: #bbf7d0;
+	color: #166534;
+}
+
+.negar-club-app-card--success .negar-club-app-card__icon {
+	color: #16a34a;
+}
+
+.negar-club-app-card__icon {
+	flex-shrink: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.negar-club-app-card__title {
+	font-size: 1.125rem;
+	font-weight: 700;
+	margin: 0 0 8px 0;
+}
+
+.negar-club-app-card__text {
+	font-size: 0.9375rem;
+	line-height: 1.7;
+	margin: 0;
+	opacity: 0.9;
+}
+
+.negar-club-app-card__actions {
+	margin-top: 16px;
+}
+
+.negar-club-form-wrap {
+	background: #ffffff;
+	border: 1px solid var(--club-slate-200);
+	border-radius: 20px;
+	padding: 32px;
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+}
+
+.negar-club-form-grid {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: 20px;
+}
+
+.negar-club-form-group--full {
+	grid-column: 1 / -1;
+}
+
+.negar-club-form-label {
+	display: block;
+	font-size: 0.875rem;
+	font-weight: 600;
+	color: var(--club-slate-800);
+	margin-bottom: 8px;
+}
+
+.negar-club-form-label .required {
+	color: var(--club-crimson);
+	margin-right: 2px;
+}
+
+.negar-club-form-input,
+.negar-club-form-select,
+.negar-club-form-textarea {
+	width: 100%;
+	padding: 12px 14px;
+	font-size: 0.9375rem;
+	font-family: inherit;
+	border: 1px solid var(--club-slate-300);
+	border-radius: 10px;
+	background: var(--club-slate-50);
+	color: var(--club-slate-900);
+	transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.negar-club-form-input:focus,
+.negar-club-form-select:focus,
+.negar-club-form-textarea:focus {
+	outline: none;
+	border-color: var(--club-crimson);
+	background: #ffffff;
+	box-shadow: 0 0 0 3px rgba(185, 28, 28, 0.12);
+}
+
+.negar-club-form-hint {
+	display: block;
+	font-size: 0.75rem;
+	color: var(--club-slate-500);
+	margin-top: 6px;
+}
+
+.negar-club-form-footer {
+	margin-top: 24px;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 12px;
+}
+
+.negar-club-form-disclaimer {
+	font-size: 0.8125rem;
+	color: var(--club-slate-500);
+	margin: 0;
+}
+
+.negar-club-apply-feedback {
+	padding: 14px 18px;
+	border-radius: 10px;
+	font-size: 0.875rem;
+	font-weight: 500;
+	margin-bottom: 20px;
+}
+
+.negar-club-apply-feedback--error {
+	background: #fee2e2;
+	color: #991b1b;
+	border: 1px solid #fecaca;
+}
+
+.negar-club-app-details {
+	margin-top: 16px;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 20px;
+}
+
+.negar-club-app-detail-item {
+	font-size: 0.9375rem;
+}
+
+.negar-club-app-detail-item strong {
+	font-family: monospace;
+	font-size: 1.0625rem;
+	color: var(--club-slate-900);
+	margin-right: 6px;
+}
+
+.negar-btn-spinner svg {
+	animation: spin 1s linear infinite;
+	vertical-align: middle;
+	margin-right: 6px;
+}
+
+@keyframes spin {
+	from { transform: rotate(0deg); }
+	to { transform: rotate(360deg); }
+}
+
+@media (max-width: 640px) {
+	.negar-club-form-grid {
+		grid-template-columns: 1fr;
+	}
+	.negar-club-form-wrap {
+		padding: 20px 16px;
+	}
+	.negar-club-app-card {
+		flex-direction: column;
+		text-align: center;
+	}
+}

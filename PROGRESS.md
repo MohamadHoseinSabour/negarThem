@@ -281,5 +281,17 @@
     3. `php tests/club-settings-regression.php` (۹ تست، پاس ۱۰۰٪).
     4. `php tests/customer-club-page-render-test.php` (۹ تست، پاس ۱۰۰٪).
     5. `php tests/application-lifecycle-test.php` (۸ تست، پاس ۱۰۰٪).
+- [x] **Phase 5.1 — Critical Application Security Fixes & Public Form Integration (Fixes A–E):**
+  - **Fix A (Sensitive Information Disclosure)**: رفع افشای اطلاعات در درخواست‌های تکراری حساب‌های دیگر؛ بازگرداندن پاسخ عمومی و خنثی `DUPLICATE_APPLICATION_RESTRICTED` با کد ۴۰۹ بدون افشای شماره درخواست، وضعیت یا مشخصات مالک؛ تفکیک قطعی یادداشت‌های داخلی کارشناس (`operator_notes`) از توضیحات عمومی مشتری (`customer_message`) در اندپوینت‌های تک‌درخواست و تاریخچه.
+  - **Fix B (Concurrent Duplicate Submissions)**: ایجاد مکانیزم قفل اتمیک در سطح دیتابیس با افزودن ستون‌های `active_lock_user` و `active_lock_nid` با قیود یکتای InnoDB؛ مهار Race Condition در ثبت درخواست‌های همزمان با کد ۴۰۹؛ و آزادسازی خودکار قفل‌ها در وضعیت‌های نهایی (`rejected`, `cancelled`, `expired`) جهت امکان درخواست مجدد قانونی.
+  - **Fix C (Operator Approval Limits & State Safety)**: اعمال اعتبارسنجی سقف مصوب در برابر سقف درخواستی مشتری و سقف مجاز طرح؛ رد مبالغ صفر، منفی و نامعتبر؛ کنترل مهلت اعتبار بین ۱ تا ۹۰ روز؛ قفل خوش‌بینانه وضعیت (`UPDATE ... WHERE status = %s`) جهت جلوگیری از تداخل کارشناسان همزمان با خطای ۴۰۹؛ و ثبت ممیزی فقط در صورت موفقیت قطعی ترنزیشن.
+  - **Fix D (Plugin Bootstrapping & Test Safety)**: جداسازی بوت‌استرپ پوسته از افزونه در `functions.php` (پوسته فقط ماشین‌حساب بدون حالت را لود می‌کند تا افزونه غیرفعال اندپوینت‌های عملیاتی را باز نکند)؛ جلوگیری از ثبت مضاعف کلاس‌ها و مسیرهای REST؛ رفتار Fail-closed در صورت نبود تنظیمات؛ بررسی فیزیکی ایجاد جداول قبل از ثبت موفقیت دیتابیس؛ و اجرای تست‌ها در جداول ایزوله `test_negar_club_*` بدون آلودگی دیتابیس اصلی.
+  - **Fix E (Public Application Form Integration)**: پیاده‌سازی کامپوننت فرم ثبت درخواست در `template-parts/customer-club/application-form.php` با رعایت شرط امنیتی صریح (عدم رندر فرم و فیلد کدملی در صورت خاموش بودن پذیرش عمومی)؛ اتصال یکپارچه به لاگین پیامکی OTP موجود؛ اعتبارسنجی سمت کلاینت با مودولو ۱۱؛ اتصال به اندپوینت امن REST؛ جلوگیری از ارسال مکرر فرم؛ و نمایش کارت موفقیت با شماره پیگیری.
+  - اجرای موفق آزمون‌های جامع:
+    1. `npm run test:lint` (۱۴۵ فایل، پاس ۱۰۰٪ بدون خطا).
+    2. `php tests/quote-calculator-test.php` (۶ تست، پاس ۱۰۰٪).
+    3. `php tests/club-settings-regression.php` (۹ تست، پاس ۱۰۰٪).
+    4. `php tests/customer-club-page-render-test.php` (۹ تست، پاس ۱۰۰٪).
+    5. `php tests/application-lifecycle-test.php` (۹ تست سخت‌سازی‌شده فاز ۵.۱، پاس ۱۰۰٪).
 - [ ] **Phases 6–9:** در انتظار تأیید کارفرما (موتور مالی، جداول قراردادها و اقساط و درگاه پرداخت تا تأیید تصمیم‌های تجاری `CLUB-BD-001`–`022` و مجوز کارفرما کاملاً مسدود می‌ماند).
 

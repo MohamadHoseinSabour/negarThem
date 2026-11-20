@@ -414,11 +414,203 @@
 		}
 	}
 
+	// 4. Client-side Modulo 11 National ID Validation
+	function validateNationalId(code) {
+		var clean = normalizeDigits(code);
+		if (clean.length !== 10) return false;
+		if (/^(\d)\1{9}$/.test(clean)) return false;
+		var sum = 0;
+		for (var i = 0; i < 9; i++) {
+			sum += parseInt(clean.charAt(i), 10) * (10 - i);
+		}
+		var remainder = sum % 11;
+		var checkDigit = parseInt(clean.charAt(9), 10);
+		if (remainder < 2) {
+			return checkDigit === remainder;
+		}
+		return checkDigit === (11 - remainder);
+	}
+
+	// 5. Application Form Controller (Fix E)
+	function initApplicationForm() {
+		var form = document.getElementById('negar-club-apply-form');
+		if (!form) return;
+
+		var endpoint    = form.getAttribute('data-rest-endpoint');
+		var nonce       = form.getAttribute('data-rest-nonce');
+		var planSelect  = document.getElementById('negar-apply-plan');
+		var ceilingIn   = document.getElementById('negar-apply-ceiling');
+		var ceilingH    = document.getElementById('negar-apply-ceiling-hint');
+		var nidIn       = document.getElementById('negar-apply-national-id');
+		var phoneIn     = document.getElementById('negar-apply-phone');
+		var notesIn     = document.getElementById('negar-apply-notes');
+		var submitBtn   = document.getElementById('negar-apply-submit-btn');
+		var btnText     = submitBtn ? submitBtn.querySelector('.negar-btn-text') : null;
+		var btnSpinner  = submitBtn ? submitBtn.querySelector('.negar-btn-spinner') : null;
+		var feedback    = document.getElementById('negar-apply-feedback');
+		var successCard = document.getElementById('negar-apply-success-card');
+		var successNum  = document.getElementById('negar-apply-success-number');
+		var successStat = document.getElementById('negar-apply-success-status');
+		var successMsg  = document.getElementById('negar-apply-success-msg');
+
+		var isSubmitting = false;
+
+		function updateCeilingLimits() {
+			if (!planSelect || !ceilingIn) return;
+			var opt = planSelect.options[planSelect.selectedIndex];
+			if (!opt) return;
+			var ceil = parseInt(opt.getAttribute('data-ceiling') || '0', 10);
+			if (ceil > 0) {
+				ceilingIn.max = ceil;
+				if (!ceilingIn.value || parseInt(ceilingIn.value, 10) > ceil) {
+					ceilingIn.value = ceil;
+				}
+				if (ceilingH) {
+					ceilingH.textContent = 'حداکثر سقف این طرح: ' + formatPersianNumber(ceil) + ' تومان';
+				}
+			}
+		}
+
+		if (planSelect) {
+			planSelect.addEventListener('change', updateCeilingLimits);
+			updateCeilingLimits();
+		}
+
+		// Sync with session selected plan if available
+		try {
+			var savedPlan = sessionStorage.getItem('negar_club_selected_plan');
+			if (savedPlan && planSelect) {
+				for (var idx = 0; idx < planSelect.options.length; idx++) {
+					if (planSelect.options[idx].value === savedPlan) {
+						planSelect.selectedIndex = idx;
+						updateCeilingLimits();
+						break;
+					}
+				}
+			}
+		} catch (e) {}
+
+		function showError(msg) {
+			if (!feedback) return;
+			feedback.textContent = msg;
+			feedback.className = 'negar-club-apply-feedback negar-club-apply-feedback--error';
+			feedback.hidden = false;
+			feedback.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+		}
+
+		function clearError() {
+			if (!feedback) return;
+			feedback.textContent = '';
+			feedback.hidden = true;
+		}
+
+		form.addEventListener('submit', function (e) {
+			e.preventDefault();
+			if (isSubmitting) return;
+
+			clearError();
+
+			var planId     = planSelect ? planSelect.value : '';
+			var ceilingVal = ceilingIn ? parseInt(normalizeDigits(ceilingIn.value), 10) : 0;
+			var nidVal     = nidIn ? normalizeDigits(nidIn.value) : '';
+			var phoneVal   = phoneIn ? normalizeDigits(phoneIn.value) : '';
+			var notesVal   = notesIn ? notesIn.value.trim() : '';
+
+			// Validation
+			if (!planId) {
+				showError('لطفاً طرح اقساطی مورد نظر را انتخاب فرمایید.');
+				return;
+			}
+
+			if (isNaN(ceilingVal) || ceilingVal <= 0) {
+				showError('مبلغ سقف درخواستی نامعتبر است.');
+				if (ceilingIn) ceilingIn.focus();
+				return;
+			}
+
+			var maxCeil = planSelect && planSelect.options[planSelect.selectedIndex] ? parseInt(planSelect.options[planSelect.selectedIndex].getAttribute('data-ceiling') || '0', 10) : 0;
+			if (maxCeil > 0 && ceilingVal > maxCeil) {
+				showError('سقف درخواستی نمی‌تواند از سقف مجاز طرح (' + formatPersianNumber(maxCeil) + ' تومان) بیشتر باشد.');
+				if (ceilingIn) ceilingIn.focus();
+				return;
+			}
+
+			if (!validateNationalId(nidVal)) {
+				showError('کد ملی وارد شده نامعتبر است (کنترل رقم چک مودولو ۱۱ تأیید نشد).');
+				if (nidIn) nidIn.focus();
+				return;
+			}
+
+			if (!/^09\d{9}$/.test(phoneVal)) {
+				showError('شماره همراه وارد شده نامعتبر است. فرمت صحیح: ۰۹xxxxxxxxx');
+				if (phoneIn) phoneIn.focus();
+				return;
+			}
+
+			// Prevent repeated submission (Fix E)
+			isSubmitting = true;
+			if (submitBtn) submitBtn.disabled = true;
+			if (btnSpinner) btnSpinner.hidden = false;
+			if (btnText) btnText.textContent = 'در حال ثبت درخواست...';
+
+			var payload = {
+				plan_id: planId,
+				requested_ceiling: ceilingVal,
+				national_id: nidVal,
+				contact_phone: phoneVal,
+				applicant_notes: notesVal
+			};
+
+			fetch(endpoint, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'X-WP-Nonce': nonce
+				},
+				body: JSON.stringify(payload)
+			})
+			.then(function (res) {
+				return res.json().then(function (data) {
+					return { status: res.status, data: data };
+				});
+			})
+			.then(function (resObj) {
+				isSubmitting = false;
+				if (submitBtn) submitBtn.disabled = false;
+				if (btnSpinner) btnSpinner.hidden = true;
+				if (btnText) btnText.textContent = 'ثبت نهایی درخواست عضویت';
+
+				if (resObj.status === 201 && resObj.data && resObj.data.success) {
+					form.hidden = true;
+					if (successCard) {
+						var d = resObj.data.data;
+						if (successNum) successNum.textContent = d.application_number;
+						if (successStat) successStat.textContent = d.status_label || 'در انتظار بررسی مدارک';
+						if (successMsg) successMsg.textContent = d.message || 'درخواست شما با موفقیت ثبت شد.';
+						successCard.hidden = false;
+						successCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+					}
+				} else {
+					var err = (resObj.data && resObj.data.message) ? resObj.data.message : 'خطا در ثبت درخواست. لطفاً دوباره تلاش نمایید.';
+					showError(err);
+				}
+			})
+			.catch(function () {
+				isSubmitting = false;
+				if (submitBtn) submitBtn.disabled = false;
+				if (btnSpinner) btnSpinner.hidden = true;
+				if (btnText) btnText.textContent = 'ثبت نهایی درخواست عضویت';
+				showError('خطا در برقراری ارتباط با سرور. لطفاً اتصال اینترنت خود را بررسی نمایید.');
+			});
+		});
+	}
+
 	// DOM Ready
 	document.addEventListener('DOMContentLoaded', function () {
 		initCalculator();
 		initPlanCardActions();
 		initFaqAccordion();
+		initApplicationForm();
 	});
 
 })();
