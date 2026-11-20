@@ -129,44 +129,113 @@ class Negar_Club_Membership_Manager {
 		$status = $order->get_status();
 		$payment_method = $order->get_payment_method();
 
-		// For deferred/offline methods (bacs, cheque, cod), require explicit completed status
+		// For deferred/offline methods (bacs, cheque, cod), require explicit completed status and confirmed receipt
 		$deferred_gateways = array( 'bacs', 'cheque', 'cod' );
 		if ( in_array( $payment_method, $deferred_gateways, true ) ) {
 			if ( 'completed' !== $status ) {
 				return false; // Cash has not been physically collected yet
 			}
 		} else {
-			// Online/electronic gateway: must be completed or verified processing
-			$is_paid = method_exists( $order, 'is_paid' ) ? $order->is_paid() : false;
+			// Online/electronic gateway: must be confirmed paid (is_paid or date_paid present)
+			$is_paid   = method_exists( $order, 'is_paid' ) ? $order->is_paid() : false;
 			$date_paid = method_exists( $order, 'get_date_paid' ) ? $order->get_date_paid() : null;
 
-			if ( 'completed' !== $status && ! ( 'processing' === $status && ( $is_paid || ! empty( $date_paid ) ) ) ) {
+			if ( ! $is_paid && empty( $date_paid ) ) {
 				return false; // Not a confirmed paid order
+			}
+
+			if ( 'completed' !== $status && 'processing' !== $status ) {
+				return false;
+			}
+		}
+
+		// Verify currency consistency
+		$order_currency = method_exists( $order, 'get_currency' ) ? $order->get_currency() : '';
+		if ( function_exists( 'get_woocommerce_currency' ) ) {
+			$store_currency = get_woocommerce_currency();
+			if ( ! empty( $order_currency ) && ! empty( $store_currency ) && $order_currency !== $store_currency ) {
+				Negar_Club_Database::log_audit(
+					'wc_order',
+					$order_id,
+					'membership:currency_mismatch_blocked',
+					null,
+					array( 'order_currency' => $order_currency, 'store_currency' => $store_currency ),
+					0,
+					'ارز سفارش با ارز پیش‌فرض فروشگاه همخوانی ندارد.'
+				);
+				return false;
 			}
 		}
 
 		// 2. Scan line items for Customer Club VIP product
-		$matched_plan_id   = '';
-		$prepayment_amount = 0;
+		$matched_plan_id       = '';
+		$matched_product_id    = 0;
+		$prepayment_amount     = 0;
+		$vip_item_count        = 0;
+		$regular_item_count    = 0;
+		$vip_line_qty          = 0;
+		$is_flagged_for_review = false;
+		$review_reason         = '';
 
 		foreach ( $order->get_items() as $item ) {
-			$product_id = $item->get_product_id();
+			$product_id = method_exists( $item, 'get_product_id' ) ? $item->get_product_id() : 0;
 			$plan_id    = Negar_Club_VIP_Products::get_product_plan_id( $product_id );
 
 			if ( ! empty( $plan_id ) ) {
-				$matched_plan_id   = $plan_id;
-				$prepayment_amount = (int) $item->get_total();
-				break;
+				$vip_item_count++;
+				$vip_line_qty      += method_exists( $item, 'get_quantity' ) ? (int) $item->get_quantity() : 1;
+				$matched_plan_id    = $plan_id;
+				$matched_product_id = $product_id;
+				$prepayment_amount  = method_exists( $item, 'get_total' ) ? (int) $item->get_total() : 0;
+			} else {
+				$regular_item_count++;
 			}
 		}
 
-		if ( empty( $matched_plan_id ) ) {
+		if ( empty( $matched_plan_id ) || 0 === $vip_item_count ) {
 			return false; // Not a VIP membership order
+		}
+
+		// Validate product suitability (must be simple virtual, not downloadable)
+		if ( ! Negar_Club_VIP_Products::is_valid_vip_product( $matched_product_id ) ) {
+			Negar_Club_Database::log_audit(
+				'wc_order',
+				$order_id,
+				'membership:invalid_product_blocked',
+				null,
+				array( 'product_id' => $matched_product_id ),
+				0,
+				'محصول فاقد شرایط محصول مجازی ساده VIP است.'
+			);
+			return false;
 		}
 
 		// If line item total is 0, fallback to order total
 		if ( $prepayment_amount <= 0 ) {
 			$prepayment_amount = (int) $order->get_total();
+		}
+
+		if ( $prepayment_amount <= 0 ) {
+			return false; // Invalid financial amount
+		}
+
+		// Quantity check: exactly 1 VIP product and no mixed merchandise
+		if ( 1 !== $vip_line_qty || $vip_item_count > 1 || $regular_item_count > 0 ) {
+			$is_flagged_for_review = true;
+			$review_reason         = 'سفارش شامل اقلام غیرمجاز، کالاهای متعدد یا تعداد بیش از ۱ اشتراک VIP است و نیازمند بررسی کارشناس می‌باشد.';
+		}
+
+		// Check expected price vs actual paid prepayment (discounts / coupons guard)
+		$plan_conf      = Negar_Club_VIP_Products::get_plan_configs( $matched_plan_id );
+		$expected_price = isset( $plan_conf['prepayment'] ) ? (int) $plan_conf['prepayment'] : 0;
+
+		if ( $expected_price > 0 && $prepayment_amount < $expected_price ) {
+			$is_flagged_for_review = true;
+			$review_reason         = sprintf(
+				'مبلغ پرداختی (%s تومان) به دلیل اعمال تخفیف یا کوپن کمتر از قیمت مصوب طرح (%s تومان) است. نیازمند بررسی کارشناس.',
+				number_format( $prepayment_amount ),
+				number_format( $expected_price )
+			);
 		}
 
 		// 3. Customer Verification Check
@@ -195,7 +264,6 @@ class Negar_Club_Membership_Manager {
 		$active_mem = Negar_Club_Database::get_active_membership_by_customer( $customer_id );
 
 		// 6. Plan configuration & limits
-		$plan_conf = Negar_Club_VIP_Products::get_plan_configs( $matched_plan_id );
 		$purchase_ceiling = isset( $plan_conf['ceiling'] ) && (int) $plan_conf['ceiling'] > 0
 			? (int) $plan_conf['ceiling']
 			: ( $prepayment_amount * 2 );
@@ -206,8 +274,17 @@ class Negar_Club_Membership_Manager {
 
 		$valid_until = date( 'Y-m-d H:i:s', strtotime( "+{$term_months} months", current_time( 'timestamp' ) ) );
 
-		// Status decision: if customer already has an active membership, flag for operator review
-		$membership_status = $active_mem ? 'pending_operator_review' : 'active';
+		// Status decision
+		if ( $active_mem ) {
+			$membership_status = 'pending_operator_review';
+			$membership_notes  = sprintf( 'خرید مجدد اشتراک VIP در حالی که مشتری دارای اشتراک فعال #%d است. نیازمند بررسی و ادغام دستی اپراتور.', (int) $active_mem->id );
+		} elseif ( $is_flagged_for_review ) {
+			$membership_status = 'pending_operator_review';
+			$membership_notes  = $review_reason;
+		} else {
+			$membership_status = 'active';
+			$membership_notes  = sprintf( 'فعال‌سازی خودکار اشتراک VIP پس از تایید پرداخت سفارش ووکامرس #%d', $order_id );
+		}
 		$membership_notes  = $active_mem
 			? sprintf( 'خرید مجدد اشتراک VIP در حالی که مشتری دارای اشتراک فعال #%d است. نیازمند بررسی و ادغام دستی اپراتور.', (int) $active_mem->id )
 			: sprintf( 'فعال‌سازی خودکار اشتراک VIP پس از تایید پرداخت سفارش ووکامرس #%d', $order_id );

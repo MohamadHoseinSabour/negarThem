@@ -148,6 +148,76 @@ class Negar_Club_Database {
 	}
 
 	/**
+	 * Start a database transaction.
+	 */
+	public static function begin_transaction() {
+		global $wpdb;
+		$wpdb->query( 'START TRANSACTION' );
+	}
+
+	/**
+	 * Commit active database transaction.
+	 */
+	public static function commit() {
+		global $wpdb;
+		$wpdb->query( 'COMMIT' );
+	}
+
+	/**
+	 * Rollback active database transaction.
+	 */
+	public static function rollback() {
+		global $wpdb;
+		$wpdb->query( 'ROLLBACK' );
+	}
+
+	/**
+	 * Get membership record with row-level lock (FOR UPDATE).
+	 *
+	 * @param int $membership_id Membership row ID.
+	 * @return object|null Row object or null.
+	 */
+	public static function get_membership_for_update( $membership_id ) {
+		global $wpdb;
+
+		$table = self::get_table_name( 'memberships' );
+		return $wpdb->get_row( $wpdb->prepare( "SELECT * FROM `{$table}` WHERE id = %d FOR UPDATE", (int) $membership_id ) );
+	}
+
+	/**
+	 * Check if a submission token has already been processed (idempotency).
+	 *
+	 * @param string $token Unique submission token.
+	 * @return bool True if already processed.
+	 */
+	public static function is_submission_token_used( $token ) {
+		$token = sanitize_text_field( $token );
+		if ( empty( $token ) ) {
+			return false;
+		}
+
+		$used = get_transient( 'negar_club_subtoken_' . $token );
+		return ! empty( $used );
+	}
+
+	/**
+	 * Record a submission token as processed.
+	 *
+	 * @param string $token Unique submission token.
+	 * @param int    $actor_id Operator user ID.
+	 * @param int    $ttl Time to live in seconds (default 2 hours).
+	 * @return bool True on success.
+	 */
+	public static function record_submission_token( $token, $actor_id = 0, $ttl = 7200 ) {
+		$token = sanitize_text_field( $token );
+		if ( empty( $token ) ) {
+			return false;
+		}
+
+		return set_transient( 'negar_club_subtoken_' . $token, $actor_id ?: 1, $ttl );
+	}
+
+	/**
 	 * Get membership record by ID.
 	 *
 	 * @param int $membership_id Membership row ID.

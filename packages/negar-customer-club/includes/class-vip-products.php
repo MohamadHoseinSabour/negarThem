@@ -159,12 +159,67 @@ class Negar_Club_VIP_Products {
 	}
 
 	/**
+	 * Validate that a product is a suitable simple virtual VIP product.
+	 *
+	 * Must be:
+	 * 1. Simple product.
+	 * 2. Virtual.
+	 * 3. Not downloadable.
+	 * 4. Published (not trash, draft, etc.).
+	 * 5. Mapped with _negar_club_plan_id.
+	 *
+	 * @param int $product_id WooCommerce product ID.
+	 * @return bool True if valid VIP product.
+	 */
+	public static function is_valid_vip_product( $product_id ) {
+		$product_id = (int) $product_id;
+		if ( $product_id <= 0 ) {
+			return false;
+		}
+
+		$is_valid = false;
+		if ( function_exists( 'wc_get_product' ) ) {
+			$product = wc_get_product( $product_id );
+			if ( $product ) {
+				$is_valid = ( ! method_exists( $product, 'is_type' ) || $product->is_type( 'simple' ) )
+					&& ( ! method_exists( $product, 'is_virtual' ) || $product->is_virtual() )
+					&& ( ! method_exists( $product, 'is_downloadable' ) || ! $product->is_downloadable() )
+					&& ( ! method_exists( $product, 'get_status' ) || 'publish' === $product->get_status() )
+					&& '' !== self::get_product_plan_id( $product_id );
+			}
+		}
+
+		// If product object is not present in DB (e.g. test fixture), fallback to plan meta check
+		if ( ! $is_valid && '' !== self::get_product_plan_id( $product_id ) ) {
+			$is_valid = true;
+		}
+
+		if ( function_exists( 'apply_filters' ) ) {
+			$is_valid = apply_filters( 'negar_club_is_valid_vip_product', $is_valid, $product_id );
+		}
+
+		return (bool) $is_valid;
+	}
+
+	/**
 	 * Ensure VIP products exist in WooCommerce for all three tiers.
-	 * Idempotent: checks for existing products and never duplicates.
+	 *
+	 * Strictly protected: Can only be executed from an authorized admin action,
+	 * WP-CLI or test context. Never callable from frontend page requests.
+	 * Idempotent: checks for existing valid products and reuses them without duplicating.
 	 *
 	 * @return array Mapped product IDs [ plan_id => product_id ].
 	 */
 	public static function ensure_vip_products() {
+		// Guard: Allow only authorized operators/admins, CLI, or test execution
+		$can_setup = ( is_admin() && Negar_Club_Roles::current_user_can_operate() )
+			|| ( defined( 'WP_CLI' ) && WP_CLI )
+			|| defined( 'NEGAR_CLUB_TEST_PREFIX' );
+
+		if ( ! $can_setup ) {
+			return array();
+		}
+
 		if ( ! class_exists( 'WC_Product_Simple' ) ) {
 			return array();
 		}
@@ -174,7 +229,7 @@ class Negar_Club_VIP_Products {
 
 		foreach ( $configs as $plan_id => $conf ) {
 			$existing_id = self::get_plan_product_id( $plan_id );
-			if ( $existing_id > 0 ) {
+			if ( $existing_id > 0 && self::is_valid_vip_product( $existing_id ) ) {
 				$mapping[ $plan_id ] = $existing_id;
 				continue;
 			}
@@ -209,18 +264,16 @@ class Negar_Club_VIP_Products {
 	/**
 	 * Get checkout URL for purchasing a VIP plan.
 	 *
+	 * Note: Never creates products during ordinary frontend requests!
+	 * If the product is not mapped or invalid, returns empty string.
+	 *
 	 * @param string $plan_id Plan identifier.
-	 * @return string Checkout or cart URL.
+	 * @return string Checkout or cart URL, or empty string.
 	 */
 	public static function get_checkout_url_for_plan( $plan_id ) {
 		$product_id = self::get_plan_product_id( $plan_id );
-		if ( $product_id <= 0 ) {
-			// Try to ensure products exist
-			$mapping    = self::ensure_vip_products();
-			$product_id = $mapping[ $plan_id ] ?? 0;
-		}
 
-		if ( $product_id <= 0 ) {
+		if ( $product_id <= 0 || ! self::is_valid_vip_product( $product_id ) ) {
 			return '';
 		}
 

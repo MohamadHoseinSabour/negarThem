@@ -41,6 +41,79 @@ class Negar_Club_Admin_Memberships {
 	}
 
 	/**
+	 * Validate and sanitize strict integer monetary inputs.
+	 *
+	 * Rejects non-numeric, negative, decimal, or overflowing values.
+	 * Never silently clamps invalid inputs to zero.
+	 *
+	 * @param mixed  $raw_value   Submitted value.
+	 * @param string $field_label User-facing field name for error reporting.
+	 * @param bool   $allow_zero  Whether zero is permitted.
+	 * @return int Sanitized positive integer.
+	 * @throws InvalidArgumentException When validation fails.
+	 */
+	public static function validate_monetary_input( $raw_value, $field_label, $allow_zero = false ) {
+		if ( null === $raw_value || '' === trim( (string) $raw_value ) ) {
+			throw new InvalidArgumentException( sprintf( 'لطفاً %s را وارد نمایید.', $field_label ) );
+		}
+
+		$clean = trim( (string) $raw_value );
+		// Convert Persian and Arabic digits to Latin
+		$clean = strtr( $clean, array(
+			'۰' => '0', '۱' => '1', '۲' => '2', '۳' => '3', '۴' => '4',
+			'۵' => '5', '۶' => '6', '۷' => '7', '۸' => '8', '۹' => '9',
+			'٠' => '0', '١' => '1', '٢' => '2', '٣' => '3', '٤' => '4',
+			'٥' => '5', '٦' => '6', '٧' => '7', '٨' => '8', '٩' => '9',
+		) );
+
+		if ( ! is_numeric( $clean ) || preg_match( '/[^0-9\-]/', $clean ) ) {
+			throw new InvalidArgumentException( sprintf( '%s باید یک عدد معتبر باشد.', $field_label ) );
+		}
+
+		$float_val = (float) $clean;
+		if ( floor( $float_val ) != $float_val ) {
+			throw new InvalidArgumentException( sprintf( '%s نباید دارای رقم اعشار باشد.', $field_label ) );
+		}
+
+		if ( $float_val < 0 ) {
+			throw new InvalidArgumentException( sprintf( '%s نمی‌تواند منفی باشد.', $field_label ) );
+		}
+
+		if ( ! $allow_zero && 0.0 === $float_val ) {
+			throw new InvalidArgumentException( sprintf( '%s باید بزرگ‌تر از صفر باشد.', $field_label ) );
+		}
+
+		if ( $float_val > 1000000000000.0 ) {
+			throw new InvalidArgumentException( sprintf( '%s فراتر از سقف مجاز سیستم است.', $field_label ) );
+		}
+
+		return (int) $float_val;
+	}
+
+	/**
+	 * Get Persian label for a membership status.
+	 *
+	 * @param string $status Status code.
+	 * @return string Label.
+	 */
+	public static function get_status_label( $status ) {
+		switch ( $status ) {
+			case 'active':
+				return 'فعال';
+			case 'suspended':
+				return 'معلق';
+			case 'expired':
+				return 'منقضی';
+			case 'pending_operator_review':
+				return 'در انتظار بررسی کارشناس';
+			case 'refunded_pending_reconciliation':
+				return 'استرداد / تعلیق مالی';
+			default:
+				return (string) $status;
+		}
+	}
+
+	/**
 	 * Handle admin form submissions for operator balance adjustments and actions.
 	 */
 	public static function handle_admin_actions() {
@@ -56,135 +129,176 @@ class Negar_Club_Admin_Memberships {
 			wp_die( 'شما دسترسی لازم برای مدیریت اعضای VIP را ندارید.' );
 		}
 
-		$action        = sanitize_key( (string) $_POST['negar_club_membership_action'] );
-		$membership_id = (int) ( $_POST['membership_id'] ?? 0 );
-		$operator_id   = get_current_user_id();
+		$action      = sanitize_key( (string) $_POST['negar_club_membership_action'] );
+		$operator_id = get_current_user_id();
 
+		// Action: Explicit authorized VIP product creation/mapping (Fix D)
+		if ( 'setup_vip_products' === $action ) {
+			$mapping = Negar_Club_VIP_Products::ensure_vip_products();
+			if ( ! empty( $mapping ) ) {
+				add_settings_error( 'negar_club_membership_notices', 'setup_success', sprintf( 'محصولات VIP با موفقیت در ووکامرس بررسی و همگام‌سازی شدند (%d محصول فعال).', count( $mapping ) ), 'success' );
+			} else {
+				add_settings_error( 'negar_club_membership_notices', 'setup_error', 'خطا در ایجاد یا بررسی محصولات VIP.', 'error' );
+			}
+			return;
+		}
+
+		$membership_id = (int) ( $_POST['membership_id'] ?? 0 );
 		if ( $membership_id <= 0 ) {
 			add_settings_error( 'negar_club_membership_notices', 'invalid_id', 'شناسه عضویت معتبر نمی‌باشد.', 'error' );
 			return;
 		}
 
-		$membership = Negar_Club_Database::get_membership( $membership_id );
-		if ( ! $membership ) {
-			add_settings_error( 'negar_club_membership_notices', 'not_found', 'عضویت مورد نظر یافت نشد.', 'error' );
-			return;
-		}
-
-		$old_state = (array) $membership;
-		$reason    = sanitize_text_field( (string) ( $_POST['reason'] ?? '' ) );
-
+		$reason = sanitize_text_field( (string) ( $_POST['reason'] ?? '' ) );
 		if ( empty( $reason ) ) {
 			add_settings_error( 'negar_club_membership_notices', 'missing_reason', 'ذکر دلیل یا توضیحات برای کلیه اقدامات دستی کارشناس الزامی است.', 'error' );
 			return;
 		}
 
-		switch ( $action ) {
+		// Idempotency token check (Fix B): Prevent duplicate resubmission
+		$submission_token = sanitize_text_field( (string) ( $_POST['negar_club_submission_token'] ?? '' ) );
+		if ( ! empty( $submission_token ) && Negar_Club_Database::is_submission_token_used( $submission_token ) ) {
+			add_settings_error( 'negar_club_membership_notices', 'duplicate_submission', 'این عملیات قبلاً ارسال و پردازش شده است. جهت جلوگیری از دوباره‌کاری، درخواست تکراری مسدود شد.', 'error' );
+			return;
+		}
 
-			// 1. Record In-Store Merchandise Purchase
-			case 'record_purchase':
-				$purchase_amount = max( 0, (int) ( $_POST['purchase_amount'] ?? 0 ) );
-				$receipt_ref     = sanitize_text_field( (string) ( $_POST['receipt_ref'] ?? '' ) );
-				$apply_deposit   = max( 0, (int) ( $_POST['deposit_to_apply'] ?? 0 ) );
-				$record_as_debt  = ! empty( $_POST['record_as_debt'] );
+		// Atomic Transaction with row-level locking (Fix B)
+		Negar_Club_Database::begin_transaction();
 
-				if ( $purchase_amount <= 0 ) {
-					add_settings_error( 'negar_club_membership_notices', 'invalid_purchase_amount', 'مبلغ خرید باید بزرگ‌تر از صفر باشد.', 'error' );
-					return;
-				}
+		try {
+			$membership = Negar_Club_Database::get_membership_for_update( $membership_id );
+			if ( ! $membership ) {
+				throw new Exception( 'عضویت مورد نظر یافت نشد.' );
+			}
 
-				if ( $purchase_amount > (int) $membership->available_purchase_capacity ) {
-					add_settings_error( 'negar_club_membership_notices', 'exceeds_capacity', sprintf( 'مبلغ خرید (%s تومان) نمی‌تواند از ظرفیت خرید باقیمانده (%s تومان) بیشتر باشد.', number_format( $purchase_amount ), number_format( (int) $membership->available_purchase_capacity ) ), 'error' );
-					return;
-				}
+			$old_state = (array) $membership;
 
-				if ( $apply_deposit > (int) $membership->unused_deposit ) {
-					add_settings_error( 'negar_club_membership_notices', 'exceeds_deposit', sprintf( 'مبلغ بیعانه اعمالی (%s تومان) نمی‌تواند از مانده پیش‌پرداخت (%s تومان) بیشتر باشد.', number_format( $apply_deposit ), number_format( (int) $membership->unused_deposit ) ), 'error' );
-					return;
-				}
+			switch ( $action ) {
 
-				if ( $apply_deposit > $purchase_amount ) {
-					add_settings_error( 'negar_club_membership_notices', 'deposit_exceeds_purchase', 'مبلغ بیعانه نمی‌تواند از کل مبلغ خرید کالا بیشتر باشد.', 'error' );
-					return;
-				}
+				// 1. Record In-Store Merchandise Purchase
+				case 'record_purchase':
+					// Fix C: Block ordinary purchases for non-active memberships
+					if ( 'active' !== $membership->status ) {
+						throw new Exception( sprintf( 'ثبت خرید کالا برای عضویت در وضعیت «%s» مجاز نمی‌باشد. عضویت باید در وضعیت فعال باشد.', self::get_status_label( $membership->status ) ) );
+					}
 
-				$new_used_purchase = (int) $membership->used_purchase_amount + $purchase_amount;
-				$new_capacity      = (int) $membership->available_purchase_capacity - $purchase_amount;
-				$new_applied_dep   = (int) $membership->applied_deposit + $apply_deposit;
-				$new_unused_dep    = (int) $membership->unused_deposit - $apply_deposit;
+					$purchase_amount = self::validate_monetary_input( $_POST['purchase_amount'] ?? null, 'مبلغ خرید کالا', false );
+					$receipt_ref     = sanitize_text_field( (string) ( $_POST['receipt_ref'] ?? '' ) );
+					$apply_deposit   = isset( $_POST['deposit_to_apply'] ) && '' !== trim( (string) $_POST['deposit_to_apply'] )
+						? self::validate_monetary_input( $_POST['deposit_to_apply'], 'کسر از بیعانه', true )
+						: 0;
+					$record_as_debt  = ! empty( $_POST['record_as_debt'] );
 
-				$remaining_unpaid  = $purchase_amount - $apply_deposit;
-				$new_offline_debt  = (int) $membership->offline_debt_amount + ( $record_as_debt ? $remaining_unpaid : 0 );
+					if ( $purchase_amount > (int) $membership->available_purchase_capacity ) {
+						throw new Exception( sprintf( 'مبلغ خرید (%s تومان) نمی‌تواند از ظرفیت خرید باقیمانده (%s تومان) بیشتر باشد.', number_format( $purchase_amount ), number_format( (int) $membership->available_purchase_capacity ) ) );
+					}
 
-				$note_addition = sprintf(
-					'ثبت خرید حضوری: %s تومان (رسید: %s). بیعانه کسر شده: %s تومان. بدهی اقساط افزوده شده: %s تومان. دلیل: %s',
-					number_format( $purchase_amount ),
-					$receipt_ref ?: 'ثبت نشده',
-					number_format( $apply_deposit ),
-					number_format( $record_as_debt ? $remaining_unpaid : 0 ),
-					$reason
-				);
+					if ( $apply_deposit > (int) $membership->unused_deposit ) {
+						throw new Exception( sprintf( 'مبلغ بیعانه اعمالی (%s تومان) نمی‌تواند از مانده پیش‌پرداخت (%s تومان) بیشتر باشد.', number_format( $apply_deposit ), number_format( (int) $membership->unused_deposit ) ) );
+					}
 
-				$updated = Negar_Club_Database::update_membership(
-					$membership_id,
-					array(
-						'used_purchase_amount'        => $new_used_purchase,
-						'available_purchase_capacity' => $new_capacity,
-						'applied_deposit'             => $new_applied_dep,
-						'unused_deposit'              => $new_unused_dep,
-						'offline_debt_amount'         => $new_offline_debt,
-						'notes'                       => $note_addition,
-						'last_operator_id'            => $operator_id,
-					)
-				);
+					if ( $apply_deposit > $purchase_amount ) {
+						throw new Exception( 'مبلغ بیعانه نمی‌تواند از کل مبلغ خرید کالا بیشتر باشد.' );
+					}
 
-				if ( $updated ) {
+					$new_used_purchase = (int) $membership->used_purchase_amount + $purchase_amount;
+					$new_capacity      = (int) $membership->available_purchase_capacity - $purchase_amount;
+					$new_applied_dep   = (int) $membership->applied_deposit + $apply_deposit;
+					$new_unused_dep    = (int) $membership->unused_deposit - $apply_deposit;
+
+					// Fix A: Prepayment invariant check
+					if ( ( $new_applied_dep + $new_unused_dep ) !== (int) $membership->prepayment_amount ) {
+						throw new Exception( 'ناسازگاری تراز بیعانه: مجموع بیعانه مصرف‌شده و باقیمانده با کل پیش‌پرداخت همخوانی ندارد.' );
+					}
+
+					$remaining_unpaid = $purchase_amount - $apply_deposit;
+					$new_offline_debt = (int) $membership->offline_debt_amount + ( $record_as_debt ? $remaining_unpaid : 0 );
+
+					$note_addition = sprintf(
+						'ثبت خرید حضوری: %s تومان (رسید: %s). بیعانه کسر شده: %s تومان. بدهی اقساط افزوده شده: %s تومان. دلیل: %s',
+						number_format( $purchase_amount ),
+						$receipt_ref ?: 'ثبت نشده',
+						number_format( $apply_deposit ),
+						number_format( $record_as_debt ? $remaining_unpaid : 0 ),
+						$reason
+					);
+
+					$updated = Negar_Club_Database::update_membership(
+						$membership_id,
+						array(
+							'used_purchase_amount'        => $new_used_purchase,
+							'available_purchase_capacity' => $new_capacity,
+							'applied_deposit'             => $new_applied_dep,
+							'unused_deposit'              => $new_unused_dep,
+							'offline_debt_amount'         => $new_offline_debt,
+							'notes'                       => $note_addition,
+							'last_operator_id'            => $operator_id,
+						)
+					);
+
+					if ( ! $updated ) {
+						throw new Exception( 'خطا در ثبت اطلاعات خرید در پایگاه داده.' );
+					}
+
 					Negar_Club_Database::log_audit(
 						'club_membership',
 						$membership_id,
 						'membership:record_purchase',
 						$old_state,
 						array(
-							'purchase_amount'   => $purchase_amount,
-							'receipt_ref'       => $receipt_ref,
-							'applied_deposit'   => $apply_deposit,
-							'record_as_debt'    => $record_as_debt,
-							'new_debt'          => $new_offline_debt,
+							'purchase_amount' => $purchase_amount,
+							'receipt_ref'     => $receipt_ref,
+							'applied_deposit' => $apply_deposit,
+							'record_as_debt'  => $record_as_debt,
+							'new_debt'        => $new_offline_debt,
 						),
 						$operator_id,
 						$reason
 					);
+
+					if ( ! empty( $submission_token ) ) {
+						Negar_Club_Database::record_submission_token( $submission_token, $operator_id );
+					}
+
+					Negar_Club_Database::commit();
 					add_settings_error( 'negar_club_membership_notices', 'purchase_success', 'خرید حضوری کالا با موفقیت ثبت و ترازهای عضویت به‌روزرسانی شد.', 'success' );
-				}
-				break;
+					break;
 
-			// 2. Apply Deposit Toward Offline Purchase
-			case 'apply_deposit':
-				$deposit_amount = max( 0, (int) ( $_POST['deposit_amount'] ?? 0 ) );
-				if ( $deposit_amount <= 0 ) {
-					add_settings_error( 'negar_club_membership_notices', 'invalid_deposit_amount', 'مبلغ اعمال بیعانه باید بزرگ‌تر از صفر باشد.', 'error' );
-					return;
-				}
+				// 2. Apply Deposit Toward Offline Purchase
+				case 'apply_deposit':
+					// Fix C: Block for non-active memberships
+					if ( 'active' !== $membership->status ) {
+						throw new Exception( sprintf( 'امکان کسر بیعانه برای عضویت در وضعیت «%s» وجود ندارد.', self::get_status_label( $membership->status ) ) );
+					}
 
-				if ( $deposit_amount > (int) $membership->unused_deposit ) {
-					add_settings_error( 'negar_club_membership_notices', 'exceeds_deposit', 'مبلغ انتخابی از مانده پیش‌پرداخت آزاد بیشتر است.', 'error' );
-					return;
-				}
+					$deposit_amount = self::validate_monetary_input( $_POST['deposit_amount'] ?? null, 'مبلغ اعمال بیعانه', false );
 
-				$new_applied = (int) $membership->applied_deposit + $deposit_amount;
-				$new_unused  = (int) $membership->unused_deposit - $deposit_amount;
+					if ( $deposit_amount > (int) $membership->unused_deposit ) {
+						throw new Exception( sprintf( 'مبلغ انتخابی (%s تومان) از مانده پیش‌پرداخت آزاد (%s تومان) بیشتر است.', number_format( $deposit_amount ), number_format( (int) $membership->unused_deposit ) ) );
+					}
 
-				$updated = Negar_Club_Database::update_membership(
-					$membership_id,
-					array(
-						'applied_deposit'  => $new_applied,
-						'unused_deposit'   => $new_unused,
-						'notes'            => 'کسر پیش‌پرداخت: ' . number_format( $deposit_amount ) . ' تومان. دلیل: ' . $reason,
-						'last_operator_id' => $operator_id,
-					)
-				);
+					$new_applied = (int) $membership->applied_deposit + $deposit_amount;
+					$new_unused  = (int) $membership->unused_deposit - $deposit_amount;
 
-				if ( $updated ) {
+					// Fix A: Prepayment invariant check
+					if ( ( $new_applied + $new_unused ) !== (int) $membership->prepayment_amount ) {
+						throw new Exception( 'ناسازگاری تراز بیعانه: مجموع بیعانه مصرف‌شده و باقیمانده با کل پیش‌پرداخت همخوانی ندارد.' );
+					}
+
+					$updated = Negar_Club_Database::update_membership(
+						$membership_id,
+						array(
+							'applied_deposit'  => $new_applied,
+							'unused_deposit'   => $new_unused,
+							'notes'            => 'کسر پیش‌پرداخت: ' . number_format( $deposit_amount ) . ' تومان. دلیل: ' . $reason,
+							'last_operator_id' => $operator_id,
+						)
+					);
+
+					if ( ! $updated ) {
+						throw new Exception( 'خطا در ثبت کسر بیعانه در پایگاه داده.' );
+					}
+
 					Negar_Club_Database::log_audit(
 						'club_membership',
 						$membership_id,
@@ -194,40 +308,52 @@ class Negar_Club_Admin_Memberships {
 						$operator_id,
 						$reason
 					);
+
+					if ( ! empty( $submission_token ) ) {
+						Negar_Club_Database::record_submission_token( $submission_token, $operator_id );
+					}
+
+					Negar_Club_Database::commit();
 					add_settings_error( 'negar_club_membership_notices', 'deposit_applied', 'پیش‌پرداخت با موفقیت اعمال گردید.', 'success' );
-				}
-				break;
+					break;
 
-			// 3. Record Offline Installment Collection Receipt
-			case 'record_collection':
-				$collected_amount = max( 0, (int) ( $_POST['collected_amount'] ?? 0 ) );
-				$collection_ref   = sanitize_text_field( (string) ( $_POST['collection_ref'] ?? '' ) );
+				// 3. Record Offline Installment Collection Receipt
+				case 'record_collection':
+					$collected_amount = self::validate_monetary_input( $_POST['collected_amount'] ?? null, 'مبلغ قسط دریافتی', false );
+					$collection_ref   = sanitize_text_field( (string) ( $_POST['collection_ref'] ?? '' ) );
 
-				if ( $collected_amount <= 0 ) {
-					add_settings_error( 'negar_club_membership_notices', 'invalid_collected_amount', 'مبلغ دریافتی باید بزرگ‌تر از صفر باشد.', 'error' );
-					return;
-				}
+					// Fix C: Reject collected amount greater than recorded debt. Never silently clamp!
+					if ( $collected_amount > (int) $membership->offline_debt_amount ) {
+						throw new Exception( sprintf(
+							'مبلغ وصولی (%s تومان) نمی‌تواند از کل بدهی اقساط باقیمانده (%s تومان) بیشتر باشد. (ثبت مبلغ مازاد مسدود شد)',
+							number_format( $collected_amount ),
+							number_format( (int) $membership->offline_debt_amount )
+						) );
+					}
 
-				$new_debt = max( 0, (int) $membership->offline_debt_amount - $collected_amount );
+					$new_debt = (int) $membership->offline_debt_amount - $collected_amount;
 
-				$note = sprintf(
-					'ثبت دریافت قسط حضوری: %s تومان (رسید: %s). مانده بدهی اقساط: %s تومان. دلیل: %s',
-					number_format( $collected_amount ),
-					$collection_ref ?: 'ثبت نشده',
-					number_format( $new_debt ),
-					$reason
-				);
+					$note = sprintf(
+						'ثبت دریافت قسط حضوری: %s تومان (رسید: %s). مانده بدهی اقساط: %s تومان. دلیل: %s',
+						number_format( $collected_amount ),
+						$collection_ref ?: 'ثبت نشده',
+						number_format( $new_debt ),
+						$reason
+					);
 
-				$updated = Negar_Club_Database::update_membership(
-					$membership_id,
-					array(
-						'offline_debt_amount' => $new_debt,
-						'notes'               => $note,
-						'last_operator_id'    => $operator_id,
-					)
-				);
+					$updated = Negar_Club_Database::update_membership(
+						$membership_id,
+						array(
+							'offline_debt_amount' => $new_debt,
+							'notes'               => $note,
+							'last_operator_id'    => $operator_id,
+						)
+					);
 
-				if ( $updated ) {
+					if ( ! $updated ) {
+						throw new Exception( 'خطا در ثبت وصول قسط در پایگاه داده.' );
+					}
+
 					Negar_Club_Database::log_audit(
 						'club_membership',
 						$membership_id,
@@ -237,37 +363,57 @@ class Negar_Club_Admin_Memberships {
 						$operator_id,
 						$reason
 					);
+
+					if ( ! empty( $submission_token ) ) {
+						Negar_Club_Database::record_submission_token( $submission_token, $operator_id );
+					}
+
+					Negar_Club_Database::commit();
 					add_settings_error( 'negar_club_membership_notices', 'collection_success', 'دریافت قسط حضوری با موفقیت ثبت شد.', 'success' );
-				}
-				break;
+					break;
 
-			// 4. Adjust Balances / Status / Limits
-			case 'adjust_balances':
-				$new_ceiling  = isset( $_POST['purchase_ceiling'] ) ? max( 0, (int) $_POST['purchase_ceiling'] ) : (int) $membership->purchase_ceiling;
-				$new_capacity = isset( $_POST['available_purchase_capacity'] ) ? max( 0, (int) $_POST['available_purchase_capacity'] ) : (int) $membership->available_purchase_capacity;
-				$new_unused   = isset( $_POST['unused_deposit'] ) ? max( 0, (int) $_POST['unused_deposit'] ) : (int) $membership->unused_deposit;
-				$new_debt     = isset( $_POST['offline_debt_amount'] ) ? max( 0, (int) $_POST['offline_debt_amount'] ) : (int) $membership->offline_debt_amount;
-				$new_status   = sanitize_key( (string) ( $_POST['status'] ?? $membership->status ) );
+				// 4. Adjust Balances / Status / Limits (Routine adjustment)
+				case 'adjust_balances':
+					// Notice: unused_deposit is NOT editable here (Fix A). Prepayments remain strictly immutable.
+					$new_ceiling = isset( $_POST['purchase_ceiling'] )
+						? self::validate_monetary_input( $_POST['purchase_ceiling'], 'سقف خرید کالا', true )
+						: (int) $membership->purchase_ceiling;
 
-				$allowed_statuses = array( 'active', 'suspended', 'expired', 'pending_operator_review', 'refunded_pending_reconciliation' );
-				if ( ! in_array( $new_status, $allowed_statuses, true ) ) {
-					$new_status = $membership->status;
-				}
+					$new_capacity = isset( $_POST['available_purchase_capacity'] )
+						? self::validate_monetary_input( $_POST['available_purchase_capacity'], 'ظرفیت خرید باقیمانده', true )
+						: (int) $membership->available_purchase_capacity;
 
-				$updated = Negar_Club_Database::update_membership(
-					$membership_id,
-					array(
-						'purchase_ceiling'            => $new_ceiling,
-						'available_purchase_capacity' => $new_capacity,
-						'unused_deposit'              => $new_unused,
-						'offline_debt_amount'         => $new_debt,
-						'status'                      => $new_status,
-						'notes'                       => 'تنظیم دستی توسط کارشناس: ' . $reason,
-						'last_operator_id'            => $operator_id,
-					)
-				);
+					$new_debt = isset( $_POST['offline_debt_amount'] )
+						? self::validate_monetary_input( $_POST['offline_debt_amount'], 'بدهی اقساط حضوری', true )
+						: (int) $membership->offline_debt_amount;
 
-				if ( $updated ) {
+					$new_status = sanitize_key( (string) ( $_POST['status'] ?? $membership->status ) );
+					$allowed_statuses = array( 'active', 'suspended', 'expired', 'pending_operator_review', 'refunded_pending_reconciliation' );
+					if ( ! in_array( $new_status, $allowed_statuses, true ) ) {
+						$new_status = $membership->status;
+					}
+
+					// Fix C: Available purchase capacity cannot exceed ceiling
+					if ( $new_capacity > $new_ceiling ) {
+						throw new Exception( sprintf( 'ظرفیت خرید باقیمانده (%s تومان) نمی‌تواند از کل سقف خرید (%s تومان) بیشتر باشد.', number_format( $new_capacity ), number_format( $new_ceiling ) ) );
+					}
+
+					$updated = Negar_Club_Database::update_membership(
+						$membership_id,
+						array(
+							'purchase_ceiling'            => $new_ceiling,
+							'available_purchase_capacity' => $new_capacity,
+							'offline_debt_amount'         => $new_debt,
+							'status'                      => $new_status,
+							'notes'                       => 'تنظیم دستی توسط کارشناس: ' . $reason,
+							'last_operator_id'            => $operator_id,
+						)
+					);
+
+					if ( ! $updated ) {
+						throw new Exception( 'خطا در ثبت تنظیمات دستی ترازها در پایگاه داده.' );
+					}
+
 					Negar_Club_Database::log_audit(
 						'club_membership',
 						$membership_id,
@@ -276,16 +422,73 @@ class Negar_Club_Admin_Memberships {
 						array(
 							'ceiling'  => $new_ceiling,
 							'capacity' => $new_capacity,
-							'deposit'  => $new_unused,
 							'debt'     => $new_debt,
 							'status'   => $new_status,
 						),
 						$operator_id,
 						$reason
 					);
+
+					if ( ! empty( $submission_token ) ) {
+						Negar_Club_Database::record_submission_token( $submission_token, $operator_id );
+					}
+
+					Negar_Club_Database::commit();
 					add_settings_error( 'negar_club_membership_notices', 'adjust_success', 'ترازها و وضعیت عضویت با موفقیت به‌روزرسانی شدند.', 'success' );
-				}
-				break;
+					break;
+
+				// 5. Exceptional Accounting Correction (Fix A)
+				case 'exceptional_deposit_correction':
+					if ( ! current_user_can( 'manage_options' ) ) {
+						throw new Exception( 'اصلاح استثنایی حسابداری تنها توسط مدیر ارشد مجاز است.' );
+					}
+
+					$new_unused_dep  = self::validate_monetary_input( $_POST['new_unused_deposit'] ?? null, 'مانده پیش‌پرداخت آزاد', true );
+					$new_applied_dep = self::validate_monetary_input( $_POST['new_applied_deposit'] ?? null, 'پیش‌پرداخت کسر شده', true );
+
+					$updated = Negar_Club_Database::update_membership(
+						$membership_id,
+						array(
+							'unused_deposit'   => $new_unused_dep,
+							'applied_deposit'  => $new_applied_dep,
+							'notes'            => 'اصلاح استثنایی حسابداری: ' . $reason,
+							'last_operator_id' => $operator_id,
+						)
+					);
+
+					if ( ! $updated ) {
+						throw new Exception( 'خطا در ثبت اصلاح حسابداری در پایگاه داده.' );
+					}
+
+					Negar_Club_Database::log_audit(
+						'club_membership',
+						$membership_id,
+						'membership:exceptional_correction',
+						$old_state,
+						array(
+							'old_unused'  => (int) $membership->unused_deposit,
+							'new_unused'  => $new_unused_dep,
+							'old_applied' => (int) $membership->applied_deposit,
+							'new_applied' => $new_applied_dep,
+						),
+						$operator_id,
+						$reason
+					);
+
+					if ( ! empty( $submission_token ) ) {
+						Negar_Club_Database::record_submission_token( $submission_token, $operator_id );
+					}
+
+					Negar_Club_Database::commit();
+					add_settings_error( 'negar_club_membership_notices', 'correction_success', 'اصلاح استثنایی حسابداری با موفقیت در سوابق ممیزی ثبت گردید.', 'success' );
+					break;
+
+				default:
+					throw new Exception( 'عملیات درخواستی معتبر نمی‌باشد.' );
+			}
+		} catch ( Exception $e ) {
+			Negar_Club_Database::rollback();
+			add_settings_error( 'negar_club_membership_notices', 'action_failed', $e->getMessage(), 'error' );
 		}
 	}
 
@@ -367,6 +570,16 @@ class Negar_Club_Admin_Memberships {
 							<?php endif; ?>
 						</div>
 					</div>
+				</form>
+			</div>
+
+			<div style="margin-top: 15px; display: flex; justify-content: flex-end;">
+				<form method="post" action="">
+					<?php wp_nonce_field( 'negar_club_operator_membership_action', 'negar_club_membership_nonce' ); ?>
+					<input type="hidden" name="negar_club_membership_action" value="setup_vip_products">
+					<button type="submit" class="button button-primary" onclick="return confirm('آیا از بررسی و همگام‌سازی محصولات مجازی VIP در ووکامرس اطمینان دارید؟');">
+						همگام‌سازی محصولات VIP در ووکامرس
+					</button>
 				</form>
 			</div>
 
@@ -547,39 +760,45 @@ class Negar_Club_Admin_Memberships {
 				<div class="postbox" style="padding: 15px;">
 					<h3>۱. ثبت خرید حضوری کالا</h3>
 					<p style="color: #666;">ثبت خرید کالای لوازم خانگی در فروشگاه حضوری و کسر از سقف مجاز خرید.</p>
+					<?php if ( 'active' !== $mem->status ) : ?>
+						<div class="notice notice-warning inline" style="margin: 10px 0; padding: 8px 12px;">
+							<p>این عضویت در وضعیت «<strong><?php echo esc_html( self::get_status_label( $mem->status ) ); ?></strong>» قرار دارد و امکان ثبت خرید یا کسر بیعانه تا فعال‌سازی مجدد مسدود است.</p>
+						</div>
+					<?php endif; ?>
 					<form method="post" action="">
 						<?php wp_nonce_field( 'negar_club_operator_membership_action', 'negar_club_membership_nonce' ); ?>
 						<input type="hidden" name="negar_club_membership_action" value="record_purchase">
 						<input type="hidden" name="membership_id" value="<?php echo esc_attr( $mem->id ); ?>">
+						<input type="hidden" name="negar_club_submission_token" value="<?php echo esc_attr( wp_generate_uuid4() ); ?>">
 
 						<table class="form-table">
 							<tr>
 								<th>مبلغ خرید کالا (تومان):</th>
-								<td><input type="number" name="purchase_amount" max="<?php echo esc_attr( $mem->available_purchase_capacity ); ?>" required class="regular-text"></td>
+								<td><input type="number" name="purchase_amount" max="<?php echo esc_attr( $mem->available_purchase_capacity ); ?>" <?php disabled( 'active' !== $mem->status ); ?> required class="regular-text"></td>
 							</tr>
 							<tr>
 								<th>شماره فاکتور / رسید فروشگاه:</th>
-								<td><input type="text" name="receipt_ref" placeholder="مثال: INV-1403-882" class="regular-text"></td>
+								<td><input type="text" name="receipt_ref" placeholder="مثال: INV-1403-882" <?php disabled( 'active' !== $mem->status ); ?> class="regular-text"></td>
 							</tr>
 							<tr>
 								<th>کسر از مانده بیعانه (تومان):</th>
 								<td>
-									<input type="number" name="deposit_to_apply" max="<?php echo esc_attr( $mem->unused_deposit ); ?>" value="0" class="regular-text">
+									<input type="number" name="deposit_to_apply" max="<?php echo esc_attr( $mem->unused_deposit ); ?>" value="0" <?php disabled( 'active' !== $mem->status ); ?> class="regular-text">
 									<p class="description">حداکثر تا سقف مانده پیش‌پرداخت (<?php echo esc_html( number_format( (int) $mem->unused_deposit ) ); ?> تومان)</p>
 								</td>
 							</tr>
 							<tr>
 								<th>ثبت باقیمانده به عنوان بدهی اقساط:</th>
 								<td>
-									<label><input type="checkbox" name="record_as_debt" value="1" checked> باقیمانده خرید پس از کسر بیعانه به بدهی اقساط حضوری افزوده شود.</label>
+									<label><input type="checkbox" name="record_as_debt" value="1" checked <?php disabled( 'active' !== $mem->status ); ?>> باقیمانده خرید پس از کسر بیعانه به بدهی اقساط حضوری افزوده شود.</label>
 								</td>
 							</tr>
 							<tr>
 								<th>دلیل / توضیحات کارشناس:</th>
-								<td><textarea name="reason" rows="2" class="large-text" required placeholder="توضیح کالای تحویل شده یا شماره فاکتور"></textarea></td>
+								<td><textarea name="reason" rows="2" class="large-text" required placeholder="توضیح کالای تحویل شده یا شماره فاکتور" <?php disabled( 'active' !== $mem->status ); ?>></textarea></td>
 							</tr>
 						</table>
-						<p><button type="submit" class="button button-primary">ثبت خرید حضوری</button></p>
+						<p><button type="submit" class="button button-primary" <?php disabled( 'active' !== $mem->status ); ?>>ثبت خرید حضوری</button></p>
 					</form>
 				</div>
 
@@ -591,11 +810,12 @@ class Negar_Club_Admin_Memberships {
 						<?php wp_nonce_field( 'negar_club_operator_membership_action', 'negar_club_membership_nonce' ); ?>
 						<input type="hidden" name="negar_club_membership_action" value="record_collection">
 						<input type="hidden" name="membership_id" value="<?php echo esc_attr( $mem->id ); ?>">
+						<input type="hidden" name="negar_club_submission_token" value="<?php echo esc_attr( wp_generate_uuid4() ); ?>">
 
 						<table class="form-table">
 							<tr>
 								<th>مبلغ قسط دریافتی (تومان):</th>
-								<td><input type="number" name="collected_amount" required class="regular-text"></td>
+								<td><input type="number" name="collected_amount" max="<?php echo esc_attr( $mem->offline_debt_amount ); ?>" required class="regular-text"></td>
 							</tr>
 							<tr>
 								<th>شماره ارجاع / رسید کارتخوان:</th>
@@ -612,12 +832,13 @@ class Negar_Club_Admin_Memberships {
 
 				<!-- Form C: Adjust Balances & Status -->
 				<div class="postbox" style="padding: 15px; grid-column: 1 / -1;">
-					<h3>۳. تنظیم دستی ترازها، وضعیت و سقف خرید</h3>
-					<p style="color: #666;">اصلاح دستی و موردی ترازها با ثبت دائمی در سابقه ممیزی.</p>
+					<h3>۳. تنظیم دستی سقف خرید، وضعیت و بدهی اقساط</h3>
+					<p style="color: #666;">اصلاح دستی و موردی سقف‌ها و وضعیت با ثبت دائمی در سابقه ممیزی. (پیش‌پرداخت پرداختی در سفارش ووکامرس غیرقابل‌تغییر است)</p>
 					<form method="post" action="">
 						<?php wp_nonce_field( 'negar_club_operator_membership_action', 'negar_club_membership_nonce' ); ?>
 						<input type="hidden" name="negar_club_membership_action" value="adjust_balances">
 						<input type="hidden" name="membership_id" value="<?php echo esc_attr( $mem->id ); ?>">
+						<input type="hidden" name="negar_club_submission_token" value="<?php echo esc_attr( wp_generate_uuid4() ); ?>">
 
 						<table class="form-table">
 							<tr>
@@ -641,10 +862,6 @@ class Negar_Club_Admin_Memberships {
 								<td><input type="number" name="available_purchase_capacity" value="<?php echo esc_attr( $mem->available_purchase_capacity ); ?>" class="regular-text"></td>
 							</tr>
 							<tr>
-								<th>مانده پیش‌پرداخت بیعانه (تومان):</th>
-								<td><input type="number" name="unused_deposit" value="<?php echo esc_attr( $mem->unused_deposit ); ?>" class="regular-text"></td>
-							</tr>
-							<tr>
 								<th>بدهی اقساط حضوری (تومان):</th>
 								<td><input type="number" name="offline_debt_amount" value="<?php echo esc_attr( $mem->offline_debt_amount ); ?>" class="regular-text"></td>
 							</tr>
@@ -656,6 +873,38 @@ class Negar_Club_Admin_Memberships {
 						<p><button type="submit" class="button button-secondary">ذخیره تغییرات دستی</button></p>
 					</form>
 				</div>
+
+				<?php if ( current_user_can( 'manage_options' ) ) : ?>
+					<!-- Form D: Exceptional Accounting Correction (Fix A) -->
+					<div class="postbox" style="padding: 15px; grid-column: 1 / -1; border: 1px solid #dba617; background: #fffcf0;">
+						<h3 style="color: #856404; margin-top: 0;">۴. اصلاح استثنایی حسابداری و ودیعه (مدیریت ارشد)</h3>
+						<p style="color: #666; font-size: 13px;">
+							<strong>هشدار حسابداری:</strong> این بخش منحصراً جهت تصحیح اشتباهات دفتری یا مصالحه‌های حقوقی با نظارت مستقیم مدیریت است. مبلغ پرداختی در سفارش ووکامرس غیرقابل‌تغییر است و تغییرات در سوابق ممیزی با شناسه مدیر ثبت می‌گردد.
+						</p>
+						<form method="post" action="">
+							<?php wp_nonce_field( 'negar_club_operator_membership_action', 'negar_club_membership_nonce' ); ?>
+							<input type="hidden" name="negar_club_membership_action" value="exceptional_deposit_correction">
+							<input type="hidden" name="membership_id" value="<?php echo esc_attr( $mem->id ); ?>">
+							<input type="hidden" name="negar_club_submission_token" value="<?php echo esc_attr( wp_generate_uuid4() ); ?>">
+
+							<table class="form-table">
+								<tr>
+									<th>مانده پیش‌پرداخت آزاد جدید (تومان):</th>
+									<td><input type="number" name="new_unused_deposit" value="<?php echo esc_attr( $mem->unused_deposit ); ?>" required class="regular-text"></td>
+								</tr>
+								<tr>
+									<th>پیش‌پرداخت کسر شده جدید (تومان):</th>
+									<td><input type="number" name="new_applied_deposit" value="<?php echo esc_attr( $mem->applied_deposit ); ?>" required class="regular-text"></td>
+								</tr>
+								<tr>
+									<th>دلیل مستندسازی مصوبه مدیریت (الزامی):</th>
+									<td><textarea name="reason" rows="2" class="large-text" required placeholder="علت رسمی اصلاح دفتری حسابداری"></textarea></td>
+								</tr>
+							</table>
+							<p><button type="submit" class="button button-secondary" onclick="return confirm('آیا از ثبت اصلاح استثنایی حسابداری اطمینان دارید؟');">ثبت اصلاح حسابداری</button></p>
+						</form>
+					</div>
+				<?php endif; ?>
 
 			</div>
 		</div>
