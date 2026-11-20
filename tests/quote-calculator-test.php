@@ -59,6 +59,9 @@ run_calc_test( 'T325: Persian and Arabic Digit Normalization', function() {
 	assert_calc_equals( '1234567890', Negar_Club_Quote_Calculator::normalize_digits( '۱۲۳۴۵۶۷۸۹۰' ) );
 	assert_calc_equals( '1234567890', Negar_Club_Quote_Calculator::normalize_digits( '١٢٣٤٥٦٧٨٩٠' ) );
 	assert_calc_equals( '15000000', Negar_Club_Quote_Calculator::normalize_digits( '۱۵,۰۰۰,۰۰۰ تومان' ) );
+	assert_calc_equals( '', Negar_Club_Quote_Calculator::normalize_digits( '123abc456' ), 'Mixed alphanumeric must return empty string' );
+	assert_calc_equals( '', Negar_Club_Quote_Calculator::normalize_digits( 'invalid-text' ), 'Malformed string must return empty string' );
+	assert_calc_equals( '', Negar_Club_Quote_Calculator::normalize_digits( '5000@#$' ), 'Special characters must return empty string' );
 } );
 
 // Test 2: Standard Divisible Amount (negar_aghaz, 6M purchase, 3M initial, 3M financed over 3 months = 1M/month)

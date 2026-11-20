@@ -18,20 +18,33 @@ class Negar_Club_Quote_Calculator {
 	/**
 	 * Convert Persian and Arabic digits to standard ASCII digits.
 	 *
+	 * Strips allowed currency words (تومان, ریال, etc.) and grouping separators (commas, spaces).
+	 * Rejects strings containing invalid alphabetic or symbolic characters by returning an empty string.
+	 *
 	 * @param string|int|float $input Raw numeric string.
-	 * @return string
+	 * @return string Normalized digit string, or empty string on malformed/mixed input.
 	 */
 	public static function normalize_digits( $input ) {
 		$persian = array( '۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹' );
 		$arabic  = array( '٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩' );
 		$ascii   = array( '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' );
 
-		$str = (string) $input;
+		$str = trim( (string) $input );
 		$str = str_replace( $persian, $ascii, $str );
 		$str = str_replace( $arabic, $ascii, $str );
-		$str = preg_replace( '/[^\d]/', '', $str );
 
-		return (string) $str;
+		// Strip permitted currency labels
+		$cleaned = str_ireplace( array( 'تومان', 'ریال', 'toman', 'irt', 'irr' ), '', $str );
+
+		// Strip permitted grouping characters: commas, Persian commas, spaces
+		$cleaned = str_replace( array( ',', '،', ' ' ), '', $cleaned );
+
+		// If input contains non-digit characters (e.g. letters, symbols), treat as invalid
+		if ( '' !== $cleaned && ! ctype_digit( $cleaned ) ) {
+			return '';
+		}
+
+		return $cleaned;
 	}
 
 	/**
