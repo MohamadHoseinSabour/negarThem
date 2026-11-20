@@ -197,63 +197,63 @@
 
 ### Tasks for Phase 5:
 
-- [ ] **T330** [Phase 5] [US-05, CLUB-AD-001] [AC: CLUB-AC-041] Scaffold minimal plugin bootstrap with HPOS compatibility declaration
+- [x] **T330** [Phase 5] [US-05, CLUB-AD-001] [AC: CLUB-AC-041] Scaffold minimal plugin bootstrap with HPOS compatibility declaration
   - **Objective**: Initialize `packages/negar-customer-club/negar-customer-club.php` declaring plugin metadata, HPOS compatibility feature flag, version constants, and autoloader.
   - **Files**: `packages/negar-customer-club/negar-customer-club.php`
   - **Acceptance Criteria**: Plugin activates without errors; declares `FeaturesUtil::declare_compatibility('custom_order_tables', ...)` cleanly.
   - **Required Tests**: WP-CLI plugin activation test; lint test.
   - **Dependencies**: CLUB-AD-001 employer approval.
 
-- [ ] **T331** [Phase 5] [US-05] [AC: CLUB-AC-017] Implement database migration for `wp_negar_club_applications` table
+- [x] **T331** [Phase 5] [US-05] [AC: CLUB-AC-017] Implement database migration for `wp_negar_club_applications` table
   - **Objective**: Create `class-installer.php` creating table `wp_negar_club_applications` with `id`, `application_number`, `user_id`, `plan_id`, `status`, `requested_amount_irt`, `approved_ceiling_irt`, `national_id_hash`, `mobile`, `created_at`, `updated_at`, and idempotent version tracking.
   - **Files**: `packages/negar-customer-club/includes/class-installer.php`
   - **Acceptance Criteria**: Table created with InnoDB, `utf8mb4_unicode_ci`, appropriate indexes (`idx_user_status`, `idx_national_hash`); migration runs idempotently via `dbDelta`.
   - **Required Tests**: MySQL schema inspection; idempotent re-run test.
   - **Dependencies**: T330.
 
-- [ ] **T332** [P] [Phase 5] [US-05] [AC: CLUB-AC-018] Implement Iranian National ID validation utility using official Modulo 11 checksum
+- [x] **T332** [P] [Phase 5] [US-05] [AC: CLUB-AC-018] Implement Iranian National ID validation utility using official Modulo 11 checksum
   - **Objective**: Implement `Negar_Club_Validator::validate_national_id($code)` with 10-digit normalization, identical-digit rejection (`0000000000`..`9999999999`), and official Modulo 11 algorithm.
   - **Files**: `packages/negar-customer-club/includes/class-validator.php`
-  - **Acceptance Criteria**: Validates verified test vectors (`0010000006` valid, `0010000007` invalid); rejects non-numeric or malformed strings.
+  - **Acceptance Criteria**: Validates verified test vectors (`0010000003` valid, `0010000006` invalid, `0790419904` valid, `1111111111` invalid); rejects non-numeric or malformed strings.
   - **Required Tests**: PHP unit test suite testing 10 verified test vectors and edge cases.
   - **Dependencies**: T330.
 
-- [ ] **T333** [Phase 5] [US-05] [AC: CLUB-AC-017, CLUB-AC-048] Implement REST application submission endpoint
+- [x] **T333** [Phase 5] [US-05] [AC: CLUB-AC-017, CLUB-AC-048] Implement REST application submission endpoint
   - **Objective**: Register `POST /wp-json/negar-club/v1/applications` requiring logged-in user, action nonce verification, rate limiting, Modulo 11 check, and input sanitization.
   - **Files**: `packages/negar-customer-club/includes/class-application-manager.php`
   - **Acceptance Criteria**: Authenticated user can submit application; guest receives 401 Unauthorized; invalid national ID receives 422 Unprocessable Entity; duplicate active application cleanly blocked.
   - **Required Tests**: REST API automated test suite (positive, negative, unauthenticated).
   - **Dependencies**: T331, T332.
 
-- [ ] **T334** [Phase 5] [US-05, US-06] [AC: CLUB-AC-019, CLUB-AC-020] Implement application state machine
+- [x] **T334** [Phase 5] [US-05, US-06] [AC: CLUB-AC-019, CLUB-AC-020] Implement application state machine
   - **Objective**: Define formal states (`pending_review`, `under_review`, `approved`, `rejected`, `expired`, `cancelled`) and allowed state transitions in `class-application-manager.php`.
   - **Files**: `packages/negar-customer-club/includes/class-application-manager.php`
   - **Acceptance Criteria**: Disallowed transitions (e.g. `rejected` -> `approved`) throw domain exceptions; transition logs timestamp, operator ID, and reason.
   - **Required Tests**: Unit test covering 100% of state transition paths.
   - **Dependencies**: T333.
 
-- [ ] **T335** [Phase 5] [US-12] [AC: CLUB-AC-050] Register scoped operator capability `negar_club_operator` and review REST endpoints
+- [x] **T335** [Phase 5] [US-12] [AC: CLUB-AC-050] Register scoped operator capability `negar_club_operator` and review REST endpoints
   - **Objective**: Register custom capability `negar_club_operator` (assigned to Administrator and Shop Manager) and secure review endpoints (`GET/POST /wp-json/negar-club/v1/admin/applications/*`).
   - **Files**: `packages/negar-customer-club/includes/class-roles.php`, `class-application-manager.php`
   - **Acceptance Criteria**: Non-operator users receive 403 Forbidden on review endpoints; operators can list, view, and transition applications.
   - **Required Tests**: REST permission callback test with customer, operator, and admin accounts.
   - **Dependencies**: T334.
 
-- [ ] **T336** [Phase 5] [US-12] [AC: CLUB-AC-049] Implement operator review UI in WP admin
+- [x] **T336** [Phase 5] [US-12] [AC: CLUB-AC-049] Implement operator review UI in WP admin
   - **Objective**: Create admin menu under WooCommerce or top-level «بررسی درخواست‌های اقساطی» showing application queue, customer details, plan requested, and approve/reject action modal with ceiling assignment.
   - **Files**: `packages/negar-customer-club/includes/admin/class-admin-applications.php`
   - **Acceptance Criteria**: Operator can filter applications by status; approving prompts for approved credit ceiling (`IRT`); rejecting requires mandatory reason text.
   - **Required Tests**: Manual/E2E review workflow test.
   - **Dependencies**: T335.
 
-- [ ] **T337** [P] [Phase 5] [US-06] [AC: CLUB-AC-021] Implement customer application tracking endpoint with anti-IDOR isolation
+- [x] **T337** [P] [Phase 5] [US-06] [AC: CLUB-AC-021] Implement customer application tracking endpoint with anti-IDOR isolation
   - **Objective**: Register `GET /wp-json/negar-club/v1/my-applications` returning the authenticated customer's application history.
   - **Files**: `packages/negar-customer-club/includes/class-application-manager.php`
   - **Acceptance Criteria**: Returns applications where `user_id === get_current_user_id()`; strictly prevents accessing another customer's application record (anti-IDOR); masks national ID.
   - **Required Tests**: Anti-IDOR security test attempting to fetch Customer A's record using Customer B's session.
   - **Dependencies**: T334.
 
-- [ ] **T338** [Phase 5] [US-05, US-12] [AC: CLUB-AC-017..021] Implement automated integration test suite for applications
+- [x] **T338** [Phase 5] [US-05, US-12] [AC: CLUB-AC-017..021] Implement automated integration test suite for applications
   - **Objective**: Create `tests/application-lifecycle-test.php` testing submission, Modulo 11 validation, transition enforcement, anti-IDOR protection, and operator capability checks.
   - **Files**: `tests/application-lifecycle-test.php`
   - **Acceptance Criteria**: All test assertions pass without database pollution (cleanup fixtures on exit).
