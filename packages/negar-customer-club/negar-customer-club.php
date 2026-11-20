@@ -29,6 +29,7 @@ require_once NEGAR_CLUB_DIR . '/includes/class-vip-products.php';
 require_once NEGAR_CLUB_DIR . '/includes/class-membership-manager.php';
 require_once NEGAR_CLUB_DIR . '/includes/class-application-manager.php';
 require_once NEGAR_CLUB_DIR . '/includes/admin/class-admin-applications.php';
+require_once NEGAR_CLUB_DIR . '/includes/admin/class-admin-memberships.php';
 
 // Plugin lifecycle activation hooks
 register_activation_hook( __FILE__, array( 'Negar_Club_Database', 'create_tables' ) );
@@ -55,6 +56,8 @@ add_action( 'rest_api_init', array( 'Negar_Club_Application_Manager', 'register_
 if ( is_admin() ) {
 	add_action( 'admin_menu', array( 'Negar_Club_Admin_Applications', 'register_admin_menu' ) );
 	add_action( 'admin_init', array( 'Negar_Club_Admin_Applications', 'handle_admin_actions' ) );
+	add_action( 'admin_menu', array( 'Negar_Club_Admin_Memberships', 'register_admin_menu' ) );
+	add_action( 'admin_init', array( 'Negar_Club_Admin_Memberships', 'handle_admin_actions' ) );
 }
 
 // Declare HPOS compatibility (High-Performance Order Storage)

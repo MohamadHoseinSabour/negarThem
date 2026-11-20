@@ -304,7 +304,7 @@
   - **Acceptance Criteria**: Paid order creates exactly one active VIP membership; repeated hooks or concurrent calls do not duplicate records or funds; unpaid or deferred on-hold orders do not activate membership until confirmed.
   - **Dependencies**: T340-VIP, T341-VIP.
 
-- [ ] **T343-VIP** [Phase 6] [VIP-04] Operator VIP management panel in WP admin (`negar_club_operator`)
+- [x] **T343-VIP** [Phase 6] [VIP-04] Operator VIP management panel in WP admin (`negar_club_operator`)
   - **Objective**: Implement administrative panel «مدیریت اعضای VIP» in `includes/admin/class-admin-memberships.php` under WooCommerce or Customer Club menu. List table with status and plan filters, customer search, and detailed member modal to record: (1) in-store merchandise purchase usage, (2) applying deposit toward purchase, (3) offline collection receipt, (4) adjusting purchase ceiling or term, (5) changing status. Mandatory reason required for every manual adjustment, with full audit trail in `wp_negar_club_audit_log`.
   - **Files**: `packages/negar-customer-club/includes/admin/class-admin-memberships.php`
   - **Acceptance Criteria**: Scoped to `negar_club_operator`; nonce and capability protected; atomic balance validation (no accidental negative prepaid balance); audit trail persisted.
