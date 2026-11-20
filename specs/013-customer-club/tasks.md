@@ -316,7 +316,7 @@
   - **Acceptance Criteria**: Accessible at `/my-account/customer-club/`; renders accurate real balances; anti-IDOR enforced; zero fake installment buttons or pay links.
   - **Dependencies**: T340-VIP, T342-VIP.
 
-- [ ] **T345-VIP** [Phase 6] [VIP-06] Public `/customer-club/` landing page redesign (VIP plan purchase buttons linking to WooCommerce checkout)
+- [x] **T345-VIP** [Phase 6] [VIP-06] Public `/customer-club/` landing page redesign (VIP plan purchase buttons linking to WooCommerce checkout)
   - **Objective**: Update `template-parts/customer-club/plans.php` and `page-templates/page-customer-club.php`: display VIP plan prepayment (product price), maximum purchase ceiling, validity term, and benefits. Direct "خرید اشتراک VIP" CTA adds the VIP product to cart and redirects to WooCommerce checkout (`?add-to-cart=ID`). Hide/remove obsolete installment calculator and legacy loan application form from public view.
   - **Files**: `page-templates/page-customer-club.php`, `template-parts/customer-club/plans.php`, `template-parts/customer-club/hero.php`
   - **Acceptance Criteria**: Public page features VIP prepayment tiers; CTA initiates standard WooCommerce checkout; obsolete calculator and application form hidden; responsive RTL layout preserved.

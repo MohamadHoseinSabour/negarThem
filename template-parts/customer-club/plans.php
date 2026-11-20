@@ -16,9 +16,9 @@ $allowed_ids = array( 'negar_aghaz', 'negar_plus', 'negar_vizhe' );
 
 <section id="club-plans" class="negar-club-plans" aria-labelledby="club-plans-heading">
 	<div class="negar-club-section-header">
-		<span class="negar-club-section-eyebrow"><?php esc_html_e( 'پلن‌های تسهیلات', 'negar-shop' ); ?></span>
-		<h2 id="club-plans-heading" class="negar-club-section-title"><?php esc_html_e( 'طرح‌های سه‌گانه خرید اقساطی', 'negar-shop' ); ?></h2>
-		<p class="negar-club-section-desc"><?php esc_html_e( 'شرایط هر طرح را بررسی کرده و مناسب‌ترین گزینه را بر اساس سقف خرید مورد نیازتان انتخاب فرمایید.', 'negar-shop' ); ?></p>
+		<span class="negar-club-section-eyebrow"><?php esc_html_e( 'پلن‌های عضویت VIP', 'negar-shop' ); ?></span>
+		<h2 id="club-plans-heading" class="negar-club-section-title"><?php esc_html_e( 'طرح‌های سه‌گانه عضویت VIP و پیش‌پرداخت', 'negar-shop' ); ?></h2>
+		<p class="negar-club-section-desc"><?php esc_html_e( 'پیش‌پرداخت طرح انتخابی را آنلاین پرداخت فرموده و جهت انتخاب و دریافت لوازم خانگی تا سقف مجاز، به فروشگاه حضوری مراجعه فرمایید.', 'negar-shop' ); ?></p>
 	</div>
 
 	<div class="negar-club-plans__grid">
@@ -83,17 +83,20 @@ $allowed_ids = array( 'negar_aghaz', 'negar_plus', 'negar_vizhe' );
 				<?php endif; ?>
 
 				<div class="negar-club-plan-card__footer">
-					<button type="button" class="negar-club-btn <?php echo $is_featured ? 'negar-club-btn--primary' : 'negar-club-btn--outline'; ?> js-select-plan" data-plan-id="<?php echo esc_attr( $p_id ); ?>" data-plan-title="<?php echo esc_attr( $title ); ?>">
-						<span><?php esc_html_e( 'انتخاب و برآورد در ماشین‌حساب', 'negar-shop' ); ?></span>
-					</button>
+					<?php
+					$checkout_url = class_exists( 'Negar_Club_VIP_Products' ) ? Negar_Club_VIP_Products::get_checkout_url_for_plan( $p_id ) : '';
+					if ( ! empty( $checkout_url ) ) : ?>
+						<a href="<?php echo esc_url( $checkout_url ); ?>" class="negar-club-btn <?php echo $is_featured ? 'negar-club-btn--primary' : 'negar-club-btn--outline'; ?>" data-plan-id="<?php echo esc_attr( $p_id ); ?>">
+							<span><?php esc_html_e( 'خرید اشتراک VIP و پرداخت پیش‌پرداخت', 'negar-shop' ); ?></span>
+						</a>
+					<?php else : ?>
+						<button type="button" disabled class="negar-club-btn <?php echo $is_featured ? 'negar-club-btn--primary' : 'negar-club-btn--outline'; ?>" style="opacity: 0.6; cursor: not-allowed;">
+							<span><?php esc_html_e( 'محصول عضویت در حال پیکربندی', 'negar-shop' ); ?></span>
+						</button>
+					<?php endif; ?>
 					<span class="negar-club-plan-card__status">
-						<?php if ( ! $allow_applications ) : ?>
-							<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-							<?php esc_html_e( 'پیش‌نمایش شرایط (پذیرش به زودی)', 'negar-shop' ); ?>
-						<?php else : ?>
-							<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 10"></polyline></svg>
-							<?php esc_html_e( 'امکان برآورد آنلاین', 'negar-shop' ); ?>
-						<?php endif; ?>
+						<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 10"></polyline></svg>
+						<?php esc_html_e( 'پرداخت آنلاین از طریق درگاه‌های ووکامرس', 'negar-shop' ); ?>
 					</span>
 				</div>
 			</article>

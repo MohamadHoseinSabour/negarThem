@@ -40,10 +40,9 @@ $sections   = function_exists( 'negar_theme_club_setting' ) ? (array) negar_them
 			if ( $sections['comparison'] ?? true ) {
 				get_template_part( 'template-parts/customer-club/comparison' );
 			}
-			if ( $sections['calculator'] ?? true ) {
+			if ( ! empty( $sections['calculator'] ) ) {
 				get_template_part( 'template-parts/customer-club/calculator' );
 			}
-			get_template_part( 'template-parts/customer-club/application-form' );
 			if ( $sections['timeline'] ?? true ) {
 				get_template_part( 'template-parts/customer-club/steps' );
 			}
