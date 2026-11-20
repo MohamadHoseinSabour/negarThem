@@ -63,10 +63,11 @@ require_once NEGAR_SHOP_DIR . '/inc/theme-settings.php';
 require_once NEGAR_SHOP_DIR . '/inc/customer-club-settings.php';
 
 /**
- * Customer Club Canonical Quote Calculator Package (Phase 4).
+ * Customer Club Canonical Quote Calculator Package (Public Theme Previews).
  */
-if ( ! defined( 'NEGAR_CLUB_VERSION' ) && file_exists( NEGAR_SHOP_DIR . '/packages/negar-customer-club/negar-customer-club.php' ) ) {
-	require_once NEGAR_SHOP_DIR . '/packages/negar-customer-club/negar-customer-club.php';
+if ( ! class_exists( 'Negar_Club_Quote_Calculator' ) && file_exists( NEGAR_SHOP_DIR . '/packages/negar-customer-club/includes/class-quote-calculator.php' ) ) {
+	require_once NEGAR_SHOP_DIR . '/packages/negar-customer-club/includes/class-quote-calculator.php';
+	add_action( 'rest_api_init', array( 'Negar_Club_Quote_Calculator', 'register_rest_routes' ) );
 }
 
 /**

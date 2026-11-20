@@ -201,6 +201,12 @@ class Negar_Club_Quote_Calculator {
 	 * @return void
 	 */
 	public static function register_rest_routes() {
+		static $registered = false;
+		if ( $registered ) {
+			return;
+		}
+		$registered = true;
+
 		register_rest_route(
 			'negar-club/v1',
 			'/quote',
