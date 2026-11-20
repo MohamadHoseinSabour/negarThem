@@ -11,15 +11,50 @@
 
 ## 1. Domain Entities & Storage Strategy
 
-We evaluated whether to reuse standard WordPress/WooCommerce entities (posts, order meta, user meta) or to introduce dedicated custom tables.
+> [!IMPORTANT]
+> **CRITICAL PRODUCT DIRECTION CHANGE (SUPERSEDED — VIP PREPAYMENT + MANUAL OPERATOR MODEL)**:
+> The employer cancelled the online installment-financing architecture. The active persistent model consists of:
+> 1. `wp_negar_club_applications` (Implemented in Phase 5)
+> 2. `wp_negar_club_audit_log` (Implemented in Phase 5)
+> 3. `wp_negar_club_memberships` (Implemented in Phase 6 for VIP prepayment memberships)
+> Theoretical tables for automated contracts, installments, and payment webhooks (`wp_negar_club_contracts`, `wp_negar_club_installments`, `wp_negar_club_payments`, `wp_negar_club_refunds`) are marked **SUPERSEDED** and are not created.
 
 ### 1.1 Architectural Evaluation
-1. **Customer Applications (`ClubApplication`):** Reusing `wp_posts` with a custom post type (CPT) was evaluated. However, credit applications contain structured identity hashes, operator review workflows, and scoring metrics that are fundamentally non-public and require strict schema enforcement, zero accidental public querying, and fast indexed lookups. Dedicated table `wp_negar_club_applications` is chosen.
-2. **Credit Agreements (`CreditAgreement`):** Storing agreements inside WooCommerce order meta (`wp_wc_orders_meta`) was rejected because a customer's credit relationship may span multiple orders, refunds, and extended payment schedules, and must remain durable even if order data is archived. Dedicated table `wp_negar_club_contracts` is chosen.
-3. **Installment Schedules (`InstallmentItem`):** An installment schedule creates 3 to 36 rows per agreement. Storing these in meta tables causes severe performance degradation, non-atomic querying, and high risk of race conditions during concurrent payments. Dedicated indexed table `wp_negar_club_installments` is essential.
-4. **Payment Transactions (`PaymentTransaction`):** Storing payment callbacks in transient options or post meta violates financial durability and makes idempotency enforcement fragile. Dedicated table `wp_negar_club_payments` guarantees unique provider transaction constraints.
-5. **Refunds Ledger (`PaymentRefund`):** A dedicated table `wp_negar_club_refunds` is required to accurately track partial and full refunds, link them to the original payment and WooCommerce order, and reconcile rolling agreement balances.
-6. **Operational Audit Trail (`LedgerAuditEvent`):** An append-only audit trail `wp_negar_club_audit_log` is required for regulatory compliance, anti-tampering, and incident investigation.
+1. **Customer Applications (`ClubApplication`):** Dedicated table `wp_negar_club_applications` stores application workflows, Modulo 11 national ID HMAC hashes, and operator review states.
+2. **VIP Memberships (`ClubMembership`):** Dedicated table `wp_negar_club_memberships` tracks active VIP prepaid memberships created from verified WooCommerce orders, storing actual paid deposits, applied deposits, unused balances, purchase ceiling, recorded usage, available purchase capacity, and offline debt balances entered manually by operators.
+3. **Operational Audit Trail (`LedgerAuditEvent`):** Dedicated table `wp_negar_club_audit_log` records every operator manual adjustment, balance update, and membership transition with actor ID, IP, and reason.
+4. **Superseded Entities:** `wp_negar_club_contracts`, `wp_negar_club_installments`, `wp_negar_club_payments`, and `wp_negar_club_refunds` are superseded by the employer's VIP business model.
+
+---
+
+### 1.2 Table Specification: `wp_negar_club_memberships`
+
+```sql
+CREATE TABLE {$wpdb->prefix}negar_club_memberships (
+  id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  customer_id bigint(20) unsigned NOT NULL,
+  plan_id varchar(32) NOT NULL,
+  order_id bigint(20) unsigned NOT NULL,
+  prepayment_amount bigint(20) unsigned NOT NULL DEFAULT 0,
+  applied_deposit bigint(20) unsigned NOT NULL DEFAULT 0,
+  unused_deposit bigint(20) unsigned NOT NULL DEFAULT 0,
+  purchase_ceiling bigint(20) unsigned NOT NULL DEFAULT 0,
+  used_purchase_amount bigint(20) unsigned NOT NULL DEFAULT 0,
+  available_purchase_capacity bigint(20) unsigned NOT NULL DEFAULT 0,
+  offline_debt_amount bigint(20) unsigned NOT NULL DEFAULT 0,
+  term_months int(10) unsigned NOT NULL DEFAULT 3,
+  status varchar(24) NOT NULL DEFAULT 'active',
+  valid_until datetime DEFAULT NULL,
+  notes text DEFAULT NULL,
+  last_operator_id bigint(20) unsigned DEFAULT NULL,
+  created_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_order_id (order_id),
+  KEY ix_customer_status (customer_id, status),
+  KEY ix_status (status)
+) {$charset_collate};
+```
 
 ---
 

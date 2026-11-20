@@ -4,9 +4,23 @@
 **Feature Branch**: `feat/013-customer-club`  
 **Approved Git Baseline**: `eda9740a9943ab54c2eeb8161498b6556e1533d6`  
 **Created**: 2026-11-18  
-**Status**: `Draft — Awaiting Employer Approval on Unresolved Decisions`
+**Status**: `Approved VIP Prepayment & Manual Operator Model (Superseding Automated Financing)`
 
-> **Governance Rule:** This document strictly separates **Confirmed Rules** (verified environment facts or explicit Master Prompt / Phase 1 directives), **Proposed Defaults** (provisional modeling values awaiting confirmation), and **Unresolved Decisions (`NEEDS APPROVAL`)**. Recommendations are engineering/product proposals only and MUST NEVER be treated as employer-approved store policies until explicitly ratified.
+> [!IMPORTANT]
+> **CRITICAL PRODUCT DIRECTION CHANGE (SUPERSEDED — VIP PREPAYMENT + MANUAL OPERATOR MODEL)**:
+> The employer has made the final product decision:
+> The automated online installment-financing architecture is **CANCELLED and SUPERSEDED**.
+> Commercial decisions `CLUB-BD-001` through `CLUB-BD-022` regarding online automated installment scheduling, banking gateway callbacks, and automated debt settlement are marked **SUPERSEDED — VIP PREPAYMENT + MANUAL OPERATOR MODEL**.
+> 
+> **The Active Business Rules are:**
+> 1. Customers purchase VIP plan tiers (`negar_aghaz`, `negar_plus`, `negar_vizhe`) as standard WooCommerce virtual simple products.
+> 2. The amount paid in WooCommerce is a **prepayment (deposit) toward future merchandise**, not a standalone membership fee.
+> 3. Each plan grants an operator-assigned purchase ceiling (e.g. 6M, 10M, 20M IRT) and an indicative validity term.
+> 4. Merchandise purchases occur offline/in-store.
+> 5. Installment collections and repayments occur offline/in-store.
+> 6. Store operators have full authority to record credit usage, deposit deductions, offline collections, and account adjustments.
+> 7. The plugin does NOT generate automated installment schedules, interest calculations, or online installment payment orders.
+> 8. Remaining open operational requirements: Store accountant signoff on VAT and prepayment-liability reporting before production financial launch.
 
 ---
 

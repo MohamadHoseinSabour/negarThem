@@ -4,9 +4,20 @@
 **Feature Branch**: `feat/013-customer-club`  
 **Approved Git Baseline**: `eda9740a9943ab54c2eeb8161498b6556e1533d6`  
 **Created**: 2026-11-18  
-**Traceability Coverage**: `64 / 64` requirements (`40` Functional Requirements `CLUB-FR-001`–`CLUB-FR-040` + `24` Non-Functional Requirements `CLUB-NFR-001`–`CLUB-NFR-024`) mapped 100% to objective acceptance criteria (`CLUB-AC-001`–`CLUB-AC-064`).
+**Status**: `Updated for Phase 6 Replacement (VIP Prepayment & Operator-Managed Credit)`
 
-> **Verification Discipline:** No test or acceptance criterion may be marked `PASS` until it has been actually executed against implemented code. All rows below remain `NOT RUN` during Phase 1 (documentation-only phase).
+> [!IMPORTANT]
+> **CRITICAL PRODUCT DIRECTION CHANGE (SUPERSEDED — VIP PREPAYMENT + MANUAL OPERATOR MODEL)**:
+> Automated online installment financing is superseded.
+> Acceptance criteria for Phase 6 (`CLUB-AC-022` through `CLUB-AC-032`) are replaced by the active VIP Acceptance Criteria:
+> - **VIP-AC-01 (T340-VIP)**: Idempotent database creation of `wp_negar_club_memberships` with `uq_order_id`.
+> - **VIP-AC-02 (T341-VIP)**: Three VIP plans mapped to virtual simple WooCommerce products (`_negar_club_plan_id`).
+> - **VIP-AC-03 (T342-VIP)**: Verified WooCommerce paid order activates exactly one VIP membership; repeated hooks do not duplicate records.
+> - **VIP-AC-04 (T343-VIP)**: Operator panel permits manual purchase usage, deposit application, offline collection logging, and ceiling/term adjustments with audit trail.
+> - **VIP-AC-05 (T344-VIP)**: Customer dashboard in `/my-account/customer-club/` displays real balances with anti-IDOR isolation; zero fake installment buttons.
+> - **VIP-AC-06 (T345-VIP)**: Public `/customer-club/` links VIP plans directly to WooCommerce checkout (`?add-to-cart=ID`); obsolete calculator/form hidden.
+> - **VIP-AC-07 (T346-VIP)**: Refund/cancellation of source VIP order flags or suspends membership; prevents double-crediting.
+> - **VIP-AC-08 (T347-VIP)**: Automated test suite verifies complete VIP lifecycle with 100% pass on isolated tables.
 
 ---
 

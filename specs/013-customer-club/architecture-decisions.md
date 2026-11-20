@@ -220,3 +220,38 @@ In WooCommerce 10.5.2 core:
    - When all installments are fully settled and the credit agreement status transitions to `settled`, the WooCommerce order is transitioned to `processing` (or `completed` if already fulfilled), and `$order->payment_complete()` is invoked.
 4. **Disallow Non-Existent Core Methods:**
    - All references to `WC_Order::get_total_paid()` are strictly forbidden. Initial cash received is tracked in order metadata `_negar_club_down_payment_settled` and in the immutable `wp_negar_club_payments` table.
+
+---
+
+## Record 5: Phase 6 Replacement — WooCommerce VIP Prepayment & Operator-Managed Credit (`CLUB-AD-003`)
+
+### Status
+`APPROVED BY EMPLOYER DIRECTIVE (SUPERSEDING CLUB-AD-002 AND AUTOMATED FINANCING)`
+
+### Context & Problem Statement
+The employer made a final product decision to cancel the complex automated online financing platform (`WC_Gateway_Negar_Installment`, `wc-partially-paid`, automatic contract snapshots, automated installment schedule generation, webhook verification engine, automated repayments/interest, and provider inquiry adapters).
+Instead, the store requires:
+- Customers to purchase VIP plans online through normal WooCommerce virtual product checkout.
+- A paid VIP plan acts as a **prepayment (deposit) toward future merchandise**.
+- All subsequent merchandise purchases, credit allocations, offline installment collections, adjustments, and settlements are conducted in person and manually recorded by authorized store operators.
+
+### Decision
+1. **VIP Plans as Virtual Simple WooCommerce Products:**
+   - Standard WooCommerce simple virtual non-downloadable products (`_virtual = 'yes'`).
+   - Mapped to VIP plan IDs (`negar_aghaz`, `negar_plus`, `negar_vizhe`) via meta `_negar_club_plan_id`.
+   - The product price in WooCommerce is the single source of truth for the online prepayment amount.
+2. **Idempotent Membership Activation:**
+   - On confirmed order payment (`woocommerce_order_status_completed` / verified payment hook), create exactly one membership record in `wp_negar_club_memberships`.
+   - Prevent duplicate activations via database `UNIQUE KEY uq_order_id (order_id)`.
+   - Initial `prepayment_amount` and `unused_deposit` equal the paid VIP product total.
+   - Initial `purchase_ceiling` and `available_purchase_capacity` equal the configured plan ceiling.
+3. **Operator VIP Management Panel (`negar_club_operator`):**
+   - Admin UI under WooCommerce menu allows operators to view all members, filter by status and tier.
+   - Operator actions: record offline merchandise purchases (`used_purchase_amount += X`, `available_purchase_capacity -= X`), apply deposit (`applied_deposit += Y`, `unused_deposit -= Y`), log offline collections/receipts (`offline_debt_amount -= Z`), adjust purchase ceiling/term, and manage status.
+   - Every action requires a mandatory reason and is recorded in `wp_negar_club_audit_log`.
+4. **Customer Dashboard in My Account (`/my-account/customer-club/`):**
+   - Displays real VIP tier, status, deposit balances, purchase ceiling, and operator notes.
+   - Anti-IDOR protected. Clearly indicates that purchase ceiling is not a cash wallet and collections are handled in-store.
+5. **Refund Handling:**
+   - Refunding a source order flags the membership for reconciliation or suspends it, preventing double deposit recognition.
+   - Prepayments are customer advances toward future merchandise; production deployment requires accountant signoff on tax/deposit liability treatment.

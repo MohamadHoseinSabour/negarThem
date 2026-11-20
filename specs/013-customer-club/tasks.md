@@ -264,114 +264,94 @@
 
 ---
 
-## Phase 6: Financial Engine & Payments (⚠️ BLOCKED UNTIL EMPLOYER APPROVAL)
+## Phase 6: WooCommerce VIP Prepayment Membership & Operator-Managed Credit (Active Implementation)
 
-> [!CAUTION]
-> **GOVERNANCE GATE**: All tasks in Phase 6 remain strictly **BLOCKED** until all commercial decisions (`CLUB-BD-001` through `CLUB-BD-022`) and architectural decisions (`CLUB-AD-001`, `CLUB-AD-002`) receive explicit employer approval. Zero real money transactions, gateway credentials, or live financial debits may be activated before this gate is formally passed.
+> [!IMPORTANT]
+> **CRITICAL PRODUCT DIRECTION CHANGE**: The previous online automated installment-financing engine (`WC_Gateway_Negar_Installment`, `wc-partially-paid`, automatic contract snapshots, automated installment schedule generation, webhook verification engine, automated repayments/interest, and provider inquiry adapters) is **CANCELLED and SUPERSEDED**.
+> Tasks `T340` through `T353` below are marked **SUPERSEDED — VIP PREPAYMENT + MANUAL OPERATOR MODEL**.
+> The Customer Club operates as: **A prepaid VIP membership system powered by standard WooCommerce purchases, with all credit management, offline purchases, and installment collections handled manually by authorized store operators**.
+> The obsolete requirement to block on commercial decisions `CLUB-BD-001` through `CLUB-BD-022` is removed, replaced by the employer's approved VIP business model.
 
-**Goal**: Implement the robust, HPOS-compliant financial engine: dedicated custom tables, WooCommerce installment payment gateway, zero-drift integer Toman installment scheduling, two-stage webhook verification, atomic settlement, duplicate charge prevention, and separated refund/debt adjustment ledgers.
+**Goal**: Implement the robust, minimal, auditable VIP prepayment membership system:
+1. `wp_negar_club_memberships` database table and schema migration.
+2. Standard WooCommerce virtual simple product mapping (`_negar_club_plan_id`).
+3. Idempotent VIP membership activation upon genuine, verified WooCommerce order payment.
+4. Operator VIP management panel (`negar_club_operator`) for manual purchase usage, deposit application, offline collection logging, and balance adjustments.
+5. WooCommerce My Account customer dashboard (`/my-account/customer-club/`).
+6. Redesign of public `/customer-club/` landing page to link VIP plans directly to WooCommerce checkout.
+7. Order refund/cancellation reconciliation handlers and accounting guards.
+8. Comprehensive automated test suite verifying the VIP lifecycle.
 
-**Independent Test**: Mock provider webhooks to simulate down payment, installment payments, race conditions, transient network timeouts, and partial returns; verify custom status `wc-partially-paid`, single stock reduction, exactly-once agreement creation, mathematical reconciliation across all 4 invariants, and proper balance adjustments.
+---
 
-### Tasks for Phase 6:
+### Phase 6 Replacement Tasks (Active):
 
-- [ ] **T340** [Phase 6] [US-14, Financial Guard A] [AC: CLUB-AC-024] Register custom WooCommerce order status `wc-partially-paid`
-  - **Objective**: Register `wc-partially-paid` («پرداخت جزئی (اقساطی)») in WooCommerce. Ensure it is NOT added to `wc_get_is_paid_statuses()` so that `$order->is_paid() === false`, preventing false cash recognition in WooCommerce sales and tax reports while allowing warehouse fulfillment.
-  - **Files**: `packages/negar-customer-club/includes/class-order-statuses.php`
-  - **Acceptance Criteria**: Order in `wc-partially-paid` returns `$order->is_paid() === false`; order is displayed in admin with distinct badge; stock reduction is permitted.
-  - **Required Tests**: PHP assertion checking `wc_get_is_paid_statuses()` and `$order->is_paid()`.
-  - **Dependencies**: Phase 5 complete; CLUB-AD-002 approval.
+- [ ] **T340-VIP** [Phase 6] [VIP-01] Database migration for `wp_negar_club_memberships` table & schema manager
+  - **Objective**: Create `{$wpdb->prefix}negar_club_memberships` table using `dbDelta` in `class-database.php`. Enforce `UNIQUE KEY uq_order_id (order_id)`, integer IRT monetary fields (`prepayment_amount`, `applied_deposit`, `unused_deposit`, `purchase_ceiling`, `used_purchase_amount`, `available_purchase_capacity`, `offline_debt_amount`), validity term, status (`active`, `suspended`, `expired`), and operator tracking. Update DB version to `1.2.0`.
+  - **Files**: `packages/negar-customer-club/includes/class-database.php`, `packages/negar-customer-club/negar-customer-club.php`
+  - **Acceptance Criteria**: Table created idempotently; `uq_order_id` prevents duplicate activations at DB level; schema migration verified.
+  - **Dependencies**: Phase 5 complete.
 
-- [ ] **T341** [Phase 6] [US-14] [AC: CLUB-AC-026, CLUB-AC-027] Implement database migrations for financial tables with unique constraint `uq_contract_order`
-  - **Objective**: Create `wp_negar_club_contracts` (with `UNIQUE KEY uq_contract_order (order_id)`), `wp_negar_club_installments`, `wp_negar_club_payments`, `wp_negar_club_refunds` (with `refund_type`), and `wp_negar_club_audit_log` tables using `BIGINT UNSIGNED` monetary fields and proper foreign keys.
-  - **Files**: `packages/negar-customer-club/includes/class-installer.php`
-  - **Acceptance Criteria**: Schema matches `specs/013-customer-club/data-model.md` exactly; `uq_contract_order` enforces 1:1 agreement to order constraint at database level; migrations run idempotently.
-  - **Required Tests**: MySQL schema validation script verifying columns, types, and indexes.
-  - **Dependencies**: T340.
+- [ ] **T341-VIP** [Phase 6] [VIP-02] WooCommerce VIP virtual simple products creation & mapping (`_negar_club_plan_id`)
+  - **Objective**: Implement `Negar_Club_VIP_Products` helper to map the three fixed plan IDs (`negar_aghaz`, `negar_plus`, `negar_vizhe`) to standard WooCommerce simple virtual products (`_virtual = 'yes'`) with meta `_negar_club_plan_id`. Product price in WooCommerce serves as the single source of truth for online prepayment. Never alter unrelated store products.
+  - **Files**: `packages/negar-customer-club/includes/class-vip-products.php`
+  - **Acceptance Criteria**: Each plan maps to a virtual simple product; purchasable through standard WooCommerce checkout; non-downloadable; no shipping required.
+  - **Dependencies**: T340-VIP.
 
-- [ ] **T342** [Phase 6] [US-08, US-13] [AC: CLUB-AC-022, CLUB-AC-023] Implement dedicated WooCommerce payment gateway `WC_Gateway_Negar_Installment`
-  - **Objective**: Implement `WC_Gateway_Negar_Installment` extending `WC_Payment_Gateway` for checkout down payment. Validates customer approval, credit ceiling, live stock, and cart eligibility; dispatches to payment provider for down payment amount only; records full merchandise total on order.
-  - **Files**: `packages/negar-customer-club/includes/gateways/class-wc-gateway-negar-installment.php`
-  - **Acceptance Criteria**: Gateway appears at checkout only for eligible approved customers; dispatches exact down payment amount; retains full merchandise total on order without negative fees.
-  - **Required Tests**: Checkout submission test asserting gateway availability and payload dispatch.
-  - **Dependencies**: T341, CLUB-BD-001, CLUB-BD-004.
+- [ ] **T342-VIP** [Phase 6] [VIP-03] Verified WooCommerce order completion listener for idempotent VIP membership activation
+  - **Objective**: Implement `Negar_Club_Membership_Manager` listening to `woocommerce_order_status_completed` (and verified payment hooks). Identifies VIP products via `_negar_club_plan_id`, verifies payment is genuinely received, idempotently creates active membership linking `order_id`, sets initial `unused_deposit` equal to received prepayment, assigns plan purchase ceiling, and writes audit log entry.
+  - **Files**: `packages/negar-customer-club/includes/class-membership-manager.php`
+  - **Acceptance Criteria**: Paid order creates exactly one active VIP membership; repeated hooks or concurrent calls do not duplicate records or funds; unpaid or deferred on-hold orders do not activate membership until confirmed.
+  - **Dependencies**: T340-VIP, T341-VIP.
 
-- [ ] **T343** [Phase 6] [US-13] [AC: CLUB-AC-028, CLUB-AC-029] Implement zero-drift integer Toman installment schedule generator
-  - **Objective**: Implement schedule generator in `class-agreement-engine.php` generating $N$ `InstallmentItem` records in integer `IRT`. Guarantees: (1) sum of principals = financed principal, (2) sum of charges = total charges, (3) sum of totals = total obligation, and (4) item total = item principal + charge. First installment absorbs indivisible remainder per `CLUB-BD-022`.
-  - **Files**: `packages/negar-customer-club/includes/class-agreement-engine.php`
-  - **Acceptance Criteria**: Zero rounding drift across divisible and prime/non-divisible amounts (e.g. 5,000,000 / 6, 7,000,001 / 3); exact due dates generated sequentially.
-  - **Required Tests**: Property-based mathematical unit test testing 1,000 random monetary values.
-  - **Dependencies**: T341.
+- [ ] **T343-VIP** [Phase 6] [VIP-04] Operator VIP management panel in WP admin (`negar_club_operator`)
+  - **Objective**: Implement administrative panel «مدیریت اعضای VIP» in `includes/admin/class-admin-memberships.php` under WooCommerce or Customer Club menu. List table with status and plan filters, customer search, and detailed member modal to record: (1) in-store merchandise purchase usage, (2) applying deposit toward purchase, (3) offline collection receipt, (4) adjusting purchase ceiling or term, (5) changing status. Mandatory reason required for every manual adjustment, with full audit trail in `wp_negar_club_audit_log`.
+  - **Files**: `packages/negar-customer-club/includes/admin/class-admin-memberships.php`
+  - **Acceptance Criteria**: Scoped to `negar_club_operator`; nonce and capability protected; atomic balance validation (no accidental negative prepaid balance); audit trail persisted.
+  - **Dependencies**: T340-VIP, T342-VIP.
 
-- [ ] **T344** [Phase 6] [US-14, Financial Guard E] [AC: CLUB-AC-031, CLUB-AC-047] Implement provider-independent webhook listener and adapter architecture
-  - **Objective**: Create webhook endpoint `POST /wp-json/negar-club/v1/payment-callback` and adapter interfaces for Class 1 (HMAC), Class 2 (Inquiry), and Class 3 (Dual) providers in `class-payment-gateway.php`.
-  - **Files**: `packages/negar-customer-club/includes/class-payment-gateway.php`, `includes/adapters/`
-  - **Acceptance Criteria**: Verifies provider signature / inquiry; validates Rial 10x conversion (`amount_irr % 10 === 0`); separates provider authentication from browser nonces.
-  - **Required Tests**: Webhook authentication test with mock HMAC provider and mock inquiry provider.
-  - **Dependencies**: T341.
+- [ ] **T344-VIP** [Phase 6] [VIP-05] WooCommerce My Account `/my-account/customer-club/` VIP customer dashboard
+  - **Objective**: Register `customer-club` endpoint in WooCommerce My Account. Display responsive Persian RTL dashboard with VIP badge, tier, status, paid deposit, applied deposit, unused deposit, max purchase ceiling, recorded usage, available purchase capacity, term/expiry, and store announcements. Clearly communicate that purchase ceiling is not a cash wallet and offline debt/installments are settled in-store. Anti-IDOR protected: users can only view their own membership.
+  - **Files**: `packages/negar-customer-club/includes/class-customer-dashboard.php`, `woocommerce/myaccount/customer-club.php`
+  - **Acceptance Criteria**: Accessible at `/my-account/customer-club/`; renders accurate real balances; anti-IDOR enforced; zero fake installment buttons or pay links.
+  - **Dependencies**: T340-VIP, T342-VIP.
 
-- [ ] **T345** [Phase 6] [US-14, Financial Guard E] [AC: CLUB-AC-032, CLUB-AC-047] Implement Stage A external provider verification with transient error handling
-  - **Objective**: Execute external provider verification inquiry **WITHOUT holding any database locks**. If provider returns 5xx or network times out, keep local payment in `pending_verification` and return `HTTP 503 Service Unavailable` with `Retry-After: 60`. Enforce immutability on terminal statuses (`verified`, `failed`).
-  - **Files**: `packages/negar-customer-club/includes/class-payment-gateway.php`
-  - **Acceptance Criteria**: Transient timeouts do NOT mark payment as `failed`; stale callbacks cannot overwrite terminal statuses; gateway returns 503 prompting provider retry.
-  - **Required Tests**: Mock network failure test asserting status remains `pending_verification` and returns 503.
-  - **Dependencies**: T344.
+- [ ] **T345-VIP** [Phase 6] [VIP-06] Public `/customer-club/` landing page redesign (VIP plan purchase buttons linking to WooCommerce checkout)
+  - **Objective**: Update `template-parts/customer-club/plans.php` and `page-templates/page-customer-club.php`: display VIP plan prepayment (product price), maximum purchase ceiling, validity term, and benefits. Direct "خرید اشتراک VIP" CTA adds the VIP product to cart and redirects to WooCommerce checkout (`?add-to-cart=ID`). Hide/remove obsolete installment calculator and legacy loan application form from public view.
+  - **Files**: `page-templates/page-customer-club.php`, `template-parts/customer-club/plans.php`, `template-parts/customer-club/hero.php`
+  - **Acceptance Criteria**: Public page features VIP prepayment tiers; CTA initiates standard WooCommerce checkout; obsolete calculator and application form hidden; responsive RTL layout preserved.
+  - **Dependencies**: T341-VIP.
 
-- [ ] **T346** [Phase 6] [US-14, Financial Guards A, B] [AC: CLUB-AC-026] Implement Stage B atomic down-payment settlement and agreement creation
-  - **Objective**: In a MySQL transaction, lock order/application, verify `uq_contract_order`, insert contract in `active` status, generate installment schedule, link payment ID, set order status to `wc-partially-paid`, and call `wc_reduce_stock_levels($order_id)` exactly once.
-  - **Files**: `packages/negar-customer-club/includes/class-payment-gateway.php`, `class-agreement-engine.php`
-  - **Acceptance Criteria**: Down payment creates exactly one agreement and schedule; order transitions to `wc-partially-paid`; stock is reduced exactly once guarded by `_order_stock_reduced`.
-  - **Required Tests**: Automated end-to-end checkout-to-settlement test verifying database state and order meta.
-  - **Dependencies**: T342, T343, T345.
+- [ ] **T346-VIP** [Phase 6] [VIP-07] Order refund/cancellation reconciliation handler & accounting guards
+  - **Objective**: Hook into `woocommerce_order_status_refunded` and `woocommerce_order_status_cancelled`. When a VIP order is refunded/cancelled, flag membership for operator reconciliation (or suspend status), restrict further usage of disputed prepaid funds, record audit trail entry, and preserve links to the source order. Include explicit accounting disclosure that VIP prepayments represent customer advances toward future merchandise, requiring accountant approval for official VAT/deposit liability treatment.
+  - **Files**: `packages/negar-customer-club/includes/class-membership-manager.php`
+  - **Acceptance Criteria**: Refund of source order suspends membership or flags for reconciliation; prevents double deposit recognition; audit logged.
+  - **Dependencies**: T342-VIP.
 
-- [ ] **T347** [Phase 6] [US-14, Financial Guard B] [AC: CLUB-AC-026] Implement automated recovery mechanism for `verified_pending_contract` state
-  - **Objective**: When Stage A succeeds but local contract insertion fails mid-transaction in Stage B, set payment status to `verified_pending_contract`. Implement reconciliation worker to retry contract creation idempotently without charging the customer again.
-  - **Files**: `packages/negar-customer-club/includes/class-payment-gateway.php`, `class-reconciliation-worker.php`
-  - **Acceptance Criteria**: Recovery worker detects `verified_pending_contract`, creates missing contract and schedule, and transitions payment to `verified`; customer is never double-charged.
-  - **Required Tests**: Fault-injection test simulating database failure after provider verification.
-  - **Dependencies**: T346.
+- [ ] **T347-VIP** [Phase 6] [VIP-08] Automated test suite for VIP lifecycle (`tests/vip-membership-lifecycle-test.php`)
+  - **Objective**: Implement comprehensive automated CLI test suite covering: (1) schema migration and table verification, (2) VIP product mapping, (3) order completion and idempotent membership activation, (4) repeat payment / duplicate order guard, (5) operator manual bookkeeping adjustments and audit logging, (6) customer dashboard anti-IDOR checks, (7) order refund suspension. Run cleanly with PASS on all tests in isolated tables.
+  - **Files**: `tests/vip-membership-lifecycle-test.php`
+  - **Acceptance Criteria**: 100% pass on all test assertions; isolated test execution; no modification of live store data.
+  - **Dependencies**: T340-VIP through T346-VIP.
 
-- [ ] **T348** [Phase 6] [US-08, Financial Guard C] [AC: CLUB-AC-032] Implement Stage B atomic installment settlement and duplicate charge guard
-  - **Objective**: In a transaction, acquire row locks (`contracts` -> `installments` -> `payments` `FOR UPDATE`), check `settled_payment_id` with atomic conditional update (`WHERE status != 'paid'`). If already paid, flag current payment as `duplicate_settlement_detected` without double-crediting contract balances.
-  - **Files**: `packages/negar-customer-club/includes/class-payment-gateway.php`
-  - **Acceptance Criteria**: Concurrent payments targeting the same installment settle at most once; second payment is flagged `duplicate_settlement_detected` with audit log; contract balances reflect exact single settlement.
-  - **Required Tests**: Multi-threaded concurrency simulation test hitting webhook simultaneously with two payment confirmations for the same installment.
-  - **Dependencies**: T345, T346.
+---
 
-- [ ] **T349** [Phase 6] [US-14, Financial Guard D] [AC: CLUB-AC-036] Implement dedicated refunds ledger and balance reconciliation manager
-  - **Objective**: Create `class-refund-manager.php` managing `wp_negar_club_refunds`. Strictly distinguish Cash Refund (`refund_type = 'cash_refund'` — cash returned, reduces net cash collected) from Debt Cancellation (`refund_type = 'debt_cancellation'` — product return, cancels future installments without cash movement). Preserve cumulative gross fields `paid_principal` and `paid_charges`.
-  - **Files**: `packages/negar-customer-club/includes/class-refund-manager.php`
-  - **Acceptance Criteria**: Cash refunds and debt cancellations create separate ledger entries; contract rolling balances reconcile without double-deduction; gross paid fields remain immutable.
-  - **Required Tests**: Refund calculation test asserting mathematical balance consistency for cash refund vs debt cancellation.
-  - **Dependencies**: T341, T348.
+### Superseded Phase 6 Tasks (Historical Reference Only):
 
-- [ ] **T350** [Phase 6] [US-14] [AC: CLUB-AC-036] Implement WooCommerce order status synchronization hooks
-  - **Objective**: Hook into `woocommerce_order_status_changed` to handle order cancellation, failure, and refunds, synchronizing linked credit agreements and installments per `CLUB-BD-014` without corrupting ledger balances.
-  - **Files**: `packages/negar-customer-club/includes/class-order-sync.php`
-  - **Acceptance Criteria**: Cancelling a partially paid order cancels future unpaid installments and triggers appropriate refund record; status changes outside club orders are completely ignored.
-  - **Required Tests**: Integration test changing WooCommerce order statuses and verifying linked contract states.
-  - **Dependencies**: T349.
-
-- [ ] **T351** [Phase 6] [US-14] [AC: CLUB-AC-030] Implement final contract payoff transition to fully paid order
-  - **Objective**: When the final installment of a contract is paid, transition contract status to `settled`, transition WooCommerce order status from `wc-partially-paid` to `processing` (or `completed` if already shipped), and invoke `$order->payment_complete()`.
-  - **Files**: `packages/negar-customer-club/includes/class-agreement-engine.php`
-  - **Acceptance Criteria**: Fully settled installment contract transitions order to completed/processing; fires standard WooCommerce order complete hooks.
-  - **Required Tests**: Full lifecycle test paying all $N$ installments and verifying final WooCommerce order status.
-  - **Dependencies**: T348, T350.
-
-- [ ] **T352** [Phase 6] [US-14] [AC: CLUB-AC-035] Implement append-only operational audit logging
-  - **Objective**: Create `class-audit-logger.php` recording all lifecycle transitions, payment callbacks, duplicate charge detections, and operator overrides into `wp_negar_club_audit_log` with IP address, user agent, actor ID, and JSON payload.
-  - **Files**: `packages/negar-customer-club/includes/class-audit-logger.php`
-  - **Acceptance Criteria**: Audit log is strictly append-only (no update/delete methods); sensitive data (passwords, full card PANs, OTPs) is masked before insertion.
-  - **Required Tests**: Audit logging assertion test verifying recorded events on payment and status change.
-  - **Dependencies**: T341.
-
-- [ ] **T353** [Phase 6] [US-08, US-14, Financial Guards A-E] [AC: CLUB-AC-022..032, CLUB-AC-036] Implement comprehensive financial integration test suite
-  - **Objective**: Create `tests/financial-lifecycle-test.php` testing gateway checkout, initial payment recovery, schedule math invariants, concurrent payment race condition, refund allocation, and transient failure handling against local WAMP harness.
-  - **Files**: `tests/financial-lifecycle-test.php`
-  - **Acceptance Criteria**: All financial guards pass; zero balance drift; clean exit code 0.
-  - **Required Tests**: `php tests/financial-lifecycle-test.php` execution.
-  - **Dependencies**: T340 through T352.
+- [x] **T340** [SUPERSEDED — VIP PREPAYMENT + MANUAL OPERATOR MODEL] Register custom WooCommerce order status `wc-partially-paid`
+- [x] **T341** [SUPERSEDED — VIP PREPAYMENT + MANUAL OPERATOR MODEL] Implement database migrations for contracts/installments tables
+- [x] **T342** [SUPERSEDED — VIP PREPAYMENT + MANUAL OPERATOR MODEL] Implement dedicated WooCommerce payment gateway `WC_Gateway_Negar_Installment`
+- [x] **T343** [SUPERSEDED — VIP PREPAYMENT + MANUAL OPERATOR MODEL] Implement zero-drift integer Toman installment schedule generator
+- [x] **T344** [SUPERSEDED — VIP PREPAYMENT + MANUAL OPERATOR MODEL] Implement provider-independent webhook listener and adapter architecture
+- [x] **T345** [SUPERSEDED — VIP PREPAYMENT + MANUAL OPERATOR MODEL] Implement Stage A external provider verification with transient error handling
+- [x] **T346** [SUPERSEDED — VIP PREPAYMENT + MANUAL OPERATOR MODEL] Implement Stage B atomic down-payment settlement and agreement creation
+- [x] **T347** [SUPERSEDED — VIP PREPAYMENT + MANUAL OPERATOR MODEL] Implement automated recovery mechanism for `verified_pending_contract` state
+- [x] **T348** [SUPERSEDED — VIP PREPAYMENT + MANUAL OPERATOR MODEL] Implement Stage B atomic installment settlement and duplicate charge guard
+- [x] **T349** [SUPERSEDED — VIP PREPAYMENT + MANUAL OPERATOR MODEL] Implement dedicated refunds ledger and balance reconciliation manager
+- [x] **T350** [SUPERSEDED — VIP PREPAYMENT + MANUAL OPERATOR MODEL] Implement WooCommerce order status synchronization hooks
+- [x] **T351** [SUPERSEDED — VIP PREPAYMENT + MANUAL OPERATOR MODEL] Implement final contract payoff transition to fully paid order
+- [x] **T352** [SUPERSEDED — VIP PREPAYMENT + MANUAL OPERATOR MODEL] Implement append-only operational audit logging
+- [x] **T353** [SUPERSEDED — VIP PREPAYMENT + MANUAL OPERATOR MODEL] Implement comprehensive financial integration test suite
 
 **Checkpoint**: Phase 6 complete. Robust, secure, HPOS-compliant financial engine verified.
 
@@ -599,23 +579,15 @@ flowchart TD
         T333 & T334 & T335 & T337 --> T338["T338: Application Integration Test"]
     end
 
-    subgraph Phase6["Phase 6: Financial Engine (T340-T353) - GATED"]
-        Gate6{{"BLOCKED: Gated by CLUB-BD-001..022 & Employer Approval"}}
-        T338 -.-> Gate6
-        Gate6 --> T340["T340: Custom Status wc-partially-paid"]
-        T340 --> T341["T341: Financial Tables & uq_contract_order"]
-        T341 --> T342["T342: Dedicated Payment Gateway"]
-        T341 --> T343["T343: Zero-Drift Schedule Math"]
-        T341 --> T344["T344: Webhook Listener & Adapters"]
-        T344 --> T345["T345: Stage A Timeout/5xx Handling"]
-        T342 & T343 & T345 --> T346["T346: Stage B Down Payment Settlement"]
-        T346 --> T347["T347: verified_pending_contract Recovery"]
-        T345 & T346 --> T348["T348: Stage B Installment & Concurrency Guard"]
-        T341 & T348 --> T349["T349: Dedicated Refunds Ledger"]
-        T349 --> T350["T350: WooCommerce Order Status Sync"]
-        T348 & T350 --> T351["T351: Final Full Payoff Transition"]
-        T341 --> T352["T352: Append-Only Operational Audit Log"]
-        T346 & T347 & T348 & T349 & T350 & T351 & T352 --> T353["T353: Comprehensive Financial Test Suite"]
+    subgraph Phase6["Phase 6: WooCommerce VIP Prepayment & Operator Credit (T340-VIP - T347-VIP)"]
+        T338 --> T340VIP["T340-VIP: Database Migration wp_negar_club_memberships"]
+        T340VIP --> T341VIP["T341-VIP: WooCommerce VIP Virtual Simple Products"]
+        T341VIP --> T342VIP["T342-VIP: Verified Order Completion Listener"]
+        T342VIP --> T343VIP["T343-VIP: Operator VIP Management Panel"]
+        T342VIP --> T344VIP["T344-VIP: My Account Customer Dashboard"]
+        T341VIP --> T345VIP["T345-VIP: Landing Page VIP Plan Checkout"]
+        T342VIP --> T346VIP["T346-VIP: Refund & Cancellation Handler"]
+        T340VIP & T341VIP & T342VIP & T343VIP & T344VIP & T345VIP & T346VIP --> T347VIP["T347-VIP: Automated VIP Lifecycle Test Suite"]
     end
 
     subgraph Phase7["Phase 7: Customer Dashboard (T355-T361)"]
@@ -687,10 +659,11 @@ While execution discipline requires strict sequential delivery by commit, the fo
 - Validates Iranian National IDs with Modulo 11 and provides operator review queue.
 - **Risk Level**: Medium (introduces custom database table and customer data; zero live money).
 
-### Milestone 4: Financial Core & WooCommerce Integration (Phase 6)
-- **GATE**: Requires explicit employer approval of commercial rules `CLUB-BD-001`–`022`.
-- Delivers custom status `wc-partially-paid`, dedicated gateway, schedule generator, two-stage webhook verification, and duplicate payment protection.
-- **Risk Level**: High (handles financial calculations and payment callbacks; strictly guarded by tests).
+### Milestone 4: WooCommerce VIP Prepayment & Operator-Managed Credit (Phase 6)
+- Replaces obsolete automated online installment-financing engine with employer-approved VIP prepayment model.
+- Customers purchase VIP plans via standard WooCommerce checkout; prepayment acts as advance deposit toward future merchandise.
+- Store operators manually manage all merchandise purchase usage, offline debt/installments, and credit adjustments in WP admin with audit trail.
+- **Risk Level**: Low to Medium (standard WooCommerce virtual product checkout; manual bookkeeping in admin; zero automated banking APIs or schedules).
 
 ### Milestone 5: Customer Portal & Storefront Continuity (Phases 7 & 8)
 - Delivers My Account dashboard, product page teaser banners, and intent restoration.

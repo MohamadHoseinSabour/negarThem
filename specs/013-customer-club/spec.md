@@ -12,8 +12,18 @@
 
 ## 1. Product Purpose & Scope
 
+> [!IMPORTANT]
+> **CRITICAL PRODUCT DIRECTION CHANGE (SUPERSEDED — VIP PREPAYMENT + MANUAL OPERATOR MODEL)**:
+> By employer directive, the previous automated online installment-financing engine (`WC_Gateway_Negar_Installment`, `wc-partially-paid`, automatic contract snapshots, automated installment schedule generation, webhook verification engine, automated repayments/interest, and provider inquiry adapters) is **CANCELLED and SUPERSEDED**.
+> The Customer Club operates as:
+> **A prepaid VIP membership system powered by standard WooCommerce purchases, with all credit management, merchandise purchases, and installment collections handled manually by authorized store operators.**
+> - The ONLY customer-facing online payment is the purchase of a VIP virtual product through standard WooCommerce checkout.
+> - A paid VIP plan is a **prepayment toward future merchandise** (deposit), not a separate membership fee.
+> - Store operators have full manual authority to record credit allocations, merchandise usage, offline installment collections, adjustments, and validity terms.
+> - Zero automated banking gateways, zero automated installment schedule generation, zero interest/fee calculation, zero automated payment links.
+
 ### 1.1 Purpose
-Provide an integrated, Persian RTL-first **Negar Customer Club («باشگاه مشتریان نگار»)** experience for the NegarThem WooCommerce storefront (home electrical appliances catalog, `IRT` integer currency, HPOS enabled). The system introduces a controlled three-tier installment-purchasing program that:
+Provide an integrated, Persian RTL-first **Negar Customer Club («باشگاه مشتریان نگار»)** experience for the NegarThem WooCommerce storefront (home electrical appliances catalog, `IRT` integer currency, HPOS enabled). The system introduces a VIP membership and credit-management program that:
 
 1. Enables visitors to discover, compare, and preview installment options transparently without misleading financial claims.
 2. Enables administrators to configure presentation content, FAQs, public visibility, and three fixed-identity plan tiers safely from the existing NegarThem settings interface.

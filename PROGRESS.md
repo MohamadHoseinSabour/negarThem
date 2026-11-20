@@ -293,5 +293,11 @@
     3. `php tests/club-settings-regression.php` (۹ تست، پاس ۱۰۰٪).
     4. `php tests/customer-club-page-render-test.php` (۹ تست، پاس ۱۰۰٪).
     5. `php tests/application-lifecycle-test.php` (۹ تست سخت‌سازی‌شده فاز ۵.۱، پاس ۱۰۰٪).
-- [ ] **Phases 6–9:** در انتظار تأیید کارفرما (موتور مالی، جداول قراردادها و اقساط و درگاه پرداخت تا تأیید تصمیم‌های تجاری `CLUB-BD-001`–`022` و مجوز کارفرما کاملاً مسدود می‌ماند).
+- [x] **Phase 6 Replacement Specification (VIP Prepayment & Manual Operator Model):**
+  - ابلاغ تصمیم نهایی کارفرما مبنی بر لغو و جایگزینی کامل موتور اقساط آنلاین پیشین (`WC_Gateway_Negar_Installment`, `wc-partially-paid`, اقساط خودکار، وب‌هوک‌های مالی و محاسبات بهره/جریمه).
+  - تثبیت مدل کسب‌وکار جدید: خرید آنلاین پلن VIP به عنوان پیش‌پرداخت خرید آتی از طریق ووکامرس استاندارد + مدیریت دستی سقف خرید، ثبت خریدهای حضوری و دریافت اقساط سنتی توسط اپراتورهای مجاز فروشگاه.
+  - به‌روزرسانی اسناد `tasks.md`, `spec.md`, `plan.md`, `data-model.md`, `business-rules.md`, `architecture-decisions.md`, `acceptance-matrix.md` و `coverage-matrix.md`.
+  - نشانه‌گذاری تسک‌های قبلی `T340` تا `T353` به عنوان `SUPERSEDED — VIP PREPAYMENT + MANUAL OPERATOR MODEL`.
+  - تعریف تسک‌های فعال فاز ۶: `T340-VIP` (مایگریشن جدول اعضای VIP)، `T341-VIP` (محصولات مجازی ووکامرس)، `T342-VIP` (شنونده پرداخت و فعال‌سازی آیدمپوتنت)، `T343-VIP` (پنل اپراتور مدیریت اعضا)، `T344-VIP` (داشبورد مشتری در حساب کاربری)، `T345-VIP` (انتقال صفحه عمومی به خرید پلن)، `T346-VIP` (هندلر استرداد و لغو سفارش)، و `T347-VIP` (آزمون خودکار چرخه عمر VIP).
+- [ ] **Phase 6 Replacement Implementation (T340-VIP - T347-VIP):** در حال پیاده‌سازی.
 

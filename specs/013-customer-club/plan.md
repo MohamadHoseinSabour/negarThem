@@ -9,13 +9,23 @@
 
 ## Summary
 
-The **NegarThem Advanced Customer Club** («باشگاه مشتریان و خرید اقساطی نگار») delivers a complete installment commerce and loyalty ecosystem for the Negar Shop WooCommerce storefront.
+> [!IMPORTANT]
+> **CRITICAL PRODUCT DIRECTION CHANGE (SUPERSEDED — VIP PREPAYMENT + MANUAL OPERATOR MODEL)**:
+> By employer directive, the previous automated online installment-financing architecture (`WC_Gateway_Negar_Installment`, `wc-partially-paid`, automatic contract snapshots, automated installment schedule generation, webhook verification engine, automated repayments/interest, and provider inquiry adapters) is **CANCELLED and SUPERSEDED**.
+> The Customer Club operates as:
+> **A prepaid VIP membership system powered by standard WooCommerce purchases, with all credit management, offline purchases, and installment collections handled manually by authorized store operators.**
+> - The ONLY customer-facing online payment is the purchase of a VIP virtual product through standard WooCommerce checkout.
+> - A paid VIP plan is a **prepayment toward future merchandise** (deposit), not a separate membership fee.
+> - Store operators have full manual authority to record credit allocations, merchandise usage, offline installment collections, adjustments, and validity terms.
+> - Zero automated banking gateways, zero automated installment schedule generation, zero interest/fee calculation, zero automated payment links.
+
+The **NegarThem Advanced Customer Club** («باشگاه مشتریان و خرید اقساطی نگار») delivers a complete VIP membership and installment-support ecosystem for the Negar Shop WooCommerce storefront.
 
 The technical approach decouples:
-1. **Storefront Presentation Layer (Theme):** High-fidelity Persian RTL customer club landing page, responsive plan comparison cards, interactive preview calculator UI, Settings API management tab (`negar_theme_club_options`), and My Account customer endpoints, integrated into the existing crimson design system.
-2. **Persistent Financial Core (Decoupled Module):** Custom database schema (`wp_negar_club_*`), application underwriting lifecycle, immutable credit agreements with rolling balance tracking, dedicated refunds ledger (`wp_negar_club_refunds`), zero-drift integer Toman (`IRT`) installment scheduling, HPOS-compliant WooCommerce order association, and provider-independent payment webhooks.
-3. **Single Canonical Server-Authoritative Calculator:** A lightweight, stateless calculation service (`packages/negar-customer-club/includes/class-quote-calculator.php`) available as a foundation in Phase 4 to guarantee exact server/client parity for public previews without requiring live payment or credit activation.
-4. **WooCommerce Accounting Alignment:** At checkout, full merchandise catalog value is retained for accurate legal and Iranian VAT invoicing. A dedicated installment payment gateway integration (`WC_Gateway_Negar_Installment` — Alternative C, Recommended) collects the initial down payment upfront, tracks cash received in order metadata, creates the credit agreement and schedule, reduces inventory stock exactly once via `wc_reduce_stock_levels()`, and transitions status to custom status `wc-partially-paid` without calling `$order->payment_complete()` or using standard `processing`/`completed` statuses (which core `wc_get_is_paid_statuses()` treats as 100% paid). This keeps `$order->is_paid() === false`, avoiding false cash recognition and preserving core accounting integrity while permitting warehouse fulfillment (`PROPOSED — REQUIRES EMPLOYER APPROVAL`). Alternative B (negative fee line item) is rejected due to explicit WooCommerce 10.5.2 core warnings in `class-wc-order-item-fee.php`. Native `WC_Order::get_total_paid()` does not exist in WooCommerce 10.5.2 and is strictly avoided.
+1. **Storefront Presentation Layer (Theme):** High-fidelity Persian RTL customer club landing page, responsive plan comparison cards, Settings API management tab (`negar_theme_club_options`), and My Account customer endpoints, integrated into the existing crimson design system.
+2. **Persistent Membership & Operations Core (Decoupled Module):** Custom database schema (`wp_negar_club_applications`, `wp_negar_club_audit_log`, `wp_negar_club_memberships`), application underwriting lifecycle, idempotent VIP membership activation from genuine WooCommerce orders, and an operator management panel (`negar_club_operator`).
+3. **Single Canonical Server-Authoritative Calculator:** Retained for backward compatibility and calculation utilities.
+4. **WooCommerce Accounting Alignment:** VIP plans are standard WooCommerce virtual simple products (`_virtual = 'yes'`) mapped via `_negar_club_plan_id`. Product price in WooCommerce is the single source of truth for online prepayment. Merchandise sales and installment receipts occur offline/in-person and are manually entered by operators.
 
 ---
 
