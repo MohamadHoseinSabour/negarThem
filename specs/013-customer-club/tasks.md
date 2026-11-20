@@ -286,13 +286,13 @@
 
 ### Phase 6 Replacement Tasks (Active):
 
-- [ ] **T340-VIP** [Phase 6] [VIP-01] Database migration for `wp_negar_club_memberships` table & schema manager
+- [x] **T340-VIP** [Phase 6] [VIP-01] Database migration for `wp_negar_club_memberships` table & schema manager
   - **Objective**: Create `{$wpdb->prefix}negar_club_memberships` table using `dbDelta` in `class-database.php`. Enforce `UNIQUE KEY uq_order_id (order_id)`, integer IRT monetary fields (`prepayment_amount`, `applied_deposit`, `unused_deposit`, `purchase_ceiling`, `used_purchase_amount`, `available_purchase_capacity`, `offline_debt_amount`), validity term, status (`active`, `suspended`, `expired`), and operator tracking. Update DB version to `1.2.0`.
   - **Files**: `packages/negar-customer-club/includes/class-database.php`, `packages/negar-customer-club/negar-customer-club.php`
   - **Acceptance Criteria**: Table created idempotently; `uq_order_id` prevents duplicate activations at DB level; schema migration verified.
   - **Dependencies**: Phase 5 complete.
 
-- [ ] **T341-VIP** [Phase 6] [VIP-02] WooCommerce VIP virtual simple products creation & mapping (`_negar_club_plan_id`)
+- [x] **T341-VIP** [Phase 6] [VIP-02] WooCommerce VIP virtual simple products creation & mapping (`_negar_club_plan_id`)
   - **Objective**: Implement `Negar_Club_VIP_Products` helper to map the three fixed plan IDs (`negar_aghaz`, `negar_plus`, `negar_vizhe`) to standard WooCommerce simple virtual products (`_virtual = 'yes'`) with meta `_negar_club_plan_id`. Product price in WooCommerce serves as the single source of truth for online prepayment. Never alter unrelated store products.
   - **Files**: `packages/negar-customer-club/includes/class-vip-products.php`
   - **Acceptance Criteria**: Each plan maps to a virtual simple product; purchasable through standard WooCommerce checkout; non-downloadable; no shipping required.

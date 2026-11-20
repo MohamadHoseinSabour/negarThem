@@ -86,6 +86,7 @@ function assert_lifecycle_equals( $expected, $actual, $message = '' ) {
 global $wpdb;
 $test_app_table   = Negar_Club_Database::get_table_name( 'applications' );
 $test_audit_table = Negar_Club_Database::get_table_name( 'audit_log' );
+$test_mem_table   = Negar_Club_Database::get_table_name( 'memberships' );
 
 try {
 
@@ -416,7 +417,7 @@ try {
 
 } finally {
 	// Clean teardown: drop isolated test tables (Fix D)
-	$wpdb->query( "DROP TABLE IF EXISTS `{$test_app_table}`, `{$test_audit_table}`" );
+	$wpdb->query( "DROP TABLE IF EXISTS `{$test_app_table}`, `{$test_audit_table}`, `{$test_mem_table}`" );
 }
 
 echo "\n--- Customer Club Application Lifecycle Test Results ---\n";

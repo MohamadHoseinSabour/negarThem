@@ -16,8 +16,8 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'NEGAR_CLUB_VERSION', '1.1.0' );
-define( 'NEGAR_CLUB_DB_VERSION', '1.1.0' );
+define( 'NEGAR_CLUB_VERSION', '1.2.0' );
+define( 'NEGAR_CLUB_DB_VERSION', '1.2.0' );
 define( 'NEGAR_CLUB_DIR', __DIR__ );
 
 // Core components
@@ -25,6 +25,7 @@ require_once NEGAR_CLUB_DIR . '/includes/class-quote-calculator.php';
 require_once NEGAR_CLUB_DIR . '/includes/class-validator.php';
 require_once NEGAR_CLUB_DIR . '/includes/class-database.php';
 require_once NEGAR_CLUB_DIR . '/includes/class-roles.php';
+require_once NEGAR_CLUB_DIR . '/includes/class-vip-products.php';
 require_once NEGAR_CLUB_DIR . '/includes/class-application-manager.php';
 require_once NEGAR_CLUB_DIR . '/includes/admin/class-admin-applications.php';
 
@@ -37,6 +38,7 @@ add_action(
 	'plugins_loaded',
 	function() {
 		Negar_Club_Roles::register_capabilities();
+		Negar_Club_VIP_Products::init();
 		if ( get_option( 'negar_club_db_version' ) !== NEGAR_CLUB_DB_VERSION ) {
 			Negar_Club_Database::create_tables();
 		}
