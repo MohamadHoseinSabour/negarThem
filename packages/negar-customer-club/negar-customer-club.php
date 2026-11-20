@@ -27,6 +27,7 @@ require_once NEGAR_CLUB_DIR . '/includes/class-database.php';
 require_once NEGAR_CLUB_DIR . '/includes/class-roles.php';
 require_once NEGAR_CLUB_DIR . '/includes/class-vip-products.php';
 require_once NEGAR_CLUB_DIR . '/includes/class-membership-manager.php';
+require_once NEGAR_CLUB_DIR . '/includes/class-customer-dashboard.php';
 require_once NEGAR_CLUB_DIR . '/includes/class-application-manager.php';
 require_once NEGAR_CLUB_DIR . '/includes/admin/class-admin-applications.php';
 require_once NEGAR_CLUB_DIR . '/includes/admin/class-admin-memberships.php';
@@ -42,6 +43,7 @@ add_action(
 		Negar_Club_Roles::register_capabilities();
 		Negar_Club_VIP_Products::init();
 		Negar_Club_Membership_Manager::init();
+		Negar_Club_Customer_Dashboard::init();
 		if ( get_option( 'negar_club_db_version' ) !== NEGAR_CLUB_DB_VERSION ) {
 			Negar_Club_Database::create_tables();
 		}

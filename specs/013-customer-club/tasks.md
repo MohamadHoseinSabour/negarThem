@@ -310,7 +310,7 @@
   - **Acceptance Criteria**: Scoped to `negar_club_operator`; nonce and capability protected; atomic balance validation (no accidental negative prepaid balance); audit trail persisted.
   - **Dependencies**: T340-VIP, T342-VIP.
 
-- [ ] **T344-VIP** [Phase 6] [VIP-05] WooCommerce My Account `/my-account/customer-club/` VIP customer dashboard
+- [x] **T344-VIP** [Phase 6] [VIP-05] WooCommerce My Account `/my-account/customer-club/` VIP customer dashboard
   - **Objective**: Register `customer-club` endpoint in WooCommerce My Account. Display responsive Persian RTL dashboard with VIP badge, tier, status, paid deposit, applied deposit, unused deposit, max purchase ceiling, recorded usage, available purchase capacity, term/expiry, and store announcements. Clearly communicate that purchase ceiling is not a cash wallet and offline debt/installments are settled in-store. Anti-IDOR protected: users can only view their own membership.
   - **Files**: `packages/negar-customer-club/includes/class-customer-dashboard.php`, `woocommerce/myaccount/customer-club.php`
   - **Acceptance Criteria**: Accessible at `/my-account/customer-club/`; renders accurate real balances; anti-IDOR enforced; zero fake installment buttons or pay links.
