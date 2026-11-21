@@ -35,6 +35,24 @@ class Negar_Club_VIP_Products {
 
 		// Cart item validation (anti-guest, single VIP purchase, no mixed checkout)
 		add_action( 'woocommerce_check_cart_items', array( __CLASS__, 'validate_cart_items' ) );
+
+		// Simplified VIP checkout fields
+		add_filter( 'woocommerce_checkout_fields', array( __CLASS__, 'filter_checkout_fields' ), 20 );
+		add_filter( 'woocommerce_billing_fields', array( __CLASS__, 'filter_billing_fields' ), 20 );
+
+		// Disable order notes for VIP checkout
+		add_filter( 'woocommerce_enable_order_notes_field', array( __CLASS__, 'filter_enable_order_notes' ) );
+
+		// Prefill default checkout values from authenticated profile / OTP
+		add_filter( 'default_checkout_billing_first_name', array( __CLASS__, 'filter_default_first_name' ) );
+		add_filter( 'default_checkout_billing_last_name', array( __CLASS__, 'filter_default_last_name' ) );
+		add_filter( 'default_checkout_billing_phone', array( __CLASS__, 'filter_default_phone' ) );
+
+		// Inject customer email from profile without asking on checkout
+		add_filter( 'woocommerce_checkout_posted_data', array( __CLASS__, 'filter_checkout_posted_data' ) );
+
+		// Server-side validation of VIP checkout fields
+		add_action( 'woocommerce_after_checkout_validation', array( __CLASS__, 'validate_vip_checkout_fields' ), 10, 2 );
 	}
 
 	/**
@@ -365,6 +383,330 @@ class Negar_Club_VIP_Products {
 					'error'
 				);
 			}
+		}
+	}
+
+	/**
+	 * Check whether the current WooCommerce cart contains an authorized VIP product
+	 * and zero physical merchandise.
+	 *
+	 * Strictly fails closed if cart is empty or contains non-VIP merchandise.
+	 *
+	 * @return bool True if exclusively VIP digital cart.
+	 */
+	public static function is_vip_cart() {
+		if ( ! function_exists( 'WC' ) || ! WC()->cart || WC()->cart->is_empty() ) {
+			return false;
+		}
+
+		$vip_count     = 0;
+		$regular_count = 0;
+
+		foreach ( WC()->cart->get_cart() as $cart_item ) {
+			$product_id = $cart_item['product_id'] ?? 0;
+			$plan_id    = self::get_product_plan_id( $product_id );
+
+			if ( ! empty( $plan_id ) ) {
+				$vip_count += (int) ( $cart_item['quantity'] ?? 1 );
+			} else {
+				$regular_count += (int) ( $cart_item['quantity'] ?? 1 );
+			}
+		}
+
+		return ( $vip_count > 0 && 0 === $regular_count );
+	}
+
+	/**
+	 * Retrieve prefilled customer info for VIP checkout.
+	 *
+	 * Reuses first name, last name, and OTP-verified phone number from authenticated profile.
+	 *
+	 * @param int|null $user_id Optional user ID. Defaults to current user.
+	 * @return array{
+	 *     first_name: string,
+	 *     last_name: string,
+	 *     phone: string,
+	 *     has_first_name: bool,
+	 *     has_last_name: bool,
+	 *     has_phone: bool,
+	 *     is_complete: bool
+	 * }
+	 */
+	public static function get_customer_vip_checkout_data( $user_id = null ) {
+		if ( null === $user_id && function_exists( 'get_current_user_id' ) ) {
+			$user_id = get_current_user_id();
+		}
+
+		$user_id = (int) $user_id;
+		$empty_data = array(
+			'first_name'     => '',
+			'last_name'      => '',
+			'phone'          => '',
+			'has_first_name' => false,
+			'has_last_name'  => false,
+			'has_phone'      => false,
+			'is_complete'    => false,
+		);
+
+		if ( $user_id <= 0 || ! function_exists( 'get_userdata' ) ) {
+			return $empty_data;
+		}
+
+		$user = get_userdata( $user_id );
+		if ( ! $user ) {
+			return $empty_data;
+		}
+
+		// First name: check billing_first_name, then user first_name
+		$first_name = trim( (string) get_user_meta( $user_id, 'billing_first_name', true ) );
+		if ( empty( $first_name ) && ! empty( $user->first_name ) ) {
+			$first_name = trim( (string) $user->first_name );
+		}
+
+		// Last name: check billing_last_name, then user last_name
+		$last_name = trim( (string) get_user_meta( $user_id, 'billing_last_name', true ) );
+		if ( empty( $last_name ) && ! empty( $user->last_name ) ) {
+			$last_name = trim( (string) $user->last_name );
+		}
+
+		// Phone: check billing_phone, then OTP-verified username if mobile
+		$phone = trim( (string) get_user_meta( $user_id, 'billing_phone', true ) );
+		if ( empty( $phone ) && preg_match( '/^09\d{9}$/', $user->user_login ) ) {
+			$phone = $user->user_login;
+		}
+
+		$valid_phone = class_exists( 'Negar_Club_Validator' )
+			? Negar_Club_Validator::validate_phone( $phone )
+			: ( preg_match( '/^09\d{9}$/', $phone ) ? $phone : false );
+
+		$has_fn    = ! empty( $first_name );
+		$has_ln    = ! empty( $last_name );
+		$has_phone = false !== $valid_phone && ! empty( $valid_phone );
+
+		return array(
+			'first_name'     => $first_name,
+			'last_name'      => $last_name,
+			'phone'          => false !== $valid_phone ? $valid_phone : '',
+			'has_first_name' => $has_fn,
+			'has_last_name'  => $has_ln,
+			'has_phone'      => $has_phone,
+			'is_complete'    => ( $has_fn && $has_ln && $has_phone ),
+		);
+	}
+
+	/**
+	 * Filter checkout fields for VIP membership digital checkout.
+	 *
+	 * When cart contains a VIP plan:
+	 * - Unsets all address fields (country, state, city, address_1, address_2, postcode).
+	 * - Unsets company.
+	 * - Unsets shipping fields entirely.
+	 * - Unsets order comments / notes.
+	 * - Keeps only billing_first_name, billing_last_name, and billing_phone.
+	 * - Reuses existing customer profile data if already set.
+	 *
+	 * @param array $fields All checkout fields.
+	 * @return array Filtered checkout fields.
+	 */
+	public static function filter_checkout_fields( $fields ) {
+		if ( ! self::is_vip_cart() ) {
+			return $fields;
+		}
+
+		$customer_data = self::get_customer_vip_checkout_data();
+		$allowed       = array( 'billing_first_name', 'billing_last_name', 'billing_phone' );
+
+		if ( isset( $fields['billing'] ) && is_array( $fields['billing'] ) ) {
+			foreach ( $fields['billing'] as $key => $conf ) {
+				if ( ! in_array( $key, $allowed, true ) ) {
+					unset( $fields['billing'][ $key ] );
+				}
+			}
+
+			if ( isset( $fields['billing']['billing_first_name'] ) ) {
+				$fields['billing']['billing_first_name']['required'] = true;
+				$fields['billing']['billing_first_name']['label']    = __( 'نام', 'negar-shop' );
+				$fields['billing']['billing_first_name']['class']    = array( 'form-row-first' );
+				if ( ! empty( $customer_data['first_name'] ) ) {
+					$fields['billing']['billing_first_name']['default'] = $customer_data['first_name'];
+				}
+			}
+
+			if ( isset( $fields['billing']['billing_last_name'] ) ) {
+				$fields['billing']['billing_last_name']['required'] = true;
+				$fields['billing']['billing_last_name']['label']    = __( 'نام خانوادگی', 'negar-shop' );
+				$fields['billing']['billing_last_name']['class']    = array( 'form-row-last' );
+				if ( ! empty( $customer_data['last_name'] ) ) {
+					$fields['billing']['billing_last_name']['default'] = $customer_data['last_name'];
+				}
+			}
+
+			if ( isset( $fields['billing']['billing_phone'] ) ) {
+				$fields['billing']['billing_phone']['required'] = true;
+				$fields['billing']['billing_phone']['label']    = __( 'شماره همراه', 'negar-shop' );
+				$fields['billing']['billing_phone']['class']    = array( 'form-row-wide' );
+				$fields['billing']['billing_phone']['validate'] = array( 'phone' );
+				if ( ! empty( $customer_data['phone'] ) ) {
+					$fields['billing']['billing_phone']['default'] = $customer_data['phone'];
+				}
+			}
+		}
+
+		if ( isset( $fields['shipping'] ) ) {
+			unset( $fields['shipping'] );
+		}
+
+		if ( isset( $fields['order']['order_comments'] ) ) {
+			unset( $fields['order']['order_comments'] );
+		}
+
+		return $fields;
+	}
+
+	/**
+	 * Filter billing fields directly.
+	 *
+	 * @param array $fields Billing fields.
+	 * @return array Filtered billing fields.
+	 */
+	public static function filter_billing_fields( $fields ) {
+		if ( ! self::is_vip_cart() ) {
+			return $fields;
+		}
+
+		$allowed = array( 'billing_first_name', 'billing_last_name', 'billing_phone' );
+		foreach ( $fields as $key => $conf ) {
+			if ( ! in_array( $key, $allowed, true ) ) {
+				unset( $fields[ $key ] );
+			}
+		}
+
+		if ( isset( $fields['billing_first_name'] ) ) {
+			$fields['billing_first_name']['required'] = true;
+		}
+		if ( isset( $fields['billing_last_name'] ) ) {
+			$fields['billing_last_name']['required'] = true;
+		}
+		if ( isset( $fields['billing_phone'] ) ) {
+			$fields['billing_phone']['required'] = true;
+		}
+
+		return $fields;
+	}
+
+	/**
+	 * Disable order comments field on VIP checkout.
+	 *
+	 * @param bool $enabled Order notes enabled state.
+	 * @return bool False for VIP, original value otherwise.
+	 */
+	public static function filter_enable_order_notes( $enabled ) {
+		if ( self::is_vip_cart() ) {
+			return false;
+		}
+		return $enabled;
+	}
+
+	/**
+	 * Default billing first name filter for VIP checkout.
+	 *
+	 * @param mixed $value Default value.
+	 * @return mixed
+	 */
+	public static function filter_default_first_name( $value ) {
+		if ( empty( $value ) && self::is_vip_cart() ) {
+			$data = self::get_customer_vip_checkout_data();
+			return ! empty( $data['first_name'] ) ? $data['first_name'] : $value;
+		}
+		return $value;
+	}
+
+	/**
+	 * Default billing last name filter for VIP checkout.
+	 *
+	 * @param mixed $value Default value.
+	 * @return mixed
+	 */
+	public static function filter_default_last_name( $value ) {
+		if ( empty( $value ) && self::is_vip_cart() ) {
+			$data = self::get_customer_vip_checkout_data();
+			return ! empty( $data['last_name'] ) ? $data['last_name'] : $value;
+		}
+		return $value;
+	}
+
+	/**
+	 * Default billing phone filter for VIP checkout.
+	 *
+	 * @param mixed $value Default value.
+	 * @return mixed
+	 */
+	public static function filter_default_phone( $value ) {
+		if ( empty( $value ) && self::is_vip_cart() ) {
+			$data = self::get_customer_vip_checkout_data();
+			return ! empty( $data['phone'] ) ? $data['phone'] : $value;
+		}
+		return $value;
+	}
+
+	/**
+	 * Filter posted checkout data: carry user real email and normalize phone without manual entry.
+	 *
+	 * @param array $data Posted checkout data.
+	 * @return array Sanitized posted data.
+	 */
+	public static function filter_checkout_posted_data( $data ) {
+		if ( ! self::is_vip_cart() ) {
+			return $data;
+		}
+
+		// Ensure customer's existing authentic email from profile is used on the order
+		if ( empty( $data['billing_email'] ) && is_user_logged_in() ) {
+			$user = wp_get_current_user();
+			if ( $user && ! empty( $user->user_email ) ) {
+				$data['billing_email'] = $user->user_email;
+			}
+		}
+
+		// Normalize phone
+		if ( ! empty( $data['billing_phone'] ) && class_exists( 'Negar_Club_Validator' ) ) {
+			$norm = Negar_Club_Validator::validate_phone( $data['billing_phone'] );
+			if ( false !== $norm ) {
+				$data['billing_phone'] = $norm;
+			}
+		}
+
+		return $data;
+	}
+
+	/**
+	 * Server-side validation callback for VIP checkout submissions.
+	 *
+	 * @param array    $data   Submitted checkout data.
+	 * @param WP_Error $errors Validation errors object.
+	 * @return void
+	 */
+	public static function validate_vip_checkout_fields( $data, $errors ) {
+		if ( ! self::is_vip_cart() ) {
+			return;
+		}
+
+		$first_name = trim( (string) ( $data['billing_first_name'] ?? '' ) );
+		$last_name  = trim( (string) ( $data['billing_last_name'] ?? '' ) );
+		$phone      = trim( (string) ( $data['billing_phone'] ?? '' ) );
+
+		if ( empty( $first_name ) ) {
+			$errors->add( 'validation', __( 'لطفاً نام خریدار اشتراک VIP را وارد فرمایید.', 'negar-shop' ) );
+		}
+
+		if ( empty( $last_name ) ) {
+			$errors->add( 'validation', __( 'لطفاً نام خانوادگی خریدار اشتراک VIP را وارد فرمایید.', 'negar-shop' ) );
+		}
+
+		if ( empty( $phone ) ) {
+			$errors->add( 'validation', __( 'لطفاً شماره همراه خریدار اشتراک VIP را وارد فرمایید.', 'negar-shop' ) );
+		} elseif ( class_exists( 'Negar_Club_Validator' ) && false === Negar_Club_Validator::validate_phone( $phone ) ) {
+			$errors->add( 'validation', __( 'شماره همراه وارد شده نامعتبر است. شماره همراه باید ۱۱ رقم بوده و با ۰۹ آغاز شود.', 'negar-shop' ) );
 		}
 	}
 }
