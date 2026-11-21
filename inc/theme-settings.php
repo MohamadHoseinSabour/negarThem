@@ -1112,54 +1112,92 @@ function negar_theme_product_section_config( $section_id ) {
 
  * @param array<string, mixed> $args Product query arguments.
 
+ * @param string               $context Query context ('catalog' or 'search').
  * @return array<string, mixed>
-
  */
+function negar_theme_exclude_vip_products_query_args( $args, $context = 'catalog' ) {
+	if ( class_exists( 'Negar_Club_VIP_Products' ) ) {
+		return Negar_Club_VIP_Products::exclude_vip_from_query_args( $args, $context );
+	}
+	return negar_theme_catalog_visibility_query_args( $args, $context );
+}
 
-function negar_theme_catalog_visibility_query_args( $args ) {
+/**
+ * Filter product query arguments to exclude hidden WooCommerce catalog/search products
+ * and Customer Club VIP virtual prepayment products from the storefront.
+ *
+ * @param array<string, mixed> $args    Product query arguments.
+ * @param string               $context Query context ('catalog' or 'search').
+ * @return array<string, mixed>
+ */
+function negar_theme_catalog_visibility_query_args( $args, $context = 'catalog' ) {
+	$args = is_array( $args ) ? $args : array();
 
-	$args      = is_array( $args ) ? $args : array();
+	if ( class_exists( 'Negar_Club_VIP_Products' ) ) {
+		return Negar_Club_VIP_Products::exclude_vip_from_query_args( $args, $context );
+	}
 
 	$tax_query = isset( $args['tax_query'] ) && is_array( $args['tax_query'] ) ? $args['tax_query'] : array();
 
-
-
 	if ( function_exists( 'wc_get_product_visibility_term_ids' ) ) {
-
 		$visibility = wc_get_product_visibility_term_ids();
-
 		$hidden_id  = isset( $visibility['exclude-from-catalog'] ) ? absint( $visibility['exclude-from-catalog'] ) : 0;
-
 		if ( $hidden_id ) {
-
 			$tax_query[] = array(
-
 				'taxonomy' => 'product_visibility',
-
 				'field'    => 'term_id',
-
 				'terms'    => array( $hidden_id ),
-
 				'operator' => 'NOT IN',
-
 			);
-
 		}
-
+		if ( 'search' === $context && ! empty( $visibility['exclude-from-search'] ) ) {
+			$tax_query[] = array(
+				'taxonomy' => 'product_visibility',
+				'field'    => 'term_id',
+				'terms'    => array( absint( $visibility['exclude-from-search'] ) ),
+				'operator' => 'NOT IN',
+			);
+		}
 	}
-
-
 
 	if ( ! empty( $tax_query ) ) {
-
 		$args['tax_query'] = $tax_query;
-
 	}
 
-
-
 	return $args;
+}
 
+if ( ! function_exists( 'negar_get_matching_product_info' ) ) {
+	/**
+	 * Find a published matching physical merchandise product by search keyword,
+	 * strictly excluding VIP membership products and hidden products.
+	 *
+	 * @param string $slug_fragment Search term or fragment.
+	 * @param string $fallback_url  Fallback URL.
+	 * @return array{id: int, url: string}
+	 */
+	function negar_get_matching_product_info( $slug_fragment, $fallback_url ) {
+		$args  = negar_theme_catalog_visibility_query_args(
+			array(
+				'post_type'      => 'product',
+				'posts_per_page' => 1,
+				'post_status'    => 'publish',
+				's'              => $slug_fragment,
+			),
+			'search'
+		);
+		$prods = get_posts( $args );
+		if ( ! empty( $prods ) ) {
+			return array(
+				'id'  => $prods[0]->ID,
+				'url' => get_permalink( $prods[0]->ID ),
+			);
+		}
+		return array(
+			'id'  => 0,
+			'url' => '',
+		);
+	}
 }
 
 

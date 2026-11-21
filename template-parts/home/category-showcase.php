@@ -12,14 +12,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $showcase_products = array();
 if ( class_exists( 'WooCommerce' ) ) {
-	$showcase_products = new WP_Query(
-		array(
+	$showcase_args = function_exists( 'negar_theme_catalog_visibility_query_args' )
+		? negar_theme_catalog_visibility_query_args(
+			array(
+				'post_type'      => 'product',
+				'post_status'    => 'publish',
+				'posts_per_page' => 4,
+				'orderby'        => 'rand',
+			)
+		)
+		: array(
 			'post_type'      => 'product',
 			'post_status'    => 'publish',
 			'posts_per_page' => 4,
 			'orderby'        => 'rand',
-		)
-	);
+		);
+	$showcase_products = new WP_Query( $showcase_args );
 }
 ?>
 

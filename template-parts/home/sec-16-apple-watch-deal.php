@@ -14,20 +14,29 @@ $deal_product = false;
 if ( function_exists( 'wc_get_products' ) ) {
 	$deal_products = wc_get_products(
 		array(
-			'status'   => 'publish',
-			'limit'    => 20,
-			'orderby'  => 'date',
-			'order'    => 'DESC',
+			'status'     => 'publish',
+			'limit'      => 20,
+			'visibility' => 'catalog',
+			'orderby'    => 'date',
+			'order'      => 'DESC',
 		)
 	);
 	foreach ( $deal_products as $candidate ) {
+		if ( class_exists( 'Negar_Club_VIP_Products' ) && Negar_Club_VIP_Products::is_vip_product( $candidate->get_id() ) ) {
+			continue;
+		}
 		if ( $candidate->is_on_sale() ) {
 			$deal_product = $candidate;
 			break;
 		}
 	}
-	if ( ! $deal_product && ! empty( $deal_products ) ) {
-		$deal_product = $deal_products[0];
+	if ( ! $deal_product ) {
+		foreach ( $deal_products as $candidate ) {
+			if ( ! class_exists( 'Negar_Club_VIP_Products' ) || ! Negar_Club_VIP_Products::is_vip_product( $candidate->get_id() ) ) {
+				$deal_product = $candidate;
+				break;
+			}
+		}
 	}
 }
 

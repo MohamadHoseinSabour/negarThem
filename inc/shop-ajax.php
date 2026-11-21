@@ -261,6 +261,10 @@ function negar_shop_kaveh_ajax_shop_filters() {
 			break;
 	}
 
+	if ( function_exists( 'negar_theme_catalog_visibility_query_args' ) ) {
+		$args = negar_theme_catalog_visibility_query_args( $args, 'catalog' );
+	}
+
 	$query = new WP_Query( $args );
 
 	ob_start();

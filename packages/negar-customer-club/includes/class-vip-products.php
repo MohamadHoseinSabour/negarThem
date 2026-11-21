@@ -53,6 +53,12 @@ class Negar_Club_VIP_Products {
 
 		// Server-side validation of VIP checkout fields
 		add_action( 'woocommerce_after_checkout_validation', array( __CLASS__, 'validate_vip_checkout_fields' ), 10, 2 );
+
+		// Exclude VIP products from storefront catalog and search queries
+		if ( ! is_admin() ) {
+			add_action( 'woocommerce_product_query', array( __CLASS__, 'filter_woocommerce_product_query' ) );
+			add_action( 'pre_get_posts', array( __CLASS__, 'filter_storefront_pre_get_posts' ) );
+		}
 	}
 
 	/**
@@ -167,13 +173,228 @@ class Negar_Club_VIP_Products {
 	}
 
 	/**
-	 * Check if a product is a Customer Club VIP plan product.
+	 * Get authorized VIP plan identifiers.
+	 *
+	 * @return array<string>
+	 */
+	public static function get_authorized_plan_ids() {
+		return array( self::PLAN_AGHAZ, self::PLAN_PLUS, self::PLAN_VIZHE );
+	}
+
+	/**
+	 * Check if a product is an authorized Customer Club VIP plan product.
 	 *
 	 * @param int $product_id Product ID.
 	 * @return bool True if VIP product.
 	 */
 	public static function is_vip_product( $product_id ) {
-		return '' !== self::get_product_plan_id( $product_id );
+		$plan_id = self::get_product_plan_id( $product_id );
+		return in_array( $plan_id, self::get_authorized_plan_ids(), true );
+	}
+
+	/**
+	 * Get all active WooCommerce product IDs mapped to VIP plans.
+	 *
+	 * Idempotent and cached per request.
+	 *
+	 * @return array<int>
+	 */
+	public static function get_vip_product_ids() {
+		static $cached_ids = null;
+		if ( null !== $cached_ids ) {
+			return $cached_ids;
+		}
+
+		$ids = array();
+		foreach ( self::get_authorized_plan_ids() as $plan_id ) {
+			$pid = self::get_plan_product_id( $plan_id );
+			if ( $pid > 0 ) {
+				$ids[] = (int) $pid;
+			}
+		}
+
+		// Also check by meta key for any unmapped VIP products in DB
+		if ( function_exists( 'get_posts' ) ) {
+			$meta_posts = get_posts( array(
+				'post_type'      => 'product',
+				'post_status'    => 'any',
+				'posts_per_page' => -1,
+				'fields'         => 'ids',
+				'meta_query'     => array(
+					array(
+						'key'     => self::META_KEY_PLAN_ID,
+						'value'   => self::get_authorized_plan_ids(),
+						'compare' => 'IN',
+					),
+				),
+			) );
+			if ( ! empty( $meta_posts ) ) {
+				foreach ( $meta_posts as $mpid ) {
+					$ids[] = (int) $mpid;
+				}
+			}
+		}
+
+		$cached_ids = array_values( array_unique( array_filter( $ids ) ) );
+		return $cached_ids;
+	}
+
+	/**
+	 * Enforce hidden catalog visibility on all existing VIP products.
+	 *
+	 * Strictly uses WooCommerce CRUD APIs.
+	 */
+	public static function enforce_vip_products_hidden_visibility() {
+		if ( ! function_exists( 'wc_get_product' ) ) {
+			return;
+		}
+
+		$vip_ids = self::get_vip_product_ids();
+		foreach ( $vip_ids as $pid ) {
+			$prod = wc_get_product( $pid );
+			if ( $prod && 'hidden' !== $prod->get_catalog_visibility() ) {
+				$prod->set_catalog_visibility( 'hidden' );
+				$prod->save();
+			}
+		}
+	}
+
+	/**
+	 * Central query modifier to exclude VIP membership products and enforce
+	 * WooCommerce catalog visibility rules on product queries.
+	 *
+	 * @param array<string, mixed> $args    WP_Query or get_posts arguments.
+	 * @param string               $context Query context ('catalog' or 'search').
+	 * @return array<string, mixed> Filtered query arguments.
+	 */
+	public static function exclude_vip_from_query_args( $args, $context = 'catalog' ) {
+		$args = is_array( $args ) ? $args : array();
+
+		// 1. Tax query: enforce WooCommerce catalog / search visibility exclusions
+		$tax_query = isset( $args['tax_query'] ) && is_array( $args['tax_query'] ) ? $args['tax_query'] : array();
+		if ( function_exists( 'wc_get_product_visibility_term_ids' ) ) {
+			$visibility = wc_get_product_visibility_term_ids();
+			$hidden_ids = array();
+			if ( ! empty( $visibility['exclude-from-catalog'] ) ) {
+				$hidden_ids[] = absint( $visibility['exclude-from-catalog'] );
+			}
+			if ( 'search' === $context && ! empty( $visibility['exclude-from-search'] ) ) {
+				$hidden_ids[] = absint( $visibility['exclude-from-search'] );
+			}
+			if ( ! empty( $hidden_ids ) ) {
+				$tax_query[] = array(
+					'taxonomy' => 'product_visibility',
+					'field'    => 'term_id',
+					'terms'    => array_unique( $hidden_ids ),
+					'operator' => 'NOT IN',
+				);
+			}
+		}
+		if ( ! empty( $tax_query ) ) {
+			$args['tax_query'] = $tax_query;
+		}
+
+		// 2. Meta query: exclude any product having _negar_club_plan_id set to authorized VIP plans
+		$meta_query = isset( $args['meta_query'] ) && is_array( $args['meta_query'] ) ? $args['meta_query'] : array();
+		$meta_query[] = array(
+			'relation' => 'OR',
+			array(
+				'key'     => self::META_KEY_PLAN_ID,
+				'compare' => 'NOT EXISTS',
+			),
+			array(
+				'key'     => self::META_KEY_PLAN_ID,
+				'value'   => self::get_authorized_plan_ids(),
+				'compare' => 'NOT IN',
+			),
+		);
+		$args['meta_query'] = $meta_query;
+
+		// 3. Post ID exclusion (defense-in-depth)
+		$vip_ids = self::get_vip_product_ids();
+		if ( ! empty( $vip_ids ) ) {
+			if ( ! empty( $args['post__in'] ) && is_array( $args['post__in'] ) ) {
+				$args['post__in'] = array_values( array_diff( array_map( 'absint', $args['post__in'] ), $vip_ids ) );
+				if ( empty( $args['post__in'] ) ) {
+					$args['post__in'] = array( 0 );
+				}
+			} else {
+				$post__not_in = isset( $args['post__not_in'] ) && is_array( $args['post__not_in'] ) ? $args['post__not_in'] : array();
+				$args['post__not_in'] = array_values( array_unique( array_merge( array_map( 'absint', $post__not_in ), $vip_ids ) ) );
+			}
+		}
+
+		return $args;
+	}
+
+	/**
+	 * Hook for woocommerce_product_query to exclude VIP products from main catalog/archive query.
+	 *
+	 * @param WP_Query $q Query object.
+	 */
+	public static function filter_woocommerce_product_query( $q ) {
+		if ( is_admin() || ( defined( 'REST_REQUEST' ) && REST_REQUEST ) ) {
+			return;
+		}
+
+		$meta_query   = (array) $q->get( 'meta_query' );
+		$meta_query[] = array(
+			'relation' => 'OR',
+			array(
+				'key'     => self::META_KEY_PLAN_ID,
+				'compare' => 'NOT EXISTS',
+			),
+			array(
+				'key'     => self::META_KEY_PLAN_ID,
+				'value'   => self::get_authorized_plan_ids(),
+				'compare' => 'NOT IN',
+			),
+		);
+		$q->set( 'meta_query', $meta_query );
+
+		$vip_ids = self::get_vip_product_ids();
+		if ( ! empty( $vip_ids ) ) {
+			$post__in = (array) $q->get( 'post__in' );
+			if ( ! empty( $post__in ) ) {
+				$filtered_in = array_values( array_diff( array_map( 'absint', $post__in ), $vip_ids ) );
+				$q->set( 'post__in', empty( $filtered_in ) ? array( 0 ) : $filtered_in );
+			} else {
+				$post__not_in = (array) $q->get( 'post__not_in' );
+				$q->set( 'post__not_in', array_values( array_unique( array_merge( array_map( 'absint', $post__not_in ), $vip_ids ) ) ) );
+			}
+		}
+	}
+
+	/**
+	 * Hook for pre_get_posts on frontend product searches and custom product queries.
+	 *
+	 * @param WP_Query $q Query object.
+	 */
+	public static function filter_storefront_pre_get_posts( $q ) {
+		if ( is_admin() || wp_doing_cron() || ( defined( 'REST_REQUEST' ) && REST_REQUEST ) ) {
+			return;
+		}
+
+		if ( function_exists( 'is_cart' ) && is_cart() ) {
+			return;
+		}
+		if ( function_exists( 'is_checkout' ) && is_checkout() ) {
+			return;
+		}
+
+		if ( $q->get( 'negar_allow_vip_products' ) ) {
+			return;
+		}
+
+		$post_type        = $q->get( 'post_type' );
+		$is_product_query = false;
+		if ( 'product' === $post_type || ( is_array( $post_type ) && in_array( 'product', $post_type, true ) ) ) {
+			$is_product_query = true;
+		}
+
+		if ( $is_product_query && ( $q->is_main_query() || $q->is_search() ) ) {
+			self::filter_woocommerce_product_query( $q );
+		}
 	}
 
 	/**
@@ -263,6 +484,11 @@ class Negar_Club_VIP_Products {
 		foreach ( $configs as $plan_id => $conf ) {
 			$existing_id = self::get_plan_product_id( $plan_id );
 			if ( $existing_id > 0 && self::is_valid_vip_product( $existing_id ) ) {
+				$existing_prod = wc_get_product( $existing_id );
+				if ( $existing_prod && 'hidden' !== $existing_prod->get_catalog_visibility() ) {
+					$existing_prod->set_catalog_visibility( 'hidden' );
+					$existing_prod->save();
+				}
 				$mapping[ $plan_id ] = $existing_id;
 				continue;
 			}

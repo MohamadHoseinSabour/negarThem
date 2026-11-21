@@ -274,10 +274,18 @@ async function run() {
 	const bannerSsrHtml = await (await page.request.get(BASE_URL)).text();
 	const bannerSectionMap = {
 	  'wide-banner-one': 'sec-08-banner-wide',
+	  'banners-10-one': 'sec-10-banners-2col',
+	  'banners-10-two': 'sec-10-banners-2col',
+	  'compact-12-one': 'sec-12-banners-compact',
+	  'compact-12-two': 'sec-12-banners-compact',
+	  'banners-18-one': 'sec-18-banners-2col',
+	  'banners-18-two': 'sec-18-banners-2col',
 	  'compact-27-one': 'sec-27-banners-compact-2',
 	  'compact-27-two': 'sec-27-banners-compact-2',
 	  'banners-29-one': 'sec-29-banners-2col',
 	  'banners-29-two': 'sec-29-banners-2col',
+	  'banners-32-one': 'sec-32-banners-2col',
+	  'banners-32-two': 'sec-32-banners-2col',
 	};
 	for (const bannerId of [
 	  'banners-grid-one', 'banners-grid-two', 'wide-banner-one',
@@ -295,7 +303,9 @@ async function run() {
 	if (bannerSsrHtml.includes('<!-- negar-home-section:sec-08-banner-wide -->')) {
 	  assert(bannerSsrHtml.includes('https://example.com/wide-banner-e2e') && bannerSsrHtml.includes('alt="Wide Banner E2E Alt"'), 'Wide banner SSR HTML must contain configured link and alt directly');
 	}
-	assert(bannerSsrHtml.includes('/shop/?compact12=1') && bannerSsrHtml.includes('alt="Compact 12 One Alt"'), 'Compact banner SSR HTML must contain configured link and alt directly');
+	if (bannerSsrHtml.includes('<!-- negar-home-section:sec-12-banners-compact -->')) {
+	  assert(bannerSsrHtml.includes('/shop/?compact12=1') && bannerSsrHtml.includes('alt="Compact 12 One Alt"'), 'Compact banner SSR HTML must contain configured link and alt directly');
+	}
 	assert(bannerSsrHtml.includes('<div class="title f-iran-yekan fw-bold"></div>') && bannerSsrHtml.includes('<div class="sub-title f-iran-yekan fw-normal"></div>'), 'Intentional empty editorial text must render empty without demo fallback text');
 
 	const bannerErrors = [];

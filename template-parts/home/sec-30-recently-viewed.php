@@ -16,6 +16,9 @@ $recent_ids = array_slice( array_values( array_unique( array_filter( $recent_ids
 $products   = array();
 
 foreach ( $recent_ids as $recent_id ) {
+	if ( class_exists( 'Negar_Club_VIP_Products' ) && Negar_Club_VIP_Products::is_vip_product( $recent_id ) ) {
+		continue;
+	}
 	$product = wc_get_product( $recent_id );
 	if ( $product && $product->is_visible() ) {
 		$products[] = $product;

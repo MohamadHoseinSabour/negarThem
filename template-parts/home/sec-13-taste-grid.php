@@ -52,14 +52,18 @@ if ( ! empty( $chosen_cats ) ) {
 		$cat_link = get_term_link( $cat );
 		$cat_link = is_wp_error( $cat_link ) ? $shop_url : $cat_link;
 
-		$cat_products = function_exists( 'wc_get_products' ) ? wc_get_products(
+		$cat_products = function_exists( 'wc_get_products' ) ? array_filter( wc_get_products(
 			array(
-				'status'   => 'publish',
-				'limit'    => 4,
-				'orderby'  => 'rand',
-				'category' => array( $cat->slug ),
+				'status'     => 'publish',
+				'limit'      => 8,
+				'visibility' => 'catalog',
+				'orderby'    => 'rand',
+				'category'   => array( $cat->slug ),
 			)
-		) : array();
+		), static function ( $p ) {
+			return $p && ( ! class_exists( 'Negar_Club_VIP_Products' ) || ! Negar_Club_VIP_Products::is_vip_product( $p->get_id() ) );
+		} ) : array();
+		$cat_products = array_slice( array_values( $cat_products ), 0, 4 );
 
 		$product_slots = array();
 		if ( ! empty( $cat_products ) ) {

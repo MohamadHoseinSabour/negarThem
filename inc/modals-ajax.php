@@ -26,6 +26,10 @@ function negar_shop_ajax_quickview() {
 		wp_send_json_error( array( 'message' => __( 'محصول یافت نشد.', 'negar-shop' ) ) );
 	}
 
+	if ( class_exists( 'Negar_Club_VIP_Products' ) && Negar_Club_VIP_Products::is_vip_product( $product_id ) ) {
+		wp_send_json_error( array( 'message' => __( 'امکان مشاهده سریع این محصول وجود ندارد.', 'negar-shop' ) ) );
+	}
+
 	global $post;
 	$post = get_post( $product_id ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 	setup_postdata( $post );
@@ -105,6 +109,11 @@ function negar_shop_ajax_get_wishlist_cards() {
 		$raw_ids = is_array( $_POST['ids[]'] ) ? $_POST['ids[]'] : explode( ',', (string) $_POST['ids[]'] );
 	}
 	$ids = array_filter( array_map( 'absint', $raw_ids ) );
+	if ( class_exists( 'Negar_Club_VIP_Products' ) ) {
+		$ids = array_values( array_filter( $ids, static function( $id ) {
+			return ! Negar_Club_VIP_Products::is_vip_product( $id );
+		} ) );
+	}
 
 	if ( empty( $ids ) ) {
 		ob_start();
@@ -170,6 +179,11 @@ function negar_shop_ajax_get_compare_data() {
 		$raw_ids = is_array( $_POST['ids[]'] ) ? $_POST['ids[]'] : explode( ',', (string) $_POST['ids[]'] );
 	}
 	$ids = array_slice( array_filter( array_map( 'absint', $raw_ids ) ), 0, 4 );
+	if ( class_exists( 'Negar_Club_VIP_Products' ) ) {
+		$ids = array_values( array_filter( $ids, static function( $id ) {
+			return ! Negar_Club_VIP_Products::is_vip_product( $id );
+		} ) );
+	}
 
 	if ( empty( $ids ) ) {
 		ob_start();

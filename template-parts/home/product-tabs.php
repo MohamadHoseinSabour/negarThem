@@ -129,6 +129,9 @@ foreach ( $tab_categories as $key => $tab ) {
 						if ( $query->have_posts() ) :
 							while ( $query->have_posts() ) :
 								$query->the_post();
+								if ( class_exists( 'Negar_Club_VIP_Products' ) && Negar_Club_VIP_Products::is_vip_product( get_the_ID() ) ) {
+									continue;
+								}
 								?>
 								<div class="product-grid-item">
 									<?php get_template_part( 'template-parts/product/card' ); ?>

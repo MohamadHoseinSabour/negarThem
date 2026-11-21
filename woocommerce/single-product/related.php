@@ -31,6 +31,10 @@ $args = array(
 	'post__not_in'         => array( $product->get_id() ),
 );
 
+if ( function_exists( 'negar_theme_catalog_visibility_query_args' ) ) {
+	$args = negar_theme_catalog_visibility_query_args( $args, 'catalog' );
+}
+
 $related_products = new WP_Query( $args );
 
 if ( ! $related_products->have_posts() ) {

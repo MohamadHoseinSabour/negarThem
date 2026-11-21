@@ -733,11 +733,13 @@ try {
 	$normalized_layout = $malformed_layout['layout']['sections'];
 
 	$product_ids = get_posts(
-		array(
-			'post_type'      => 'product',
-			'post_status'    => 'publish',
-			'posts_per_page' => 1,
-			'fields'         => 'ids',
+		negar_theme_catalog_visibility_query_args(
+			array(
+				'post_type'      => 'product',
+				'post_status'    => 'publish',
+				'posts_per_page' => 1,
+				'fields'         => 'ids',
+			)
 		)
 	);
 	if ( empty( $product_ids ) ) {

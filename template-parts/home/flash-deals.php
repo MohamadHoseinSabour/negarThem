@@ -27,7 +27,7 @@ if ( negar_theme_product_section_is_configured( 'flash-deals' ) ) {
 	while ( $sale_query->have_posts() ) {
 		$sale_query->the_post();
 		$product = wc_get_product( get_the_ID() );
-		if ( $product && $product->is_visible() ) {
+		if ( $product && $product->is_visible() && ( ! class_exists( 'Negar_Club_VIP_Products' ) || ! Negar_Club_VIP_Products::is_vip_product( $product->get_id() ) ) ) {
 			$sale_products[] = $product;
 		}
 	}
@@ -35,15 +35,16 @@ if ( negar_theme_product_section_is_configured( 'flash-deals' ) ) {
 } else {
 $sale_products = array_filter( wc_get_products(
 	array(
-		'status'  => 'publish',
-		'limit'    => 8,
-		'on_sale'  => true,
-		'orderby'  => 'date',
-		'order'    => 'DESC',
-		'return'   => 'objects',
+		'status'     => 'publish',
+		'limit'      => 8,
+		'visibility' => 'catalog',
+		'on_sale'    => true,
+		'orderby'    => 'date',
+		'order'      => 'DESC',
+		'return'     => 'objects',
 	)
 ), static function ( $product ) {
-	return $product && $product->is_visible();
+	return $product && $product->is_visible() && ( ! class_exists( 'Negar_Club_VIP_Products' ) || ! Negar_Club_VIP_Products::is_vip_product( $product->get_id() ) );
 } );
 }
 

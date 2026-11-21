@@ -14,27 +14,75 @@ if ( ! defined( 'ABSPATH' ) ) {
 $upload_dir = wp_upload_dir();
 $kaveh_base = $upload_dir['baseurl'] . '/kaveh-demo';
 $shop_link  = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/shop/' );
-$featured_product_posts = get_posts(
-	array(
-		'post_type'      => 'product',
-		'post_status'    => 'publish',
-		'posts_per_page' => 1,
-	)
-);
 
-if ( empty( $featured_product_posts ) ) {
-	$featured_product_posts = get_posts(
+// Query eligible storefront merchandise product (prefer on-sale products, fallback to published catalog merchandise)
+$featured_product = false;
+if ( function_exists( 'wc_get_products' ) ) {
+	$sale_candidates = wc_get_products(
 		array(
+			'status'     => 'publish',
+			'limit'      => 1,
+			'visibility' => 'catalog',
+			'on_sale'    => true,
+			'orderby'    => 'date',
+			'order'      => 'DESC',
+		)
+	);
+	if ( ! empty( $sale_candidates ) ) {
+		$candidate = $sale_candidates[0];
+		if ( ! class_exists( 'Negar_Club_VIP_Products' ) || ! Negar_Club_VIP_Products::is_vip_product( $candidate->get_id() ) ) {
+			$featured_product = $candidate;
+		}
+	}
+
+	if ( ! $featured_product ) {
+		$catalog_candidates = wc_get_products(
+			array(
+				'status'     => 'publish',
+				'limit'      => 5,
+				'visibility' => 'catalog',
+				'orderby'    => 'date',
+				'order'      => 'DESC',
+			)
+		);
+		foreach ( $catalog_candidates as $cand ) {
+			if ( ! class_exists( 'Negar_Club_VIP_Products' ) || ! Negar_Club_VIP_Products::is_vip_product( $cand->get_id() ) ) {
+				$featured_product = $cand;
+				break;
+			}
+		}
+	}
+}
+
+// Fallback to safe get_posts with catalog visibility and VIP product exclusion
+if ( ! $featured_product && function_exists( 'get_posts' ) ) {
+	$featured_posts_query = function_exists( 'negar_theme_catalog_visibility_query_args' )
+		? negar_theme_catalog_visibility_query_args(
+			array(
+				'post_type'      => 'product',
+				'post_status'    => 'publish',
+				'posts_per_page' => 1,
+				'orderby'        => 'date',
+				'order'          => 'DESC',
+			)
+		)
+		: array(
 			'post_type'      => 'product',
 			'post_status'    => 'publish',
 			'posts_per_page' => 1,
-		)
-	);
+		);
+
+	$featured_posts = get_posts( $featured_posts_query );
+	if ( ! empty( $featured_posts ) ) {
+		$pid = $featured_posts[0]->ID;
+		if ( ! class_exists( 'Negar_Club_VIP_Products' ) || ! Negar_Club_VIP_Products::is_vip_product( $pid ) ) {
+			$featured_product = function_exists( 'wc_get_product' ) ? wc_get_product( $pid ) : false;
+		}
+	}
 }
 
-$featured_product       = ! empty( $featured_product_posts ) && function_exists( 'wc_get_product' ) ? wc_get_product( $featured_product_posts[0]->ID ) : false;
 $featured_product_link  = $featured_product ? get_permalink( $featured_product->get_id() ) : $shop_link;
-$featured_product_title = $featured_product ? $featured_product->get_name() : __( 'پیشنهاد ویژه امروز', 'negar-shop' );
+$featured_product_title = $featured_product ? $featured_product->get_name() : __( 'پیشنهاد شگفت‌انگیز در دسترس نیست', 'negar-shop' );
 $featured_product_image = $featured_product && $featured_product->get_image_id() ? wp_get_attachment_image_url( $featured_product->get_image_id(), 'woocommerce_thumbnail' ) : ( function_exists( 'wc_placeholder_img_src' ) ? wc_placeholder_img_src( 'woocommerce_thumbnail' ) : '' );
 $featured_regular_price = $featured_product ? (float) $featured_product->get_regular_price() : 0;
 $featured_sale_price    = $featured_product ? (float) $featured_product->get_price() : 0;

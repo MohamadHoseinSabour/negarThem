@@ -45,11 +45,20 @@ function negar_shop_ajax_search_callback() {
 			);
 		}
 
+		if ( function_exists( 'negar_theme_catalog_visibility_query_args' ) ) {
+			$query_args = negar_theme_catalog_visibility_query_args( $query_args, 'search' );
+		}
+
 		$search_query = new WP_Query( $query_args );
 
 		if ( $search_query->have_posts() ) {
 			while ( $search_query->have_posts() ) {
 				$search_query->the_post();
+
+				if ( class_exists( 'Negar_Club_VIP_Products' ) && Negar_Club_VIP_Products::is_vip_product( get_the_ID() ) ) {
+					continue;
+				}
+
 				global $product;
 				if ( ! is_a( $product, 'WC_Product' ) ) {
 					$product = wc_get_product( get_the_ID() );

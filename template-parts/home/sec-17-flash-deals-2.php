@@ -30,15 +30,27 @@ $target_keywords = array( 'HD9280', 'ECM2026', 'BS-1111', 'BGL8GOLDIR', 'HR7778'
 $sec17_products  = array();
 
 foreach ( $target_keywords as $keyword ) {
-	$matched_posts = get_posts( array(
-		'post_type'      => 'product',
-		'posts_per_page' => 1,
-		'post_status'    => 'publish',
-		's'              => $keyword,
-	) );
+	$matched_query = function_exists( 'negar_theme_catalog_visibility_query_args' )
+		? negar_theme_catalog_visibility_query_args(
+			array(
+				'post_type'      => 'product',
+				'posts_per_page' => 1,
+				'post_status'    => 'publish',
+				's'              => $keyword,
+			),
+			'search'
+		)
+		: array(
+			'post_type'      => 'product',
+			'posts_per_page' => 1,
+			'post_status'    => 'publish',
+			's'              => $keyword,
+		);
+
+	$matched_posts = get_posts( $matched_query );
 	if ( ! empty( $matched_posts ) ) {
 		$p_obj = wc_get_product( $matched_posts[0]->ID );
-		if ( $p_obj && $p_obj->is_visible() ) {
+		if ( $p_obj && $p_obj->is_visible() && ( ! class_exists( 'Negar_Club_VIP_Products' ) || ! Negar_Club_VIP_Products::is_vip_product( $p_obj->get_id() ) ) ) {
 			$sec17_products[] = $p_obj;
 		}
 	}
@@ -48,15 +60,16 @@ foreach ( $target_keywords as $keyword ) {
 if ( empty( $sec17_products ) ) {
 	$sec17_products = array_filter( wc_get_products(
 		array(
-			'status'  => 'publish',
-			'limit'   => 8,
-			'on_sale' => true,
-			'orderby' => 'date',
-			'order'   => 'ASC',
-			'return'  => 'objects',
+			'status'     => 'publish',
+			'limit'      => 8,
+			'visibility' => 'catalog',
+			'on_sale'    => true,
+			'orderby'    => 'date',
+			'order'      => 'ASC',
+			'return'     => 'objects',
 		)
 	), static function ( $p ) {
-		return $p && $p->is_visible();
+		return $p && $p->is_visible() && ( ! class_exists( 'Negar_Club_VIP_Products' ) || ! Negar_Club_VIP_Products::is_vip_product( $p->get_id() ) );
 	} );
 }
 

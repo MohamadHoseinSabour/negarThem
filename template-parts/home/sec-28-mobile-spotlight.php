@@ -22,14 +22,18 @@ $focal_product = function_exists( 'negar_theme_product_pack_product' )
 if ( ! $focal_product && function_exists( 'wc_get_products' ) ) {
 	$fallback_prods = wc_get_products(
 		array(
-			'status'  => 'publish',
-			'limit'   => 1,
-			'orderby' => 'date',
-			'order'   => 'DESC',
+			'status'     => 'publish',
+			'limit'      => 5,
+			'visibility' => 'catalog',
+			'orderby'    => 'date',
+			'order'      => 'DESC',
 		)
 	);
-	if ( ! empty( $fallback_prods ) ) {
-		$focal_product = $fallback_prods[0];
+	foreach ( $fallback_prods as $candidate ) {
+		if ( ! class_exists( 'Negar_Club_VIP_Products' ) || ! Negar_Club_VIP_Products::is_vip_product( $candidate->get_id() ) ) {
+			$focal_product = $candidate;
+			break;
+		}
 	}
 }
 
