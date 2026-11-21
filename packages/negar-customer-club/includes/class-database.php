@@ -16,7 +16,7 @@ class Negar_Club_Database {
 	/**
 	 * Database schema version.
 	 */
-	const DB_VERSION = '1.2.0';
+	const DB_VERSION = '1.3.0';
 
 	/**
 	 * Get dynamic table name with test prefix support for isolated execution.
@@ -132,12 +132,35 @@ class Negar_Club_Database {
 
 		dbDelta( $sql_memberships );
 
-		// Strict verification of table creation before recording success (Fix D)
-		$app_exists   = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table_applications ) );
-		$audit_exists = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table_audit_log ) );
-		$mem_exists   = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table_memberships ) );
+		// 4. Table: wp_negar_club_operation_tokens (Durable DB-level Idempotency)
+		$table_tokens = self::get_table_name( 'operation_tokens' );
+		$sql_tokens   = "CREATE TABLE {$table_tokens} (
+  id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  token varchar(64) NOT NULL,
+  action varchar(48) NOT NULL,
+  membership_id bigint(20) unsigned NOT NULL,
+  actor_id bigint(20) unsigned NOT NULL DEFAULT 0,
+  created_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY  (id),
+  UNIQUE KEY uq_op_token (token),
+  KEY ix_mem_action (membership_id, action)
+) {$charset_collate};";
 
-		if ( $app_exists === $table_applications && $audit_exists === $table_audit_log && $mem_exists === $table_memberships ) {
+		dbDelta( $sql_tokens );
+
+		// Ensure InnoDB storage engine for ACID transactions and row-level locking support
+		$all_club_tables = array( $table_applications, $table_audit_log, $table_memberships, $table_tokens );
+		foreach ( $all_club_tables as $tbl ) {
+			$wpdb->query( "ALTER TABLE `{$tbl}` ENGINE = InnoDB" );
+		}
+
+		// Strict verification of table creation before recording success (Fix D)
+		$app_exists    = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table_applications ) );
+		$audit_exists  = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table_audit_log ) );
+		$mem_exists    = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table_memberships ) );
+		$tokens_exists = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table_tokens ) );
+
+		if ( $app_exists === $table_applications && $audit_exists === $table_audit_log && $mem_exists === $table_memberships && $tokens_exists === $table_tokens ) {
 			if ( ! defined( 'NEGAR_CLUB_TEST_PREFIX' ) ) {
 				update_option( 'negar_club_db_version', self::DB_VERSION );
 			}
@@ -187,17 +210,82 @@ class Negar_Club_Database {
 	/**
 	 * Check if a submission token has already been processed (idempotency).
 	 *
+	 * Checks transient fast cache and durable database unique records.
+	 *
 	 * @param string $token Unique submission token.
 	 * @return bool True if already processed.
 	 */
 	public static function is_submission_token_used( $token ) {
+		global $wpdb;
+
 		$token = sanitize_text_field( $token );
 		if ( empty( $token ) ) {
 			return false;
 		}
 
+		// Fast transient cache check
 		$used = get_transient( 'negar_club_subtoken_' . $token );
-		return ! empty( $used );
+		if ( ! empty( $used ) ) {
+			return true;
+		}
+
+		// Persistent DB table check
+		$table = self::get_table_name( 'operation_tokens' );
+		$found = $wpdb->get_var( $wpdb->prepare( "SELECT id FROM `{$table}` WHERE token = %s LIMIT 1", $token ) );
+
+		return ! empty( $found );
+	}
+
+	/**
+	 * Atomically claim an operation token within the current database transaction.
+	 *
+	 * Uses database UNIQUE constraint on `token` to prevent concurrent execution.
+	 *
+	 * @param string $token         Unique submission token.
+	 * @param string $action        Action being performed.
+	 * @param int    $membership_id Membership row ID.
+	 * @param int    $actor_id      Operator user ID.
+	 * @throws Exception If token is missing, already used, or DB duplicate constraint triggers.
+	 * @return bool True if successfully claimed.
+	 */
+	public static function claim_operation_token( $token, $action = '', $membership_id = 0, $actor_id = 0 ) {
+		global $wpdb;
+
+		$token = sanitize_text_field( $token );
+		if ( empty( $token ) ) {
+			throw new Exception( 'توکن یکتای ارسال عملیات الزامی است و نمی‌تواند خالی باشد.' );
+		}
+
+		$table = self::get_table_name( 'operation_tokens' );
+
+		// Check fast cache first
+		if ( self::is_submission_token_used( $token ) ) {
+			throw new Exception( 'این عملیات قبلاً ارسال و پردازش شده است (توکن تکراری).' );
+		}
+
+		// Insert token into database inside current transaction
+		$suppress = $wpdb->suppress_errors( true );
+		$inserted = $wpdb->insert(
+			$table,
+			array(
+				'token'         => $token,
+				'action'        => sanitize_key( $action ),
+				'membership_id' => (int) $membership_id,
+				'actor_id'      => (int) $actor_id,
+				'created_at'    => current_time( 'mysql' ),
+			),
+			array( '%s', '%s', '%d', '%d', '%s' )
+		);
+		$wpdb->suppress_errors( $suppress );
+
+		if ( false === $inserted ) {
+			throw new Exception( 'این عملیات قبلاً ارسال و پردازش شده است (خطای انحصار توکن در پایگاه داده).' );
+		}
+
+		// Fast transient cache
+		self::record_submission_token( $token, $actor_id );
+
+		return true;
 	}
 
 	/**
@@ -432,6 +520,13 @@ class Negar_Club_Database {
 	 */
 	public static function log_audit( $entity_type, $entity_id, $event_action, $old_state = null, $new_state = null, $actor_id = null, $context_note = '' ) {
 		global $wpdb;
+
+		if ( function_exists( 'apply_filters' ) ) {
+			$mock_result = apply_filters( 'negar_club_log_audit_result', null, $entity_type, $entity_id, $event_action );
+			if ( null !== $mock_result ) {
+				return $mock_result;
+			}
+		}
 
 		$table_audit_log = self::get_table_name( 'audit_log' );
 

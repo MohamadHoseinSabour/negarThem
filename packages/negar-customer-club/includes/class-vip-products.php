@@ -162,11 +162,16 @@ class Negar_Club_VIP_Products {
 	 * Validate that a product is a suitable simple virtual VIP product.
 	 *
 	 * Must be:
-	 * 1. Simple product.
-	 * 2. Virtual.
-	 * 3. Not downloadable.
-	 * 4. Published (not trash, draft, etc.).
-	 * 5. Mapped with _negar_club_plan_id.
+	 * 1. Valid WooCommerce product object.
+	 * 2. Simple product.
+	 * 3. Virtual.
+	 * 4. Not downloadable.
+	 * 5. Published status.
+	 * 6. Mapped to an authorized plan ('negar_aghaz', 'negar_plus', 'negar_vizhe').
+	 * 7. Price matches the plan's defined prepayment amount.
+	 *
+	 * Production validation fails closed (returns false) if any check fails.
+	 * Unit and integration tests may override via 'negar_club_is_valid_vip_product' filter.
 	 *
 	 * @param int $product_id WooCommerce product ID.
 	 * @return bool True if valid VIP product.
@@ -181,17 +186,27 @@ class Negar_Club_VIP_Products {
 		if ( function_exists( 'wc_get_product' ) ) {
 			$product = wc_get_product( $product_id );
 			if ( $product ) {
-				$is_valid = ( ! method_exists( $product, 'is_type' ) || $product->is_type( 'simple' ) )
-					&& ( ! method_exists( $product, 'is_virtual' ) || $product->is_virtual() )
-					&& ( ! method_exists( $product, 'is_downloadable' ) || ! $product->is_downloadable() )
-					&& ( ! method_exists( $product, 'get_status' ) || 'publish' === $product->get_status() )
-					&& '' !== self::get_product_plan_id( $product_id );
-			}
-		}
+				$plan_id            = self::get_product_plan_id( $product_id );
+				$valid_plans        = array( 'negar_aghaz', 'negar_plus', 'negar_vizhe' );
+				$is_plan_authorized = in_array( $plan_id, $valid_plans, true );
 
-		// If product object is not present in DB (e.g. test fixture), fallback to plan meta check
-		if ( ! $is_valid && '' !== self::get_product_plan_id( $product_id ) ) {
-			$is_valid = true;
+				$configs        = self::get_plan_configs( $plan_id );
+				$expected_price = isset( $configs['prepayment'] ) ? (int) $configs['prepayment'] : 0;
+				$actual_price   = method_exists( $product, 'get_price' ) ? (int) $product->get_price() : 0;
+
+				$is_simple       = method_exists( $product, 'is_type' ) ? $product->is_type( 'simple' ) : false;
+				$is_virtual      = method_exists( $product, 'is_virtual' ) && $product->is_virtual();
+				$is_downloadable = method_exists( $product, 'is_downloadable' ) && $product->is_downloadable();
+				$is_published    = method_exists( $product, 'get_status' ) ? ( 'publish' === $product->get_status() ) : ( 'publish' === get_post_status( $product_id ) );
+				$price_matches   = ( $expected_price > 0 && $actual_price === $expected_price );
+
+				$is_valid = $is_plan_authorized
+					&& $is_simple
+					&& $is_virtual
+					&& ! $is_downloadable
+					&& $is_published
+					&& $price_matches;
+			}
 		}
 
 		if ( function_exists( 'apply_filters' ) ) {

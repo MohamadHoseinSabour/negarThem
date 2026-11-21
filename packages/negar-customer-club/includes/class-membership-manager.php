@@ -132,8 +132,13 @@ class Negar_Club_Membership_Manager {
 		// For deferred/offline methods (bacs, cheque, cod), require explicit completed status and confirmed receipt
 		$deferred_gateways = array( 'bacs', 'cheque', 'cod' );
 		if ( in_array( $payment_method, $deferred_gateways, true ) ) {
-			if ( 'completed' !== $status ) {
-				return false; // Cash has not been physically collected yet
+			$has_offline_receipt = ( method_exists( $order, 'is_paid' ) && $order->is_paid() )
+				|| ( method_exists( $order, 'get_date_paid' ) && ! empty( $order->get_date_paid() ) )
+				|| ( method_exists( $order, 'get_transaction_id' ) && ! empty( $order->get_transaction_id() ) )
+				|| ( method_exists( $order, 'get_meta' ) && (bool) $order->get_meta( '_negar_club_offline_receipt_confirmed' ) );
+
+			if ( 'completed' !== $status || ! $has_offline_receipt ) {
+				return false; // Cash has not been physically collected and verified yet
 			}
 		} else {
 			// Online/electronic gateway: must be confirmed paid (is_paid or date_paid present)
@@ -210,9 +215,12 @@ class Negar_Club_Membership_Manager {
 			return false;
 		}
 
-		// If line item total is 0, fallback to order total
+		// Prepayment amount calculation: never credit more customer prepayment than verified paid
+		$order_total = method_exists( $order, 'get_total' ) ? (int) $order->get_total() : (int) ( $order->total ?? 0 );
 		if ( $prepayment_amount <= 0 ) {
-			$prepayment_amount = (int) $order->get_total();
+			$prepayment_amount = $order_total;
+		} else {
+			$prepayment_amount = min( $prepayment_amount, $order_total );
 		}
 
 		if ( $prepayment_amount <= 0 ) {
@@ -285,9 +293,6 @@ class Negar_Club_Membership_Manager {
 			$membership_status = 'active';
 			$membership_notes  = sprintf( 'فعال‌سازی خودکار اشتراک VIP پس از تایید پرداخت سفارش ووکامرس #%d', $order_id );
 		}
-		$membership_notes  = $active_mem
-			? sprintf( 'خرید مجدد اشتراک VIP در حالی که مشتری دارای اشتراک فعال #%d است. نیازمند بررسی و ادغام دستی اپراتور.', (int) $active_mem->id )
-			: sprintf( 'فعال‌سازی خودکار اشتراک VIP پس از تایید پرداخت سفارش ووکامرس #%d', $order_id );
 
 		$membership_data = array(
 			'customer_id'                 => $customer_id,

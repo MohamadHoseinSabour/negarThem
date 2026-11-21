@@ -157,7 +157,12 @@ class Negar_Club_Admin_Memberships {
 
 		// Idempotency token check (Fix B): Prevent duplicate resubmission
 		$submission_token = sanitize_text_field( (string) ( $_POST['negar_club_submission_token'] ?? '' ) );
-		if ( ! empty( $submission_token ) && Negar_Club_Database::is_submission_token_used( $submission_token ) ) {
+		if ( empty( $submission_token ) ) {
+			add_settings_error( 'negar_club_membership_notices', 'missing_submission_token', 'توکن یکتای ارسال عملیات الزامی است و نمی‌تواند خالی باشد.', 'error' );
+			return;
+		}
+
+		if ( Negar_Club_Database::is_submission_token_used( $submission_token ) ) {
 			add_settings_error( 'negar_club_membership_notices', 'duplicate_submission', 'این عملیات قبلاً ارسال و پردازش شده است. جهت جلوگیری از دوباره‌کاری، درخواست تکراری مسدود شد.', 'error' );
 			return;
 		}
@@ -170,6 +175,9 @@ class Negar_Club_Admin_Memberships {
 			if ( ! $membership ) {
 				throw new Exception( 'عضویت مورد نظر یافت نشد.' );
 			}
+
+			// Durable DB claim for idempotency inside the transaction
+			Negar_Club_Database::claim_operation_token( $submission_token, $action, $membership_id, $operator_id );
 
 			$old_state = (array) $membership;
 
@@ -240,7 +248,7 @@ class Negar_Club_Admin_Memberships {
 						throw new Exception( 'خطا در ثبت اطلاعات خرید در پایگاه داده.' );
 					}
 
-					Negar_Club_Database::log_audit(
+					$audit_id = Negar_Club_Database::log_audit(
 						'club_membership',
 						$membership_id,
 						'membership:record_purchase',
@@ -255,6 +263,10 @@ class Negar_Club_Admin_Memberships {
 						$operator_id,
 						$reason
 					);
+
+					if ( false === $audit_id ) {
+						throw new Exception( 'خطا در ثبت لاگ ممیزی عملیات در پایگاه داده.' );
+					}
 
 					if ( ! empty( $submission_token ) ) {
 						Negar_Club_Database::record_submission_token( $submission_token, $operator_id );
@@ -299,7 +311,7 @@ class Negar_Club_Admin_Memberships {
 						throw new Exception( 'خطا در ثبت کسر بیعانه در پایگاه داده.' );
 					}
 
-					Negar_Club_Database::log_audit(
+					$audit_id = Negar_Club_Database::log_audit(
 						'club_membership',
 						$membership_id,
 						'membership:apply_deposit',
@@ -308,6 +320,10 @@ class Negar_Club_Admin_Memberships {
 						$operator_id,
 						$reason
 					);
+
+					if ( false === $audit_id ) {
+						throw new Exception( 'خطا در ثبت لاگ ممیزی عملیات در پایگاه داده.' );
+					}
 
 					if ( ! empty( $submission_token ) ) {
 						Negar_Club_Database::record_submission_token( $submission_token, $operator_id );
@@ -354,7 +370,7 @@ class Negar_Club_Admin_Memberships {
 						throw new Exception( 'خطا در ثبت وصول قسط در پایگاه داده.' );
 					}
 
-					Negar_Club_Database::log_audit(
+					$audit_id = Negar_Club_Database::log_audit(
 						'club_membership',
 						$membership_id,
 						'membership:record_collection',
@@ -363,6 +379,10 @@ class Negar_Club_Admin_Memberships {
 						$operator_id,
 						$reason
 					);
+
+					if ( false === $audit_id ) {
+						throw new Exception( 'خطا در ثبت لاگ ممیزی عملیات در پایگاه داده.' );
+					}
 
 					if ( ! empty( $submission_token ) ) {
 						Negar_Club_Database::record_submission_token( $submission_token, $operator_id );
@@ -414,7 +434,7 @@ class Negar_Club_Admin_Memberships {
 						throw new Exception( 'خطا در ثبت تنظیمات دستی ترازها در پایگاه داده.' );
 					}
 
-					Negar_Club_Database::log_audit(
+					$audit_id = Negar_Club_Database::log_audit(
 						'club_membership',
 						$membership_id,
 						'membership:adjust_balances',
@@ -428,6 +448,10 @@ class Negar_Club_Admin_Memberships {
 						$operator_id,
 						$reason
 					);
+
+					if ( false === $audit_id ) {
+						throw new Exception( 'خطا در ثبت لاگ ممیزی عملیات در پایگاه داده.' );
+					}
 
 					if ( ! empty( $submission_token ) ) {
 						Negar_Club_Database::record_submission_token( $submission_token, $operator_id );
@@ -446,6 +470,16 @@ class Negar_Club_Admin_Memberships {
 					$new_unused_dep  = self::validate_monetary_input( $_POST['new_unused_deposit'] ?? null, 'مانده پیش‌پرداخت آزاد', true );
 					$new_applied_dep = self::validate_monetary_input( $_POST['new_applied_deposit'] ?? null, 'پیش‌پرداخت کسر شده', true );
 
+					// Prepayment conservation invariant: applied + unused <= verified prepayment
+					if ( ( $new_unused_dep + $new_applied_dep ) > (int) $membership->prepayment_amount ) {
+						throw new Exception( sprintf(
+							'مجموع بیعانه آزاد (%s تومان) و مصرف‌شده (%s تومان) نمی‌تواند از کل پیش‌پرداخت تایید شده مشتری (%s تومان) بیشتر باشد.',
+							number_format( $new_unused_dep ),
+							number_format( $new_applied_dep ),
+							number_format( (int) $membership->prepayment_amount )
+						) );
+					}
+
 					$updated = Negar_Club_Database::update_membership(
 						$membership_id,
 						array(
@@ -460,7 +494,7 @@ class Negar_Club_Admin_Memberships {
 						throw new Exception( 'خطا در ثبت اصلاح حسابداری در پایگاه داده.' );
 					}
 
-					Negar_Club_Database::log_audit(
+					$audit_id = Negar_Club_Database::log_audit(
 						'club_membership',
 						$membership_id,
 						'membership:exceptional_correction',
@@ -474,6 +508,10 @@ class Negar_Club_Admin_Memberships {
 						$operator_id,
 						$reason
 					);
+
+					if ( false === $audit_id ) {
+						throw new Exception( 'خطا در ثبت لاگ ممیزی عملیات در پایگاه داده.' );
+					}
 
 					if ( ! empty( $submission_token ) ) {
 						Negar_Club_Database::record_submission_token( $submission_token, $operator_id );
