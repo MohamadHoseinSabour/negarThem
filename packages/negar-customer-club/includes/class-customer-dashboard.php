@@ -32,9 +32,11 @@ class Negar_Club_Customer_Dashboard {
 
 	/**
 	 * Register custom rewrite endpoint.
+	 *
+	 * Scoped strictly to EP_PAGES to avoid colliding with the public /customer-club/ root page.
 	 */
 	public static function add_endpoints() {
-		add_rewrite_endpoint( self::ENDPOINT, EP_ROOT | EP_PAGES );
+		add_rewrite_endpoint( self::ENDPOINT, EP_PAGES );
 	}
 
 	/**

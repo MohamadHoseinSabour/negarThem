@@ -197,35 +197,133 @@ function negar_theme_ensure_club_option() {
 add_action( 'admin_init', 'negar_theme_ensure_club_option', 20 );
 
 /**
- * Ensure customer club page exists in WordPress and is linked to the template.
+ * Ensure customer club page exists in WordPress, is published, and is linked to the template.
  *
- * @return int Page ID.
+ * Idempotent: Checks recorded page ID and slug, prevents duplicate creation,
+ * restores trashed/draft status to publish, and assigns the custom page template.
+ *
+ * @return int Page ID, or 0 on failure.
  */
 function negar_theme_ensure_club_page() {
+	// 1. Check if we already have a recorded page ID that exists and is not trashed
+	$page_id = (int) get_option( 'negar_theme_club_page_id', 0 );
+	if ( $page_id > 0 ) {
+		$page = get_post( $page_id );
+		if ( $page && 'page' === $page->post_type && 'trash' !== $page->post_status ) {
+			if ( 'customer-club' !== $page->post_name ) {
+				wp_update_post(
+					array(
+						'ID'        => $page->ID,
+						'post_name' => 'customer-club',
+					)
+				);
+			}
+			if ( 'publish' !== $page->post_status ) {
+				wp_update_post(
+					array(
+						'ID'          => $page->ID,
+						'post_status' => 'publish',
+					)
+				);
+			}
+			if ( 'page-templates/page-customer-club.php' !== get_post_meta( $page->ID, '_wp_page_template', true ) ) {
+				update_post_meta( $page->ID, '_wp_page_template', 'page-templates/page-customer-club.php' );
+			}
+			return (int) $page->ID;
+		}
+	}
+
+	// 2. Query by path/slug across all non-trash pages
 	$page = get_page_by_path( 'customer-club' );
 	if ( ! $page ) {
-		$page_id = wp_insert_post(
-			array(
-				'post_title'     => __( 'باشگاه مشتریان و خرید اقساطی', 'negar-shop' ),
-				'post_name'      => 'customer-club',
-				'post_status'    => 'publish',
-				'post_type'      => 'page',
-				'comment_status' => 'closed',
+		global $wpdb;
+		$existing_id = (int) $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT ID FROM {$wpdb->posts} WHERE post_name = %s AND post_type = 'page' AND post_status != 'trash' LIMIT 1",
+				'customer-club'
 			)
 		);
-		if ( $page_id && ! is_wp_error( $page_id ) ) {
-			update_post_meta( $page_id, '_wp_page_template', 'page-templates/page-customer-club.php' );
-			return (int) $page_id;
+		if ( $existing_id > 0 ) {
+			$page = get_post( $existing_id );
 		}
-		return 0;
 	}
 
-	if ( 'page-templates/page-customer-club.php' !== get_post_meta( $page->ID, '_wp_page_template', true ) ) {
-		update_post_meta( $page->ID, '_wp_page_template', 'page-templates/page-customer-club.php' );
+	if ( $page && 'trash' !== $page->post_status ) {
+		if ( 'publish' !== $page->post_status ) {
+			wp_update_post(
+				array(
+					'ID'          => $page->ID,
+					'post_status' => 'publish',
+				)
+			);
+		}
+		if ( 'page-templates/page-customer-club.php' !== get_post_meta( $page->ID, '_wp_page_template', true ) ) {
+			update_post_meta( $page->ID, '_wp_page_template', 'page-templates/page-customer-club.php' );
+		}
+		update_option( 'negar_theme_club_page_id', (int) $page->ID, false );
+		return (int) $page->ID;
 	}
 
-	return (int) $page->ID;
+	// 3. Create fresh page if non-existent
+	$new_id = wp_insert_post(
+		array(
+			'post_title'     => __( 'باشگاه مشتریان و خرید اقساطی', 'negar-shop' ),
+			'post_name'      => 'customer-club',
+			'post_status'    => 'publish',
+			'post_type'      => 'page',
+			'comment_status' => 'closed',
+		)
+	);
+
+	if ( $new_id && ! is_wp_error( $new_id ) ) {
+		update_post_meta( $new_id, '_wp_page_template', 'page-templates/page-customer-club.php' );
+		update_option( 'negar_theme_club_page_id', (int) $new_id, false );
+		return (int) $new_id;
+	}
+
+	return 0;
 }
+
+/**
+ * Routine executed when theme is switched / activated.
+ *
+ * Ensures customer club option, creates the page if missing, and flushes rewrite rules once.
+ *
+ * @return void
+ */
+function negar_theme_club_on_theme_activation() {
+	negar_theme_ensure_club_option();
+	$page_id = negar_theme_ensure_club_page();
+	if ( $page_id > 0 ) {
+		flush_rewrite_rules( false );
+	}
+	update_option( 'negar_theme_club_setup_version', NEGAR_THEME_CLUB_VERSION, false );
+}
+add_action( 'after_switch_theme', 'negar_theme_club_on_theme_activation' );
+
+/**
+ * Versioned setup routine for existing installations or updates.
+ *
+ * Executes on admin_init, checks if the version has changed or the page is missing.
+ * Flushes rewrite rules strictly once on version transition, never on every request.
+ *
+ * @return void
+ */
+function negar_theme_club_versioned_setup() {
+	$current_setup_version = get_option( 'negar_theme_club_setup_version', '' );
+	$page_id               = (int) get_option( 'negar_theme_club_page_id', 0 );
+	$page_missing          = ( $page_id <= 0 || ! get_post( $page_id ) );
+
+	if ( version_compare( $current_setup_version, NEGAR_THEME_CLUB_VERSION, '<' ) || $page_missing ) {
+		negar_theme_ensure_club_option();
+		$ensured_id = negar_theme_ensure_club_page();
+		if ( $ensured_id > 0 ) {
+			flush_rewrite_rules( false );
+		}
+		update_option( 'negar_theme_club_setup_version', NEGAR_THEME_CLUB_VERSION, false );
+	}
+}
+add_action( 'admin_init', 'negar_theme_club_versioned_setup', 15 );
 
 /**
  * Filter template_include to route /customer-club/ to page-templates/page-customer-club.php.
