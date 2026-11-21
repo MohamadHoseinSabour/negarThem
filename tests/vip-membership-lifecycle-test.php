@@ -243,6 +243,7 @@ try {
 					public function get_status() { return 'completed'; }
 					public function get_payment_method() { return 'online_gateway'; }
 					public function is_paid() { return true; }
+					public function get_transaction_id() { return 'TRX-ONLINE-99901'; }
 					public function get_date_paid() { return current_time( 'mysql' ); }
 					public function get_customer_id() { return $this->uid; }
 					public function get_total() { return 5000000; }
@@ -351,9 +352,19 @@ try {
 			return $order;
 		};
 		add_filter( 'negar_club_get_order', $order_status_only, 10, 2 );
+		$postmeta_filter = function( $meta, $object_id, $meta_key ) {
+			if ( 88882 === (int) $object_id && Negar_Club_VIP_Products::META_KEY_PLAN_ID === $meta_key ) {
+				return 'negar_plus';
+			}
+			return $meta;
+		};
+		add_filter( 'get_post_metadata', $postmeta_filter, 10, 3 );
 		$res_status_only = Negar_Club_Membership_Manager::process_paid_order( $status_only_id );
 		remove_filter( 'negar_club_get_order', $order_status_only );
-		assert_vip_false( $res_status_only, 'Status-only completed BACS order without receipt confirmation must not activate' );
+		remove_filter( 'get_post_metadata', $postmeta_filter );
+		assert_vip_true( $res_status_only > 0, 'Status-only completed BACS order must create pending review membership' );
+		$mem_status_only = Negar_Club_Database::get_membership( $res_status_only );
+		assert_vip_equals( 'pending_operator_review', $mem_status_only->status, 'Status-only completed BACS order without receipt confirmation must not activate (must be pending_operator_review)' );
 
 		// 2C: Completed BACS order WITH verified offline receipt
 		$confirmed_bacs_id = 999904;
@@ -759,6 +770,7 @@ try {
 					public function get_status() { return 'completed'; }
 					public function get_payment_method() { return 'online_gateway'; }
 					public function is_paid() { return true; }
+					public function get_transaction_id() { return 'TRX-ONLINE-99910'; }
 					public function get_date_paid() { return current_time( 'mysql' ); }
 					public function get_customer_id() { return $this->uid; }
 					public function get_total() { return 5000000; }
@@ -853,6 +865,110 @@ try {
 
 		remove_filter( 'negar_club_get_order', $paid_filter );
 		remove_filter( 'get_post_metadata', $meta_filter );
+		remove_filter( 'user_has_cap', $role_filter );
+		$_POST    = array();
+		$_REQUEST = array();
+	} );
+
+	// Scenario 11: Partial refund blocks deposit usage
+	run_vip_test( 'Scenario 11: Partial refund sets refunded_pending_reconciliation and blocks deposit usage', function() use ( $test_order_id, $created_membership_id ) {
+		// Reset status to active temporarily
+		Negar_Club_Database::update_membership( $created_membership_id, array( 'status' => 'active' ) );
+
+		Negar_Club_Membership_Manager::handle_order_partially_refunded( $test_order_id, 101 );
+		$mem = Negar_Club_Database::get_membership( $created_membership_id );
+		assert_vip_equals( 'refunded_pending_reconciliation', $mem->status, 'Partial refund must transition status to refunded_pending_reconciliation' );
+	} );
+
+	// Scenario 12: Reactivating refunded membership via ordinary status edit without admin capability is blocked
+	run_vip_test( 'Scenario 12: Reactivating refunded membership via ordinary status edit without admin capability is blocked', function() use ( $created_membership_id ) {
+		wp_set_current_user( 1 );
+		$operator_only_filter = function( $allcaps ) {
+			$allcaps['negar_club_operator'] = true;
+			$allcaps['manage_options']     = false;
+			return $allcaps;
+		};
+		add_filter( 'user_has_cap', $operator_only_filter );
+
+		$_POST = array(
+			'negar_club_membership_action' => 'adjust_balances',
+			'negar_club_membership_nonce'  => wp_create_nonce( 'negar_club_operator_membership_action' ),
+			'membership_id'                => $created_membership_id,
+			'negar_club_submission_token'  => wp_generate_uuid4(),
+			'status'                       => 'active', // Attempting to reactivate without admin
+			'reason'                       => 'تلاش فعال‌سازی مجدد عضویت مستردشده توسط اپراتور عادی',
+		);
+		$_REQUEST = $_POST;
+
+		Negar_Club_Admin_Memberships::handle_admin_actions();
+
+		$mem = Negar_Club_Database::get_membership( $created_membership_id );
+		assert_vip_equals( 'refunded_pending_reconciliation', $mem->status, 'Status must remain refunded_pending_reconciliation' );
+
+		remove_filter( 'user_has_cap', $operator_only_filter );
+		$_POST    = array();
+		$_REQUEST = array();
+	} );
+
+	// Scenario 13: Operator confirmation action with receipt reference activates pending review membership
+	run_vip_test( 'Scenario 13: Operator confirmation action with receipt reference activates pending review membership', function() use ( $created_membership_id ) {
+		wp_set_current_user( 1 );
+		$role_filter = function( $allcaps ) {
+			$allcaps['negar_club_operator'] = true;
+			return $allcaps;
+		};
+		add_filter( 'user_has_cap', $role_filter );
+
+		// Set status to pending_operator_review
+		Negar_Club_Database::update_membership( $created_membership_id, array( 'status' => 'pending_operator_review' ) );
+
+		$_POST = array(
+			'negar_club_membership_action' => 'confirm_receipt_and_activate',
+			'negar_club_membership_nonce'  => wp_create_nonce( 'negar_club_operator_membership_action' ),
+			'membership_id'                => $created_membership_id,
+			'negar_club_submission_token'  => wp_generate_uuid4(),
+			'receipt_ref'                  => 'BANK-SLIP-77312',
+			'reason'                       => 'تایید فیش واریز بانکی و فعال‌سازی اشتراک',
+		);
+		$_REQUEST = $_POST;
+
+		Negar_Club_Admin_Memberships::handle_admin_actions();
+
+		$mem = Negar_Club_Database::get_membership( $created_membership_id );
+		assert_vip_equals( 'active', $mem->status, 'confirm_receipt_and_activate must transition status to active' );
+		assert_vip_true( false !== strpos( $mem->notes, 'BANK-SLIP-77312' ), 'Receipt reference must be recorded in membership notes' );
+
+		remove_filter( 'user_has_cap', $role_filter );
+		$_POST    = array();
+		$_REQUEST = array();
+	} );
+
+	// Scenario 14: Adjusting term_months and valid_until in adjust_balances
+	run_vip_test( 'Scenario 14: Adjusting term_months and valid_until updates membership record', function() use ( $created_membership_id ) {
+		wp_set_current_user( 1 );
+		$role_filter = function( $allcaps ) {
+			$allcaps['negar_club_operator'] = true;
+			return $allcaps;
+		};
+		add_filter( 'user_has_cap', $role_filter );
+
+		$_POST = array(
+			'negar_club_membership_action' => 'adjust_balances',
+			'negar_club_membership_nonce'  => wp_create_nonce( 'negar_club_operator_membership_action' ),
+			'membership_id'                => $created_membership_id,
+			'negar_club_submission_token'  => wp_generate_uuid4(),
+			'term_months'                  => '6',
+			'valid_until'                  => '2027-06-01 00:00:00',
+			'reason'                       => 'تمدید ۳ ماهه تشویقی اعتبار',
+		);
+		$_REQUEST = $_POST;
+
+		Negar_Club_Admin_Memberships::handle_admin_actions();
+
+		$mem = Negar_Club_Database::get_membership( $created_membership_id );
+		assert_vip_equals( 6, (int) $mem->term_months, 'term_months must be updated to 6' );
+		assert_vip_equals( '2027-06-01 00:00:00', $mem->valid_until, 'valid_until must be updated to 2027-06-01 00:00:00' );
+
 		remove_filter( 'user_has_cap', $role_filter );
 		$_POST    = array();
 		$_REQUEST = array();

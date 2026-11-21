@@ -25,6 +25,7 @@ class Negar_Club_Customer_Dashboard {
 	public static function init() {
 		add_action( 'init', array( __CLASS__, 'add_endpoints' ) );
 		add_filter( 'query_vars', array( __CLASS__, 'add_query_vars' ), 0 );
+		add_filter( 'woocommerce_get_query_vars', array( __CLASS__, 'add_wc_query_vars' ) );
 		add_filter( 'woocommerce_account_menu_items', array( __CLASS__, 'add_menu_item' ), 40 );
 		add_action( 'woocommerce_account_' . self::ENDPOINT . '_endpoint', array( __CLASS__, 'render_dashboard_endpoint' ) );
 	}
@@ -34,6 +35,17 @@ class Negar_Club_Customer_Dashboard {
 	 */
 	public static function add_endpoints() {
 		add_rewrite_endpoint( self::ENDPOINT, EP_ROOT | EP_PAGES );
+	}
+
+	/**
+	 * Add endpoint to WooCommerce query variables.
+	 *
+	 * @param array $vars WooCommerce query vars.
+	 * @return array
+	 */
+	public static function add_wc_query_vars( $vars ) {
+		$vars[ self::ENDPOINT ] = self::ENDPOINT;
+		return $vars;
 	}
 
 	/**

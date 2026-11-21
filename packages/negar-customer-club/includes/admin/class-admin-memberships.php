@@ -117,6 +117,10 @@ class Negar_Club_Admin_Memberships {
 	 * Handle admin form submissions for operator balance adjustments and actions.
 	 */
 	public static function handle_admin_actions() {
+		if ( ! function_exists( 'add_settings_error' ) && defined( 'ABSPATH' ) && file_exists( ABSPATH . 'wp-admin/includes/template.php' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/template.php';
+		}
+
 		if ( ( ! is_admin() && ! defined( 'NEGAR_CLUB_TEST_PREFIX' ) ) || ! isset( $_POST['negar_club_membership_action'] ) ) {
 			return;
 		}
@@ -413,10 +417,25 @@ class Negar_Club_Admin_Memberships {
 						$new_status = $membership->status;
 					}
 
+					// Small Financial Consistency Check: Refunded memberships cannot be reactivated via ordinary status edit without admin reconciliation
+					if ( 'refunded_pending_reconciliation' === $membership->status && 'active' === $new_status ) {
+						if ( ! current_user_can( 'manage_options' ) ) {
+							throw new Exception( 'فعال‌سازی مجدد عضویت مستردشده از طریق تنظیمات عادی مجاز نمی‌باشد و نیازمند بررسی مصالحه حسابداری توسط مدیر ارشد است.' );
+						}
+					}
+
 					// Fix C: Available purchase capacity cannot exceed ceiling
 					if ( $new_capacity > $new_ceiling ) {
 						throw new Exception( sprintf( 'ظرفیت خرید باقیمانده (%s تومان) نمی‌تواند از کل سقف خرید (%s تومان) بیشتر باشد.', number_format( $new_capacity ), number_format( $new_ceiling ) ) );
 					}
+
+					$new_term_months = isset( $_POST['term_months'] ) && '' !== trim( (string) $_POST['term_months'] )
+						? max( 1, (int) $_POST['term_months'] )
+						: (int) $membership->term_months;
+
+					$new_valid_until = ! empty( $_POST['valid_until'] )
+						? sanitize_text_field( (string) $_POST['valid_until'] )
+						: $membership->valid_until;
 
 					$updated = Negar_Club_Database::update_membership(
 						$membership_id,
@@ -424,6 +443,8 @@ class Negar_Club_Admin_Memberships {
 							'purchase_ceiling'            => $new_ceiling,
 							'available_purchase_capacity' => $new_capacity,
 							'offline_debt_amount'         => $new_debt,
+							'term_months'                 => $new_term_months,
+							'valid_until'                 => $new_valid_until,
 							'status'                      => $new_status,
 							'notes'                       => 'تنظیم دستی توسط کارشناس: ' . $reason,
 							'last_operator_id'            => $operator_id,
@@ -519,6 +540,67 @@ class Negar_Club_Admin_Memberships {
 
 					Negar_Club_Database::commit();
 					add_settings_error( 'negar_club_membership_notices', 'correction_success', 'اصلاح استثنایی حسابداری با موفقیت در سوابق ممیزی ثبت گردید.', 'success' );
+					break;
+
+				// 6. Minimal Operator Confirmation Action for Pending Reviews (Fix B)
+				case 'confirm_receipt_and_activate':
+					if ( 'pending_operator_review' !== $membership->status ) {
+						throw new Exception( 'تنها عضویت‌های در وضعیت «نیازمند بررسی» قابل تایید و فعال‌سازی هستند.' );
+					}
+
+					$receipt_ref = sanitize_text_field( (string) ( $_POST['receipt_ref'] ?? '' ) );
+					if ( empty( $receipt_ref ) ) {
+						throw new Exception( 'شماره ارجاع، رسید واریز یا شناسه تراکنش الزامی است.' );
+					}
+
+					$note = sprintf(
+						'تایید رسمی دریافت پیش‌پرداخت و فعال‌سازی عضویت توسط کارشناس. شماره پیگیری/رسید: %s. دلیل: %s',
+						$receipt_ref,
+						$reason
+					);
+
+					$updated = Negar_Club_Database::update_membership(
+						$membership_id,
+						array(
+							'status'           => 'active',
+							'notes'            => $note,
+							'last_operator_id' => $operator_id,
+						)
+					);
+
+					if ( ! $updated ) {
+						throw new Exception( 'خطا در فعال‌سازی عضویت در پایگاه داده.' );
+					}
+
+					$audit_id = Negar_Club_Database::log_audit(
+						'club_membership',
+						$membership_id,
+						'membership:confirm_receipt_and_activate',
+						$old_state,
+						array( 'status' => 'active', 'receipt_ref' => $receipt_ref ),
+						$operator_id,
+						$reason
+					);
+
+					if ( false === $audit_id ) {
+						throw new Exception( 'خطا در ثبت لاگ ممیزی عملیات در پایگاه داده.' );
+					}
+
+					// Update WooCommerce order metadata for persistent audit
+					if ( (int) $membership->order_id > 0 && function_exists( 'wc_get_order' ) ) {
+						$wc_order = wc_get_order( (int) $membership->order_id );
+						if ( $wc_order && method_exists( $wc_order, 'update_meta_data' ) ) {
+							$wc_order->update_meta_data( '_negar_club_offline_receipt_confirmed', $receipt_ref );
+							$wc_order->save();
+						}
+					}
+
+					if ( ! empty( $submission_token ) ) {
+						Negar_Club_Database::record_submission_token( $submission_token, $operator_id );
+					}
+
+					Negar_Club_Database::commit();
+					add_settings_error( 'negar_club_membership_notices', 'confirm_success', 'دریافت وجه پیش‌پرداخت با موفقیت تایید و عضویت VIP فعال گردید.', 'success' );
 					break;
 
 				default:
@@ -794,6 +876,33 @@ class Negar_Club_Admin_Memberships {
 			<h2 style="margin-top: 30px;">اقدامات اپراتور فروشگاه</h2>
 			<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
 
+				<?php if ( 'pending_operator_review' === $mem->status ) : ?>
+					<div class="postbox" style="padding: 15px; grid-column: 1 / -1; border: 1px solid #084298; background: #f0f7ff;">
+						<h3 style="color: #084298; margin-top: 0;">تایید رسید واریز و فعال‌سازی عضویت (بررسی اپراتور)</h3>
+						<p style="color: #444; font-size: 13px;">
+							این عضویت در وضعیت «نیازمند بررسی» قرار دارد. پس از رویت فیش واریز یا شناسه تراکنش معتبر، می‌توانید با ثبت رسید واریزی، عضویت را فعال نمایید.
+						</p>
+						<form method="post" action="">
+							<?php wp_nonce_field( 'negar_club_operator_membership_action', 'negar_club_membership_nonce' ); ?>
+							<input type="hidden" name="negar_club_membership_action" value="confirm_receipt_and_activate">
+							<input type="hidden" name="membership_id" value="<?php echo esc_attr( $mem->id ); ?>">
+							<input type="hidden" name="negar_club_submission_token" value="<?php echo esc_attr( wp_generate_uuid4() ); ?>">
+
+							<table class="form-table">
+								<tr>
+									<th>شماره پیگیری / رسید واریز (الزامی):</th>
+									<td><input type="text" name="receipt_ref" required placeholder="کد پیگیری بانکی یا فیش واریزی" class="regular-text"></td>
+								</tr>
+								<tr>
+									<th>توضیحات کارشناس (الزامی):</th>
+									<td><textarea name="reason" rows="2" class="large-text" required placeholder="تایید صحت واریز وجه به حساب شرکت"></textarea></td>
+								</tr>
+							</table>
+							<p><button type="submit" class="button button-primary">تایید دریافت وجه و فعال‌سازی عضویت</button></p>
+						</form>
+					</div>
+				<?php endif; ?>
+
 				<!-- Form A: Record Offline Merchandise Purchase -->
 				<div class="postbox" style="padding: 15px;">
 					<h3>۱. ثبت خرید حضوری کالا</h3>
@@ -902,6 +1011,14 @@ class Negar_Club_Admin_Memberships {
 							<tr>
 								<th>بدهی اقساط حضوری (تومان):</th>
 								<td><input type="number" name="offline_debt_amount" value="<?php echo esc_attr( $mem->offline_debt_amount ); ?>" class="regular-text"></td>
+							</tr>
+							<tr>
+								<th>مدت اعتبار طرح (ماه):</th>
+								<td><input type="number" name="term_months" min="1" max="36" value="<?php echo esc_attr( $mem->term_months ); ?>" class="small-text"> ماه</td>
+							</tr>
+							<tr>
+								<th>تاریخ پایان اعتبار:</th>
+								<td><input type="text" name="valid_until" value="<?php echo esc_attr( $mem->valid_until ?: '' ); ?>" placeholder="YYYY-MM-DD HH:MM:SS" class="regular-text"></td>
 							</tr>
 							<tr>
 								<th>دلیل مستندسازی و ممیزی (الزامی):</th>

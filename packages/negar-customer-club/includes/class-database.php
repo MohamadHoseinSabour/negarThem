@@ -345,6 +345,19 @@ class Negar_Club_Database {
 	}
 
 	/**
+	 * Get active membership for a customer with row-level lock (FOR UPDATE).
+	 *
+	 * @param int $customer_id WordPress user ID.
+	 * @return object|null Active membership row or null.
+	 */
+	public static function get_active_membership_by_customer_for_update( $customer_id ) {
+		global $wpdb;
+
+		$table = self::get_table_name( 'memberships' );
+		return $wpdb->get_row( $wpdb->prepare( "SELECT * FROM `{$table}` WHERE customer_id = %d AND status = 'active' ORDER BY id DESC LIMIT 1 FOR UPDATE", (int) $customer_id ) );
+	}
+
+	/**
 	 * Get all memberships for a customer.
 	 *
 	 * @param int $customer_id WordPress user ID.

@@ -35,6 +35,7 @@ class Negar_Club_Membership_Manager {
 		// Cancellation and refund hooks
 		add_action( 'woocommerce_order_status_refunded', array( __CLASS__, 'handle_order_refunded' ), 10, 2 );
 		add_action( 'woocommerce_order_status_cancelled', array( __CLASS__, 'handle_order_cancelled' ), 10, 2 );
+		add_action( 'woocommerce_order_partially_refunded', array( __CLASS__, 'handle_order_partially_refunded' ), 10, 2 );
 	}
 
 	/**
@@ -63,7 +64,12 @@ class Negar_Club_Membership_Manager {
 	 * @param int $order_id Order ID.
 	 */
 	public static function handle_payment_complete( $order_id ) {
-		self::process_paid_order( $order_id );
+		$order = function_exists( 'wc_get_order' ) ? wc_get_order( $order_id ) : null;
+		if ( $order && method_exists( $order, 'update_meta_data' ) ) {
+			$order->update_meta_data( '_negar_club_payment_confirmed', current_time( 'mysql' ) );
+			$order->save();
+		}
+		self::process_paid_order( $order_id, $order );
 	}
 
 	/**
@@ -74,6 +80,16 @@ class Negar_Club_Membership_Manager {
 	 */
 	public static function handle_order_refunded( $order_id, $order = null ) {
 		self::handle_order_refund_or_cancellation( $order_id, 'refund' );
+	}
+
+	/**
+	 * Handle order partial refund hook.
+	 *
+	 * @param int $order_id  Order ID.
+	 * @param int $refund_id Refund ID.
+	 */
+	public static function handle_order_partially_refunded( $order_id, $refund_id = 0 ) {
+		self::handle_order_refund_or_cancellation( $order_id, 'partial_refund' );
 	}
 
 	/**
@@ -125,6 +141,9 @@ class Negar_Club_Membership_Manager {
 			return false;
 		}
 
+		$is_flagged_for_review = false;
+		$review_reason         = '';
+
 		// 1. Payment Verification Check
 		$status = $order->get_status();
 		$payment_method = $order->get_payment_method();
@@ -132,13 +151,14 @@ class Negar_Club_Membership_Manager {
 		// For deferred/offline methods (bacs, cheque, cod), require explicit completed status and confirmed receipt
 		$deferred_gateways = array( 'bacs', 'cheque', 'cod' );
 		if ( in_array( $payment_method, $deferred_gateways, true ) ) {
-			$has_offline_receipt = ( method_exists( $order, 'is_paid' ) && $order->is_paid() )
-				|| ( method_exists( $order, 'get_date_paid' ) && ! empty( $order->get_date_paid() ) )
-				|| ( method_exists( $order, 'get_transaction_id' ) && ! empty( $order->get_transaction_id() ) )
+			$has_offline_receipt = ( method_exists( $order, 'get_transaction_id' ) && ! empty( $order->get_transaction_id() ) )
 				|| ( method_exists( $order, 'get_meta' ) && (bool) $order->get_meta( '_negar_club_offline_receipt_confirmed' ) );
 
-			if ( 'completed' !== $status || ! $has_offline_receipt ) {
-				return false; // Cash has not been physically collected and verified yet
+			if ( 'completed' === $status && ! $has_offline_receipt ) {
+				$is_flagged_for_review = true;
+				$review_reason         = 'سفارش با روش پرداخت معوق ثبت گردیده و نیازمند تایید فیش واریزی توسط کارشناس است.';
+			} elseif ( 'completed' !== $status ) {
+				return false; // Cash has not been physically collected yet
 			}
 		} else {
 			// Online/electronic gateway: must be confirmed paid (is_paid or date_paid present)
@@ -151,6 +171,14 @@ class Negar_Club_Membership_Manager {
 
 			if ( 'completed' !== $status && 'processing' !== $status ) {
 				return false;
+			}
+
+			$has_online_signal = ( method_exists( $order, 'get_transaction_id' ) && ! empty( $order->get_transaction_id() ) )
+				|| ( method_exists( $order, 'get_meta' ) && (bool) $order->get_meta( '_negar_club_payment_confirmed' ) );
+
+			if ( ! $has_online_signal ) {
+				$is_flagged_for_review = true;
+				$review_reason         = 'سفارش درگاه آنلاین فاقد شناسه تراکنش معتبر است و نیازمند تایید دستی کارشناس می‌باشد.';
 			}
 		}
 
@@ -179,8 +207,6 @@ class Negar_Club_Membership_Manager {
 		$vip_item_count        = 0;
 		$regular_item_count    = 0;
 		$vip_line_qty          = 0;
-		$is_flagged_for_review = false;
-		$review_reason         = '';
 
 		foreach ( $order->get_items() as $item ) {
 			$product_id = method_exists( $item, 'get_product_id' ) ? $item->get_product_id() : 0;
@@ -230,7 +256,8 @@ class Negar_Club_Membership_Manager {
 		// Quantity check: exactly 1 VIP product and no mixed merchandise
 		if ( 1 !== $vip_line_qty || $vip_item_count > 1 || $regular_item_count > 0 ) {
 			$is_flagged_for_review = true;
-			$review_reason         = 'سفارش شامل اقلام غیرمجاز، کالاهای متعدد یا تعداد بیش از ۱ اشتراک VIP است و نیازمند بررسی کارشناس می‌باشد.';
+			$qty_note              = 'سفارش شامل اقلام غیرمجاز، کالاهای متعدد یا تعداد بیش از ۱ اشتراک VIP است و نیازمند بررسی کارشناس می‌باشد.';
+			$review_reason         = ! empty( $review_reason ) ? $review_reason . ' | ' . $qty_note : $qty_note;
 		}
 
 		// Check expected price vs actual paid prepayment (discounts / coupons guard)
@@ -239,11 +266,12 @@ class Negar_Club_Membership_Manager {
 
 		if ( $expected_price > 0 && $prepayment_amount < $expected_price ) {
 			$is_flagged_for_review = true;
-			$review_reason         = sprintf(
+			$disc_note             = sprintf(
 				'مبلغ پرداختی (%s تومان) به دلیل اعمال تخفیف یا کوپن کمتر از قیمت مصوب طرح (%s تومان) است. نیازمند بررسی کارشناس.',
 				number_format( $prepayment_amount ),
 				number_format( $expected_price )
 			);
+			$review_reason         = ! empty( $review_reason ) ? $review_reason . ' | ' . $disc_note : $disc_note;
 		}
 
 		// 3. Customer Verification Check
@@ -262,72 +290,86 @@ class Negar_Club_Membership_Manager {
 			return false;
 		}
 
-		// 4. Exactly-Once Idempotency Check: Order ID must be unique
-		$existing = Negar_Club_Database::get_membership_by_order( $order_id );
-		if ( $existing ) {
-			return (int) $existing->id; // Already activated, strictly idempotent
-		}
+		// 4. Exactly-Once Idempotency & Atomic Concurrency Guard
+		Negar_Club_Database::begin_transaction();
 
-		// 5. Check if customer already has an active VIP membership
-		$active_mem = Negar_Club_Database::get_active_membership_by_customer( $customer_id );
+		try {
+			// Idempotency: Order ID must be unique
+			$existing = Negar_Club_Database::get_membership_by_order( $order_id );
+			if ( $existing ) {
+				Negar_Club_Database::commit();
+				return (int) $existing->id; // Already activated, strictly idempotent
+			}
 
-		// 6. Plan configuration & limits
-		$purchase_ceiling = isset( $plan_conf['ceiling'] ) && (int) $plan_conf['ceiling'] > 0
-			? (int) $plan_conf['ceiling']
-			: ( $prepayment_amount * 2 );
+			// Atomic Check with row lock for active membership (prevents simultaneous active memberships)
+			$active_mem = Negar_Club_Database::get_active_membership_by_customer_for_update( $customer_id );
 
-		$term_months = isset( $plan_conf['duration_months'] ) && (int) $plan_conf['duration_months'] > 0
-			? (int) $plan_conf['duration_months']
-			: 3;
+			// 5. Plan configuration & limits
+			$purchase_ceiling = isset( $plan_conf['ceiling'] ) && (int) $plan_conf['ceiling'] > 0
+				? (int) $plan_conf['ceiling']
+				: ( $prepayment_amount * 2 );
 
-		$valid_until = date( 'Y-m-d H:i:s', strtotime( "+{$term_months} months", current_time( 'timestamp' ) ) );
+			$term_months = isset( $plan_conf['duration_months'] ) && (int) $plan_conf['duration_months'] > 0
+				? (int) $plan_conf['duration_months']
+				: 3;
 
-		// Status decision
-		if ( $active_mem ) {
-			$membership_status = 'pending_operator_review';
-			$membership_notes  = sprintf( 'خرید مجدد اشتراک VIP در حالی که مشتری دارای اشتراک فعال #%d است. نیازمند بررسی و ادغام دستی اپراتور.', (int) $active_mem->id );
-		} elseif ( $is_flagged_for_review ) {
-			$membership_status = 'pending_operator_review';
-			$membership_notes  = $review_reason;
-		} else {
-			$membership_status = 'active';
-			$membership_notes  = sprintf( 'فعال‌سازی خودکار اشتراک VIP پس از تایید پرداخت سفارش ووکامرس #%d', $order_id );
-		}
+			$valid_until = date( 'Y-m-d H:i:s', strtotime( "+{$term_months} months", current_time( 'timestamp' ) ) );
 
-		$membership_data = array(
-			'customer_id'                 => $customer_id,
-			'plan_id'                     => $matched_plan_id,
-			'order_id'                    => $order_id,
-			'prepayment_amount'           => $prepayment_amount,
-			'applied_deposit'             => 0,
-			'unused_deposit'              => $prepayment_amount,
-			'purchase_ceiling'            => $purchase_ceiling,
-			'used_purchase_amount'        => 0,
-			'available_purchase_capacity' => $purchase_ceiling,
-			'offline_debt_amount'         => 0,
-			'term_months'                 => $term_months,
-			'status'                      => $membership_status,
-			'valid_until'                 => $valid_until,
-			'notes'                       => $membership_notes,
-		);
+			// Status decision
+			if ( $active_mem ) {
+				$membership_status = 'pending_operator_review';
+				$membership_notes  = sprintf( 'خرید مجدد اشتراک VIP در حالی که مشتری دارای اشتراک فعال #%d است. نیازمند بررسی و ادغام دستی اپراتور.', (int) $active_mem->id );
+			} elseif ( $is_flagged_for_review ) {
+				$membership_status = 'pending_operator_review';
+				$membership_notes  = $review_reason;
+			} else {
+				$membership_status = 'active';
+				$membership_notes  = sprintf( 'فعال‌سازی خودکار اشتراک VIP پس از تایید پرداخت سفارش ووکامرس #%d', $order_id );
+			}
 
-		$membership_id = Negar_Club_Database::create_membership( $membership_data );
-		if ( ! $membership_id ) {
+			$membership_data = array(
+				'customer_id'                 => $customer_id,
+				'plan_id'                     => $matched_plan_id,
+				'order_id'                    => $order_id,
+				'prepayment_amount'           => $prepayment_amount,
+				'applied_deposit'             => 0,
+				'unused_deposit'              => $prepayment_amount,
+				'purchase_ceiling'            => $purchase_ceiling,
+				'used_purchase_amount'        => 0,
+				'available_purchase_capacity' => $purchase_ceiling,
+				'offline_debt_amount'         => 0,
+				'term_months'                 => $term_months,
+				'status'                      => $membership_status,
+				'valid_until'                 => $valid_until,
+				'notes'                       => $membership_notes,
+			);
+
+			$membership_id = Negar_Club_Database::create_membership( $membership_data );
+			if ( ! $membership_id ) {
+				throw new Exception( 'Failed to create membership record in database.' );
+			}
+
+			// Audit logging
+			$audit_id = Negar_Club_Database::log_audit(
+				'club_membership',
+				$membership_id,
+				'membership:activate',
+				null,
+				$membership_data,
+				$customer_id,
+				$membership_notes
+			);
+
+			if ( false === $audit_id ) {
+				throw new Exception( 'Failed to log membership activation audit.' );
+			}
+
+			Negar_Club_Database::commit();
+			return (int) $membership_id;
+		} catch ( Exception $e ) {
+			Negar_Club_Database::rollback();
 			return false;
 		}
-
-		// Audit logging
-		Negar_Club_Database::log_audit(
-			'club_membership',
-			$membership_id,
-			'membership:activate',
-			null,
-			$membership_data,
-			$customer_id,
-			$membership_notes
-		);
-
-		return (int) $membership_id;
 	}
 
 	/**
@@ -349,12 +391,13 @@ class Negar_Club_Membership_Manager {
 		}
 
 		$old_state = (array) $membership;
-		$new_status = 'refund' === $action ? 'refunded_pending_reconciliation' : 'suspended';
+		$new_status = in_array( $action, array( 'refund', 'partial_refund' ), true ) ? 'refunded_pending_reconciliation' : 'suspended';
 
+		$action_label = 'refund' === $action ? 'مسترد' : ( 'partial_refund' === $action ? 'شامل استرداد جزئی' : 'لغو' );
 		$new_notes = sprintf(
 			'سفارش ووکامرس شماره #%d %s شد. وضعیت عضویت به حالت تعلیق درآمد. استفاده از مانده پیش‌پرداخت تا بررسی حسابداری مسدود است.',
 			$order_id,
-			'refund' === $action ? 'مسترد' : 'لغو'
+			$action_label
 		);
 
 		$updated = Negar_Club_Database::update_membership(

@@ -3,7 +3,7 @@
  * Plugin Name: Negar Customer Club & Installment Purchase
  * Plugin URI: https://github.com/MohamadHoseinSabour/negarThem
  * Description: Foundation for customer club quotation previews, installment calculation, application underwriting, and credit evaluation.
- * Version: 1.0.0
+ * Version: 1.3.0
  * Author: Negar Themed Team
  * Text Domain: negar-club
  * Requires at least: 6.2
@@ -16,8 +16,8 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'NEGAR_CLUB_VERSION', '1.2.0' );
-define( 'NEGAR_CLUB_DB_VERSION', '1.2.0' );
+define( 'NEGAR_CLUB_VERSION', '1.3.0' );
+define( 'NEGAR_CLUB_DB_VERSION', '1.3.0' );
 define( 'NEGAR_CLUB_DIR', __DIR__ );
 
 // Core components
@@ -44,7 +44,7 @@ add_action(
 		Negar_Club_VIP_Products::init();
 		Negar_Club_Membership_Manager::init();
 		Negar_Club_Customer_Dashboard::init();
-		if ( get_option( 'negar_club_db_version' ) !== NEGAR_CLUB_DB_VERSION ) {
+		if ( get_option( 'negar_club_db_version' ) !== Negar_Club_Database::DB_VERSION ) {
 			Negar_Club_Database::create_tables();
 		}
 	}
